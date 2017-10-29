@@ -9,24 +9,10 @@ module.exports = {
 
     inputs: {
 
-        ip: {
-            type: 'string',
-            description: 'IP address of the server to send the request',
-            required: true
-        },
-        port: {
-            type: 'string',
-            description: 'Web port of the server to send the request',
-            required: true
-        },
-        authName: {
-            type: 'string',
-            description: 'Authorization name of the server to send the request',
-            required: true
-        },
-        authToken: {
-            type: 'string',
-            description: 'Authorization token of the server to send the request',
+
+        id: {
+            type: "number",
+            description: "ID of the server to get stats from",
             required: true
         },
         apiModule: {
@@ -46,10 +32,16 @@ module.exports = {
 
     fn: async function(inputs, exits) {
         const request = require("request-promise-native");
+        const gameServer = await sails.models.sdtdserver.findOne(inputs.id);
+        const ip = gameServer.ip;
+        const port = gameServer.webPort;
+        const authName = gameServer.authName;
+        const authToken = gameServer.authToken;
+
 
         async function getRequestOptions(apiModule) {
             try {
-                const baseUrl = "http://" + inputs.ip + ":" + inputs.port + "/api/";
+                const baseUrl = "http://" + ip + ":" + port + "/api/";
                 let requestOptions = {
                     url: baseUrl + apiModule,
                     json: true,
@@ -59,8 +51,8 @@ module.exports = {
                     },
                     useQuerystring: true,
                     qs: {
-                        adminuser: inputs.authName,
-                        admintoken: inputs.authToken
+                        adminuser: authName,
+                        admintoken: authToken
                     }
                 };
                 return requestOptions
