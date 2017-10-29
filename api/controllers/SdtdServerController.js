@@ -20,7 +20,7 @@ module.exports = {
         const day7data = await sails.helpers.getStats({
             id: serverID
         })
-        res.render('dashboard.ejs', {
+        res.view('dashboard.ejs', {
             title: "Server Dashboard",
             day7data
         })

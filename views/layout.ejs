@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <title>New Sails App</title>
 
     <!-- Viewport mobile tag for sensible mobile support -->
@@ -29,16 +30,50 @@
     -->
 
     <!--STYLES-->
+    <link rel="stylesheet" href="/styles/font-awesome.min.css">
     <link rel="stylesheet" href="/styles/importer.css">
+    <link rel="stylesheet" href="/styles/main.css">
     <!--STYLES END-->
-  </head>
+</head>
 
-  <body>
+<body>
+    <!-- Header -->
+    <header id="header" class="alt">
+        <h1><strong><a href="index.html">Spatial</a></strong> by Templated</h1>
+        <nav id="nav">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="generic.html">Generic</a></li>
+                <li><a href="elements.html">Elements</a></li>
+            </ul>
+        </nav>
+    </header>
+
     <%- body %>
+        <!-- Footer -->
+        <footer id="footer">
+            <div class="container">
+                <ul class="icons">
+                    <li>
+                        <a href="#" class="icon fa-facebook"></a>
+                    </li>
+                    <li>
+                        <a href="#" class="icon fa-twitter"></a>
+                    </li>
+                    <li>
+                        <a href="#" class="icon fa-instagram"></a>
+                    </li>
+                </ul>
+                <ul class="copyright">
+                    <li>&copy; Untitled</li>
+                    <li>Design: <a href="http://templated.co">TEMPLATED</a></li>
+                    <li>Images: <a href="http://unsplash.com">Unsplash</a></li>
+                </ul>
+            </div>
+        </footer>
 
 
-
-    <!--
+        <!--
         Client-side Templates
         ========================
 
@@ -59,12 +94,13 @@
               stringfile before they're served.
     -->
 
-    <!--TEMPLATES-->
-    
-    <!--TEMPLATES END-->
+
+        <!--TEMPLATES-->
+        
+        <!--TEMPLATES END-->
 
 
-    <!--
+        <!--
         Server-side View Locals
         ========================
 
@@ -80,7 +116,7 @@
     -->
 
 
-    <!--
+        <!--
 
       Client-side Javascript
       ========================
@@ -103,8 +139,13 @@
 
     -->
 
-    <!--SCRIPTS-->
-    <script src="/dependencies/sails.io.js"></script>
-    <!--SCRIPTS END-->
-  </body>
+        <!--SCRIPTS-->
+        <script src="/dependencies/sails.io.js"></script>
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/main.js"></script>
+        <script src="/js/skel.min.js"></script>
+        <script src="/js/util.js"></script>
+        <!--SCRIPTS END-->
+</body>
+
 </html>
