@@ -18,10 +18,7 @@ module.exports = {
         sails.log("Showing dashboard for a server")
         const serverID = req.query.id
         const day7data = await sails.helpers.getStats({
-            ip: "localhost",
-            port: "8082",
-            authName: "test",
-            authToken: "test-secret"
+            id: serverID
         })
         res.render('dashboard.ejs', {
             title: "Server Dashboard",

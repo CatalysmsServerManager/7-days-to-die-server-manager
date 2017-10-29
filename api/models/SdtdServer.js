@@ -15,17 +15,32 @@ module.exports = {
         name: {
             type: 'string'
         },
+
         ip: {
             type: 'string',
             required: true
         },
+
         gamePort: {
             type: 'number'
         },
+
         telnetPort: {
             type: 'number',
             required: true
-        }
+        },
+
+        webPort: {
+            type: "number"
+        },
+
+        authName: {
+            type: "string"
+        },
+
+        authToken: {
+            type: "string"
+        },
 
         //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
         //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
