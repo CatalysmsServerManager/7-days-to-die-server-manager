@@ -1,0 +1,22 @@
+<html>
+
+<head>
+    <script type="text/javascript" src="/js/dependencies/sails.io.js"></script>
+</head>
+
+<body>
+    <h1>
+        <%= title %>
+    </h1>
+    <ul>
+        <% Object.entries(day7data).forEach(function(dataEntry) { %>
+            <li>
+                <%= dataEntry %>
+            </li>
+            <% }); %>
+    </ul>
+</body>
+
+
+
+</html>
