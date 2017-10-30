@@ -6,11 +6,13 @@
  */
 
 module.exports = {
-    init: async function(req, res) {
+    addServer: async function(req, res) {
         sails.log("Initializing a new 7 Days to die server")
         const serverID = req.query.id
-        await sails.helpers.connectToTelnet({ id: serverID })
-        res.send(`Initializing server with id ${serverID}`)
+
+        res.view('addServer', {
+
+        })
 
     },
 
