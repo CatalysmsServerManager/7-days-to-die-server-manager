@@ -1,7 +1,7 @@
 /**
- * SdtdServer.js
+ * LogLine.js
  *
- * @description :: Represents 7 Days to Die servers
+ * @description :: A log line
  */
 
 module.exports = {
@@ -12,40 +12,20 @@ module.exports = {
         //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
         //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
 
-        name: {
-            type: 'string'
-        },
-
-        ip: {
+        logType: {
             type: 'string',
             required: true
         },
 
-        gamePort: {
-            type: 'number'
-        },
-
-        telnetPort: {
-            type: 'number',
+        message: {
+            type: "string",
             required: true
         },
 
-        telnetPassword: {
-            type: 'string',
+        serverID: {
+            type: "number",
             required: true
-        },
-
-        webPort: {
-            type: "number"
-        },
-
-        authName: {
-            type: "string"
-        },
-
-        authToken: {
-            type: "string"
-        },
+        }
 
         //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
         //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
@@ -55,11 +35,6 @@ module.exports = {
         //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
         //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
         //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
-
-        loggingEnabled: {
-            type: "boolean",
-            defaultsTo: false
-        }
 
     },
 
