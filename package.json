@@ -9,6 +9,8 @@
         "connect-redis": "3.2.0",
         "grunt": "1.0.1",
         "lodash": "3.10.1",
+        "passport": "^0.4.0",
+        "passport-steam": "^1.0.8",
         "rand-token": "^0.3.0",
         "request": "^2.83.0",
         "request-promise-native": "^1.0.5",
@@ -37,6 +39,7 @@
         "node": "8"
     },
     "devDependencies": {
-        "ejs-lint": "^0.3.0"
+        "ejs-lint": "^0.3.0",
+        "mocha": "^4.0.1"
     }
 }

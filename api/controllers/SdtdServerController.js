@@ -55,14 +55,9 @@ module.exports = {
                 passwordError: ""
             })
         }
-
-
-
-
     },
 
     dashboard: async function(req, res) {
-        sails.log("Showing dashboard for a server")
         const serverID = req.query.id
         const day7data = await sails.helpers.getStats({
             id: serverID
@@ -70,6 +65,16 @@ module.exports = {
         res.view('dashboard.ejs', {
             title: "Server Dashboard",
             day7data
+        })
+    },
+
+    console: async function(req, res) {
+        const serverID = req.query.id
+        const server = await sails.models.sdtdserver.findOne(serverID)
+        let connection = sails.helpers.connectToTelnet({
+            ip: IP,
+            port: telnetPort,
+            password: telnetPassword
         })
     }
 };
