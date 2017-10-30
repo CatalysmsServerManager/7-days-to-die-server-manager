@@ -30,6 +30,11 @@ module.exports = {
             required: true
         },
 
+        telnetPassword: {
+            type: 'string',
+            required: true
+        },
+
         webPort: {
             type: "number"
         },
