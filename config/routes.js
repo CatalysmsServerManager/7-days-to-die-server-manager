@@ -41,10 +41,6 @@ module.exports.routes = {
      *                                                                          *
      ***************************************************************************/
 
-    '/sdtdserver/init': {
-        controller: "SdtdServerController",
-        action: "init"
-    },
 
     '/sdtdserver/dashboard': {
         controller: "SdtdServerController",
@@ -54,7 +50,24 @@ module.exports.routes = {
     "/addserver": {
         controller: "SdtdServerController",
         action: "addServer"
-    }
+    },
+
+    "GET /sdtdserver/console": {
+        controller: "SdtdServerController",
+        action: "console"
+    },
+
+    // Start/Stop getting logs from a server
+
+    'GET /sdtdserver/logging': {
+        controller: "SdtdServerController",
+        action: "startLogging"
+    },
+
+    "DELETE /sdtdserver/logging": {
+        controller: "SdtdServerController",
+        action: "stopLogging"
+    },
 
 
     //  ╔═╗╔═╗╦  ╔═╗╔╗╔╔╦╗╔═╗╔═╗╦╔╗╔╔╦╗╔═╗

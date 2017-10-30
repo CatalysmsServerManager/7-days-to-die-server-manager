@@ -1,0 +1,18 @@
+<body>
+
+    <div class="container">
+        <ul>
+            <% telnetSocket.on('data', function(logLine) { %>
+                <% console.log(logLine.toString()) %>
+                    <li>
+                        <%= logLine.toString() %>
+                    </li>
+                    <% }); %>
+        </ul>
+
+
+    </div>
+
+
+
+</body>
