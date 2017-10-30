@@ -5,36 +5,39 @@
 </head>
 
 <body>
-    <h1>Dashboard</h1>
+    <div class="container-wrapper">
+        <div class="content">
+            <h1>Dashboard</h1>
 
-    <div id="day7data" class="container">
-        <h2>Game stats</h2>
-        <ul>
-            <li>
-                <%= day7data.gametime.days %> Days
-                    <%= day7data.gametime.hours %> Hours
-                        <%= day7data.gametime.minutes %> Minutes
-            </li>
-            <li>Online players:
-                <%= day7data.players %>
-            </li>
-            <li>Zombies:
-                <%= day7data.hostiles %>
-            </li>
-            <li>Animals:
-                <%= day7data.animals %>
-            </li>
-        </ul>
+            <div id="day7data" class="container">
+                <h2>Game stats</h2>
+                <ul>
+                    <li>
+                        <%= day7data.gametime.days %> Days
+                            <%= day7data.gametime.hours %> Hours
+                                <%= day7data.gametime.minutes %> Minutes
+                    </li>
+                    <li>Online players:
+                        <%= day7data.players %>
+                    </li>
+                    <li>Zombies:
+                        <%= day7data.hostiles %>
+                    </li>
+                    <li>Animals:
+                        <%= day7data.animals %>
+                    </li>
+                </ul>
+            </div>
+
+            <div id="ConsoleBridge" class="container">
+                <h2>Console</h2>
+            </div>
+
+            <div id="day7options" class="container">
+                <h2>Options</h2>
+            </div>
+        </div>
     </div>
-
-    <div id="ConsoleBridge" class="container">
-        <h2>Console</h2>
-    </div>
-
-    <div id="day7options" class="container">
-        <h2>Options</h2>
-    </div>
-
 </body>
 
 
