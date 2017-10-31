@@ -69,6 +69,20 @@ module.exports.routes = {
         action: "stopLogging"
     },
 
+    // Login/out 
+
+    'get /login': {
+        view: 'login'
+    },
+
+    'post /login': 'AuthController.login',
+
+    '/logout': 'AuthController.logout',
+
+    'get /signup': {
+        view: 'signup'
+    }
+
 
     //  ╔═╗╔═╗╦  ╔═╗╔╗╔╔╦╗╔═╗╔═╗╦╔╗╔╔╦╗╔═╗
     //  ╠═╣╠═╝║  ║╣ ║║║ ║║╠═╝║ ║║║║║ ║ ╚═╗

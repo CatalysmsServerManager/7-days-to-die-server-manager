@@ -6,10 +6,12 @@
     "keywords": [],
     "dependencies": {
         "async": "2.0.1",
+        "bcrypt": "^1.0.3",
         "connect-redis": "3.2.0",
         "grunt": "1.0.1",
         "lodash": "3.10.1",
         "passport": "^0.4.0",
+        "passport-local": "^1.0.0",
         "passport-steam": "^1.0.8",
         "rand-token": "^0.3.0",
         "request": "^2.83.0",
