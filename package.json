@@ -7,21 +7,22 @@
     "dependencies": {
         "async": "2.0.1",
         "bcrypt": "^1.0.3",
+        "bcryptjs": "^2.4.3",
         "connect-redis": "3.2.0",
         "grunt": "1.0.1",
         "lodash": "3.10.1",
-        "passport": "^0.4.0",
-        "passport-local": "^1.0.0",
-        "passport-steam": "^1.0.8",
         "rand-token": "^0.3.0",
+        "req-flash": "0.0.3",
         "request": "^2.83.0",
         "request-promise-native": "^1.0.5",
         "sails": "^1.0.0-38",
         "sails-hook-grunt": "^2.0.0",
         "sails-hook-orm": "^2.0.0-16",
         "sails-hook-sockets": "^1.4.0",
+        "sails-mysql": "^1.0.0-15",
         "socket.io-redis": "4.0.0",
-        "telnet-client": "^0.15.4"
+        "telnet-client": "^0.15.4",
+        "validator": "^9.1.1"
     },
     "scripts": {
         "start": "NODE_ENV=production node app.js",

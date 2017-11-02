@@ -23,7 +23,7 @@ module.exports.policies = {
      *                                                                          *
      ***************************************************************************/
 
-    // '*': true,
+    // '*': ['passport', 'sessionAuth'],
 
     /***************************************************************************
      *                                                                          *
@@ -45,10 +45,5 @@ module.exports.policies = {
     //   destroy: 'isAdmin',
     //
     // },
-
-    SdtdServerController: {
-
-        '*': 'isAuthenticated'
-    }
 
 };

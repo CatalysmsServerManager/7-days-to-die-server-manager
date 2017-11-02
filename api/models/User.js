@@ -1,49 +1,11 @@
-/**
- * User.js
- *
- * @description :: A model definition.  Represents a database table/collection/etc.
- * @docs        :: https://sailsjs.com/docs/concepts/models-and-orm/models
- */
-
-const bcrypt = require('bcrypt');
-
-module.exports = {
+var User = {
+    // Enforce model schema in the case of schemaless databases
+    schema: true,
 
     attributes: {
-
-        //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
-        //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
-        //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
-
-        steamid: {
-            type: "string",
-            //  required: true,
-            //   unique: true
-        },
-
-        username: {
-            type: "string",
-            required: true
-        },
-
-        password: {
-            type: 'string',
-            minLength: 6,
-            required: true
-        },
-
-
-        //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
-        //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
-        //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
-
-
-
-
-        //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
-        //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
-        //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
-
-    },
-
+        username: { type: 'string', unique: true, required: true },
+        email: { type: 'string' },
+    }
 };
+
+module.exports = User;
