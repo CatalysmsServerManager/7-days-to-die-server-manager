@@ -32,6 +32,14 @@ module.exports = {
     exits: {
         success: {
             outputFriendlyName: 'Request Data',
+        },
+        unauthorized: {
+            outputFriendlyName: 'Access forbidden',
+            description: "Server returned a 403 response. This usually indicates a problem with permissions (the web tokens)"
+        },
+        timeout: {
+            outputFriendlyName: "Request timed out",
+            description: "Server did not respond in time. Server offline?"
         }
     },
 
@@ -74,12 +82,12 @@ module.exports = {
         async function doRequest(apiModule) {
             let options = await getRequestOptions(apiModule)
 
-            return request(options)
+            await request(options)
                 .then(function(response) {
                     return exits.success(response)
                 })
                 .catch(function(error) {
-                    sails.log(error)
+                    return exits.unauthorized()
                 })
         }
         doRequest(inputs.apiModule)

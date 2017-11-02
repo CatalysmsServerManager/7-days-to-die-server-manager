@@ -1,0 +1,15 @@
+<body>
+
+    <ul>
+        <% if(onlinePlayers) {%>
+            <% onlinePlayers.forEach(function(player) { %>
+                <li>
+                    <%= player.name %>
+                </li>
+                <% }) } else {%>
+                    <li>No players online</li>
+                    <% } %>
+
+    </ul>
+
+</body>

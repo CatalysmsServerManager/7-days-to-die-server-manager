@@ -46,14 +46,37 @@ module.exports = {
 
         const serverID = req.query.id
 
-        const day7data = await sails.helpers.getStats({
+        let day7data
+        let onlinePlayers
+
+        await sails.helpers.getStats({
+            id: serverID,
+        }).switch({
+            success: function(data) {
+                day7data = data;
+            },
+            error: function(err) {
+                return res.badRequest("Invalid permissions for 7 days server. Please check your webtokens or add your server again.")
+            }
+        });
+
+        await sails.helpers.getPlayersOnline({
             id: serverID
+        }).switch({
+            success: function(data) {
+                onlinePlayers = data
+                res.view('dashboard.ejs', {
+                    title: "Server Dashboard",
+                    day7data,
+                    onlinePlayers
+                })
+            },
+            error: function(err) {
+                return res.badRequest("Invalid permissions for 7 days server. Please check your webtokens or add your server again.")
+            }
         })
 
-        res.view('dashboard.ejs', {
-            title: "Server Dashboard",
-            day7data
-        })
+
     },
 
     console: async function(req, res) {

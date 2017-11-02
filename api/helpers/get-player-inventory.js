@@ -24,6 +24,8 @@ module.exports = {
 
         success: {
             outputFriendlyName: 'Player inventory',
+            outputExample: { "playername": "GAD", "bag": [{ "count": 6000, "name": "wood", "icon": "wood", "iconcolor": "FFFFFF", "quality": -1 }, { "count": 1000, "name": "concreteMix", "icon": "concreteMix", "iconcolor": "FFFFFF", "quality": -1 }, { "count": 479, "name": "emptyJar", "icon": "emptyJar", "iconcolor": "FFFFFF", "quality": -1 }, { "count": 211, "name": "forgedSteel", "icon": "forgedSteel", "iconcolor": "FFFFFF", "quality": -1 }, { "count": 6000, "name": "scrapIron", "icon": "scrapIron", "iconcolor": "FFFFFF", "quality": -1 }, { "count": 72, "name": "cement", "icon": "cement", "iconcolor": "FFFFFF", "quality": -1 }, { "count": 784, "name": "crushedSand", "icon": "crushedSand", "iconcolor": "FFFFFF", "quality": -1 }, { "count": 108, "name": "gunPowder", "icon": "gunPowder", "iconcolor": "FFFFFF", "quality": -1 }, { "count": 5, "name": "grainAlcohol", "icon": "grainAlcohol", "iconcolor": "FFFFFF", "quality": -1 }, { "count": 93, "name": "cornBread", "icon": "cornBread", "iconcolor": "FFFFFF", "quality": -1 }] },
+            outputType: "json"
         }
 
     },
