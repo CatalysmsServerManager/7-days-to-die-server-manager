@@ -7,16 +7,9 @@
 
 module.exports = {
     addServer: async function(req, res) {
-        const IP = req.query.IP
-        const telnetPort = parseInt(req.query.TelnetPort)
-        const telnetPassword = req.query.TelnetPassword
-        if (!IP || !telnetPort || !telnetPassword) {
-            return res.view('addServer', {
-                ipError: "",
-                portError: "",
-                passwordError: ""
-            })
-        }
+        const IP = req.param("IP")
+        const telnetPort = parseInt(req.param("TelnetPort"))
+        const telnetPassword = req.param("TelnetPassword")
 
         try {
             let connection = await sails.helpers.connectToTelnet({
@@ -27,33 +20,26 @@ module.exports = {
             const authInfo = await sails.helpers.createWebToken({
                 telnetConnection: connection
             })
+
             sails.models.sdtdserver.create({
                     ip: IP,
                     telnetPort: telnetPort,
                     telnetPassword: telnetPassword,
                     webPort: telnetPort + 1,
                     authName: authInfo.authName,
-                    authToken: authInfo.authToken
+                    authToken: authInfo.authToken,
+                    owner: req.session.userId
                 }).meta({ fetch: true })
                 .exec(function(err, sdtdServer) {
-                    if (err) {
-                        return res.view('addServer', {
-                            ipError: err,
-                            portError: "",
-                            passwordError: ""
-                        })
-                    }
+                    sails.log(err)
+                    sails.log(sdtdServer)
                     return res.redirect(`/sdtdserver/dashboard?id=${sdtdServer.id}`)
                 })
 
 
 
         } catch (error) {
-            res.view('addServer', {
-                ipError: error,
-                portError: "",
-                passwordError: ""
-            })
+            console.log(error)
         }
     },
 
