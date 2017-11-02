@@ -44,13 +44,13 @@ module.exports = {
     },
 
     dashboard: async function(req, res) {
+
         const serverID = req.query.id
+
         const day7data = await sails.helpers.getStats({
             id: serverID
         })
-        const logLines = await sails.models.logline.find({
-            where: { serverID: serverID }
-        })
+
         res.view('dashboard.ejs', {
             title: "Server Dashboard",
             day7data

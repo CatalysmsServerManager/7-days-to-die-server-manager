@@ -36,6 +36,18 @@ module.exports.views = {
      *                                                                          *
      ***************************************************************************/
 
-    layout: 'layout'
+    layout: 'layout',
 
+    locals: {
+        getUserServers: function(req) {
+            return req.session.servers
+        },
+        isLoggedIn: function(req) {
+            if (_.isUndefined(req.session.userId)) {
+                return false
+            } else {
+                return req.session.userId
+            }
+        },
+    },
 };

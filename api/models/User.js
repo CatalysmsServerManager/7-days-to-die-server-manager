@@ -7,6 +7,12 @@
 
 module.exports = {
 
+    toJSON: function() {
+        var obj = this.toObject();
+        delete obj.encryptedPassword;
+        return obj;
+    },
+
     attributes: {
 
         //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
@@ -36,7 +42,7 @@ module.exports = {
         servers: {
             collection: 'sdtdServer',
             via: 'owner'
-        }
+        },
 
 
         //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
@@ -47,6 +53,7 @@ module.exports = {
         //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
         //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
         //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
+
 
     },
 

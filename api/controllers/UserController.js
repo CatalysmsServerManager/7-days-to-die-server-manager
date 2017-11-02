@@ -9,17 +9,12 @@ var Passwords = require('machinepack-passwords');
 
 module.exports = {
 
-
-    /**
-     * `UserController.login()`
-     */
     login: function(req, res) {
-        sails.log("LOGGING IN")
         User.findOne({
             where: {
                 username: req.param('username')
             }
-        }, function foundUser(err, createdUser) {
+        }).populate("servers").exec(function foundUser(err, createdUser) {
             if (err) return res.negotatiate(err);
             if (!createdUser) return res.notFound();
 
@@ -38,10 +33,18 @@ module.exports = {
                 success: function() {
 
                     if (createdUser.banned) {
-                        return res.forbidden("'Your account has been banned, most likely for adding dog videos in violation of the Terms of Service.  Please contact Chad or his mother.'");
+                        return res.forbidden("Your account has been banned");
                     }
 
+
+                    let userServers = createdUser.servers
+                    userServers.map(function(server) {
+                        delete server.authToken
+                        delete server.telnetPassword
+                    })
+                    req.session.servers = userServers
                     req.session.userId = createdUser.id;
+
 
                     return res.view("welcome");
 
@@ -50,9 +53,9 @@ module.exports = {
         })
     },
 
-    /**
-     * `UserController.logout()`
-     */
+
+
+
     logout: function(req, res) {
 
         User.findOne(req.session.userId, function foundUser(err, user) {
@@ -69,10 +72,6 @@ module.exports = {
         });
     },
 
-
-    /**
-     * `UserController.signup()`
-     */
     signup: function(req, res) {
         sails.log(req.params)
         if (_.isUndefined(req.param('password'))) {
@@ -133,9 +132,10 @@ module.exports = {
 
                     return res.view('welcome')
                 });
-            }
+            },
+
+
         });
     },
-
 
 };
