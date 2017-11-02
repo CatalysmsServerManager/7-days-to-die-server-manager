@@ -1,38 +1,44 @@
 module.exports = {
 
 
-  friendlyName: 'Get server info',
+    friendlyName: 'Get server info',
+
+    description: 'Gets 7 days to die server info',
 
 
-  description: '',
+    inputs: {
+
+        id: {
+            type: "number",
+            description: "ID of the server to get stats from",
+            required: true
+        }
+
+    },
 
 
-  inputs: {
+    exits: {
 
-  },
+        success: {
+            outputFriendlyName: 'Server info',
+            outputExample: '==='
+        }
+
+    },
 
 
-  exits: {
+    fn: async function(inputs, exits) {
 
-    success: {
-      outputFriendlyName: 'Server info',
-      outputExample: '==='
+        // Get server info.
+        var serverInfo = await sails.helpers.webRequestToSdtdServer({
+            id: inputs.id,
+            apiModule: "getserverinfo"
+        })
+
+        // Send back the result through the success exit.
+        return exits.success(serverInfo);
+
     }
-
-  },
-
-
-  fn: async function (inputs, exits) {
-
-    // Get server info.
-    var serverInfo;
-    // TODO
-
-    // Send back the result through the success exit.
-    return exits.success(serverInfo);
-
-  }
 
 
 };
-

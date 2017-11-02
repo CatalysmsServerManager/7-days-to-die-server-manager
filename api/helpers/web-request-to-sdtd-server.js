@@ -15,10 +15,16 @@ module.exports = {
             description: "ID of the server to get stats from",
             required: true
         },
+
         apiModule: {
             type: 'string',
             description: 'The API endpoint to send a request to',
             required: true
+        },
+
+        extraqs: {
+            type: "json",
+            description: "Extra parameters for the request"
         }
     },
 
@@ -55,6 +61,9 @@ module.exports = {
                         admintoken: authToken
                     }
                 };
+                if (inputs.extraqs) {
+                    requestOptions.qs = Object.assign(requestOptions.qs, extraqs)
+                }
                 return requestOptions
 
             } catch (error) {
