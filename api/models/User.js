@@ -1,11 +1,53 @@
-var User = {
-    // Enforce model schema in the case of schemaless databases
-    schema: true,
+/**
+ * User.js
+ *
+ * @description :: A model definition.  Represents a database table/collection/etc.
+ * @docs        :: https://sailsjs.com/docs/concepts/models-and-orm/models
+ */
+
+module.exports = {
 
     attributes: {
-        username: { type: 'string', unique: true, required: true },
-        email: { type: 'string' },
-    }
-};
 
-module.exports = User;
+        //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
+        //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
+        //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
+
+        username: {
+            type: 'string',
+            required: true
+        },
+
+        encryptedPassword: {
+            type: "string",
+            required: true
+        },
+
+        admin: {
+            type: 'boolean',
+            defaultsTo: false
+        },
+
+        banned: {
+            type: 'boolean',
+            defaultsTo: false
+        },
+
+        servers: {
+            collection: 'sdtdServer',
+            via: 'owner'
+        }
+
+
+        //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
+        //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
+        //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
+
+
+        //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
+        //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
+        //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
+
+    },
+
+};

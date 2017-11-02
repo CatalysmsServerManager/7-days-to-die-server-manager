@@ -71,9 +71,12 @@ module.exports.routes = {
 
     // Login/out 
 
-    'get /login': 'AuthController.login',
-    'get /logout': 'AuthController.logout',
-    'get /register': 'AuthController.register',
+    'get /login': { view: 'user/login' },
+    'get /signup': { view: 'user/signup' },
+    '/welcome': { view: 'user/welcome' },
+    'post /login': 'UserController.login',
+    'post /signup': 'UserController.signup',
+    '/logout': 'UserController.logout',
 
     //  ╔═╗╔═╗╦  ╔═╗╔╗╔╔╦╗╔═╗╔═╗╦╔╗╔╔╦╗╔═╗
     //  ╠═╣╠═╝║  ║╣ ║║║ ║║╠═╝║ ║║║║║ ║ ╚═╗

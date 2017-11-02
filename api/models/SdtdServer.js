@@ -47,6 +47,11 @@ module.exports = {
             type: "string"
         },
 
+        owner: {
+            type: "string",
+            required: true
+        },
+
         //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
         //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
         //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
