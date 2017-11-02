@@ -47,11 +47,6 @@ module.exports = {
             type: "string"
         },
 
-        owner: {
-            type: "string",
-            required: true
-        },
-
         //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
         //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
         //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
@@ -64,6 +59,16 @@ module.exports = {
         loggingEnabled: {
             type: "boolean",
             defaultsTo: false
+        },
+
+        owner: {
+            model: "user",
+            required: true
+        },
+
+        admins: {
+            collection: "user",
+
         }
 
     },
