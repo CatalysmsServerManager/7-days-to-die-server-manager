@@ -46,4 +46,8 @@ module.exports.policies = {
     //
     // },
 
+    sdtdServerController: {
+        '*': 'isLoggedIn'
+    },
+
 };

@@ -47,33 +47,20 @@ module.exports.routes = {
         action: "dashboard"
     },
 
-    "/addserver": {
-        controller: "SdtdServerController",
-        action: "addServer"
-    },
+    "get /addserver": { view: 'addServer' },
+
+    "post /addserver": "SdtdServerController.addServer",
 
     "GET /sdtdserver/console": {
         controller: "SdtdServerController",
         action: "console"
     },
 
-    // Start/Stop getting logs from a server
-
-    'GET /sdtdserver/logging': {
-        controller: "SdtdServerController",
-        action: "startLogging"
-    },
-
-    "DELETE /sdtdserver/logging": {
-        controller: "SdtdServerController",
-        action: "stopLogging"
-    },
-
     // Login/out 
 
     'get /login': { view: 'user/login' },
     'get /signup': { view: 'user/signup' },
-    '/welcome': { view: 'user/welcome' },
+    '/welcome': { view: 'welcome' },
     'post /login': 'UserController.login',
     'post /signup': 'UserController.signup',
     '/logout': 'UserController.logout',

@@ -14,6 +14,7 @@ module.exports = {
      * `UserController.login()`
      */
     login: function(req, res) {
+        sails.log("LOGGING IN")
         User.findOne({
             where: {
                 username: req.param('username')
@@ -31,7 +32,7 @@ module.exports = {
                 },
 
                 incorrect: function() {
-                    return res.notFound();
+                    return res.send("Incorrect!");
                 },
 
                 success: function() {
@@ -42,7 +43,7 @@ module.exports = {
 
                     req.session.userId = createdUser.id;
 
-                    return res.ok();
+                    return res.view("welcome");
 
                 }
             });
