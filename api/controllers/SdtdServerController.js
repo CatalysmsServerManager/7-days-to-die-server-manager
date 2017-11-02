@@ -32,7 +32,6 @@ module.exports = {
                 }).meta({ fetch: true })
                 .exec(function(err, sdtdServer) {
                     sails.log(err)
-                    sails.log(sdtdServer)
                     return res.redirect(`/sdtdserver/dashboard?id=${sdtdServer.id}`)
                 })
 

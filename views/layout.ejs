@@ -98,25 +98,30 @@
                                 <a href="/about/" class="pure-menu-link">About</a>
                             </li>
 
-                            <li class="pure-menu-item" class="menu-item-divided pure-menu-selected">
-                                <a href="/addserver/" class="pure-menu-link">Add server</a>
-                            </li>
-
                             <% if (isLoggedIn(req)) { %>
+
+                                <li class="pure-menu-item" class="menu-item-divided pure-menu-selected">
+                                    <a href="/addserver/" class="pure-menu-link">Add server</a>
+                                </li>
 
                                 <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
                                     <a href="#" id="menuLink1" class="pure-menu-link">Your servers</a>
                                     <ul class="pure-menu-children">
-
-                                        <% userServers.forEach(function(server) { %>
-                                            <li class="pure-menu-item">
-                                                <% const dashboardURL = "/sdtdserver/dashboard?id=" + server.id; %>
-                                                    <a href=<%=dashboardURL %> class="pure-menu-link">
-                                                        <%= server.ip %>
+                                        <% if(userServers) { %>
+                                            <% userServers.forEach(function(server) { %>
+                                                <li class="pure-menu-item">
+                                                    <% const dashboardURL = "/sdtdserver/dashboard?id=" + server.id; %>
+                                                        <a href=<%=dashboardURL %> class="pure-menu-link">
+                                                        <% if(server.name) {%>
+                                                           <%= server.name %>
+                                                           <% } else { %>
+                                                            <%= server.ip%>
+                                                            <% } %>
                                                     </a>
 
-                                            </li>
-                                            <% })%>
+                                                </li>
+                                                <% })%>
+                                                    <% } %>
                                     </ul>
                                 </li>
                                 <li class="pure-menu-item"><a href="/logout/" class="pure-menu-link">Log out</a></li>

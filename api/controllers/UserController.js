@@ -58,7 +58,7 @@ module.exports = {
 
     logout: function(req, res) {
 
-        User.findOne(req.session.userId, function foundUser(err, user) {
+        User.findOne({ where: { id: req.session.userId } }, function foundUser(err, user) {
             if (err) return res.negotiate(err);
             if (!user) {
                 sails.log.verbose('Session refers to a user who no longer exists.');
@@ -68,12 +68,11 @@ module.exports = {
             // log the user-agent out.
             req.session.userId = null;
 
-            return res.ok();
+            return res.view("homepage");
         });
     },
 
     signup: function(req, res) {
-        sails.log(req.params)
         if (_.isUndefined(req.param('password'))) {
             return res.badRequest('A password is required!');
         }
@@ -97,7 +96,6 @@ module.exports = {
         }
 
         // Validation of input is ok, we start creating the user
-
         Passwords.encryptPassword({
             password: req.param('password'),
         }).exec({
@@ -107,9 +105,7 @@ module.exports = {
             },
 
             success: function(result) {
-
                 var options = {};
-
                 options.username = req.param('username');
                 options.encryptedPassword = result;
 
