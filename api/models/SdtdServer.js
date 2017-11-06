@@ -77,6 +77,11 @@ module.exports = {
         admins: {
             collection: "user",
 
+        },
+
+        players: {
+            collection: "player",
+            via: 'server'
         }
 
     },
