@@ -5,6 +5,8 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
+var sevenDays = require('machinepack-7daystodiewebapi');
+
 module.exports = {
     addServer: async function(req, res) {
         const IP = req.param("IP")
@@ -30,9 +32,11 @@ module.exports = {
                     authToken: authInfo.authToken,
                     owner: req.session.userId
                 }).meta({ fetch: true })
-                .exec(function(err, sdtdServer) {
+                .exec(async function(err, sdtdServer) {
                     sails.log(err)
-                    return res.redirect(`/sdtdserver/dashboard?id=${sdtdServer.id}`)
+                    await sails.helpers.loadPlayerData({ serverID: sdtdServer.id })
+                    return res.ok()
+                        //return res.redirect(`/sdtdserver/dashboard?id=${sdtdServer.id}`)
                 })
 
 
@@ -58,7 +62,7 @@ module.exports = {
             error: function(err) {
                 return res.badRequest("Invalid permissions for 7 days server. Please check your webtokens or add your server again.")
             }
-        });
+        })
 
         await sails.helpers.getPlayersOnline({
             id: serverID
@@ -113,6 +117,7 @@ module.exports = {
         if (!serverID) { throw new Error("Must provide a server ID in query") }
         await sails.models.sdtdserver.update({ id: serverID }, { loggingEnabled: false })
         sails.models.sdtdserver.telnetSocket.removeAllListeners('data')
-    }
+    },
+
 
 };
