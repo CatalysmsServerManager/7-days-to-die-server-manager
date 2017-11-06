@@ -15,7 +15,7 @@ module.exports = {
                 username: req.param('username')
             }
         }).populate("servers").exec(function foundUser(err, createdUser) {
-            if (err) return res.negotatiate(err);
+            if (err) return res.send(err);
             if (!createdUser) return res.notFound();
 
             Passwords.checkPassword({
@@ -23,7 +23,7 @@ module.exports = {
                 encryptedPassword: createdUser.encryptedPassword
             }).exec({
                 error: function(err) {
-                    return res.negotiate(err);
+                    return res.send(err);
                 },
 
                 incorrect: function() {
@@ -94,6 +94,7 @@ module.exports = {
         if (!_.isString(req.param('username')) || req.param('username').match(/[^a-z0-9]/i)) {
             return res.badRequest('Invalid username: must consist of numbers and letters only.');
         }
+
 
         // Validation of input is ok, we start creating the user
         Passwords.encryptPassword({
