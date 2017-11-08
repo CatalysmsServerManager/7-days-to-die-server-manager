@@ -111,7 +111,7 @@
                                             <% _.forIn(userServers, function(server) {  %>
                                                 <li class="pure-menu-item">
                                                     <% server %>
-                                                        <% const dashboardURL = "/sdtdserver/dashboard?id=" + server.id; %>
+                                                        <% const dashboardURL = "/sdtdserver/dashboard/" + server.id; %>
                                                             <a href=<%=dashboardURL %> class="pure-menu-link">
                                                         <% if(server.name) {%>
                                                            <%= server.name %>

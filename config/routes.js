@@ -42,7 +42,7 @@ module.exports.routes = {
      ***************************************************************************/
 
 
-    '/sdtdserver/dashboard': {
+    '/sdtdserver/dashboard/:serverID': {
         controller: "SdtdServerController",
         action: "dashboard"
     },

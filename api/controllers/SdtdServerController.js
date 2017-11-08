@@ -70,10 +70,10 @@ module.exports = {
                                     if (err) return res.serverError(err);
                                     await sails.helpers.loadPlayerData({ serverID: createdServer.id }).switch({
                                         success: function(playerData) {
-                                            return res.redirect(`/sdtdserver/dashboard?id=${createdServer.id}`)
+                                            return res.redirect(`/sdtdserver/dashboard/${createdServer.id}`)
                                         },
                                         noPlayers: function() {
-                                            return res.redirect(`/sdtdserver/dashboard?id=${createdServer.id}`)
+                                            return res.redirect(`/sdtdserver/dashboard/${createdServer.id}`)
                                         },
                                         error: function(error) {
                                             return res.serverError(error)
@@ -98,7 +98,7 @@ module.exports = {
 
     dashboard: async function(req, res) {
 
-        const serverID = req.query.id
+        const serverID = req.param("serverID")
 
         let day7data
         let onlinePlayers
