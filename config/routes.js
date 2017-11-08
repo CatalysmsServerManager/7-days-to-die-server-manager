@@ -11,11 +11,11 @@
 module.exports.routes = {
 
 
-    //  ╦ ╦╔═╗╔╗ ╔═╗╔═╗╔═╗╔═╗╔═╗
-    //  ║║║║╣ ╠╩╗╠═╝╠═╣║ ╦║╣ ╚═╗
-    //  ╚╩╝╚═╝╚═╝╩  ╩ ╩╚═╝╚═╝╚═╝
+  //  ╦ ╦╔═╗╔╗ ╔═╗╔═╗╔═╗╔═╗╔═╗
+  //  ║║║║╣ ╠╩╗╠═╝╠═╣║ ╦║╣ ╚═╗
+  //  ╚╩╝╚═╝╚═╝╩  ╩ ╩╚═╝╚═╝╚═╝
 
-    /***************************************************************************
+  /***************************************************************************
      *                                                                          *
      * Make the view located at `views/homepage.ejs` your home page.            *
      *                                                                          *
@@ -24,13 +24,13 @@ module.exports.routes = {
      *                                                                          *
      ***************************************************************************/
 
-    '/': {
-        view: 'homepage'
-    },
+  '/': {
+    view: 'homepage'
+  },
 
 
 
-    /***************************************************************************
+  /***************************************************************************
      *                                                                          *
      * More custom routes here...                                               *
      * (See https://sailsjs.com/config/routes for examples.)                    *
@@ -42,41 +42,41 @@ module.exports.routes = {
      ***************************************************************************/
 
 
-    '/sdtdserver/dashboard/:serverID': {
-        controller: "SdtdServerController",
-        action: "dashboard",
-        skipAssets: true
-    },
+  '/sdtdserver/dashboard/:serverID': {
+    controller: 'SdtdServerController',
+    action: 'dashboard',
+    skipAssets: true
+  },
 
-    "get /addserver": { view: 'addServer' },
+  'get /addserver': { view: 'addServer' },
 
-    "post /addserver": "SdtdServerController.addServer",
+  'post /addserver': 'SdtdServerController.addServer',
 
-    'get /sdtdserver/:id/dashboard': 'SdtdServerController.dashboard',
-    'get /sdtdserver/:id/players': 'SdtdServerController.viewPlayers',
+  'get /sdtdserver/:id/dashboard': 'SdtdServerController.dashboard',
+  'get /sdtdserver/:id/players': 'SdtdServerController.viewPlayers',
 
-    // Login/out 
+  // Login/out
 
-    'get /login': { view: 'user/login' },
-    'get /signup': { view: 'user/signup' },
-    '/welcome': { view: 'welcome' },
-    'post /login': 'UserController.login',
-    'post /signup': 'UserController.signup',
-    '/logout': 'UserController.logout',
+  'get /login': { view: 'user/login' },
+  'get /signup': { view: 'user/signup' },
+  '/welcome': { view: 'welcome' },
+  'post /login': 'UserController.login',
+  'post /signup': 'UserController.signup',
+  '/logout': 'UserController.logout',
 
-    //  ╔═╗╔═╗╦  ╔═╗╔╗╔╔╦╗╔═╗╔═╗╦╔╗╔╔╦╗╔═╗
-    //  ╠═╣╠═╝║  ║╣ ║║║ ║║╠═╝║ ║║║║║ ║ ╚═╗
-    //  ╩ ╩╩  ╩  ╚═╝╝╚╝═╩╝╩  ╚═╝╩╝╚╝ ╩ ╚═╝
-
-
-    //  ╦ ╦╔═╗╔╗ ╦ ╦╔═╗╔═╗╦╔═╔═╗
-    //  ║║║║╣ ╠╩╗╠═╣║ ║║ ║╠╩╗╚═╗
-    //  ╚╩╝╚═╝╚═╝╩ ╩╚═╝╚═╝╩ ╩╚═╝
+  //  ╔═╗╔═╗╦  ╔═╗╔╗╔╔╦╗╔═╗╔═╗╦╔╗╔╔╦╗╔═╗
+  //  ╠═╣╠═╝║  ║╣ ║║║ ║║╠═╝║ ║║║║║ ║ ╚═╗
+  //  ╩ ╩╩  ╩  ╚═╝╝╚╝═╩╝╩  ╚═╝╩╝╚╝ ╩ ╚═╝
 
 
-    //  ╔╦╗╦╔═╗╔═╗
-    //  ║║║║╚═╗║
-    //  ╩ ╩╩╚═╝╚═╝
+  //  ╦ ╦╔═╗╔╗ ╦ ╦╔═╗╔═╗╦╔═╔═╗
+  //  ║║║║╣ ╠╩╗╠═╣║ ║║ ║╠╩╗╚═╗
+  //  ╚╩╝╚═╝╚═╝╩ ╩╚═╝╚═╝╩ ╩╚═╝
+
+
+  //  ╔╦╗╦╔═╗╔═╗
+  //  ║║║║╚═╗║
+  //  ╩ ╩╩╚═╝╚═╝
 
 
 };

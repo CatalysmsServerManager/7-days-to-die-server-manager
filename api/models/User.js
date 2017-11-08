@@ -7,64 +7,64 @@
 
 module.exports = {
 
-    toJSON: function() {
-        var obj = this.toObject();
-        delete obj.encryptedPassword;
-        return obj;
+  toJSON: function() {
+    var obj = this.toObject();
+    delete obj.encryptedPassword;
+    return obj;
+  },
+
+  attributes: {
+
+    //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
+    //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
+    //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
+
+    username: {
+      type: 'string',
+      required: true,
+      unique: true
     },
 
-    attributes: {
-
-        //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
-        //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
-        //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
-
-        username: {
-            type: 'string',
-            required: true,
-            unique: true
-        },
-
-        encryptedPassword: {
-            type: "string",
-            required: true
-        },
-
-        admin: {
-            type: 'boolean',
-            defaultsTo: false
-        },
-
-        banned: {
-            type: 'boolean',
-            defaultsTo: false
-        },
-
-        servers: {
-            collection: 'sdtdServer',
-            via: 'owner'
-        },
-
-        steamID: {
-            type: 'string'
-        },
-
-
-        //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
-        //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
-        //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
-
-
-        //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
-        //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
-        //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
-
-        players: {
-            collection: 'player',
-            via: 'user'
-        }
-
-
+    encryptedPassword: {
+      type: 'string',
+      required: true
     },
+
+    admin: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
+    banned: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
+    servers: {
+      collection: 'sdtdServer',
+      via: 'owner'
+    },
+
+    steamID: {
+      type: 'string'
+    },
+
+
+    //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
+    //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
+    //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
+
+
+    //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
+    //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
+    //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
+
+    players: {
+      collection: 'player',
+      via: 'user'
+    }
+
+
+  },
 
 };

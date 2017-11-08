@@ -15,7 +15,7 @@
 
 module.exports.security = {
 
-   /***************************************************************************
+  /***************************************************************************
    *                                                                          *
    * CORS is like a more modern version of JSONP-- it allows your application *
    * to circumvent browsers' same-origin policy, so that the responses from   *

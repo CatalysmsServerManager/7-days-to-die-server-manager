@@ -6,137 +6,137 @@
 
 module.exports = {
 
-    toJSON: function() {
-        var obj = this.toObject();
-        delete obj.telnetPassword;
-        delete obj.authToken;
-        delete obj.authName;
-        return obj;
+  toJSON: function() {
+    var obj = this.toObject();
+    delete obj.telnetPassword;
+    delete obj.authToken;
+    delete obj.authName;
+    return obj;
+  },
+
+  attributes: {
+
+    //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
+    //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
+    //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
+
+    name: {
+      type: 'string'
     },
 
-    attributes: {
+    ip: {
+      type: 'string',
+      required: true
+    },
 
-        //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
-        //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
-        //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
+    gamePort: {
+      type: 'number'
+    },
 
-        name: {
-            type: 'string'
-        },
+    telnetPort: {
+      type: 'number',
+      required: true
+    },
 
-        ip: {
-            type: 'string',
-            required: true
-        },
+    telnetPassword: {
+      type: 'string',
+      required: true
+    },
 
-        gamePort: {
-            type: 'number'
-        },
+    webPort: {
+      type: 'number'
+    },
 
-        telnetPort: {
-            type: 'number',
-            required: true
-        },
+    authName: {
+      type: 'string'
+    },
 
-        telnetPassword: {
-            type: 'string',
-            required: true
-        },
+    authToken: {
+      type: 'string'
+    },
 
-        webPort: {
-            type: "number"
-        },
+    // Info loaded from /getserverinfo
 
-        authName: {
-            type: "string"
-        },
+    description: {
+      type: 'string'
+    },
 
-        authToken: {
-            type: "string"
-        },
+    mapType: {
+      type: 'string'
+    },
 
-        // Info loaded from /getserverinfo
+    version: {
+      type: 'string'
+    },
 
-        description: {
-            type: "string"
-        },
+    maxPlayers: {
+      type: 'number'
+    },
 
-        mapType: {
-            type: "string"
-        },
+    gameDifficulty: {
+      type: 'string'
+    },
 
-        version: {
-            type: 'string'
-        },
+    dayNightLength: {
+      type: 'number'
+    },
 
-        maxPlayers: {
-            type: 'number'
-        },
+    zombiesRun: {
+      type: 'number'
+    },
 
-        gameDifficulty: {
-            type: "string"
-        },
+    dropOnDeath: {
+      type: 'number'
+    },
 
-        dayNightLength: {
-            type: 'number'
-        },
+    playerKillingMode: {
+      type: 'number'
+    },
 
-        zombiesRun: {
-            type: "number"
-        },
+    lootRespawnDays: {
+      type: 'number',
+    },
 
-        dropOnDeath: {
-            type: "number"
-        },
+    landClaimSize: {
+      type: 'number'
+    },
 
-        playerKillingMode: {
-            type: "number"
-        },
+    isPasswordProtected: {
+      type: 'boolean'
+    },
 
-        lootRespawnDays: {
-            type: "number",
-        },
+    EACEnabled: {
+      type: 'boolean'
+    },
 
-        landClaimSize: {
-            type: "number"
-        },
+    requiresMod: {
+      type: 'boolean'
+    },
 
-        isPasswordProtected: {
-            type: "boolean"
-        },
-
-        EACEnabled: {
-            type: "boolean"
-        },
-
-        requiresMod: {
-            type: "boolean"
-        },
-
-        //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
-        //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
-        //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
+    //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
+    //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
+    //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
 
 
-        //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
-        //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
-        //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
+    //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
+    //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
+    //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
 
-        owner: {
-            model: "user",
-            required: true
-        },
+    owner: {
+      model: 'user',
+      required: true
+    },
 
-        admins: {
-            collection: "user",
-
-        },
-
-        players: {
-            collection: "player",
-            via: 'server'
-        }
+    admins: {
+      collection: 'user',
 
     },
+
+    players: {
+      collection: 'player',
+      via: 'server'
+    }
+
+  },
 
 };

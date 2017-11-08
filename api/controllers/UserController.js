@@ -9,14 +9,14 @@ var Passwords = require('machinepack-passwords');
 
 module.exports = {
 
-    login: function(req, res) {
-        User.findOne({
+    login: async function(req, res) {
+        await User.findOne({
             where: {
                 username: req.param('username')
             }
-        }).populate("servers").exec(function foundUser(err, createdUser) {
-            if (err) return res.send(`Error finding a user in DB ${err}`);
-            if (!createdUser) return res.notFound();
+        }).populate('servers').exec(function foundUser(err, createdUser) {
+            if (err) { return res.send(`Error finding a user in DB ${err}`); }
+            if (!createdUser) { return res.notFound(); }
 
             Passwords.checkPassword({
                 passwordAttempt: req.param('password'),
@@ -27,30 +27,30 @@ module.exports = {
                 },
 
                 incorrect: function() {
-                    return res.send("Incorrect!");
+                    return res.send('Incorrect!');
                 },
 
                 success: function() {
 
                     if (createdUser.banned) {
-                        return res.forbidden("Your account has been banned");
+                        return res.forbidden('Your account has been banned');
                     }
 
                     req.session.userId = createdUser.id;
 
-                    let userServers = createdUser.servers
+                    let userServers = createdUser.servers;
                     userServers.map(function(server) {
-                        delete server.authToken
-                        delete server.telnetPassword
-                    })
-                    req.session.servers = userServers
+                        delete server.authToken;
+                        delete server.telnetPassword;
+                    });
+                    req.session.servers = userServers;
 
 
-                    return res.view("homepage");
+                    return res.view('homepage');
 
                 }
             });
-        })
+        });
     },
 
 
@@ -59,7 +59,7 @@ module.exports = {
     logout: function(req, res) {
 
         User.findOne({ where: { id: req.session.userId } }, function foundUser(err, user) {
-            if (err) return res.negotiate(err);
+            if (err) { return res.negotiate(err); }
             if (!user) {
                 sails.log.verbose('Session refers to a user who no longer exists.');
                 return res.redirect('/');
@@ -68,7 +68,7 @@ module.exports = {
             // log the user-agent out.
             req.session.userId = null;
 
-            return res.view("homepage");
+            return res.view('homepage');
         });
     },
 
@@ -114,14 +114,14 @@ module.exports = {
                     // Check for duplicate username
                     if (err && err.code === 'E_UNIQUE') {
 
-                        return res.status(409).send('Username is already taken by another user, please try again.')
+                        return res.status(409).send('Username is already taken by another user, please try again.');
                     }
 
                     // Log the user in
                     req.session.userId = createdUser.id;
-                    req.session.servers = false
+                    req.session.servers = false;
 
-                    return res.view('welcome')
+                    return res.view('welcome');
                 });
             },
 

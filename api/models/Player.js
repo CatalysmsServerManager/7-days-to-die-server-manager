@@ -7,75 +7,75 @@
 
 module.exports = {
 
-    attributes: {
+  attributes: {
 
-        //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
-        //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
-        //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
-
-
-        steamID: {
-            type: 'number',
-            required: true
-        },
-
-        entityID: {
-            type: 'number'
-        },
-
-        ip: {
-            type: 'string',
-            required: true
-        },
-
-        name: {
-            type: 'string',
-            required: true
-        },
-
-        positionX: {
-            type: "number"
-        },
-
-        positionY: {
-            type: "number"
-        },
-
-        positionZ: {
-            type: "number"
-        },
-
-        playtime: {
-            type: "number"
-        },
-
-        lastOnline: {
-            type: "string"
-        },
-
-        banned: {
-            type: 'boolean',
-            required: true
-        },
+    //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
+    //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
+    //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
 
 
-        //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
-        //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
-        //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
-
-
-        //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
-        //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
-        //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
-
-        server: {
-            model: 'sdtdServer'
-        },
-
-        user: {
-            model: 'user'
-        }
-
+    steamID: {
+      type: 'number',
+      required: true
     },
+
+    entityID: {
+      type: 'number'
+    },
+
+    ip: {
+      type: 'string',
+      required: true
+    },
+
+    name: {
+      type: 'string',
+      required: true
+    },
+
+    positionX: {
+      type: 'number'
+    },
+
+    positionY: {
+      type: 'number'
+    },
+
+    positionZ: {
+      type: 'number'
+    },
+
+    playtime: {
+      type: 'number'
+    },
+
+    lastOnline: {
+      type: 'string'
+    },
+
+    banned: {
+      type: 'boolean',
+      required: true
+    },
+
+
+    //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
+    //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
+    //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
+
+
+    //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
+    //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
+    //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
+
+    server: {
+      model: 'sdtdServer'
+    },
+
+    user: {
+      model: 'user'
+    }
+
+  },
 
 };
