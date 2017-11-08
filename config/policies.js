@@ -47,7 +47,10 @@ module.exports.policies = {
     // },
 
     sdtdServerController: {
-        '*': 'isLoggedIn'
+        'dashboard': 'isServerOwner',
+        'addserver': 'isLoggedIn',
+
+
     },
 
 };

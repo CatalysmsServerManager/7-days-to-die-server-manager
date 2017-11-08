@@ -119,6 +119,7 @@ module.exports = {
 
                     // Log the user in
                     req.session.userId = createdUser.id;
+                    req.session.servers = false
 
                     return res.view('welcome')
                 });
