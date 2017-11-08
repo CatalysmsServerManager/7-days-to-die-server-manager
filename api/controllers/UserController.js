@@ -36,13 +36,6 @@ module.exports = {
                         return res.forbidden("Your account has been banned");
                     }
 
-
-                    let userServers = createdUser.servers
-                    userServers.map(function(server) {
-                        delete server.authToken
-                        delete server.telnetPassword
-                    })
-                    req.session.servers = userServers
                     req.session.userId = createdUser.id;
 
 

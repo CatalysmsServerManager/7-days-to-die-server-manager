@@ -17,13 +17,13 @@
         "req-flash": "0.0.3",
         "request": "^2.83.0",
         "request-promise-native": "^1.0.5",
-        "sails": "^1.0.0-38",
-        "sails-hook-grunt": "^2.0.0",
+        "sails": "^1.0.0-40",
+        "sails-hook-grunt": "^2.2.1",
         "sails-hook-orm": "^2.0.0-16",
         "sails-hook-sockets": "^1.4.0",
         "sails-mysql": "^1.0.0-15",
         "socket.io-redis": "4.0.0",
-        "telnet-client": "^0.15.4",
+        "telnet-client": "^0.15.5",
         "validator": "^9.1.1"
     },
     "scripts": {

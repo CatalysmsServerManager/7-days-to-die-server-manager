@@ -19,6 +19,10 @@ module.exports = {
 
     exits: {
 
+        noPlayers: {
+            description: "No player data on the server."
+        }
+
     },
 
 
@@ -36,6 +40,7 @@ module.exports = {
                 },
                 success: function(data) {
                     const playerData = data.players;
+                    if (_.isUndefined(playerData)) return exits.noPlayers()
                     playerData.forEach(async function(playerJSON) {
                         await sails.models.player.find({
                             where: {

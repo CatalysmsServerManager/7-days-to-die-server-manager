@@ -51,10 +51,8 @@ module.exports.routes = {
 
     "post /addserver": "SdtdServerController.addServer",
 
-    "GET /sdtdserver/console": {
-        controller: "SdtdServerController",
-        action: "console"
-    },
+    'get /sdtdserver/:id/dashboard': 'SdtdServerController.dashboard',
+    'get /sdtdserver/:id/players': 'SdtdServerController.viewPlayers',
 
     // Login/out 
 

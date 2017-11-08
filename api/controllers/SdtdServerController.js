@@ -13,37 +13,56 @@ module.exports = {
         const telnetPort = parseInt(req.param("TelnetPort"))
         const telnetPassword = req.param("TelnetPassword")
 
-        try {
-            let connection = await sails.helpers.connectToTelnet({
-                ip: IP,
-                port: telnetPort,
-                password: telnetPassword
-            })
-            const authInfo = await sails.helpers.createWebToken({
-                telnetConnection: connection
-            })
+        await sails.helpers.connectToTelnet({
+            ip: IP,
+            port: telnetPort,
+            password: telnetPassword
+        }).switch({
+            error: function(error) {
+                return res.badRequest("Could not connect to telnet. Please verify the info is correct." + error)
+            },
 
-            sails.models.sdtdserver.create({
-                    ip: IP,
-                    telnetPort: telnetPort,
-                    telnetPassword: telnetPassword,
-                    webPort: telnetPort + 1,
-                    authName: authInfo.authName,
-                    authToken: authInfo.authToken,
-                    owner: req.session.userId
-                }).meta({ fetch: true })
-                .exec(async function(err, sdtdServer) {
-                    sails.log(err)
-                    await sails.helpers.loadPlayerData({ serverID: sdtdServer.id })
-                    return res.ok()
-                        //return res.redirect(`/sdtdserver/dashboard?id=${sdtdServer.id}`)
+            success: async function(telnetConnection) {
+                await sails.helpers.createWebToken({
+                    telnetConnection: telnetConnection
+                }).switch({
+                    error: function(error) {
+                        return res.badRequest("Connected to telnet, but cannot add web authorization token." + error)
+                    },
+                    success: function(authInfo) {
+                        sails.models.sdtdserver.create({
+                            ip: IP,
+                            telnetPort: telnetPort,
+                            telnetPassword: telnetPassword,
+                            webPort: telnetPort + 1,
+                            authName: authInfo.authName,
+                            authToken: authInfo.authToken,
+                            owner: req.session.userId
+                        }).meta({ fetch: true }).exec(async function(err, createdServer) {
+                            if (err) return res.serverError(err);
+                            await sails.helpers.loadPlayerData({ serverID: createdServer.id }).switch({
+                                success: function(playerData) {
+                                    return res.redirect(`/sdtdserver/dashboard?id=${createdServer.id}`)
+                                },
+                                noPlayers: function() {
+                                    return res.view("welcome")
+                                },
+                                error: function(error) {
+                                    return res.serverError(error)
+                                }
+                            })
+                        })
+                    }
                 })
+            },
+
+        })
 
 
 
-        } catch (error) {
-            console.log(error)
-        }
+
+
+
     },
 
     dashboard: async function(req, res) {
@@ -81,42 +100,6 @@ module.exports = {
         })
 
 
-    },
-
-    console: async function(req, res) {
-        const serverID = req.query.id
-        let telnetSocket = await sails.helpers.createTelnetSocket({ id: serverID })
-
-        return res.view("console", {
-            telnetSocket: telnetSocket
-        })
-    },
-
-    startLogging: async function(req, res) {
-        console.log("Start logging")
-        const serverID = req.query.id
-        if (!serverID) { throw new Error("Must provide a server ID in query") }
-        const server = await sails.models.sdtdserver.findOne(serverID)
-        await sails.models.sdtdserver.update({ id: serverID }, { loggingEnabled: true })
-        let telnetSocket = await sails.helpers.createTelnetSocket({ id: serverID })
-        sails.models.sdtdserver.telnetSocket.on('data', async function createLogLine(dataLine) {
-            await LogLine.create({
-                logType: "telnet",
-                message: dataLine.toString(),
-                serverID: serverID
-            }).exec(function() {
-
-            })
-        })
-        return res.send(200)
-    },
-
-    stopLogging: async function(req, res) {
-        console.log("Stop logging")
-        const serverID = req.query.id
-        if (!serverID) { throw new Error("Must provide a server ID in query") }
-        await sails.models.sdtdserver.update({ id: serverID }, { loggingEnabled: false })
-        sails.models.sdtdserver.telnetSocket.removeAllListeners('data')
     },
 
 
