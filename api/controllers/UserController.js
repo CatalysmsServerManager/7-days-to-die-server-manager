@@ -14,8 +14,8 @@ module.exports = {
             where: {
                 username: req.param('username')
             }
-        }).populate("servers").exec(function foundUser(err, createdUser) {
-            if (err) return res.send(err);
+        }).exec(function foundUser(err, createdUser) {
+            if (err) return res.send(`Error finding a user in DB ${err}`);
             if (!createdUser) return res.notFound();
 
             Passwords.checkPassword({
@@ -23,7 +23,7 @@ module.exports = {
                 encryptedPassword: createdUser.encryptedPassword
             }).exec({
                 error: function(err) {
-                    return res.send(err);
+                    return res.send(`Error during log in: ${err}`);
                 },
 
                 incorrect: function() {
@@ -39,7 +39,7 @@ module.exports = {
                     req.session.userId = createdUser.id;
 
 
-                    return res.view("welcome");
+                    return res.view("homepage");
 
                 }
             });
