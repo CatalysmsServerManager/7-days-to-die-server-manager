@@ -45,7 +45,7 @@ module.exports = {
                                     return res.redirect(`/sdtdserver/dashboard?id=${createdServer.id}`)
                                 },
                                 noPlayers: function() {
-                                    return res.view("welcome")
+                                    return res.redirect(`/sdtdserver/dashboard?id=${createdServer.id}`)
                                 },
                                 error: function(error) {
                                     return res.serverError(error)
