@@ -12,7 +12,7 @@ module.exports = {
         const IP = req.param("IP")
         const telnetPort = parseInt(req.param("TelnetPort"))
         const telnetPassword = req.param("TelnetPassword")
-        const webPort = telnetPort + 1
+        const webPort = parseInt(req.param("webPort")) || telnetPort + 1
 
         await sails.helpers.connectToTelnet({
             ip: IP,
