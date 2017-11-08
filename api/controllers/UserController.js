@@ -14,7 +14,7 @@ module.exports = {
             where: {
                 username: req.param('username')
             }
-        }).exec(function foundUser(err, createdUser) {
+        }).populate("servers").exec(function foundUser(err, createdUser) {
             if (err) return res.send(`Error finding a user in DB ${err}`);
             if (!createdUser) return res.notFound();
 
@@ -37,6 +37,13 @@ module.exports = {
                     }
 
                     req.session.userId = createdUser.id;
+
+                    let userServers = createdUser.servers
+                    userServers.map(function(server) {
+                        delete server.authToken
+                        delete server.telnetPassword
+                    })
+                    req.session.servers = userServers
 
 
                     return res.view("homepage");
@@ -105,7 +112,7 @@ module.exports = {
 
                 User.create(options).meta({ fetch: true }).exec(function(err, createdUser) {
                     // Check for duplicate username
-                    if (err.code === 'E_UNIQUE') {
+                    if (err && err.code === 'E_UNIQUE') {
 
                         return res.status(409).send('Username is already taken by another user, please try again.')
                     }

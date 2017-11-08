@@ -12,6 +12,7 @@ module.exports = {
         const IP = req.param("IP")
         const telnetPort = parseInt(req.param("TelnetPort"))
         const telnetPassword = req.param("TelnetPassword")
+        const webPort = telnetPort + 1
 
         await sails.helpers.connectToTelnet({
             ip: IP,
@@ -29,29 +30,59 @@ module.exports = {
                     error: function(error) {
                         return res.badRequest("Connected to telnet, but cannot add web authorization token." + error)
                     },
-                    success: function(authInfo) {
-                        sails.models.sdtdserver.create({
+                    success: async function(authInfo) {
+
+                        await sevenDays.getServerInfo({
                             ip: IP,
-                            telnetPort: telnetPort,
-                            telnetPassword: telnetPassword,
-                            webPort: telnetPort + 1,
+                            port: webPort,
                             authName: authInfo.authName,
-                            authToken: authInfo.authToken,
-                            owner: req.session.userId
-                        }).meta({ fetch: true }).exec(async function(err, createdServer) {
-                            if (err) return res.serverError(err);
-                            await sails.helpers.loadPlayerData({ serverID: createdServer.id }).switch({
-                                success: function(playerData) {
-                                    return res.redirect(`/sdtdserver/dashboard?id=${createdServer.id}`)
-                                },
-                                noPlayers: function() {
-                                    return res.redirect(`/sdtdserver/dashboard?id=${createdServer.id}`)
-                                },
-                                error: function(error) {
-                                    return res.serverError(error)
-                                }
-                            })
+                            authToken: authInfo.authToken
+                        }).exec({
+                            error: function(error) {
+                                return res.badRequest("Could not connect to the web API of your server." + error)
+                            },
+                            success: async function(serverInfo) {
+
+                                sails.models.sdtdserver.create({
+                                    ip: IP,
+                                    telnetPort: telnetPort,
+                                    telnetPassword: telnetPassword,
+                                    webPort: webPort,
+                                    authName: authInfo.authName,
+                                    authToken: authInfo.authToken,
+                                    owner: req.session.userId,
+                                    name: serverInfo.GameHost.value,
+                                    description: serverInfo.ServerDescription.value,
+                                    mapType: serverInfo.LevelName.value,
+                                    version: serverInfo.Version.value,
+                                    maxPlayers: serverInfo.MaxPlayers.value,
+                                    gameDifficulty: serverInfo.GameDifficulty.value,
+                                    dayNightLength: serverInfo.DayNightLength.value,
+                                    zombiesRun: serverInfo.ZombiesRun.value,
+                                    dropOnDeath: serverInfo.DropOnDeath.value,
+                                    playerKillingMode: serverInfo.PlayerKillingMode.value,
+                                    lootRespawnDays: serverInfo.LootRespawnDays.value,
+                                    landClaimSize: serverInfo.LandClaimSize.value,
+                                    isPasswordProtected: serverInfo.IsPasswordProtected.value,
+                                    EACEnabled: serverInfo.EACEnabled.value,
+                                    requiresMod: serverInfo.RequiresMod.value,
+                                }).meta({ fetch: true }).exec(async function(err, createdServer) {
+                                    if (err) return res.serverError(err);
+                                    await sails.helpers.loadPlayerData({ serverID: createdServer.id }).switch({
+                                        success: function(playerData) {
+                                            return res.redirect(`/sdtdserver/dashboard?id=${createdServer.id}`)
+                                        },
+                                        noPlayers: function() {
+                                            return res.redirect(`/sdtdserver/dashboard?id=${createdServer.id}`)
+                                        },
+                                        error: function(error) {
+                                            return res.serverError(error)
+                                        }
+                                    })
+                                })
+                            }
                         })
+
                     }
                 })
             },

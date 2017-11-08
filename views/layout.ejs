@@ -108,10 +108,11 @@
                                     <a href="#" id="menuLink1" class="pure-menu-link">Your servers</a>
                                     <ul class="pure-menu-children">
                                         <% if(userServers) { %>
-                                            <% userServers.forEach(function(server) { %>
+                                            <% _.forIn(userServers, function(server) {  %>
                                                 <li class="pure-menu-item">
-                                                    <% const dashboardURL = "/sdtdserver/dashboard?id=" + server.id; %>
-                                                        <a href=<%=dashboardURL %> class="pure-menu-link">
+                                                    <% server %>
+                                                        <% const dashboardURL = "/sdtdserver/dashboard?id=" + server.id; %>
+                                                            <a href=<%=dashboardURL %> class="pure-menu-link">
                                                         <% if(server.name) {%>
                                                            <%= server.name %>
                                                            <% } else { %>

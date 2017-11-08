@@ -55,6 +55,64 @@ module.exports = {
             type: "string"
         },
 
+        // Info loaded from /getserverinfo
+
+        description: {
+            type: "string"
+        },
+
+        mapType: {
+            type: "string"
+        },
+
+        version: {
+            type: 'string'
+        },
+
+        maxPlayers: {
+            type: 'number'
+        },
+
+        gameDifficulty: {
+            type: "string"
+        },
+
+        dayNightLength: {
+            type: 'number'
+        },
+
+        zombiesRun: {
+            type: "number"
+        },
+
+        dropOnDeath: {
+            type: "number"
+        },
+
+        playerKillingMode: {
+            type: "number"
+        },
+
+        lootRespawnDays: {
+            type: "number",
+        },
+
+        landClaimSize: {
+            type: "number"
+        },
+
+        isPasswordProtected: {
+            type: "boolean"
+        },
+
+        EACEnabled: {
+            type: "boolean"
+        },
+
+        requiresMod: {
+            type: "boolean"
+        },
+
         //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
         //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
         //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
@@ -63,11 +121,6 @@ module.exports = {
         //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
         //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
         //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
-
-        loggingEnabled: {
-            type: "boolean",
-            defaultsTo: false
-        },
 
         owner: {
             model: "user",
