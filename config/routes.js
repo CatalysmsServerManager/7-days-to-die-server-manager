@@ -44,7 +44,8 @@ module.exports.routes = {
 
     '/sdtdserver/dashboard/:serverID': {
         controller: "SdtdServerController",
-        action: "dashboard"
+        action: "dashboard",
+        skipAssets: true
     },
 
     "get /addserver": { view: 'addServer' },
