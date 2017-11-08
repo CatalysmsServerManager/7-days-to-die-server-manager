@@ -21,7 +21,8 @@ module.exports = {
 
         username: {
             type: 'string',
-            required: true
+            required: true,
+            unique: true
         },
 
         encryptedPassword: {
