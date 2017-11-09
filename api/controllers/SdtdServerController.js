@@ -70,6 +70,11 @@ module.exports = {
                                     if (err) { return res.serverError(err); }
                                     await sails.helpers.loadPlayerData({ serverID: createdServer.id }).switch({
                                         success: function() {
+                                            if (typeof req.session.servers === Array) {
+                                                req.session.servers.push(createdServer);
+                                            } else {
+                                                req.session.servers = new Array(createdServer);
+                                            }
                                             return res.redirect(`/sdtdserver/dashboard/${createdServer.id}`);
                                         },
                                         noPlayers: function() {
