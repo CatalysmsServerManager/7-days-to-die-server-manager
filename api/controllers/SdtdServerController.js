@@ -102,38 +102,38 @@ module.exports = {
     },
 
     dashboard: async function(req, res) {
-
         const serverID = req.param('serverID');
 
-        let day7data;
-        let onlinePlayers;
+        let day7data
+        let onlinePlayers
 
-        await sails.helpers.getStats({
+        sails.helpers.getStats({
             id: serverID,
         }).switch({
             success: function(data) {
                 day7data = data;
-            },
-            error: function(err) {
-                return res.badRequest('Invalid permissions for 7 days server. Please check your webtokens or add your server again.' + err);
-            }
-        });
+                sails.helpers.getPlayersOnline({
+                    id: serverID
+                }).switch({
+                    success: function(data) {
+                        onlinePlayers = data;
 
-        await sails.helpers.getPlayersOnline({
-            id: serverID
-        }).switch({
-            success: function(data) {
-                onlinePlayers = data;
-                res.view('dashboard.ejs', {
-                    serverID: serverID,
-                    day7data,
-                    onlinePlayers
+                        return res.view('dashboard.ejs', {
+                            serverID: serverID,
+                            day7data,
+                            onlinePlayers
+                        });
+                    },
+                    error: function(err) {
+                        return res.badRequest('Invalid permissions for 7 days server. Please check your webtokens or add your server again.' + err);
+                    }
                 });
             },
             error: function(err) {
                 return res.badRequest('Invalid permissions for 7 days server. Please check your webtokens or add your server again.' + err);
             }
         });
+
 
 
     },
