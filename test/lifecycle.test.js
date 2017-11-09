@@ -32,6 +32,12 @@ before(function(done) {
             }
         ];
 
+        await User.destroy({
+            where: {
+                username: { startsWith: 'npmT3st' }
+            }
+        })
+
 
 
         await User.createEach(usersToBeCreated).exec(function(err, created) {
