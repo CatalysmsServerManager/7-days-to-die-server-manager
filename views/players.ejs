@@ -1,0 +1,30 @@
+<body>
+
+    <table class="pure-table">
+        <thead>
+            <tr>
+                <th>Steam ID</th>
+                <th>Name</th>
+                <th>IP</th>
+                <th>Last Online</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% players.forEach(function(player) { %>
+                <td>
+                    <%= player.steamID %>
+                </td>
+                <td>
+                    <%= player.name %>
+                </td>
+                <td>
+                    <%= player.ip %>
+                </td>
+                <td>
+                    <%= player.lastOnline %>
+                </td>
+                <% }) %>
+        </tbody>
+    </table>
+
+</body>
