@@ -1,10 +1,12 @@
 var sails = require('sails');
 
+
 // Before running any tests...
 before(function(done) {
 
     // Increase the Mocha timeout so that Sails has enough time to lift, even if you have a bunch of assets.
     this.timeout(10000);
+
 
     sails.lift({
         // Your sails app's configuration files will be loaded automatically,
@@ -30,25 +32,14 @@ before(function(done) {
             }
         ];
 
-        await User.destroy({
-            where: {
-                username: { startsWith: 'npmT3st' }
-            }
-        })
-
 
 
         await User.createEach(usersToBeCreated).exec(function(err, created) {
             if (err) { return console.log('ERROR creating mock data' + err); }
-            sails.log(`Created some user data in the DB`);
+            return done();
         });
 
 
-
-        // here you can load fixtures, etc.
-        // (for example, you might want to create some records in the database)
-
-        return done();
     });
 });
 
