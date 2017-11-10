@@ -11,7 +11,7 @@
         "connect-redis": "3.2.0",
         "grunt": "1.0.1",
         "lodash": "3.10.1",
-        "machinepack-7daystodiewebapi": "^0.1.1",
+        "machinepack-7daystodiewebapi": "^0.1.2",
         "machinepack-passwords": "^2.3.0",
         "rand-token": "^0.3.0",
         "req-flash": "0.0.3",

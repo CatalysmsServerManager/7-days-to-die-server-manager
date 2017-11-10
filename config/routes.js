@@ -58,6 +58,11 @@ module.exports.routes = {
 
     'post /addserver': 'SdtdServerController.addServer',
 
+    'post /sdtdserver/:serverID/kickplayer/:playerID': {
+        controller: 'PlayerController',
+        action: 'kickPlayer'
+    },
+
 
     // Login/out
 
