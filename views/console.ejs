@@ -1,7 +1,11 @@
 <body>
 
+    <h1>Console</h1>
+
+
+
     <div class="container">
-        <ul>
+        <ul class="console">
 
         </ul>
 
@@ -11,3 +15,15 @@
 
 
 </body>
+
+<script>
+    const serverID = <%= req.param('serverID') %>
+
+    // Connect to the servers room via socket
+    io.socket.post('/sdtdserver/' + serverID + '/console');
+
+    // When a logline is recieved, do something
+    io.socket.on('logLine', function(logLine) {
+        $(".console").append("<li class='logLine' >" + logLine.time + " - " + logLine.msg + "</li>")
+    })
+</script>

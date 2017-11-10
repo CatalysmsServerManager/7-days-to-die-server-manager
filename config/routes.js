@@ -55,12 +55,20 @@ module.exports.routes = {
     },
 
     'get /addserver': { view: 'addServer' },
-
     'post /addserver': 'SdtdServerController.addServer',
 
+    'get /sdtdserver/:serverID/console': { view: 'console' },
+    'post /sdtdserver/:serverID/console': 'SdtdServerController.console',
+
+    // kick player
     'post /sdtdserver/:serverID/kickplayer/:playerID': {
         controller: 'PlayerController',
         action: 'kickPlayer'
+    },
+
+    '/sdtdserver/:serverID/startLogging': {
+        controller: 'sdtdServerController',
+        action: 'startLogging'
     },
 
 
