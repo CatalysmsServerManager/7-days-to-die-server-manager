@@ -161,6 +161,9 @@ module.exports = {
                     sails.sockets.broadcast(serverID, 'logLine', logLine, req);
                 });
                 res.ok("Started logging");
+
+
+
             }
         });
 
