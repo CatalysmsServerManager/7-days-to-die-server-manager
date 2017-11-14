@@ -157,7 +157,7 @@ module.exports = {
         try {
             sails.hooks.sdtdlogs.stop(serverID);
         } catch (error) {
-            req.serverError(error);
+            res.serverError(error);
         }
     },
 
