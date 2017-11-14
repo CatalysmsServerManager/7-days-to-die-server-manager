@@ -149,3 +149,4 @@ nbproject
 .node_history
 dump.rdb
 
+config/datastores.js
