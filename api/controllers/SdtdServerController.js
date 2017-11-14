@@ -143,30 +143,22 @@ module.exports = {
 
     startLogging: async function(req, res) {
         const serverID = req.param('serverID');
-        sails.log("Starting logging")
-        let server = await SdtdServer.findOne(serverID);
+        sails.log.info(`Starting logging for ${serverID}`);
+        try {
+            sails.hooks.sdtdlogs.start(serverID);
+        } catch (error) {
+            res.serverError(error);
+        }
+    },
 
-        sevenDays.startLoggingEvents({
-            ip: server.ip,
-            port: server.webPort,
-            authName: server.authName,
-            authToken: server.authToken,
-        }).exec({
-            error: function(error) {
-                return res.badRequest("Cannot start logging events - " + error);
-            },
-            success: function(eventEmitter) {
-                sails.log("Got a emitter object, listening for log lines")
-                eventEmitter.on("logLine", function newLogLine(logLine) {
-                    sails.sockets.broadcast(serverID, 'logLine', logLine, req);
-                });
-                res.ok("Started logging");
-
-
-
-            }
-        });
-
+    stopLogging: async function(req, res) {
+        const serverID = req.param('serverID');
+        sails.log.info(`Stopping logging for ${serverID}`);
+        try {
+            sails.hooks.sdtdlogs.stop(serverID);
+        } catch (error) {
+            req.serverError(error);
+        }
     },
 
     console: async function(req, res) {

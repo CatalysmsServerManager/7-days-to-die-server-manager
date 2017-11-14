@@ -17,15 +17,21 @@ module.exports = function sdtdLogs(sails) {
                         createLogObject(server.id);
                     });
                 });
-                // Create collection/map [serverID, logEmitter]
                 return cb();
             });
         },
 
         start: function(serverID) {
-            return sails.models.sdtdserver.update({ id: serverID }, { loggingEnabled: true })
-                .exec(createLogObject(serverID))
 
+            if (!loggingInfoMap.has(parseInt(serverID))) {
+                return sails.models.sdtdserver.update({ id: serverID }, { loggingEnabled: true })
+                    .exec(function() {
+                        return createLogObject(serverID);
+                    });
+            } else {
+                let error = new Error("Tried to start logging for a server that already had it enabled");
+                sails.log.error(error);
+            }
         },
 
         stop: function(serverID) {
@@ -34,6 +40,7 @@ module.exports = function sdtdLogs(sails) {
                     .exec(function() {
                         let loggingObj = loggingInfoMap.get(serverID);
                         loggingObj.stop();
+                        loggingInfoMap.delete(serverID)
                     });
             }
         }
