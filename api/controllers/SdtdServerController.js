@@ -161,7 +161,19 @@ module.exports = {
         }
     },
 
-    console: async function(req, res) {
+    console: function(req, res) {
+        const serverID = req.param('serverID');
+        sails.models.sdtdserver.findOne({ id: serverID }).exec(function(error, server) {
+            if (error) {
+                sails.log.error(error);
+                throw error;
+            }
+            res.view('console', { server: server })
+        });
+
+    },
+
+    subscribeToConsoleSocket: async function(req, res) {
         const serverID = req.param('serverID');
         if (_.isUndefined(serverID)) {
             return res.badRequest("No server ID found!");

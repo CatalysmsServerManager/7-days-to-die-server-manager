@@ -65,6 +65,14 @@ module.exports = function sdtdLogs(sails) {
                 },
                 success: function(eventEmitter) {
                     loggingInfoMap.set(server.id, eventEmitter);
+
+                    eventEmitter.on('logLine', function(logLine) {
+                        sails.sockets.broadcast(server.id, 'logLine', logLine);
+                    });
+
+                    eventEmitter.on('chatMessage', function(chatMessage) {
+                        sails.sockets.broadcast(server.id, 'chatMessage', chatMessage);
+                    });
                 }
             });
         });
