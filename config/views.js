@@ -16,6 +16,8 @@
 
 module.exports.views = {
 
+
+
     /***************************************************************************
      *                                                                          *
      * Extension to use for your views. When calling `res.view()` in an action, *
@@ -25,7 +27,10 @@ module.exports.views = {
      *                                                                          *
      ***************************************************************************/
 
-    // extension: 'ejs',
+    extension: 'jsx',
+    getRenderFn: function() {
+        return require('express-react-views').createEngine();
+    },
 
     /***************************************************************************
      *                                                                          *
