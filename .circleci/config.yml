@@ -29,7 +29,7 @@ jobs:
       
       - run:
           name: Install java
-          command: 'sudo apt-get install openjdk-8-jre'
+          command: 'sudo apt-get install default-jdk'
 
       - run: npm install
 
