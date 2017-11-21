@@ -27,10 +27,10 @@ module.exports.views = {
      *                                                                          *
      ***************************************************************************/
 
-    extension: 'jsx',
-    getRenderFn: function() {
-        return require('express-react-views').createEngine();
-    },
+    // extension: 'jsx',
+    // getRenderFn: function() {
+    //     return require('express-react-views').createEngine();
+    // },
 
     /***************************************************************************
      *                                                                          *

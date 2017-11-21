@@ -50,45 +50,36 @@ module.exports.routes = {
 
     '/sdtdserver/players/:serverID': {
         controller: 'SdtdServerController',
-        action: 'showPlayers',
+        action: 'showPlayers'
+    },
+
+    '/sdtdserver/console/:serverID': {
+        controller: 'SdtdServerController',
+        action: 'console',
         skipAssets: true
     },
 
-    'get /addserver': { view: 'addServer' },
-    'post /addserver': 'SdtdServerController.addServer',
 
-    'get /sdtdserver/:serverID/console': { view: 'console' },
-    'post /sdtdserver/:serverID/console': 'SdtdServerController.console',
-
-    // kick player
-    'post /sdtdserver/:serverID/kickplayer/:playerID': {
-        controller: 'PlayerController',
-        action: 'kickPlayer'
-    },
-
-    '/sdtdserver/:serverID/startLogging': {
-        controller: 'sdtdServerController',
-        action: 'startLogging'
-    },
-
-
-    // Login/out
-
-    'get /login': { view: 'user/login' },
-    'get /signup': { view: 'user/signup' },
-    '/welcome': { view: 'welcome' },
-    'post /login': 'UserController.login',
-    'post /signup': 'UserController.signup',
-    '/logout': 'UserController.logout',
 
     //  ╔═╗╔═╗╦  ╔═╗╔╗╔╔╦╗╔═╗╔═╗╦╔╗╔╔╦╗╔═╗
     //  ╠═╣╠═╝║  ║╣ ║║║ ║║╠═╝║ ║║║║║ ║ ╚═╗
     //  ╩ ╩╩  ╩  ╚═╝╝╚╝═╩╝╩  ╚═╝╩╝╚╝ ╩ ╚═╝
 
+    'get /api/sdtdserver/onlinePlayers': {
+        controller: 'SdtdServerController',
+        action: 'onlinePlayers',
+        skipAssets: true
+    },
+
 
     //  ╦ ╦╔═╗╔╗ ╦ ╦╔═╗╔═╗╦╔═╔═╗
     //  ║║║║╣ ╠╩╗╠═╣║ ║║ ║╠╩╗╚═╗
     //  ╚╩╝╚═╝╚═╝╩ ╩╚═╝╚═╝╩ ╩╚═╝
+
+    'get /sdtdserver/:serverID/socket': {
+        controller: 'sdtdServerController',
+        action: 'subscribeToServerSocket'
+    }
 
 
     //  ╔╦╗╦╔═╗╔═╗

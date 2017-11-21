@@ -33,7 +33,7 @@
     "scripts": {
         "start": "NODE_ENV=production node app.js",
         "test": "npm run custom-tests && echo 'Done.'",
-        "custom-tests": "node ./node_modules/mocha/bin/mocha test/lifecycle.test.js test/integration/**/*.test.js",
+        "custom-tests": "./node_modules/.bin/codeceptjs run -c test --steps",
         "debug": "node debug app.js"
     },
     "main": "app.js",
@@ -47,12 +47,10 @@
         "node": "8"
     },
     "devDependencies": {
-        "chai": "^4.1.2",
+        "codeceptjs": "^1.0.3",
+        "codeceptjs-webdriverio": "^1.1.0",
         "ejs-lint": "^0.3.0",
         "eslint": "^4.10.0",
-        "mocha": "^4.0.1",
-        "sails-hook-babel": "^6.0.3",
-        "supertest": "^3.0.0",
-        "supertest-session": "^3.1.0"
+        "selenium-standalone": "^6.11.0"
     }
 }
