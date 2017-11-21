@@ -31,6 +31,10 @@ jobs:
           name: Install java
           command: 'sudo apt-get install default-jdk'
 
+      - run:
+          name: Show java version
+          command: 'java -v'
+
       - run: npm install
 
       - save_cache:
