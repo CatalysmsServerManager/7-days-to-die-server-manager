@@ -26,6 +26,14 @@ jobs:
           - v1-dependencies-{{ checksum "package.json" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
+
+      - run:
+          name: Add java PPA
+          command: 'sudo add-apt-repository ppa:openjdk-r/ppa'
+
+      - run:
+          name: Update package manager
+          command: 'sudo apt-get update '
       
       - run:
           name: Install java
