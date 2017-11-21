@@ -51,6 +51,7 @@
         "codeceptjs-webdriverio": "^1.1.0",
         "ejs-lint": "^0.3.0",
         "eslint": "^4.10.0",
+        "java": "^0.9.0",
         "selenium-standalone": "^6.11.0"
     }
 }
