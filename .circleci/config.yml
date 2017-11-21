@@ -28,6 +28,10 @@ jobs:
           - v1-dependencies-
 
       - run:
+          name: Install software-properties-common package
+          command: 'sudo apt-get install software-properties-common python-software-properties'
+
+      - run:
           name: Add java PPA
           command: 'sudo add-apt-repository ppa:openjdk-r/ppa'
 
