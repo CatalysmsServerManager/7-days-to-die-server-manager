@@ -33,7 +33,7 @@ jobs:
 
       - run:
           name: Show java version
-          command: 'java -v'
+          command: 'java -version'
 
       - run: npm install
 
