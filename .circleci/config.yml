@@ -43,7 +43,7 @@ jobs:
           name: Update package manager
           command: 'sudo apt-get update'
 
-        - run:
+      - run:
           name: Auto accept license
           command: 'sudo echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections'
       
