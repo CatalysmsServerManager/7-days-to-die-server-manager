@@ -15,8 +15,8 @@ Scenario('User logout', (I) => {
 
 Scenario('User register', (I) => {
     I.amOnPage('/register');
-    I.fillField('Username', 'newUser');
-    I.fillField('Password', 'secret');
-    I.click('Register');
-    I.see('Welcome, CSMMTEST');
+    I.fillField('username', 'newUser');
+    I.fillField('password', 'secret');
+    I.click('Submit');
+    I.see('Welcome to CSMM newUser');
 })

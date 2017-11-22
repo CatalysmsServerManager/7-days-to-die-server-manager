@@ -1,5 +1,4 @@
 var sails = require('sails');
-var selenium = require('selenium-standalone');
 
 module.exports = {
     bootstrap: function(done) {
@@ -11,7 +10,8 @@ module.exports = {
             // and disable all logs except errors and warnings:
             hooks: { grunt: false },
             log: { level: 'warn' },
-
+            // Clean out DB before running tests
+            models: { migrate: 'drop' }
         }, function(err) {
             if (err) { return done(err); }
             // here you can load fixtures, etc.
