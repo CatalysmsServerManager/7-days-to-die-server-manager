@@ -72,7 +72,8 @@ module.exports = {
         });
     },
 
-    signup: function(req, res) {
+    register: function(req, res) {
+        sails.log(`Registering a new user: ${req.param('username')} and password length: ${req.param('password').length}`)
         if (_.isUndefined(req.param('password'))) {
             return res.badRequest('A password is required!');
         }
@@ -120,8 +121,9 @@ module.exports = {
                     // Log the user in
                     req.session.userId = createdUser.id;
                     req.session.servers = false;
-
-                    return res.view('welcome');
+                    return res.view('welcome', {
+                        userName: createdUser.username
+                    });
                 });
             },
 
