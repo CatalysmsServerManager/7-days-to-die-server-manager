@@ -4,8 +4,8 @@
 <head>
     <title>CSMM</title>
 
-    <!-- Viewport mobile tag for sensible mobile support -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
 
 
     <!--
@@ -30,49 +30,10 @@
     -->
 
     <!--STYLES-->
-    <link rel="stylesheet" href="/styles/console.css">
+    <link rel="stylesheet" href="/styles/framework7.material.colors.min.css">
+    <link rel="stylesheet" href="/styles/framework7.material.min.css">
     <link rel="stylesheet" href="/styles/importer.css">
-    <link rel="stylesheet" href="/styles/main.css">
-    <link rel="stylesheet" href="/styles/Pure/base-context-min.css">
-    <link rel="stylesheet" href="/styles/Pure/base-context.css">
-    <link rel="stylesheet" href="/styles/Pure/base-min.css">
-    <link rel="stylesheet" href="/styles/Pure/base.css">
-    <link rel="stylesheet" href="/styles/Pure/buttons-core-min.css">
-    <link rel="stylesheet" href="/styles/Pure/buttons-core.css">
-    <link rel="stylesheet" href="/styles/Pure/buttons-min.css">
-    <link rel="stylesheet" href="/styles/Pure/buttons.css">
-    <link rel="stylesheet" href="/styles/Pure/forms-min.css">
-    <link rel="stylesheet" href="/styles/Pure/forms-nr-min.css">
-    <link rel="stylesheet" href="/styles/Pure/forms-nr.css">
-    <link rel="stylesheet" href="/styles/Pure/forms.css">
-    <link rel="stylesheet" href="/styles/Pure/grids-core-min.css">
-    <link rel="stylesheet" href="/styles/Pure/grids-core.css">
-    <link rel="stylesheet" href="/styles/Pure/grids-min.css">
-    <link rel="stylesheet" href="/styles/Pure/grids-responsive-min.css">
-    <link rel="stylesheet" href="/styles/Pure/grids-responsive-old-ie-min.css">
-    <link rel="stylesheet" href="/styles/Pure/grids-responsive-old-ie.css">
-    <link rel="stylesheet" href="/styles/Pure/grids-responsive.css">
-    <link rel="stylesheet" href="/styles/Pure/grids-units-min.css">
-    <link rel="stylesheet" href="/styles/Pure/grids-units.css">
-    <link rel="stylesheet" href="/styles/Pure/grids.css">
-    <link rel="stylesheet" href="/styles/Pure/menus-core-min.css">
-    <link rel="stylesheet" href="/styles/Pure/menus-core.css">
-    <link rel="stylesheet" href="/styles/Pure/menus-dropdown-min.css">
-    <link rel="stylesheet" href="/styles/Pure/menus-dropdown.css">
-    <link rel="stylesheet" href="/styles/Pure/menus-horizontal-min.css">
-    <link rel="stylesheet" href="/styles/Pure/menus-horizontal.css">
-    <link rel="stylesheet" href="/styles/Pure/menus-min.css">
-    <link rel="stylesheet" href="/styles/Pure/menus-scrollable-min.css">
-    <link rel="stylesheet" href="/styles/Pure/menus-scrollable.css">
-    <link rel="stylesheet" href="/styles/Pure/menus-skin-min.css">
-    <link rel="stylesheet" href="/styles/Pure/menus-skin.css">
-    <link rel="stylesheet" href="/styles/Pure/menus.css">
-    <link rel="stylesheet" href="/styles/Pure/pure-min.css">
-    <link rel="stylesheet" href="/styles/Pure/pure-nr-min.css">
-    <link rel="stylesheet" href="/styles/Pure/pure-nr.css">
-    <link rel="stylesheet" href="/styles/Pure/pure.css">
-    <link rel="stylesheet" href="/styles/Pure/tables-min.css">
-    <link rel="stylesheet" href="/styles/Pure/tables.css">
+    <link rel="stylesheet" href="/styles/my-app.css">
     <!--STYLES END-->
 
     <!--
@@ -143,79 +104,49 @@
 
     <!--SCRIPTS-->
     <script src="/dependencies/sails.io.js"></script>
-    <script src="/dependencies/jquery-3.2.1.js"></script>
-    <script src="/js/console.js"></script>
-    <script src="/js/menus.js"></script>
+    <script src="/dependencies/framework7.min.js"></script>
+    <script src="/js/my-app.js"></script>
     <!--SCRIPTS END-->
 </head>
 
 <body>
+    <!-- Views -->
+    <div class="views">
+        <!-- Your main view, should have "view-main" class -->
+        <div class="view view-main">
+            <!-- Pages container, because we use fixed navbar and toolbar, it has additional appropriate classes-->
+            <div class="pages navbar-fixed toolbar-fixed">
+                <!-- Page, "data-page" contains page name -->
+                <div data-page="index" class="page">
 
-    <%- exposeLocalsToBrowser(); %>
-
-        <%const userServers = getUserServers(req)%>
-            <div class="pure-g">
-
-                <!-- Side menu -->
-                <div class="pure-u-1-8">
-                    <!-- Menu toggle -->
-                    <a href="#menu" id="menuLink" class="menu-link">
-                        <!-- Hamburger icon -->
-                        <span></span>
-                    </a>
-
-                    <div id="menu">
-                        <div class="pure-menu">
-                            <a class="pure-menu-heading" href="/">CSMM</a>
-
-                            <ul class="pure-menu-list">
-                                <li class="pure-menu-item"><a href="/" class="pure-menu-link">Home</a></li>
-                                <li class="pure-menu-item">
-                                    <a href="/about/" class="pure-menu-link">About</a>
-                                </li>
-
-                                <% if (isLoggedIn(req)) { %>
-
-                                    <li class="pure-menu-item" class="menu-item-divided pure-menu-selected">
-                                        <a href="/addserver/" class="pure-menu-link">Add server</a>
-                                    </li>
-
-                                    <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
-                                        <a href="#" id="menuLink1" class="pure-menu-link">Your servers</a>
-                                        <ul class="pure-menu-children">
-                                            <% if(userServers) { %>
-                                                <% _.forIn(userServers, function(server) {  %>
-                                                    <li class="pure-menu-item">
-                                                        <% server %>
-                                                            <% const dashboardURL = "/sdtdserver/dashboard/" + server.id; %>
-                                                                <a href=<%=dashboardURL %> class="pure-menu-link">
-                                                                        <% if(server.name) {%>
-                                                                           <%= server.name %>
-                                                                           <% } else { %>
-                                                                            <%= server.ip%>
-                                                                            <% } %>
-                                                                    </a>
-
-                                                    </li>
-                                                    <% })%>
-                                                        <% } %>
-                                        </ul>
-                                    </li>
-                                    <li class="pure-menu-item"><a href="/logout/" class="pure-menu-link">Log out</a></li>
-
-                                    <% } else {%>
-                                        <li class="pure-menu-item"><a href="/login/" class="pure-menu-link">Log in</a></li>
-                                        <li class="pure-menu-item"><a href="/signup/" class="pure-menu-link">Register</a></li>
-                                        <% } %>
-                            </ul>
+                    <!-- Top Navbar. In Material theme it should be inside of the page-->
+                    <div class="navbar">
+                        <div class="navbar-inner">
+                            <div class="center"><a href="/" class="link">CSMM</a></div>
                         </div>
                     </div>
-                </div>
 
-                <div class="pure-u-7-8">
-                    <%- body %>
+                    <!-- Scrollable page content -->
+                    <div class="page-content">
+                        <%- body %>
+                    </div>
+
+                    <!-- Toolbar. In Material theme it should be inside of the page-->
+                    <div class="toolbar">
+                        <div class="toolbar-inner">
+                            <!-- Toolbar links -->
+                            <a href="/about" class="link">About</a>
+                            <a href="/login" class="link">Login</a>
+                            <a href="/register" class="link">Register</a>
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
+        </div>
+    </div>
+
 </body>
 
 </html>

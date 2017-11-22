@@ -28,6 +28,27 @@ module.exports.routes = {
         view: 'homepage'
     },
 
+    '/about': {
+        view: 'about'
+    },
+
+    '/welcome': {
+        view: 'welcome'
+    },
+
+    '/login': {
+        view: 'auth/login'
+    },
+
+    'get /register': {
+        view: 'auth/register'
+    },
+
+    'post /register': {
+        controller: 'UserController',
+        action: 'register'
+    },
+
 
 
     /***************************************************************************
