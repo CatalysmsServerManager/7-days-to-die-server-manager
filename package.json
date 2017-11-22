@@ -13,7 +13,7 @@
         "express-react-views": "^0.10.4",
         "grunt": "1.0.1",
         "lodash": "3.10.1",
-        "machinepack-7daystodiewebapi": "^0.1.2",
+        "machinepack-7daystodiewebapi": "^0.2.2",
         "machinepack-passwords": "^2.3.0",
         "rand-token": "^0.3.0",
         "react": "^16.1.1",
@@ -21,9 +21,9 @@
         "req-flash": "0.0.3",
         "request": "^2.83.0",
         "request-promise-native": "^1.0.5",
-        "sails": "^1.0.0-40",
+        "sails": "^1.0.0-41",
         "sails-hook-grunt": "^2.2.1",
-        "sails-hook-orm": "^2.0.0-16",
+        "sails-hook-orm": "^2.0.0-22",
         "sails-hook-sockets": "^1.4.0",
         "sails-mysql": "^1.0.0-15",
         "socket.io-redis": "4.0.0",
@@ -50,7 +50,8 @@
         "codeceptjs": "^1.0.3",
         "codeceptjs-webdriverio": "^1.1.0",
         "ejs-lint": "^0.3.0",
-        "eslint": "^4.10.0",
+        "eslint": "^4.11.0",
+        "mocha-junit-reporter": "^1.15.0",
         "selenium-standalone": "^6.11.0"
     }
 }
