@@ -1,46 +1,92 @@
+const Telnet = require('telnet-client');
+const randToken = require('rand-token');
+
 module.exports = {
 
 
-  friendlyName: 'Create web token',
+    friendlyName: 'Create web token',
 
 
-  description: 'Takes a telnet connection, adds webtokens to the server and returns these',
+    description: 'Connects to telnet, adds webtokens to the server and returns these',
 
 
-  inputs: {
+    inputs: {
 
-    telnetConnection: {
-      type: 'ref',
-      description: 'Telnet connection with a sdtd Server',
-      required: true
+        ip: {
+            type: 'string',
+            description: 'IP address of server to connect to',
+            required: true
+        },
+
+        port: {
+            type: 'number',
+            description: 'Telnet port',
+            required: true
+        },
+
+        password: {
+            type: 'string',
+            description: 'Telnet password',
+            required: true
+        }
+
+    },
+
+
+    exits: {
+        success: {
+            outputFriendlyName: 'Connected and tokens added'
+        },
+        timeout: {
+            outputFriendlyName: 'Connection timed out'
+        },
+        failedLogin: {
+            outputFriendlyName: 'Could not log in to telnet'
+        }
+
+    },
+
+
+    fn: async function(inputs, exits) {
+        const authName = 'CSMM';
+        const authToken = randToken.generate(32);
+
+        let connection = new Telnet();
+        let params = {
+            host: inputs.ip,
+            port: inputs.port,
+            timeout: 3000,
+            password: inputs.password,
+            failedLoginMatch: 'Password incorrect',
+            passwordPrompt: /Please enter password:/i,
+            shellPrompt: /\r\n$/,
+        };
+        connection.connect(params);
+
+
+
+        connection.on('ready', function(prompt) {
+            connection.exec(`webtokens add ${authName} ${authToken} 0`, function(err, response) {
+                if (err) { return exits.error(err); }
+                if (_.isUndefined(response) || response.length <= 0) {
+                    return exits.error(new Error('No response from telnet server'));
+                } else {
+                    return exits.success({ authName: authName, authToken: authToken });
+                }
+
+            });
+        });
+
+        connection.on('failedlogin', function() {
+            return exits.failedLogin();
+        });
+
+        connection.on('error', function(error) {
+            return exits.error(new Error(error));
+        });
+
+
     }
-
-  },
-
-
-  exits: {
-
-  },
-
-
-  fn: async function(inputs, exits) {
-    const randToken = require('rand-token');
-
-    let connection = inputs.telnetConnection;
-
-    const authName = 'CSMM';
-    const authToken = randToken.generate(32);
-
-    try {
-      await connection.exec(`webtokens add ${authName} ${authToken} 0`);
-      return exits.success({ authName: authName, authToken: authToken });
-
-    } catch (error) {
-      return exits.error(error);
-    }
-
-
-  }
 
 
 };

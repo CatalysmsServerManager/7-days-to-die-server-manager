@@ -1,0 +1,60 @@
+<body>
+    <div class="list-block">
+        <form action="/sdtdserver/addserver" method="POST">
+            <ul>
+                <li>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title label">Server IP</div>
+                            <div class="item-input">
+                                <input type="text" name="serverip">
+                            </div>
+                        </div>
+                </li>
+                <li>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title label">Telnet port</div>
+                            <div class="item-input">
+                                <input type="text" name="telnetport">
+                            </div>
+                        </div>
+                </li>
+                <li>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title label">Telnet Password</div>
+                            <div class="item-input">
+                                <input type="password" name="telnetpassword">
+                            </div>
+                        </div>
+                </li>
+                <% if (!_.isUndefined(telnetError))  {%>
+                    <p>
+                        <%= telnetError %>
+                    </p>
+                    <% } %>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">Web port</div>
+                                    <div class="item-input">
+                                        <input type="text" name="webport">
+                                    </div>
+                                </div>
+                        </li>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-input">
+                                        <input type="submit" value="Submit">
+                                    </div>
+                                </div>
+                        </li>
+            </ul>
+
+        </form>
+        </div>
+
+
+</body>

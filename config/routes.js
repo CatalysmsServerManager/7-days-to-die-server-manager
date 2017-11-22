@@ -72,25 +72,23 @@ module.exports.routes = {
      *                                                                          *
      ***************************************************************************/
 
+    'get /sdtdserver/addserver': {
+        view: 'sdtdServer/addserver',
+        locals: {
+            telnetError: ""
+        }
+    },
 
-    '/sdtdserver/dashboard/:serverID': {
+    'post /sdtdserver/addserver': {
+        controller: 'SdtdServerController',
+        action: 'addserver'
+    },
+
+    '/sdtdserver/:serverID/dashboard/': {
         controller: 'SdtdServerController',
         action: 'dashboard',
         skipAssets: true
     },
-
-    '/sdtdserver/players/:serverID': {
-        controller: 'SdtdServerController',
-        action: 'showPlayers'
-    },
-
-    '/sdtdserver/console/:serverID': {
-        controller: 'SdtdServerController',
-        action: 'console',
-        skipAssets: true
-    },
-
-
 
     //  ╔═╗╔═╗╦  ╔═╗╔╗╔╔╦╗╔═╗╔═╗╦╔╗╔╔╦╗╔═╗
     //  ╠═╣╠═╝║  ║╣ ║║║ ║║╠═╝║ ║║║║║ ║ ╚═╗

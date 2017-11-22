@@ -17,35 +17,35 @@ module.exports = {
             }
         }).populate('servers').exec(function foundUser(err, createdUser) {
             if (err) { return res.send(`Error finding a user in DB ${err}`); }
-            if (!createdUser) { return res.notFound(); }
+            if (!createdUser) {
+                sails.log.debug(`Unknown user tried to log in with ${req.param('username')}`);
+                return res.notFound();
+            }
 
             Passwords.checkPassword({
                 passwordAttempt: req.param('password'),
                 encryptedPassword: createdUser.encryptedPassword
             }).exec({
                 error: function(err) {
+                    sails.log.error(`Error during log in: ${err}`);
                     return res.send(`Error during log in: ${err}`);
                 },
 
                 incorrect: function() {
+                    sails.log.debug(`User ${req.param('username')} filled in a wrong password`);
                     return res.send('Incorrect!');
                 },
 
                 success: function() {
 
                     if (createdUser.banned) {
+                        sails.log.debug(`User ${req.param('username')} tried to login but is banned`);
                         return res.forbidden('Your account has been banned');
                     }
 
                     req.session.userId = createdUser.id;
 
-                    let userServers = createdUser.servers;
-                    userServers.map(function(server) {
-                        delete server.authToken;
-                        delete server.telnetPassword;
-                    });
-                    req.session.servers = userServers;
-
+                    sails.log.debug(`User ${req.param('username')} successfully logged in`);
 
                     return res.view('welcome', {
                         userName: createdUser.username

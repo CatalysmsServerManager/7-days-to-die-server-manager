@@ -6,7 +6,7 @@
 
 module.exports = {
 
-    toJSON: function() {
+    _toJSON: function() {
         var obj = this.toObject();
         delete obj.telnetPassword;
         delete obj.authToken;

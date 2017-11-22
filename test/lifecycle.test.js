@@ -18,8 +18,15 @@ module.exports = {
             // here you can load fixtures, etc.
             // (for example, you might want to create some records in the database)
 
-            return done();
-        })
+            // Password = "something"
+            User.create({
+                username: 'CSMMTesterFixture',
+                encryptedPassword: "$2a$10$b8kbwLOvUvJH3Y.37ZAwdu77K3zaFfjXAQnaym3BqpSuzDApJcbcG",
+            }).exec(function() {
+                sails.log.debug('Finished bootstrapping test data');
+                return done();
+            });
+        });
     },
     teardown: function(done) {
         // here you can clear fixtures, etc.

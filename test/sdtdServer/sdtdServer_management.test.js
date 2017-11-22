@@ -1,11 +1,12 @@
 Feature('SdtdServer management');
 
 Scenario('Add a new server', (I) => {
-    I.login('CSMMtest', 'secret');
+    I.login('CSMMTesterFixture', 'something');
     I.amOnPage('/sdtdserver/addserver');
-    I.fillField('serverip', '109.134.143.236');
-    I.fillField('telnetport', '8081');
+    I.fillField('serverip', '80.201.88.43');
+    I.fillField('telnetport', '1337');
     I.fillField('telnetpassword', 'somethingtelnet');
+    I.fillField('webport', '8082');
     I.click('Submit');
     I.see('Dashboard');
 });

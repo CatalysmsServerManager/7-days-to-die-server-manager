@@ -8,15 +8,17 @@
  */
 module.exports = function isLoggedIn(req, res, next) {
 
-  // If `req.session.userId` is set, then we know that this request originated
-  // from a logged-in user.  So we can safely proceed to the next policy--
-  // or, if this is the last policy, the relevant action.
-  if (req.session.userId) {
-    return next();
-  }
+    // If `req.session.userId` is set, then we know that this request originated
+    // from a logged-in user.  So we can safely proceed to the next policy--
+    // or, if this is the last policy, the relevant action.
+    if (req.session.userId) {
+        sails.log.debug(`User ${req.session.userId} is logged in, allowing request`);
+        return next();
+    }
 
-  //--•
-  // Otherwise, this request did not come from a logged-in user.
-  return res.forbidden();
+    //--•
+    // Otherwise, this request did not come from a logged-in user.
+    sails.log.debug(`User is NOT logged in, blocking request`);
+    return res.forbidden();
 
 };

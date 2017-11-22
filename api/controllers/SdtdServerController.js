@@ -9,6 +9,55 @@ var sevenDays = require('machinepack-7daystodiewebapi');
 
 module.exports = {
 
+    addServer: async function(req, res) {
+        if (_.isUndefined(req.param('serverip'))) {
+            return res.badRequest('A server IP is required but was not given');
+        }
+        if (_.isUndefined(req.param('telnetport'))) {
+            return res.badRequest('A telnet port is required but was not given');
+        }
+        if (_.isUndefined(req.param('telnetpassword'))) {
+            return res.badRequest('A telnet password is required but was not given');
+        }
+        if (_.isUndefined(req.param('webport'))) {
+            return res.badRequest('A web port is required but was not given');
+        }
+
+        const serverip = req.param('serverip');
+        const telnetport = req.param('telnetport');
+        const telnetpassword = req.param('telnetpassword');
+        const webport = req.param('webport');
+
+        sails.helpers.createWebToken({
+            ip: serverip,
+            port: telnetport,
+            password: telnetpassword
+        }).switch({
+            success: async function(authInfo) {
+                sails.log.debug('Successfully connected to telnet & created tokens');
+                var createdServer = await SdtdServer.create({
+                    ip: serverip,
+                    telnetPort: telnetport,
+                    telnetPassword: telnetpassword,
+                    authName: authInfo.authName,
+                    authToken: authInfo.authToken,
+                    owner: req.session.userId
+                }).fetch();
+
+                await sails.hooks.sdtdlogs.start(createdServer.id);
+                return res.redirect('/sdtdserver/' + createdServer.id + '/dashboard');
+
+            },
+            error: function(error) {
+                sails.log.warn('Could not connect to servers telnet ' + error);
+                res.view('sdtdServer/addserver', {
+                    telnetError: "Could not connect to telnet. Please confirm the input is correct"
+                });
+            }
+        })
+
+    },
+
     dashboard: async function(req, res) {
         const serverID = req.param('serverID');
         sails.models.sdtdserver.findOne({ id: serverID }).exec(function(error, server) {
@@ -16,7 +65,7 @@ module.exports = {
                 sails.log.error(error);
                 throw error;
             }
-            res.view('dashboard/dashboard', { server: server })
+            res.view('sdtdServer/dashboard', { server: server });
         });
     },
 
