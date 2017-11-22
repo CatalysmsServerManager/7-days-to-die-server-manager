@@ -135,9 +135,14 @@
                     <div class="toolbar">
                         <div class="toolbar-inner">
                             <!-- Toolbar links -->
-                            <a href="/about" class="link">About</a>
-                            <a href="/login" class="link">Login</a>
-                            <a href="/register" class="link">Register</a>
+                            <% if (!isLoggedIn(req)) { %>
+                                <a href="/login" class="link">Login</a>
+                                <a href="/register" class="link">Register</a>
+                                <% } else {%>
+                                    <a href="/logout" class="link">Logout</a>
+                                    <% } %>
+                                        <a href="/about" class="link">About</a>
+
                         </div>
                     </div>
 

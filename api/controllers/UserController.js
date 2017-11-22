@@ -10,6 +10,7 @@ var Passwords = require('machinepack-passwords');
 module.exports = {
 
     login: async function(req, res) {
+        sails.log(`Logging in a user: ${req.param('username')}`)
         await User.findOne({
             where: {
                 username: req.param('username')
@@ -46,8 +47,9 @@ module.exports = {
                     req.session.servers = userServers;
 
 
-                    return res.view('homepage');
-
+                    return res.view('welcome', {
+                        userName: createdUser.username
+                    });
                 }
             });
         });
@@ -58,7 +60,11 @@ module.exports = {
 
     logout: function(req, res) {
 
-        User.findOne({ where: { id: req.session.userId } }, function foundUser(err, user) {
+        if (_.isUndefined(req.session.userId)) {
+            return res.badRequest('Tried to logout without logging in');
+        }
+
+        User.find({ where: { id: req.session.userId } }, function foundUser(err, user) {
             if (err) { return res.negotiate(err); }
             if (!user) {
                 sails.log.verbose('Session refers to a user who no longer exists.');

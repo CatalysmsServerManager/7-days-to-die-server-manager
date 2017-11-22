@@ -40,6 +40,11 @@ module.exports.routes = {
         view: 'auth/login'
     },
 
+    'post /login': {
+        controller: 'UserController',
+        action: 'login'
+    },
+
     'get /register': {
         view: 'auth/register'
     },
@@ -47,6 +52,11 @@ module.exports.routes = {
     'post /register': {
         controller: 'UserController',
         action: 'register'
+    },
+
+    '/logout': {
+        controller: 'UserController',
+        action: 'logout'
     },
 
 

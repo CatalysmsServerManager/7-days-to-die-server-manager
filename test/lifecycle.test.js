@@ -1,4 +1,5 @@
 var sails = require('sails');
+var Passwords = require('machinepack-passwords');
 
 module.exports = {
     bootstrap: function(done) {
@@ -9,7 +10,7 @@ module.exports = {
             // For example, we might want to skip the Grunt hook,
             // and disable all logs except errors and warnings:
             hooks: { grunt: false },
-            log: { level: 'warn' },
+            // log: { level: 'warn' },
             // Clean out DB before running tests
             models: { migrate: 'drop' }
         }, function(err) {
@@ -18,12 +19,14 @@ module.exports = {
             // (for example, you might want to create some records in the database)
 
             return done();
-        });
+        })
     },
     teardown: function(done) {
         // here you can clear fixtures, etc.
         // (e.g. you might want to destroy the records you created above)
 
+
         sails.lower(done);
+
     }
 }
