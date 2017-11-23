@@ -28,33 +28,49 @@ module.exports = {
         const telnetpassword = req.param('telnetpassword');
         const webport = req.param('webport');
 
-        sails.helpers.createWebToken({
+        SdtdServer.find({
             ip: serverip,
-            port: telnetport,
-            password: telnetpassword
-        }).switch({
-            success: async function(authInfo) {
-                sails.log.debug('Successfully connected to telnet & created tokens');
-                var createdServer = await SdtdServer.create({
-                    ip: serverip,
-                    telnetPort: telnetport,
-                    telnetPassword: telnetpassword,
-                    webPort: webport,
-                    authName: authInfo.authName,
-                    authToken: authInfo.authToken,
-                    owner: req.session.userId
-                }).fetch();
-                await sails.hooks.sdtdlogs.start(createdServer.id);
-                return res.redirect('/sdtdserver/' + createdServer.id + '/dashboard');
-
-            },
-            error: function(error) {
-                sails.log.warn('Could not connect to servers telnet ' + error);
-                res.view('sdtdServer/addserver', {
-                    telnetError: "Could not connect to telnet. Please confirm the input is correct"
-                });
+            telnetPort: telnetport,
+            webPort: webport,
+        }).exec(function(err, foundServers) {
+            if (err) {
+                return res.serverError(new Error("Error checking for existing server"));
             }
+            if (!_.isUndefined(foundServers) && foundServers.length > 0) {
+                sails.log.warn(`User tried to add a server that is already in the system`);
+                return res.badRequest(`This server has already been added to the system`);
+            }
+
+            sails.helpers.createWebToken({
+                ip: serverip,
+                port: telnetport,
+                password: telnetpassword
+            }).switch({
+                success: async function(authInfo) {
+                    sails.log.debug('Successfully connected to telnet & created tokens');
+                    var createdServer = await SdtdServer.create({
+                        ip: serverip,
+                        telnetPort: telnetport,
+                        telnetPassword: telnetpassword,
+                        webPort: webport,
+                        authName: authInfo.authName,
+                        authToken: authInfo.authToken,
+                        owner: req.session.userId
+                    }).fetch();
+                    await sails.hooks.sdtdlogs.start(createdServer.id);
+                    return res.redirect('/sdtdserver/' + createdServer.id + '/dashboard');
+
+                },
+                error: function(error) {
+                    sails.log.warn('Could not connect to servers telnet ' + error);
+                    res.view('sdtdServer/addserver', {
+                        telnetError: "Could not connect to telnet. Please confirm the input is correct"
+                    });
+                }
+            });
         });
+
+
 
     },
 

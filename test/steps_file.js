@@ -9,9 +9,9 @@ module.exports = function() {
 
 
         testServer: {
-            ip: '87.67.203.148',
+            ip: '192.168.1.101',
             webPort: '8082',
-            telnetPort: '1337',
+            telnetPort: '8081',
             telnetPassword: "somethingtelnet"
         },
 
