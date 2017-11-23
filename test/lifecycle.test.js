@@ -10,7 +10,7 @@ module.exports = {
             // For example, we might want to skip the Grunt hook,
             // and disable all logs except errors and warnings:
             hooks: { grunt: false },
-            // log: { level: 'warn' },
+            log: { level: 'warn' },
             // Clean out DB before running tests
             models: { migrate: 'drop' }
         }, function(err) {

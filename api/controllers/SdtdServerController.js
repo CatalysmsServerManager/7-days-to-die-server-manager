@@ -44,7 +44,6 @@ module.exports = {
                     authToken: authInfo.authToken,
                     owner: req.session.userId
                 }).fetch();
-
                 await sails.hooks.sdtdlogs.start(createdServer.id);
                 return res.redirect('/sdtdserver/' + createdServer.id + '/dashboard');
 
