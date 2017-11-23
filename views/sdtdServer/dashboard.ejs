@@ -4,4 +4,66 @@
         <%= server.ip %>
     </h1>
 
+    <div class="list-block">
+        <ul>
+            <% if (onlinePlayers.length <= 0 ) { %>
+                <li>
+                    <div class="item-content">
+                        <div class="item-media">
+                            <i class="icon icon-person"></i>
+                        </div>
+                        <div class="item-inner">
+                            <div class="item-title">
+                                No players online!
+                            </div>
+                            <div class="item-after">
+
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <% } else { %>
+                    <% _.each(onlinePlayers, function(player) {%>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-media">
+                                    <i class="icon icon-person"></i>
+                                </div>
+                                <div class="item-inner">
+                                    <div class="item-title">
+                                        <%= player.name %>
+                                    </div>
+                                    <div class="item-after">
+                                        <%= player.steamid %>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </li>
+                        <% }) %>
+                            <% } %>
+
+
+        </ul>
+        <div class="list-block-label">Online Players</div>
+    </div>
+
+    <div class="toolbar tabbar">
+        <div class="toolbar-inner">
+            <% var consoleLink = "/sdtdserver/" + server.id + "/console" %>
+                <a href=<%=consoleLink %> class="tab-link active">
+                    <i>Console</i>
+                </a>
+                <a href="#tab2" class="tab-link">
+                    <i>Chat</i>
+                </a>
+                <a href="#tab3" class="tab-link">
+                    <i>Something</i>
+                </a>
+                <a href="#tab4" class="tab-link">
+                    <i>Something else</i>
+                </a>
+        </div>
+    </div>
+
 </body>

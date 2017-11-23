@@ -1,0 +1,22 @@
+<body>
+
+    <h1>Console
+        <%= server.ip %>
+    </h1>
+
+    <div class="console-window">
+
+    </div>
+
+    <div class="console-send-box">
+        <% var executeCommandLink = "/sdtdserver/" + server.id + "/executeCommand" %>
+            <form action=<%=executeCommandLink%> method="GET" class="ajax-submit">
+                <input type="text" name="command">
+            </form>
+    </div>
+
+</body>
+
+<script>
+    startConsole(<%= server.id %>)
+</script>

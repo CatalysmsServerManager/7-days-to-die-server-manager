@@ -1,0 +1,12 @@
+.console-window {
+    background: black;
+    color: white;
+    overflow: auto;
+    width: 80%;
+    height: 50%;
+    border: 8px solid black
+}
+
+.log-line {
+    list-style-type: none;
+}

@@ -72,6 +72,11 @@ module.exports.routes = {
      *                                                                          *
      ***************************************************************************/
 
+    'get /sdtdserver/:serverID/subscribetosocket': {
+        controller: 'SdtdServerController',
+        action: 'subscribeToServerSocket'
+    },
+
     'get /sdtdserver/addserver': {
         view: 'sdtdServer/addserver',
         locals: {
@@ -88,6 +93,17 @@ module.exports.routes = {
         controller: 'SdtdServerController',
         action: 'dashboard',
         skipAssets: true
+    },
+
+    '/sdtdserver/:serverID/console/': {
+        controller: 'SdtdServerController',
+        action: 'console',
+        skipAssets: false
+    },
+
+    '/sdtdserver/:serverID/executeCommand': {
+        controller: 'SdtdServerController',
+        action: 'executeCommand'
     },
 
     //  ╔═╗╔═╗╦  ╔═╗╔╗╔╔╦╗╔═╗╔═╗╦╔╗╔╔╦╗╔═╗

@@ -105,6 +105,7 @@
     <!--SCRIPTS-->
     <script src="/dependencies/sails.io.js"></script>
     <script src="/dependencies/framework7.min.js"></script>
+    <script src="/js/console.js"></script>
     <script src="/js/my-app.js"></script>
     <!--SCRIPTS END-->
 </head>
@@ -126,10 +127,6 @@
                         </div>
                     </div>
 
-                    <!-- Scrollable page content -->
-                    <div class="page-content">
-                        <%- body %>
-                    </div>
 
                     <!-- Toolbar. In Material theme it should be inside of the page-->
                     <div class="toolbar">
@@ -143,16 +140,17 @@
                                     <a href="/sdtdserver/addserver" class="link">Add a server</a>
                                     <% } %>
                                         <a href="/about" class="link">About</a>
-
                         </div>
                     </div>
 
-
+                    <!-- Scrollable page content -->
+                    <div class="page-content">
+                        <%- body %>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
 </body>
 
 </html>

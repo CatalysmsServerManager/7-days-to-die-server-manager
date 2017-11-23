@@ -13,7 +13,7 @@
         "express-react-views": "^0.10.4",
         "grunt": "1.0.1",
         "lodash": "3.10.1",
-        "machinepack-7daystodiewebapi": "^0.2.2",
+        "machinepack-7daystodiewebapi": "^0.3.1",
         "machinepack-passwords": "^2.3.0",
         "rand-token": "^0.3.0",
         "react": "^16.1.1",

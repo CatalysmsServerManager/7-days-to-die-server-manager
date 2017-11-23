@@ -45,6 +45,13 @@ module.exports = {
 
                     req.session.userId = createdUser.id;
 
+                    let userServers = createdUser.servers;
+                    userServers.map(function(server) {
+                        delete server.authToken;
+                        delete server.telnetPassword;
+                    });
+                    req.session.servers = userServers;
+
                     sails.log.debug(`User ${req.param('username')} successfully logged in`);
 
                     return res.view('welcome', {

@@ -39,6 +39,7 @@ module.exports = {
                     ip: serverip,
                     telnetPort: telnetport,
                     telnetPassword: telnetpassword,
+                    webPort: webport,
                     authName: authInfo.authName,
                     authToken: authInfo.authToken,
                     owner: req.session.userId
@@ -54,7 +55,7 @@ module.exports = {
                     telnetError: "Could not connect to telnet. Please confirm the input is correct"
                 });
             }
-        })
+        });
 
     },
 
@@ -65,7 +66,23 @@ module.exports = {
                 sails.log.error(error);
                 throw error;
             }
-            res.view('sdtdServer/dashboard', { server: server });
+            sevenDays.getOnlinePlayers({
+                ip: server.ip,
+                port: server.webPort,
+                authName: server.authName,
+                authToken: server.authToken
+            }).exec({
+                error: function(error) {
+                    return res.badRequest(new Error("Could not connect to your server.\n" + error));
+                },
+                success: function(result) {
+                    res.view('sdtdServer/dashboard', {
+                        server: server,
+                        onlinePlayers: result
+                    });
+                }
+            });
+
         });
     },
 
@@ -74,15 +91,46 @@ module.exports = {
         if (_.isUndefined(serverID)) {
             return res.badRequest("No serverID given");
         }
-
-
         sails.models.sdtdserver.findOne({ id: serverID }).exec(function(error, server) {
             if (error) {
                 return res.badRequest("Unknown server");
             } else {
-                return res.view('console/console', { server: server });
+                return res.view('sdtdServer/console', { server: server });
             }
         });
+    },
+
+    executeCommand: function(req, res) {
+        const serverID = req.param('serverID');
+        const command = req.param('command');
+        if (_.isUndefined(serverID)) {
+            return res.badRequest("No serverID given");
+        }
+        if (_.isUndefined(command)) {
+            return res.badRequest("No command given");
+        }
+        sails.models.sdtdserver.findOne({ id: serverID }).exec(function(error, server) {
+            if (error) {
+                return res.badRequest("Unknown server");
+            } else {
+                sails.log.debug(`User ${req.session.userId} executed a command on server ${server.id} ${command}`);
+                sevenDays.executeCommand({
+                    ip: server.ip,
+                    port: server.webPort,
+                    authName: server.authName,
+                    authToken: server.authToken,
+                    command: command
+                }).exec({
+                    error: function(error) {
+                        return res.badRequest(new Error('Error executing command\n' + error));
+                    },
+                    success: function() {
+                        return res.ok()
+                    }
+                });
+            }
+        });
+
     },
 
     showPlayers: function(req, res) {
@@ -199,8 +247,9 @@ module.exports = {
 
     subscribeToServerSocket: function(req, res) {
         const serverID = req.param('serverID');
+        sails.log.debug(`Connecting user with id ${req.session.userId} to server socket with id ${serverID}`)
         if (_.isUndefined(serverID)) {
-            return badRequest("No server ID given.");
+            return res.badRequest("No server ID given.");
         }
         if (!req.isSocket) {
             return res.badRequest();
@@ -210,8 +259,9 @@ module.exports = {
             if (error) {
                 return res.badRequest("Unknown server");
             } else {
+                sails.log.debug(`Successfully connected`);
                 sails.sockets.join(req, serverID);
-                return res.ok()
+                return res.ok();
             }
 
         });
