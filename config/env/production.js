@@ -232,7 +232,7 @@ module.exports = {
          *                                                                          *
          ***************************************************************************/
         onlyAllowOrigins: [
-            'http://cssm.herokuapp.com',
+            'http://csmm.herokuapp.com',
         ],
 
 
