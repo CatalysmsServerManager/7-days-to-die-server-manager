@@ -73,6 +73,18 @@ module.exports = function sdtdLogs(sails) {
                     eventEmitter.on('chatMessage', function(chatMessage) {
                         sails.sockets.broadcast(server.id, 'chatMessage', chatMessage);
                     });
+
+                    eventEmitter.on('playerConnected', function(connectedMsg) {
+                        sails.sockets.broadcast(server.id, 'playerConnected', connectedMsg);
+                    });
+
+                    eventEmitter.on('playerDisconected', function(disconectedMsg) {
+                        sails.sockets.broadcast(server.id, 'playerDisconected', disconectedMsg);
+                    });
+
+                    eventEmitter.on('playerDeath', function(deathMessage) {
+                        sails.sockets.broadcast(server.id, 'playerDeath', deathMessage);
+                    });
                 }
             });
         });
