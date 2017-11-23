@@ -16,7 +16,3 @@ function startConsole(serverID) {
 function scrollToBottom() {
     $$('.console-window').scrollTop($$('.console-window')[0].scrollHeight);
 }
-
-function executeCommand() {
-    alert('exec')
-}

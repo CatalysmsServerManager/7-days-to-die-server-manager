@@ -72,6 +72,11 @@ module.exports.routes = {
      *                                                                          *
      ***************************************************************************/
 
+    'get /welcome': {
+        controller: 'UserController',
+        action: 'welcome'
+    },
+
     'get /sdtdserver/:serverID/subscribetosocket': {
         controller: 'SdtdServerController',
         action: 'subscribeToServerSocket'

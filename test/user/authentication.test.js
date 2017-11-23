@@ -5,7 +5,7 @@ Scenario('User register', (I) => {
     I.fillField('username', 'CSMMtest');
     I.fillField('password', 'secret');
     I.click('Submit');
-    I.see('Welcome to CSMM CSMMtest');
+    I.see('Welcome to CSMM');
 });
 
 Scenario('User logout', (I) => {
@@ -19,5 +19,5 @@ Scenario('User login', (I) => {
     I.fillField('username', 'CSMMtest');
     I.fillField('password', 'secret');
     I.click('Submit');
-    I.see('Welcome to CSMM CSMMtest');
+    I.see('Welcome to CSMM');
 });

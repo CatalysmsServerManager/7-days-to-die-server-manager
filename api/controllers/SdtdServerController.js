@@ -125,7 +125,7 @@ module.exports = {
                         return res.badRequest(new Error('Error executing command\n' + error));
                     },
                     success: function() {
-                        return res.ok()
+                        return res.ok();
                     }
                 });
             }

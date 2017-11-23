@@ -1,14 +1,13 @@
 <body>
     Welcome to CSMM
-    <%= userName %>
 
-        <div class="content-block-title">Your servers</div>
-        <div class="list-block">
-            <ul>
-                <% const userServers = getUserServers(req) %>
-                    <% _.each(userServers, function(server) { %>
-                        <% var dashboardlink = "/sdtdserver/" + server.id + "/dashboard" %>
-                            <a href=<%=dashboardlink %> class="item-link">
+    <div class="content-block-title">Your servers</div>
+    <div class="list-block">
+        <ul>
+            <% const userServers = getUserServers(req) %>
+                <% _.each(userServers, function(server) { %>
+                    <% var dashboardlink = "/sdtdserver/" + server.id + "/dashboard" %>
+                        <a href=<%=dashboardlink %> class="item-link">
                             <li class="item-content">
                                 <div class="item-inner">
                                     <div class="item-title">
@@ -18,7 +17,7 @@
                                 </div>
                             </li>
                             </a>
-                            <% }) %>
-            </ul>
-        </div>
+                        <% }) %>
+        </ul>
+    </div>
 </body>

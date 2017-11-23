@@ -9,6 +9,21 @@ var Passwords = require('machinepack-passwords');
 
 module.exports = {
 
+    welcome: function(req, res) {
+        const userID = req.session.userId;
+        if (_.isUndefined(userID)) {
+            return res.badRequest("No userID given");
+        }
+
+        User.find(userID).populate('servers').exec(function(err, createdUser) {
+            if (err) { return res.serverError(`Error finding a user in DB ${err}`); }
+
+            return res.view('welcome', {
+                userName: createdUser.username
+            });
+        });
+    },
+
     login: async function(req, res) {
         sails.log(`Logging in a user: ${req.param('username')}`)
         await User.findOne({

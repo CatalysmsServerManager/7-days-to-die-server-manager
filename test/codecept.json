@@ -1,6 +1,4 @@
 {
-    "tests": "./**/*.test.js",
-    "timeout": 10000,
     "output": "./output",
     "helpers": {
         "WebDriverIO": {
@@ -9,10 +7,14 @@
         }
     },
     "include": {
-        "I": "./steps_file.js"
+        "I": "./steps_file.js",
+        "consolePage": "./pages/Console.js"
     },
+    "mocha": {},
     "bootstrap": "./lifecycle.test.js",
     "teardown": "./lifecycle.test.js",
-    "mocha": {},
+    "hooks": [],
+    "tests": "./**/*.test.js",
+    "timeout": 10000,
     "name": "test"
 }

@@ -53,6 +53,10 @@ module.exports.policies = {
 
     playerController: {
         '*': 'isServerOwner'
-    }
+    },
+
+    userController: {
+        'welcome': 'isLoggedIn'
+    },
 
 };

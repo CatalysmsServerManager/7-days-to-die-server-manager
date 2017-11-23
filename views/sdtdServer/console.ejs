@@ -7,13 +7,22 @@
     <div class="console-window">
 
     </div>
+    <div class="list-block">
+        <div class="console-send-box">
+            <% var executeCommandLink = "/sdtdserver/" + server.id + "/executeCommand" %>
+                <form action=<%=executeCommandLink%> method="GET" class="ajax-submit">
 
-    <div class="console-send-box">
-        <% var executeCommandLink = "/sdtdserver/" + server.id + "/executeCommand" %>
-            <form action=<%=executeCommandLink%> method="GET" class="ajax-submit">
-                <input type="text" name="command">
-            </form>
-    </div>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-input">
+                                <input id="input-command" type="text" name="command">
+                            </div>
+                        </div>
+
+                        <input id="input-command-button" class="button" type="submit" value="Execute">
+                </form>
+                </div>
+        </div>
 
 </body>
 
