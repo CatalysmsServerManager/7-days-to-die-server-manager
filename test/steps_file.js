@@ -39,7 +39,6 @@ module.exports = function() {
         goToTestServerConsole: function() {
             this.goToTestServerDashboard();
             this.click('Console');
-        }
-
+        },
     });
 }

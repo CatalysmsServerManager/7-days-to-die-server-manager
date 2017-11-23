@@ -139,7 +139,14 @@ module.exports = {
                     error: function(error) {
                         return res.badRequest(new Error('Error executing command\n' + error));
                     },
-                    success: function() {
+                    success: function(response) {
+                        console.log(response);
+                        let logLine = {
+                            msg: response.result,
+                            date: new Date(),
+                            type: 'commandResponse'
+                        };
+                        sails.sockets.broadcast(server.id, 'logLine', logLine);
                         return res.ok();
                     }
                 });
@@ -157,13 +164,13 @@ module.exports = {
             sails.models.player.find({ server: serverID }).exec(function(error, players) {
                 if (error) {
                     sails.log.error(error);
-                    return res.serverError(error)
+                    return res.serverError(error);
                 }
                 res.view('player/players', {
                     serverID: serverID,
                     players: players
-                })
-            })
+                });
+            });
         }
 
     },

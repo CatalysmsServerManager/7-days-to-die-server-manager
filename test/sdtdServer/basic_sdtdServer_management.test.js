@@ -10,7 +10,6 @@ Scenario('Add a duplicate server', (I) => {
     I.login('CSMMTesterFixture', 'something');
     I.addTestServer();
     I.dontSee('Dashboard');
-
 });
 
 Scenario('Go to server dashboard', (I) => {
