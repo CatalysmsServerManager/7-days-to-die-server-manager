@@ -6,12 +6,8 @@
 
 module.exports = {
 
-    _toJSON: function() {
-        var obj = this.toObject();
-        delete obj.telnetPassword;
-        delete obj.authToken;
-        delete obj.authName;
-        return obj;
+    customToJSON: function() {
+        return _.omit(this, ['authToken', 'authName', 'telnetPort', 'telnetPassword']);
     },
 
     attributes: {

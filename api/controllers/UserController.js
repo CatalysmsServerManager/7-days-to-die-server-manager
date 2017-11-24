@@ -14,12 +14,12 @@ module.exports = {
         if (_.isUndefined(userID)) {
             return res.badRequest("No userID given");
         }
-
         User.find(userID).populate('servers').exec(function(err, createdUser) {
             if (err) { return res.serverError(`Error finding a user in DB ${err}`); }
 
             return res.view('welcome', {
-                userName: createdUser.username
+                userName: createdUser.username,
+                userId: createdUser.id
             });
         });
     },
@@ -70,7 +70,8 @@ module.exports = {
                     sails.log.debug(`User ${req.param('username')} successfully logged in`);
 
                     return res.view('welcome', {
-                        userName: createdUser.username
+                        userName: createdUser.username,
+                        userId: createdUser.id
                     });
                 }
             });
@@ -158,5 +159,20 @@ module.exports = {
 
         });
     },
+
+    /*****************/
+    /* JSON requests */
+    /*****************/
+
+    ownedServers: function(req, res) {
+        var userId = req.query.userId;
+
+        if (_.isUndefined(userId)) { return res.badRequest("No userId given"); }
+
+        SdtdServer.find({ owner: userId }).exec(function(err, foundServers) {
+            if (err) { return res.serverError(new Error(`Error serversOwned`)); }
+            res.json(foundServers);
+        });
+    }
 
 };

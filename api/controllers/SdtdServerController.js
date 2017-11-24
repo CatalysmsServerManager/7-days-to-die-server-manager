@@ -140,7 +140,6 @@ module.exports = {
                         return res.badRequest(new Error('Error executing command\n' + error));
                     },
                     success: function(response) {
-                        console.log(response);
                         let logLine = {
                             msg: response.result,
                             date: new Date(),

@@ -121,6 +121,12 @@ module.exports.routes = {
         skipAssets: true
     },
 
+    'get /api/user/ownedServers': {
+        controller: 'User',
+        action: 'ownedServers',
+        skipAssets: true
+    },
+
 
     //  ╦ ╦╔═╗╔╗ ╦ ╦╔═╗╔═╗╦╔═╔═╗
     //  ║║║║╣ ╠╩╗╠═╣║ ║║ ║╠╩╗╚═╗
