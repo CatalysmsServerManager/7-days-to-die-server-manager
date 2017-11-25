@@ -28,12 +28,12 @@
         "sails-mysql": "^1.0.0-15",
         "socket.io-redis": "4.0.0",
         "telnet-client": "^0.15.5",
-        "validator": "^9.1.1"
+        "validator": "^9.1.2"
     },
     "scripts": {
         "start": "NODE_ENV=production node app.js",
         "test": "npm run custom-tests && echo 'Done.'",
-        "custom-tests": "./node_modules/.bin/codeceptjs run -c test --steps",
+        "custom-tests": "./node_modules/.bin/codeceptjs run -c test",
         "debug": "node debug app.js"
     },
     "main": "app.js",

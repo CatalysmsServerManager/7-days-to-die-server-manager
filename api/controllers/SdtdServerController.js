@@ -154,66 +154,72 @@ module.exports = {
 
     },
 
-    showPlayers: function(req, res) {
-
+    startLogging: async function(req, res) {
         const serverID = req.param('serverID');
-        if (_.isUndefined(serverID)) {
-            return res.badRequest("No server ID given");
-        } else {
-            sails.models.player.find({ server: serverID }).exec(function(error, players) {
-                if (error) {
-                    sails.log.error(error);
-                    return res.serverError(error);
-                }
-                res.view('player/players', {
-                    serverID: serverID,
-                    players: players
-                });
-            });
+        sails.log.info(`Starting logging for ${serverID}`);
+        try {
+            sails.hooks.sdtdlogs.start(serverID);
+        } catch (error) {
+            res.serverError(error);
         }
-
     },
 
-    showOnlinePlayers: async function(req, res) {
+    stopLogging: async function(req, res) {
         const serverID = req.param('serverID');
-
-
-        if (_.isUndefined(serverID)) {
-            return res.badRequest("No server ID given");
-        } else {
-            sails.models.sdtdserver.findOne({ id: serverID }).exec(function(error, server) {
-                if (error) {
-                    sails.log.error(error);
-                    throw error;
-                }
-                sevenDays.getOnlinePlayers({
-                    ip: server.ip,
-                    port: server.webPort,
-                    authName: server.authName,
-                    authToken: server.authToken,
-                }).exec({
-                    error: function(error) {
-                        return res.serverError(error);
-                    },
-                    connectionRefused: function(error) {
-                        return res.badRequest(error);
-                    },
-                    unauthorized: function(error) {
-                        return res.badRequest(error);
-                    },
-                    success: function(data) {
-                        return res.view('dashboard/onlinePlayers', {
-                            server: server,
-                            data: data
-                        });
-                    }
-                })
-            });
-        };
+        sails.log.info(`Stopping logging for ${serverID}`);
+        try {
+            sails.hooks.sdtdlogs.stop(serverID);
+        } catch (error) {
+            res.serverError(error);
+        }
     },
+
+    subscribeToServerSocket: function(req, res) {
+        const serverID = req.param('serverID');
+        sails.log.debug(`Connecting user with id ${req.session.userId} to server socket with id ${serverID}`)
+        if (_.isUndefined(serverID)) {
+            return res.badRequest("No server ID given.");
+        }
+        if (!req.isSocket) {
+            return res.badRequest();
+        }
+        sails.models.sdtdserver.findOne({ id: serverID }).exec(function(error, server) {
+            if (error) {
+                return res.badRequest("Unknown server");
+            } else {
+                sails.log.debug(`Successfully connected`);
+                sails.sockets.join(req, serverID);
+                return res.ok();
+            }
+
+        });
+    },
+
+    loadServerInfo: function(req, res) {
+        const serverId = req.param('serverID');
+        sails.log.debug(`Updating server info for ${serverId}`);
+        if (_.isUndefined(serverId)) {
+            return res.badRequest("No server ID given.");
+        }
+        sails.helpers.loadServerInfo({
+            serverId: serverId
+        }).exec({
+            success: function() {
+                return res.ok();
+            },
+            connectionError: function(error) {
+                return res.badRequest(new Error('Could not connect to server'));
+            },
+            databaseError: function(error) {
+                return res.serverError(new Error('Database error'));
+            }
+        });
+    },
+
+    /* JSON API */
 
     onlinePlayers: function(req, res) {
-        const serverID = req.query.serverid;
+        const serverID = req.query.serverId;
 
         if (_.isUndefined(serverID)) {
             return res.badRequest("No server ID given");
@@ -246,48 +252,19 @@ module.exports = {
         }
     },
 
-    startLogging: async function(req, res) {
-        const serverID = req.param('serverID');
-        sails.log.info(`Starting logging for ${serverID}`);
-        try {
-            sails.hooks.sdtdlogs.start(serverID);
-        } catch (error) {
-            res.serverError(error);
-        }
-    },
-
-    stopLogging: async function(req, res) {
-        const serverID = req.param('serverID');
-        sails.log.info(`Stopping logging for ${serverID}`);
-        try {
-            sails.hooks.sdtdlogs.stop(serverID);
-        } catch (error) {
-            res.serverError(error);
-        }
-    },
-
-    subscribeToServerSocket: function(req, res) {
-        const serverID = req.param('serverID');
-        sails.log.debug(`Connecting user with id ${req.session.userId} to server socket with id ${serverID}`)
-        if (_.isUndefined(serverID)) {
+    getServerInfo: function(req, res) {
+        const serverId = req.query.serverId;
+        sails.log.debug(`Showing server info for ${serverId}`);
+        if (_.isUndefined(serverId)) {
             return res.badRequest("No server ID given.");
         }
-        if (!req.isSocket) {
-            return res.badRequest();
-        }
-
-        sails.models.sdtdserver.findOne({ id: serverID }).exec(function(error, server) {
-            if (error) {
-                return res.badRequest("Unknown server");
-            } else {
-                sails.log.debug(`Successfully connected`);
-                sails.sockets.join(req, serverID);
-                return res.ok();
-            }
-
+        SdtdServer.find({ id: serverId }).exec(function(err, foundServer) {
+            if (err) { return res.serverError(new Error(`Database error`)); }
+            sails.log.warn(foundServer)
+            return res.json(foundServer);
         });
 
+    },
 
-    }
 
 };

@@ -8,15 +8,15 @@
                 <% _.each(userServers, function(server) { %>
                     <% var dashboardlink = "/sdtdserver/" + server.id + "/dashboard" %>
                         <a href=<%=dashboardlink %> class="item-link">
-                            <li class="item-content">
-                                <div class="item-inner">
-                                    <div class="item-title">
-                                        <%= server.ip %>
-                                    </div>
-                                    <div class="item-after">Label</div>
-                                </div>
-                            </li>
-                            </a>
+                                    <li class="item-content">
+                                        <div class="item-inner">
+                                            <div class="item-title">
+                                                <%= server.ip %>
+                                            </div>
+                                            <div class="item-after">Label</div>
+                                        </div>
+                                    </li>
+                                    </a>
                         <% }) %>
         </ul>
     </div>

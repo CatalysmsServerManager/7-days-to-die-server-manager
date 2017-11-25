@@ -127,6 +127,18 @@ module.exports.routes = {
         skipAssets: true
     },
 
+    'get /api/sdtdserver/serverinfo': {
+        controller: 'SdtdServer',
+        action: 'getServerInfo',
+        skipAssets: true
+    },
+
+    'post /api/sdtdserver/serverinfo': {
+        controller: 'SdtdServer',
+        action: 'loadServerInfo',
+        skipAssets: true
+    },
+
 
     //  ╦ ╦╔═╗╔╗ ╦ ╦╔═╗╔═╗╦╔═╔═╗
     //  ║║║║╣ ╠╩╗╠═╣║ ║║ ║╠╩╗╚═╗
