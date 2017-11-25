@@ -13,7 +13,7 @@ Scenario('Execute help command', (I, consolePage) => {
     I.goToTestServerConsole();
     consolePage.executeCommand('help');
     I.waitForElement('.log-line', 10);
-    I.see('Executing command \'help\'');
+    I.see('*** Generic Console Help ***');
 });
 
 
@@ -23,5 +23,5 @@ Scenario('Execute unknown command', (I, consolePage) => {
     consolePage.executeCommand('commandWhichDoesNotExist');
     I.waitForElement('.log-line', 10);
     I.dontSee('Executing command');
-    I.see('.error');
+    I.see('Unknown command');
 })

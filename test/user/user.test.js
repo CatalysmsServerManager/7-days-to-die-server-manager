@@ -11,11 +11,6 @@ describe('User (model)', function() {
                 .send({ username: 'CSMMTesterFixture', password: 'something' })
                 .expect(200, done);
         });
-        it('should allow access to sdtd functions when a user is logged in', function(done) {
-            agent
-                .get('/sdtdserver/addserver')
-                .expect(200, done);
-        });
     });
 
 
@@ -34,6 +29,31 @@ describe('User (model)', function() {
                 assert.equal(foundUser.username, 'newUser');
                 done();
             });
+        });
+    });
+
+    describe('GET ownedServers', function() {
+        it('should return JSON', function(done) {
+            agent
+                .get('/api/user/ownedServers')
+                .query({ userId: '1' })
+                .expect('Content-Type', /json/)
+                .expect(200, done);
+        });
+        it('should error when no userId given', function(done) {
+            agent
+                .get('/api/user/ownedServers')
+                .expect(400, done);
+        });
+        it('should respond with an array', function(done) {
+            agent
+                .get('/api/user/ownedServers')
+                .query({ userId: '1' })
+                .expect(200)
+                .then(response => {
+                    assert.equal(typeof response.body, typeof new Array);
+                    done();
+                });
         });
     });
 });
