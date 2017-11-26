@@ -37,7 +37,7 @@ module.exports = {
                 return res.serverError(new Error("Error checking for existing server"));
             }
             if (!_.isUndefined(foundServers) && foundServers.length > 0) {
-                sails.log.warn(`User tried to add a server that is already in the system`);
+                //  sails.log.warn(`User tried to add a server that is already in the system`);
                 return res.badRequest(`This server has already been added to the system`);
             }
 

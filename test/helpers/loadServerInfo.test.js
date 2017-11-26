@@ -3,7 +3,7 @@ var assert = require('assert');
 var agent = supertest(sails.hooks.http.app);
 
 
-describe('Load server info (helper)', function() {
+xdescribe('Load server info (helper)', function() {
     describe('API POST', function() {
         it('should return ok when correct info is entered', function(done) {
             agent

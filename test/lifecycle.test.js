@@ -31,15 +31,16 @@ module.exports = {
                     username: 'CSMMTesterFixture',
                     encryptedPassword: "$2a$10$b8kbwLOvUvJH3Y.37ZAwdu77K3zaFfjXAQnaym3BqpSuzDApJcbcG",
                 }).fetch();
-                var testServer = await SdtdServer.create({
-                    ip: '192.168.1.101',
-                    telnetPort: '8081',
-                    telnetPassword: 'somethingtelnet',
-                    authName: 'niek',
-                    authToken: 'test',
-                    webPort: '8082',
-                    owner: testUser.id
-                }).fetch();
+                // var testServer = await SdtdServer.create({
+                //     ip: '192.168.1.101',
+                //     telnetPort: '8081',
+                //     telnetPassword: 'somethingtelnet',
+                //     authName: 'niek',
+                //     authToken: 'test',
+                //     webPort: '8082',
+                //     owner: testUser.id
+                // }).fetch();
+                // sails.testServer = testServer;
                 sails.log.debug('Finished bootstrapping test data');
                 return done();
             } catch (error) {
