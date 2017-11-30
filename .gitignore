@@ -151,3 +151,4 @@ dump.rdb
 
 config/datastores.js
 test/output/*
+.env
