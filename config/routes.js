@@ -32,10 +32,6 @@ module.exports.routes = {
         view: 'about'
     },
 
-    '/welcome': {
-        view: 'welcome'
-    },
-
     '/auth/steam': {
         controller: 'AuthController',
         action: 'steamLogin'
@@ -46,7 +42,10 @@ module.exports.routes = {
         action: 'steamReturn'
     },
 
-
+    '/auth/logout': {
+        controller: 'AuthController',
+        action: 'logout'
+    },
 
     /***************************************************************************
      *                                                                          *

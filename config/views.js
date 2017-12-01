@@ -48,10 +48,10 @@ module.exports.views = {
             return req.session.servers;
         },
         loggedInUserID: function(req) {
-            return req.session.userId;
+            return req.signedCookies.userProfile.id;
         },
         isLoggedIn: function(req) {
-            if (_.isUndefined(req.session.userId)) {
+            if (_.isUndefined(req.signedCookies.userProfile)) {
                 return false;
             } else {
                 return true;

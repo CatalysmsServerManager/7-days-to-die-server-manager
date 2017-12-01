@@ -133,14 +133,24 @@
                     <div class="toolbar">
                         <div class="toolbar-inner">
                             <!-- Toolbar links -->
+                            <a href="/about" class="link">About</a>
                             <% if (!isLoggedIn(req)) { %>
                                 <a href="/auth/steam" class="link"><img src="/images/steamlogin.png"></a>
                                 <% } else {%>
-                                    <a href="/logout" class="link">Logout</a>
+                                    <a href="/auth/logout" class="link">Logout</a>
                                     <a href="/welcome" class="link">Your servers</a>
                                     <a href="/sdtdserver/addserver" class="link">Add a server</a>
+
+
+                                    <p>
+                                        <%=req.signedCookies.userProfile.steamProfile.displayName%>
+                                    </p>
+
+                                    <img src=<%=req.signedCookies.userProfile.steamProfile._json.avatar%>>
+
+
                                     <% } %>
-                                        <a href="/about" class="link">About</a>
+
                         </div>
                     </div>
 

@@ -11,7 +11,7 @@ module.exports = {
     steamLogin: function(req, res, next) {
         sails.log.debug(`Logging in a user via steam`);
         passport.authenticate('steam', {
-            failureRedirect: 'http://localhost:1337/about'
+            failureRedirect: `${process.env.CSMM_HOSTNAME}`
         })(req, res);
 
     },
@@ -32,7 +32,8 @@ module.exports = {
     },
 
     logout: function(req, res) {
-
+        res.clearCookie('userProfile');
+        return res.redirect('/');
     },
 
 

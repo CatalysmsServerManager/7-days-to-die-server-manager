@@ -8,9 +8,8 @@
  */
 module.exports = function isLoggedIn(req, res, next) {
 
-    console.log(req.cookies)
     if (req.signedCookies.userProfile) {
-        sails.log.debug(`User ${req.session.userId} is logged in, allowing request`);
+        sails.log.debug(`User ${req.signedCookies.userProfile.id} is logged in, allowing request`);
         return next();
     }
 

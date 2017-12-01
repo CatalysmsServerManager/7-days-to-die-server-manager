@@ -1,8 +1,18 @@
 var $$ = Dom7;
 
 function drawUserServers(userId) {
-    let servers = serversOwnedByUser(userId)
-    console.log(servers)
+
+    $$.get('/api/user/ownedServers', { userId: userId }, function success(data, status, xhr) {
+        let servers = JSON.parse(data)
+        _.each(servers, function(server) {
+            $$('.user-servers')
+                .append(createServerEntry(server));
+        });
+    }, function error(xhr, status) {
+        console.log(status)
+    })
+
+
 
     function createServerEntry(server) {
         var dashboardlink = "/sdtdserver/" + server.id + "/dashboard"
@@ -19,12 +29,8 @@ function drawUserServers(userId) {
         return html;
     }
 
-    _.each(servers, function(server) {
-        console.log('Creating a server entry');
-        $$('.user-servers')
-            .append(createServerEntry(server));
 
-    });
+
 }
 
 function addServer() {

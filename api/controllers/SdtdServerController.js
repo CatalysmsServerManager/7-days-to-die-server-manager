@@ -55,7 +55,7 @@ module.exports = {
                         webPort: webport,
                         authName: authInfo.authName,
                         authToken: authInfo.authToken,
-                        owner: req.session.userId
+                        owner: req.signedCookies.userProfile.id
                     }).fetch();
                     await sails.hooks.sdtdlogs.start(createdServer.id);
                     return res.json(createdServer);

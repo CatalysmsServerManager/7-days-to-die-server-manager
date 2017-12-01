@@ -2,8 +2,8 @@
     Welcome to CSMM
 
     <div class="content-block-title">Your servers</div>
-    <div class="list-block">
-        <ul>
+    <div class="list-block user-servers">
+        <!-- <ul>
             <% const userServers = getUserServers(req) %>
                 <% _.each(userServers, function(server) { %>
                     <% var dashboardlink = "/sdtdserver/" + server.id + "/dashboard" %>
@@ -18,6 +18,10 @@
                                     </li>
                                     </a>
                         <% }) %>
-        </ul>
+        </ul> -->
     </div>
 </body>
+
+<script>
+    drawUserServers(<%= loggedInUserID(req) %>);
+</script>
