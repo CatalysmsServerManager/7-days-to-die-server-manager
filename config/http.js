@@ -14,8 +14,8 @@ var SteamStrategy = require('passport-steam');
 
 let steamAPIkey = process.env.API_KEY_STEAM
 passport.use(new SteamStrategy({
-    returnURL: 'http://localhost:1337/auth/steam/return',
-    realm: 'http://localhost:1337/',
+    returnURL: `${process.env.CSMM_HOSTNAME}/auth/steam/return`,
+    realm: `${process.env.CSMM_HOSTNAME}`,
     apiKey: steamAPIkey
 }, function(identifier, profile, done) {
     User.findOrCreate({ steamId: profile.id }, { steamId: profile.id, username: profile.displayName })
