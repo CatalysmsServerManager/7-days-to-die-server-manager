@@ -18,12 +18,16 @@ module.exports = {
             // here you can load fixtures, etc.
             // (for example, you might want to create some records in the database)
 
+            require('dotenv').config();
+
             var testServer = {
-                ip: process.env.CSMMTESTIP,
-                webPort: process.env.CSMMTESTWEBPORT,
-                telnetPort: process.env.CSMMTESTTELNETPORT,
-                telnetPassword: process.env.CSMMTESTTELNETPASSWORD
+                ip: process.env.CSMM_TEST_IP,
+                webPort: process.env.CSMM_TEST_WEBPORT,
+                telnetPort: process.env.CSMM_TEST_TELNETPORT,
+                telnetPassword: process.env.CSMM_TEST_TELNETPW
             };
+
+            sails.testServer = testServer
 
             try {
                 // Password = "something"

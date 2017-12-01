@@ -1,9 +1,9 @@
 Feature('SdtdServer management');
 
-Scenario('Add a new server', (I) => {
+Scenario('Add a new server (test server)', (I) => {
     I.login('CSMMTesterFixture', 'something');
     I.addTestServer();
-    I.see('Dashboard');
+    I.waitForText('Dashboard');
 });
 
 Scenario('Add a duplicate server', (I) => {
@@ -16,4 +16,5 @@ Scenario('Go to server dashboard', (I) => {
     I.login('CSMMTesterFixture', 'something');
     I.goToTestServerDashboard();
     I.see('Online Players');
-})
+    I.findTestServerFromDB();
+});

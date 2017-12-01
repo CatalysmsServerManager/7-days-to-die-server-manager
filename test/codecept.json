@@ -4,6 +4,9 @@
         "WebDriverIO": {
             "url": "http://localhost:1337",
             "browser": "chrome"
+        },
+        "REST": {
+            "endpoint": "http://localhost:1337"
         }
     },
     "include": {

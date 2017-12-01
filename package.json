@@ -9,16 +9,15 @@
         "bcrypt": "^1.0.3",
         "bcryptjs": "^2.4.3",
         "connect-redis": "3.2.0",
-        "consolidate": "^0.15.0",
+        "dotenv": "^4.0.0",
         "express-react-views": "^0.10.4",
         "grunt": "1.0.1",
         "lodash": "3.10.1",
         "machinepack-7daystodiewebapi": "^0.3.1",
         "machinepack-passwords": "^2.3.0",
+        "passport": "^0.4.0",
+        "passport-steam": "^1.0.8",
         "rand-token": "^0.3.0",
-        "react": "^16.1.1",
-        "react-dom": "^16.1.1",
-        "req-flash": "0.0.3",
         "request": "^2.83.0",
         "request-promise-native": "^1.0.5",
         "sails": "^1.0.0-41",
@@ -54,6 +53,7 @@
         "mocha": "^4.0.1",
         "mocha-junit-reporter": "^1.15.0",
         "selenium-standalone": "^6.11.0",
-        "supertest": "^3.0.0"
+        "supertest": "^3.0.0",
+        "unirest": "^0.5.1"
     }
 }

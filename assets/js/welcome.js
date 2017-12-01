@@ -26,3 +26,19 @@ function drawUserServers(userId) {
 
     });
 }
+
+function addServer() {
+    let serverip = $$('#input-serverip').val();
+    let telnetport = $$('#input-telnetport').val();
+    let telnetpassword = $$('#input-telnetpassword').val();
+    let webport = $$('#input-webport').val();
+    $$.post('/api/sdtdserver/addserver', {
+        serverip: serverip,
+        telnetport: telnetport,
+        telnetpassword: telnetpassword,
+        webport: webport
+    }, function(data) {
+        let response = JSON.parse(data);
+        window.location.replace(`/sdtdserver/${response.id}/dashboard`);
+    });
+}

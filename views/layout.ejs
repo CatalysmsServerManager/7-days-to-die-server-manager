@@ -7,7 +7,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
 
-
     <!--
         Stylesheets and Preprocessors
         ==============================
@@ -135,8 +134,7 @@
                         <div class="toolbar-inner">
                             <!-- Toolbar links -->
                             <% if (!isLoggedIn(req)) { %>
-                                <a href="/login" class="link">Login</a>
-                                <a href="/register" class="link">Register</a>
+                                <a href="/auth/steam" class="link"><img src="/images/steamlogin.png"></a>
                                 <% } else {%>
                                     <a href="/logout" class="link">Logout</a>
                                     <a href="/welcome" class="link">Your servers</a>

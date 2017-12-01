@@ -55,8 +55,8 @@ module.exports.policies = {
         '*': 'isServerOwner'
     },
 
-    userController: {
-        'welcome': 'isLoggedIn'
-    },
+    // userController: {
+    //     'welcome': 'isLoggedIn'
+    // },
 
 };

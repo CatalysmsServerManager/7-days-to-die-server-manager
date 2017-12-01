@@ -37,7 +37,7 @@ module.exports = {
                 return res.serverError(new Error("Error checking for existing server"));
             }
             if (!_.isUndefined(foundServers) && foundServers.length > 0) {
-                //  sails.log.warn(`User tried to add a server that is already in the system`);
+                sails.log.warn(`User tried to add a server that is already in the system`);
                 return res.badRequest(`This server has already been added to the system`);
             }
 
@@ -58,14 +58,12 @@ module.exports = {
                         owner: req.session.userId
                     }).fetch();
                     await sails.hooks.sdtdlogs.start(createdServer.id);
-                    return res.redirect('/sdtdserver/' + createdServer.id + '/dashboard');
+                    return res.json(createdServer);
 
                 },
                 error: function(error) {
                     sails.log.warn('Could not connect to servers telnet ' + error);
-                    res.view('sdtdServer/addserver', {
-                        telnetError: "Could not connect to telnet. Please confirm the input is correct"
-                    });
+                    res.badRequest('Could not connect to the servers telnet');
                 }
             });
         });
@@ -227,7 +225,7 @@ module.exports = {
             sails.models.sdtdserver.findOne({ id: serverID }).exec(function(error, server) {
                 if (error) {
                     sails.log.error(error);
-                    throw error;
+                    res.serverError(error);
                 }
                 sevenDays.getOnlinePlayers({
                     ip: server.ip,

@@ -36,27 +36,14 @@ module.exports.routes = {
         view: 'welcome'
     },
 
-    '/login': {
-        view: 'auth/login'
+    '/auth/steam': {
+        controller: 'AuthController',
+        action: 'steamLogin'
     },
 
-    'post /login': {
-        controller: 'UserController',
-        action: 'login'
-    },
-
-    'get /register': {
-        view: 'auth/register'
-    },
-
-    'post /register': {
-        controller: 'UserController',
-        action: 'register'
-    },
-
-    '/logout': {
-        controller: 'UserController',
-        action: 'logout'
+    '/auth/steam/return': {
+        controller: 'AuthController',
+        action: 'steamReturn'
     },
 
 
@@ -89,10 +76,6 @@ module.exports.routes = {
         }
     },
 
-    'post /sdtdserver/addserver': {
-        controller: 'SdtdServerController',
-        action: 'addserver'
-    },
 
     '/sdtdserver/:serverID/dashboard/': {
         controller: 'SdtdServerController',
@@ -115,10 +98,14 @@ module.exports.routes = {
     //  ╠═╣╠═╝║  ║╣ ║║║ ║║╠═╝║ ║║║║║ ║ ╚═╗
     //  ╩ ╩╩  ╩  ╚═╝╝╚╝═╩╝╩  ╚═╝╩╝╚╝ ╩ ╚═╝
 
+    'post /api/sdtdserver/addserver': {
+        controller: 'SdtdServerController',
+        action: 'addserver'
+    },
+
     'get /api/sdtdserver/onlinePlayers': {
         controller: 'SdtdServerController',
-        action: 'onlinePlayers',
-        skipAssets: true
+        action: 'onlinePlayers'
     },
 
     'get /api/user/ownedServers': {

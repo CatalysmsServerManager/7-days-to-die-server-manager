@@ -1,13 +1,13 @@
 <body>
     <div class="list-block">
-        <form action="/sdtdserver/addserver" method="POST">
+        <form id="addServer" action="javascript:addServer();">
             <ul>
                 <li>
                     <div class="item-content">
                         <div class="item-inner">
                             <div class="item-title label">Server IP</div>
                             <div class="item-input">
-                                <input type="text" name="serverip">
+                                <input id="input-serverip" type="text" name="serverip">
                             </div>
                         </div>
                 </li>
@@ -16,7 +16,7 @@
                         <div class="item-inner">
                             <div class="item-title label">Telnet port</div>
                             <div class="item-input">
-                                <input type="text" name="telnetport">
+                                <input id="input-telnetport" type="text" name="telnetport">
                             </div>
                         </div>
                 </li>
@@ -25,7 +25,7 @@
                         <div class="item-inner">
                             <div class="item-title label">Telnet Password</div>
                             <div class="item-input">
-                                <input type="password" name="telnetpassword">
+                                <input id="input-telnetpassword" type="password" name="telnetpassword">
                             </div>
                         </div>
                 </li>
@@ -39,7 +39,7 @@
                                 <div class="item-inner">
                                     <div class="item-title label">Web port</div>
                                     <div class="item-input">
-                                        <input type="text" name="webport">
+                                        <input id="input-webport" type="text" name="webport">
                                     </div>
                                 </div>
                         </li>
