@@ -1,5 +1,10 @@
-# bill-sails
+# 7DTD Server manager 
 
 a [Sails](https://sailsjs.com) application
 
-Very early stages 
+## Env vars
+
+To start the application, you need to add these environment variables;
+
+CSMM_HOSTNAME
+API_KEY_STEAM

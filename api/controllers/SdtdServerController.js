@@ -144,7 +144,7 @@ module.exports = {
                             type: 'commandResponse'
                         };
                         sails.sockets.broadcast(server.id, 'logLine', logLine);
-                        return res.ok();
+                        return res.json(logLine);
                     }
                 });
             }
