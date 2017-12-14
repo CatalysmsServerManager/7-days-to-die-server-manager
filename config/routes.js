@@ -113,15 +113,15 @@ module.exports.routes = {
         skipAssets: true
     },
 
-    'get /api/sdtdserver/serverinfo': {
+    'get /api/sdtdserver/info': {
         controller: 'SdtdServer',
         action: 'getServerInfo',
         skipAssets: true
     },
 
-    'post /api/sdtdserver/serverinfo': {
+    'get /api/sdtdserver/players': {
         controller: 'SdtdServer',
-        action: 'loadServerInfo',
+        action: 'getPlayers',
         skipAssets: true
     },
 

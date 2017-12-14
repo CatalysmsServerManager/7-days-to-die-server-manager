@@ -219,6 +219,8 @@ module.exports = {
     onlinePlayers: function(req, res) {
         const serverID = req.query.serverId;
 
+        sails.log.debug(`Showing online players for ${serverID}`);
+
         if (_.isUndefined(serverID)) {
             return res.badRequest("No server ID given");
         } else {
@@ -250,15 +252,46 @@ module.exports = {
         }
     },
 
-    getServerInfo: function(req, res) {
+    getPlayers: function(req, res) {
         const serverId = req.query.serverId;
-        sails.log.debug(`Showing server info for ${serverId}`);
         if (_.isUndefined(serverId)) {
             return res.badRequest("No server ID given.");
         }
-        SdtdServer.find({ id: serverId }).exec(function(err, foundServer) {
+        sails.log.debug(`Showing all players for ${serverId}`);
+
+        SdtdServer.findOne({ id: serverId }).exec(function(err, server) {
             if (err) { return res.serverError(new Error(`Database error`)); }
-            sails.log.warn(foundServer)
+            sevenDays.getPlayerList({
+                ip: server.ip,
+                port: server.webPort,
+                authName: server.authName,
+                authToken: server.authToken,
+            }).exec({
+                error: function(error) {
+                    return res.serverError(error);
+                },
+                connectionRefused: function(error) {
+                    return res.badRequest(error);
+                },
+                unauthorized: function(error) {
+                    return res.badRequest(error);
+                },
+                success: function(data) {
+                    return res.status(200).json(data.players)
+                }
+            });
+        });
+
+    },
+
+    getServerInfo: function(req, res) {
+        const serverId = req.query.serverId;
+        if (_.isUndefined(serverId)) {
+            return res.badRequest("No server ID given.");
+        }
+        sails.log.debug(`Showing server info for ${serverId}`);
+        SdtdServer.findOne({ id: serverId }).exec(function(err, foundServer) {
+            if (err) { return res.serverError(new Error(`Database error`)); }
             return res.json(foundServer);
         });
 
