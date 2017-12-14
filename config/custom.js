@@ -6,16 +6,20 @@
  *
  * For more information on custom configuration, visit:
  * https://sailsjs.com/config/custom
-*/
+ */
+
+
+// Load env vars
+require('dotenv').config();
 
 module.exports.custom = {
 
   /**************************************************************************
-  *                                                                          *
-  * Default settings for custom configuration used in your app.              *
-  * (these may also be overridden in config/env/production.js)               *
-  *                                                                          *
-  ***************************************************************************/
+   *                                                                          *
+   * Default settings for custom configuration used in your app.              *
+   * (these may also be overridden in config/env/production.js)               *
+   *                                                                          *
+   ***************************************************************************/
   // mailgunDomain: 'transactional-mail.example.com',
   // mailgunApiKey: 'key-testkeyb183848139913858e8abd9a3',
   // stripeSecret: 'sk_test_Zzd814nldl91104qor5911gjald',
