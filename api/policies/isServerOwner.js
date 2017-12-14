@@ -1,10 +1,10 @@
 module.exports = async function isServerOwner(req, res, next) {
     if (_.isUndefined(req.signedCookies.userProfile)) { return res.badRequest('You have to be logged in.'); }
-    if (_.isUndefined(req.param('serverID'))) { return res.badRequest('No server ID given'); }
+    if (_.isUndefined(req.param('serverID')) && _.isUndefined(req.query.serverId)) { return res.badRequest('No server ID given'); }
 
-
+    var serverId = req.param('serverID') || req.query.serverId
     var isOwner = false;
-    SdtdServer.findOne(req.param('serverID')).exec(function(err, foundServer) {
+    SdtdServer.findOne({id: serverId}).exec(function(err, foundServer) {
         if (err) { return res.serverError(`Error checking if you are server owner`); }
         if (foundServer.owner === req.signedCookies.userProfile.id) {
             isOwner = true;
