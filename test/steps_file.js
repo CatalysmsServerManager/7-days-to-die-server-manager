@@ -8,10 +8,10 @@ module.exports = function() {
         // It is recommended to place a general 'login' function here.
 
         login: function(username, password) {
-            this.amOnPage('/login');
-            this.fillField('username', username);
-            this.fillField('password', password);
-            this.click('Submit');
+            this.amOnPage('/auth/steam');
+            this.fillField('username', process.env.CSMM_TEST_STEAM_USERNAME);
+            this.fillField('password', process.env.CSMM_TEST_STEAM_PASSWORD);
+            this.click('#imageLogin');
         },
 
         addTestServer: async function() {

@@ -34,6 +34,7 @@ module.exports = {
                 var testUser = await User.create({
                     username: 'CSMMTesterFixture',
                     encryptedPassword: "$2a$10$b8kbwLOvUvJH3Y.37ZAwdu77K3zaFfjXAQnaym3BqpSuzDApJcbcG",
+                    steamId: process.env.CSMM_TEST_STEAMID
                 }).fetch();
                 // var testServer = await SdtdServer.create({
                 //     ip: '192.168.1.101',
