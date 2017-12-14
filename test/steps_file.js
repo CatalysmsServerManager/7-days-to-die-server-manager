@@ -7,11 +7,13 @@ module.exports = function() {
         // Define custom steps here, use 'this' to access default methods of I.
         // It is recommended to place a general 'login' function here.
 
-        login: function(username, password) {
+        login: async function() {
             this.amOnPage('/auth/steam');
             this.fillField('username', process.env.CSMM_TEST_STEAM_USERNAME);
             this.fillField('password', process.env.CSMM_TEST_STEAM_PASSWORD);
             this.click('#imageLogin');
+            this.waitForElement('.page-content', 10);
+            this.userProfile = await this.grabCookie('userProfile');
         },
 
         addTestServer: async function() {
@@ -20,7 +22,7 @@ module.exports = function() {
             this.fillField('telnetport', sails.testServer.telnetPort);
             this.fillField('telnetpassword', sails.testServer.telnetPassword);
             this.fillField('webport', sails.testServer.webPort);
-            await this.click('Submit');
+            this.click('Submit');
         },
 
         goToTestServerDashboard: function() {

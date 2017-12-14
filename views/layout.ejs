@@ -135,7 +135,7 @@
                             <!-- Toolbar links -->
                             <a href="/about" class="link">About</a>
                             <% if (!isLoggedIn(req)) { %>
-                                <a href="/auth/steam" class="link"><img src="/images/steamlogin.png"></a>
+                                <a href="/auth/steam" class="link"><img id=steamLoginImg src="/images/steamlogin.png"></a>
                                 <% } else {%>
                                     <a href="/auth/logout" class="link">Logout</a>
                                     <a href="/welcome" class="link">Your servers</a>

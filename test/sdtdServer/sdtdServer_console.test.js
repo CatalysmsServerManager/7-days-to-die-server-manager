@@ -1,6 +1,6 @@
 Feature('SdtdServer Console');
 
-Scenario('Go to console', (I, consolePage) => {
+xScenario('Go to console', (I, consolePage) => {
     I.login('CSMMTesterFixture', 'something');
     I.goToTestServerConsole();
     I.see('Console');
@@ -8,7 +8,7 @@ Scenario('Go to console', (I, consolePage) => {
     I.seeElement('.console-send-box');
 });
 
-Scenario('Execute help command', (I, consolePage) => {
+xScenario('Execute help command', (I, consolePage) => {
     I.login('CSMMTesterFixture', 'something');
     I.goToTestServerConsole();
     consolePage.executeCommand('help');
