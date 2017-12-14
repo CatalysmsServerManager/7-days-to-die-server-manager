@@ -33,6 +33,7 @@
         "start": "NODE_ENV=production node app.js",
         "test": "npm run custom-tests && echo 'Done.'",
         "custom-tests": "./node_modules/.bin/codeceptjs run -c test",
+        "api-test": "./node_modules/.bin/codeceptjs run -c test --grep @api",
         "debug": "node debug app.js"
     },
     "main": "app.js",
