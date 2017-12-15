@@ -28,7 +28,8 @@ module.exports = {
           playerController: {
             '*': true
           }
-      }
+      },
+      port: 1338
     }, async function (err) {
       if (err) {
         return done(err);
