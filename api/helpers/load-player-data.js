@@ -10,9 +10,6 @@ module.exports = {
     },
     steamId: {
       type: 'string'
-    },
-    playerId: {
-      type: 'number'
     }
   },
   exits: {
@@ -21,12 +18,13 @@ module.exports = {
     }
   },
   fn: async function (inputs, exits) {
-    sails.log.debug(`HELPER LOAD PLAYER DATA Loading player data for server ${inputs.serverId}`);
+    sails.log.debug(`HELPER LOAD PLAYER DATA Loading player data for server ${inputs.serverId} -- steamId: ${inputs.steamId} playerId: ${inputs.playerId}`);
 
     try {
       let server = await SdtdServer.findOne(inputs.serverId)
       let playerList = await getPlayerList(server)
-      let newPlayerList = await playerList.players.map(await updatePlayerInfo)
+      playerList = await loadPlayersInventory(playerList.players, server)
+      let newPlayerList = await playerList.map(await updatePlayerInfo)
       let jsonToSend = await createJSON(newPlayerList)
       exits.success(jsonToSend)
     } catch (error) {
@@ -34,33 +32,64 @@ module.exports = {
     }
 
 
-    async function updatePlayerInfo(newPlayer) {
-      return new Promise(async function(resolve) {
-        try {
-          foundOrCreatedPlayer = await Player.findOrCreate({
-            steamId: newPlayer.steamid,
-            server: inputs.serverId,
-            entityId: newPlayer.entityid
-          }, {
-            steamId: newPlayer.steamid,
-            server: inputs.serverId,
-            entityId: newPlayer.entityid,
-            name: newPlayer.name,
-            ip: newPlayer.ip
+    async function loadPlayersInventory(playerList, server) {
+      return new Promise(resolve => {
+        let listWithInventories = playerList.map(function (player) {
+          return new Promise(resolve => {
+            sevenDays.getPlayerInventory({
+              ip: server.ip,
+              port: server.webPort,
+              authName: server.authName,
+              authToken: server.authToken,
+              steamID: player.steamid
+            }).exec({
+              error: function (err) {
+                throw err
+              },
+              success: function (data) {
+                player.inventory = new Object();
+                player.inventory.bag = data.bag;
+                player.inventory.belt = data.belt;
+                player.inventory.equipment = data.equipment
+                resolve(player)
+              }
+            })
           })
-          newPlayer = await Player.update({
-            steamId: foundOrCreatedPlayer.steamId,
-            server: inputs.serverId,
-            entityId: foundOrCreatedPlayer.entityId
-          }).set({
-            ip: newPlayer.ip,
-            positionX: newPlayer.position.x,
-            positionY: newPlayer.position.y,
-            positionZ: newPlayer.position.z,
-            playtime: newPlayer.totalplaytime,
-            banned: newPlayer.banned
-          }).fetch()
-          resolve(newPlayer[0])
+        })
+        resolve(listWithInventories)
+      })
+    }
+
+    async function updatePlayerInfo(newPlayer) {
+      return new Promise(async function (resolve) {
+        try {
+          newPlayer.then(async function (newPlayer) {
+            foundOrCreatedPlayer = await Player.findOrCreate({
+              steamId: newPlayer.steamid,
+              server: inputs.serverId,
+              entityId: newPlayer.entityid
+            }, {
+              steamId: newPlayer.steamid,
+              server: inputs.serverId,
+              entityId: newPlayer.entityid,
+              name: newPlayer.name,
+              ip: newPlayer.ip
+            })
+            newPlayer = await Player.update({
+              steamId: foundOrCreatedPlayer.steamId,
+              server: inputs.serverId,
+              entityId: foundOrCreatedPlayer.entityId
+            }).set({
+              ip: newPlayer.ip,
+              positionX: newPlayer.position.x,
+              positionY: newPlayer.position.y,
+              positionZ: newPlayer.position.z,
+              playtime: newPlayer.totalplaytime,
+              inventory: newPlayer.inventory,
+              banned: newPlayer.banned
+            }).fetch()
+            resolve(newPlayer[0])
+          })
         } catch (error) {
           throw error
         }
@@ -88,13 +117,13 @@ module.exports = {
 
 
     async function createJSON(playerList) {
-      return new Promise(async function(resolve) {
+      return new Promise(async function (resolve) {
         try {
           let toSend = {};
           Promise.all(playerList).then(resolvedPlayers => {
             toSend.totalPlayers = playerList.length
             toSend.players = new Array();
-            resolvedPlayers.forEach(function(player) {
+            resolvedPlayers.forEach(function (player) {
               let playerData = new Object()
               playerData.id = player.id
               playerData.steamId = player.steamId
@@ -103,6 +132,7 @@ module.exports = {
               playerData.location.x = player.positionX
               playerData.location.y = player.positionY
               playerData.location.z = player.positionZ
+              playerData.inventory = player.inventory
               playerData.totalPlaytime = player.playtime
               playerData.banned = player.banned
               playerData.server = player.server
@@ -110,7 +140,6 @@ module.exports = {
             })
             resolve(toSend)
           })
-          
         } catch (error) {
           throw error
         }

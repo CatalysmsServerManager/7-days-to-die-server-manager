@@ -1,4 +1,4 @@
-var assert = require('assert');
+var assert = require('chai').assert;
 
 describe('HELPER load-player-data @service', function () {
   it('Should load all player info when only a serverID is given', function (done) {
@@ -10,12 +10,16 @@ describe('HELPER load-player-data @service', function () {
           done(err)
         },
         success: function (data) {
-          assert((data.totalPlayers > 1))
-          done();
+          if (data.players.length > 1) {
+            done()
+          } else {
+            done(`Only found info for ${data.players.length} players`)
+          }
+
         }
       })
   });
-  it('Should load only a single players info when a player ID is given', function (done) {
+  it('Should load only a single players info when a steam ID is given', function (done) {
     return sails.helpers.loadPlayerData({
         serverId: sails.testServer.id,
         steamId: sails.testUser.steamId
@@ -25,8 +29,11 @@ describe('HELPER load-player-data @service', function () {
           done(err)
         },
         success: function (data) {
-          assert((data.totalPlayers == 1))
-          done();
+          if (data.players.length == 1) {
+            done()
+          } else {
+            done(`Found info for ${data.players.length} players`)
+          }
         }
       })
   });
@@ -36,20 +43,20 @@ describe('HELPER load-player-data @service', function () {
       })
       .switch({
         error: function (err) {
-          done(err)
+          throw err
         },
         success: function (data) {
           if (data.totalPlayers == 0) {
-            done(new Error('No player data to test..'))
+            done('No player data to test..')
           }
           if (data.players[0].location) {
             done()
           } else {
-            done(new Error("No location info"))
+            done('No location data found')
           }
-
         }
       })
+
   });
   it('Should load inventory data', function (done) {
     sails.helpers.loadPlayerData({
@@ -57,18 +64,18 @@ describe('HELPER load-player-data @service', function () {
       })
       .switch({
         error: function (err) {
-          done(err)
+          throw err
         },
         success: function (data) {
           if (data.totalPlayers = 0) {
-            return done(new Error('No player data to test..'))
+            done('No player data to test..')
           }
-          console.log(data.players)
           if (data.players[0].inventory) {
-            done()
+            return done()
           } else {
-            done(new Error("No inventory info"))
+            return done('No inventory data found')
           }
+
         }
       })
   });

@@ -53,6 +53,7 @@ module.exports = {
           authToken: process.env.CSMM_TEST_AUTHTOKEN,
           owner: testUser.id
         }).fetch();
+        sails.testUser = testUser
         sails.testServer = testServer;
         sails.log.debug('Finished bootstrapping test data');
         return done();

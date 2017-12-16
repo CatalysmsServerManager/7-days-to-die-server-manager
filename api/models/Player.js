@@ -45,6 +45,10 @@ module.exports = {
       type: 'number'
     },
 
+    inventory: {
+      type: 'json',
+    },
+
     playtime: {
       type: 'number'
     },
