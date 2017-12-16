@@ -15,6 +15,10 @@ module.exports = {
   exits: {
     error: {
       friendlyName: 'error'
+    },
+    playerNotFound: {
+      friendlyName: 'Player not found',
+      description: 'Steam ID was given, but no player found on the server'
     }
   },
   fn: async function (inputs, exits) {
@@ -109,6 +113,19 @@ module.exports = {
             throw err
           },
           success: function (playerList) {
+            // If a steam ID is provided, we filter the list to only 1 player
+            if (inputs.steamId) {
+              let playerToFind
+              playerList.players.forEach(player => {
+                if (player.steamid == inputs.steamId) {
+                  playerToFind = player
+                }
+              })
+              if (_.isUndefined(playerToFind)) {
+                return exits.playerNotFound()
+              }
+              playerList.players = new Array(playerToFind)
+            }
             resolve(playerList)
           }
         });
