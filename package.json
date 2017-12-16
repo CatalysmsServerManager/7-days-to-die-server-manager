@@ -34,6 +34,7 @@
         "test": "npm run custom-tests && echo 'Done.'",
         "custom-tests": "./node_modules/.bin/codeceptjs run -c test",
         "api-test": "./node_modules/.bin/codeceptjs run -c test --grep @api",
+        "service-test": "./node_modules/.bin/codeceptjs run -c test --grep @service",
         "debug": "node debug app.js"
     },
     "main": "app.js",

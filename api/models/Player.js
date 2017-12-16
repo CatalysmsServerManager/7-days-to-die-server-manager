@@ -14,12 +14,12 @@ module.exports = {
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
 
 
-    steamID: {
-      type: 'number',
+    steamId: {
+      type: 'string',
       required: true
     },
 
-    entityID: {
+    entityId: {
       type: 'number'
     },
 
@@ -55,7 +55,7 @@ module.exports = {
 
     banned: {
       type: 'boolean',
-      required: true
+      defaultsTo: false
     },
 
 

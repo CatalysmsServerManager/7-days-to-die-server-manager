@@ -2,7 +2,7 @@ var assert = require('assert');
 
 describe('HELPER load-player-data @service', function () {
   it('Should load all player info when only a serverID is given', function (done) {
-    sails.helpers.loadPlayerData({
+    return sails.helpers.loadPlayerData({
         serverId: sails.testServer.id
       })
       .switch({
@@ -16,7 +16,7 @@ describe('HELPER load-player-data @service', function () {
       })
   });
   it('Should load only a single players info when a player ID is given', function (done) {
-    sails.helpers.loadPlayerData({
+    return sails.helpers.loadPlayerData({
         serverId: sails.testServer.id,
         steamId: sails.testUser.steamId
       })
@@ -31,7 +31,7 @@ describe('HELPER load-player-data @service', function () {
       })
   });
   it('Should load location data', function (done) {
-    sails.helpers.loadPlayerData({
+    return sails.helpers.loadPlayerData({
         serverId: sails.testServer.id
       })
       .switch({
@@ -39,11 +39,15 @@ describe('HELPER load-player-data @service', function () {
           done(err)
         },
         success: function (data) {
-          if (data.totalPlayers = 0) {
-            done('No player data to test..')
+          if (data.totalPlayers == 0) {
+            done(new Error('No player data to test..'))
           }
-          assert(data.players[0].location)
-          done()
+          if (data.players[0].location) {
+            done()
+          } else {
+            done(new Error("No location info"))
+          }
+
         }
       })
   });
@@ -57,10 +61,14 @@ describe('HELPER load-player-data @service', function () {
         },
         success: function (data) {
           if (data.totalPlayers = 0) {
-            done('No player data to test..')
+            return done(new Error('No player data to test..'))
           }
-          assert(data.players[0].inventory)
-          done()
+          console.log(data.players)
+          if (data.players[0].inventory) {
+            done()
+          } else {
+            done(new Error("No inventory info"))
+          }
         }
       })
   });
@@ -74,19 +82,21 @@ describe('HELPER load-player-data @service', function () {
         },
         success: function (data) {
           if (data.totalPlayers = 0) {
-            done('No player data to test..')
+            done(new Error('No player data to test..'))
           }
           let playerToFind = data.players[0]
           Player.findOne({
             steamId: playerToFind.steamId,
             server: sails.testServer.id
-          }).exec(function(err, foundPlayer) {
-              if (err) {return done(err)}
-              if (foundPlayer) {
-                  done()
-              } else {
-                  done(new Error('Did not find player in database'))
-              }
+          }).exec(function (err, foundPlayer) {
+            if (err) {
+              return done(err)
+            }
+            if (foundPlayer) {
+              done()
+            } else {
+              done(new Error('Did not find player in database'))
+            }
           })
         }
       })
