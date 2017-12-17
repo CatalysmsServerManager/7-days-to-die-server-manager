@@ -137,6 +137,12 @@ module.exports.routes = {
         skipAssets: true
     },
 
+    'get /api/player/location': {
+        controller: 'Player',
+        action: 'getLocation',
+        skipAssets: true
+    },
+
 
     //  ╦ ╦╔═╗╔╗ ╦ ╦╔═╗╔═╗╦╔═╔═╗
     //  ║║║║╣ ╠╩╗╠═╣║ ║║ ║╠╩╗╚═╗
