@@ -131,6 +131,12 @@ module.exports.routes = {
         skipAssets: true
     },
 
+    'get /api/player/ban': {
+        controller: 'Player',
+        action: 'getBanStatus',
+        skipAssets: true
+    },
+
 
     //  ╦ ╦╔═╗╔╗ ╦ ╦╔═╗╔═╗╦╔═╔═╗
     //  ║║║║╣ ╠╩╗╠═╣║ ║║ ║╠╩╗╚═╗

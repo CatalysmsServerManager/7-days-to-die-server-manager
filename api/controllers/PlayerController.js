@@ -77,7 +77,37 @@ module.exports = {
       sails.log.error(error)
       return res.badRequest()
     }
+  },
 
+  getBanStatus: async function(req, res) {
+    const steamId = req.query.steamId;
+    const serverId = req.query.serverId;
+
+    sails.log.debug(`Showing ban status for player ${steamId} on server ${serverId}`);
+
+    if (_.isUndefined(steamId)) {
+      return res.badRequest("No steam ID given");
+    }
+    if (_.isUndefined(serverId)) {
+      return res.badRequest("No server ID given");
+    }
+
+    try {
+      let playerInfo = await sails.helpers.loadPlayerData({
+        serverId: serverId,
+        steamId: steamId
+      })
+
+      let player = playerInfo.players[0]
+      let toSend = new Object();
+      toSend.id = player.id,
+      toSend.steamId = player.steamId,
+      toSend.serverId = player.server
+      toSend.banned = player.banned
+      return res.json(toSend)
+    } catch (error) {
+      sails.log.error(error)
+      return res.badRequest()
+    }
   }
-
 };
