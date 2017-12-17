@@ -9,7 +9,7 @@ var sevenDays = require('machinepack-7daystodiewebapi');
 
 module.exports = {
 
-  kickPlayer: async function(req, res) {
+  kickPlayer: async function (req, res) {
     const playerID = req.param('playerID');
     const serverID = req.param('serverID');
     let reason;
@@ -30,10 +30,10 @@ module.exports = {
       playerID: playerID,
       reason: reason
     }).exec({
-      unknownPlayer: function() {
+      unknownPlayer: function () {
         res.badRequest('Cannot kick player, invalid ID given!');
       },
-      success: function() {
+      success: function () {
         res.ok();
       }
     });
@@ -48,8 +48,36 @@ module.exports = {
   // | | \ \| |____ ____) |  | |     / ____ \| |    _| |_ 
   // |_|  \_\______|_____/   |_|    /_/    \_\_|   |_____|
 
-  getInventory: function(req, res) {
-    
+  getInventory: async function (req, res) {
+    const steamId = req.query.steamId;
+    const serverId = req.query.serverId;
+
+    sails.log.debug(`Showing inventory for player ${steamId} on server ${serverId}`);
+
+    if (_.isUndefined(steamId)) {
+      return res.badRequest("No steam ID given");
+    }
+    if (_.isUndefined(serverId)) {
+      return res.badRequest("No server ID given");
+    }
+    try {
+      let playerInfo = await sails.helpers.loadPlayerData({
+        serverId: serverId,
+        steamId: steamId
+      })
+
+      let player = playerInfo.players[0]
+      let toSend = new Object();
+      toSend.id = player.id,
+      toSend.steamId = player.steamId,
+      toSend.serverId = player.server
+      toSend.inventory = player.inventory
+      return res.json(toSend)
+    } catch (error) {
+      sails.log.error(error)
+      return res.badRequest()
+    }
+
   }
 
 };

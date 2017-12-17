@@ -18,12 +18,12 @@ module.exports = {
     },
     playerNotFound: {
       friendlyName: 'Player not found',
-      description: 'Steam ID was given, but no player found on the server'
+      description: 'ID was given, but no player found on the server'
     }
   },
   fn: async function (inputs, exits) {
     sails.log.debug(`HELPER LOAD PLAYER DATA Loading player data for server ${inputs.serverId} -- steamId: ${inputs.steamId} playerId: ${inputs.playerId}`);
-
+    
     try {
       let server = await SdtdServer.findOne(inputs.serverId)
       let playerList = await getPlayerList(server)
@@ -34,7 +34,6 @@ module.exports = {
     } catch (error) {
       exits.error(error)
     }
-
 
     async function loadPlayersInventory(playerList, server) {
       return new Promise(resolve => {

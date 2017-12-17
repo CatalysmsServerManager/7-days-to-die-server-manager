@@ -125,6 +125,12 @@ module.exports.routes = {
         skipAssets: true
     },
 
+    'get /api/player/inventory': {
+        controller: 'Player',
+        action: 'getInventory',
+        skipAssets: true
+    },
+
 
     //  ╦ ╦╔═╗╔╗ ╦ ╦╔═╗╔═╗╦╔═╔═╗
     //  ║║║║╣ ╠╩╗╠═╣║ ║║ ║╠╩╗╚═╗
