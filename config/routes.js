@@ -143,6 +143,12 @@ module.exports.routes = {
         skipAssets: true
     },
 
+    'get /api/player/kick': {
+        controller: 'Player',
+        action: 'kick',
+        skipAssets: true
+    },
+
 
     //  ╦ ╦╔═╗╔╗ ╦ ╦╔═╗╔═╗╦╔═╔═╗
     //  ║║║║╣ ╠╩╗╠═╣║ ║║ ║╠╩╗╚═╗

@@ -9,36 +9,7 @@ var sevenDays = require('machinepack-7daystodiewebapi');
 
 module.exports = {
 
-  kickPlayer: async function (req, res) {
-    const playerID = req.param('playerID');
-    const serverID = req.param('serverID');
-    let reason;
 
-    if (_.isUndefined(req.query.reason)) {
-      reason = 'No reason given';
-    } else {
-      reason = req.query.reason;
-    }
-
-    let server = await sdtdServer.findOne(serverID);
-
-    sevenDays.kickPlayer({
-      ip: server.ip,
-      port: server.webPort,
-      authName: server.authName,
-      authToken: server.authToken,
-      playerID: playerID,
-      reason: reason
-    }).exec({
-      unknownPlayer: function () {
-        res.badRequest('Cannot kick player, invalid ID given!');
-      },
-      success: function () {
-        res.ok();
-      }
-    });
-
-  },
 
 
   // _____  ______  _____ _______            _____ _____ 
@@ -69,8 +40,8 @@ module.exports = {
       let player = playerInfo.players[0]
       let toSend = new Object();
       toSend.id = player.id,
-      toSend.steamId = player.steamId,
-      toSend.serverId = player.server
+        toSend.steamId = player.steamId,
+        toSend.serverId = player.server
       toSend.inventory = player.inventory
       return res.json(toSend)
     } catch (error) {
@@ -79,7 +50,7 @@ module.exports = {
     }
   },
 
-  getBanStatus: async function(req, res) {
+  getBanStatus: async function (req, res) {
     const steamId = req.query.steamId;
     const serverId = req.query.serverId;
 
@@ -101,8 +72,8 @@ module.exports = {
       let player = playerInfo.players[0]
       let toSend = new Object();
       toSend.id = player.id,
-      toSend.steamId = player.steamId,
-      toSend.serverId = player.server
+        toSend.steamId = player.steamId,
+        toSend.serverId = player.server
       toSend.banned = player.banned
       return res.json(toSend)
     } catch (error) {
@@ -111,7 +82,7 @@ module.exports = {
     }
   },
 
-  getLocation: async function(req, res) {
+  getLocation: async function (req, res) {
     const steamId = req.query.steamId;
     const serverId = req.query.serverId;
 
@@ -133,8 +104,8 @@ module.exports = {
       let player = playerInfo.players[0]
       let toSend = new Object();
       toSend.id = player.id,
-      toSend.steamId = player.steamId,
-      toSend.serverId = player.server
+        toSend.steamId = player.steamId,
+        toSend.serverId = player.server
       toSend.location = player.location
       return res.json(toSend)
     } catch (error) {
@@ -142,5 +113,49 @@ module.exports = {
       return res.badRequest()
     }
 
-  }
+  },
+
+  kick: async function (req, res) {
+    const steamId = req.query.steamId;
+    const serverId = req.query.serverId;
+
+    sails.log.debug(`Kicking player ${steamId} on server ${serverId}`);
+
+    if (_.isUndefined(steamId)) {
+      return res.badRequest("No steam ID given");
+    }
+    if (_.isUndefined(serverId)) {
+      return res.badRequest("No server ID given");
+    }
+
+    let server = await SdtdServer.findOne(serverId);
+    let reason;
+    if (_.isUndefined(req.query.reason)) {
+      reason = 'No reason given';
+    } else {
+      reason = req.query.reason;
+    }
+
+    sevenDays.kickPlayer({
+      ip: server.ip,
+      port: server.webPort,
+      authName: server.authName,
+      authToken: server.authToken,
+      playerID: steamId,
+      reason: reason
+    }).exec({
+      error: function (error) {
+        res.badRequest(error)
+      },
+      unknownPlayer: function () {
+        res.badRequest('Cannot kick player, invalid ID given!');
+      },
+      success: function (response) {
+        res.json(response);
+      }
+    });
+
+  },
+
+
 };
