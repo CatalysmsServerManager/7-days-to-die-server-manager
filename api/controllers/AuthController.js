@@ -1,13 +1,18 @@
+var passport = require('passport');
+
 /**
  * AuthController
  *
- * @description :: Server-side actions for handling incoming requests.
- * @help        :: See https://sailsjs.com/docs/concepts/actions
+ * @description Server-side actions for handling incoming requests regarding authentication.
+ * @module AuthController
  */
-var passport = require('passport');
+
 
 module.exports = {
 
+    /**
+     * @description Authenticate a user via steam
+     */
     steamLogin: function(req, res, next) {
         sails.log.debug(`Logging in a user via steam`);
         passport.authenticate('steam', {
@@ -15,6 +20,10 @@ module.exports = {
         })(req, res);
 
     },
+
+    /**
+     * @description Return link after steam login
+     */
 
     steamReturn: function(req, res) {
         passport.authenticate('steam', {
@@ -30,6 +39,10 @@ module.exports = {
                 res.redirect('/');
             })(req, res);
     },
+
+    /**
+     * @description Log out a user, clears the encrypted cookie
+     */
 
     logout: function(req, res) {
         res.clearCookie('userProfile');
