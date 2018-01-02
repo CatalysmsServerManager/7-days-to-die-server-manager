@@ -2,7 +2,7 @@
  * User.js
  *
  * @description :: A model definition.  Represents a database table/collection/etc.
- * @docs        :: https://sailsjs.com/docs/concepts/models-and-orm/models
+ * @module UserModel
  */
 
 module.exports = {
@@ -19,11 +19,19 @@ module.exports = {
         //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
         //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
 
+        /**
+         * @var {string} steamId
+         */
+
         steamId: {
             type: 'string',
             required: true,
             unique: true
         },
+
+        /**
+         * @var {string} username
+         */
 
         username: {
             type: 'string',
@@ -31,25 +39,26 @@ module.exports = {
             unique: true
         },
 
+        /**
+         * @var {boolean} admin
+         * @description If a user can perform admin actions on the system
+         * @default false
+         */
+
         admin: {
             type: 'boolean',
             defaultsTo: false
         },
 
+        /**
+         * @var {boolean} banned
+         * @default false
+         */
+
         banned: {
             type: 'boolean',
             defaultsTo: false
         },
-
-        servers: {
-            collection: 'sdtdServer',
-            via: 'owner'
-        },
-
-        steamID: {
-            type: 'string'
-        },
-
 
         //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
         //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
@@ -63,8 +72,17 @@ module.exports = {
         players: {
             collection: 'player',
             via: 'user'
-        }
+        },
 
+        /**
+         * @var servers
+         * @description Servers this User owns
+         */
+
+        servers: {
+            collection: 'sdtdServer',
+            via: 'owner'
+        },
 
     },
 
