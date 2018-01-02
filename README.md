@@ -2,6 +2,10 @@
 
 a [Sails](https://sailsjs.com) application
 
+## [Documentation](https://niekcandaele.github.io/7-Days-To-Die-Server-Manager/)
+
+The documentation is still a work in progress!
+
 ## Env vars
 
 To start the application, you need to add these environment variables;
