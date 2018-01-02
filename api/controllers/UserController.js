@@ -1,28 +1,19 @@
 /**
  * UserController
  *
- * @description :: Server-side actions for handling incoming requests.
- * @help        :: See https://sailsjs.com/docs/concepts/actions
+ * @description  Server-side actions for handling incoming requests regarding users
  */
 
 module.exports = {
-
-    welcome: function(req, res) {
-        const userID = req.signedCookies.userProfile.id;
-        if (_.isUndefined(userID)) {
-            return res.badRequest("No userID given");
-        }
-        return res.view('welcome', {
-            userProfile: req.signedCookies.userProfile,
-            userName: req.signedCookies.userProfile.displayName,
-            userId: req.signedCookies.userProfile.id
-        });
-    },
 
     /*****************/
     /* JSON requests */
     /*****************/
 
+    /**
+     * @description Gets a list of servers owned by a user
+     * @param {number} userId ID of the user
+     */
     ownedServers: function(req, res) {
         var userId = req.query.userId;
 
