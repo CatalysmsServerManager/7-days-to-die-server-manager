@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: controllers/PlayerController.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: controllers/PlayerController.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>var sevenDays = require('machinepack-7daystodiewebapi');
+
+/**
+ * PlayerController
+ *
+ * @module PlayerController
+ * @description  Server-side actions for handling incoming requests regarding ingame players
+ */
+
+/**
+ * @description  Get the contents of a players inventory
+ * @param {string} steamId  Steam ID of the player
+ * @param {string} serverId  ID of the server
+ */
+
+async function getInventory(req, res) {
+  const steamId = req.query.steamId;
+  const serverId = req.query.serverId;
+
+  sails.log.debug(`Showing inventory for player ${steamId} on server ${serverId}`);
+
+  if (_.isUndefined(steamId)) {
+    return res.badRequest("No steam ID given");
+  }
+  if (_.isUndefined(serverId)) {
+    return res.badRequest("No server ID given");
+  }
+  try {
+    let playerInfo = await sails.helpers.loadPlayerData.with({
+      serverId: serverId,
+      steamId: steamId
+    })
+
+    let player = playerInfo.players[0]
+    let toSend = new Object();
+    toSend.id = player.id,
+      toSend.steamId = player.steamId,
+      toSend.serverId = player.server
+    toSend.inventory = player.inventory
+    return res.json(toSend)
+  } catch (error) {
+    sails.log.error(error)
+    return res.badRequest()
+  }
+}
+
+/**
+ * @description Get ban status of a player
+ * @param {string} steamId  Steam ID of the player
+ * @param {string} serverId  ID of the server
+ */
+
+async function getBanStatus (req, res) {
+  const steamId = req.query.steamId;
+  const serverId = req.query.serverId;
+
+  sails.log.debug(`Showing ban status for player ${steamId} on server ${serverId}`);
+
+  if (_.isUndefined(steamId)) {
+    return res.badRequest("No steam ID given");
+  }
+  if (_.isUndefined(serverId)) {
+    return res.badRequest("No server ID given");
+  }
+
+  try {
+    let playerInfo = await sails.helpers.loadPlayerData.with({
+      serverId: serverId,
+      steamId: steamId
+    })
+
+    let player = playerInfo.players[0]
+    let toSend = new Object();
+    toSend.id = player.id,
+      toSend.steamId = player.steamId,
+      toSend.serverId = player.server
+    toSend.banned = player.banned
+    return res.json(toSend)
+  } catch (error) {
+    sails.log.error(error)
+    return res.badRequest()
+  }
+}
+
+/**
+ * @description Get location of a player
+ * @param {string} steamId  Steam ID of the player
+ * @param {string} serverId  ID of the server
+ */
+
+async function getLocation (req, res) {
+  const steamId = req.query.steamId;
+  const serverId = req.query.serverId;
+
+  sails.log.debug(`Showing location info for player ${steamId} on server ${serverId}`);
+
+  if (_.isUndefined(steamId)) {
+    return res.badRequest("No steam ID given");
+  }
+  if (_.isUndefined(serverId)) {
+    return res.badRequest("No server ID given");
+  }
+
+  try {
+    let playerInfo = await sails.helpers.loadPlayerData.with({
+      serverId: serverId,
+      steamId: steamId
+    })
+
+    let player = playerInfo.players[0]
+    let toSend = new Object();
+    toSend.id = player.id,
+      toSend.steamId = player.steamId,
+      toSend.serverId = player.server
+    toSend.location = player.location
+    return res.json(toSend)
+  } catch (error) {
+    sails.log.error(error)
+    return res.badRequest()
+  }
+}
+
+/**
+ * @description Kick a player
+ * @param {string} steamId  Steam ID of the player
+ * @param {string} serverId  ID of the server
+ */
+
+async function kick (req, res) {
+  const steamId = req.query.steamId;
+  const serverId = req.query.serverId;
+
+  sails.log.debug(`Kicking player ${steamId} on server ${serverId}`);
+
+  if (_.isUndefined(steamId)) {
+    return res.badRequest("No steam ID given");
+  }
+  if (_.isUndefined(serverId)) {
+    return res.badRequest("No server ID given");
+  }
+
+  let server = await SdtdServer.findOne(serverId);
+  let reason;
+  if (_.isUndefined(req.query.reason)) {
+    reason = 'No reason given';
+  } else {
+    reason = req.query.reason;
+  }
+
+  sevenDays.kickPlayer({
+    ip: server.ip,
+    port: server.webPort,
+    authName: server.authName,
+    authToken: server.authToken,
+    playerID: steamId,
+    reason: reason
+  }).exec({
+    error: function (error) {
+      res.badRequest(error)
+    },
+    unknownPlayer: function () {
+      res.badRequest('Cannot kick player, invalid ID given!');
+    },
+    success: function (response) {
+      res.json(response);
+    }
+  });
+}
+
+module.exports = {
+  getInventory: getInventory,
+  getBanStatus: getBanStatus,
+  getLocation: getLocation,
+  kick: kick
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-PlayerController.html">PlayerController</a></li></ul><h3>Global</h3><ul><li><a href="global.html#passport">passport</a></li><li><a href="global.html#sevenDays">sevenDays</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Jan 02 2018 10:47:43 GMT+0100 (Romance Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
