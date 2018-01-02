@@ -1,8 +1,8 @@
 /**
  * User.js
  *
- * @description :: A model definition.  Represents a database table/collection/etc.
- * @module UserModel
+ * @description Represents a user of the system
+ * @class User
  */
 
 module.exports = {
@@ -20,6 +20,7 @@ module.exports = {
         //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
 
         /**
+         * @memberof User
          * @var {string} steamId
          */
 
@@ -30,6 +31,7 @@ module.exports = {
         },
 
         /**
+         * @memberof User
          * @var {string} username
          */
 
@@ -41,6 +43,7 @@ module.exports = {
 
         /**
          * @var {boolean} admin
+         * @memberof User
          * @description If a user can perform admin actions on the system
          * @default false
          */
@@ -52,6 +55,7 @@ module.exports = {
 
         /**
          * @var {boolean} banned
+         * @memberof User
          * @default false
          */
 
@@ -69,6 +73,12 @@ module.exports = {
         //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
         //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
 
+        /**
+         * @var players
+         * @description Ingame Players corresponding to a user
+         * @memberof User
+         */
+
         players: {
             collection: 'player',
             via: 'user'
@@ -77,6 +87,7 @@ module.exports = {
         /**
          * @var servers
          * @description Servers this User owns
+         * @memberof User
          */
 
         servers: {

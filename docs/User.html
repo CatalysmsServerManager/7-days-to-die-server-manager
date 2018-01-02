@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Helpers - Documentation</title>
+    <title>User - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Helpers</h1>
+    <h1 class="page-title">User</h1>
     
 
     
@@ -39,8 +39,9 @@
 
 <header>
     
-        
-            
+        <h2>
+        User
+        </h2>
         
     
 </header>
@@ -49,11 +50,12 @@
     <div class="container-overview">
     
         
-            <div class="description">Helper functions</div>
-        
 
-        
-            
+    
+
+    <h4 class="name" id="User"><span class="type-signature"></span>new User<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
 
 
 
@@ -63,7 +65,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="helpers_create-web-token.js.html">helpers/create-web-token.js</a>, <a href="helpers_create-web-token.js.html#line4">line 4</a>
+        <a href="models_User.js.html">models/User.js</a>, <a href="models_User.js.html#line1">line 1</a>
     </li></ul></dd>
     
 
@@ -102,6 +104,9 @@
 
 
 
+<div class="description">
+    Represents a user of the system
+</div>
 
 
 
@@ -126,7 +131,7 @@
 
 
 
-        
+
     
     </div>
 
@@ -145,7 +150,7 @@
 
         
             
-<h4 class="name" id=".createWebTokens"><span class="type-signature">(static) </span>createWebTokens<span class="type-signature"></span></h4>
+<h4 class="name" id=".admin"><span class="type-signature">(static) </span>admin<span class="type-signature"> :boolean</span></h4>
 
 
 
@@ -156,7 +161,159 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="helpers_create-web-token.js.html">helpers/create-web-token.js</a>, <a href="helpers_create-web-token.js.html#line54">line 54</a>
+        <a href="models_User.js.html">models/User.js</a>, <a href="models_User.js.html#line44">line 44</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy">
+            <li>false</li>
+        </ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    If a user can perform admin actions on the system
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">boolean</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id=".banned"><span class="type-signature">(static) </span>banned<span class="type-signature"> :boolean</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="models_User.js.html">models/User.js</a>, <a href="models_User.js.html#line56">line 56</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy">
+            <li>false</li>
+        </ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">boolean</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id=".players"><span class="type-signature">(static) </span>players<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="models_User.js.html">models/User.js</a>, <a href="models_User.js.html#line76">line 76</a>
     </li></ul></dd>
     
 
@@ -196,7 +353,7 @@
 
 
 <div class="description">
-    Executes webtokens add command on a server
+    Ingame Players corresponding to a user
 </div>
 
 
@@ -208,7 +365,7 @@
 
         
             
-<h4 class="name" id=".LoadPlayerData"><span class="type-signature">(static) </span>LoadPlayerData<span class="type-signature"></span></h4>
+<h4 class="name" id=".servers"><span class="type-signature">(static) </span>servers<span class="type-signature"></span></h4>
 
 
 
@@ -219,7 +376,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="helpers_load-player-data.js.html">helpers/load-player-data.js</a>, <a href="helpers_load-player-data.js.html#line25">line 25</a>
+        <a href="models_User.js.html">models/User.js</a>, <a href="models_User.js.html#line87">line 87</a>
     </li></ul></dd>
     
 
@@ -259,10 +416,148 @@
 
 
 <div class="description">
-    Loads player information and saves it to database
+    Servers this User owns
 </div>
 
 
+
+
+
+
+
+
+        
+            
+<h4 class="name" id=".steamId"><span class="type-signature">(static) </span>steamId<span class="type-signature"> :string</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="models_User.js.html">models/User.js</a>, <a href="models_User.js.html#line22">line 22</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id=".username"><span class="type-signature">(static) </span>username<span class="type-signature"> :string</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="models_User.js.html">models/User.js</a>, <a href="models_User.js.html#line33">line 33</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
 
 
 

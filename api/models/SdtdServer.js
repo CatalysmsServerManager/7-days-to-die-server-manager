@@ -2,7 +2,7 @@
  * SdtdServer.js
  *
  * @description  Represents a 7 Days to Die server
- * @module SdtdServerModel
+ * @class SdtdServer
  */
 
 module.exports = {
@@ -18,6 +18,7 @@ module.exports = {
         //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
 
         /**
+         * @memberof SdtdServer
          * @var {string} name
          */
 
@@ -27,6 +28,7 @@ module.exports = {
 
         /**
          * @var {string} ip
+         * @memberof SdtdServer
          */
 
         ip: {
@@ -35,6 +37,7 @@ module.exports = {
         },
 
         /**
+         * @memberof SdtdServer
          * @var {number} gamePort
          * @description Port used by players to join the game
          */
@@ -44,6 +47,7 @@ module.exports = {
         },
 
         /**
+         * @memberof SdtdServer
          * @var {number} telnetPort
          */
         
@@ -53,6 +57,7 @@ module.exports = {
         },
 
         /**
+         * @memberof SdtdServer
          * @var {string} telnetPassword
          * @deprecated Should not need to store telnet password - Will be removed soon(tm)
          */
@@ -63,6 +68,7 @@ module.exports = {
         },
 
         /**
+         * @memberof SdtdServer
          * @var {number} webPort
          * @description Port provided by Alloc's webserver
          */
@@ -72,6 +78,7 @@ module.exports = {
         },
 
         /**
+         * @memberof SdtdServer
          * @var {string} authName
          * @description adminuser to use during webrequests
          */
@@ -81,6 +88,7 @@ module.exports = {
         },
 
         /**
+         * @memberof SdtdServer
          * @var {string} authToken
          * @description admintoken to use during webrequests
          */
@@ -90,6 +98,7 @@ module.exports = {
         },
 
         /**
+         * @memberof SdtdServer
          * @var {boolean} loggingEnabled
          * @description Whether or not logging is enabled
          * @default true
@@ -101,6 +110,7 @@ module.exports = {
         },
 
         /**
+         * @memberof SdtdServer
          * @var {string} description
          * @description Description of the server
          */
@@ -110,6 +120,7 @@ module.exports = {
         },
 
         /**
+         * @memberof SdtdServer
          * @var {string} mapType
          * @description Navezgane or random gen
          */
@@ -119,6 +130,7 @@ module.exports = {
         },
 
         /**
+         * @memberof SdtdServer
          * @var {string} version
          * @description Game version the game is running on
          */
@@ -128,6 +140,7 @@ module.exports = {
         },
 
         /**
+         * @memberof SdtdServer
          * @var {number} maxPlayers
          * @description # player slots on the server
          */
@@ -137,6 +150,7 @@ module.exports = {
         },
 
         /**
+         * @memberof SdtdServer
          * @var {string} gameDifficulty
          */
 
@@ -145,6 +159,7 @@ module.exports = {
         },
 
         /**
+         * @memberof SdtdServer
          * @var {number} dayNightLength
          */
 
@@ -153,6 +168,7 @@ module.exports = {
         },
 
         /**
+         * @memberof SdtdServer
          * @var {number} zombiesRun
          * @description Wheter or not zombies should run
          */
@@ -162,6 +178,7 @@ module.exports = {
         },
 
         /**
+         * @memberof SdtdServer
          * @var {number} dropOnDeath
          * @description What is dropped on death
          */
@@ -171,6 +188,7 @@ module.exports = {
         },
 
         /**
+         * @memberof SdtdServer
          * @var {number} playerKillingMode
          */
 
@@ -179,6 +197,7 @@ module.exports = {
         },
 
         /**
+         * @memberof SdtdServer
          * @var {number} lootRespawnDays
          * @description How many days until loot respawns
          */
@@ -188,6 +207,7 @@ module.exports = {
         },
 
         /**
+         * @memberof SdtdServer
          * @var {number} landClaimSize
          */
 
@@ -196,6 +216,7 @@ module.exports = {
         },
 
         /**
+         * @memberof SdtdServer
          * @var {boolean} isPasswordProtected
          */
 
@@ -204,6 +225,7 @@ module.exports = {
         },
 
         /**
+         * @memberof SdtdServer
          * @var {boolean} EACEnabled
          * @description If anti cheat is enabled
          */
@@ -213,6 +235,7 @@ module.exports = {
         },
 
         /**
+         * @memberof SdtdServer
          * @var {boolean} requiresMod
          * @description Are mods required to join the game?
          */
@@ -231,6 +254,7 @@ module.exports = {
         //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
 
         /**
+         * @memberof SdtdServer
          * @var owner
          * @description Owner of the server, corresponds to a User
          */
@@ -241,6 +265,7 @@ module.exports = {
         },
 
         /**
+         * @memberof SdtdServer
          * @var admins
          * @description Users allowed to perform admin actions on the server
          */
@@ -250,6 +275,7 @@ module.exports = {
         },
 
         /**
+         * @memberof SdtdServer
          * @var players
          * @description Collection of Players that have logged on the server
          */

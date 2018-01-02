@@ -2,7 +2,7 @@
  * Player.js
  *
  * @description A model definition.  Represents a ingame player
- * @module PlayerModel
+ * @class Player
  */
 
 module.exports = {
@@ -14,7 +14,8 @@ module.exports = {
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
 
     /**
-    * @var {string} steamId
+     * @var {string} steamId
+     * @memberof Player
      */
 
     steamId: {
@@ -24,6 +25,7 @@ module.exports = {
 
     /**
      * @var {number} entityId
+     * @memberof Player
      */
 
     entityId: {
@@ -33,6 +35,7 @@ module.exports = {
     /**
      * @var {string} ip
      * @description Last known IP address of the player
+     * @memberof Player
      */
 
     ip: {
@@ -41,6 +44,7 @@ module.exports = {
     },
 
     /**
+     * @memberof Player
      * @var {string} name
      */
 
@@ -50,6 +54,7 @@ module.exports = {
     },
 
     /**
+     * @memberof Player
      * @var {number} positionX
      */
 
@@ -58,6 +63,7 @@ module.exports = {
     },
 
     /**
+     * @memberof Player
      * @var {number} positionY
      */
 
@@ -66,6 +72,7 @@ module.exports = {
     },
 
     /**
+     * @memberof Player
      * @var {number} positionZ
      */
 
@@ -74,6 +81,7 @@ module.exports = {
     },
 
     /**
+     * @memberof Player
      * @var {json} inventory
      * @description Last known inventory
      */
@@ -83,6 +91,7 @@ module.exports = {
     },
 
     /**
+     * @memberof Player
      * @var {number} playtime
      * @description Total time the player has been online
      */
@@ -92,6 +101,7 @@ module.exports = {
     },
 
     /**
+     * @memberof Player
      * @var {string} lastOnline
      * @description When the player was last seen online
      */
@@ -101,6 +111,7 @@ module.exports = {
     },
 
     /**
+     * @memberof Player
      * @var {boolean} banned
      * @description Whether or not a player is banned
      * @default false
@@ -122,6 +133,7 @@ module.exports = {
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
 
     /**
+     * @memberof Player
      * @var server
      * @description What server the player belongs to
      */
@@ -130,6 +142,7 @@ module.exports = {
     },
 
     /**
+     * @memberof Player
      * @var user
      * @description What user corresponds to a player
      */

@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-7dtdLoggingHook.html">7dtdLoggingHook</a></li><li><a href="module-AuthController.html">AuthController</a><ul class='methods'><li data-type='method'><a href="module-AuthController.html#.logout">logout</a></li><li data-type='method'><a href="module-AuthController.html#.steamLogin">steamLogin</a></li><li data-type='method'><a href="module-AuthController.html#.steamReturn">steamReturn</a></li></ul></li><li><a href="module-Helpers.html">Helpers</a></li><li><a href="module-PlayerController.html">PlayerController</a><ul class='methods'><li data-type='method'><a href="module-PlayerController.html#~getBanStatus">getBanStatus</a></li><li data-type='method'><a href="module-PlayerController.html#~getInventory">getInventory</a></li><li data-type='method'><a href="module-PlayerController.html#~getLocation">getLocation</a></li><li data-type='method'><a href="module-PlayerController.html#~kick">kick</a></li></ul></li><li><a href="module-PlayerModel.html">PlayerModel</a></li><li><a href="module-SdtdServerController.html">SdtdServerController</a><ul class='methods'><li data-type='method'><a href="module-SdtdServerController.html#.addServer">addServer</a></li><li data-type='method'><a href="module-SdtdServerController.html#.executeCommand">executeCommand</a></li><li data-type='method'><a href="module-SdtdServerController.html#.getPlayers">getPlayers</a></li><li data-type='method'><a href="module-SdtdServerController.html#.getServerInfo">getServerInfo</a></li><li data-type='method'><a href="module-SdtdServerController.html#.loadServerInfo">loadServerInfo</a></li><li data-type='method'><a href="module-SdtdServerController.html#.onlinePlayers">onlinePlayers</a></li><li data-type='method'><a href="module-SdtdServerController.html#.startLogging">startLogging</a></li><li data-type='method'><a href="module-SdtdServerController.html#.stopLogging">stopLogging</a></li><li data-type='method'><a href="module-SdtdServerController.html#.subscribeToServerSocket">subscribeToServerSocket</a></li></ul></li><li><a href="module-SdtdServerModel.html">SdtdServerModel</a></li><li><a href="module-UserModel.html">UserModel</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Player.html">Player</a></li><li><a href="SdtdServer.html">SdtdServer</a></li><li><a href="User.html">User</a></li></ul><h3>Modules</h3><ul><li><a href="module-7dtdLoggingHook.html">7dtdLoggingHook</a></li><li><a href="module-AuthController.html">AuthController</a><ul class='methods'><li data-type='method'><a href="module-AuthController.html#.logout">logout</a></li><li data-type='method'><a href="module-AuthController.html#.steamLogin">steamLogin</a></li><li data-type='method'><a href="module-AuthController.html#.steamReturn">steamReturn</a></li></ul></li><li><a href="module-Helpers.html">Helpers</a></li><li><a href="module-PlayerController.html">PlayerController</a><ul class='methods'><li data-type='method'><a href="module-PlayerController.html#~getBanStatus">getBanStatus</a></li><li data-type='method'><a href="module-PlayerController.html#~getInventory">getInventory</a></li><li data-type='method'><a href="module-PlayerController.html#~getLocation">getLocation</a></li><li data-type='method'><a href="module-PlayerController.html#~kick">kick</a></li></ul></li><li><a href="module-SdtdServerController.html">SdtdServerController</a><ul class='methods'><li data-type='method'><a href="module-SdtdServerController.html#.addServer">addServer</a></li><li data-type='method'><a href="module-SdtdServerController.html#.executeCommand">executeCommand</a></li><li data-type='method'><a href="module-SdtdServerController.html#.getPlayers">getPlayers</a></li><li data-type='method'><a href="module-SdtdServerController.html#.getServerInfo">getServerInfo</a></li><li data-type='method'><a href="module-SdtdServerController.html#.loadServerInfo">loadServerInfo</a></li><li data-type='method'><a href="module-SdtdServerController.html#.onlinePlayers">onlinePlayers</a></li><li data-type='method'><a href="module-SdtdServerController.html#.startLogging">startLogging</a></li><li data-type='method'><a href="module-SdtdServerController.html#.stopLogging">stopLogging</a></li><li data-type='method'><a href="module-SdtdServerController.html#.subscribeToServerSocket">subscribeToServerSocket</a></li></ul></li></ul>
 </nav>
 
 <div id="main">
@@ -41,7 +41,7 @@
  * Player.js
  *
  * @description A model definition.  Represents a ingame player
- * @module PlayerModel
+ * @class Player
  */
 
 module.exports = {
@@ -53,7 +53,8 @@ module.exports = {
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
 
     /**
-    * @var {string} steamId
+     * @var {string} steamId
+     * @memberof Player
      */
 
     steamId: {
@@ -63,6 +64,7 @@ module.exports = {
 
     /**
      * @var {number} entityId
+     * @memberof Player
      */
 
     entityId: {
@@ -72,6 +74,7 @@ module.exports = {
     /**
      * @var {string} ip
      * @description Last known IP address of the player
+     * @memberof Player
      */
 
     ip: {
@@ -80,6 +83,7 @@ module.exports = {
     },
 
     /**
+     * @memberof Player
      * @var {string} name
      */
 
@@ -89,6 +93,7 @@ module.exports = {
     },
 
     /**
+     * @memberof Player
      * @var {number} positionX
      */
 
@@ -97,6 +102,7 @@ module.exports = {
     },
 
     /**
+     * @memberof Player
      * @var {number} positionY
      */
 
@@ -105,6 +111,7 @@ module.exports = {
     },
 
     /**
+     * @memberof Player
      * @var {number} positionZ
      */
 
@@ -113,6 +120,7 @@ module.exports = {
     },
 
     /**
+     * @memberof Player
      * @var {json} inventory
      * @description Last known inventory
      */
@@ -122,6 +130,7 @@ module.exports = {
     },
 
     /**
+     * @memberof Player
      * @var {number} playtime
      * @description Total time the player has been online
      */
@@ -131,6 +140,7 @@ module.exports = {
     },
 
     /**
+     * @memberof Player
      * @var {string} lastOnline
      * @description When the player was last seen online
      */
@@ -140,6 +150,7 @@ module.exports = {
     },
 
     /**
+     * @memberof Player
      * @var {boolean} banned
      * @description Whether or not a player is banned
      * @default false
@@ -161,6 +172,7 @@ module.exports = {
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
 
     /**
+     * @memberof Player
      * @var server
      * @description What server the player belongs to
      */
@@ -169,6 +181,7 @@ module.exports = {
     },
 
     /**
+     * @memberof Player
      * @var user
      * @description What user corresponds to a player
      */
@@ -192,7 +205,7 @@ module.exports = {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Jan 02 2018 16:34:21 GMT+0100 (Romance Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Jan 02 2018 17:10:27 GMT+0100 (Romance Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
