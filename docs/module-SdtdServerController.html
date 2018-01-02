@@ -2,22 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: SdtdServerController</title>
+    <title>SdtdServerController - Documentation</title>
 
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
 </head>
-
 <body>
 
-<div id="main">
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
 
-    <h1 class="page-title">Module: SdtdServerController</h1>
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-7dtdLoggingHook.html">7dtdLoggingHook</a></li><li><a href="module-AuthController.html">AuthController</a><ul class='methods'><li data-type='method'><a href="module-AuthController.html#.logout">logout</a></li><li data-type='method'><a href="module-AuthController.html#.steamLogin">steamLogin</a></li><li data-type='method'><a href="module-AuthController.html#.steamReturn">steamReturn</a></li></ul></li><li><a href="module-Helpers.html">Helpers</a></li><li><a href="module-PlayerController.html">PlayerController</a><ul class='methods'><li data-type='method'><a href="module-PlayerController.html#~getBanStatus">getBanStatus</a></li><li data-type='method'><a href="module-PlayerController.html#~getInventory">getInventory</a></li><li data-type='method'><a href="module-PlayerController.html#~getLocation">getLocation</a></li><li data-type='method'><a href="module-PlayerController.html#~kick">kick</a></li></ul></li><li><a href="module-PlayerModel.html">PlayerModel</a></li><li><a href="module-SdtdServerController.html">SdtdServerController</a><ul class='methods'><li data-type='method'><a href="module-SdtdServerController.html#.addServer">addServer</a></li><li data-type='method'><a href="module-SdtdServerController.html#.executeCommand">executeCommand</a></li><li data-type='method'><a href="module-SdtdServerController.html#.getPlayers">getPlayers</a></li><li data-type='method'><a href="module-SdtdServerController.html#.getServerInfo">getServerInfo</a></li><li data-type='method'><a href="module-SdtdServerController.html#.loadServerInfo">loadServerInfo</a></li><li data-type='method'><a href="module-SdtdServerController.html#.onlinePlayers">onlinePlayers</a></li><li data-type='method'><a href="module-SdtdServerController.html#.startLogging">startLogging</a></li><li data-type='method'><a href="module-SdtdServerController.html#.stopLogging">stopLogging</a></li><li data-type='method'><a href="module-SdtdServerController.html#.subscribeToServerSocket">subscribeToServerSocket</a></li></ul></li><li><a href="module-SdtdServerModel.html">SdtdServerModel</a></li><li><a href="module-UserModel.html">UserModel</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">SdtdServerController</h1>
+    
 
     
 
@@ -47,42 +58,7 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 <dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
 
     
     <dt class="tag-source">Source:</dt>
@@ -96,7 +72,42 @@
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -125,9 +136,7 @@
 
     
 
-    
-
-    
+     
 
     
 
@@ -141,17 +150,62 @@
 
     
 
-    
     <h4 class="name" id=".addServer"><span class="type-signature">(static) </span>addServer<span class="signature">(serverip, telnetport, telnetpassword, webport)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="controllers_SdtdServerController.js.html">controllers/SdtdServerController.js</a>, <a href="controllers_SdtdServerController.js.html#line18">line 18</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
 <div class="description">
     Add a server to the system
 </div>
+
+
 
 
 
@@ -283,53 +337,6 @@
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdServerController.js.html">controllers/SdtdServerController.js</a>, <a href="controllers_SdtdServerController.js.html#line18">line 18</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
 
 
 
@@ -345,17 +352,62 @@
 
     
 
-    
     <h4 class="name" id=".executeCommand"><span class="type-signature">(static) </span>executeCommand<span class="signature">(serverID, command)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="controllers_SdtdServerController.js.html">controllers/SdtdServerController.js</a>, <a href="controllers_SdtdServerController.js.html#line271">line 271</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
 <div class="description">
     Executes a command on a 7dtd server
 </div>
+
+
 
 
 
@@ -441,53 +493,6 @@
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdServerController.js.html">controllers/SdtdServerController.js</a>, <a href="controllers_SdtdServerController.js.html#line271">line 271</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
 
 
 
@@ -503,11 +508,54 @@
 
     
 
-    
     <h4 class="name" id=".getPlayers"><span class="type-signature">(static) </span>getPlayers<span class="signature">(serverID)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="controllers_SdtdServerController.js.html">controllers/SdtdServerController.js</a>, <a href="controllers_SdtdServerController.js.html#line215">line 215</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
@@ -523,6 +571,8 @@
 
 
 
+
+
     <h5>Parameters:</h5>
     
 
@@ -576,53 +626,6 @@
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdServerController.js.html">controllers/SdtdServerController.js</a>, <a href="controllers_SdtdServerController.js.html#line215">line 215</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
 
 
 
@@ -638,11 +641,54 @@
 
     
 
-    
     <h4 class="name" id=".getServerInfo"><span class="type-signature">(static) </span>getServerInfo<span class="signature">(serverID)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="controllers_SdtdServerController.js.html">controllers/SdtdServerController.js</a>, <a href="controllers_SdtdServerController.js.html#line252">line 252</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
@@ -658,6 +704,8 @@
 
 
 
+
+
     <h5>Parameters:</h5>
     
 
@@ -711,53 +759,6 @@
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdServerController.js.html">controllers/SdtdServerController.js</a>, <a href="controllers_SdtdServerController.js.html#line252">line 252</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
 
 
 
@@ -773,11 +774,54 @@
 
     
 
-    
     <h4 class="name" id=".loadServerInfo"><span class="type-signature">(static) </span>loadServerInfo<span class="signature">(serverID)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="controllers_SdtdServerController.js.html">controllers/SdtdServerController.js</a>, <a href="controllers_SdtdServerController.js.html#line141">line 141</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
@@ -793,6 +837,8 @@
 
 
 
+
+
     <h5>Parameters:</h5>
     
 
@@ -846,53 +892,6 @@
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdServerController.js.html">controllers/SdtdServerController.js</a>, <a href="controllers_SdtdServerController.js.html#line141">line 141</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
 
 
 
@@ -908,11 +907,54 @@
 
     
 
-    
     <h4 class="name" id=".onlinePlayers"><span class="type-signature">(static) </span>onlinePlayers<span class="signature">(serverID)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="controllers_SdtdServerController.js.html">controllers/SdtdServerController.js</a>, <a href="controllers_SdtdServerController.js.html#line174">line 174</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
@@ -928,6 +970,8 @@
 
 
 
+
+
     <h5>Parameters:</h5>
     
 
@@ -981,53 +1025,6 @@
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdServerController.js.html">controllers/SdtdServerController.js</a>, <a href="controllers_SdtdServerController.js.html#line174">line 174</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
 
 
 
@@ -1043,11 +1040,54 @@
 
     
 
-    
     <h4 class="name" id=".startLogging"><span class="type-signature">(static) </span>startLogging<span class="signature">(serverID)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="controllers_SdtdServerController.js.html">controllers/SdtdServerController.js</a>, <a href="controllers_SdtdServerController.js.html#line86">line 86</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
@@ -1063,6 +1103,8 @@
 
 
 
+
+
     <h5>Parameters:</h5>
     
 
@@ -1116,53 +1158,6 @@
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdServerController.js.html">controllers/SdtdServerController.js</a>, <a href="controllers_SdtdServerController.js.html#line86">line 86</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
 
 
 
@@ -1178,11 +1173,54 @@
 
     
 
-    
     <h4 class="name" id=".stopLogging"><span class="type-signature">(static) </span>stopLogging<span class="signature">(serverID)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="controllers_SdtdServerController.js.html">controllers/SdtdServerController.js</a>, <a href="controllers_SdtdServerController.js.html#line101">line 101</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
@@ -1198,6 +1236,8 @@
 
 
 
+
+
     <h5>Parameters:</h5>
     
 
@@ -1251,53 +1291,6 @@
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdServerController.js.html">controllers/SdtdServerController.js</a>, <a href="controllers_SdtdServerController.js.html#line101">line 101</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
 
 
 
@@ -1313,11 +1306,54 @@
 
     
 
-    
     <h4 class="name" id=".subscribeToServerSocket"><span class="type-signature">(static) </span>subscribeToServerSocket<span class="signature">(serverID)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="controllers_SdtdServerController.js.html">controllers/SdtdServerController.js</a>, <a href="controllers_SdtdServerController.js.html#line115">line 115</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
@@ -1333,6 +1369,8 @@
 
 
 
+
+
     <h5>Parameters:</h5>
     
 
@@ -1380,53 +1418,6 @@
     
     </tbody>
 </table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdServerController.js.html">controllers/SdtdServerController.js</a>, <a href="controllers_SdtdServerController.js.html#line115">line 115</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
 
 
 
@@ -1458,17 +1449,13 @@
 
 </div>
 
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-7dtdLoggingHook.html">7dtdLoggingHook</a></li><li><a href="module-AuthController.html">AuthController</a></li><li><a href="module-Helpers.html">Helpers</a></li><li><a href="module-PlayerController.html">PlayerController</a></li><li><a href="module-PlayerModel.html">PlayerModel</a></li><li><a href="module-SdtdServerController.html">SdtdServerController</a></li><li><a href="module-SdtdServerModel.html">SdtdServerModel</a></li><li><a href="module-UserModel.html">UserModel</a></li></ul>
-</nav>
-
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Jan 02 2018 16:23:35 GMT+0100 (Romance Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Jan 02 2018 16:34:21 GMT+0100 (Romance Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
 </body>
 </html>

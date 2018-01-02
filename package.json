@@ -52,6 +52,7 @@
     "chai": "^4.1.2",
     "codeceptjs": "^1.0.3",
     "codeceptjs-webdriverio": "^1.1.0",
+    "docdash": "^0.4.0",
     "ejs-lint": "^0.3.0",
     "eslint": "^4.11.0",
     "jsdoc": "^3.5.5",
