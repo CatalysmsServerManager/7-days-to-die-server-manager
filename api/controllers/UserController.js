@@ -1,9 +1,3 @@
-/**
- * UserController
- *
- * @description  Server-side actions for handling incoming requests regarding users
- */
-
 module.exports = {
 
     /*****************/
@@ -12,6 +6,7 @@ module.exports = {
 
     /**
      * @description Gets a list of servers owned by a user
+     * @memberof User
      * @param {number} userId ID of the user
      */
     ownedServers: function(req, res) {

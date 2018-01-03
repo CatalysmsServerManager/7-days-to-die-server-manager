@@ -56,6 +56,10 @@ module.exports = {
      * @name createWebTokens
      * @memberof module:Helpers
      * @returns {json} Authname and token
+     * @method
+     * @param {string} ip 
+     * @param {number} port Telnet port
+     * @param {string} password Telnet password
      */
 
     fn: async function(inputs, exits) {

@@ -24,9 +24,10 @@ module.exports = {
 
   /**
      * @description Loads player information and saves it to database
-     * @name LoadPlayerData
+     * @name loadPlayerData
      * @param {number} serverId
      * @memberof module:Helpers
+     * @method
      */
 
   fn: async function (inputs, exits) {

@@ -13,7 +13,8 @@ module.exports = function sdtdLogs(sails) {
          * @name initialize
          * @memberof module:7dtdLoggingHook
          * @description Called on app launch, loads all servers which have logging enabled and creates logging objects for these
-         * @instance
+         * @method
+         * @private
          */
         initialize: function(cb) {
             sails.on('hook:orm:loaded', function() {
@@ -36,7 +37,7 @@ module.exports = function sdtdLogs(sails) {
          * @memberof module:7dtdLoggingHook
          * @description Starts logging for a server
          * @param {number} serverID - Id of the server
-         * @instance
+         * @method
          */
 
         start: function(serverID) {
@@ -57,7 +58,7 @@ module.exports = function sdtdLogs(sails) {
          * @memberof module:7dtdLoggingHook
          * @description Stops logging for a server
          * @param {number} serverID - Id of the server
-         * @instance
+         * @method
          */
 
         stop: function(serverID) {
@@ -77,7 +78,8 @@ module.exports = function sdtdLogs(sails) {
          * @memberof module:7dtdLoggingHook
          * @description Creates a logging object for a 7dtd server
          * @param {number} serverID - Id of the server
-         * @instance
+         * @method
+         * @private
          */
 
     function createLogObject(serverID) {

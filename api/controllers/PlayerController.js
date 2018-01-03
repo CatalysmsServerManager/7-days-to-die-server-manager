@@ -1,13 +1,7 @@
 var sevenDays = require('machinepack-7daystodiewebapi');
 
 /**
- * PlayerController
- *
- * @module PlayerController
- * @description  Server-side actions for handling incoming requests regarding ingame players
- */
-
-/**
+ * @memberof Player
  * @description  Get the contents of a players inventory
  * @param {string} steamId  Steam ID of the player
  * @param {string} serverId  ID of the server
@@ -45,12 +39,13 @@ async function getInventory(req, res) {
 }
 
 /**
+ * @memberof Player
  * @description Get ban status of a player
  * @param {string} steamId  Steam ID of the player
  * @param {string} serverId  ID of the server
  */
 
-async function getBanStatus (req, res) {
+async function getBanStatus(req, res) {
   const steamId = req.query.steamId;
   const serverId = req.query.serverId;
 
@@ -83,12 +78,13 @@ async function getBanStatus (req, res) {
 }
 
 /**
+ * @memberof Player
  * @description Get location of a player
  * @param {string} steamId  Steam ID of the player
  * @param {string} serverId  ID of the server
  */
 
-async function getLocation (req, res) {
+async function getLocation(req, res) {
   const steamId = req.query.steamId;
   const serverId = req.query.serverId;
 
@@ -121,12 +117,13 @@ async function getLocation (req, res) {
 }
 
 /**
+ * @memberof Player
  * @description Kick a player
  * @param {string} steamId  Steam ID of the player
  * @param {string} serverId  ID of the server
  */
 
-async function kick (req, res) {
+async function kick(req, res) {
   const steamId = req.query.steamId;
   const serverId = req.query.serverId;
 
