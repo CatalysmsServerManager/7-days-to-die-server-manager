@@ -24,4 +24,7 @@ module.exports.custom = {
   // mailgunApiKey: 'key-testkeyb183848139913858e8abd9a3',
   // stripeSecret: 'sk_test_Zzd814nldl91104qor5911gjald',
 
+    botOwners: "220554523561820160",
+    botToken: process.env.DISCORDBOTTOKEN
+
 };
