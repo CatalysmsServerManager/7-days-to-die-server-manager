@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Global - Documentation</title>
+    <title>hooks/discordBot/commands/7dtd/addServer.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,171 +27,110 @@
 
 <div id="main">
     
-    <h1 class="page-title">Global</h1>
+    <h1 class="page-title">hooks/discordBot/commands/7dtd/addServer.js</h1>
     
 
     
 
 
 
-
-<section>
-
-<header>
     
-        <h2>
-        
-        </h2>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-        
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id="discordId"><span class="type-signature"></span>discordId<span class="type-signature"> :string</span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_User.js.html">models/User.js</a>, <a href="models_User.js.html#line31">line 31</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    memberof User
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">string</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-
-        
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const Commando = require('discord.js-commando');
+
+/**
+ * @memberof module:DiscordCommands
+ * @name AddServer
+ * @description Adds a server to the system
+ * @param {string} ip
+ * @param {integer} webPort
+ * @param {integer} telnetPort
+ * @param {string} telnetPassword
+ */
+
+class AddServer extends Commando.Command {
+  constructor(client) {
+    super(client, {
+      name: 'addserver',
+      group: '7dtd',
+      memberName: 'addserver',
+      args: [{
+          key: 'ip',
+          label: 'IP',
+          prompt: 'Specify the server ip please',
+          type: 'string'
+        },
+        {
+          key: 'webPort',
+          label: 'Web port',
+          prompt: 'Specify the server web port please (Allocs port)',
+          type: 'integer'
+        },
+        {
+          key: 'telnetPort',
+          label: 'Telnet port',
+          prompt: 'Specify a telnet port please',
+          type: 'integer'
+        },
+        {
+          key: 'telnetPassword',
+          label: 'Telnet password',
+          prompt: 'Please specify your telnet password',
+          type: 'string'
+        }
+      ],
+      description: 'Adds a server to the system',
+      details: "For more information see the website"
+    });
+  }
+
+  async run(msg, args) {
+    try {
+      let statusMessage = await msg.channel.send(`Got your request, hold on while we verify info of your server`);
+      msg.delete({
+          reason: "Deleting sensitive info"
+        }).then(() => {
+          sails.log.debug("Deleted message")
+        })
+        .catch(err => {
+          sails.log.debug(`Could not delete a setup message from discord`)
+          statusMessage.edit(statusMessage.content + '\n:warning: Could not delete the original message! Make sure your telnet password is safe')
+        })
+      let user = await User.findOrCreate({
+        discordId: msg.author.id
+      }, {
+        discordId: msg.author.id,
+        username: msg.author.username
+      });
+      sails.helpers.add7DtdServer.with({
+        ip: args.ip,
+        telnetPort: args.telnetPort,
+        telnetPassword: args.telnetPassword,
+        webPort: args.webPort,
+        owner: user.id
+      }).switch({
+        error: function (err) {
+          sails.log.error(err);
+          statusMessage.edit(statusMessage.content + '\nError adding your server! Error message:\n' + err.message)
+        },
+        success: function (server) {
+          return msg.reply(`User = ${JSON.stringify(server)}`)
+        }
+      })
+    } catch (error) {
+      sails.log.error(error)
+    }
+
+  }
+
+}
+
+
+module.exports = AddServer;
+</code></pre>
+        </article>
+    </section>
 
 
 
