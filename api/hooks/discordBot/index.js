@@ -7,8 +7,20 @@ const path = require('path');
  * @param {*} sails Global sails instance
  */
 
-module.exports = function myBasicHook(sails) {
+ /**
+  * @module DiscordCommands
+  * @description Command guide for users
+  */
+
+module.exports = function discordBot(sails) {
   return {
+
+    /**
+     * @memberof module:DiscordBot
+     * @method
+     * @name initialize
+     * @description Starts the discord bot & logs in
+     */
     initialize: function (cb) {
       sails.on('hook:orm:loaded', function () {
         sails.log.debug('HOOK: Initializing discord bot')

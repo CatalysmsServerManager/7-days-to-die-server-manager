@@ -1,0 +1,91 @@
+const Commando = require('discord.js-commando');
+
+/**
+ * @memberof module:DiscordCommands
+ * @name AddServer
+ * @description Adds a server to the system
+ * @param {string} ip
+ * @param {integer} webPort
+ * @param {integer} telnetPort
+ * @param {string} telnetPassword
+ */
+
+class AddServer extends Commando.Command {
+  constructor(client) {
+    super(client, {
+      name: 'addserver',
+      group: '7dtd',
+      memberName: 'addserver',
+      args: [{
+          key: 'ip',
+          label: 'IP',
+          prompt: 'Specify the server ip please',
+          type: 'string'
+        },
+        {
+          key: 'webPort',
+          label: 'Web port',
+          prompt: 'Specify the server web port please (Allocs port)',
+          type: 'integer'
+        },
+        {
+          key: 'telnetPort',
+          label: 'Telnet port',
+          prompt: 'Specify a telnet port please',
+          type: 'integer'
+        },
+        {
+          key: 'telnetPassword',
+          label: 'Telnet password',
+          prompt: 'Please specify your telnet password',
+          type: 'string'
+        }
+      ],
+      description: 'Adds a server to the system',
+      details: "For more information see the website"
+    });
+  }
+
+  async run(msg, args) {
+    try {
+      let statusMessage = await msg.channel.send(`Got your request, hold on while we verify info of your server`);
+      msg.delete({
+          reason: "Deleting sensitive info"
+        }).then(() => {
+          sails.log.debug("Deleted message")
+        })
+        .catch(err => {
+          sails.log.debug(`Could not delete a setup message from discord`)
+          statusMessage.edit(statusMessage.content + '\n:warning: Could not delete the original message! Make sure your telnet password is safe')
+        })
+      let user = await User.findOrCreate({
+        discordId: msg.author.id
+      }, {
+        discordId: msg.author.id,
+        username: msg.author.username
+      });
+      sails.helpers.add7DtdServer.with({
+        ip: args.ip,
+        telnetPort: args.telnetPort,
+        telnetPassword: args.telnetPassword,
+        webPort: args.webPort,
+        owner: user.id
+      }).switch({
+        error: function (err) {
+          sails.log.error(err);
+          statusMessage.edit(statusMessage.content + '\nError adding your server! Error message:\n' + err.message)
+        },
+        success: function (server) {
+          return msg.reply(`User = ${JSON.stringify(server)}`)
+        }
+      })
+    } catch (error) {
+      sails.log.error(error)
+    }
+
+  }
+
+}
+
+
+module.exports = AddServer;

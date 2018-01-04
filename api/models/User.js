@@ -29,6 +29,15 @@ module.exports = {
         },
 
         /**
+         * memberof User
+         * @var {string} discordId
+         */
+
+        discordId: {
+            type: 'string'
+        },
+
+        /**
          * @memberof User
          * @var {string} username
          */
