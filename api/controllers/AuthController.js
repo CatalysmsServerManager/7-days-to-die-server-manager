@@ -1,4 +1,5 @@
 var passport = require('passport');
+var jwt = require('jsonwebtoken');
 
 /**
  * AuthController
@@ -48,6 +49,23 @@ module.exports = {
         res.clearCookie('userProfile');
         return res.redirect('/');
     },
+
+    /**
+     * @description Generates a JWT to use in subsequent API calls
+     */
+
+    issueJWT: function(req, res) {
+        passport.authenticate('jwt', function(err, user) {
+            if (err) {
+                sails.log.error(err);
+            }
+            sails.log.warn(user);
+        })
+    },
+
+    verifyJWT: function(req, res) {
+
+    }
 
 
 };

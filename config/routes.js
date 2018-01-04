@@ -58,11 +58,6 @@ module.exports.routes = {
      *                                                                          *
      ***************************************************************************/
 
-    'get /welcome': {
-        controller: 'UserController',
-        action: 'welcome'
-    },
-
     'get /sdtdserver/:serverID/subscribetosocket': {
         controller: 'SdtdServerController',
         action: 'subscribeToServerSocket'
@@ -73,19 +68,6 @@ module.exports.routes = {
         locals: {
             telnetError: ""
         }
-    },
-
-
-    '/sdtdserver/:serverID/dashboard/': {
-        controller: 'SdtdServerController',
-        action: 'dashboard',
-        skipAssets: true
-    },
-
-    '/sdtdserver/:serverID/console/': {
-        controller: 'SdtdServerController',
-        action: 'console',
-        skipAssets: false
     },
 
     '/sdtdserver/:serverID/executeCommand': {

@@ -51,12 +51,12 @@ module.exports.policies = {
         'addserver': 'isLoggedIn',
     },
 
-    playerController: {
-        '*': 'isServerOwner'
-    },
+    // playerController: {
+    //     '*': 'isServerOwner'
+    // },
 
-    userController: {
-        'welcome': 'isLoggedIn'
-    },
+    // userController: {
+    //     'welcome': 'isLoggedIn'
+    // },
 
 };

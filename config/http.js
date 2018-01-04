@@ -9,8 +9,18 @@
  * https://sailsjs.com/config/http
  */
 
+ /**
+  * PASSPORT CONFIGURATION
+  */
+
 var passport = require('passport');
 var SteamStrategy = require('passport-steam');
+var JWTStrategy = require('passport-jwt').Strategy;
+var ExtractJWT = require('passport-jwt').ExtractJwt;
+
+/**
+ * Steam strategy config
+ */
 
 let steamAPIkey = process.env.API_KEY_STEAM
 passport.use(new SteamStrategy({
@@ -28,6 +38,29 @@ passport.use(new SteamStrategy({
             return done(err);
         });
 }));
+
+/**
+ * JWT strategy config
+ */
+
+let jwtOpts = {
+    jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+    secretOrKey: process.env.JWTSECRET,
+}
+
+ passport.use(new JWTStrategy(jwtOpts, function(jwtPayload, done) {
+     sails.log.warn("JWT STRAT USED WOOOOOOOO")
+     User.find({id: jwtPayload.sub})
+     .then(foundUser => {
+        sails.log.debug(`User ${foundUser.id} authenticated via jwt`);
+        return done(null, foundUser);
+     })
+     .catch(err => {
+         sails.log.err(err)
+         return done(err)
+     })
+ }))
+
 
 passport.serializeUser(function(user, done) {
     done(null, user.id);

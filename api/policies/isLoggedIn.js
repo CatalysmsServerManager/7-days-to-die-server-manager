@@ -1,3 +1,5 @@
+var passport = require('passport');
+
 /**
  * isLoggedIn
  *
@@ -8,13 +10,14 @@
  */
 module.exports = function isLoggedIn(req, res, next) {
 
-    if (req.signedCookies.userProfile) {
-        sails.log.debug(`User ${req.signedCookies.userProfile.id} is logged in, allowing request`);
-        return next();
+  passport.authenticate('jwt', function (err, user, info) {
+    if (err) {
+      return res.forbidden();
     }
-
-    // this request did not come from a logged-in user.
-    sails.log.debug(`User is NOT logged in, blocking request`);
-    return res.forbidden();
-
+    if (user) {
+      return next()
+    } else {
+      return res.forbidden();
+    }
+  })(req, res, next)
 };
