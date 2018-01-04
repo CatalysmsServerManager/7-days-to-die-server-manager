@@ -1,11 +1,11 @@
 Feature('User authentication');
 
-Scenario('User login', (I) => {
+xScenario('User login', (I) => {
     I.login();
     I.seeCookie('userProfile')
 });
 
-Scenario('User logout', (I) => {
+xScenario('User logout', (I) => {
     I.login();
     I.amOnPage('/auth/steam');
     I.dontSeeCookie('userProfile')

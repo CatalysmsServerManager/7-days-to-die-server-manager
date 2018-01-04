@@ -1,7 +1,7 @@
 var supertest = require('supertest');
 var agent = supertest(sails.hooks.http.app);
 
-describe('GET /api/player/kick @api', function () {
+xdescribe('GET /api/player/kick @api', function () {
   it('should return OK (200)', function (done) {
     agent
       .get('/api/player/kick')

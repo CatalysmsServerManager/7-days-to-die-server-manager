@@ -6,6 +6,11 @@ var sevenDays = require('machinepack-7daystodiewebapi');
   */
 module.exports = function sdtdLogs(sails) {
 
+    /**
+     * @var {Map} loggingInfoMap Keeps track of servers with logging activated
+     * @private
+     */
+
     var loggingInfoMap = new Map();
 
     return {
