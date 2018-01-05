@@ -43,23 +43,23 @@ passport.use(new SteamStrategy({
  * JWT strategy config
  */
 
-let jwtOpts = {
-    jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-    secretOrKey: process.env.JWTSECRET,
-}
+// let jwtOpts = {
+//     jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+//     secretOrKey: process.env.JWTSECRET,
+// }
 
- passport.use(new JWTStrategy(jwtOpts, function(jwtPayload, done) {
-     sails.log.warn("JWT STRAT USED WOOOOOOOO")
-     User.find({id: jwtPayload.sub})
-     .then(foundUser => {
-        sails.log.debug(`User ${foundUser.id} authenticated via jwt`);
-        return done(null, foundUser);
-     })
-     .catch(err => {
-         sails.log.err(err)
-         return done(err)
-     })
- }))
+//  passport.use(new JWTStrategy(jwtOpts, function(jwtPayload, done) {
+//      sails.log.warn("JWT STRAT USED WOOOOOOOO")
+//      User.find({id: jwtPayload.sub})
+//      .then(foundUser => {
+//         sails.log.debug(`User ${foundUser.id} authenticated via jwt`);
+//         return done(null, foundUser);
+//      })
+//      .catch(err => {
+//          sails.log.err(err)
+//          return done(err)
+//      })
+//  }))
 
 
 passport.serializeUser(function(user, done) {

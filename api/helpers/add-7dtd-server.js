@@ -27,6 +27,10 @@ module.exports = {
     owner: {
       type: 'number',
       required: true
+    },
+    discordGuildId: {
+      type: 'number',
+      required: false
     }
 
   },
@@ -39,6 +43,7 @@ module.exports = {
    * @param {string} telnetPassword
    * @param {number} webPort
    * @param {number} owner The ID of the owner
+   * @param {number} discordGuildId
    * @memberof module:Helpers
    * @method
    */
@@ -74,7 +79,8 @@ module.exports = {
           telnetPassword: inputs.telnetPassword,
           authName: authInfo.authName,
           authToken: authInfo.authToken,
-          owner: inputs.owner
+          owner: inputs.owner,
+          discordGuildId: inputs.discordGuildId ? inputs.discordGuildId : 0
         })
         return newServer
       } catch (error) {

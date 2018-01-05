@@ -49,15 +49,17 @@ class AddServer extends Commando.Command {
   async run(msg, args) {
     try {
       let statusMessage = await msg.channel.send(`Got your request, hold on while we verify info of your server`);
+
       msg.delete({
           reason: "Deleting sensitive info"
         }).then(() => {
-          sails.log.debug("Deleted message")
+          sails.log.debug("Deleted setup message")
         })
         .catch(err => {
           sails.log.debug(`Could not delete a setup message from discord`)
           statusMessage.edit(statusMessage.content + '\n:warning: Could not delete the original message! Make sure your telnet password is safe')
         })
+
       let user = await User.findOrCreate({
         discordId: msg.author.id
       }, {
@@ -69,14 +71,28 @@ class AddServer extends Commando.Command {
         telnetPort: args.telnetPort,
         telnetPassword: args.telnetPassword,
         webPort: args.webPort,
-        owner: user.id
+        owner: user.id,
+        discordGuildId: msg.guild.id
       }).switch({
         error: function (err) {
-          sails.log.error(err);
-          statusMessage.edit(statusMessage.content + '\nError adding your server! Error message:\n' + err.message)
+          sails.log.error(`7DTD server setup`);
+          let errorEmbed = new msg.client.customEmbed();
+          errorEmbed
+          .setDescription(`Could not initialize your server, something went wrong!`)
+          .addField('IP', args.ip, true)
+          .addField('Web port', args.webPort, true)
+          .addField('Error', err)
+          .setColor('RED')
+          msg.channel.send(errorEmbed)
         },
         success: function (server) {
-          return msg.reply(`User = ${JSON.stringify(server)}`)
+          let successEmbed = new msg.client.customEmbed();
+          successEmbed
+            .setDescription(`Successfully initialized your server!`)
+            .addField('IP', server.ip, true)
+            .addField('Web port', server.webPort, true)
+            .setColor('GREEN')
+          return msg.channel.send(successEmbed)
         }
       })
     } catch (error) {

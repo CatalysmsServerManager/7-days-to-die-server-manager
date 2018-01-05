@@ -28,6 +28,8 @@ module.exports = function discordBot(sails) {
           owner: sails.config.custom.botOwners 
         });
 
+        client.customEmbed = require('./util/createEmbed');
+
         client.registry
           .registerGroups([
             ['7dtd', '7 Days to die']

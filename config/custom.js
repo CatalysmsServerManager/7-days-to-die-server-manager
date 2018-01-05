@@ -24,7 +24,12 @@ module.exports.custom = {
   // mailgunApiKey: 'key-testkeyb183848139913858e8abd9a3',
   // stripeSecret: 'sk_test_Zzd814nldl91104qor5911gjald',
 
+
+  // Discord bot config
     botOwners: "220554523561820160",
-    botToken: process.env.DISCORDBOTTOKEN
+    botToken: process.env.DISCORDBOTTOKEN,
+    botEmbedLink: 'https://github.com/niekcandaele/7-Days-To-Die-Server-Manager',
+    botEmbedTitle: 'Takaro - discord bot'
+
 
 };

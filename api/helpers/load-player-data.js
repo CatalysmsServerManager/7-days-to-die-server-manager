@@ -31,7 +31,7 @@ module.exports = {
      */
 
   fn: async function (inputs, exits) {
-    sails.log.debug(`HELPER LOAD PLAYER DATA Loading player data for server ${inputs.serverId} -- steamId: ${inputs.steamId} playerId: ${inputs.playerId}`);
+    sails.log.debug(`HELPER LOAD PLAYER DATA Loading player data for server ${inputs.serverId} -- steamId: ${inputs.steamId}`);
     
     try {
       let server = await SdtdServer.findOne(inputs.serverId)
