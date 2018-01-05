@@ -16,4 +16,13 @@ class CustomEmbed extends Discord.RichEmbed {
     }
 }
 
-module.exports = CustomEmbed
+class ErrorEmbed extends CustomEmbed {
+    constructor(errorMsg) {
+        super();
+        this.setDescription(`An error occured! See below for more info \n ${errorMsg}`)
+        this.setColor('RED')
+    }
+}
+
+module.exports.CustomEmbed = CustomEmbed
+module.exports.ErrorEmbed = ErrorEmbed

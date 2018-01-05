@@ -28,7 +28,8 @@ module.exports = function discordBot(sails) {
           owner: sails.config.custom.botOwners 
         });
 
-        client.customEmbed = require('./util/createEmbed');
+        client.customEmbed = require('./util/createEmbed').CustomEmbed
+        client.errorEmbed =require('./util/createEmbed').ErrorEmbed
 
         client.registry
           .registerGroups([

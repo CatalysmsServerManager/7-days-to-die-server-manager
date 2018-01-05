@@ -161,6 +161,7 @@ module.exports = {
               playerData.totalPlaytime = player.playtime
               playerData.banned = player.banned
               playerData.server = player.server
+              playerData.name = player.name
               toSend.players.push(playerData)
             })
             resolve(toSend)
