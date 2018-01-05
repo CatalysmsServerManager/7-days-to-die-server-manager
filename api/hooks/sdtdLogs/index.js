@@ -117,6 +117,7 @@ module.exports = function sdtdLogs(sails) {
 
                     eventEmitter.on('playerConnected', function(connectedMsg) {
                         sails.sockets.broadcast(server.id, 'playerConnected', connectedMsg);
+                        sails.helpers.loadPlayerData(server.id, connectedMsg.steamID)
                     });
 
                     eventEmitter.on('playerDisconected', function(disconectedMsg) {
