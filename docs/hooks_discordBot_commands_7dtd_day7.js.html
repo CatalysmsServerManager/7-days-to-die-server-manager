@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>models/Player.js - Documentation</title>
+    <title>hooks/discordBot/commands/7dtd/day7.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">models/Player.js</h1>
+    <h1 class="page-title">hooks/discordBot/commands/7dtd/day7.js</h1>
     
 
     
@@ -37,162 +37,55 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * Player.js
- *
- * @description A model definition.  Represents a ingame player
- * @class Player
+            <pre class="prettyprint source linenums"><code>const Commando = require('discord.js-commando');
+
+/**
+ * @memberof module:DiscordCommands
+ * @name Day7
+ * @description Displays basic information about a 7 Days to Die server
  */
 
-module.exports = {
+class Day7 extends Commando.Command {
+  constructor(client) {
+    super(client, {
+      name: 'day7',
+      group: '7dtd',
+      memberName: 'day7',
+      description: 'Shows basic information about a server',
+      details: "For more information see the website"
+    });
+  }
 
-  attributes: {
+  async run(msg, args) {
 
-    //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
-    //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
-    //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
+    try {
+      let sdtdServer = await SdtdServer.find({
+        discordGuildId: msg.guild.id
+      }).limit(1)
+      sails.helpers.loadSdtdserverInfo(sdtdServer[0].id).exec((err, serverInfo) => {
+        if (err) {
+          throw err
+        }
+        let resultEmbed = new msg.client.customEmbed();
+        resultEmbed
+        .setColor('GREEN')
+        .addField('Online Players', serverInfo.stats.players, true)
+        .addField('Ping', serverInfo.serverInfo.Ping, true)
+        .addField('Hostiles / Animals', `${serverInfo.stats.hostiles} / ${serverInfo.stats.animals}`)
+        .setFooter(serverInfo.serverInfo.GameHost)
 
-    /**
-     * @var {string} steamId
-     * @memberof Player
-     */
-
-    steamId: {
-      type: 'string',
-      required: true
-    },
-
-    /**
-     * @var {number} entityId
-     * @memberof Player
-     */
-
-    entityId: {
-      type: 'number'
-    },
-
-    /**
-     * @var {string} ip
-     * @description Last known IP address of the player
-     * @memberof Player
-     */
-
-    ip: {
-      type: 'string',
-      required: true
-    },
-
-    /**
-     * @memberof Player
-     * @var {string} name
-     */
-
-    name: {
-      type: 'string',
-      required: true
-    },
-
-    /**
-     * @memberof Player
-     * @var {number} positionX
-     */
-
-    positionX: {
-      type: 'number'
-    },
-
-    /**
-     * @memberof Player
-     * @var {number} positionY
-     */
-
-    positionY: {
-      type: 'number'
-    },
-
-    /**
-     * @memberof Player
-     * @var {number} positionZ
-     */
-
-    positionZ: {
-      type: 'number'
-    },
-
-    /**
-     * @memberof Player
-     * @var {json} inventory
-     * @description Last known inventory
-     */
-
-    inventory: {
-      type: 'json',
-    },
-
-    /**
-     * @memberof Player
-     * @var {number} playtime
-     * @description Total time the player has been online
-     */
-
-    playtime: {
-      type: 'number'
-    },
-
-    /**
-     * @memberof Player
-     * @var {string} lastOnline
-     * @description When the player was last seen online
-     */
-
-    lastOnline: {
-      type: 'string'
-    },
-
-    /**
-     * @memberof Player
-     * @var {boolean} banned
-     * @description Whether or not a player is banned
-     * @default false
-     */
-
-    banned: {
-      type: 'boolean',
-      defaultsTo: false
-    },
-
-
-    //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
-    //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
-    //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
-
-
-    //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
-    //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
-    //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
-
-    /**
-     * @memberof Player
-     * @var server
-     * @description What server the player belongs to
-     */
-    server: {
-      model: 'sdtdServer'
-    },
-
-    /**
-     * @memberof Player
-     * @var user
-     * @description What user corresponds to a player
-     */
-
-    user: {
-      model: 'user'
+        msg.channel.send(resultEmbed)
+      })
+    } catch (error) {
+      sails.log.error(error);
     }
 
-  },
 
-};
+  }
+}
+
+
+module.exports = Day7;
 </code></pre>
         </article>
     </section>

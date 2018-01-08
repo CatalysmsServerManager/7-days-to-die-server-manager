@@ -4,7 +4,7 @@ const Discord = require('discord.js');
  * @class
  * @name CustomDiscordEmbed
  * @description Creates a RichEmbed & loads basic data relevant to this project.
- * [Discord.js RichEmbed]{@link https://discord.js.org/#/docs/main/stable/class/RichEmbed}
+ * [Discord.js MessageEmbed]{@link https://discord.js.org/#/docs/main/master/class/MessageEmbed}
  */
 
 class CustomEmbed extends Discord.MessageEmbed {
