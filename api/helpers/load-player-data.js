@@ -23,16 +23,16 @@ module.exports = {
   },
 
   /**
-     * @description Loads player information and saves it to database
-     * @name loadPlayerData
-     * @param {number} serverId
-     * @memberof module:Helpers
-     * @method
-     */
+   * @description Loads player information and saves it to database
+   * @name loadPlayerData
+   * @param {number} serverId
+   * @memberof module:Helpers
+   * @method
+   */
 
   fn: async function (inputs, exits) {
     sails.log.debug(`HELPER LOAD PLAYER DATA Loading player data for server ${inputs.serverId} -- steamId: ${inputs.steamId}`);
-    
+
     try {
       let server = await SdtdServer.findOne(inputs.serverId)
       let playerList = await getPlayerList(server)
@@ -87,19 +87,35 @@ module.exports = {
               name: newPlayer.name,
               ip: newPlayer.ip
             })
-            newPlayer = await Player.update({
-              steamId: foundOrCreatedPlayer.steamId,
-              server: inputs.serverId,
-              entityId: foundOrCreatedPlayer.entityId
-            }).set({
-              ip: newPlayer.ip,
-              positionX: newPlayer.position.x,
-              positionY: newPlayer.position.y,
-              positionZ: newPlayer.position.z,
-              playtime: newPlayer.totalplaytime,
-              inventory: newPlayer.inventory,
-              banned: newPlayer.banned
-            }).fetch()
+            if (player.online) {
+              newPlayer = await Player.update({
+                steamId: foundOrCreatedPlayer.steamId,
+                server: inputs.serverId,
+                entityId: foundOrCreatedPlayer.entityId
+              }).set({
+                ip: newPlayer.ip,
+                positionX: newPlayer.position.x,
+                positionY: newPlayer.position.y,
+                positionZ: newPlayer.position.z,
+                playtime: newPlayer.totalplaytime,
+                inventory: newPlayer.inventory,
+                banned: newPlayer.banned
+              }).fetch()
+            } else {
+              newPlayer = await Player.update({
+                steamId: foundOrCreatedPlayer.steamId,
+                server: inputs.serverId,
+                entityId: foundOrCreatedPlayer.entityId
+              }).set({
+                ip: newPlayer.ip,
+                positionX: newPlayer.position.x,
+                positionY: newPlayer.position.y,
+                positionZ: newPlayer.position.z,
+                playtime: newPlayer.totalplaytime,
+                banned: newPlayer.banned
+              }).fetch()
+            }
+
             resolve(newPlayer[0])
           })
         } catch (error) {

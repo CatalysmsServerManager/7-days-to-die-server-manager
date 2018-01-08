@@ -38,7 +38,7 @@ class Day7 extends Commando.Command {
         msg.channel.send(resultEmbed)
       })
     } catch (error) {
-      sails.log.error(error)
+      sails.log.error(error);
     }
 
 
