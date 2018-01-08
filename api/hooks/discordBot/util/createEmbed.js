@@ -7,7 +7,7 @@ const Discord = require('discord.js');
  * [Discord.js RichEmbed]{@link https://discord.js.org/#/docs/main/stable/class/RichEmbed}
  */
 
-class CustomEmbed extends Discord.RichEmbed {
+class CustomEmbed extends Discord.MessageEmbed {
     constructor(data) {
         super()
         this.setTimestamp();

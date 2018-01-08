@@ -29,7 +29,33 @@
     -->
 
     <!--STYLES-->
+    <link rel="stylesheet" href="/dependencies/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/styles/bootstrap-social.css">
+    <link rel="stylesheet" href="/styles/bootstrap.css">
+    <link rel="stylesheet" href="/styles/dataTables.bootstrap.css">
+    <link rel="stylesheet" href="/styles/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="/styles/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="/styles/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/styles/dataTables.foundation.css">
+    <link rel="stylesheet" href="/styles/dataTables.foundation.min.css">
+    <link rel="stylesheet" href="/styles/dataTables.jqueryui.css">
+    <link rel="stylesheet" href="/styles/dataTables.jqueryui.min.css">
+    <link rel="stylesheet" href="/styles/dataTables.material.css">
+    <link rel="stylesheet" href="/styles/dataTables.material.min.css">
+    <link rel="stylesheet" href="/styles/dataTables.responsive.css">
+    <link rel="stylesheet" href="/styles/dataTables.semanticui.css">
+    <link rel="stylesheet" href="/styles/dataTables.semanticui.min.css">
+    <link rel="stylesheet" href="/styles/dataTables.uikit.css">
+    <link rel="stylesheet" href="/styles/dataTables.uikit.min.css">
+    <link rel="stylesheet" href="/styles/font-awesome.css">
+    <link rel="stylesheet" href="/styles/font-awesome.min.css">
     <link rel="stylesheet" href="/styles/importer.css">
+    <link rel="stylesheet" href="/styles/jquery.dataTables_themeroller.css">
+    <link rel="stylesheet" href="/styles/jquery.dataTables.css">
+    <link rel="stylesheet" href="/styles/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="/styles/metisMenu.css">
+    <link rel="stylesheet" href="/styles/metisMenu.min.css">
+    <link rel="stylesheet" href="/styles/morris.css">
     <!--STYLES END-->
 
     <!--
@@ -100,64 +126,65 @@
 
     <!--SCRIPTS-->
     <script src="/dependencies/sails.io.js"></script>
+    <script src="/dependencies/jquery/jquery.js"></script>
+    <script src="/dependencies/bootstrap.min.js"></script>
+    <script src="/dependencies/dataTables.bootstrap (2).js"></script>
+    <script src="/dependencies/dataTables.bootstrap.js"></script>
+    <script src="/dependencies/dataTables.bootstrap.min (2).js"></script>
+    <script src="/dependencies/dataTables.bootstrap.min.js"></script>
+    <script src="/dependencies/dataTables.bootstrap4.js"></script>
+    <script src="/dependencies/dataTables.bootstrap4.min.js"></script>
+    <script src="/dependencies/dataTables.foundation.js"></script>
+    <script src="/dependencies/dataTables.foundation.min.js"></script>
+    <script src="/dependencies/dataTables.jqueryui.js"></script>
+    <script src="/dependencies/dataTables.jqueryui.min.js"></script>
+    <script src="/dependencies/dataTables.material.js"></script>
+    <script src="/dependencies/dataTables.material.min.js"></script>
+    <script src="/dependencies/dataTables.responsive.js"></script>
+    <script src="/dependencies/dataTables.semanticui.js"></script>
+    <script src="/dependencies/dataTables.semanticui.min.js"></script>
+    <script src="/dependencies/dataTables.uikit.js"></script>
+    <script src="/dependencies/dataTables.uikit.min.js"></script>
+    <script src="/dependencies/excanvas.js"></script>
+    <script src="/dependencies/excanvas.min.js"></script>
+    <script src="/dependencies/jquery.colorhelpers.js"></script>
+    <script src="/dependencies/jquery.dataTables.js"></script>
+    <script src="/dependencies/jquery.dataTables.min.js"></script>
+    <script src="/dependencies/jquery.flot.canvas.js"></script>
+    <script src="/dependencies/jquery.flot.categories.js"></script>
+    <script src="/dependencies/jquery.flot.crosshair.js"></script>
+    <script src="/dependencies/jquery.flot.errorbars.js"></script>
+    <script src="/dependencies/jquery.flot.fillbetween.js"></script>
+    <script src="/dependencies/jquery.flot.image.js"></script>
+    <script src="/dependencies/jquery.flot.js"></script>
+    <script src="/dependencies/jquery.flot.navigate.js"></script>
+    <script src="/dependencies/jquery.flot.pie.js"></script>
+    <script src="/dependencies/jquery.flot.resize.js"></script>
+    <script src="/dependencies/jquery.flot.selection.js"></script>
+    <script src="/dependencies/jquery.flot.stack.js"></script>
+    <script src="/dependencies/jquery.flot.symbol.js"></script>
+    <script src="/dependencies/jquery.flot.threshold.js"></script>
+    <script src="/dependencies/jquery.flot.time.js"></script>
+    <script src="/dependencies/jquery.flot.tooltip.js"></script>
+    <script src="/dependencies/jquery.flot.tooltip.min.js"></script>
+    <script src="/dependencies/jquery.flot.tooltip.source.js"></script>
+    <script src="/dependencies/jquery.js"></script>
+    <script src="/dependencies/jquery/jquery.min.js"></script>
     <script src="/dependencies/lodash.js"></script>
+    <script src="/dependencies/metisMenu.js"></script>
+    <script src="/dependencies/metisMenu.min.js"></script>
+    <script src="/dependencies/morris.js"></script>
+    <script src="/dependencies/morris.min.js"></script>
+    <script src="/dependencies/raphael.js"></script>
+    <script src="/dependencies/raphael.min.js"></script>
+    <script src="/dependencies/sb-admin-2.js"></script>
+    <script src="/js/bootstrap.js"></script>
     <script src="/js/console.js"></script>
-    <script src="/js/my-app.js"></script>
-    <script src="/js/welcome.js"></script>
     <!--SCRIPTS END-->
 </head>
 
 <body>
-    <!-- Views -->
-    <div class="views">
-        <!-- Your main view, should have "view-main" class -->
-        <div class="view view-main">
-            <!-- Pages container, because we use fixed navbar and toolbar, it has additional appropriate classes-->
-            <div class="pages navbar-fixed toolbar-fixed">
-                <!-- Page, "data-page" contains page name -->
-                <div data-page="index" class="page">
-
-                    <!-- Top Navbar. In Material theme it should be inside of the page-->
-                    <div class="navbar">
-                        <div class="navbar-inner">
-                            <div class="center"><a href="/" class="link">CSMM</a></div>
-                        </div>
-                    </div>
-
-
-                    <!-- Toolbar. In Material theme it should be inside of the page-->
-                    <div class="toolbar">
-                        <div class="toolbar-inner">
-                            <!-- Toolbar links -->
-                            <a href="/about" class="link">About</a>
-                            <% if (!isLoggedIn(req)) { %>
-                                <a href="/auth/steam" class="link"><img id=steamLoginImg src="/images/steamlogin.png"></a>
-                                <% } else {%>
-                                    <a href="/auth/logout" class="link">Logout</a>
-                                    <a href="/welcome" class="link">Your servers</a>
-                                    <a href="/sdtdserver/addserver" class="link">Add a server</a>
-
-
-                                    <p>
-                                        <%=req.signedCookies.userProfile.steamProfile.displayName%>
-                                    </p>
-
-                                    <img src=<%=req.signedCookies.userProfile.steamProfile._json.avatar%>>
-
-
-                                    <% } %>
-
-                        </div>
-                    </div>
-
-                    <!-- Scrollable page content -->
-                    <div class="page-content">
-                        <%- body %>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+   <%- body %>
 </body>
 
 </html>
