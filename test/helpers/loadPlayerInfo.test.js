@@ -17,24 +17,6 @@ describe('HELPER load-player-data @service', function () {
         }
       })
   });
-  xit('Should load only a single players info when a steam ID is given', function (done) {
-    return sails.helpers.loadPlayerData.with({
-        serverId: sails.testServer.id,
-        steamId: sails.testUser.steamId
-      })
-      .switch({
-        error: function (err) {
-          done(err)
-        },
-        success: function (data) {
-          if (data.players.length == 1) {
-            done()
-          } else {
-            done(new Error(`Found info for ${data.players.length} players`))
-          }
-        }
-      })
-  });
   it('Should load location data', function (done) {
     return sails.helpers.loadPlayerData.with({
         serverId: sails.testServer.id
@@ -56,27 +38,7 @@ describe('HELPER load-player-data @service', function () {
       })
 
   });
-  xit('Should load inventory data', function (done) {
-    sails.helpers.loadPlayerData.with({
-        serverId: sails.testServer.id
-      })
-      .switch({
-        error: function (err) {
-          throw err
-        },
-        success: function (data) {
-          if (data.totalPlayers = 0) {
-            done('No player data to test..')
-          }
-          if (data.players[0].inventory) {
-            return done()
-          } else {
-            return done('No inventory data found')
-          }
 
-        }
-      })
-  });
   it('Should save updated info to the database', function (done) {
     sails.helpers.loadPlayerData.with({
         serverId: sails.testServer.id
