@@ -1,9 +1,8 @@
 var supertest = require('supertest');
-var agent = supertest(sails.hooks.http.app);
 
 xdescribe('GET /api/player/kick @api', function () {
   it('should return OK (200)', function (done) {
-    agent
+    supertest(sails.hooks.http.app)
       .get('/api/player/kick')
       .query({
         steamId: sails.testUser.steamId,
@@ -12,7 +11,7 @@ xdescribe('GET /api/player/kick @api', function () {
       .expect(200, done)
   });
   it('should error when no steamId given', function (done) {
-    agent
+    supertest(sails.hooks.http.app)
       .get('/api/player/kick')
       .query({
         serverId: sails.testServer.id
@@ -20,7 +19,7 @@ xdescribe('GET /api/player/kick @api', function () {
       .expect(400, done);
   });
   it('should error when no serverId given', function (done) {
-    agent
+    supertest(sails.hooks.http.app)
       .get('/api/player/kick')
       .query({
         steamId: sails.testUser.steamId,
@@ -28,7 +27,7 @@ xdescribe('GET /api/player/kick @api', function () {
       .expect(400, done);
   });
   it('should return JSON', function (done) {
-    agent
+    supertest(sails.hooks.http.app)
       .get('/api/player/kick')
       .query({
         steamId: sails.testUser.steamId,

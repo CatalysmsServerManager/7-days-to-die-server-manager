@@ -1,9 +1,8 @@
 var supertest = require('supertest');
-var agent = supertest(sails.hooks.http.app);
 
 describe('GET /api/player/location @api', function () {
   it('should return OK (200)', function (done) {
-    agent
+    supertest(sails.hooks.http.app)
       .get('/api/player/location')
       .query({
         steamId: sails.testUser.steamId,
@@ -12,7 +11,7 @@ describe('GET /api/player/location @api', function () {
       .expect(200, done)
   });
   it('should return JSON', function (done) {
-    agent
+    supertest(sails.hooks.http.app)
       .get('/api/player/location')
       .query({
         steamId: sails.testUser.steamId,
@@ -21,7 +20,7 @@ describe('GET /api/player/location @api', function () {
       .expect('Content-Type', /json/, done)
   })
   it('should return info about a players location', function (done) {
-    agent
+    supertest(sails.hooks.http.app)
       .get('/api/player/location')
       .query({
         steamId: sails.testUser.steamId,
@@ -43,7 +42,7 @@ describe('GET /api/player/location @api', function () {
       })
   })
   it('should error when no steamId given', function (done) {
-    agent
+    supertest(sails.hooks.http.app)
       .get('/api/player/location')
       .query({
         serverId: sails.testServer.id
@@ -51,7 +50,7 @@ describe('GET /api/player/location @api', function () {
       .expect(400, done);
   })
   it('should error when no serverId given', function (done) {
-    agent
+    supertest(sails.hooks.http.app)
       .get('/api/player/location')
       .query({
         steamId: sails.testUser.steamId,

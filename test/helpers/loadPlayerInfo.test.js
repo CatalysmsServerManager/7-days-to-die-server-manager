@@ -58,7 +58,7 @@ describe('HELPER load-player-data @service', function () {
       })
 
   });
-  it('Should load inventory data', function (done) {
+  xit('Should load inventory data', function (done) {
     sails.helpers.loadPlayerData.with({
         serverId: sails.testServer.id
       })

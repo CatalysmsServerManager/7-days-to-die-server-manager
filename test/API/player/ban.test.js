@@ -1,9 +1,8 @@
 var supertest = require('supertest');
-var agent = supertest(sails.hooks.http.app);
 
 describe('GET /api/player/ban @api', function () {
     it('should return OK (200)', function (done) {
-      agent
+      supertest(sails.hooks.http.app)
         .get('/api/player/ban')
         .query({
           steamId: sails.testUser.steamId,
@@ -12,7 +11,7 @@ describe('GET /api/player/ban @api', function () {
         .expect(200, done)
     });
     it('should return JSON', function (done) {
-      agent
+      supertest(sails.hooks.http.app)
         .get('/api/player/ban')
         .query({
           steamId: sails.testUser.steamId,
@@ -21,7 +20,7 @@ describe('GET /api/player/ban @api', function () {
         .expect('Content-Type', /json/, done)
     });
     it('should return info about ban status', function (done) {
-      agent
+      supertest(sails.hooks.http.app)
         .get('/api/player/ban')
         .query({
           steamId: sails.testUser.steamId,
@@ -35,7 +34,7 @@ describe('GET /api/player/ban @api', function () {
         })
     })
     it('should error when no steamId given', function (done) {
-      agent
+      supertest(sails.hooks.http.app)
         .get('/api/player/ban')
         .query({
           serverId: sails.testServer.id
@@ -43,7 +42,7 @@ describe('GET /api/player/ban @api', function () {
         .expect(400, done);
     });
     it('should error when no serverId given', function (done) {
-      agent
+      supertest(sails.hooks.http.app)
         .get('/api/player/ban')
         .query({
           steamId: sails.testUser.steamId,

@@ -87,7 +87,7 @@ module.exports = {
               name: newPlayer.name,
               ip: newPlayer.ip
             })
-            if (player.online) {
+            if (newPlayer.online) {
               newPlayer = await Player.update({
                 steamId: foundOrCreatedPlayer.steamId,
                 server: inputs.serverId,
