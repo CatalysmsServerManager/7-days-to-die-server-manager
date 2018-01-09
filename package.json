@@ -38,7 +38,7 @@
     "start": "NODE_ENV=production node app.js",
     "test": "npm run custom-tests && echo 'Done.'",
     "build-docs": "./node_modules/.bin/jsdoc -c ./.jsdoc.json",
-    "custom-tests": "./node_modules/.bin/codeceptjs run -c test",
+    "custom-tests": "./node_modules/.bin/mocha test/lifecycle.test.js ./test/**/*.test.js",
     "api-test": "./node_modules/.bin/codeceptjs run -c test --grep @api",
     "service-test": "./node_modules/.bin/codeceptjs run -c test --grep @service",
     "debug": "node debug app.js"
@@ -54,17 +54,10 @@
     "node": "8"
   },
   "devDependencies": {
-    "chai": "^4.1.2",
-    "codeceptjs": "^1.1.1",
-    "codeceptjs-webdriverio": "^1.1.0",
     "docdash": "^0.4.0",
-    "ejs-lint": "^0.3.0",
-    "eslint": "^4.14.0",
     "jsdoc": "^3.5.5",
     "mocha": "^4.1.0",
     "mocha-junit-reporter": "^1.15.0",
-    "selenium-standalone": "^6.12.0",
-    "supertest": "^3.0.0",
-    "unirest": "^0.5.1"
+    "supertest": "^3.0.0"
   }
 }
