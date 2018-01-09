@@ -1,5 +1,3 @@
-var assert = require('chai').assert;
-
 describe('HELPER add-7dtd-server @service', function () {
   it('Should return success if correct info given', function (done) {
     return sails.helpers.add7DtdServer.with({

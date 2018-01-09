@@ -1,5 +1,3 @@
-var assert = require('chai').assert;
-
 describe('HELPER load-player-data @service', function () {
   it('Should load all player info when only a serverID is given', function (done) {
     return sails.helpers.loadPlayerData.with({
