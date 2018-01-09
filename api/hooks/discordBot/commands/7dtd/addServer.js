@@ -43,8 +43,7 @@ class AddServer extends Commando.Command {
       ],
       description: 'Adds a server to the system',
       details: "For more information see the website",
-      userPermissions: ["MANAGE_GUILD"],
-      clientPermissions: ["MANAGE_MESSAGES"]
+      userPermissions: ["MANAGE_GUILD"]
     });
   }
 

@@ -111,13 +111,23 @@ module.exports = {
 
         /**
          * @memberof SdtdServer
-         * @var {number} discordGuildId
+         * @var {string} discordGuildId
          * @description Id of the discord guild this server is associated with
          */
 
          discordGuildId: {
-             type: 'number'
+             type: 'string'
          },
+
+         /**
+          * @memberof SdtdServer
+          * @var {string} chatChannelId
+          * @description Id of the discord channel for chat bridge
+          */
+
+          chatChannelId: {
+              type: 'string'
+          },
 
         //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
         //  ║╣ ║║║╠╩╗║╣  ║║╚═╗

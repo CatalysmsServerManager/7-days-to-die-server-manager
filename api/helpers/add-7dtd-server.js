@@ -29,7 +29,7 @@ module.exports = {
       required: true
     },
     discordGuildId: {
-      type: 'number',
+      type: 'string',
       required: false
     }
 
@@ -82,6 +82,7 @@ module.exports = {
           owner: inputs.owner,
           discordGuildId: inputs.discordGuildId ? inputs.discordGuildId : 0
         })
+        sails.hooks.sdtdlogs.start(newServer.id)
         return newServer
       } catch (error) {
         exits.error(new Error('Error while creating/updating server in DB' + error))
