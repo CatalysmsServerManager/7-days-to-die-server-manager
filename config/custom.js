@@ -26,7 +26,7 @@ module.exports.custom = {
 
 
   // Discord bot config
-    botOwners: "220554523561820160",
+    botOwners: ["220554523561820160", "252369082991509514"],
     botToken: process.env.DISCORDBOTTOKEN,
     botEmbedLink: 'https://github.com/niekcandaele/7-Days-To-Die-Server-Manager',
     botEmbedTitle: 'Takaro - discord bot'
