@@ -69,6 +69,7 @@ before(function (done) {
 
     } catch (error) {
       sails.log.error(error);
+      done(error)
     }
 
   });
