@@ -23,7 +23,7 @@ class Day7 extends Commando.Command {
       let sdtdServer = await SdtdServer.find({
         discordGuildId: msg.guild.id
       }).limit(1)
-      sails.helpers.loadSdtdserverInfo(sdtdServer[0].id).exec((err, serverInfo) => {
+      return sails.helpers.loadSdtdserverInfo(sdtdServer[0].id).exec((err, serverInfo) => {
         if (err) {
           throw err
         }

@@ -67,7 +67,7 @@ class AddServer extends Commando.Command {
         discordId: msg.author.id,
         username: msg.author.username
       });
-      sails.helpers.add7DtdServer.with({
+      return sails.helpers.add7DtdServer.with({
         ip: args.ip,
         telnetPort: args.telnetPort,
         telnetPassword: args.telnetPassword,
