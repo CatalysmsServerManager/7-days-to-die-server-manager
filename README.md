@@ -1,4 +1,4 @@
-# 7DTD Server manager 
+# 7DTD Server manager [![Build Status](https://travis-ci.org/niekcandaele/7-Days-To-Die-Server-Manager.svg?branch=master)](https://travis-ci.org/niekcandaele/7-Days-To-Die-Server-Manager)
 
 a [Sails](https://sailsjs.com) application
 
@@ -12,6 +12,7 @@ To start the application, you need to add these environment variables;
 
  - CSMM_HOSTNAME
  - API_KEY_STEAM
+ - DISCORDBOTTOKEN
 
 To test the application, add these env vars;
 
