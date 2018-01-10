@@ -35,7 +35,7 @@
     "validator": "^9.2.0"
   },
   "scripts": {
-    "start": "NODE_ENV=production node app.js",
+    "start": "node app.js",
     "test": "npm run custom-tests && echo 'Done.'",
     "build-docs": "./node_modules/.bin/jsdoc -c ./.jsdoc.json",
     "custom-tests": "./node_modules/.bin/mocha test/lifecycle.test.js ./test/**/*.test.js --exit",
