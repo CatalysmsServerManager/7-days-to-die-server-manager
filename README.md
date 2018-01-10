@@ -1,7 +1,5 @@
 # 7DTD Server manager [![Build Status](https://travis-ci.org/niekcandaele/7-Days-To-Die-Server-Manager.svg?branch=master)](https://travis-ci.org/niekcandaele/7-Days-To-Die-Server-Manager)
 
-a [Sails](https://sailsjs.com) application
-
 ## [Documentation](https://niekcandaele.github.io/7-Days-To-Die-Server-Manager/)
 
 The documentation is still a work in progress!
@@ -25,3 +23,7 @@ To test the application, add these env vars;
  - CSMM_TEST_STEAM_PASSWORD
  - CSMM_TEST_AUTHNAME
  - CSMM_TEST_AUTHTOKEN
+
+
+Made possible by
+[![LDH](https://i.imgur.com/rfmQjA2.png)](https://letsdohosting.com/?p=Register&ref=Cata)
