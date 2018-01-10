@@ -27,3 +27,4 @@ To test the application, add these env vars;
 
 Made possible by
 [![LDH](https://i.imgur.com/rfmQjA2.png)](https://letsdohosting.com/?p=Register&ref=Cata)
+All game servers € 0.35/day
