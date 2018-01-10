@@ -35,7 +35,7 @@ class Day7 extends Commando.Command {
         .addField('Hostiles / Animals', `${serverInfo.stats.hostiles} / ${serverInfo.stats.animals}`)
         .setFooter(serverInfo.serverInfo.GameHost)
 
-        msg.channel.send(resultEmbed)
+        return msg.channel.send(resultEmbed)
       })
     } catch (error) {
       sails.log.error(error);

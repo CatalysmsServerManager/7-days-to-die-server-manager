@@ -25,7 +25,7 @@ module.exports = {
       required: true
     },
     owner: {
-      type: 'number',
+      type: 'string',
       required: true
     },
     discordGuildId: {

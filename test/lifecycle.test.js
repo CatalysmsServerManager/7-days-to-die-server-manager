@@ -42,25 +42,31 @@ before(function (done) {
     // (for example, you might want to create some records in the database)
 
     try {
+      let client = sails.hooks.discordbot.getClient()
+
       // Password = "something"
       var testUser = await User.create({
         username: 'CSMMTesterFixture',
         encryptedPassword: "$2a$10$b8kbwLOvUvJH3Y.37ZAwdu77K3zaFfjXAQnaym3BqpSuzDApJcbcG",
         steamId: process.env.CSMM_TEST_STEAMID
       }).fetch();
-      var testServer = await SdtdServer.create({
+
+      var testServer = await sails.helpers.add7DtdServer.with({
         ip: process.env.CSMM_TEST_IP,
         telnetPort: process.env.CSMM_TEST_TELNETPORT,
         telnetPassword: process.env.CSMM_TEST_TELNETPW,
         webPort: process.env.CSMM_TEST_WEBPORT,
-        authName: process.env.CSMM_TEST_AUTHNAME,
-        authToken: process.env.CSMM_TEST_AUTHTOKEN,
-        owner: testUser.id
-      }).fetch();
+        owner: testUser.id,
+        discordGuildId: client.channels.get(process.env.DISCORDTESTCHANNEL).guild.id
+      })
+
       sails.testUser = testUser
       sails.testServer = testServer;
+      sails.testChannel = client.channels.get(process.env.DISCORDTESTCHANNEL)
+
       sails.log.debug('Finished bootstrapping test data');
       return done();
+
     } catch (error) {
       sails.log.error(error);
     }

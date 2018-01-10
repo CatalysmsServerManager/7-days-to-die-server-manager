@@ -14,6 +14,7 @@ const path = require('path');
  */
 
 module.exports = function discordBot(sails) {
+
   return {
 
     /**
@@ -26,9 +27,12 @@ module.exports = function discordBot(sails) {
       sails.on('hook:orm:loaded', function () {
         sails.on('hook:sdtdlogs:loaded', function () {
           sails.log.debug('HOOK: Initializing discord bot')
-          const client = new Commando.Client({
+
+          client = new Commando.Client({
             owner: sails.config.custom.botOwners
           });
+
+          sails.discordBotClient = client
 
           // Register custom embed messages
 
@@ -62,6 +66,17 @@ module.exports = function discordBot(sails) {
         });
       })
     },
+
+    /**
+     * @memberof module:DiscordBot
+     * @method
+     * @name getClient
+     * @description returns the discord client
+     */
+
+    getClient: function() {
+      return sails.discordBotClient
+    }
   };
 
   async function initChatBridges(client) {

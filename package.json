@@ -38,7 +38,7 @@
     "start": "node app.js --prod",
     "test": "npm run custom-tests && echo 'Done.'",
     "build-docs": "./node_modules/.bin/jsdoc -c ./.jsdoc.json",
-    "custom-tests": "./node_modules/.bin/mocha test/lifecycle.test.js ./test/**/*.test.js --exit",
+    "custom-tests": "./node_modules/.bin/mocha test/lifecycle.test.js ./test/API/*.test.js ./test/helpers/*.test.js ./test/discord/*.test.js --exit",
     "debug": "node debug app.js"
   },
   "main": "app.js",

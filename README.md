@@ -23,6 +23,8 @@ To test the application, add these env vars;
  - CSMM_TEST_STEAM_PASSWORD
  - CSMM_TEST_AUTHNAME
  - CSMM_TEST_AUTHTOKEN
+ - DISCORDTESTCHANNEL
+ - DISCORDTESTGUILD
 
 
 Made possible by

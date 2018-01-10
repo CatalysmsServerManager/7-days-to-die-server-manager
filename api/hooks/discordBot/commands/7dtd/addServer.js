@@ -98,6 +98,13 @@ class AddServer extends Commando.Command {
       })
     } catch (error) {
       sails.log.error(error)
+      let errorEmbed = new msg.client.customEmbed();
+      errorEmbed
+          .setDescription(`Could not initialize your server, something went wrong!`)
+          .addField('Error', error)
+          .setColor('RED')
+          msg.channel.send(errorEmbed)
+
     }
 
   }
