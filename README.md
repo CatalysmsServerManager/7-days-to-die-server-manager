@@ -11,6 +11,8 @@ To start the application, you need to add these environment variables;
  - CSMM_HOSTNAME
  - API_KEY_STEAM
  - DISCORDBOTTOKEN
+ - PAPERTRAILHOST
+ - PAPERTRAILPORT
 
 To test the application, add these env vars;
 

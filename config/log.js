@@ -22,7 +22,8 @@ var customLogger = new winston.Logger({
     }),
     new winston.transports.Papertrail({
       host: process.env.PAPERTRAILHOST,
-      port: process.env.PAPERTRAILPORT
+      port: process.env.PAPERTRAILPORT,
+      colorize: true,
     })
   ]
 });
