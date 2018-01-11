@@ -76,7 +76,7 @@ class AddServer extends Commando.Command {
         discordGuildId: msg.guild.id
       }).switch({
         error: function (err) {
-          sails.log.error(`7DTD server setup`);
+          sails.log.error(`DISCORD - COMMAND addServer - ${err}`);
           let errorEmbed = new msg.client.customEmbed();
           errorEmbed
           .setDescription(`Could not initialize your server, something went wrong!`)
@@ -97,7 +97,7 @@ class AddServer extends Commando.Command {
         }
       })
     } catch (error) {
-      sails.log.error(error)
+      sails.log.error(`DISCORD - COMMAND addServer - ${error}`);
       let errorEmbed = new msg.client.customEmbed();
       errorEmbed
           .setDescription(`Could not initialize your server, something went wrong!`)

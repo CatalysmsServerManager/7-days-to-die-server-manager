@@ -44,11 +44,7 @@ module.exports = {
         },
         timeout: {
             outputFriendlyName: 'Connection timed out'
-        },
-        failedLogin: {
-            outputFriendlyName: 'Could not log in to telnet'
         }
-
     },
 
     /**
@@ -63,6 +59,7 @@ module.exports = {
      */
 
     fn: async function(inputs, exits) {
+        sails.log.debug(`HELPER - createWebTokens - creating tokens for server with ip ${inputs.ip}`);
         const authName = 'CSMM';
         const authToken = randToken.generate(32);
 
@@ -78,25 +75,21 @@ module.exports = {
         };
         connection.connect(params);
 
-
-
         connection.on('ready', function(prompt) {
             connection.exec(`webtokens add ${authName} ${authToken} 0`, function(err, response) {
                 if (err) { return exits.error(err); }
                 if (_.isUndefined(response) || response.length <= 0) {
                     return exits.error(new Error('No response from telnet server'));
                 } else {
+                    sails.log.debug('HELPER - createWebTokens - successfully created tokens')
                     return exits.success({ authName: authName, authToken: authToken });
                 }
 
             });
         });
 
-        connection.on('failedlogin', function() {
-            return exits.failedLogin();
-        });
-
         connection.on('error', function(error) {
+            sails.log.error(`HELPER - createWebTokens - ${error}`);
             return exits.error(new Error(error));
         });
 

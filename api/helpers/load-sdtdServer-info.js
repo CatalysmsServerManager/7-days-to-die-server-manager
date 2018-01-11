@@ -42,7 +42,7 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     try {
-
+      sails.log.debug(`HELPER - loadSdtdserverInfo - Loading server info for server ${inputs.serverId}`)
       // Load serverinfo from DB first
       let server = await SdtdServer.findOne(inputs.serverId);
       let data = new Object();
