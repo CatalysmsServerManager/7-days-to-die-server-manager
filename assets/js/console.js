@@ -1,5 +1,3 @@
-var $$ = Dom7;
-
 function startConsole(serverID) {
     console.log("Starting console for server with id " + serverID);
 
