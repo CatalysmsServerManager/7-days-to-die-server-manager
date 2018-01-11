@@ -1,60 +1,73 @@
 <body>
-    <div class="list-block">
-        <form id="addServer" action="javascript:addServer();">
-            <ul>
-                <li>
-                    <div class="item-content">
-                        <div class="item-inner">
-                            <div class="item-title label">Server IP</div>
-                            <div class="item-input">
-                                <input id="input-serverip" type="text" name="serverip">
-                            </div>
-                        </div>
-                </li>
-                <li>
-                    <div class="item-content">
-                        <div class="item-inner">
-                            <div class="item-title label">Telnet port</div>
-                            <div class="item-input">
-                                <input id="input-telnetport" type="text" name="telnetport">
-                            </div>
-                        </div>
-                </li>
-                <li>
-                    <div class="item-content">
-                        <div class="item-inner">
-                            <div class="item-title label">Telnet Password</div>
-                            <div class="item-input">
-                                <input id="input-telnetpassword" type="password" name="telnetpassword">
-                            </div>
-                        </div>
-                </li>
-                <% if (!_.isUndefined(telnetError))  {%>
-                    <p>
-                        <%= telnetError %>
-                    </p>
-                    <% } %>
-                        <li>
-                            <div class="item-content">
-                                <div class="item-inner">
-                                    <div class="item-title label">Web port</div>
-                                    <div class="item-input">
-                                        <input id="input-webport" type="text" name="webport">
-                                    </div>
-                                </div>
-                        </li>
-                        <li>
-                            <div class="item-content">
-                                <div class="item-inner">
-                                    <div class="item-input">
-                                        <input type="submit" value="Submit">
-                                    </div>
-                                </div>
-                        </li>
-            </ul>
 
-        </form>
-        </div>
+  <form id="addServer" class="w-25 p-3 float-left">
+    <div class="form-group">
+      <label for="serverip">Server IP</label>
+      <input type="text" class="form-control" id="serverip" placeholder="Server IP address">
+    </div>
+    <div class="form-group">
+      <label for="webport">Web Port</label>
+      <input type="number" class="form-control" id="webport" aria-describedby="webportHelp" placeholder="ex. 8084">
+      <small id="webportHelp" class="form-text text-muted">Port added by Allocs fixes</small>
+    </div>
+    <div class="form-group">
+      <label for="telnetport">Telnet port</label>
+      <input type="number" class="form-control" id="telnetport" placeholder="ex. 8081">
+    </div>
+    <div class="form-group">
+      <label for="telnetpassword">Telnet password</label>
+      <input type="password" class="form-control" id="telnetpassword" aria-describedby="passwordHelp" placeholder="Password">
+      <small id="passwordHelp" class="form-text text-muted">We'll never share your password with anyone else.</small>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
 
+  <div id="message" class="float-right w-25 p-3"></div>
 
 </body>
+
+<script>
+  $("#addServer").submit(function (event) {
+    event.preventDefault();
+    const serverip = $("#serverip").val(),
+      webport = $("#webport").val(),
+      telnetport = $("#telnetport").val(),
+      telnetpassword = $("#telnetpassword").val()
+
+    if (serverip === '') {
+      return $('#serverip').addClass("is-invalid")
+    }
+
+    if (webport === '') {
+      return $('#webport').addClass("is-invalid")
+    }
+    if (telnetport === '') {
+      return $('#telnetport').addClass("is-invalid")
+    }
+    if (telnetpassword === '') {
+      return $('#telnetpassword').addClass("is-invalid")
+    }
+
+
+    $.ajax({
+      url: "/api/sdtdserver/addserver",
+      type: "POST",
+      data: {
+        serverip: serverip,
+        webport: webport,
+        telnetport: telnetport,
+        telnetpassword: telnetpassword
+      },
+      success: (data, status, xhr) => {
+        window.location.replace(`/sdtdserver/${data.id}/dashboard`)
+      },
+      error: (xhr, status, error) => {
+          let htmlToAdd = `<h2>Error<h2> <br> ${xhr.responseText} <br> Contact support for more help please`
+        $("#message").append(htmlToAdd)
+      }
+    })
+
+
+  })
+
+</script>

@@ -64,11 +64,10 @@ module.exports.routes = {
     },
 
     'get /sdtdserver/addserver': {
-        view: 'sdtdServer/addserver',
-        locals: {
-            telnetError: ""
-        }
+        view: 'sdtdServer/addserver'
     },
+
+    'get /sdtdserver/:serverId/dashboard': 'SdtdServerController.dashboard',
 
     '/sdtdserver/:serverID/executeCommand': {
         controller: 'SdtdServerController',
@@ -81,7 +80,7 @@ module.exports.routes = {
 
     'post /api/sdtdserver/addserver': {
         controller: 'SdtdServerController',
-        action: 'addserver'
+        action: 'addServer'
     },
 
     'get /api/sdtdserver/onlinePlayers': {

@@ -11,6 +11,7 @@ module.exports = {
    * @param {number} webport Port for webserver added by Alloc's fixes
    */
   addServer: async function (req, res) {
+    sails.log.debug(`API - addServer - Adding a new server`)
     if (_.isUndefined(req.param('serverip'))) {
       return res.badRequest('A server IP is required but was not given');
     }
@@ -23,53 +24,31 @@ module.exports = {
     if (_.isUndefined(req.param('webport'))) {
       return res.badRequest('A web port is required but was not given');
     }
+    if (_.isUndefined(req.signedCookies.userProfile)) {
+      sails.log.err('ip')
+      return res.badRequest('User has to be logged in.');
+    }
 
-    const serverip = req.param('serverip');
-    const telnetport = req.param('telnetport');
-    const telnetpassword = req.param('telnetpassword');
-    const webport = req.param('webport');
+    const serverIp = req.param('serverip');
+    const telnetPort = req.param('telnetport');
+    const telnetPassword = req.param('telnetpassword');
+    const webPort = req.param('webport');
+    const userProfile = req.signedCookies.userProfile
 
-    SdtdServer.find({
-      ip: serverip,
-      telnetPort: telnetport,
-      webPort: webport,
-    }).exec(function (err, foundServers) {
-      if (err) {
-        return res.serverError(new Error("Error checking for existing server"));
-      }
-      if (!_.isUndefined(foundServers) && foundServers.length > 0) {
-        sails.log.warn(`User tried to add a server that is already in the system`);
-        return res.badRequest(`This server has already been added to the system`);
-      }
-
-      sails.helpers.createWebToken({
-        ip: serverip,
-        port: telnetport,
-        password: telnetpassword
-      }).switch({
-        success: async function (authInfo) {
-          sails.log.debug('Successfully connected to telnet & created tokens');
-          var createdServer = await SdtdServer.create({
-            ip: serverip,
-            telnetPort: telnetport,
-            telnetPassword: telnetpassword,
-            webPort: webport,
-            authName: authInfo.authName,
-            authToken: authInfo.authToken,
-            owner: req.signedCookies.userProfile.id
-          }).fetch();
-          await sails.hooks.sdtdlogs.start(createdServer.id);
-          return res.json(createdServer);
-
-        },
-        error: function (error) {
-          sails.log.warn('Could not connect to servers telnet ' + error);
-          res.badRequest('Could not connect to the servers telnet');
-        }
-      });
-    });
-
-
+    try {
+      let sdtdServer = await sails.helpers.add7DtdServer.with({
+        ip: serverIp,
+        telnetPort: telnetPort,
+        telnetPassword: telnetPassword,
+        webPort: webPort,
+        owner: userProfile.id
+      })
+      res.json(sdtdServer)
+    } catch (error) {
+      sails.log.error(`API - addServer - ${error}`)
+      res.badRequest('Error connecting to server')
+    }
+   
 
   },
 

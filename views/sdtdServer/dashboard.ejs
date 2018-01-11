@@ -1,69 +1,68 @@
 <body>
-
-    <h1>Dashboard
-        <%= server.ip %>
-    </h1>
-
-    <div class="list-block">
-        <ul>
-            <% if (onlinePlayers.length <= 0 ) { %>
-                <li>
-                    <div class="item-content">
-                        <div class="item-media">
-                            <i class="icon icon-person"></i>
-                        </div>
-                        <div class="item-inner">
-                            <div class="item-title">
-                                No players online!
-                            </div>
-                            <div class="item-after">
-
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <% } else { %>
-                    <% _.each(onlinePlayers, function(player) {%>
-                        <li>
-                            <div class="item-content">
-                                <div class="item-media">
-                                    <i class="icon icon-person"></i>
-                                </div>
-                                <div class="item-inner">
-                                    <div class="item-title">
-                                        <%= player.name %>
-                                    </div>
-                                    <div class="item-after">
-                                        <%= player.steamid %>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </li>
-                        <% }) %>
-                            <% } %>
-
-
-        </ul>
-        <div class="list-block-label">Online Players</div>
-    </div>
-
-    <div class="toolbar tabbar">
-        <div class="toolbar-inner">
-            <% var consoleLink = "/sdtdserver/" + server.id + "/console" %>
-                <a href=<%=consoleLink %> class="tab-link active">
-                    <i>Console</i>
-                </a>
-                <a href="#tab2" class="tab-link">
-                    <i>Chat</i>
-                </a>
-                <a href="#tab3" class="tab-link">
-                    <i>Something</i>
-                </a>
-                <a href="#tab4" class="tab-link">
-                    <i>Something else</i>
-                </a>
-        </div>
-    </div>
-
+<% console.log(server) %>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-4">
+			<div class="page-header">
+				<h1>
+					<%= server.serverInfo.GameHost %>
+				</h1>
+			</div>
+		</div>
+		<div class="col-md-4">
+		</div>
+		<div class="col-md-4">
+			<div class="btn-group btn-group-vertical btn-group-md">
+				 
+				<button class="btn btn-default" type="button">
+					<em class="glyphicon glyphicon-align-left"></em> Left
+				</button> 
+				<button class="btn btn-default" type="button">
+					<em class="glyphicon glyphicon-align-center"></em> Center
+				</button> 
+				<button class="btn btn-default" type="button">
+					<em class="glyphicon glyphicon-align-right"></em> Right
+				</button> 
+				<button class="btn btn-default" type="button">
+					<em class="glyphicon glyphicon-align-justify"></em> Justify
+				</button>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-4">
+			<h2>
+				Online players
+			</h2>
+			<p>
+				Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+			</p>
+			<p>
+				<a class="btn" href="#">View details »</a>
+			</p>
+		</div>
+		<div class="col-md-4">
+			<h2>
+				Console
+			</h2>
+			<p>
+				Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+			</p>
+			<p>
+				<a class="btn" href="#">View details »</a>
+			</p>
+		</div>
+		<div class="col-md-4">
+			<h2>
+				Chat
+			</h2>
+			<p>
+				Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+			</p>
+			<p>
+				<a class="btn" href="#">View details »</a>
+			</p>
+		</div>
+	</div>
+</div>
 </body>

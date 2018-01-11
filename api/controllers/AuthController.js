@@ -32,7 +32,7 @@ module.exports = {
             },
             function(err, user) {
                 if (err) {
-                    console.log(err)
+                    sails.log.error(`Steam auth error - ${err}`)
                     return res.serverError(err)
                 };
                 sails.log.debug(`User with id ${user.id} successfully logged in`);
