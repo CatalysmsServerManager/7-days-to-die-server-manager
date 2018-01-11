@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>policies/isLoggedIn.js - Documentation</title>
+    <title>hooks/discordBot/util/chatBridgeChannel.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">policies/isLoggedIn.js</h1>
+    <h1 class="page-title">hooks/discordBot/util/chatBridgeChannel.js</h1>
     
 
     
@@ -37,29 +37,69 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>var passport = require('passport');
+            <pre class="prettyprint source linenums"><code>const Discord = require('discord.js');
 
 /**
- * isLoggedIn
- *
- * A simple policy that allows any request from an authenticated user.
- *
- * For more about how this policy works and how to use it, see:
- *   https://sailsjs.com/anatomy/api/policies/isLoggedIn.js
+ * @class
+ * @name ChatBridgeChannel
+ * @description Discord chat bridge
  */
-module.exports = function isLoggedIn(req, res, next) {
 
-  passport.authenticate('jwt', function (err, user, info) {
-    if (err) {
-      return res.forbidden();
-    }
-    if (user) {
-      return next()
+class ChatBridgeChannel {
+  constructor(textChannel, sdtdServer) {
+    this.channelId = textChannel.id
+    this.channel = textChannel
+    this.sdtdServer = sdtdServer
+    this.loggingObject = sails.hooks.sdtdlogs.getLoggingObject(this.sdtdServer.id)
+  }
+
+  start() {
+    sails.log.debug(`Starting chat bridge for sdtd server ${this.sdtdServer.id}`)
+
+    // Bind 'this' to sendMessage functions
+    this.sendChatMessageToDiscord = this.sendChatMessageToDiscord.bind(this)
+    this.sendConnectedMessageToDiscord = this.sendConnectedMessageToDiscord.bind(this)
+    this.sendDeathMessageToDiscord = this.sendDeathMessageToDiscord.bind(this)
+    this.sendDisconnectedMessageToDiscord = this.sendDisconnectedMessageToDiscord.bind(this)
+
+    if (!_.isUndefined(this.loggingObject)) {
+      this.loggingObject.on('chatMessage', this.sendChatMessageToDiscord);
+      this.loggingObject.on('playerDeath', this.sendDeathMessageToDiscord);
+      this.loggingObject.on('playerConnected', this.sendConnectedMessageToDiscord);
+      this.loggingObject.on('playerDisconnected', this.sendDisconnectedMessageToDiscord);
+      let embed = new this.channel.client.customEmbed()
+      embed.setDescription(":white_check_mark: Initialized a chat bridge")
+      this.channel.send(embed)
     } else {
-      return res.forbidden();
+      this.channel.send(new this.channel.client.errorEmbed(':x: Could not find a logging object for this server'))
     }
-  })(req, res, next)
-};
+  }
+
+  stop() {
+    this.loggingObject.removeListener('chatMessage', this.sendChatMessageToDiscord);
+    this.loggingObject.removeListener('playerDeath', this.sendDeathMessageToDiscord);
+    this.loggingObject.removeListener('playerConnected', this.sendConnectedMessageToDiscord);
+    this.loggingObject.removeListener('playerDisconnected', this.sendDisconnectedMessageToDiscord);
+  }
+
+  sendChatMessageToDiscord(chatMessage) {
+    this.channel.send(`${chatMessage.playerName}: ${chatMessage.messageText}`)
+  }
+
+  sendDeathMessageToDiscord(deathMessage) {
+    this.channel.send(`${deathMessage.playerName} died.`)
+  }
+
+  sendConnectedMessageToDiscord(connectedMsg) {
+    this.channel.send(`${connectedMsg.playerName} connected.`)
+  }
+
+  sendDisconnectedMessageToDiscord(disconnectedMsg) {
+    this.channel.send(`${disconnectedMsg.playerName} disconnected.`)
+  }
+}
+
+module.exports = ChatBridgeChannel
 </code></pre>
         </article>
     </section>

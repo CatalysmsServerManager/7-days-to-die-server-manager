@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>policies/isLoggedIn.js - Documentation</title>
+    <title>hooks/discordBot/commands/7dtd/chatbridge.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">policies/isLoggedIn.js</h1>
+    <h1 class="page-title">hooks/discordBot/commands/7dtd/chatbridge.js</h1>
     
 
     
@@ -37,29 +37,106 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>var passport = require('passport');
+            <pre class="prettyprint source linenums"><code>const Commando = require('discord.js-commando');
+const ChatBridgeChannel = require('../../util/chatBridgeChannel.js')
 
 /**
- * isLoggedIn
- *
- * A simple policy that allows any request from an authenticated user.
- *
- * For more about how this policy works and how to use it, see:
- *   https://sailsjs.com/anatomy/api/policies/isLoggedIn.js
+ * @memberof module:DiscordCommands
+ * @name ChatBridge
+ * @description Adds a server to the system
+ * @param {string} ip
+ * @param {integer} webPort
+ * @param {integer} telnetPort
+ * @param {string} telnetPassword
  */
-module.exports = function isLoggedIn(req, res, next) {
 
-  passport.authenticate('jwt', function (err, user, info) {
-    if (err) {
-      return res.forbidden();
+class ChatBridge extends Commando.Command {
+  constructor(client) {
+    super(client, {
+      name: 'chatbridge',
+      group: '7dtd',
+      aliases: ['cb'],
+      memberName: 'chatbridge',
+      args: [{
+        key: 'option',
+        label: 'Option',
+        prompt: 'Specify an option for this command please',
+        type: 'string'
+      }],
+      description: 'Command for managing chat bridges',
+      details: "For more information see the website",
+      userPermissions: ["MANAGE_GUILD"]
+    });
+  }
+
+  async run(msg, args) {
+
+    let commandOptions = {
+      start: startFunc,
+      stop: stopFunc,
+      config: configFunc
     }
-    if (user) {
-      return next()
+
+    if (commandOptions.hasOwnProperty(args.option)) {
+      commandOptions[args.option]()
     } else {
-      return res.forbidden();
+      let embed = new msg.client.errorEmbed("You did not specify a correct command option!\nSee the website for information on this command");
+      msg.channel.send(embed)
     }
-  })(req, res, next)
-};
+
+    async function startFunc() {
+
+      try {
+        let sdtdServer = await SdtdServer.findOne({
+          discordGuildId: msg.guild.id
+        })
+        await SdtdServer.update({
+          ip: sdtdServer.ip,
+          discordGuildId: msg.guild.id
+        }, {
+          chatChannelId: msg.channel.id
+        })
+        msg.guild.chatBridge = new ChatBridgeChannel(msg.channel, sdtdServer)
+        msg.guild.chatBridge.start()
+      } catch (error) {
+        sails.log.error(error)
+        msg.channel.send(new msg.client.errorEmbed(error))
+      }
+
+
+    }
+
+    async function stopFunc() {
+      try {
+        let sdtdServer = await SdtdServer.findOne({
+          discordGuildId: msg.guild.id
+        })
+        await SdtdServer.update({
+          ip: sdtdServer.ip,
+          discordGuildId: msg.guild.id
+        }, {
+          chatChannelId: 0
+        })
+
+        msg.guild.chatBridge.stop() 
+        msg.channel.send(new msg.client.customEmbed().setDescription('Stopped chat bridge'))
+      } catch (error) {
+        sails.log.error(error)
+        msg.channel.send(new msg.client.errorEmbed(error))
+      }
+
+    }
+
+    function configFunc() {
+
+    }
+
+  }
+
+}
+
+
+module.exports = ChatBridge;
 </code></pre>
         </article>
     </section>
