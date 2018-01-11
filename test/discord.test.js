@@ -7,7 +7,7 @@ const getMessageMock = (content) => {
   }
 }
 
-describe('Discord Bot', function () {
+xdescribe('Discord Bot', function () {
 
   beforeEach(function (done) {
     this.timeout(5000)
