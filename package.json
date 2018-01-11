@@ -32,7 +32,9 @@
     "sails-mysql": "^1.0.0-16",
     "socket.io-redis": "4.0.0",
     "telnet-client": "^0.15.5",
-    "validator": "^9.2.0"
+    "validator": "^9.2.0",
+    "winston": "^2.4.0",
+    "winston-papertrail": "^1.0.5"
   },
   "scripts": {
     "start": "node app.js --prod",
