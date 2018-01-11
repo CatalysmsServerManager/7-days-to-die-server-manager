@@ -11,18 +11,26 @@
  */
 
 var winston = require('winston');
-var customLogger = new winston.Logger();
+require('winston-papertrail').Papertrail;
 
-// A console transport logging debug and above.
-customLogger.add(winston.transports.Console, {
+var customLogger = new winston.Logger({
   level: 'debug',
-  colorize: true
+  //format: winston.format.json(),
+  transports: [
+    new winston.transports.Console({
+      level: 'silly'
+    }),
+    new winston.transports.Papertrail({
+      host: process.env.PAPERTRAILHOST,
+      port: process.env.PAPERTRAILPORT
+    })
+  ]
 });
 
 module.exports.log = {
   // Pass in our custom logger, and pass all log levels through.
   custom: customLogger,
-  level: 'debug',
+  level: 'silly',
 
   // Disable captain's log so it doesn't prefix or stringify our meta data.
   inspect: false
