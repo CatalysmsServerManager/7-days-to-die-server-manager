@@ -53,6 +53,10 @@ module.exports = function discordBot(sails) {
             sails.log.error(`Command error! ${command.memberName} trace: ${error.stack}`)
           })
 
+          client.on('commandRun', (command, promise, message) => {
+            sails.log.info(`Command ${command.name} ran by ${message.author.username}`)
+          })
+
           // Login
 
           client.login(sails.config.custom.botToken).then(() => {
