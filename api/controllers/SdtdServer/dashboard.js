@@ -27,6 +27,12 @@ module.exports = {
     }
   },
 
+  /**
+   * @memberof SdtdServer
+   * @name dashboard
+   * @description Serves the dashboard for a 7 Days to die server
+   */
+
   fn: async function (inputs, exits) {
 
     if (_.isUndefined(this.req.signedCookies.userProfile)) {
@@ -45,6 +51,7 @@ module.exports = {
         players: players
       });
     } catch (error) {
+      sails.log.error(`VIEW - SdtdServer:dashboard - ${error}`)
       throw 'notFound';
     }
 

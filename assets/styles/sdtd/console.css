@@ -1,0 +1,9 @@
+.console-window {
+    overflow: scroll;
+    height: 20em;
+    resize: both;
+}
+
+.log-line {
+    list-style-type: none;
+}

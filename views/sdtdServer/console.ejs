@@ -1,31 +1,66 @@
 <body>
 
-    <h1>Console
-        <%= server.ip %>
-    </h1>
-
-    <div class="console-window">
-
-    </div>
-    <div class="list-block">
-        <div class="console-send-box">
-            <% var executeCommandLink = "/sdtdserver/" + server.id + "/executeCommand" %>
-                <form action=<%=executeCommandLink%> method="GET" class="ajax-submit">
-
-                    <div class="item-content">
-                        <div class="item-inner">
-                            <div class="item-input">
-                                <input id="input-command" type="text" name="command">
-                            </div>
-                        </div>
-
-                        <input id="input-command-button" class="button" type="submit" value="Execute">
-                </form>
-                </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="page-header">
+          <h1>
+            Console
+            <small>
+              <%= server.ip %>
+            </small>
+          </h1>
         </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-8 console-window bg-dark text-white">
+        *** STARTING CONSOLE ***
+      </div>
+      <div class="col-md-4">
+        <div class="btn-group btn-group-vertical">
 
+          <button class="btn btn-small" type="button" id="clearConsole">
+            <em class="glyphicon glyphicon-align-left"></em> Clear window
+          </button>
+          <form>
+            <div class="form-group">
+              <input type="text" class="form-control" id="consoleCommand" placeholder="Enter command">
+            </div>
+
+            <button class="btn btn-small" type="submit" id='execCommand'>
+              <em class="glyphicon glyphicon-align-left"></em> Exec
+            </button>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 
+
 <script>
-    startConsole(<%= server.id %>)
+  $(document).ready(function () {
+    let sdtdConsoleWindow = new sdtdConsole(<%= server.id %>)
+    sdtdConsoleWindow.start()
+
+    $("#execCommand").click((event) => {
+      event.preventDefault();
+      let command = $("#consoleCommand").val();
+      $("#consoleCommand").val('');
+      sdtdConsoleWindow.executeCommand(command).then((response) => {
+          $('.console-window').append('<li class=\"log-line\">' + response.msg + '</li>');
+        })
+        .catch((error) => {
+          $('.console-window').append('<li class=\"log-line text-danger\">' + error + '</li>');
+        })
+    })
+
+    $("#clearConsole").click((event) => {
+      event.preventDefault();
+      $(".console-window").empty();
+    })
+  })
+
 </script>

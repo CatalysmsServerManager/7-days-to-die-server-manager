@@ -69,10 +69,10 @@ module.exports.routes = {
 
     'get /sdtdserver/:serverId/dashboard': 'SdtdServerController.dashboard',
 
-    '/sdtdserver/:serverID/executeCommand': {
-        controller: 'SdtdServerController',
-        action: 'executeCommand'
-    },
+    'get /sdtdserver/:serverId/console': 'SdtdServerController.console',
+
+    '/api/sdtdserver/:serverId/executeCommand': 'SdtdServerController.execute-command',
+    
 
     //  ╔═╗╔═╗╦  ╔═╗╔╗╔╔╦╗╔═╗╔═╗╦╔╗╔╔╦╗╔═╗
     //  ╠═╣╠═╝║  ║╣ ║║║ ║║╠═╝║ ║║║║║ ║ ╚═╗
