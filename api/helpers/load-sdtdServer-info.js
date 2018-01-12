@@ -45,10 +45,9 @@ module.exports = {
       sails.log.debug(`HELPER - loadSdtdserverInfo - Loading server info for server ${inputs.serverId}`)
       // Load serverinfo from DB first
       let server = await SdtdServer.findOne(inputs.serverId);
-      let data = new Object();
-      data.stats = await loadStats(server)
-      data.serverInfo = await loadServerInfo(server)
-      exits.success(data)
+      server.stats = await loadStats(server)
+      server.serverInfo = await loadServerInfo(server)
+      exits.success(server)
     } catch (error) {
       return exits.error(error)
     }

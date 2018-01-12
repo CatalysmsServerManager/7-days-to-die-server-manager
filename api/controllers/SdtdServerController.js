@@ -205,52 +205,5 @@ module.exports = {
 
   },
 
-  /**
-   * @memberof SdtdServer
-   * @description Executes a command on a 7dtd server
-   * @param {number} serverID ID of the server 
-   * @param {string} command Command to be executed
-   */
-
-  executeCommand: function (req, res) {
-    const serverID = req.param('serverID');
-    const command = req.param('command');
-    if (_.isUndefined(serverID)) {
-      return res.badRequest("No serverID given");
-    }
-    if (_.isUndefined(command)) {
-      return res.badRequest("No command given");
-    }
-    sails.models.sdtdserver.findOne({
-      id: serverID
-    }).exec(function (error, server) {
-      if (error) {
-        return res.badRequest("Unknown server");
-      } else {
-        sails.log.debug(`User ${req.session.userId} executed a command on server ${server.id} ${command}`);
-        sevenDays.executeCommand({
-          ip: server.ip,
-          port: server.webPort,
-          authName: server.authName,
-          authToken: server.authToken,
-          command: command
-        }).exec({
-          error: function (error) {
-            return res.badRequest(new Error('Error executing command\n' + error));
-          },
-          success: function (response) {
-            let logLine = {
-              msg: response.result,
-              date: new Date(),
-              type: 'commandResponse'
-            };
-            sails.sockets.broadcast(server.id, 'logLine', logLine);
-            return res.json(logLine);
-          }
-        });
-      }
-    });
-
-  },
 
 };
