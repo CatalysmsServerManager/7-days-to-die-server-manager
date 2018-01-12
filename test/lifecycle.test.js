@@ -4,7 +4,7 @@ var sails = require('sails');
 before(function (done) {
 
   // Increase the Mocha timeout so that Sails has enough time to lift, even if you have a bunch of assets.
-  this.timeout(5000);
+  this.timeout(10000);
 
   // Load env vars
   require('dotenv').config();
@@ -64,7 +64,7 @@ before(function (done) {
       sails.testServer = testServer;
       sails.testChannel = client.channels.get(process.env.DISCORDTESTCHANNEL)
 
-      sails.log.debug('Finished bootstrapping test data');
+      sails.log.warning('Finished bootstrapping test data');
       return done();
 
     } catch (error) {
