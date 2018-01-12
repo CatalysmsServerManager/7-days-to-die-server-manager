@@ -135,20 +135,22 @@
           </a>
         </li>
 
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
-            aria-expanded="false">
-            7 Days to die
-          </a>
-          <div class="dropdown-menu" id="sdtd-servers-owned" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/sdtdserver/addserver">Add a server</a>
-            <div class="dropdown-divider"></div>
-            <i class="fa fa-cog dropdown-item" id="loading-servers" aria-hidden="true"> Loading</i>
-          </div>
-        </li>
         <% 
       if (!_.isUndefined(req.signedCookies.userProfile)) {
         %>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+              aria-expanded="false">
+              7 Days to die
+            </a>
+            <div class="dropdown-menu" id="sdtd-servers-owned" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="/sdtdserver/addserver">Add a server</a>
+              <div class="dropdown-divider"></div>
+              <i class="fa fa-cog dropdown-item" id="loading-servers" aria-hidden="true"> Loading</i>
+            </div>
+          </li>
+
           <li class="nav-item">
             <a class="nav-link" href="/user/<%= req.signedCookies.userProfile.id %>">
               <%= req.signedCookies.userProfile.steamProfile._json.personaname %>
@@ -157,8 +159,11 @@
           <li class="nav-item">
             <img src="<%= req.signedCookies.userProfile.steamProfile._json.avatar %>">
           </li>
+            <a class="nav-link" href="/auth/logout">
+              Logout
+            </a>
           <% } else { %>
-            <a href="/auth/steam">
+            <a class="nav-item" href="/auth/steam">
               <img src="images/steamLogin.png">
             </a>
             <% } %>

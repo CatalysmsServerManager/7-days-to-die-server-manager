@@ -1,5 +1,3 @@
-var passport = require('passport');
-
 /**
  * isLoggedIn
  *
@@ -9,15 +7,9 @@ var passport = require('passport');
  *   https://sailsjs.com/anatomy/api/policies/isLoggedIn.js
  */
 module.exports = function isLoggedIn(req, res, next) {
-
-  passport.authenticate('jwt', function (err, user, info) {
-    if (err) {
-      return res.forbidden();
-    }
-    if (user) {
-      return next()
-    } else {
-      return res.forbidden();
-    }
-  })(req, res, next)
+  if(!_.isUndefined(req.signedCookied.userProfile)) {
+    return next()
+  } else {
+    return res.forbidden()
+  }
 };

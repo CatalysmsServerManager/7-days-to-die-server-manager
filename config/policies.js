@@ -23,7 +23,7 @@ module.exports.policies = {
      *                                                                          *
      ***************************************************************************/
 
-    // '*': ['passport', 'sessionAuth'],
+    //'*': 'isLoggedIn',
 
     /***************************************************************************
      *                                                                          *
@@ -47,8 +47,8 @@ module.exports.policies = {
     // },
 
     sdtdServerController: {
-        '*': 'isServerOwner',
-        'addserver': 'isLoggedIn',
+       '*': 'isServerOwner',
+       'add-server': 'isLoggedIn',
     },
 
     // playerController: {
