@@ -13,21 +13,24 @@
       <div class="col-md-4">
         <div class="btn-group btn-group-vertical btn-group-md">
 
-		<% const consoleLink = '/sdtdserver/' + server.id + '/console' %>
-          <a href= '<%= consoleLink %>'>
-            <button class="btn btn-default" type="button">
-              <em class="glyphicon glyphicon-align-left"></em> Console
-            </button>
-          </a>
-          <button class="btn btn-default" type="button">
-            <em class="glyphicon glyphicon-align-center"></em> Placeholder
-          </button>
-          <button class="btn btn-default" type="button">
-            <em class="glyphicon glyphicon-align-right"></em> Placeholder
-          </button>
-          <button class="btn btn-default" type="button">
-            <em class="glyphicon glyphicon-align-justify"></em> Placeholder
-          </button>
+          <% const consoleLink = '/sdtdserver/' + server.id + '/console' %>
+            <a href='<%= consoleLink %>'>
+              <button class="btn btn-default" type="button">
+                <em class="glyphicon glyphicon-align-left"></em> Console
+              </button>
+            </a>
+            <% const chatLink = '/sdtdserver/' + server.id + '/chat' %>
+              <a href='<%= chatLink %>'>
+                <button class="btn btn-default" type="button">
+                  <em class="glyphicon glyphicon-align-center"></em> Chat
+                </button>
+              </a>
+              <button class="btn btn-default" type="button">
+                <em class="glyphicon glyphicon-align-right"></em> Placeholder
+              </button>
+              <button class="btn btn-default" type="button">
+                <em class="glyphicon glyphicon-align-justify"></em> Placeholder
+              </button>
         </div>
       </div>
     </div>
