@@ -64,7 +64,7 @@ before(function (done) {
       sails.testServer = testServer;
       sails.testChannel = client.channels.get(process.env.DISCORDTESTCHANNEL)
 
-      sails.log.warning('Finished bootstrapping test data');
+      sails.log.warn('Finished bootstrapping test data');
       return done();
 
     } catch (error) {

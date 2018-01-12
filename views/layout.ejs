@@ -118,51 +118,63 @@
 
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="#">CSMM</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-        aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">CSMM</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="/">Home
-            </a>
-          </li>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="/">Home
+          </a>
+        </li>
 
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
-              aria-expanded="false">
-              7 Days to die
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="/sdtdserver/addserver">Add a server</a>
-            </div>
-          </li>
-          <% 
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">
+            7 Days to die
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="/sdtdserver/addserver">Add a server</a>
+          </div>
+        </li>
+        <% 
       if (!_.isUndefined(req.signedCookies.userProfile)) {
         %>
-            <li class="nav-item">
-              <a class="nav-link" href="/user/<%= req.signedCookies.userProfile.id %>">
-                <%= req.signedCookies.userProfile.steamProfile._json.personaname %>
-              </a>
-            </li>
-            <li class="nav-item">
-              <img src="<%= req.signedCookies.userProfile.steamProfile._json.avatar %>">
-            </li>
-            <% } else { %>
-              <a href="/auth/steam">
-                <img src="images/steamLogin.png">
-              </a>
-              <% } %>
-        </ul>
-      </div>
-    </nav>
+          <li class="nav-item">
+            <a class="nav-link" href="/user/<%= req.signedCookies.userProfile.id %>">
+              <%= req.signedCookies.userProfile.steamProfile._json.personaname %>
+            </a>
+          </li>
+          <li class="nav-item">
+            <img src="<%= req.signedCookies.userProfile.steamProfile._json.avatar %>">
+          </li>
+          <% } else { %>
+            <a href="/auth/steam">
+              <img src="images/steamLogin.png">
+            </a>
+            <% } %>
+      </ul>
+    </div>
+  </nav>
 
-    <%- body %>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-1">
+      </div>
+      <div class="col-md-10">
+        <%- body %>
+      </div>
+      <div class="col-md-1">
+      </div>
+    </div>
+  </div>
+
+
 
 </body>
 
