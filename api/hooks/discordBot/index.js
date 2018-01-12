@@ -96,8 +96,10 @@ module.exports = function discordBot(sails) {
       const element = serversWithChatbridges[index];
       let discordguild = client.guilds.get(element.discordGuildId)
       let textChannel = client.channels.get(element.chatChannelId)
-      discordguild.chatBridge = new ChatBridgeChannel(textChannel, element)
-      discordguild.chatBridge.start()
+      if (!_.isUndefined(textChannel) && !_.isUndefined(discordguild)) {
+        discordguild.chatBridge = new ChatBridgeChannel(textChannel, element)
+        discordguild.chatBridge.start()
+      }
     }
   }
 }
