@@ -89,7 +89,7 @@ module.exports = {
               ip: newPlayer.ip
             })
             if (newPlayer.online) {
-              newPlayer = await Player.update({
+              playerToSend = await Player.update({
                 steamId: foundOrCreatedPlayer.steamId,
                 server: inputs.serverId,
                 entityId: foundOrCreatedPlayer.entityId
@@ -103,7 +103,7 @@ module.exports = {
                 banned: newPlayer.banned
               }).fetch()
             } else {
-              newPlayer = await Player.update({
+              playerToSend = await Player.update({
                 steamId: foundOrCreatedPlayer.steamId,
                 server: inputs.serverId,
                 entityId: foundOrCreatedPlayer.entityId
@@ -117,7 +117,10 @@ module.exports = {
               }).fetch()
             }
 
-            resolve(newPlayer[0])
+            playerToSend = playerToSend[0];
+            playerToSend.online = newPlayer.online
+
+            resolve(playerToSend)
           })
         } catch (error) {
           throw error
@@ -168,6 +171,7 @@ module.exports = {
             resolvedPlayers.forEach(function (player) {
               let playerData = new Object()
               playerData.id = player.id
+              playerData.online = player.online
               playerData.steamId = player.steamId
               playerData.entityId = player.entityId
               playerData.location = new Object()

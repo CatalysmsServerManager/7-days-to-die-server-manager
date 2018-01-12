@@ -1,68 +1,93 @@
 <body>
-<% console.log(server) %>
-<div class="container-fluid">
-	<div class="row">
-		<div class="col-md-4">
-			<div class="page-header">
-				<h1>
-					<%= server.serverInfo.GameHost %>
-				</h1>
-			</div>
-		</div>
-		<div class="col-md-4">
-		</div>
-		<div class="col-md-4">
-			<div class="btn-group btn-group-vertical btn-group-md">
-				 
-				<button class="btn btn-default" type="button">
-					<em class="glyphicon glyphicon-align-left"></em> Left
-				</button> 
-				<button class="btn btn-default" type="button">
-					<em class="glyphicon glyphicon-align-center"></em> Center
-				</button> 
-				<button class="btn btn-default" type="button">
-					<em class="glyphicon glyphicon-align-right"></em> Right
-				</button> 
-				<button class="btn btn-default" type="button">
-					<em class="glyphicon glyphicon-align-justify"></em> Justify
-				</button>
-			</div>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-md-4">
-			<h2>
-				Online players
-			</h2>
-			<p>
-				Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-			</p>
-			<p>
-				<a class="btn" href="#">View details »</a>
-			</p>
-		</div>
-		<div class="col-md-4">
-			<h2>
-				Console
-			</h2>
-			<p>
-				Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-			</p>
-			<p>
-				<a class="btn" href="#">View details »</a>
-			</p>
-		</div>
-		<div class="col-md-4">
-			<h2>
-				Chat
-			</h2>
-			<p>
-				Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-			</p>
-			<p>
-				<a class="btn" href="#">View details »</a>
-			</p>
-		</div>
-	</div>
-</div>
+  <% console.log(players) %>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="page-header">
+            <h1>
+              <%= server.serverInfo.GameHost %>
+            </h1>
+          </div>
+        </div>
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-4">
+          <div class="btn-group btn-group-vertical btn-group-md">
+
+            <button class="btn btn-default" type="button">
+              <em class="glyphicon glyphicon-align-left"></em> Left
+            </button>
+            <button class="btn btn-default" type="button">
+              <em class="glyphicon glyphicon-align-center"></em> Center
+            </button>
+            <button class="btn btn-default" type="button">
+              <em class="glyphicon glyphicon-align-right"></em> Right
+            </button>
+            <button class="btn btn-default" type="button">
+              <em class="glyphicon glyphicon-align-justify"></em> Justify
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <h2>
+            Online players:
+            <%= server.stats.players %>
+          </h2>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Game ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Playtime (s)</th>
+              </tr>
+            </thead>
+            <!-- Load online players -->
+            <% for (let player of players.players) { %>
+              <% if (player.online) { %>
+                <tr>
+                  <th scope="row">
+                    <%= player.entityId %>
+                  </th>
+                  <td>
+                    <%= player.name %>
+                  </td>
+                  <td>
+                    <%= player.totalPlaytime %>
+                  </td>
+                </tr>
+                <% } } %>
+          </table>
+
+          <p>
+            <a class="btn" href="#">View all players »</a>
+          </p>
+        </div>
+        <div class="col-md-4">
+          <h2>
+            Console
+          </h2>
+          <p>
+            Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh,
+            ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+          </p>
+          <p>
+            <a class="btn" href="#">View details »</a>
+          </p>
+        </div>
+        <div class="col-md-4">
+          <h2>
+            Chat
+          </h2>
+          <p>
+            Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh,
+            ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+          </p>
+          <p>
+            <a class="btn" href="#">View details »</a>
+          </p>
+        </div>
+      </div>
+    </div>
 </body>
