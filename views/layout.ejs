@@ -111,6 +111,7 @@
   <script src="/dependencies/sails.io.js"></script>
   <script src="/dependencies/jquery-3.2.1.js"></script>
   <script src="/dependencies/lodash.js"></script>
+  <script src="/js/app.js"></script>
   <script src="/js/bootstrap/bootstrap.bundle.js"></script>
   <script src="/js/bootstrap/bootstrap.js"></script>
   <script src="/js/sdtdServer/chat.js"></script>
@@ -139,9 +140,10 @@
             aria-expanded="false">
             7 Days to die
           </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <div class="dropdown-divider"></div>
+          <div class="dropdown-menu" id="sdtd-servers-owned" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" href="/sdtdserver/addserver">Add a server</a>
+            <div class="dropdown-divider"></div>
+            <i class="fa fa-cog dropdown-item" id="loading-servers" aria-hidden="true"> Loading</i>
           </div>
         </li>
         <% 
@@ -179,5 +181,13 @@
 
 
 </body>
+
+
+<script>
+  <%  if (!_.isUndefined(req.signedCookies.userProfile)) {%>
+  loadSdtdServers(<%= req.signedCookies.userProfile.id %>)
+  <% } %>
+
+</script>
 
 </html>
