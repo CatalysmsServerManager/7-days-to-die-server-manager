@@ -131,9 +131,9 @@ module.exports = {
          *                                                                          *
          ***************************************************************************/
         cors: {
-            // allowOrigins: [
-            //   'https://example.com',
-            // ]
+            allowOrigins: [
+              'https://csmm.herokuapp.com/',
+            ]
         },
 
     },
@@ -317,7 +317,7 @@ module.exports = {
      * this, just try deploying without setting it and see if it works.)       *
      *                                                                         *
      ***************************************************************************/
-     port: 2000,
+     //port: 2000,
 
 
 
