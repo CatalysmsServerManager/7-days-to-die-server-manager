@@ -78,10 +78,7 @@ module.exports.routes = {
     //  ╠═╣╠═╝║  ║╣ ║║║ ║║╠═╝║ ║║║║║ ║ ╚═╗
     //  ╩ ╩╩  ╩  ╚═╝╝╚╝═╩╝╩  ╚═╝╩╝╚╝ ╩ ╚═╝
 
-    'post /api/sdtdserver/addserver': {
-        controller: 'SdtdServerController',
-        action: 'addServer'
-    },
+    'post /api/sdtdserver/addserver': 'SdtdServerController/add-server',
 
     'get /api/sdtdserver/onlinePlayers': {
         controller: 'SdtdServerController',

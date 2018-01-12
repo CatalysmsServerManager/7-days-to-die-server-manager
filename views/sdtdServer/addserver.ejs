@@ -53,16 +53,16 @@
       url: "/api/sdtdserver/addserver",
       type: "POST",
       data: {
-        serverip: serverip,
-        webport: webport,
-        telnetport: telnetport,
-        telnetpassword: telnetpassword
+        serverIp: serverip,
+        webPort: webport,
+        telnetPort: telnetport,
+        telnetPassword: telnetpassword
       },
       success: (data, status, xhr) => {
         window.location.replace(`/sdtdserver/${data.id}/dashboard`)
       },
       error: (xhr, status, error) => {
-          let htmlToAdd = `<h2>Error<h2> <br> ${xhr.responseText} <br> Contact support for more help please`
+          let htmlToAdd = `<h2>Error</h2> <br> <p>${xhr.responseText}</p> <br> <p>Contact support for more help please</p>`
         $("#message").append(htmlToAdd)
       }
     })

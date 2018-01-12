@@ -4,56 +4,6 @@ module.exports = {
 
   /**
    * @memberof SdtdServer
-   * @description Add a server to the system
-   * @param {string} serverip Ip of the server to add
-   * @param {number} telnetport Telnet port of the server
-   * @param {string} telnetpassword Telnet password of the server
-   * @param {number} webport Port for webserver added by Alloc's fixes
-   */
-  addServer: async function (req, res) {
-    sails.log.debug(`API - addServer - Adding a new server`)
-    if (_.isUndefined(req.param('serverip'))) {
-      return res.badRequest('A server IP is required but was not given');
-    }
-    if (_.isUndefined(req.param('telnetport'))) {
-      return res.badRequest('A telnet port is required but was not given');
-    }
-    if (_.isUndefined(req.param('telnetpassword'))) {
-      return res.badRequest('A telnet password is required but was not given');
-    }
-    if (_.isUndefined(req.param('webport'))) {
-      return res.badRequest('A web port is required but was not given');
-    }
-    if (_.isUndefined(req.signedCookies.userProfile)) {
-      sails.log.err('ip')
-      return res.badRequest('User has to be logged in.');
-    }
-
-    const serverIp = req.param('serverip');
-    const telnetPort = req.param('telnetport');
-    const telnetPassword = req.param('telnetpassword');
-    const webPort = req.param('webport');
-    const userProfile = req.signedCookies.userProfile
-
-    try {
-      let sdtdServer = await sails.helpers.add7DtdServer.with({
-        ip: serverIp,
-        telnetPort: telnetPort,
-        telnetPassword: telnetPassword,
-        webPort: webPort,
-        owner: userProfile.id
-      })
-      res.json(sdtdServer)
-    } catch (error) {
-      sails.log.error(`API - addServer - ${error}`)
-      res.badRequest('Error connecting to server')
-    }
-   
-
-  },
-
-  /**
-   * @memberof SdtdServer
    * @description Starts detecting events for a server
    * @param {number} serverID ID of the server
    */
