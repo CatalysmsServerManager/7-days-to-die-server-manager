@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>policies/isLoggedIn.js - Documentation</title>
+    <title>controllers/SdtdServer/dashboard.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">policies/isLoggedIn.js</h1>
+    <h1 class="page-title">controllers/SdtdServer/dashboard.js</h1>
     
 
     
@@ -37,27 +37,65 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>var passport = require('passport');
+            <pre class="prettyprint source linenums"><code>module.exports = {
 
-/**
- * isLoggedIn
- *
- * A simple policy that allows any request from an authenticated user.
- *
- * For more about how this policy works and how to use it, see:
- *   https://sailsjs.com/anatomy/api/policies/isLoggedIn.js
- */
-module.exports = function isLoggedIn(req, res, next) {
-  passport.authenticate('steam', function (err, user, info) {
-    if (err) {
-      return res.forbidden();
+  friendlyName: 'Dashboard',
+
+  description: 'Show the dashboard of a 7 Days to Die server',
+
+  inputs: {
+    serverId: {
+      description: 'The ID of the server to look up.',
+      type: 'number',
+      required: true
     }
-    if (user) {
-      return next()
-    } else {
-      return res.forbidden();
+  },
+
+  exits: {
+    success: {
+      responseType: 'view',
+      viewTemplatePath: 'sdtdServer/dashboard'
+    },
+    notFound: {
+      description: 'No server with the specified ID was found in the database.',
+      responseType: 'notFound'
+    },
+    notLoggedIn: {
+      responseType: 'badRequest',
+      description: 'User is not logged in (check signedCookies)'
     }
-  })(req, res, next)
+  },
+
+  /**
+   * @memberof SdtdServer
+   * @name dashboard
+   * @description Serves the dashboard for a 7 Days to die server
+   */
+
+  fn: async function (inputs, exits) {
+
+    if (_.isUndefined(this.req.signedCookies.userProfile)) {
+      throw 'notLoggedIn'
+    }
+
+    sails.log.debug(`VIEW - SdtdServer:dashboard - Showing dashboard for ${inputs.serverId}`)
+
+    try {
+      let sdtdServer = await sails.helpers.loadSdtdserverInfo(inputs.serverId)
+      let players = await sails.helpers.loadPlayerData.with({
+        serverId: inputs.serverId
+      })
+      return exits.success({
+        server: sdtdServer,
+        players: players
+      });
+    } catch (error) {
+      sails.log.error(`VIEW - SdtdServer:dashboard - ${error}`)
+      throw 'notFound';
+    }
+
+
+  }
 };
 </code></pre>
         </article>

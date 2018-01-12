@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>policies/isLoggedIn.js - Documentation</title>
+    <title>controllers/SdtdServer/execute-command.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">policies/isLoggedIn.js</h1>
+    <h1 class="page-title">controllers/SdtdServer/execute-command.js</h1>
     
 
     
@@ -37,27 +37,83 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>var passport = require('passport');
+            <pre class="prettyprint source linenums"><code>const sevenDays = require('machinepack-7daystodiewebapi')
 
-/**
- * isLoggedIn
- *
- * A simple policy that allows any request from an authenticated user.
- *
- * For more about how this policy works and how to use it, see:
- *   https://sailsjs.com/anatomy/api/policies/isLoggedIn.js
- */
-module.exports = function isLoggedIn(req, res, next) {
-  passport.authenticate('steam', function (err, user, info) {
-    if (err) {
-      return res.forbidden();
+module.exports = {
+
+  friendlyName: 'Execute command',
+
+  description: 'Execute a command on a 7 Days to Die server',
+
+  inputs: {
+    serverId: {
+      description: 'The ID of the server to look up.',
+      type: 'number',
+      required: true
+    },
+    command: {
+      description: 'Command to execute',
+      type: 'string',
+      required: true
     }
-    if (user) {
-      return next()
-    } else {
-      return res.forbidden();
+  },
+
+  exits: {
+    success: {},
+    notFound: {
+      description: 'No server with the specified ID was found in the database.',
+      responseType: 'notFound'
+    },
+    notLoggedIn: {
+      responseType: 'badRequest',
+      description: 'User is not logged in (check signedCookies)'
     }
-  })(req, res, next)
+  },
+
+  /**
+   * @memberof SdtdServer
+   * @name executeCommand
+   * @description Executes a command on a 7dtd server
+   * @param {number} serverID ID of the server 
+   * @param {string} command Command to be executed
+   */
+
+  fn: async function (inputs, exits) {
+
+    if (_.isUndefined(this.req.signedCookies.userProfile)) {
+      throw 'notLoggedIn'
+    }
+
+    sails.log.debug(`API - SdtdServer:executeCommand - Executing a command on server ${inputs.serverId}`);
+
+    try {
+      let sdtdServer = await SdtdServer.findOne(inputs.serverId);
+      sevenDays.executeCommand({
+        ip: sdtdServer.ip,
+        port: sdtdServer.webPort,
+        authName: sdtdServer.authName,
+        authToken: sdtdServer.authToken,
+        command: inputs.command
+      }).exec({
+        success: (response) => {
+          let logLine = {
+            msg: response.result,
+            date: new Date(),
+            type: 'commandResponse'
+          };
+          return exits.success(logLine)
+        },
+        error: (error) => {
+          return exits.error(error)
+        }
+      })
+
+    } catch (error) {
+      sails.log.error(`API - SdtdServer:executeCommand - ${error}`);
+      return exits.error(error)
+    }
+
+  }
 };
 </code></pre>
         </article>
