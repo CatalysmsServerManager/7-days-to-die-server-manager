@@ -1,4 +1,4 @@
-describe('helpers', function () {
+describe('Helpers', function () {
   describe('load-player-data', function () {
     it('Should load all player info when only a serverID is given', function (done) {
       return sails.helpers.loadPlayerData.with({

@@ -27,8 +27,8 @@ async function getInventory(req, res) {
 
     let player = playerInfo.players[0];
     let toSend = new Object();
-    toSend.id = player.id,
-    toSend.steamId = player.steamId,
+    toSend.id = player.id;
+    toSend.steamId = player.steamId;
     toSend.serverId = player.server;
     toSend.inventory = player.inventory;
     return res.json(toSend);
@@ -66,8 +66,8 @@ async function getBanStatus(req, res) {
 
     let player = playerInfo.players[0];
     let toSend = new Object();
-    toSend.id = player.id,
-    toSend.steamId = player.steamId,
+    toSend.id = player.id;
+    toSend.steamId = player.steamId;
     toSend.serverId = player.server;
     toSend.banned = player.banned;
     return res.json(toSend);
@@ -105,8 +105,8 @@ async function getLocation(req, res) {
 
     let player = playerInfo.players[0];
     let toSend = new Object();
-    toSend.id = player.id,
-    toSend.steamId = player.steamId,
+    toSend.id = player.id;
+    toSend.steamId = player.steamId;
     toSend.serverId = player.server;
     toSend.location = player.location;
     return res.json(toSend);
