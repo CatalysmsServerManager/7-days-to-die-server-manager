@@ -118,6 +118,7 @@ describe('Helpers', function () {
 
     })
     it('Should return notAvailable with bad webPort', function (done) {
+      this.timeout(50000)
       sails.helpers.sdtd.checkIfAvailable(sails.serverWithBadWebPort.id).switch({
         success: () => {
           done(new Error(`Success but should have errored`))

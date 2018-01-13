@@ -4,7 +4,7 @@ var sails = require('sails');
 before(function (done) {
 
   // Increase the Mocha timeout so that Sails has enough time to lift, even if you have a bunch of assets.
-  this.timeout(10000);
+  this.timeout(30000);
 
   // Load env vars
   require('dotenv').config();
