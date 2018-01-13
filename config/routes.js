@@ -11,11 +11,11 @@
 module.exports.routes = {
 
 
-    //  ╦ ╦╔═╗╔╗ ╔═╗╔═╗╔═╗╔═╗╔═╗
-    //  ║║║║╣ ╠╩╗╠═╝╠═╣║ ╦║╣ ╚═╗
-    //  ╚╩╝╚═╝╚═╝╩  ╩ ╩╚═╝╚═╝╚═╝
+  //  ╦ ╦╔═╗╔╗ ╔═╗╔═╗╔═╗╔═╗╔═╗
+  //  ║║║║╣ ╠╩╗╠═╝╠═╣║ ╦║╣ ╚═╗
+  //  ╚╩╝╚═╝╚═╝╩  ╩ ╩╚═╝╚═╝╚═╝
 
-    /***************************************************************************
+  /***************************************************************************
      *                                                                          *
      * Make the view located at `views/homepage.ejs` your home page.            *
      *                                                                          *
@@ -24,30 +24,30 @@ module.exports.routes = {
      *                                                                          *
      ***************************************************************************/
 
-    '/': {
-        view: 'index'
-    },
+  '/': {
+    view: 'index'
+  },
 
-    '/about': {
-        view: 'about'
-    },
+  '/about': {
+    view: 'about'
+  },
 
-    '/auth/steam': {
-        controller: 'AuthController',
-        action: 'steamLogin'
-    },
+  '/auth/steam': {
+    controller: 'AuthController',
+    action: 'steamLogin'
+  },
 
-    '/auth/steam/return': {
-        controller: 'AuthController',
-        action: 'steamReturn'
-    },
+  '/auth/steam/return': {
+    controller: 'AuthController',
+    action: 'steamReturn'
+  },
 
-    '/auth/logout': {
-        controller: 'AuthController',
-        action: 'logout'
-    },
+  '/auth/logout': {
+    controller: 'AuthController',
+    action: 'logout'
+  },
 
-    /***************************************************************************
+  /***************************************************************************
      *                                                                          *
      * More custom routes here...                                               *
      * (See https://sailsjs.com/config/routes for examples.)                    *
@@ -58,90 +58,90 @@ module.exports.routes = {
      *                                                                          *
      ***************************************************************************/
 
-    'get /sdtdserver/:serverID/subscribetosocket': {
-        controller: 'SdtdServerController',
-        action: 'subscribeToServerSocket'
-    },
+  'get /sdtdserver/:serverID/subscribetosocket': {
+    controller: 'SdtdServerController',
+    action: 'subscribeToServerSocket'
+  },
 
-    'get /sdtdserver/addserver': {
-        view: 'sdtdServer/addserver'
-    },
+  'get /sdtdserver/addserver': {
+    view: 'sdtdServer/addserver'
+  },
 
-    'get /sdtdserver/:serverId/dashboard': 'SdtdServerController.dashboard',
+  'get /sdtdserver/:serverId/dashboard': 'SdtdServerController.dashboard',
 
-    'get /sdtdserver/:serverId/console': 'SdtdServerController.console',
-    'get /sdtdserver/:serverId/chat': 'SdtdServerController.chat',
-
-
-    //  ╔═╗╔═╗╦  ╔═╗╔╗╔╔╦╗╔═╗╔═╗╦╔╗╔╔╦╗╔═╗
-    //  ╠═╣╠═╝║  ║╣ ║║║ ║║╠═╝║ ║║║║║ ║ ╚═╗
-    //  ╩ ╩╩  ╩  ╚═╝╝╚╝═╩╝╩  ╚═╝╩╝╚╝ ╩ ╚═╝
-
-    'post /api/sdtdserver/addserver': 'SdtdServerController/add-server',
-    '/api/sdtdserver/:serverId/executeCommand': 'SdtdServerController.execute-command',
-    '/api/sdtdserver/:serverId/sendMessage': 'SdtdServerController.send-message',
-
-    'get /api/sdtdserver/onlinePlayers': {
-        controller: 'SdtdServerController',
-        action: 'onlinePlayers'
-    },
-
-    'get /api/user/ownedServers': {
-        controller: 'User',
-        action: 'ownedServers',
-        skipAssets: true
-    },
-
-    'get /api/sdtdserver/info': {
-        controller: 'SdtdServer',
-        action: 'getServerInfo',
-        skipAssets: true
-    },
-
-    'get /api/sdtdserver/players': {
-        controller: 'SdtdServer',
-        action: 'getPlayers',
-        skipAssets: true
-    },
-
-    'get /api/player/inventory': {
-        controller: 'Player',
-        action: 'getInventory',
-        skipAssets: true
-    },
-
-    'get /api/player/ban': {
-        controller: 'Player',
-        action: 'getBanStatus',
-        skipAssets: true
-    },
-
-    'get /api/player/location': {
-        controller: 'Player',
-        action: 'getLocation',
-        skipAssets: true
-    },
-
-    'get /api/player/kick': {
-        controller: 'Player',
-        action: 'kick',
-        skipAssets: true
-    },
+  'get /sdtdserver/:serverId/console': 'SdtdServerController.console',
+  'get /sdtdserver/:serverId/chat': 'SdtdServerController.chat',
 
 
-    //  ╦ ╦╔═╗╔╗ ╦ ╦╔═╗╔═╗╦╔═╔═╗
-    //  ║║║║╣ ╠╩╗╠═╣║ ║║ ║╠╩╗╚═╗
-    //  ╚╩╝╚═╝╚═╝╩ ╩╚═╝╚═╝╩ ╩╚═╝
+  //  ╔═╗╔═╗╦  ╔═╗╔╗╔╔╦╗╔═╗╔═╗╦╔╗╔╔╦╗╔═╗
+  //  ╠═╣╠═╝║  ║╣ ║║║ ║║╠═╝║ ║║║║║ ║ ╚═╗
+  //  ╩ ╩╩  ╩  ╚═╝╝╚╝═╩╝╩  ╚═╝╩╝╚╝ ╩ ╚═╝
 
-    'get /sdtdserver/:serverID/socket': {
-        controller: 'sdtdServerController',
-        action: 'subscribeToServerSocket'
-    }
+  'post /api/sdtdserver/addserver': 'SdtdServerController/add-server',
+  '/api/sdtdserver/:serverId/executeCommand': 'SdtdServerController.execute-command',
+  '/api/sdtdserver/:serverId/sendMessage': 'SdtdServerController.send-message',
+
+  'get /api/sdtdserver/onlinePlayers': {
+    controller: 'SdtdServerController',
+    action: 'onlinePlayers'
+  },
+
+  'get /api/user/ownedServers': {
+    controller: 'User',
+    action: 'ownedServers',
+    skipAssets: true
+  },
+
+  'get /api/sdtdserver/info': {
+    controller: 'SdtdServer',
+    action: 'getServerInfo',
+    skipAssets: true
+  },
+
+  'get /api/sdtdserver/players': {
+    controller: 'SdtdServer',
+    action: 'getPlayers',
+    skipAssets: true
+  },
+
+  'get /api/player/inventory': {
+    controller: 'Player',
+    action: 'getInventory',
+    skipAssets: true
+  },
+
+  'get /api/player/ban': {
+    controller: 'Player',
+    action: 'getBanStatus',
+    skipAssets: true
+  },
+
+  'get /api/player/location': {
+    controller: 'Player',
+    action: 'getLocation',
+    skipAssets: true
+  },
+
+  'get /api/player/kick': {
+    controller: 'Player',
+    action: 'kick',
+    skipAssets: true
+  },
 
 
-    //  ╔╦╗╦╔═╗╔═╗
-    //  ║║║║╚═╗║
-    //  ╩ ╩╩╚═╝╚═╝
+  //  ╦ ╦╔═╗╔╗ ╦ ╦╔═╗╔═╗╦╔═╔═╗
+  //  ║║║║╣ ╠╩╗╠═╣║ ║║ ║╠╩╗╚═╗
+  //  ╚╩╝╚═╝╚═╝╩ ╩╚═╝╚═╝╩ ╩╚═╝
+
+  'get /sdtdserver/:serverID/socket': {
+    controller: 'sdtdServerController',
+    action: 'subscribeToServerSocket'
+  }
+
+
+  //  ╔╦╗╦╔═╗╔═╗
+  //  ║║║║╚═╗║
+  //  ╩ ╩╩╚═╝╚═╝
 
 
 };

@@ -34,15 +34,15 @@ module.exports = {
     sails.log.debug(`HELPER - loadPlayerData - Loading player data for server ${inputs.serverId} -- steamId: ${inputs.steamId}`);
 
     try {
-      let server = await SdtdServer.findOne(inputs.serverId)
-      let playerList = await getPlayerList(server)
-      playerList = await loadPlayersInventory(playerList.players, server)
-      let newPlayerList = await playerList.map(await updatePlayerInfo)
-      let jsonToSend = await createJSON(newPlayerList)
-      exits.success(jsonToSend)
+      let server = await SdtdServer.findOne(inputs.serverId);
+      let playerList = await getPlayerList(server);
+      playerList = await loadPlayersInventory(playerList.players, server);
+      let newPlayerList = await playerList.map(await updatePlayerInfo);
+      let jsonToSend = await createJSON(newPlayerList);
+      exits.success(jsonToSend);
     } catch (error) {
-      sails.log.error(`HELPER - loadPlayerData - ${error}`)
-      exits.error(error)
+      sails.log.error(`HELPER - loadPlayerData - ${error}`);
+      exits.error(error);
     }
 
     async function loadPlayersInventory(playerList, server) {
@@ -57,20 +57,20 @@ module.exports = {
               steamID: player.steamid
             }).exec({
               error: function (err) {
-                throw err
+                throw err;
               },
               success: function (data) {
                 player.inventory = new Object();
                 player.inventory.bag = data.bag;
                 player.inventory.belt = data.belt;
-                player.inventory.equipment = data.equipment
-                resolve(player)
+                player.inventory.equipment = data.equipment;
+                resolve(player);
               }
-            })
-          })
-        })
-        resolve(listWithInventories)
-      })
+            });
+          });
+        });
+        resolve(listWithInventories);
+      });
     }
 
     async function updatePlayerInfo(newPlayer) {
@@ -87,7 +87,7 @@ module.exports = {
               entityId: newPlayer.entityid,
               name: newPlayer.name,
               ip: newPlayer.ip
-            })
+            });
             if (newPlayer.online) {
               playerToSend = await Player.update({
                 steamId: foundOrCreatedPlayer.steamId,
@@ -101,7 +101,7 @@ module.exports = {
                 playtime: newPlayer.totalplaytime,
                 inventory: newPlayer.inventory,
                 banned: newPlayer.banned
-              }).fetch()
+              }).fetch();
             } else {
               playerToSend = await Player.update({
                 steamId: foundOrCreatedPlayer.steamId,
@@ -114,19 +114,19 @@ module.exports = {
                 positionZ: newPlayer.position.z,
                 playtime: newPlayer.totalplaytime,
                 banned: newPlayer.banned
-              }).fetch()
+              }).fetch();
             }
 
             playerToSend = playerToSend[0];
-            playerToSend.online = newPlayer.online
+            playerToSend.online = newPlayer.online;
 
-            resolve(playerToSend)
-          })
+            resolve(playerToSend);
+          });
         } catch (error) {
-          throw error
+          throw error;
         }
 
-      })
+      });
     }
 
     async function getPlayerList(server) {
@@ -138,26 +138,26 @@ module.exports = {
           authToken: server.authToken
         }).exec({
           error: function (err) {
-            throw err
+            throw err;
           },
           success: function (playerList) {
             // If a steam ID is provided, we filter the list to only 1 player
             if (inputs.steamId) {
-              let playerToFind
+              let playerToFind;
               playerList.players.forEach(player => {
-                if (player.steamid == inputs.steamId) {
-                  playerToFind = player
+                if (player.steamid === inputs.steamId) {
+                  playerToFind = player;
                 }
-              })
+              });
               if (_.isUndefined(playerToFind)) {
-                return exits.playerNotFound()
+                return exits.playerNotFound();
               }
-              playerList.players = new Array(playerToFind)
+              playerList.players = new Array(playerToFind);
             }
-            resolve(playerList)
+            resolve(playerList);
           }
         });
-      })
+      });
     }
 
 
@@ -166,31 +166,31 @@ module.exports = {
         try {
           let toSend = {};
           Promise.all(playerList).then(resolvedPlayers => {
-            toSend.totalPlayers = playerList.length
+            toSend.totalPlayers = playerList.length;
             toSend.players = new Array();
             resolvedPlayers.forEach(function (player) {
-              let playerData = new Object()
-              playerData.id = player.id
-              playerData.online = player.online
-              playerData.steamId = player.steamId
-              playerData.entityId = player.entityId
-              playerData.location = new Object()
-              playerData.location.x = player.positionX
-              playerData.location.y = player.positionY
-              playerData.location.z = player.positionZ
-              playerData.inventory = player.inventory
-              playerData.totalPlaytime = player.playtime
-              playerData.banned = player.banned
-              playerData.server = player.server
-              playerData.name = player.name
-              toSend.players.push(playerData)
-            })
-            resolve(toSend)
-          })
+              let playerData = new Object();
+              playerData.id = player.id;
+              playerData.online = player.online;
+              playerData.steamId = player.steamId;
+              playerData.entityId = player.entityId;
+              playerData.location = new Object();
+              playerData.location.x = player.positionX;
+              playerData.location.y = player.positionY;
+              playerData.location.z = player.positionZ;
+              playerData.inventory = player.inventory;
+              playerData.totalPlaytime = player.playtime;
+              playerData.banned = player.banned;
+              playerData.server = player.server;
+              playerData.name = player.name;
+              toSend.players.push(playerData);
+            });
+            resolve(toSend);
+          });
         } catch (error) {
-          throw error
+          throw error;
         }
-      })
+      });
     }
   },
-}
+};

@@ -24,20 +24,20 @@ module.exports = {
    * @memberof User
    * @name getOwnedServers
    * @description gets servers this user is owner of
-   * @param {number} userId 
+   * @param {number} userId
    */
 
   fn: async function (inputs, exits) {
     sails.log.debug(`API - User:getOwnedServers - Getting servers for user ${inputs.userId}`);
 
     try {
-        let user = await User.findOne(inputs.userId).populate('servers')
-        console.log(user)
-        return exits.success(user.servers)
+      let user = await User.findOne(inputs.userId).populate('servers');
+      console.log(user);
+      return exits.success(user.servers);
 
     } catch (error) {
       sails.log.error(`API - SdtdServer:sendMessage - ${error}`);
-      return exits.error(error)
+      return exits.error(error);
     }
 
   }

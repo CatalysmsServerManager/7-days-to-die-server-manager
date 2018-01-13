@@ -50,7 +50,7 @@ module.exports = {
 
   fn: function (inputs, exits) {
 
-    sails.log.debug(`HELPER - add7DtdServer - adding a server with ip: ${inputs.ip} webPort: ${inputs.webPort} owner: ${inputs.owner}`)
+    sails.log.debug(`HELPER - add7DtdServer - adding a server with ip: ${inputs.ip} webPort: ${inputs.webPort} owner: ${inputs.owner}`);
 
     sails.helpers.createWebToken.with({
       ip: inputs.ip,
@@ -58,13 +58,13 @@ module.exports = {
       password: inputs.telnetPassword
     }).switch({
       error: function (err) {
-        sails.log.error(`HELPER - add7DtdServer - ${err}`)
-        return exits.error(new Error('Could not create webtokens via telnet!' + err))
+        sails.log.error(`HELPER - add7DtdServer - ${err}`);
+        return exits.error(new Error('Could not create webtokens via telnet!' + err));
       },
       success: async function (authInfo) {
-        let server = await updateOrCreateServer(authInfo)
-        sails.log.debug(`HELPER - add7DtdServer - success`)
-        return exits.success(server)
+        let server = await updateOrCreateServer(authInfo);
+        sails.log.debug(`HELPER - add7DtdServer - success`);
+        return exits.success(server);
       }
     });
 
@@ -85,12 +85,12 @@ module.exports = {
           authToken: authInfo.authToken,
           owner: inputs.owner,
           discordGuildId: inputs.discordGuildId ? inputs.discordGuildId : 0
-        })
-        sails.hooks.sdtdlogs.start(newServer.id)
-        return newServer
+        });
+        sails.hooks.sdtdlogs.start(newServer.id);
+        return newServer;
       } catch (error) {
-        sails.log.error(`HELPER - add7DtdServer - ${err}`)
-        exits.error(new Error('Error while creating/updating server in DB' + error))
+        sails.log.error(`HELPER - add7DtdServer - ${err}`);
+        exits.error(new Error('Error while creating/updating server in DB' + error));
       }
     }
   }

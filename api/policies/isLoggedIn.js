@@ -8,8 +8,8 @@
  */
 module.exports = function isLoggedIn(req, res, next) {
   if(!_.isUndefined(req.signedCookied.userProfile)) {
-    return next()
+    return next();
   } else {
-    return res.forbidden()
+    return res.forbidden();
   }
 };

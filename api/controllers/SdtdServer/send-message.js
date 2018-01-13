@@ -1,4 +1,4 @@
-const sevenDays = require('machinepack-7daystodiewebapi')
+const sevenDays = require('machinepack-7daystodiewebapi');
 
 module.exports = {
 
@@ -18,8 +18,8 @@ module.exports = {
       required: true
     },
     destinationPlayer: {
-        description: 'Player to send a message to (steamID)',
-        type:'string'
+      description: 'Player to send a message to (steamID)',
+      type:'string'
     }
   },
 
@@ -39,7 +39,7 @@ module.exports = {
    * @memberof SdtdServer
    * @name sendMessage
    * @description sends a message on a 7dtd server
-   * @param {number} serverID ID of the server 
+   * @param {number} serverID ID of the server
    * @param {string} message Message to be executed
    * @param {string} destinationPlayer SteamID of the player to send a message to
    */
@@ -47,7 +47,7 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     if (_.isUndefined(this.req.signedCookies.userProfile)) {
-      throw 'notLoggedIn'
+      throw 'notLoggedIn';
     }
 
     sails.log.debug(`API - SdtdServer:send message - sending a message on server ${inputs.serverId} to player: ${inputs.destinationPlayer}`);
@@ -63,16 +63,16 @@ module.exports = {
         playerID: inputs.destinationPlayer ? inputs.destinationPlayer : undefined
       }).exec({
         success: (response) => {
-          return exits.success(response)
+          return exits.success(response);
         },
         error: (error) => {
-          return exits.error(error)
+          return exits.error(error);
         }
-      })
+      });
 
     } catch (error) {
       sails.log.error(`API - SdtdServer:sendMessage - ${error}`);
-      return exits.error(error)
+      return exits.error(error);
     }
 
   }

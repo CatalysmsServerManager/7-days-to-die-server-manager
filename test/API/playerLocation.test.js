@@ -8,7 +8,7 @@ describe('GET /api/player/location @api', function () {
         steamId: sails.testUser.steamId,
         serverId: sails.testServer.id
       })
-      .expect(200, done)
+      .expect(200, done);
   });
   it('should return JSON', function (done) {
     supertest(sails.hooks.http.app)
@@ -17,8 +17,8 @@ describe('GET /api/player/location @api', function () {
         steamId: sails.testUser.steamId,
         serverId: sails.testServer.id
       })
-      .expect('Content-Type', /json/, done)
-  })
+      .expect('Content-Type', /json/, done);
+  });
   it('should return info about a players location', function (done) {
     supertest(sails.hooks.http.app)
       .get('/api/player/location')
@@ -27,20 +27,20 @@ describe('GET /api/player/location @api', function () {
         serverId: sails.testServer.id
       }).then(response => {
         if (_.isUndefined(response.body.location)) {
-          return done('Did not find location information')
+          return done('Did not find location information');
         }
         if (_.isUndefined(response.body.location.x)) {
-          return done('Did not x coordinate information')
+          return done('Did not x coordinate information');
         }
         if (_.isUndefined(response.body.location.y)) {
-          return done('Did not y coordinate information')
+          return done('Did not y coordinate information');
         }
         if (_.isUndefined(response.body.location.z)) {
-          return done('Did not z coordinate information')
+          return done('Did not z coordinate information');
         }
-        done()
-      })
-  })
+        done();
+      });
+  });
   it('should error when no steamId given', function (done) {
     supertest(sails.hooks.http.app)
       .get('/api/player/location')
@@ -48,7 +48,7 @@ describe('GET /api/player/location @api', function () {
         serverId: sails.testServer.id
       })
       .expect(400, done);
-  })
+  });
   it('should error when no serverId given', function (done) {
     supertest(sails.hooks.http.app)
       .get('/api/player/location')
@@ -56,5 +56,5 @@ describe('GET /api/player/location @api', function () {
         steamId: sails.testUser.steamId,
       })
       .expect(400, done);
-  })
+  });
 });

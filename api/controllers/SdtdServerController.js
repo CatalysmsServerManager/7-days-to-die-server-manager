@@ -41,9 +41,9 @@ module.exports = {
    */
   subscribeToServerSocket: function (req, res) {
     const serverID = req.param('serverID');
-    sails.log.debug(`Connecting user with id ${req.session.userId} to server socket with id ${serverID}`)
+    sails.log.debug(`Connecting user with id ${req.session.userId} to server socket with id ${serverID}`);
     if (_.isUndefined(serverID)) {
-      return res.badRequest("No server ID given.");
+      return res.badRequest('No server ID given.');
     }
     if (!req.isSocket) {
       return res.badRequest();
@@ -52,7 +52,7 @@ module.exports = {
       id: serverID
     }).exec(function (error, server) {
       if (error) {
-        return res.badRequest("Unknown server");
+        return res.badRequest('Unknown server');
       } else {
         sails.log.debug(`Successfully connected`);
         sails.sockets.join(req, serverID);
@@ -72,7 +72,7 @@ module.exports = {
     const serverId = req.param('serverID');
     sails.log.debug(`Updating server info for ${serverId}`);
     if (_.isUndefined(serverId)) {
-      return res.badRequest("No server ID given.");
+      return res.badRequest('No server ID given.');
     }
     sails.helpers.loadServerInfo({
       serverId: serverId
@@ -89,17 +89,17 @@ module.exports = {
     });
   },
 
-  // _____  ______  _____ _______            _____ _____ 
+  // _____  ______  _____ _______            _____ _____
   // |  __ \|  ____|/ ____|__   __|     /\   |  __ \_   _|
-  // | |__) | |__  | (___    | |       /  \  | |__) || |  
-  // |  _  /|  __|  \___ \   | |      / /\ \ |  ___/ | |  
-  // | | \ \| |____ ____) |  | |     / ____ \| |    _| |_ 
+  // | |__) | |__  | (___    | |       /  \  | |__) || |
+  // |  _  /|  __|  \___ \   | |      / /\ \ |  ___/ | |
+  // | | \ \| |____ ____) |  | |     / ____ \| |    _| |_
   // |_|  \_\______|_____/   |_|    /_/    \_\_|   |_____|
 
   /**
    * @memberof SdtdServer
    * @description GET online players
-   * @param {number} serverID ID of the server 
+   * @param {number} serverID ID of the server
    */
 
   onlinePlayers: function (req, res) {
@@ -108,7 +108,7 @@ module.exports = {
     sails.log.debug(`Showing online players for ${serverID}`);
 
     if (_.isUndefined(serverID)) {
-      return res.badRequest("No server ID given");
+      return res.badRequest('No server ID given');
     } else {
       sails.models.sdtdserver.findOne({
         id: serverID
@@ -133,7 +133,7 @@ module.exports = {
             return res.badRequest(error);
           },
           success: function (data) {
-            return res.status(200).json(data)
+            return res.status(200).json(data);
           }
         });
       });
@@ -143,13 +143,13 @@ module.exports = {
   /**
    * @memberof SdtdServer
    * @description Get information about all players that have logged into the server
-   * @param {number} serverID ID of the server 
+   * @param {number} serverID ID of the server
    */
 
   getPlayers: function (req, res) {
     const serverId = req.query.serverId;
     if (_.isUndefined(serverId)) {
-      return res.badRequest("No server ID given.");
+      return res.badRequest('No server ID given.');
     }
     sails.log.debug(`Showing all players for ${serverId}`);
 
@@ -175,7 +175,7 @@ module.exports = {
           return res.badRequest(error);
         },
         success: function (data) {
-          return res.status(200).json(data.players)
+          return res.status(200).json(data.players);
         }
       });
     });
@@ -185,13 +185,13 @@ module.exports = {
   /**
    * @memberof SdtdServer
    * @description Get basic information and game settings of a 7dtd server
-   * @param {number} serverID ID of the server 
+   * @param {number} serverID ID of the server
    */
 
   getServerInfo: function (req, res) {
     const serverId = req.query.serverId;
     if (_.isUndefined(serverId)) {
-      return res.badRequest("No server ID given.");
+      return res.badRequest('No server ID given.');
     }
     sails.log.debug(`Showing server info for ${serverId}`);
     SdtdServer.findOne({

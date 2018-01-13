@@ -31,24 +31,24 @@ module.exports = {
    * @memberof SdtdServer
    * @name console
    * @description Server the console view
-   * @param {number} serverID ID of the server 
+   * @param {number} serverID ID of the server
    */
 
   fn: async function (inputs, exits) {
 
     if (_.isUndefined(this.req.signedCookies.userProfile)) {
-      throw 'notLoggedIn'
+      throw 'notLoggedIn';
     }
 
-    sails.log.debug(`VIEW - SdtdServer:console - Showing console for ${inputs.serverId}`)
+    sails.log.debug(`VIEW - SdtdServer:console - Showing console for ${inputs.serverId}`);
 
     try {
       let server = await SdtdServer.findOne(inputs.serverId);
       return exits.success({
         server: server
-      })
+      });
     } catch (error) {
-      sails.log.error(`VIEW - SdtdServer:console - ${error}`)
+      sails.log.error(`VIEW - SdtdServer:console - ${error}`);
       throw 'notFound';
     }
 

@@ -42,12 +42,12 @@ before(function (done) {
     // (for example, you might want to create some records in the database)
 
     try {
-      let client = sails.hooks.discordbot.getClient()
+      let client = sails.hooks.discordbot.getClient();
 
       // Password = "something"
       var testUser = await User.create({
         username: 'CSMMTesterFixture',
-        encryptedPassword: "$2a$10$b8kbwLOvUvJH3Y.37ZAwdu77K3zaFfjXAQnaym3BqpSuzDApJcbcG",
+        encryptedPassword: '$2a$10$b8kbwLOvUvJH3Y.37ZAwdu77K3zaFfjXAQnaym3BqpSuzDApJcbcG',
         steamId: process.env.CSMM_TEST_STEAMID
       }).fetch();
 
@@ -58,18 +58,18 @@ before(function (done) {
         webPort: process.env.CSMM_TEST_WEBPORT,
         owner: testUser.id,
         discordGuildId: client.channels.get(process.env.DISCORDTESTCHANNEL).guild.id
-      })
+      });
 
-      sails.testUser = testUser
+      sails.testUser = testUser;
       sails.testServer = testServer;
-      sails.testChannel = client.channels.get(process.env.DISCORDTESTCHANNEL)
+      sails.testChannel = client.channels.get(process.env.DISCORDTESTCHANNEL);
 
       sails.log.warn('Finished bootstrapping test data');
       return done();
 
     } catch (error) {
       sails.log.error(error);
-      done(error)
+      return done(error);
     }
 
   });

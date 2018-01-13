@@ -36,22 +36,22 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     if (_.isUndefined(this.req.signedCookies.userProfile)) {
-      throw 'notLoggedIn'
+      throw 'notLoggedIn';
     }
 
-    sails.log.debug(`VIEW - SdtdServer:dashboard - Showing dashboard for ${inputs.serverId}`)
+    sails.log.debug(`VIEW - SdtdServer:dashboard - Showing dashboard for ${inputs.serverId}`);
 
     try {
-      let sdtdServer = await sails.helpers.loadSdtdserverInfo(inputs.serverId)
+      let sdtdServer = await sails.helpers.loadSdtdserverInfo(inputs.serverId);
       let players = await sails.helpers.loadPlayerData.with({
         serverId: inputs.serverId
-      })
+      });
       return exits.success({
         server: sdtdServer,
         players: players
       });
     } catch (error) {
-      sails.log.error(`VIEW - SdtdServer:dashboard - ${error}`)
+      sails.log.error(`VIEW - SdtdServer:dashboard - ${error}`);
       throw 'notFound';
     }
 

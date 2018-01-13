@@ -8,8 +8,8 @@ describe('GET /api/player/inventory @api', function () {
         steamId: sails.testUser.steamId,
         serverId: sails.testServer.id
       })
-      .expect(200, done)
-  })
+      .expect(200, done);
+  });
   it('should return JSON', function (done) {
     supertest(sails.hooks.http.app)
       .get('/api/player/inventory')

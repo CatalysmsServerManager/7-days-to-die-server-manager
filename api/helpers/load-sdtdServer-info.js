@@ -30,7 +30,7 @@ module.exports = {
     }
   },
 
-    /**
+  /**
      * @description Loads server information
      * @name loadSdtdServerInfo
      * @param {number} serverId
@@ -42,14 +42,14 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     try {
-      sails.log.debug(`HELPER - loadSdtdserverInfo - Loading server info for server ${inputs.serverId}`)
+      sails.log.debug(`HELPER - loadSdtdserverInfo - Loading server info for server ${inputs.serverId}`);
       // Load serverinfo from DB first
       let server = await SdtdServer.findOne(inputs.serverId);
-      server.stats = await loadStats(server)
-      server.serverInfo = await loadServerInfo(server)
-      exits.success(server)
+      server.stats = await loadStats(server);
+      server.serverInfo = await loadServerInfo(server);
+      exits.success(server);
     } catch (error) {
-      return exits.error(error)
+      return exits.error(error);
     }
 
 
@@ -66,10 +66,10 @@ module.exports = {
             reject(error);
           },
           success: data => {
-            resolve(data)
+            resolve(data);
           }
-        })
-      })
+        });
+      });
     }
 
     function loadServerInfo(server) {
@@ -85,15 +85,15 @@ module.exports = {
             reject(error);
           },
           success: data => {
-              for (const dataPoint in data) {
-                  if (data.hasOwnProperty(dataPoint)) {
-                      data[dataPoint] = data[dataPoint].value
-                  }
+            for (const dataPoint in data) {
+              if (data.hasOwnProperty(dataPoint)) {
+                data[dataPoint] = data[dataPoint].value;
               }
-            resolve(data)
+            }
+            resolve(data);
           }
-        })
-      })
+        });
+      });
     }
 
 

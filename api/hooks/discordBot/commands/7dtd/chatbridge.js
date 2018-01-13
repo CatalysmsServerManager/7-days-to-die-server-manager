@@ -1,5 +1,5 @@
 const Commando = require('discord.js-commando');
-const ChatBridgeChannel = require('../../util/chatBridgeChannel.js')
+const ChatBridgeChannel = require('../../util/chatBridgeChannel.js');
 
 /**
  * @memberof module:DiscordCommands
@@ -25,8 +25,8 @@ class ChatBridge extends Commando.Command {
         type: 'string'
       }],
       description: 'Command for managing chat bridges',
-      details: "For more information see the website",
-      userPermissions: ["MANAGE_GUILD"]
+      details: 'For more information see the website',
+      userPermissions: ['MANAGE_GUILD']
     });
   }
 
@@ -36,13 +36,13 @@ class ChatBridge extends Commando.Command {
       start: startFunc,
       stop: stopFunc,
       config: configFunc
-    }
+    };
 
     if (commandOptions.hasOwnProperty(args.option)) {
-      commandOptions[args.option]()
+      commandOptions[args.option]();
     } else {
-      let embed = new msg.client.errorEmbed("You did not specify a correct command option!\nSee the website for information on this command");
-      msg.channel.send(embed)
+      let embed = new msg.client.errorEmbed('You did not specify a correct command option!\nSee the website for information on this command');
+      msg.channel.send(embed);
     }
 
     async function startFunc() {
@@ -50,18 +50,18 @@ class ChatBridge extends Commando.Command {
       try {
         let sdtdServer = await SdtdServer.findOne({
           discordGuildId: msg.guild.id
-        })
+        });
         await SdtdServer.update({
           ip: sdtdServer.ip,
           discordGuildId: msg.guild.id
         }, {
           chatChannelId: msg.channel.id
-        })
-        msg.guild.chatBridge = new ChatBridgeChannel(msg.channel, sdtdServer)
-        msg.guild.chatBridge.start()
+        });
+        msg.guild.chatBridge = new ChatBridgeChannel(msg.channel, sdtdServer);
+        msg.guild.chatBridge.start();
       } catch (error) {
-        sails.log.error(error)
-        msg.channel.send(new msg.client.errorEmbed(error))
+        sails.log.error(error);
+        msg.channel.send(new msg.client.errorEmbed(error));
       }
 
 
@@ -71,19 +71,19 @@ class ChatBridge extends Commando.Command {
       try {
         let sdtdServer = await SdtdServer.findOne({
           discordGuildId: msg.guild.id
-        })
+        });
         await SdtdServer.update({
           ip: sdtdServer.ip,
           discordGuildId: msg.guild.id
         }, {
           chatChannelId: 0
-        })
+        });
 
-        msg.guild.chatBridge.stop() 
-        msg.channel.send(new msg.client.customEmbed().setDescription('Stopped chat bridge'))
+        msg.guild.chatBridge.stop();
+        msg.channel.send(new msg.client.customEmbed().setDescription('Stopped chat bridge'));
       } catch (error) {
-        sails.log.error(error)
-        msg.channel.send(new msg.client.errorEmbed(error))
+        sails.log.error(error);
+        msg.channel.send(new msg.client.errorEmbed(error));
       }
 
     }

@@ -8,21 +8,21 @@ const Discord = require('discord.js');
  */
 
 class CustomEmbed extends Discord.MessageEmbed {
-    constructor(data) {
-        super()
-        this.setTimestamp();
-        this.setTitle(sails.config.custom.botEmbedTitle);
-        this.setURL(sails.config.custom.botEmbedLink);
-    }
+  constructor(data) {
+    super();
+    this.setTimestamp();
+    this.setTitle(sails.config.custom.botEmbedTitle);
+    this.setURL(sails.config.custom.botEmbedLink);
+  }
 }
 
 class ErrorEmbed extends CustomEmbed {
-    constructor(errorMsg) {
-        super();
-        this.setDescription(`An error occured! See below for more info \n ${errorMsg}`)
-        this.setColor('RED')
-    }
+  constructor(errorMsg) {
+    super();
+    this.setDescription(`An error occured! See below for more info \n ${errorMsg}`);
+    this.setColor('RED');
+  }
 }
 
-module.exports.CustomEmbed = CustomEmbed
-module.exports.ErrorEmbed = ErrorEmbed
+module.exports.CustomEmbed = CustomEmbed;
+module.exports.ErrorEmbed = ErrorEmbed;

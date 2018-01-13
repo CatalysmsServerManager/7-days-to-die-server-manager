@@ -1,4 +1,4 @@
-const sevenDays = require('machinepack-7daystodiewebapi')
+const sevenDays = require('machinepack-7daystodiewebapi');
 
 module.exports = {
 
@@ -35,14 +35,14 @@ module.exports = {
    * @memberof SdtdServer
    * @name executeCommand
    * @description Executes a command on a 7dtd server
-   * @param {number} serverID ID of the server 
+   * @param {number} serverID ID of the server
    * @param {string} command Command to be executed
    */
 
   fn: async function (inputs, exits) {
 
     if (_.isUndefined(this.req.signedCookies.userProfile)) {
-      throw 'notLoggedIn'
+      throw 'notLoggedIn';
     }
 
     sails.log.debug(`API - SdtdServer:executeCommand - Executing a command on server ${inputs.serverId}`);
@@ -62,16 +62,16 @@ module.exports = {
             date: new Date(),
             type: 'commandResponse'
           };
-          return exits.success(logLine)
+          return exits.success(logLine);
         },
         error: (error) => {
-          return exits.error(error)
+          return exits.error(error);
         }
-      })
+      });
 
     } catch (error) {
       sails.log.error(`API - SdtdServer:executeCommand - ${error}`);
-      return exits.error(error)
+      return exits.error(error);
     }
 
   }

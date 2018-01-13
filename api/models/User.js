@@ -7,101 +7,101 @@
 
 module.exports = {
 
-    toJSON: function() {
-        var obj = this.toObject();
-        delete obj.encryptedPassword;
-        return obj;
-    },
+  toJSON: function() {
+    var obj = this.toObject();
+    delete obj.encryptedPassword;
+    return obj;
+  },
 
-    attributes: {
+  attributes: {
 
-        //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
-        //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
-        //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
+    //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
+    //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
+    //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
 
-        /**
+    /**
          * @memberof User
          * @var {string} steamId
          */
 
-        steamId: {
-            type: 'string'
-        },
+    steamId: {
+      type: 'string'
+    },
 
-        /**
+    /**
          * memberof User
          * @var {string} discordId
          */
 
-        discordId: {
-            type: 'string'
-        },
+    discordId: {
+      type: 'string'
+    },
 
-        /**
+    /**
          * @memberof User
          * @var {string} username
          */
 
-        username: {
-            type: 'string',
-            required: true,
-            unique: true
-        },
+    username: {
+      type: 'string',
+      required: true,
+      unique: true
+    },
 
-        /**
+    /**
          * @var {boolean} admin
          * @memberof User
          * @description If a user can perform admin actions on the system
          * @default false
          */
 
-        admin: {
-            type: 'boolean',
-            defaultsTo: false
-        },
+    admin: {
+      type: 'boolean',
+      defaultsTo: false
+    },
 
-        /**
+    /**
          * @var {boolean} banned
          * @memberof User
          * @default false
          */
 
-        banned: {
-            type: 'boolean',
-            defaultsTo: false
-        },
+    banned: {
+      type: 'boolean',
+      defaultsTo: false
+    },
 
-        //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
-        //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
-        //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
+    //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
+    //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
+    //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
 
 
-        //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
-        //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
-        //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
+    //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
+    //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
+    //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
 
-        /**
+    /**
          * @var players
          * @description Ingame Players corresponding to a user
          * @memberof User
          */
 
-        players: {
-            collection: 'player',
-            via: 'user'
-        },
+    players: {
+      collection: 'player',
+      via: 'user'
+    },
 
-        /**
+    /**
          * @var servers
          * @description Servers this User owns
          * @memberof User
          */
 
-        servers: {
-            collection: 'sdtdServer',
-            via: 'owner'
-        },
-
+    servers: {
+      collection: 'sdtdServer',
+      via: 'owner'
     },
+
+  },
 
 };

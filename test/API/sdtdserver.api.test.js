@@ -39,8 +39,8 @@ describe('GET /api/sdtdserver/players @api', function () {
         done();
       })
       .catch(err => {
-        done(err)
-      })
+        done(err);
+      });
   });
   it('Should error when no serverID given', function (done) {
     supertest(sails.hooks.http.app)
@@ -68,28 +68,28 @@ describe('GET /api/sdtdserver/info @api', function () {
 
   it('Should not have any sensitive information', function(done) {
     supertest(sails.hooks.http.app)
-    .get('/api/sdtdserver/info')
-    .query({
-      serverId: sails.testServer.id
-    })
-    .expect(200)
-    .then(response => {
+      .get('/api/sdtdserver/info')
+      .query({
+        serverId: sails.testServer.id
+      })
+      .expect(200)
+      .then(response => {
         if (!_.isUndefined(response.body.telnetPort)) {
-            return done(new Error("Response contains the telnet port!"))
+          return done(new Error('Response contains the telnet port!'));
         }
         if (!_.isUndefined(response.body.telnetPassword)) {
-            return done(new Error("Response contains the telnet password!"))
+          return done(new Error('Response contains the telnet password!'));
         }
         if (!_.isUndefined(response.body.authName)) {
-            return done(new Error("Response contains the authName!"))
+          return done(new Error('Response contains the authName!'));
         }
         if (!_.isUndefined(response.body.authToken)) {
-            return done(new Error("Response contains the authToken!"))
+          return done(new Error('Response contains the authToken!'));
         }
-        return done()
-    })
-    .catch(err => {
-        done(err)
-    }) 
-  })
-})
+        return done();
+      })
+      .catch(err => {
+        done(err);
+      });
+  });
+});

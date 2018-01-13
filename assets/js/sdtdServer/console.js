@@ -1,13 +1,13 @@
 class sdtdConsole {
   constructor(serverId) {
-    this.serverId = serverId
+    this.serverId = serverId;
   }
 
   start() {
-    console.log("Starting console for server with id " + this.serverId);
+    console.log('Starting console for server with id ' + this.serverId);
 
     io.socket.get('/sdtdserver/' + this.serverId + '/subscribetosocket', function (response) {
-      console.log("Subscribed to socket " + response);
+      console.log('Subscribed to socket ' + response);
     });
 
     io.socket.on('logLine', function addNewLogLine(logLine) {
@@ -17,7 +17,7 @@ class sdtdConsole {
   }
 
   stop() {
-    io.socket.removeListener('logLine', addNewLogLine)
+    io.socket.removeListener('logLine', addNewLogLine);
   }
 
   executeCommand(command) {
@@ -28,12 +28,12 @@ class sdtdConsole {
           command: command
         },
         success: (data, status, xhr) => {
-          resolve(data)
+          resolve(data);
         },
         error: (xhr, status, error) => {
-          reject(error)
+          reject(error);
         }
-      })
-    })
+      });
+    });
   }
 }

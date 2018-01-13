@@ -56,27 +56,27 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    sails.log.info(`API - SdtdServer:addServer - Adding a new server ${inputs.serverIp} ${inputs.webPort}`)
+    sails.log.info(`API - SdtdServer:addServer - Adding a new server ${inputs.serverIp} ${inputs.webPort}`);
 
     if (_.isUndefined(this.req.signedCookies.userProfile)) {
-      throw 'notLoggedIn'
+      throw 'notLoggedIn';
     }
 
     try {
-      const userProfile = this.req.signedCookies.userProfile
+      const userProfile = this.req.signedCookies.userProfile;
       let sdtdServer = await sails.helpers.add7DtdServer.with({
         ip: inputs.serverIp,
         telnetPort: inputs.telnetPort,
         telnetPassword: inputs.telnetPassword,
         webPort: inputs.webPort,
         owner: userProfile.id
-      })
-      return exits.success(sdtdServer)
+      });
+      return exits.success(sdtdServer);
     } catch (error) {
-      sails.log.error(`API - addServer - ${error}`)
+      sails.log.error(`API - addServer - ${error}`);
       throw {
         error: error
-      }
+      };
     }
 
 

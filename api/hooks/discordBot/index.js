@@ -1,5 +1,5 @@
 const Commando = require('discord.js-commando');
-const ChatBridgeChannel = require('./util/chatBridgeChannel.js')
+const ChatBridgeChannel = require('./util/chatBridgeChannel.js');
 const path = require('path');
 
 /**
@@ -26,18 +26,18 @@ module.exports = function discordBot(sails) {
     initialize: function (cb) {
       sails.on('hook:orm:loaded', function () {
         sails.on('hook:sdtdlogs:loaded', function () {
-          sails.log.debug('HOOK: Initializing discord bot')
+          sails.log.debug('HOOK: Initializing discord bot');
 
           client = new Commando.Client({
             owner: sails.config.custom.botOwners
           });
 
-          sails.discordBotClient = client
+          sails.discordBotClient = client;
 
           // Register custom embed messages
 
-          client.customEmbed = require('./util/createEmbed').CustomEmbed
-          client.errorEmbed = require('./util/createEmbed').ErrorEmbed
+          client.customEmbed = require('./util/createEmbed').CustomEmbed;
+          client.errorEmbed = require('./util/createEmbed').ErrorEmbed;
 
           // Register some stuff in the registry... yeah..
           client.registry
@@ -49,26 +49,26 @@ module.exports = function discordBot(sails) {
 
           // Listeners
 
-          client.on("commandError", (command, error) => {
-            sails.log.error(`Command error! ${command.memberName} trace: ${error.stack}`)
-          })
+          client.on('commandError', (command, error) => {
+            sails.log.error(`Command error! ${command.memberName} trace: ${error.stack}`);
+          });
 
           client.on('commandRun', (command, promise, message) => {
-            sails.log.info(`Command ${command.name} ran by ${message.author.username}`)
-          })
+            sails.log.info(`Command ${command.name} ran by ${message.author.username}`);
+          });
 
           // Login
 
           client.login(sails.config.custom.botToken).then(() => {
-              sails.log.debug("Bot successfully logged in!")
-              initChatBridges(client)
-              return cb();
-            })
+            sails.log.debug('Bot successfully logged in!');
+            initChatBridges(client);
+            return cb();
+          })
             .catch((err) => {
-              sails.log.error(err)
-            })
+              sails.log.error(err);
+            });
         });
-      })
+      });
     },
 
     /**
@@ -79,7 +79,7 @@ module.exports = function discordBot(sails) {
      */
 
     getClient: function() {
-      return sails.discordBotClient
+      return sails.discordBotClient;
     }
   };
 
@@ -89,17 +89,17 @@ module.exports = function discordBot(sails) {
       chatChannelId: {
         '!=': [0]
       }
-    })
+    });
 
     // loop over enabled servers and create chatBridge class
     for (let index = 0; index < serversWithChatbridges.length; index++) {
       const element = serversWithChatbridges[index];
-      let discordguild = client.guilds.get(element.discordGuildId)
-      let textChannel = client.channels.get(element.chatChannelId)
+      let discordguild = client.guilds.get(element.discordGuildId);
+      let textChannel = client.channels.get(element.chatChannelId);
       if (!_.isUndefined(textChannel) && !_.isUndefined(discordguild)) {
-        discordguild.chatBridge = new ChatBridgeChannel(textChannel, element)
-        discordguild.chatBridge.start()
+        discordguild.chatBridge = new ChatBridgeChannel(textChannel, element);
+        discordguild.chatBridge.start();
       }
     }
   }
-}
+};

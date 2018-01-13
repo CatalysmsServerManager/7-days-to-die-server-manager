@@ -13,7 +13,7 @@ class Day7 extends Commando.Command {
       group: '7dtd',
       memberName: 'day7',
       description: 'Shows basic information about a server',
-      details: "For more information see the website"
+      details: 'For more information see the website'
     });
   }
 
@@ -22,21 +22,21 @@ class Day7 extends Commando.Command {
     try {
       let sdtdServer = await SdtdServer.find({
         discordGuildId: msg.guild.id
-      }).limit(1)
+      }).limit(1);
       return sails.helpers.loadSdtdserverInfo(sdtdServer[0].id).exec((err, serverInfo) => {
         if (err) {
-          throw err
+          throw err;
         }
         let resultEmbed = new msg.client.customEmbed();
         resultEmbed
-        .setColor('GREEN')
-        .addField('Online Players', serverInfo.stats.players, true)
-        .addField('Ping', serverInfo.serverInfo.Ping, true)
-        .addField('Hostiles / Animals', `${serverInfo.stats.hostiles} / ${serverInfo.stats.animals}`)
-        .setFooter(serverInfo.serverInfo.GameHost)
+          .setColor('GREEN')
+          .addField('Online Players', serverInfo.stats.players, true)
+          .addField('Ping', serverInfo.serverInfo.Ping, true)
+          .addField('Hostiles / Animals', `${serverInfo.stats.hostiles} / ${serverInfo.stats.animals}`)
+          .setFooter(serverInfo.serverInfo.GameHost);
 
-        return msg.channel.send(resultEmbed)
-      })
+        return msg.channel.send(resultEmbed);
+      });
     } catch (error) {
       sails.log.error(error);
     }

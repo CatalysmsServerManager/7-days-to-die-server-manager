@@ -18,7 +18,7 @@ module.exports.views = {
 
 
 
-    /***************************************************************************
+  /***************************************************************************
      *                                                                          *
      * Extension to use for your views. When calling `res.view()` in an action, *
      * you can leave this extension off. For example, calling                   *
@@ -27,12 +27,12 @@ module.exports.views = {
      *                                                                          *
      ***************************************************************************/
 
-    // extension: 'jsx',
-    // getRenderFn: function() {
-    //     return require('express-react-views').createEngine();
-    // },
+  // extension: 'jsx',
+  // getRenderFn: function() {
+  //     return require('express-react-views').createEngine();
+  // },
 
-    /***************************************************************************
+  /***************************************************************************
      *                                                                          *
      * The path (relative to the views directory, and without extension) to the *
      * default layout file to use, or `false` to disable layouts entirely.      *
@@ -41,28 +41,28 @@ module.exports.views = {
      *                                                                          *
      ***************************************************************************/
 
-    layout: 'layout',
+  layout: 'layout',
 
-    locals: {
-        getUserServers: function(req) {
-            return req.session.servers;
-        },
-        loggedInUserID: function(req) {
-            return req.signedCookies.userProfile.id;
-        },
-        isLoggedIn: function(req) {
-            if (_.isUndefined(req.signedCookies.userProfile)) {
-                return false;
-            } else {
-                return true;
-            }
-        },
-        currentServer: function(req) {
-            if (_.isUndefined(req.param("serverID"))) {
-                return false;
-            } else {
-                return req.param('serverID');
-            }
-        }
+  locals: {
+    getUserServers: function(req) {
+      return req.session.servers;
     },
+    loggedInUserID: function(req) {
+      return req.signedCookies.userProfile.id;
+    },
+    isLoggedIn: function(req) {
+      if (_.isUndefined(req.signedCookies.userProfile)) {
+        return false;
+      } else {
+        return true;
+      }
+    },
+    currentServer: function(req) {
+      if (_.isUndefined(req.param('serverID'))) {
+        return false;
+      } else {
+        return req.param('serverID');
+      }
+    }
+  },
 };

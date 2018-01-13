@@ -23,12 +23,12 @@ module.exports = function sdtdLogs(sails) {
      */
     initialize: function (cb) {
       sails.on('hook:orm:loaded', function () {
-        sails.log.debug('HOOK: Initializing sdtdlogs')
+        sails.log.debug('HOOK: Initializing sdtdlogs');
         sails.models.sdtdserver.find({
           loggingEnabled: true
         }).exec(function (err, enabledServers) {
           if (err) {
-            sails.log.error(new Error("Error getting logging enabled servers from DB"));
+            sails.log.error(new Error('Error getting logging enabled servers from DB'));
             throw err;
           }
 
@@ -52,15 +52,15 @@ module.exports = function sdtdLogs(sails) {
 
       if (!loggingInfoMap.has(parseInt(serverID))) {
         return sails.models.sdtdserver.update({
-            id: serverID
-          }, {
-            loggingEnabled: true
-          })
+          id: serverID
+        }, {
+          loggingEnabled: true
+        })
           .exec(function () {
             return createLogObject(serverID);
           });
       } else {
-        let error = new Error("Tried to start logging for a server that already had it enabled");
+        let error = new Error('Tried to start logging for a server that already had it enabled');
         sails.log.error(error);
       }
     },
@@ -76,14 +76,14 @@ module.exports = function sdtdLogs(sails) {
     stop: function (serverID) {
       if (loggingInfoMap.has(serverID)) {
         return sails.models.sdtdserver.update({
-            id: serverID
-          }, {
-            loggingEnabled: false
-          })
+          id: serverID
+        }, {
+          loggingEnabled: false
+        })
           .exec(function () {
             let loggingObj = loggingInfoMap.get(serverID);
             loggingObj.stop();
-            loggingInfoMap.delete(serverID)
+            loggingInfoMap.delete(serverID);
           });
       }
     },
@@ -91,13 +91,13 @@ module.exports = function sdtdLogs(sails) {
     /**
      * @name getLoggingObject
      * @memberof module:7dtdLoggingHook
-     * @description Gets the logging object for a server 
+     * @description Gets the logging object for a server
      * @param {number} serverId - Id of the server
      * @method
      */
 
     getLoggingObject: function (serverId) {
-        return loggingInfoMap.get(serverId)
+      return loggingInfoMap.get(serverId);
     }
   };
 
@@ -142,7 +142,7 @@ module.exports = function sdtdLogs(sails) {
 
           eventEmitter.on('playerConnected', function (connectedMsg) {
             sails.sockets.broadcast(server.id, 'playerConnected', connectedMsg);
-            sails.helpers.loadPlayerData(server.id, connectedMsg.steamID)
+            sails.helpers.loadPlayerData(server.id, connectedMsg.steamID);
           });
 
           eventEmitter.on('playerDisconnected', function (disconectedMsg) {
@@ -157,4 +157,4 @@ module.exports = function sdtdLogs(sails) {
     });
 
   }
-}
+};

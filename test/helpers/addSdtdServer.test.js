@@ -11,9 +11,9 @@ xdescribe('HELPER add-7dtd-server @service', function () {
         done(err);
       },
       success: function (data) {
-        done()
+        done();
       }
-    })
+    });
   });
 });
 
