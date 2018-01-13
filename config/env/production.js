@@ -132,7 +132,7 @@ module.exports = {
          ***************************************************************************/
     cors: {
       allowOrigins: [
-        process.env.CSMM_HOSTNAME,
+        "https://csmm.herokuapp.com",
       ]
     },
 
@@ -232,7 +232,7 @@ module.exports = {
          *                                                                          *
          ***************************************************************************/
     onlyAllowOrigins: [
-      process.env.CSMM_HOSTNAME,
+      "https://csmm.herokuapp.com",
     ],
 
 
