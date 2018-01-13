@@ -271,9 +271,9 @@ module.exports = {
      * (https://sailsjs.com/config/log)                                        *
      *                                                                         *
      ***************************************************************************/
-  log: {
-    level: 'debug'
-  },
+  // log: {
+  //   level: 'debug'
+  // },
 
 
 
