@@ -75,7 +75,7 @@ describe('Helpers', function () {
 
   describe('check-if-available', function () {
     // Since we're dealing with unresponsive servers, we'll need to heighten the timeout
-    this.timeout(5000)
+    this.timeout(10000)
     before(async function () {
       this.timeout(5000)
       try {
@@ -143,5 +143,57 @@ describe('Helpers', function () {
         }
       })
     })
+  })
+
+  describe('add-7dtd-server', function () {
+    before(async function () {
+      this.timeout(5000)
+      try {
+        let deletedRecords = await SdtdServer.destroy({})
+        return
+      } catch (error) {
+        return error
+      }
+
+    })
+    after(async function () {
+      try {
+        let testServer = await SdtdServer.create({
+          ip: process.env.CSMM_TEST_IP,
+          telnetPort: process.env.CSMM_TEST_TELNETPORT,
+          telnetPassword: process.env.CSMM_TEST_TELNETPW,
+          webPort: process.env.CSMM_TEST_WEBPORT,
+          authName: process.env.CSMM_TEST_AUTHNAME,
+          authToken: process.env.CSMM_TEST_AUTHTOKEN,
+          owner: sails.testUser.id
+        }).fetch()
+        sails.testServer = testServer;
+        return
+      } catch (error) {
+        return error
+      }
+
+
+    })
+
+    it('Returns OK with valid data', function(done) {
+      sails.helpers.add7DtdServer.with({
+        ip: sails.testServer.ip,
+        telnetPort: sails.testServer.telnetPort,
+        telnetPassword: sails.testServer.telnetPassword,
+        webPort: sails.testServer.webPort,
+        owner: sails.testUser.id
+      }).switch({
+        error: function (err) {
+          done(err);
+        },
+        success: function (data) {
+          done();
+        }
+      });
+    })
+    it('Returns badWebPort if invalid webport given')
+    it('Returns badTelnet if invalid telnet info given')
+
   })
 })

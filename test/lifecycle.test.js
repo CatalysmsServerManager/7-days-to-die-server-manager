@@ -76,11 +76,17 @@ before(function (done) {
 });
 
 // After all tests have finished...
-after(function (done) {
+after(async function () {
+  try {
+    await SdtdServer.destroy({});
+    await User.destroy({});
+    await Player.destroy({});
+    return sails.lower();
+  } catch (error) {
+    return error
+  }
 
-  // here you can clear fixtures, etc.
-  // (e.g. you might want to destroy the records you created above)
 
-  sails.lower(done);
+
 
 });
