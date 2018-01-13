@@ -35,6 +35,7 @@
 var cssFilesToInject = [
 
   // Bring in `.css` files for themes and style guides (e.g. bootstrap)
+  'dependencies/bootstrap/**/*.css',
   'dependencies/**/*.css',
 
   // All of the rest of your custom `.css` files will be injected here,
@@ -65,10 +66,10 @@ var jsFilesToInject = [
   // Load `sails.io` before everything else.
   'dependencies/sails.io.js',
 
-  'dependencies/jquery/jquery.js',
-
   // Bring in `.js` files for any other client-side JavaScript dependencies.
   // (e.g. Lodash, jQuery, React, bootstrap.js, Ember, Angular, etc.)
+  'dependencies/jquery-3.2.1.js',
+  'dependencies/bootstrap/**/*.js',
   'dependencies/**/*.js',
 
   // All of the rest of your custom client-side js files will be injected here,
