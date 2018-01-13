@@ -7,7 +7,7 @@
  *   https://sailsjs.com/anatomy/api/policies/isLoggedIn.js
  */
 module.exports = function isLoggedIn(req, res, next) {
-  if(!_.isUndefined(req.signedCookied.userProfile)) {
+  if(!_.isUndefined(req.signedCookies.userProfile)) {
     return next();
   } else {
     return res.forbidden();
