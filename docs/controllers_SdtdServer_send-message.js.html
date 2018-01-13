@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Global - Documentation</title>
+    <title>controllers/SdtdServer/send-message.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,171 +27,98 @@
 
 <div id="main">
     
-    <h1 class="page-title">Global</h1>
+    <h1 class="page-title">controllers/SdtdServer/send-message.js</h1>
     
 
     
 
 
 
-
-<section>
-
-<header>
     
-        <h2>
-        
-        </h2>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-        
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id="discordId"><span class="type-signature"></span>discordId<span class="type-signature"> :string</span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_User.js.html">models/User.js</a>, <a href="models_User.js.html#line31">line 31</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    memberof User
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">string</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-
-        
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const sevenDays = require('machinepack-7daystodiewebapi');
+
+module.exports = {
+
+  friendlyName: 'Send message',
+
+  description: 'Execute a message on a 7 Days to Die server',
+
+  inputs: {
+    serverId: {
+      description: 'The ID of the server to look up.',
+      type: 'number',
+      required: true
+    },
+    message: {
+      description: 'message to send',
+      type: 'string',
+      required: true
+    },
+    destinationPlayer: {
+      description: 'Player to send a message to (steamID)',
+      type:'string'
+    }
+  },
+
+  exits: {
+    success: {},
+    notFound: {
+      description: 'No server/player with the specified ID was found in the database.',
+      responseType: 'notFound'
+    },
+    notLoggedIn: {
+      responseType: 'badRequest',
+      description: 'User is not logged in (check signedCookies)'
+    }
+  },
+
+  /**
+   * @memberof SdtdServer
+   * @name sendMessage
+   * @description sends a message on a 7dtd server
+   * @param {number} serverID ID of the server
+   * @param {string} message Message to be executed
+   * @param {string} destinationPlayer SteamID of the player to send a message to
+   */
+
+  fn: async function (inputs, exits) {
+
+    if (_.isUndefined(this.req.signedCookies.userProfile)) {
+      throw 'notLoggedIn';
+    }
+
+    sails.log.debug(`API - SdtdServer:send message - sending a message on server ${inputs.serverId} to player: ${inputs.destinationPlayer}`);
+
+    try {
+      let sdtdServer = await SdtdServer.findOne(inputs.serverId);
+      sevenDays.sendMessage({
+        ip: sdtdServer.ip,
+        port: sdtdServer.webPort,
+        authName: sdtdServer.authName,
+        authToken: sdtdServer.authToken,
+        message: inputs.message,
+        playerID: inputs.destinationPlayer ? inputs.destinationPlayer : undefined
+      }).exec({
+        success: (response) => {
+          return exits.success(response);
+        },
+        error: (error) => {
+          return exits.error(error);
+        }
+      });
+
+    } catch (error) {
+      sails.log.error(`API - SdtdServer:sendMessage - ${error}`);
+      return exits.error(error);
+    }
+
+  }
+};
+</code></pre>
+        </article>
+    </section>
 
 
 

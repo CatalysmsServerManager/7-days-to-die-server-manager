@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Global - Documentation</title>
+    <title>helpers/sdtd/check-if-available.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,171 +27,124 @@
 
 <div id="main">
     
-    <h1 class="page-title">Global</h1>
+    <h1 class="page-title">helpers/sdtd/check-if-available.js</h1>
     
 
     
 
 
 
-
-<section>
-
-<header>
     
-        <h2>
-        
-        </h2>
-        
-    
-</header>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>var sevenDays = require('machinepack-7daystodiewebapi');
+
+module.exports = {
+
+
+  friendlyName: 'Check if available',
+
+
+  description: 'Checks if a server can be reached via the web API',
+
+
+  inputs: {
+
+    serverId: {
+      type: 'number',
+      description: 'Id of the server',
+      required: true
+    }
+
+  },
+
+
+  exits: {
+    success: {
+      outputFriendlyName: 'Success',
+      outputType: 'boolean'
+    },
+    notAvailable: {
+      outputFriendlyName: 'Not available',
+      description: 'The server could not be reached'
+    }
+  },
+
+  /**
+   * @description Checks if a server can be reached via the web API
+   * @name checkIfAvailable
+   * @memberof module:Helpers
+   * @returns {boolean}
+   * @method
+   * @param {number} serverId 
+   */
+
+  fn: async function (inputs, exits) {
+    sails.log.debug(`HELPER - checkIfAvailable - checking if server ${inputs.serverId} is available`);
+
+    try {
+      let sdtdServer = await SdtdServer.findOne({
+        id: inputs.serverId
+      })
+      let statsResponse = await checkStats(sdtdServer);
+      let commandResponse = await checkCommand(sdtdServer);
+
+      if (statsResponse &amp;&amp; commandResponse) {
+        return exits.success(true)
+      } else {
+        return exits.notAvailable()
+      }
+
+    } catch (error) {
+      return exits.error(error)
+    }
+
+
+    async function checkStats(sdtdServer) {
+      return new Promise(resolve => {
+        let statsResponse = sevenDays.getStats({
+          ip: sdtdServer.ip,
+          port: sdtdServer.webPort,
+          authName: sdtdServer.authName,
+          authToken: sdtdServer.authToken
+        }).exec({
+          success: (response) => {
+            resolve(true)
+          },
+          error: (error) => {
+            resolve(false)
+          }
+        })
+      })
+    }
+
+    async function checkCommand(sdtdServer) {
+      return new Promise(resolve => {
+        let statsResponse = sevenDays.executeCommand({
+          ip: sdtdServer.ip,
+          port: sdtdServer.webPort,
+          authName: sdtdServer.authName,
+          authToken: sdtdServer.authToken,
+          command: 'mem'
+        }).exec({
+          success: (response) => {
+            resolve(true)
+          },
+          error: (error) => {
+            resolve(false)
+          }
+        })
+      })
+    }
 
-<article>
-    <div class="container-overview">
-    
-        
 
-<dl class="details">
+  }
 
-    
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-        
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id="discordId"><span class="type-signature"></span>discordId<span class="type-signature"> :string</span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_User.js.html">models/User.js</a>, <a href="models_User.js.html#line31">line 31</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    memberof User
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">string</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-
-        
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+};
+</code></pre>
+        </article>
+    </section>
 
 
 
