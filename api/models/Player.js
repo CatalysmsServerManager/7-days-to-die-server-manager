@@ -39,8 +39,7 @@ module.exports = {
      */
 
     ip: {
-      type: 'string',
-      required: true
+      type: 'string'
     },
 
     /**
