@@ -12,16 +12,26 @@
  *
  */
 module.exports = function(grunt) {
+  // grunt.registerTask('prod', [
+  //   'polyfill:prod', //« Remove this to skip transpilation in production (not recommended)
+  //   'compileAssets',
+  //   'babel',         //« Remove this to skip transpilation in production (not recommended)
+  //   'concat',
+  //   'uglify',
+  //   'cssmin',
+  //   'sails-linker:prodJs',
+  //   'sails-linker:prodStyles',
+  //   'sails-linker:clientSideTemplates',
+  // ]);
+
+ // Something is original prod task breaks the build. So using dev task as prod for now ¯\_(ツ)_/¯
+
   grunt.registerTask('prod', [
-    //   'polyfill:prod', //« Remove this to skip transpilation in production (not recommended)
+    //'polyfill:dev', //« uncomment to ALSO transpile during development (for broader browser compat.)
     'compileAssets',
-    'babel',         //« Remove this to skip transpilation in production (not recommended)
-    'concat',
-    'uglify',
-    'cssmin',
-    'sails-linker:prodJs',
-    'sails-linker:prodStyles',
-    'sails-linker:clientSideTemplates',
+    // 'babel',        //« uncomment to ALSO transpile during development (for broader browser compat.)
+    'linkAssets',
+  //  'watch'
   ]);
 };
 
