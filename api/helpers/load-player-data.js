@@ -77,6 +77,9 @@ module.exports = {
       return new Promise(async function (resolve) {
         try {
           newPlayer.then(async function (newPlayer) {
+            if (newPlayer.name === '') {
+              newPlayer.name = 'Unknown name'
+            }
             foundOrCreatedPlayer = await Player.findOrCreate({
               steamId: newPlayer.steamid,
               server: inputs.serverId,
