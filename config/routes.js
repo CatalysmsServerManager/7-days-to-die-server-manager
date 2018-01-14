@@ -58,11 +58,6 @@ module.exports.routes = {
      *                                                                          *
      ***************************************************************************/
 
-  'get /sdtdserver/:serverID/subscribetosocket': {
-    controller: 'SdtdServerController',
-    action: 'subscribeToServerSocket'
-  },
-
   'get /sdtdserver/addserver': {
     view: 'sdtdServer/addserver'
   },
@@ -133,10 +128,7 @@ module.exports.routes = {
   //  ║║║║╣ ╠╩╗╠═╣║ ║║ ║╠╩╗╚═╗
   //  ╚╩╝╚═╝╚═╝╩ ╩╚═╝╚═╝╩ ╩╚═╝
 
-  'get /sdtdserver/:serverID/socket': {
-    controller: 'sdtdServerController',
-    action: 'subscribeToServerSocket'
-  }
+  'get /sdtdserver/:serverId/socket': "SdtdServer.subscribe-to-socket"
 
 
   //  ╔╦╗╦╔═╗╔═╗

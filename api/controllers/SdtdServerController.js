@@ -4,38 +4,6 @@ module.exports = {
 
   /**
    * @memberof SdtdServer
-   * @description Starts detecting events for a server
-   * @param {number} serverID ID of the server
-   */
-
-  startLogging: async function (req, res) {
-    const serverID = req.param('serverID');
-    sails.log.info(`Starting logging for ${serverID}`);
-    try {
-      sails.hooks.sdtdlogs.start(serverID);
-    } catch (error) {
-      res.serverError(error);
-    }
-  },
-
-  /**
-   * @memberof SdtdServer
-   * @description Stops detecting events for a server
-   * @param {number} serverID ID of the server
-   */
-
-  stopLogging: async function (req, res) {
-    const serverID = req.param('serverID');
-    sails.log.info(`Stopping logging for ${serverID}`);
-    try {
-      sails.hooks.sdtdlogs.stop(serverID);
-    } catch (error) {
-      res.serverError(error);
-    }
-  },
-
-  /**
-   * @memberof SdtdServer
    * @description Load/update server info and save to DB
    * @param {number} serverID ID of the server
    */
@@ -79,9 +47,9 @@ module.exports = {
 
     sails.log.debug(`Showing online players for ${serverID}`);
 
-    if (_.isUndefined(servuest('No server ID given');
-    } else {erID)) {
-      return res.badReq
+    if (_.isUndefined(serverID)) {
+      return res.badRequest('No server ID given');
+    } else {
       sails.models.sdtdserver.findOne({
         id: serverID
       }).exec(function (error, server) {

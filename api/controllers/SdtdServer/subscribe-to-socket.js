@@ -10,7 +10,8 @@ module.exports = {
   inputs: {
     serverId: {
       description: 'Id of the server',
-      required: true
+      required: true,
+      type: 'string'
     }
 
   },
@@ -31,6 +32,7 @@ module.exports = {
    * @memberof SdtdServer
    * @method
    * @description Subscribe to a socket to receive event notifications
+   * @name subscribe-to-socket
    * @param {serverId}
    */
 
