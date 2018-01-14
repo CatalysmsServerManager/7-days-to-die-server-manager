@@ -48,7 +48,7 @@ module.exports = {
       }
       return exits.success(status)
     } catch (error) {
-      sails.log.error(`API - SdtdServer:logging-toggle - ${error} `);
+      sails.log.error(`API - SdtdServer:logging-toggle - ${error}`);
     }
 
 
