@@ -36,34 +36,6 @@ module.exports = {
 
   /**
    * @memberof SdtdServer
-   * @description Subscribe to a socket to receive event notifications
-   * @param {number} serverID ID of the server
-   */
-  subscribeToServerSocket: function (req, res) {
-    const serverID = req.param('serverID');
-    sails.log.debug(`Connecting user with id ${req.session.userId} to server socket with id ${serverID}`);
-    if (_.isUndefined(serverID)) {
-      return res.badRequest('No server ID given.');
-    }
-    if (!req.isSocket) {
-      return res.badRequest();
-    }
-    sails.models.sdtdserver.findOne({
-      id: serverID
-    }).exec(function (error, server) {
-      if (error) {
-        return res.badRequest('Unknown server');
-      } else {
-        sails.log.debug(`Successfully connected`);
-        sails.sockets.join(req, serverID);
-        return res.ok();
-      }
-
-    });
-  },
-
-  /**
-   * @memberof SdtdServer
    * @description Load/update server info and save to DB
    * @param {number} serverID ID of the server
    */
@@ -107,9 +79,9 @@ module.exports = {
 
     sails.log.debug(`Showing online players for ${serverID}`);
 
-    if (_.isUndefined(serverID)) {
-      return res.badRequest('No server ID given');
-    } else {
+    if (_.isUndefined(servuest('No server ID given');
+    } else {erID)) {
+      return res.badReq
       sails.models.sdtdserver.findOne({
         id: serverID
       }).exec(function (error, server) {
