@@ -75,6 +75,7 @@ module.exports.routes = {
   'post /api/sdtdserver/addserver': 'SdtdServerController/add-server',
   '/api/sdtdserver/:serverId/executeCommand': 'SdtdServerController.execute-command',
   '/api/sdtdserver/:serverId/sendMessage': 'SdtdServerController.send-message',
+  '/api/sdtdserver/:serverId/loadServerInfo': 'SdtdServerController.load-server-info',
 
   'get /api/sdtdserver/onlinePlayers': {
     controller: 'SdtdServerController',

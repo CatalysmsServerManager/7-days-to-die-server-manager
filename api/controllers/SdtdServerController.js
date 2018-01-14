@@ -2,33 +2,6 @@ var sevenDays = require('machinepack-7daystodiewebapi');
 
 module.exports = {
 
-  /**
-   * @memberof SdtdServer
-   * @description Load/update server info and save to DB
-   * @param {number} serverID ID of the server
-   */
-
-  loadServerInfo: function (req, res) {
-    const serverId = req.param('serverID');
-    sails.log.debug(`Updating server info for ${serverId}`);
-    if (_.isUndefined(serverId)) {
-      return res.badRequest('No server ID given.');
-    }
-    sails.helpers.loadServerInfo({
-      serverId: serverId
-    }).exec({
-      success: function () {
-        return res.ok();
-      },
-      connectionError: function (error) {
-        return res.badRequest(new Error('Could not connect to server'));
-      },
-      databaseError: function (error) {
-        return res.serverError(new Error('Database error'));
-      }
-    });
-  },
-
   // _____  ______  _____ _______            _____ _____
   // |  __ \|  ____|/ ____|__   __|     /\   |  __ \_   _|
   // | |__) | |__  | (___    | |       /  \  | |__) || |
