@@ -144,7 +144,7 @@ describe('Helpers', function () {
         }
       })
     })
-  })
+  });
 
   describe('add-7dtd-server', function () {
     // Dealing with unresponsive servers, so we allow longer timeouts here
@@ -235,5 +235,36 @@ describe('Helpers', function () {
       });
     })
 
+  });
+  describe('load-sdtdServer-info', function () {
+    it('Returns OK with a valid serverId', function (done) {
+      sails.helpers.loadSdtdserverInfo(sails.testServer.id).switch({
+        success: (data) => {
+          done()
+        },
+        error: (err) => done(err)
+      })
+    })
+    it('Errors with an invalid serverId', function (done) {
+      sails.helpers.loadSdtdserverInfo('notanId').switch({
+        success: (data) => {
+          done(new Error('Success but should have errored'))
+        },
+        error: (err) => done()
+      })
+    })
+    it('Returns stats & serverInfo data', function (done) {
+      sails.helpers.loadSdtdserverInfo(sails.testServer.id).switch({
+        success: (data) => {
+          if (!_.isUndefined(data.stats) && !_.isUndefined(data.serverInfo)) {
+            done()
+          } else {
+            done(new Error('Did not find expected info in response'))
+          }
+        },
+        error: (err) => done(err)
+      })
+
+    })
   })
 })
