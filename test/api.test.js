@@ -1,39 +1,21 @@
 var supertest = require('supertest');
 var assert = require('assert');
 
-describe('API', function () {
+describe('API @api', function () {
   describe('SdtdServer', function () {
-    describe('/api/sdtdserver/togglelogging', function() {
-      it('Changes logging status', function(done) {
+    describe('/api/sdtdserver/togglelogging', function () {
+      it('Changes logging status', function (done) {
         supertest(sails.hooks.http.app)
-        .get('/api/sdtdserver/toggleLogging')
-        .query({
-          serverId: sails.testServer.id
-        })
-        .expect('Content-Type', /json/)
-        .expect(200, done);
-      })
-
-
-    })
-    describe('GET /api/sdtdserver/onlineplayers @api', function () {
-      it('should return JSON', function (done) {
-        supertest(sails.hooks.http.app)
-          .get('/api/sdtdserver/onlinePlayers')
+          .get('/api/sdtdserver/toggleLogging')
           .query({
             serverId: sails.testServer.id
           })
           .expect('Content-Type', /json/)
           .expect(200, done);
-      });
-      it('should error when no serverId given', function (done) {
-        supertest(sails.hooks.http.app)
-          .get('/api/sdtdserver/onlineplayers')
-          .expect(400, done);
-      });
-    });
+      })
+    })
 
-    describe('GET /api/sdtdserver/players @api', function () {
+    describe('GET /api/sdtdserver/players', function () {
       it('Should return JSON', function (done) {
         supertest(sails.hooks.http.app)
           .get('/api/sdtdserver/players')
@@ -64,7 +46,7 @@ describe('API', function () {
       });
     });
 
-    describe('GET /api/sdtdserver/info @api', function () {
+    describe('GET /api/sdtdserver/info', function () {
       it('Should return JSON', function (done) {
         supertest(sails.hooks.http.app)
           .get('/api/sdtdserver/info')
@@ -108,7 +90,6 @@ describe('API', function () {
           });
       });
     });
-
   })
   describe('Player', function () {
     describe('GET /api/player/ban @api', function () {

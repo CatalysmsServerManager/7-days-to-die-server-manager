@@ -79,11 +79,6 @@ module.exports.routes = {
   'get /api/sdtdserver/players': 'SdtdServerController.get-players',
   'get /api/sdtdserver/info': 'SdtdServerController.load-server-info',
 
-  'get /api/sdtdserver/onlinePlayers': {
-    controller: 'SdtdServerController',
-    action: 'onlinePlayers'
-  },
-
   'get /api/user/ownedServers': {
     controller: 'User',
     action: 'ownedServers',
