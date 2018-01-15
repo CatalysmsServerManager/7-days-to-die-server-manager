@@ -42,8 +42,8 @@ module.exports = {
     success: {
       outputFriendlyName: 'Connected and tokens added'
     },
-    timeout: {
-      outputFriendlyName: 'Connection timed out'
+    badTelnet: {
+      description: "Could not connect to telnet"
     }
   },
 
@@ -79,7 +79,7 @@ module.exports = {
       connection.exec(`webtokens add ${authName} ${authToken} 0`, function(err, response) {
         if (err) { return exits.error(err); }
         if (_.isUndefined(response) || response.length <= 0) {
-          return exits.error(new Error('No response from telnet server'));
+          return exits.badTelnet(new Error("Did not receive a response from the server"));
         } else {
           sails.log.debug('HELPER - createWebTokens - successfully created tokens');
           return exits.success({ authName: authName, authToken: authToken });
@@ -90,7 +90,7 @@ module.exports = {
 
     connection.on('error', function(error) {
       sails.log.error(`HELPER - createWebTokens - ${error}`);
-      return exits.error(new Error(error));
+      return exits.badTelnet(error);
     });
 
 

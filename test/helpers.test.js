@@ -147,6 +147,8 @@ describe('Helpers', function () {
   })
 
   describe('add-7dtd-server', function () {
+    // Dealing with unresponsive servers, so we allow longer timeouts here
+    this.timeout(10000)
     before(async function () {
       this.timeout(5000)
       try {
@@ -177,7 +179,7 @@ describe('Helpers', function () {
 
     })
 
-    it('Returns OK with valid data', function(done) {
+    it('Returns OK with valid data', function (done) {
       sails.helpers.add7DtdServer.with({
         ip: sails.testServer.ip,
         telnetPort: sails.testServer.telnetPort,
@@ -193,8 +195,45 @@ describe('Helpers', function () {
         }
       });
     })
-    it('Returns badWebPort if invalid webport given')
-    it('Returns badTelnet if invalid telnet info given')
+    it('Returns badWebPort if invalid webport given', function (done) {
+      this.timeout(15000)
+      sails.helpers.add7DtdServer.with({
+        ip: sails.testServer.ip,
+        telnetPort: sails.testServer.telnetPort,
+        telnetPassword: sails.testServer.telnetPassword,
+        webPort: sails.testServer.webPort + 1,
+        owner: sails.testUser.id
+      }).switch({
+        error: function (err) {
+          done(err);
+        },
+        badWebPort: function (error) {
+          done()
+        },
+        success: function (data) {
+          done(new Error('Success but should have errored'));
+        }
+      });
+    });
+    it('Returns badTelnet if invalid telnet info given', function (done) {
+      sails.helpers.add7DtdServer.with({
+        ip: sails.testServer.ip,
+        telnetPort: sails.testServer.telnetPort,
+        telnetPassword: "WRONG-PASSWORD",
+        webPort: sails.testServer.webPort,
+        owner: sails.testUser.id
+      }).switch({
+        error: function (err) {
+          done(err);
+        },
+        badTelnet: function (error) {
+          done()
+        },
+        success: function (data) {
+          done(new Error('Success but should have errored'));
+        }
+      });
+    })
 
   })
 })

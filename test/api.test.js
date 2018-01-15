@@ -3,6 +3,19 @@ var assert = require('assert');
 
 describe('API', function () {
   describe('SdtdServer', function () {
+    describe('/api/sdtdserver/togglelogging', function() {
+      it('Changes logging status', function(done) {
+        supertest(sails.hooks.http.app)
+        .get('/api/sdtdserver/toggleLogging')
+        .query({
+          serverId: sails.testServer.id
+        })
+        .expect('Content-Type', /json/)
+        .expect(200, done);
+      })
+
+
+    })
     describe('GET /api/sdtdserver/onlineplayers @api', function () {
       it('should return JSON', function (done) {
         supertest(sails.hooks.http.app)
