@@ -22,7 +22,7 @@ module.exports = {
     }
   },
 
-   /**
+  /**
    * @memberof SdtdServer
    * @name load-server-info
    * @description Load/update server info and save to DB
@@ -35,12 +35,11 @@ module.exports = {
     sails.log.debug(`API - SdtdServer:loadServerInfo - loading info for server ${inputs.serverId}`)
 
     try {
-      let serverInfo = await sails.helpers.sdtd.loadServerInfo(inputs.serverId);
+      let serverInfo = await sails.helpers.loadSdtdserverInfo(inputs.serverId);
       exits.success(serverInfo)
     } catch (error) {
       sails.log.error(`API - SdtdServer:loadServerInfo - ${error}`)
     }
-    return exits.success();
   }
 
 

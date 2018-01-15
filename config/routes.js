@@ -76,6 +76,8 @@ module.exports.routes = {
   '/api/sdtdserver/sendMessage': 'SdtdServerController.send-message',
   '/api/sdtdserver/loadServerInfo': 'SdtdServerController.load-server-info',
   '/api/sdtdserver/toggleLogging': 'SdtdServerController.logging-toggle',
+  'get /api/sdtdserver/players': 'SdtdServerController.get-players',
+  'get /api/sdtdserver/info': 'SdtdServerController.load-server-info',
 
   'get /api/sdtdserver/onlinePlayers': {
     controller: 'SdtdServerController',
@@ -85,18 +87,6 @@ module.exports.routes = {
   'get /api/user/ownedServers': {
     controller: 'User',
     action: 'ownedServers',
-    skipAssets: true
-  },
-
-  'get /api/sdtdserver/info': {
-    controller: 'SdtdServer',
-    action: 'getServerInfo',
-    skipAssets: true
-  },
-
-  'get /api/sdtdserver/players': {
-    controller: 'SdtdServer',
-    action: 'getPlayers',
     skipAssets: true
   },
 
