@@ -39,7 +39,7 @@ module.exports = {
   fn: async function (inputs, exits) {
     sails.log.debug(`API - SdtdServer:subscribeToSocket - subscribing to server ${inputs.serverId}`)
     
-    if (!req.isSocket) {
+    if (!this.req.isSocket) {
       throw 'notASocket'
     }
 
@@ -48,7 +48,7 @@ module.exports = {
       if (_.isUndefined(server)) {
         throw serverNotFound
       }
-      sails.sockets.join(req, inputs.serverId);
+      sails.sockets.join(this.req, inputs.serverId);
       sails.log.debug(`API - SdtdServer:subscribeToSocket - Successfully connected server ${inputs.serverId}`)
     } catch (error) {
       sails.log.error(`API - SdtdServer:subscribeToSocket - ${error}`)

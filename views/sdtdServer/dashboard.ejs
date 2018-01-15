@@ -66,7 +66,8 @@
         </table>
 
         <p>
-          <a class="btn" href="#">View all players »</a>
+          <% const playersLink = '/sdtdserver/' + server.id + '/players' %>
+            <a class="btn" href='<%= playersLink %>'>View all players »</a>
         </p>
       </div>
       <div class="col-md-4">
