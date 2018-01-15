@@ -23,7 +23,6 @@ module.exports = {
 
   },
 
-
   fn: async function (inputs, exits) {
 
     try {

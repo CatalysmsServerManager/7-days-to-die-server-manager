@@ -133,6 +133,7 @@ module.exports = {
     cors: {
       allowOrigins: [
         "https://csmm.herokuapp.com",
+        "http://catalysm.ddns.net"
       ]
     },
 
