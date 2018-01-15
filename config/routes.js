@@ -65,6 +65,8 @@ module.exports.routes = {
   'get /sdtdserver/:serverId/dashboard': 'SdtdServerController.dashboard',
   'get /sdtdserver/:serverId/console': 'SdtdServerController.console',
   'get /sdtdserver/:serverId/chat': 'SdtdServerController.chat',
+  'get /sdtdserver/:serverId/players': 'SdtdServerController.get-players-view',
+  
 
 
   //  ╔═╗╔═╗╦  ╔═╗╔╗╔╔╦╗╔═╗╔═╗╦╔╗╔╔╦╗╔═╗
