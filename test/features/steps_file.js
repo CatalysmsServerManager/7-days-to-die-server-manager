@@ -19,6 +19,17 @@ module.exports = function() {
     this.loginSteam();
     this.amOnPage('/auth/logout');
     this.dontSee('#steam-avatar')
+  },
+
+  addTestServer: async function() {
+    this.loginSteam();
+    this.amOnPage('/sdtdserver/addserver');
+    this.fillField('Server IP', process.env.CSMM_TEST_IP);
+    this.fillField('Web port', process.env.CSMM_TEST_WEBPORT);
+    this.fillField('Telnet port', process.env.CSMM_TEST_TELNETPORT);
+    this.fillField('Telnet password', process.env.CSMM_TEST_TELNETPW);
+    this.click('Submit');
+    I.see('Dashboard');
   }
 
   });

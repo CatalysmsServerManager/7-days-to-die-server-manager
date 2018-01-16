@@ -1,4 +1,3 @@
-
 Feature('Authentication');
 
 Scenario('Login via steam', (I) => {
