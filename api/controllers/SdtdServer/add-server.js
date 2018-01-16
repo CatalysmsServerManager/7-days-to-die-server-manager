@@ -36,11 +36,6 @@ module.exports = {
   exits: {
 
     success: {
-    },
-
-    notLoggedIn: {
-      responseType: 'badRequest',
-      description: 'User is not logged in (check signedCookies)'
     }
 
   },
@@ -58,9 +53,6 @@ module.exports = {
 
     sails.log.info(`API - SdtdServer:addServer - Adding a new server ${inputs.serverIp} ${inputs.webPort}`);
 
-    if (_.isUndefined(this.req.signedCookies.userProfile)) {
-      throw 'notLoggedIn';
-    }
 
     try {
       const userProfile = this.req.signedCookies.userProfile;

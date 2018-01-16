@@ -35,6 +35,15 @@ module.exports = {
 
   },
 
+  exits: {
+    badTelnet: {
+      description: "Could not connect to telnet"
+    },
+    badWebPort: {
+      description: "WebPort given was not valid"
+    }
+  },
+
   /**
    * @description Adds a 7 Days to die server to the system while verifying input
    * @name Add7dtdServer
@@ -61,10 +70,19 @@ module.exports = {
         sails.log.error(`HELPER - add7DtdServer - ${err}`);
         return exits.error(new Error('Could not create webtokens via telnet!' + err));
       },
+      badTelnet: function (err) {
+        return exits.badTelnet(err)
+      },
       success: async function (authInfo) {
-        let server = await updateOrCreateServer(authInfo);
-        sails.log.debug(`HELPER - add7DtdServer - success`);
-        return exits.success(server);
+        try {
+          let server = await updateOrCreateServer(authInfo);
+          return exits.success(server)
+        } catch (error) {
+          return exits.error(error)
+        }
+
+
+
       }
     });
 
@@ -86,10 +104,17 @@ module.exports = {
           owner: inputs.owner,
           discordGuildId: inputs.discordGuildId ? inputs.discordGuildId : 0
         });
+
+        let status = await sails.helpers.sdtd.checkIfAvailable(newServer.id)
+          .tolerate('notAvailable', function () {
+            sails.log.debug(`HELPER - add7DtdServer - not available`);
+            return exits.badWebPort()
+          })
+        sails.log.debug(`HELPER - add7DtdServer - success`);
         sails.hooks.sdtdlogs.start(newServer.id);
         return newServer;
       } catch (error) {
-        sails.log.error(`HELPER - add7DtdServer - ${err}`);
+        sails.log.error(`HELPER - add7DtdServer - ${error}`);
         exits.error(new Error('Error while creating/updating server in DB' + error));
       }
     }

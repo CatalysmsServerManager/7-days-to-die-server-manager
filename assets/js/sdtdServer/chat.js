@@ -6,10 +6,9 @@ class sdtdChat {
   start() {
     console.log('Starting chat for server with id ' + this.serverId);
 
-    io.socket.get('/sdtdserver/' + this.serverId + '/subscribetosocket', function (response) {
+    io.socket.get('/sdtdserver/' + this.serverId + '/socket', function (response) {
       console.log('Subscribed to socket ' + response);
     });
-
     io.socket.on('chatMessage', function addNewChatMessage(chatMessage) {
       $('.chat-window').append(`<li class=\"chatMessage\">${chatMessage.playerName}: ${chatMessage.messageText} </li>`);
       $('.chat-window').scrollTop($('.chat-window')[0].scrollHeight);
@@ -23,8 +22,9 @@ class sdtdChat {
   sendMessage(message) {
     return new Promise((resolve, reject) => {
       $.ajax({
-        url: `/api/sdtdserver/${this.serverId}/sendMessage`,
+        url: `/api/sdtdserver/sendMessage`,
         data: {
+          serverId: this.serverId,
           message: message
         },
         success: (data, status, xhr) => {

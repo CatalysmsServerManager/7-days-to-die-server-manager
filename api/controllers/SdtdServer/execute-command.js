@@ -40,12 +40,11 @@ module.exports = {
    */
 
   fn: async function (inputs, exits) {
+    sails.log.debug(`API - SdtdServer:executeCommand - Executing a command on server ${inputs.serverId}`);
 
     if (_.isUndefined(this.req.signedCookies.userProfile)) {
       throw 'notLoggedIn';
     }
-
-    sails.log.debug(`API - SdtdServer:executeCommand - Executing a command on server ${inputs.serverId}`);
 
     try {
       let sdtdServer = await SdtdServer.findOne(inputs.serverId);

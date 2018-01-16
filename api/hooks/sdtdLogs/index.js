@@ -98,6 +98,22 @@ module.exports = function sdtdLogs(sails) {
 
     getLoggingObject: function (serverId) {
       return loggingInfoMap.get(serverId);
+    },
+
+        /**
+     * @name getStatus
+     * @memberof module:7dtdLoggingHook
+     * @description Gets the logging status for a server
+     * @param {number} serverId - Id of the server
+     * @method
+     */
+
+    getStatus: function(serverId) {
+      if (loggingInfoMap.has(serverId)) {
+        return true
+      } else {
+        return false
+      }
     }
   };
 

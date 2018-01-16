@@ -1,0 +1,39 @@
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>
+                ID
+              </th>
+              <th>
+                Name
+              </th>
+              <th>
+                Location
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <% players.forEach(player => { %>
+              <tr>
+                <th scope="row">
+                  <%= player.entityId %>
+                </th>
+                <td>
+                  <%= player.name %>
+                </td>
+                <td>
+                  <% let locationString = `${player.positionX} ${player.positionY} ${player.positionZ}` %>
+                  <%= locationString %>
+                </td>
+              </tr>
+              <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>

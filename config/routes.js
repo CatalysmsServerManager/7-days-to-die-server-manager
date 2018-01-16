@@ -58,19 +58,15 @@ module.exports.routes = {
      *                                                                          *
      ***************************************************************************/
 
-  'get /sdtdserver/:serverID/subscribetosocket': {
-    controller: 'SdtdServerController',
-    action: 'subscribeToServerSocket'
-  },
-
   'get /sdtdserver/addserver': {
     view: 'sdtdServer/addserver'
   },
 
   'get /sdtdserver/:serverId/dashboard': 'SdtdServerController.dashboard',
-
   'get /sdtdserver/:serverId/console': 'SdtdServerController.console',
   'get /sdtdserver/:serverId/chat': 'SdtdServerController.chat',
+  'get /sdtdserver/:serverId/players': 'SdtdServerController.get-players-view',
+  
 
 
   //  ╔═╗╔═╗╦  ╔═╗╔╗╔╔╦╗╔═╗╔═╗╦╔╗╔╔╦╗╔═╗
@@ -78,29 +74,16 @@ module.exports.routes = {
   //  ╩ ╩╩  ╩  ╚═╝╝╚╝═╩╝╩  ╚═╝╩╝╚╝ ╩ ╚═╝
 
   'post /api/sdtdserver/addserver': 'SdtdServerController/add-server',
-  '/api/sdtdserver/:serverId/executeCommand': 'SdtdServerController.execute-command',
-  '/api/sdtdserver/:serverId/sendMessage': 'SdtdServerController.send-message',
-
-  'get /api/sdtdserver/onlinePlayers': {
-    controller: 'SdtdServerController',
-    action: 'onlinePlayers'
-  },
+  '/api/sdtdserver/executeCommand': 'SdtdServerController.execute-command',
+  '/api/sdtdserver/sendMessage': 'SdtdServerController.send-message',
+  '/api/sdtdserver/loadServerInfo': 'SdtdServerController.load-server-info',
+  '/api/sdtdserver/toggleLogging': 'SdtdServerController.logging-toggle',
+  'get /api/sdtdserver/players': 'SdtdServerController.get-players',
+  'get /api/sdtdserver/info': 'SdtdServerController.load-server-info',
 
   'get /api/user/ownedServers': {
     controller: 'User',
     action: 'ownedServers',
-    skipAssets: true
-  },
-
-  'get /api/sdtdserver/info': {
-    controller: 'SdtdServer',
-    action: 'getServerInfo',
-    skipAssets: true
-  },
-
-  'get /api/sdtdserver/players': {
-    controller: 'SdtdServer',
-    action: 'getPlayers',
     skipAssets: true
   },
 
@@ -133,10 +116,7 @@ module.exports.routes = {
   //  ║║║║╣ ╠╩╗╠═╣║ ║║ ║╠╩╗╚═╗
   //  ╚╩╝╚═╝╚═╝╩ ╩╚═╝╚═╝╩ ╩╚═╝
 
-  'get /sdtdserver/:serverID/socket': {
-    controller: 'sdtdServerController',
-    action: 'subscribeToServerSocket'
-  }
+  'get /sdtdserver/:serverId/socket': "SdtdServer.subscribe-to-socket"
 
 
   //  ╔╦╗╦╔═╗╔═╗
