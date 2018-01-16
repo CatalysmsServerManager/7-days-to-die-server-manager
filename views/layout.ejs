@@ -160,13 +160,13 @@
             </a>
           </li>
           <li class="nav-item">
-            <img src="<%= req.signedCookies.userProfile.steamProfile._json.avatar %>">
+            <img id="steam-avatar" src="<%= req.signedCookies.userProfile.steamProfile._json.avatar %>" >
           </li>
-          <a class="nav-link" href="/auth/logout">
+          <a class="nav-link" id="logout-button" href="/auth/logout">
             Logout
           </a>
           <% } else { %>
-            <a class="nav-item" href="/auth/steam">
+            <a class="nav-item" id="steam-login-button" href="/auth/steam">
               <img src="https://steamcommunity-a.akamaihd.net/public/images/signinthroughsteam/sits_01.png">
             </a>
             <% } %>

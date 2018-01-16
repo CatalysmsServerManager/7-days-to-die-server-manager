@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>controllers/SdtdServer/console.js - Documentation</title>
+    <title>controllers/SdtdServer/get-players-view.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">controllers/SdtdServer/console.js</h1>
+    <h1 class="page-title">controllers/SdtdServer/get-players-view.js</h1>
     
 
     
@@ -39,61 +39,59 @@
         <article>
             <pre class="prettyprint source linenums"><code>module.exports = {
 
-  friendlyName: 'Console',
 
-  description: 'Start the console of a 7 Days to Die server',
+  friendlyName: 'Get players view',
+
+
+  description: 'Load the player overview view',
+
 
   inputs: {
     serverId: {
-      description: 'The ID of the server',
-      type: 'number',
-      required: true
+      required: true,
+      example: 4
     }
   },
+
 
   exits: {
     success: {
       responseType: 'view',
-      viewTemplatePath: 'sdtdServer/console'
-    },
-    notFound: {
-      description: 'No server with the specified ID was found in the database.',
-      responseType: 'notFound'
-    },
-    notLoggedIn: {
-      responseType: 'badRequest',
-      description: 'User is not logged in (check signedCookies)'
+      viewTemplatePath: 'sdtdServer/players'
     }
+
   },
 
-  /**
+    /**
    * @memberof SdtdServer
-   * @name console
+   * @name get-players-view
    * @method
-   * @description Server the console view
-   * @param {number} serverID ID of the server
+   * @description Serve the players views
+   * @param {number} serverId ID of the server
    */
+
 
   fn: async function (inputs, exits) {
 
-    if (_.isUndefined(this.req.signedCookies.userProfile)) {
-      throw 'notLoggedIn';
-    }
-
-    sails.log.debug(`VIEW - SdtdServer:console - Showing console for ${inputs.serverId}`);
-
     try {
-      let server = await SdtdServer.findOne(inputs.serverId);
-      return exits.success({
-        server: server
+      sails.log.debug('VIEW - SdtdServer:players - serving players view')
+      let server = await SdtdServer.findOne({
+        id: inputs.serverId
       });
+      let players = await Player.find({
+        server: server.id
+      });
+      exits.success({
+        players: players,
+        server: server
+      })
     } catch (error) {
-      sails.log.error(`VIEW - SdtdServer:console - ${error}`);
-      throw 'notFound';
+      sails.log.error(`VIEW - SdtdServer:players - ${error}`)
     }
-
 
   }
+
+
 };
 </code></pre>
         </article>

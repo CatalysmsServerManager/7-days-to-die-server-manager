@@ -34,6 +34,7 @@ module.exports = {
   /**
    * @memberof SdtdServer
    * @name executeCommand
+   * @method
    * @description Executes a command on a 7dtd server
    * @param {number} serverID ID of the server
    * @param {string} command Command to be executed

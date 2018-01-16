@@ -29,6 +29,7 @@ module.exports = {
   /**
    * @memberof SdtdServer
    * @name logging-toggle
+   * @method
    * @description Toggles the status of the logging hook for a server
    * @param {string} serverId
    */

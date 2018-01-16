@@ -30,6 +30,7 @@ module.exports = {
   /**
    * @memberof SdtdServer
    * @name chat
+   *    * @method
    * @description Serves the chatbridge view
    * @param {number} serverID ID of the server
    */

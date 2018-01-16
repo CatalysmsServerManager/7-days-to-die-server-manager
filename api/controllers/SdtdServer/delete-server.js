@@ -30,6 +30,7 @@ module.exports = {
   /**
    * @memberof SdtdServer
    * @name delete
+   * @method
    * @description Deletes a server from the system
    * @param {number} serverID ID of the server
    */

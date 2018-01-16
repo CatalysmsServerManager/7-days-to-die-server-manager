@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>controllers/SdtdServer/console.js - Documentation</title>
+    <title>controllers/SdtdServer/load-server-info.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">controllers/SdtdServer/console.js</h1>
+    <h1 class="page-title">controllers/SdtdServer/load-server-info.js</h1>
     
 
     
@@ -39,61 +39,50 @@
         <article>
             <pre class="prettyprint source linenums"><code>module.exports = {
 
-  friendlyName: 'Console',
 
-  description: 'Start the console of a 7 Days to Die server',
+  friendlyName: 'Load server info',
+
+
+  description: 'Load server info and save to database',
+
 
   inputs: {
     serverId: {
-      description: 'The ID of the server',
-      type: 'number',
-      required: true
+      required: true,
+      description: 'ID of the server',
+      type: 'string'
     }
   },
 
+
   exits: {
-    success: {
-      responseType: 'view',
-      viewTemplatePath: 'sdtdServer/console'
-    },
     notFound: {
-      description: 'No server with the specified ID was found in the database.',
-      responseType: 'notFound'
-    },
-    notLoggedIn: {
-      responseType: 'badRequest',
-      description: 'User is not logged in (check signedCookies)'
+      description: 'Given serverId did not correspond to a server in the system'
     }
   },
 
   /**
    * @memberof SdtdServer
-   * @name console
    * @method
-   * @description Server the console view
-   * @param {number} serverID ID of the server
+   * @name load-server-info
+   * @description Load/update server info and save to DB
+   * @param {number} serverId ID of the server
    */
+
 
   fn: async function (inputs, exits) {
 
-    if (_.isUndefined(this.req.signedCookies.userProfile)) {
-      throw 'notLoggedIn';
-    }
-
-    sails.log.debug(`VIEW - SdtdServer:console - Showing console for ${inputs.serverId}`);
+    sails.log.debug(`API - SdtdServer:loadServerInfo - loading info for server ${inputs.serverId}`)
 
     try {
-      let server = await SdtdServer.findOne(inputs.serverId);
-      return exits.success({
-        server: server
-      });
+      let serverInfo = await sails.helpers.loadSdtdserverInfo(inputs.serverId);
+      exits.success(serverInfo)
     } catch (error) {
-      sails.log.error(`VIEW - SdtdServer:console - ${error}`);
-      throw 'notFound';
+      sails.log.error(`API - SdtdServer:loadServerInfo - ${error}`)
     }
-
-
   }
+
+
 };
 </code></pre>
         </article>

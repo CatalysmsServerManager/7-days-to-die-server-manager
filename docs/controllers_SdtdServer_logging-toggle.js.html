@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>controllers/SdtdServer/console.js - Documentation</title>
+    <title>controllers/SdtdServer/logging-toggle.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">controllers/SdtdServer/console.js</h1>
+    <h1 class="page-title">controllers/SdtdServer/logging-toggle.js</h1>
     
 
     
@@ -39,61 +39,62 @@
         <article>
             <pre class="prettyprint source linenums"><code>module.exports = {
 
-  friendlyName: 'Console',
 
-  description: 'Start the console of a 7 Days to Die server',
+  friendlyName: 'Logging toggle',
+
+
+  description: 'Toggle the 7dtdLoggingHook',
+
 
   inputs: {
     serverId: {
-      description: 'The ID of the server',
-      type: 'number',
-      required: true
+      required: true,
+      type: 'string'
     }
   },
 
+
   exits: {
-    success: {
-      responseType: 'view',
-      viewTemplatePath: 'sdtdServer/console'
-    },
+
     notFound: {
-      description: 'No server with the specified ID was found in the database.',
-      responseType: 'notFound'
+      description: 'Server with given ID not found in the system'
     },
-    notLoggedIn: {
-      responseType: 'badRequest',
-      description: 'User is not logged in (check signedCookies)'
+    success: {
+      description: "Returns true if set to enabled, false if set to disabled"
     }
+
   },
 
   /**
    * @memberof SdtdServer
-   * @name console
+   * @name logging-toggle
    * @method
-   * @description Server the console view
-   * @param {number} serverID ID of the server
+   * @description Toggles the status of the logging hook for a server
+   * @param {string} serverId
    */
+
 
   fn: async function (inputs, exits) {
 
-    if (_.isUndefined(this.req.signedCookies.userProfile)) {
-      throw 'notLoggedIn';
-    }
-
-    sails.log.debug(`VIEW - SdtdServer:console - Showing console for ${inputs.serverId}`);
-
     try {
-      let server = await SdtdServer.findOne(inputs.serverId);
-      return exits.success({
-        server: server
-      });
+      sails.log.debug(`API - SdtdServer:logging-toggle - Toggling logging for server ${inputs.serverId}`);
+      let status
+      if (sails.hooks.sdtdlogs.getStatus(inputs.serverId)) {
+        sails.hooks.sdtdlogs.start(inputs.serverId);
+        status = true
+      } else {
+        sails.hooks.sdtdlogs.stop(inputs.serverId)
+        status = false
+      }
+      return exits.success(status)
     } catch (error) {
-      sails.log.error(`VIEW - SdtdServer:console - ${error}`);
-      throw 'notFound';
+      sails.log.error(`API - SdtdServer:logging-toggle - ${error}`);
     }
 
 
   }
+
+
 };
 </code></pre>
         </article>

@@ -26,6 +26,7 @@ module.exports = {
 
   /**
    * @memberof SdtdServer
+   * @method
    * @name get-players
    * @description Get information about all players that have logged into the server
    * @param {number} serverId ID of the server

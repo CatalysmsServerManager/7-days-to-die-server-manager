@@ -38,6 +38,8 @@ module.exports = {
 
   /**
    * @memberof SdtdServer
+   * @name add-server
+   * @method
    * @description Add a server to the system
    * @param {string} serverip Ip of the server to add
    * @param {number} telnetport Telnet port of the server

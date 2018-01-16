@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>controllers/SdtdServer/console.js - Documentation</title>
+    <title>controllers/Player/profile.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">controllers/SdtdServer/console.js</h1>
+    <h1 class="page-title">controllers/Player/profile.js</h1>
     
 
     
@@ -39,13 +39,13 @@
         <article>
             <pre class="prettyprint source linenums"><code>module.exports = {
 
-  friendlyName: 'Console',
+  friendlyName: 'Player Profile',
 
-  description: 'Start the console of a 7 Days to Die server',
+  description: 'Show profile of a SdtdPlayer',
 
   inputs: {
-    serverId: {
-      description: 'The ID of the server',
+    playerId: {
+      description: 'The ID of the player',
       type: 'number',
       required: true
     }
@@ -54,41 +54,32 @@
   exits: {
     success: {
       responseType: 'view',
-      viewTemplatePath: 'sdtdServer/console'
+      viewTemplatePath: 'player/profile'
     },
     notFound: {
-      description: 'No server with the specified ID was found in the database.',
+      description: 'No player with the specified ID was found in the database.',
       responseType: 'notFound'
-    },
-    notLoggedIn: {
-      responseType: 'badRequest',
-      description: 'User is not logged in (check signedCookies)'
     }
   },
 
   /**
    * @memberof SdtdServer
    * @name console
-   * @method
    * @description Server the console view
    * @param {number} serverID ID of the server
    */
 
   fn: async function (inputs, exits) {
 
-    if (_.isUndefined(this.req.signedCookies.userProfile)) {
-      throw 'notLoggedIn';
-    }
-
-    sails.log.debug(`VIEW - SdtdServer:console - Showing console for ${inputs.serverId}`);
+    sails.log.debug(`VIEW - Player:profile - Showing profile for ${inputs.playerId}`);
 
     try {
-      let server = await SdtdServer.findOne(inputs.serverId);
+      let player = await Player.findOne(inputs.playerId);
       return exits.success({
-        server: server
+        player: player
       });
     } catch (error) {
-      sails.log.error(`VIEW - SdtdServer:console - ${error}`);
+      sails.log.error(`VIEW - Player:profile - ${error}`);
       throw 'notFound';
     }
 

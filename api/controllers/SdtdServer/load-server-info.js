@@ -24,6 +24,7 @@ module.exports = {
 
   /**
    * @memberof SdtdServer
+   * @method
    * @name load-server-info
    * @description Load/update server info and save to DB
    * @param {number} serverId ID of the server

@@ -30,6 +30,7 @@ module.exports = {
   /**
    * @memberof SdtdServer
    * @name dashboard
+   * @method
    * @description Serves the dashboard for a 7 Days to die server
    */
 

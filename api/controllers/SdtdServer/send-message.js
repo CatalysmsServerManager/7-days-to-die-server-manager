@@ -38,6 +38,7 @@ module.exports = {
   /**
    * @memberof SdtdServer
    * @name sendMessage
+   * @method
    * @description sends a message on a 7dtd server
    * @param {number} serverID ID of the server
    * @param {string} message Message to be executed

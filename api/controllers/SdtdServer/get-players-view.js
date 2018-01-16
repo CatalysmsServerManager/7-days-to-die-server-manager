@@ -23,6 +23,15 @@ module.exports = {
 
   },
 
+    /**
+   * @memberof SdtdServer
+   * @name get-players-view
+   * @method
+   * @description Serve the players views
+   * @param {number} serverId ID of the server
+   */
+
+
   fn: async function (inputs, exits) {
 
     try {

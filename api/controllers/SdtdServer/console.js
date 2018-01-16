@@ -30,6 +30,7 @@ module.exports = {
   /**
    * @memberof SdtdServer
    * @name console
+   * @method
    * @description Server the console view
    * @param {number} serverID ID of the server
    */
