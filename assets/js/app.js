@@ -11,7 +11,7 @@ function loadSdtdServers(userId) {
     },
     success: (data, status, xhr) => {
       if (data.length === 0) {
-        return serverslist.append('None');
+        return serverslist.append(`<a class="dropdown-item"> None </a>`);
       }
       for (let index = 0; index < data.length; index++) {
         const server = data[index];
