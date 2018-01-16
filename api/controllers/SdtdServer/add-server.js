@@ -1,11 +1,8 @@
 module.exports = {
 
-
   friendlyName: 'Add server',
 
-
   description: '',
-
 
   inputs: {
 
@@ -32,7 +29,6 @@ module.exports = {
 
   },
 
-
   exits: {
 
     success: {
@@ -52,7 +48,6 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     sails.log.info(`API - SdtdServer:addServer - Adding a new server ${inputs.serverIp} ${inputs.webPort}`);
-
 
     try {
       const userProfile = this.req.signedCookies.userProfile;

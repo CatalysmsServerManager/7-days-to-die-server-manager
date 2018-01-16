@@ -28,11 +28,11 @@ module.exports.security = {
    *                                                                          *
    ***************************************************************************/
 
-  cors: {
-    allRoutes: true,
-    allowOrigins: ['http://catalysm.ddns.net'],
-    allowCredentials: false,
-  },
+  // cors: {
+  //   allRoutes: true,
+  //   allowOrigins: ['http://localhost:1337'],
+  //   allowCredentials: false,
+  // },
 
 
   /****************************************************************************

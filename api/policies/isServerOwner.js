@@ -1,12 +1,21 @@
 module.exports = async function isServerOwner(req, res, next) {
-  if (_.isUndefined(req.signedCookies.userProfile)) { return res.badRequest('You have to be logged in.'); }
-  if (_.isUndefined(req.param('serverID')) && _.isUndefined(req.param('serverId')) && _.isUndefined(req.query.serverId) && _.isUndefined(req.query.serverID)) { return res.badRequest('No server ID given'); }
+  if (_.isUndefined(req.signedCookies.userProfile)) {
+    return res.badRequest('You have to be logged in.');
+  }
+  if (_.isUndefined(req.param('serverID')) && _.isUndefined(req.param('serverId')) && _.isUndefined(req.query.serverId) && _.isUndefined(req.query.serverID)) {
+    return res.badRequest('No server ID given');
+  }
 
   var serverId = req.param('serverID') || req.param('serverId') || req.query.serverId;
   var isOwner = false;
-  SdtdServer.findOne({id: serverId}).exec(function(err, foundServer) {
-    if (err) { return res.serverError(err); }
-    if (foundServer.owner === req.signedCookies.userProfile.id) {
+  SdtdServer.findOne({
+    id: serverId
+  }).exec(function (err, foundServer) {
+      if (err) {
+        return res.serverError(err);
+      }
+      if (_.isUndefined(foundServer)) return res.notFound();
+      if (foundServer.owner === req.signedCookies.userProfile.id) {
       isOwner = true;
     }
     if (isOwner) {

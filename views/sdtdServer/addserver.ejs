@@ -1,4 +1,5 @@
 <body>
+<%- exposeLocalsToBrowser() %>
 
   <form id="addServer" class="w-25 p-3 float-left">
     <div class="form-group">
@@ -48,11 +49,13 @@
       return $('#telnetpassword').addClass("is-invalid")
     }
 
+    console.log(window.SAILS_LOCALS._csrf)
 
     $.ajax({
       url: "/api/sdtdserver/addserver",
-      type: "POST",
+      type: 'POST',
       data: {
+        _csrf: window.SAILS_LOCALS._csrf,
         serverIp: serverip,
         webPort: webport,
         telnetPort: telnetport,
@@ -62,7 +65,8 @@
         window.location.replace(`/sdtdserver/${data.id}/dashboard`)
       },
       error: (xhr, status, error) => {
-          let htmlToAdd = `<h2>Error</h2> <br> <p>${xhr.responseText}</p> <br> <p>Contact support for more help please</p>`
+        console.log(xhr)
+        let htmlToAdd = `<h2>Error</h2> <br> <p>${xhr.responseText}</p> <br> <p>Contact support for more help please</p>`
         $("#message").append(htmlToAdd)
       }
     })
