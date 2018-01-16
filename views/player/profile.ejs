@@ -1,0 +1,47 @@
+</body>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-4">
+        <h1>
+          <%= player.name %>
+        </h1>
+        <div class="row">
+          <div class="col-md-8">
+            <img alt="Bootstrap Image Preview" src="http://lorempixel.com/140/140/" class="img-circle" />
+          </div>
+          <div class="col-md-4">
+            <div class="btn-group btn-group-vertical">
+
+              <button class="btn btn-danger" type="button">
+                <em class="glyphicon glyphicon-align-left"></em> Action 1
+              </button>
+              <button class="btn btn-default" type="button">
+                <em class="glyphicon glyphicon-align-center"></em> Action 2
+              </button>
+              <button class="btn btn-default" type="button">
+                <em class="glyphicon glyphicon-align-right"></em> Action 3
+              </button>
+              <button class="btn btn-default" type="button">
+                <em class="glyphicon glyphicon-align-justify"></em> Action 4
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <ul class="list-group">
+          <li class="list-group-item">Steam ID: <%= player.steamId %></li>
+          <li class="list-group-item">Entity ID: <%= player.entityId %></li>
+          <li class="list-group-item">Location: <%= player.positionX %> <%= player.positionY %> <%= player.positionZ %></li>
+          <li class="list-group-item">Playtime: <%= player.playtime %> seconds</li>
+          <li class="list-group-item">Ban status: <%= player.banned %> </li>
+        </ul>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+      
+      </div>
+    </div>
+  </div>
+  </body>

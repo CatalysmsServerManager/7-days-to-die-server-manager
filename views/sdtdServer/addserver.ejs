@@ -49,8 +49,6 @@
       return $('#telnetpassword').addClass("is-invalid")
     }
 
-    console.log(window.SAILS_LOCALS._csrf)
-
     $.ajax({
       url: "/api/sdtdserver/addserver",
       type: 'POST',

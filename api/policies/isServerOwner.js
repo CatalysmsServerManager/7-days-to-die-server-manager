@@ -11,11 +11,11 @@ module.exports = async function isServerOwner(req, res, next) {
   SdtdServer.findOne({
     id: serverId
   }).exec(function (err, foundServer) {
-      if (err) {
-        return res.serverError(err);
-      }
-      if (_.isUndefined(foundServer)) return res.notFound();
-      if (foundServer.owner === req.signedCookies.userProfile.id) {
+    if (err) {
+      return res.serverError(err);
+    }
+    if (_.isUndefined(foundServer)) return res.notFound();
+    if (foundServer.owner === req.signedCookies.userProfile.id) {
       isOwner = true;
     }
     if (isOwner) {

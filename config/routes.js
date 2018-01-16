@@ -66,6 +66,7 @@ module.exports.routes = {
   'get /sdtdserver/:serverId/console': 'SdtdServerController.console',
   'get /sdtdserver/:serverId/chat': 'SdtdServerController.chat',
   'get /sdtdserver/:serverId/players': 'SdtdServerController.get-players-view',
+  'get /player/:playerId/profile': 'PlayerController.profile',
   
 
 
@@ -73,11 +74,13 @@ module.exports.routes = {
   //  ╠═╣╠═╝║  ║╣ ║║║ ║║╠═╝║ ║║║║║ ║ ╚═╗
   //  ╩ ╩╩  ╩  ╚═╝╝╚╝═╩╝╩  ╚═╝╩╝╚╝ ╩ ╚═╝
 
-  'post /api/sdtdserver/addserver': 'SdtdServerController/add-server',
+  
   '/api/sdtdserver/executeCommand': 'SdtdServerController.execute-command',
   '/api/sdtdserver/sendMessage': 'SdtdServerController.send-message',
   '/api/sdtdserver/loadServerInfo': 'SdtdServerController.load-server-info',
   '/api/sdtdserver/toggleLogging': 'SdtdServerController.logging-toggle',
+
+  'post /api/sdtdserver/addserver': 'SdtdServerController/add-server',
   'get /api/sdtdserver/players': 'SdtdServerController.get-players',
   'get /api/sdtdserver/info': 'SdtdServerController.load-server-info',
 

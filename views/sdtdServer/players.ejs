@@ -23,11 +23,14 @@
                   <%= player.entityId %>
                 </th>
                 <td>
-                  <%= player.name %>
+                  <% const playerLink = '/player/' + player.id + '/profile' %>
+                    <a href='<%= playerLink %>'>
+                      <%= player.name %>
+                    </a>
                 </td>
                 <td>
                   <% let locationString = `${player.positionX} ${player.positionY} ${player.positionZ}` %>
-                  <%= locationString %>
+                    <%= locationString %>
                 </td>
               </tr>
               <% }) %>
