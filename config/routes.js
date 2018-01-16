@@ -66,6 +66,8 @@ module.exports.routes = {
   'get /sdtdserver/:serverId/console': 'SdtdServerController.console',
   'get /sdtdserver/:serverId/chat': 'SdtdServerController.chat',
   'get /sdtdserver/:serverId/players': 'SdtdServerController.get-players-view',
+  'get /sdtdserver/:serverId/delete' : 'SdtdServerController.delete-server',
+  
   'get /player/:playerId/profile': 'PlayerController.profile',
   
 
@@ -75,14 +77,14 @@ module.exports.routes = {
   //  ╩ ╩╩  ╩  ╚═╝╝╚╝═╩╝╩  ╚═╝╩╝╚╝ ╩ ╚═╝
 
   
-  '/api/sdtdserver/executeCommand': 'SdtdServerController.execute-command',
-  '/api/sdtdserver/sendMessage': 'SdtdServerController.send-message',
-  '/api/sdtdserver/loadServerInfo': 'SdtdServerController.load-server-info',
-  '/api/sdtdserver/toggleLogging': 'SdtdServerController.logging-toggle',
-
-  'post /api/sdtdserver/addserver': 'SdtdServerController/add-server',
+  'get /api/sdtdserver/executeCommand': 'SdtdServerController.execute-command',
+  'get /api/sdtdserver/sendMessage': 'SdtdServerController.send-message',
+  'get /api/sdtdserver/loadServerInfo': 'SdtdServerController.load-server-info',
+  'get /api/sdtdserver/toggleLogging': 'SdtdServerController.logging-toggle',
   'get /api/sdtdserver/players': 'SdtdServerController.get-players',
   'get /api/sdtdserver/info': 'SdtdServerController.load-server-info',
+
+  'post /api/sdtdserver/addserver': 'SdtdServerController/add-server',
 
   'get /api/user/ownedServers': {
     controller: 'User',

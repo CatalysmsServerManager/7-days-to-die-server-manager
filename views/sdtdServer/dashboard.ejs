@@ -28,9 +28,12 @@
               <button class="btn btn-default" type="button">
                 <em class="glyphicon glyphicon-align-right"></em> Placeholder
               </button>
-              <button class="btn btn-default" type="button">
-                <em class="glyphicon glyphicon-align-justify"></em> Placeholder
-              </button>
+              <% const deleteLink = '/sdtdserver/' + server.id + '/delete' %>
+                <a href='<%= deleteLink %>'>
+                  <button class="btn btn-default btn-danger" type="button">
+                    <em class="glyphicon glyphicon-align-justify"></em> Delete server
+                  </button>
+                </a>
         </div>
       </div>
     </div>
