@@ -4,6 +4,16 @@ var assert = require('assert');
 describe('API @api', function () {
   describe('SdtdServer', function () {
 
+    before(async function () {
+      sails.serverWithBadWebPort = await SdtdServer.create({
+        ip: process.env.CSMM_TEST_IP,
+        telnetPort: process.env.CSMM_TEST_TELNETPORT,
+        telnetPassword: process.env.CSMM_TEST_TELNETPW,
+        webPort: '1111',
+        owner: sails.testUser.id,
+      }).fetch()
+    })
+
     describe('GET /api/sdtdserver/togglelogging', function () {
       this.timeout(5000)
       it('Can start logging', function (done) {
@@ -45,13 +55,14 @@ describe('API @api', function () {
         supertest(sails.hooks.http.app)
           .get('/api/sdtdserver/toggleLogging')
           .query({
-            serverId: sails.testServer.id + 1
+            serverId: sails.testServer.id + 111
           })
           .expect(404, done)
       })
     })
 
     describe('GET /api/sdtdserver/players', function () {
+
       it('Should return JSON', function (done) {
         supertest(sails.hooks.http.app)
           .get('/api/sdtdserver/players')
@@ -80,6 +91,23 @@ describe('API @api', function () {
           .get('/api/sdtdserver/players')
           .expect(400, done);
       });
+      it('Should error when invalid serverID given', function (done) {
+        supertest(sails.hooks.http.app)
+          .get('/api/sdtdserver/players')
+          .query({
+            serverId: sails.serverWithBadWebPort.id
+          })
+          .expect(400, done);
+      });
+      it('Returns badRequest when server info is invalid', function (done) {
+        supertest(sails.hooks.http.app)
+          .get('/api/sdtdserver/players')
+          .query({
+            serverId: sails.testServer.id + 111
+          })
+          .expect(404, done);
+
+      })
     });
 
     describe('GET /api/sdtdserver/info', function () {
@@ -141,7 +169,7 @@ describe('API @api', function () {
         supertest(sails.hooks.http.app)
           .get('/api/sdtdserver/executecommand')
           .query({
-            serverId: sails.testServer.id+10,
+            serverId: sails.testServer.id + 10,
             command: 'help'
           })
           .expect(404, done);

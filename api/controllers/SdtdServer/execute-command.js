@@ -63,8 +63,11 @@ module.exports = {
           };
           return exits.success(logLine);
         },
+        unknownCommand: (error) => {
+          return exits.commandError(error)
+        },
         error: (error) => {
-          return exits.commandError(error);
+          return exits.error(error);
         }
       });
 

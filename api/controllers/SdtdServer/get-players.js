@@ -21,6 +21,10 @@ module.exports = {
     },
     badRequest: {
       responseType: 'badRequest'
+    },
+    notFound: {
+      responseType: 'notFound',
+      description: 'Server was not found in DB'
     }
   },
 
@@ -38,12 +42,15 @@ module.exports = {
       let server = await SdtdServer.findOne({
         id: inputs.serverId
       });
+      if (_.isUndefined(server)) {
+        return exits.notFound();
+      }
       sails.helpers.loadPlayerData(server.id)
         .switch({
           success: function(data) {
             return exits.success(data)
           },
-          error: function() {
+          error: function(error) {
             return exits.badRequest()
           }
         })

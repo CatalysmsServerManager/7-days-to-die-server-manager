@@ -133,7 +133,7 @@ module.exports = {
     }
 
     async function getPlayerList(server) {
-      return new Promise(resolve => {
+      return new Promise((resolve, reject) => {
         sevenDays.getPlayerList({
           ip: server.ip,
           port: server.webPort,
@@ -141,7 +141,7 @@ module.exports = {
           authToken: server.authToken
         }).exec({
           error: function (err) {
-            throw err;
+            reject(err)
           },
           success: function (playerList) {
             // If a steam ID is provided, we filter the list to only 1 player
