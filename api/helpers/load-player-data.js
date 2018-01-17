@@ -91,6 +91,7 @@ module.exports = {
               name: newPlayer.name,
               ip: newPlayer.ip
             });
+            console.log(newPlayer)
             if (newPlayer.online) {
               playerToSend = await Player.update({
                 steamId: foundOrCreatedPlayer.steamId,

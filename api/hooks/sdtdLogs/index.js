@@ -34,7 +34,7 @@ module.exports = function sdtdLogs(sails) {
           _.each(enabledServers, async function (server) {
             try {
               let loggingObj = await createLogObject(server.id);
-              return loggingInfoMap.set(String(serverID), loggingObj);
+              return loggingInfoMap.set(String(server.id), loggingObj);
             } catch (error) {
               sails.log.error(`HOOKS - sdtdLogs - ${error}`);
             }
@@ -167,9 +167,15 @@ module.exports = function sdtdLogs(sails) {
               sails.sockets.broadcast(server.id, 'chatMessage', chatMessage);
             });
 
-            eventEmitter.on('playerConnected', function (connectedMsg) {
-              sails.sockets.broadcast(server.id, 'playerConnected', connectedMsg);
-              sails.helpers.loadPlayerData(server.id, connectedMsg.steamID);
+            eventEmitter.on('playerConnected', async function (connectedMsg) {
+              try {
+                await sails.helpers.loadPlayerData(server.id, connectedMsg.steamID);
+                sails.sockets.broadcast(server.id, 'playerConnected', connectedMsg);
+              } catch (error) {
+                sails.sockets.broadcast(server.id, 'playerConnected', connectedMsg);
+                sails.log.error(`HOOKS - sdtdLogs - ${error}`)
+              }
+
             });
 
             eventEmitter.on('playerDisconnected', function (disconectedMsg) {
