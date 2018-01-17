@@ -228,12 +228,12 @@ describe('Helpers', function () {
       sails.helpers.add7DtdServer.with({
         ip: sails.testServer.ip,
         telnetPort: sails.testServer.telnetPort,
-        telnetPassword: "WRONG-PASSWORD",
+        telnetPassword: "WRONGPASSWORD",
         webPort: sails.testServer.webPort,
         owner: sails.testUser.id
       }).switch({
         error: function (err) {
-          done(err);
+          done();
         },
         badTelnet: function (error) {
           done()

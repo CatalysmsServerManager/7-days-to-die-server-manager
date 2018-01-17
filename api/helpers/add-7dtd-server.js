@@ -57,38 +57,35 @@ module.exports = {
    * @method
    */
 
-  fn: function (inputs, exits) {
+  fn: async function (inputs, exits) {
 
     sails.log.debug(`HELPER - add7DtdServer - adding a server with ip: ${inputs.ip} webPort: ${inputs.webPort} owner: ${inputs.owner}`);
 
-    sails.helpers.createWebToken.with({
-      ip: inputs.ip,
-      port: inputs.telnetPort,
-      password: inputs.telnetPassword
-    }).switch({
-      error: function (err) {
-        sails.log.error(`HELPER - add7DtdServer - ${err}`);
-        return exits.error(new Error('Could not create webtokens via telnet!' + err));
-      },
-      badTelnet: function (err) {
-        return exits.badTelnet(err)
-      },
-      success: async function (authInfo) {
-        try {
-          let server = await updateOrCreateServer(authInfo);
-          return exits.success(server)
-        } catch (error) {
-          return exits.error(error)
-        }
+    try {
+      let authInfo = await sails.helpers.createWebToken.with({
+        ip: inputs.ip,
+        port: inputs.telnetPort,
+        password: inputs.telnetPassword
+      })
 
-
-
+      if (_.isUndefined(authInfo)) {
+        return exits.badTelnet()
       }
-    });
+
+      let server = await updateOrCreateServer(authInfo)
+      return exits.success(server)
+
+    } catch (error) {
+      sails.log.error(`HELPER - add7DtdServer - ${error}`);
+      if (error.message == "badWebport") {
+        return exits.badWebPort()
+      }
+      return exits.error(error)
+    }
 
 
     async function updateOrCreateServer(authInfo) {
-      try {
+      return new Promise(async(resolve, reject) => {
         let newServer = await SdtdServer.findOrCreate({
           ip: inputs.ip,
           webPort: inputs.webPort,
@@ -107,15 +104,14 @@ module.exports = {
         let status = await sails.helpers.sdtd.checkIfAvailable(newServer.id)
           .tolerate('notAvailable', function () {
             sails.log.debug(`HELPER - add7DtdServer - not available`);
-            return exits.badWebPort()
+            reject(new Error('badWebport'))
           })
         sails.log.debug(`HELPER - add7DtdServer - success`);
         sails.hooks.sdtdlogs.start(newServer.id);
-        return newServer;
-      } catch (error) {
-        sails.log.error(`HELPER - add7DtdServer - ${error}`);
-        exits.error(new Error('Error while creating/updating server in DB' + error));
-      }
+        resolve(newServer)
+      })
+
+
     }
   }
 
