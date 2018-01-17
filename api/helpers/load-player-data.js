@@ -46,18 +46,18 @@ module.exports = {
     }
 
     async function loadPlayersInventory(playerList, server) {
-      return new Promise(resolve => {
+      return new Promise((resolve, reject) => {
         let listWithInventories = playerList.map(function (player) {
-          return new Promise(resolve => {
+          return new Promise((resolve, reject) => {
             sevenDays.getPlayerInventory({
               ip: server.ip,
               port: server.webPort,
               authName: server.authName,
               authToken: server.authToken,
-              steamID: player.steamid
+              steamId: player.steamid
             }).exec({
               error: function (err) {
-                throw err;
+                reject(err)
               },
               success: function (data) {
                 player.inventory = new Object();
@@ -74,7 +74,7 @@ module.exports = {
     }
 
     async function updatePlayerInfo(newPlayer) {
-      return new Promise(async function (resolve) {
+      return new Promise(async function (resolve, reject) {
         try {
           newPlayer.then(async function (newPlayer) {
             if (newPlayer.name === '') {
@@ -126,7 +126,7 @@ module.exports = {
             resolve(playerToSend);
           });
         } catch (error) {
-          throw error;
+          reject(error)
         }
 
       });
