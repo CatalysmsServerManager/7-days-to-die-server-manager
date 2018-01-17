@@ -16,6 +16,23 @@ describe('API @api', function () {
 
     describe('GET /api/sdtdserver/togglelogging', function () {
       this.timeout(5000)
+      it('Can stop logging', function (done) {
+        supertest(sails.hooks.http.app)
+          .get('/api/sdtdserver/toggleLogging')
+          .query({
+            serverId: sails.testServer.id
+          })
+          .expect('Content-Type', /json/)
+          .expect(200)
+          .then((response) => {
+            assert.notEqual(true, sails.hooks.sdtdlogs.getStatus(sails.testServer.id))
+            done();
+          })
+          .catch((err) => {
+            done(err);
+          })
+      })
+
       it('Can start logging', function (done) {
         let loggingStatus = sails.hooks.sdtdlogs.getStatus(sails.testServer.id);
         supertest(sails.hooks.http.app)
@@ -26,25 +43,7 @@ describe('API @api', function () {
           .expect('Content-Type', /json/)
           .expect(200)
           .then((response) => {
-            assert.notEqual(loggingStatus, sails.hooks.sdtdlogs.getStatus(sails.testServer.id))
-            done();
-          })
-          .catch((err) => {
-            done(err);
-          })
-      })
-
-      it('Can stop logging', function (done) {
-        let loggingStatus = sails.hooks.sdtdlogs.getStatus(sails.testServer.id);
-        supertest(sails.hooks.http.app)
-          .get('/api/sdtdserver/toggleLogging')
-          .query({
-            serverId: sails.testServer.id
-          })
-          .expect('Content-Type', /json/)
-          .expect(200)
-          .then((response) => {
-            assert.notEqual(loggingStatus, sails.hooks.sdtdlogs.getStatus(sails.testServer.id))
+            assert.notEqual(false, sails.hooks.sdtdlogs.getStatus(sails.testServer.id))
             done();
           })
           .catch((err) => {
