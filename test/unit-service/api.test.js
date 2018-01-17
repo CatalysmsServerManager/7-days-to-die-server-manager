@@ -92,6 +92,7 @@ describe('API @api', function () {
           .expect(400, done);
       });
       it('Returns badRequest when server info is invalid', function (done) {
+        this.timeout(5000)
         supertest(sails.hooks.http.app)
           .get('/api/sdtdserver/players')
           .query({
