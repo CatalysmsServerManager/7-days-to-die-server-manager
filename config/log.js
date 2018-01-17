@@ -10,22 +10,13 @@
  * https://sailsjs.com/docs/concepts/logging
  */
 
-var winston = require('winston');
-require('winston-papertrail').Papertrail;
+const winston = require('winston');
+let customLogger = new winston.Logger();
 
-var customLogger = new winston.Logger({
+// A console transport logging debug and above.
+customLogger.add(winston.transports.Console, {
   level: 'debug',
-  //format: winston.format.json(),
-  transports: [
-    new winston.transports.Console({
-      level: 'silly'
-    }),
-    new winston.transports.Papertrail({
-      host: process.env.PAPERTRAILHOST,
-      port: process.env.PAPERTRAILPORT,
-      colorize: true,
-    })
-  ]
+  colorize: true
 });
 
 module.exports.log = {
