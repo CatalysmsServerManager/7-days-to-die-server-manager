@@ -2,13 +2,18 @@
   require('dotenv').config();
 
   exports.config = {
-    tests: "./features/*.test.js",
+    tests: "./features/**/*.test.js",
     timeout: 10000,
     output: "./output",
     helpers: {
       WebDriverIO: {
         url: process.env.CSMM_HOSTNAME,
-        browser: "chrome"
+        browser: "chrome",
+        desiredCapabilities: {
+          chromeOptions: {
+            args: ["--headless", "--disable-gpu", "--window-size=800,600"]
+          }
+        }
       }
     },
     include: {

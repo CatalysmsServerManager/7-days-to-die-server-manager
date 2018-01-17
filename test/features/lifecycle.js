@@ -27,6 +27,12 @@ module.exports = {
       // here you can load fixtures, etc.
       // (for example, you might want to create some records in the database)
       try {
+        sails.testServer = {
+          ip: process.env.CSMM_TEST_IP,
+          telnetPort: process.env.CSMM_TEST_TELNETPORT,
+          telnetPassword: process.env.CSMM_TEST_TELNETPW,
+          webPort: process.env.CSMM_TEST_WEBPORT,
+        }
         await installSelenium()
         sails.seleniumServer = await startSelenium()
         return done()
