@@ -1,47 +1,77 @@
 </body>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-4">
-        <h1>
-          <%= player.name %>
-        </h1>
-        <div class="row">
-          <div class="col-md-8">
-            <img alt="Bootstrap Image Preview" src="http://lorempixel.com/140/140/" class="img-circle" />
-          </div>
-          <div class="col-md-4">
-            <div class="btn-group btn-group-vertical">
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-4">
+      <h1>
+        <%= player.name %>
+      </h1>
+      <div class="row">
+        <div class="col-md-8">
+          <img alt="Bootstrap Image Preview" src="http://lorempixel.com/140/140/" class="img-circle" />
+        </div>
+        <div class="col-md-4">
+          <div class="btn-group btn-group-vertical">
 
-              <button class="btn btn-danger" type="button">
-                <em class="glyphicon glyphicon-align-left"></em> Action 1
-              </button>
-              <button class="btn btn-default" type="button">
-                <em class="glyphicon glyphicon-align-center"></em> Action 2
-              </button>
-              <button class="btn btn-default" type="button">
-                <em class="glyphicon glyphicon-align-right"></em> Action 3
-              </button>
-              <button class="btn btn-default" type="button">
-                <em class="glyphicon glyphicon-align-justify"></em> Action 4
-              </button>
-            </div>
+            <button class="btn btn-danger" type="button">
+              <em class="glyphicon glyphicon-align-left"></em> Action 1
+            </button>
+            <button class="btn btn-default" type="button">
+              <em class="glyphicon glyphicon-align-center"></em> Action 2
+            </button>
+            <button class="btn btn-default" type="button">
+              <em class="glyphicon glyphicon-align-right"></em> Action 3
+            </button>
+            <button class="btn btn-default" type="button">
+              <em class="glyphicon glyphicon-align-justify"></em> Action 4
+            </button>
           </div>
         </div>
       </div>
-      <div class="col-md-8">
-        <ul class="list-group">
-          <li class="list-group-item">Steam ID: <%= player.steamId %></li>
-          <li class="list-group-item">Entity ID: <%= player.entityId %></li>
-          <li class="list-group-item">Location: <%= player.positionX %> <%= player.positionY %> <%= player.positionZ %></li>
-          <li class="list-group-item">Playtime: <%= player.playtime %> seconds</li>
-          <li class="list-group-item">Ban status: <%= player.banned %> </li>
-        </ul>
-      </div>
     </div>
-    <div class="row">
-      <div class="col-md-12">
-      
-      </div>
+    <div class="col-md-8">
+      <ul class="list-group">
+        <li class="list-group-item">Steam ID:
+          <%= player.steamId %>
+        </li>
+        <li class="list-group-item">Entity ID:
+          <%= player.entityId %>
+        </li>
+        <li class="list-group-item">Location:
+          <%= player.positionX %>
+            <%= player.positionY %>
+              <%= player.positionZ %>
+        </li>
+        <li class="list-group-item">Playtime:
+          <%= player.playtime %> seconds</li>
+        <li class="list-group-item">Ban status:
+          <%= player.banned %>
+        </li>
+      </ul>
     </div>
   </div>
-  </body>
+  <div class="row">
+    <div class="col-md-4">
+      <h2>Equipment</h2>
+
+      <ul class="list-group">
+
+        <% for (let prop in player.inventory.equipment) { %>
+          <% if(!_.isNull(player.inventory.equipment[prop])) { %>
+            <% let playerInvItem = player.inventory.equipment[prop] %>
+              <li id="player-equipment-<%= prop %>" class="list-group-item d-flex justify-content-between align-items-center">
+                <%= playerInvItem.name %>
+                  <span class="badge badge-primary badge-pill">
+                    <%= playerInvItem.quality %>
+                  </span>
+              </li>
+              <% } %>
+                <% } %>
+
+      </ul>
+    </div>
+    <div class="col-md-8">
+      bag & belt
+    </div>
+  </div>
+</div>
+</body>
