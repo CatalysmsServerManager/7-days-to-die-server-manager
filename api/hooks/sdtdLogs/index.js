@@ -11,7 +11,7 @@ module.exports = function sdtdLogs(sails) {
    * @private
    */
 
-  var loggingInfoMap = new Map();
+  let loggingInfoMap = new Map();
 
   return {
     /**
@@ -28,12 +28,17 @@ module.exports = function sdtdLogs(sails) {
           loggingEnabled: true
         }).exec(function (err, enabledServers) {
           if (err) {
-            sails.log.error(new Error('Error getting logging enabled servers from DB'));
-            throw err;
+            sails.log.error(`HOOKS - sdtdLogs - ${err}`);
           }
 
-          _.each(enabledServers, function (server) {
-            createLogObject(server.id);
+          _.each(enabledServers, async function (server) {
+            try {
+              let loggingObj = await createLogObject(server.id);
+              return loggingInfoMap.set(String(serverID), loggingObj);
+            } catch (error) {
+              sails.log.error(`HOOKS - sdtdLogs - ${error}`);
+            }
+
           });
         });
         return cb();
@@ -48,20 +53,24 @@ module.exports = function sdtdLogs(sails) {
      * @method
      */
 
-    start: function (serverID) {
+    start: async function (serverID) {
+      serverID = String(serverID)
+      try {
+        if (!loggingInfoMap.has(serverID)) {
+          sails.log.debug(`HOOKS - sdtdLogs - starting logging for server ${serverID}`)
+          await sails.models.sdtdserver.update({
+            id: serverID
+          }, {
+            loggingEnabled: true
+          })
+          let loggingObj = await createLogObject(serverID);
+          return loggingInfoMap.set(serverID, loggingObj);
+        } else {
+          throw new Error(`Tried to start logging for a server that already had it enables`)
+        }
 
-      if (!loggingInfoMap.has(parseInt(serverID))) {
-        return sails.models.sdtdserver.update({
-          id: serverID
-        }, {
-          loggingEnabled: true
-        })
-          .exec(function () {
-            return createLogObject(serverID);
-          });
-      } else {
-        let error = new Error('Tried to start logging for a server that already had it enabled');
-        sails.log.error(error);
+      } catch (error) {
+        sails.log.error(`HOOKS - sdtdLogs - ${error}`);
       }
     },
 
@@ -73,19 +82,25 @@ module.exports = function sdtdLogs(sails) {
      * @method
      */
 
-    stop: function (serverID) {
-      if (loggingInfoMap.has(serverID)) {
-        return sails.models.sdtdserver.update({
-          id: serverID
-        }, {
-          loggingEnabled: false
-        })
-          .exec(function () {
-            let loggingObj = loggingInfoMap.get(serverID);
-            loggingObj.stop();
-            loggingInfoMap.delete(serverID);
-          });
+    stop: async function (serverID) {
+
+      try {
+        if (loggingInfoMap.has(serverID)) {
+          sails.log.debug(`HOOKS - sdtdLogs - stopping logging for server ${serverID}`)
+          await sails.models.sdtdserver.update({
+            id: serverID
+          }, {
+            loggingEnabled: false
+          })
+          let loggingObj = loggingInfoMap.get(serverID);
+          loggingInfoMap.delete(serverID);
+          return loggingObj.stop();
+        }
+      } catch (error) {
+        sails.log.error(`HOOKS - sdtdLogs - ${error}`);
       }
+
+
     },
 
     /**
@@ -97,10 +112,11 @@ module.exports = function sdtdLogs(sails) {
      */
 
     getLoggingObject: function (serverId) {
-      return loggingInfoMap.get(serverId);
+      let obj = loggingInfoMap.get(serverId);
+      return obj
     },
 
-        /**
+    /**
      * @name getStatus
      * @memberof module:7dtdLoggingHook
      * @description Gets the logging status for a server
@@ -108,12 +124,10 @@ module.exports = function sdtdLogs(sails) {
      * @method
      */
 
-    getStatus: function(serverId) {
-      if (loggingInfoMap.has(serverId)) {
-        return true
-      } else {
-        return false
-      }
+    getStatus: function (serverId) {
+      serverId = String(serverId)
+      let status = loggingInfoMap.has(serverId);
+      return status
     }
   };
 
@@ -127,50 +141,50 @@ module.exports = function sdtdLogs(sails) {
    */
 
   function createLogObject(serverID) {
-    sails.models.sdtdserver.findOne({
-      id: serverID
-    }).exec(function (error, server) {
-      if (error) {
-        sails.log.error(new Error(`Error creating a logging object for ${server.id}`));
-        throw error;
-      }
-
-      sevenDays.startLoggingEvents({
-        ip: server.ip,
-        port: server.webPort,
-        authName: server.authName,
-        authToken: server.authToken,
-      }).exec({
-        error: function (error) {
-          sails.log.error(new Error(`Error starting logs for ${server.id}`));
-          throw error;
-        },
-        success: function (eventEmitter) {
-          loggingInfoMap.set(server.id, eventEmitter);
-
-          eventEmitter.on('logLine', function (logLine) {
-            sails.sockets.broadcast(server.id, 'logLine', logLine);
-          });
-
-          eventEmitter.on('chatMessage', function (chatMessage) {
-            sails.sockets.broadcast(server.id, 'chatMessage', chatMessage);
-          });
-
-          eventEmitter.on('playerConnected', function (connectedMsg) {
-            sails.sockets.broadcast(server.id, 'playerConnected', connectedMsg);
-            sails.helpers.loadPlayerData(server.id, connectedMsg.steamID);
-          });
-
-          eventEmitter.on('playerDisconnected', function (disconectedMsg) {
-            sails.sockets.broadcast(server.id, 'playerDisconected', disconectedMsg);
-          });
-
-          eventEmitter.on('playerDeath', function (deathMessage) {
-            sails.sockets.broadcast(server.id, 'playerDeath', deathMessage);
-          });
+    return new Promise((resolve, reject) => {
+      sails.models.sdtdserver.findOne({
+        id: serverID
+      }).exec(function (error, server) {
+        if (error) {
+          reject(error)
         }
+
+        sevenDays.startLoggingEvents({
+          ip: server.ip,
+          port: server.webPort,
+          authName: server.authName,
+          authToken: server.authToken,
+        }).exec({
+          error: function (error) {
+            reject(error)
+          },
+          success: function (eventEmitter) {
+            eventEmitter.on('logLine', function (logLine) {
+              sails.sockets.broadcast(server.id, 'logLine', logLine);
+            });
+
+            eventEmitter.on('chatMessage', function (chatMessage) {
+              sails.sockets.broadcast(server.id, 'chatMessage', chatMessage);
+            });
+
+            eventEmitter.on('playerConnected', function (connectedMsg) {
+              sails.sockets.broadcast(server.id, 'playerConnected', connectedMsg);
+              sails.helpers.loadPlayerData(server.id, connectedMsg.steamID);
+            });
+
+            eventEmitter.on('playerDisconnected', function (disconectedMsg) {
+              sails.sockets.broadcast(server.id, 'playerDisconected', disconectedMsg);
+            });
+
+            eventEmitter.on('playerDeath', function (deathMessage) {
+              sails.sockets.broadcast(server.id, 'playerDeath', deathMessage);
+            });
+            resolve(eventEmitter)
+          }
+        });
       });
-    });
+    })
+
 
   }
 };

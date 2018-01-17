@@ -4,14 +4,49 @@ var assert = require('assert');
 describe('API @api', function () {
   describe('SdtdServer', function () {
     describe('/api/sdtdserver/togglelogging', function () {
-      it('Changes logging status', function (done) {
+      this.timeout(5000)
+      it('Can start logging', function (done) {
+        let loggingStatus = sails.hooks.sdtdlogs.getStatus(sails.testServer.id);
         supertest(sails.hooks.http.app)
           .get('/api/sdtdserver/toggleLogging')
           .query({
             serverId: sails.testServer.id
           })
           .expect('Content-Type', /json/)
-          .expect(200, done);
+          .expect(200)
+          .then((response) => {
+            assert.notEqual(loggingStatus, sails.hooks.sdtdlogs.getStatus(sails.testServer.id))
+            done();
+          })
+          .catch((err) => {
+            done(err);
+          })
+      })
+
+      it('Can stop logging', function (done) {
+        let loggingStatus = sails.hooks.sdtdlogs.getStatus(sails.testServer.id);
+        supertest(sails.hooks.http.app)
+          .get('/api/sdtdserver/toggleLogging')
+          .query({
+            serverId: sails.testServer.id
+          })
+          .expect('Content-Type', /json/)
+          .expect(200)
+          .then((response) => {
+            assert.notEqual(loggingStatus, sails.hooks.sdtdlogs.getStatus(sails.testServer.id))
+            done();
+          })
+          .catch((err) => {
+            done(err);
+          })
+      });
+      it('Returns "notFound" when invalid ID is given', function (done) {
+        supertest(sails.hooks.http.app)
+          .get('/api/sdtdserver/toggleLogging')
+          .query({
+            serverId: sails.testServer.id + 1
+          })
+          .expect(404, done)
       })
     })
 
