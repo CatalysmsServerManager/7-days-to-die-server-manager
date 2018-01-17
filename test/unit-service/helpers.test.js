@@ -158,6 +158,15 @@ describe('Helpers', function () {
         return error
       }
 
+      beforeEach(async function () {
+        sails.testServer = {
+          ip: process.env.CSMM_TEST_IP,
+          telnetPort: process.env.CSMM_TEST_TELNETPORT,
+          telnetPassword: process.env.CSMM_TEST_TELNETPW,
+          webPort: process.env.CSMM_TEST_WEBPORT,
+        }
+      })
+
     })
     after(async function () {
       try {
