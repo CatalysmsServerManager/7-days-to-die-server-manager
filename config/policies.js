@@ -51,9 +51,9 @@ module.exports.policies = {
     'add-server': 'isLoggedIn',
   },
 
-  // playerController: {
-  //     '*': 'isServerOwner'
-  // },
+  playerController: {
+      '*': 'isLoggedIn'
+  },
 
   // userController: {
   //     'welcome': 'isLoggedIn'
