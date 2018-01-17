@@ -2,9 +2,10 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-4">
-        <div class="page-header">
+        <div id="dashboard-title" class="page-header">
           <h1>
-            Dashboard <%= server.serverInfo.GameHost %>
+            Dashboard
+            <%= server.serverInfo.GameHost %>
           </h1>
         </div>
       </div>
@@ -75,12 +76,19 @@
       </div>
       <div class="col-md-4">
         <h2>
-          Console
+          Server stats
         </h2>
-        <p>
-          Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh,
-          ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-        </p>
+        <ul class="list-group">
+          <li class="list-group-item">ID:
+            <p id="server-id">
+              <%= server.id %>
+            </p>
+          </li>
+          <li class="list-group-item">Dapibus ac facilisis in</li>
+          <li class="list-group-item">Morbi leo risus</li>
+          <li class="list-group-item">Porta ac consectetur ac</li>
+          <li class="list-group-item">Vestibulum at eros</li>
+        </ul>
         <p>
           <a class="btn" href="#">View details »</a>
         </p>
