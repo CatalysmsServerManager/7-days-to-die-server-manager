@@ -3,7 +3,8 @@ var assert = require('assert');
 
 describe('API @api', function () {
   describe('SdtdServer', function () {
-    describe('/api/sdtdserver/togglelogging', function () {
+
+    describe('GET /api/sdtdserver/togglelogging', function () {
       this.timeout(5000)
       it('Can start logging', function (done) {
         let loggingStatus = sails.hooks.sdtdlogs.getStatus(sails.testServer.id);
@@ -125,6 +126,36 @@ describe('API @api', function () {
           });
       });
     });
+
+    describe('GET /api/sdtdserver/executecommand', function () {
+      it('Returns ok with valid info', function (done) {
+        supertest(sails.hooks.http.app)
+          .get('/api/sdtdserver/executecommand')
+          .query({
+            serverId: sails.testServer.id,
+            command: 'help'
+          })
+          .expect(200, done);
+      })
+      it('Returns notFound with bad serverId', function (done) {
+        supertest(sails.hooks.http.app)
+          .get('/api/sdtdserver/executecommand')
+          .query({
+            serverId: sails.testServer.id+10,
+            command: 'help'
+          })
+          .expect(404, done);
+      })
+      it('Returns badRequest with invalid command', function (done) {
+        supertest(sails.hooks.http.app)
+          .get('/api/sdtdserver/executecommand')
+          .query({
+            serverId: sails.testServer.id,
+            command: 'helperinos'
+          })
+          .expect(400, done);
+      })
+    })
   })
   describe('Player', function () {
     describe('GET /api/player/ban @api', function () {

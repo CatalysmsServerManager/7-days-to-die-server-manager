@@ -25,9 +25,9 @@ module.exports = {
       description: 'No server with the specified ID was found in the database.',
       responseType: 'notFound'
     },
-    notLoggedIn: {
-      responseType: 'badRequest',
-      description: 'User is not logged in (check signedCookies)'
+    commandError: {
+      description: 'Error executing the command',
+      responseType: 'badRequest'
     }
   },
 
@@ -36,19 +36,18 @@ module.exports = {
    * @name executeCommand
    * @method
    * @description Executes a command on a 7dtd server
-   * @param {number} serverID ID of the server
+   * @param {number} serverId ID of the server
    * @param {string} command Command to be executed
    */
 
   fn: async function (inputs, exits) {
     sails.log.debug(`API - SdtdServer:executeCommand - Executing a command on server ${inputs.serverId}`);
 
-    if (_.isUndefined(this.req.signedCookies.userProfile)) {
-      throw 'notLoggedIn';
-    }
-
     try {
       let sdtdServer = await SdtdServer.findOne(inputs.serverId);
+      if (_.isUndefined(sdtdServer)) {
+        return exits.notFound();
+      }
       sevenDays.executeCommand({
         ip: sdtdServer.ip,
         port: sdtdServer.webPort,
@@ -65,7 +64,7 @@ module.exports = {
           return exits.success(logLine);
         },
         error: (error) => {
-          return exits.error(error);
+          return exits.commandError(error);
         }
       });
 
