@@ -98,7 +98,6 @@ module.exports = {
           ip: inputs.ip,
           webPort: inputs.webPort,
           telnetPort: inputs.telnetPort,
-          telnetPassword: inputs.telnetPassword,
           authName: authInfo.authName,
           authToken: authInfo.authToken,
           owner: inputs.owner,

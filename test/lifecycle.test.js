@@ -61,7 +61,8 @@ before(function (done) {
       });
 
       sails.testUser = testUser;
-      sails.testServer = testServer;
+      testServer.telnetPassword = process.env.CSMM_TEST_TELNETPW
+      sails.testServer = testServer
       sails.testChannel = client.channels.get(process.env.DISCORDTESTCHANNEL);
 
       sails.log.warn('Finished bootstrapping test data');

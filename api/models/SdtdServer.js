@@ -58,17 +58,6 @@ module.exports = {
 
     /**
          * @memberof SdtdServer
-         * @var {string} telnetPassword
-         * @deprecated Should not need to store telnet password - Will be removed soon(tm)
-         */
-
-    telnetPassword: {
-      type: 'string',
-      required: true
-    },
-
-    /**
-         * @memberof SdtdServer
          * @var {number} webPort
          * @description Port provided by Alloc's webserver
          */

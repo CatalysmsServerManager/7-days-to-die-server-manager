@@ -164,13 +164,13 @@ describe('Helpers', function () {
         let testServer = await SdtdServer.create({
           ip: process.env.CSMM_TEST_IP,
           telnetPort: process.env.CSMM_TEST_TELNETPORT,
-          telnetPassword: process.env.CSMM_TEST_TELNETPW,
           webPort: process.env.CSMM_TEST_WEBPORT,
           authName: process.env.CSMM_TEST_AUTHNAME,
           authToken: process.env.CSMM_TEST_AUTHTOKEN,
           owner: sails.testUser.id
         }).fetch()
-        sails.testServer = testServer;
+        testServer.telnetPassword = process.env.CSMM_TEST_TELNETPW
+        sails.testServer = testServer
         return
       } catch (error) {
         return error
