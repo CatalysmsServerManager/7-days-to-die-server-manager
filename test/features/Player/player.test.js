@@ -5,6 +5,7 @@ Feature('Player features');
 Before((I) => {
   I.amOnPage('/');
   I.addTestServer();
+  I.see('Dashboard')
 });
 
 After((I) => {

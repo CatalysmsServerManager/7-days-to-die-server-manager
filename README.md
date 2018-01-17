@@ -28,6 +28,7 @@ To test the application, add these env vars;
  - DISCORDTESTCHANNEL
  - DISCORDTESTGUILD
 
+Test output is saved at ./test/output
 
 Made possible by
 [![LDH](https://i.imgur.com/rfmQjA2.png)](https://letsdohosting.com/?p=Register&ref=Cata)
