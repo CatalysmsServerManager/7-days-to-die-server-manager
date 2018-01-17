@@ -51,27 +51,81 @@
   </div>
   <div class="row">
     <div class="col-md-4">
-      <h2>Equipment</h2>
+      <% if(!_.isNull(player.inventory)) { %>
+        <h2>Belt</h2>
 
-      <ul class="list-group">
+        <ul class="list-group">
+          <% console.log(player.inventory.belt) %>
+            <% let beltIterator = 0 %>
 
-        <% for (let prop in player.inventory.equipment) { %>
-          <% if(!_.isNull(player.inventory.equipment[prop])) { %>
-            <% let playerInvItem = player.inventory.equipment[prop] %>
-              <li id="player-equipment-<%= prop %>" class="list-group-item d-flex justify-content-between align-items-center">
-                <%= playerInvItem.name %>
-                  <span class="badge badge-primary badge-pill">
-                    <%= playerInvItem.quality %>
-                  </span>
-              </li>
-              <% } %>
+              <% for (let invItem of player.inventory.belt) { %>
+
+                <% if(!_.isNull(invItem)) { %>
+                  <% beltIterator += 1 %>
+                    <li id="player-inventory-belt-<%= beltIterator %>" class="list-group-item d-flex justify-content-between align-items-left">
+                      <%= invItem.name %>
+                        <small class="text-muted"> x
+                          <%= invItem.count %>
+                        </small>
+
+                        <% if (invItem.quality != -1) { %>
+                          <span class="badge badge-primary badge-pill">
+                            <%= invItem.quality %>
+                          </span>
+                          <% } %>
+                    </li>
+                    <% } %>
+
+                      <% } %>
+        </ul>
+
+        <h2>Equipment</h2>
+
+        <ul class="list-group">
+          <% for (let prop in player.inventory.equipment) { %>
+            <% if(!_.isNull(player.inventory.equipment[prop])) { %>
+              <% let playerInvItem = player.inventory.equipment[prop] %>
+                <li id="player-equipment-<%= prop %>" class="list-group-item d-flex justify-content-between align-items-center">
+                  <%= playerInvItem.name %>
+                    <span class="badge badge-primary badge-pill">
+                      <%= playerInvItem.quality %>
+                    </span>
+                </li>
                 <% } %>
+                  <% } %>
 
-      </ul>
+        </ul>
+
+
     </div>
     <div class="col-md-8">
-      bag & belt
+      <h2> Bag </h2>
+
+      <ul class="list-group">
+        <% let bagIterator = 0 %>
+
+          <% for (let invItem of player.inventory.bag) { %>
+
+            <% if(!_.isNull(invItem)) { %>
+              <% bagIterator += 1 %>
+                <li id="player-inventory-bag-<%= bagIterator %>" class="list-group-item d-flex justify-content-between align-items-left">
+                  <%= invItem.name %>
+                    <small class="text-muted"> x
+                      <%= invItem.count %>
+                    </small>
+
+                    <% if (invItem.quality != -1) { %>
+                      <span class="badge badge-primary badge-pill">
+                        <%= invItem.quality %>
+                      </span>
+                      <% } %>
+                </li>
+                <% } %>
+
+                  <% } %>
+      </ul>
     </div>
   </div>
+  <% } %>
 </div>
 </body>
