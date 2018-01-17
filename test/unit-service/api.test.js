@@ -9,7 +9,7 @@ describe('API @api', function () {
         ip: process.env.CSMM_TEST_IP,
         telnetPort: process.env.CSMM_TEST_TELNETPORT,
         telnetPassword: process.env.CSMM_TEST_TELNETPW,
-        webPort: '1111',
+        webPort:  process.env.CSMM_TEST_WEBPORT+1,
         owner: sails.testUser.id,
       }).fetch()
     })
