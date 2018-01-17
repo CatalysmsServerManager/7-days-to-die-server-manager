@@ -24,14 +24,11 @@ module.exports = {
   },
 
   exits: {
-    success: {},
+    success: {
+    },
     notFound: {
       description: 'No server/player with the specified ID was found in the database.',
       responseType: 'notFound'
-    },
-    notLoggedIn: {
-      responseType: 'badRequest',
-      description: 'User is not logged in (check signedCookies)'
     }
   },
 
@@ -47,9 +44,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    if (_.isUndefined(this.req.signedCookies.userProfile)) {
-      throw 'notLoggedIn';
-    }
+
 
     sails.log.debug(`API - SdtdServer:send message - sending a message on server ${inputs.serverId} to player: ${inputs.destinationPlayer}`);
 

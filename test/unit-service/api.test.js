@@ -91,7 +91,7 @@ describe('API @api', function () {
           .get('/api/sdtdserver/players')
           .expect(400, done);
       });
-      it('Should error when invalid serverID given', function (done) {
+      it('Returns badRequest when server info is invalid', function (done) {
         supertest(sails.hooks.http.app)
           .get('/api/sdtdserver/players')
           .query({
@@ -99,7 +99,7 @@ describe('API @api', function () {
           })
           .expect(400, done);
       });
-      it('Returns badRequest when server info is invalid', function (done) {
+      it('Should error when invalid serverID given', function (done) {
         supertest(sails.hooks.http.app)
           .get('/api/sdtdserver/players')
           .query({
@@ -183,6 +183,38 @@ describe('API @api', function () {
           })
           .expect(400, done);
       })
+    })
+
+    describe('GET /api/sdtdserver/sendmessage', function() {
+
+      it('Should return OK & JSON', function (done) {
+        supertest(sails.hooks.http.app)
+          .get('/api/sdtdserver/sendmessage')
+          .query({
+            serverId: sails.testServer.id,
+            message: 'Testing'
+          })
+          .expect(200)
+          .expect('Content-Type', /json/, done);
+      });
+
+      it('Should error when no serverID given', function (done) {
+        supertest(sails.hooks.http.app)
+          .get('/api/sdtdserver/sendmessage')
+          .expect(400, done);
+      });
+
+      it('Returns badRequest when server info is invalid', function (done) {
+        supertest(sails.hooks.http.app)
+          .get('/api/sdtdserver/sendmessage')
+          .query({
+            serverId: sails.serverWithBadWebPort.id
+          })
+          .expect(400, done);
+      })
+
+      it('PMs a player when a steamId is give')
+
     })
   })
   describe('Player', function () {
