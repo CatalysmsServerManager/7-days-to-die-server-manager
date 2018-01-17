@@ -4,7 +4,7 @@
       <div class="col-md-8 chat-window">
       </div>
       <div class="col-md-4">
-        <form>
+        <form id="chat-message-form">
           <div class="form-group">
             <input type="text" class="form-control" id="chat-message-input" placeholder="Enter message">
           </div>
@@ -17,11 +17,11 @@
 
 <script>
   $(document).ready(function () {
-      
+
     let sdtdChatWindow = new sdtdChat(<%= server.id %>)
     sdtdChatWindow.start()
 
-    $('#send-message').click((event) => {
+    $('#chat-message-form').submit((event) => {
       event.preventDefault();
       let chatMessageToSend = $("#chat-message-input").val();
       $("#chat-message-input").val('');

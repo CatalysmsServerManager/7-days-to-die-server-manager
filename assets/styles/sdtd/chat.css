@@ -2,4 +2,55 @@
     overflow: scroll;
     height: 20em;
     resize: both;
+    padding: 2em;
+    list-style-type: none;
+}
+
+.chat-message {
+    border-radius: .4em;
+    position: relative;
+    padding: 2em;
+    background: #00aabb;
+}
+
+.server-speech-bubble {
+	position: relative;
+	background: #00aabb;
+    border-radius: .4em;
+}
+
+.server-speech-bubble:after {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 50%;
+	width: 0;
+	height: 0;
+	border: 1.188em solid transparent;
+	border-right-color: #00aabb;
+	border-left: 0;
+	border-top: 0;
+	margin-top: -0.594em;
+	margin-left: -1.187em;
+}
+
+.user-speech-bubble {
+	position: relative;
+	background: #01ba0f;
+    border-radius: .4em;
+}
+
+.user-speech-bubble:after {
+	content: '';
+	position: absolute;
+	right: 0;
+	top: 50%;
+	width: 0;
+	height: 0;
+	border: 1.188em solid transparent;
+	border-left-color: #01ba0f;
+	border-right: 0;
+	border-top: 0;
+	margin-top: -0.594em;
+	margin-right: -1.187em;
 }

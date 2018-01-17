@@ -10,7 +10,13 @@ class sdtdChat {
       console.log('Subscribed to socket ' + response);
     });
     io.socket.on('chatMessage', function addNewChatMessage(chatMessage) {
-      $('.chat-window').append(`<li class=\"chatMessage\">${chatMessage.playerName}: ${chatMessage.messageText} </li>`);
+
+      if (chatMessage.playerName == 'Server') {
+        $('.chat-window').append(`<li class=\"chat-message\">${chatMessage.messageText} </li>`);
+
+      } else {
+        $('.chat-window').append(`<li class=\"chat-message\">${chatMessage.playerName}: ${chatMessage.messageText} </li>`);
+      }
       $('.chat-window').scrollTop($('.chat-window')[0].scrollHeight);
     });
   }
