@@ -4,14 +4,16 @@ class sdtdConsole {
   }
 
   start() {
-    console.log('Starting console for server with id ' + this.serverId);
 
-    io.socket.get('/sdtdserver/' + this.serverId + '/socket', function (response) {
-      console.log('Subscribed to socket ' + response);
-    });
+    io.socket.get('/sdtdserver/' + this.serverId + '/socket', function (response) {});
 
     io.socket.on('logLine', function addNewLogLine(logLine) {
-      $('.console-window').append('<li class=\"log-line\">' + logLine.msg + '</li>');
+      if (logLine.msg.includes("error")) {
+        $('.console-window').append('<li class=\"log-line text-danger\">' + logLine.msg + '</li>');
+      } else {
+        $('.console-window').append('<li class=\"log-line\">' + logLine.msg + '</li>');
+      }
+
       $('.console-window').scrollTop($('.console-window')[0].scrollHeight);
     });
   }
