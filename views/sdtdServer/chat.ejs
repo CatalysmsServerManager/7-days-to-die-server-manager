@@ -25,7 +25,7 @@
       event.preventDefault();
       let chatMessageToSend = $("#chat-message-input").val();
       $("#chat-message-input").val('');
-      sdtdChatWindow.sendMessage(chatMessageToSend);
+      sdtdChatWindow.sendMessage(chatMessageToSend, "<%= req.signedCookies.userProfile.steamProfile._json.personaname %>");
     })
 
   })

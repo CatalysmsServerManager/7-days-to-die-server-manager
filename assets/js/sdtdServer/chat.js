@@ -25,13 +25,13 @@ class sdtdChat {
     io.socket.removeListener('chatMessage', addNewChatMessage);
   }
 
-  sendMessage(message) {
+  sendMessage(message, username) {
     return new Promise((resolve, reject) => {
       $.ajax({
         url: `/api/sdtdserver/sendMessage`,
         data: {
           serverId: this.serverId,
-          message: message
+          message: `${username}: ${message}`
         },
         success: (data, status, xhr) => {
           resolve(data);
