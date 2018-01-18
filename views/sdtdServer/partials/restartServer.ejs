@@ -1,0 +1,29 @@
+<button id="restart-server-button" class="btn btn-default btn-warning" type="button">
+  <em class="glyphicon glyphicon-align-right"></em> Restart
+</button>
+
+
+<script>
+  $(document).ready(function () {
+
+    $('#restart-server-button').click((event) => {
+      event.preventDefault();
+      $.ajax({
+        url: `/api/sdtdserver/executeCommand`,
+        data: {
+          serverId: <%= server.id %>,
+          command: 'shutdown'
+        },
+        success: (data, status, xhr) => {
+          alert('Shutting down your server. Please refresh this page in a few minutes');
+        },
+        error: (xhr, status, error) => {
+          alert('Something went wrong while trying to restart your server!');
+        }
+      });
+
+    })
+
+  })
+
+</script>

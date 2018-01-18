@@ -16,25 +16,23 @@
 
           <% const consoleLink = '/sdtdserver/' + server.id + '/console' %>
             <a href='<%= consoleLink %>'>
-              <button class="btn btn-default" type="button">
+              <button class="btn btn-default btn-primary" type="button">
                 <em class="glyphicon glyphicon-align-left"></em> Console
               </button>
             </a>
             <% const chatLink = '/sdtdserver/' + server.id + '/chat' %>
               <a href='<%= chatLink %>'>
-                <button class="btn btn-default" type="button">
+                <button class="btn btn-default btn-primary" type="button">
                   <em class="glyphicon glyphicon-align-center"></em> Chat
                 </button>
               </a>
-              <button class="btn btn-default" type="button">
-                <em class="glyphicon glyphicon-align-right"></em> Placeholder
-              </button>
-              <% const deleteLink = '/sdtdserver/' + server.id + '/delete' %>
-                <a href='<%= deleteLink %>'>
-                  <button id="delete-server-button" class="btn btn-default btn-danger" type="button">
-                    <em class="glyphicon glyphicon-align-justify"></em> Delete server
-                  </button>
-                </a>
+              <% include ./partials/restartServer %>
+                <% const deleteLink = '/sdtdserver/' + server.id + '/delete' %>
+                  <a href='<%= deleteLink %>'>
+                    <button id="delete-server-button" class="btn btn-default btn-danger" type="button">
+                      <em class="glyphicon glyphicon-align-justify"></em> Delete server
+                    </button>
+                  </a>
         </div>
       </div>
     </div>
