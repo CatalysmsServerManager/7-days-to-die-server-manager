@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>hooks/discordBot/commands/7dtd/chatbridge.js - Documentation</title>
+    <title>controllers/SdtdServer/settings.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">hooks/discordBot/commands/7dtd/chatbridge.js</h1>
+    <h1 class="page-title">controllers/SdtdServer/settings.js</h1>
     
 
     
@@ -37,106 +37,64 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const Commando = require('discord.js-commando');
-const ChatBridgeChannel = require('../../util/chatBridgeChannel.js');
+            <pre class="prettyprint source linenums"><code>module.exports = {
 
-/**
- * @memberof module:DiscordCommands
- * @name ChatBridge
- * @description Adds a server to the system
- * @param {string} ip
- * @param {integer} webPort
- * @param {integer} telnetPort
- * @param {string} telnetPassword
- */
+  friendlyName: 'Settings',
 
-class ChatBridge extends Commando.Command {
-  constructor(client) {
-    super(client, {
-      name: 'chatbridge',
-      group: '7dtd',
-      aliases: ['cb'],
-      memberName: 'chatbridge',
-      args: [{
-        key: 'option',
-        label: 'Option',
-        prompt: 'Specify an option for this command please',
-        type: 'string'
-      }],
-      description: 'Command for managing chat bridges',
-      details: 'For more information see the website',
-      userPermissions: ['MANAGE_GUILD']
-    });
-  }
+  description: 'Show the settings for a server view',
 
-  async run(msg, args) {
+  inputs: {
+    serverId: {
+      description: 'The ID of the server',
+      type: 'number',
+      required: true
+    }
+  },
 
-    let commandOptions = {
-      start: startFunc,
-      stop: stopFunc,
-      config: configFunc
-    };
+  exits: {
+    success: {
+      responseType: 'view',
+      viewTemplatePath: 'sdtdServer/settings'
+    },
+    notFound: {
+      description: 'No server with the specified ID was found in the database.',
+      responseType: 'notFound'
+    },
+    notLoggedIn: {
+      responseType: 'badRequest',
+      description: 'User is not logged in (check signedCookies)'
+    }
+  },
 
-    if (commandOptions.hasOwnProperty(args.option)) {
-      commandOptions[args.option]();
-    } else {
-      let embed = new msg.client.errorEmbed('You did not specify a correct command option!\nSee the website for information on this command');
-      msg.channel.send(embed);
+  /**
+   * @memberof SdtdServer
+   * @name settings
+   * @method
+   * @description Serves the settings view
+   * @param {number} serverId ID of the server
+   */
+
+  fn: async function (inputs, exits) {
+
+    if (_.isUndefined(this.req.signedCookies.userProfile)) {
+      throw 'notLoggedIn';
     }
 
-    async function startFunc() {
+    sails.log.debug(`VIEW - SdtdServer:settings - Showing settings for ${inputs.serverId}`);
 
-      try {
-        let sdtdServer = await SdtdServer.findOne({
-          discordGuildId: msg.guild.id
-        });
-        await SdtdServer.update({
-          ip: sdtdServer.ip,
-          discordGuildId: msg.guild.id
-        }, {
-          chatChannelId: msg.channel.id
-        });
-        msg.guild.chatBridge = new ChatBridgeChannel(msg.channel, sdtdServer);
-        msg.guild.chatBridge.start();
-      } catch (error) {
-        sails.log.error(error);
-        msg.channel.send(new msg.client.errorEmbed(error));
-      }
-
-
+    try {
+      let server = await SdtdServer.findOne(inputs.serverId);
+      return exits.success({
+        server: server
+      });
+    } catch (error) {
+      sails.log.error(`VIEW - SdtdServer:settings - ${error}`);
+      throw 'notFound';
     }
 
-    async function stopFunc() {
-      try {
-        let sdtdServer = await SdtdServer.findOne({
-          discordGuildId: msg.guild.id
-        });
-        await SdtdServer.update({
-          ip: sdtdServer.ip,
-          discordGuildId: msg.guild.id
-        }, {
-          chatChannelId: 0
-        });
-
-        msg.guild.chatBridge.stop();
-        msg.channel.send(new msg.client.customEmbed().setDescription('Stopped chat bridge'));
-      } catch (error) {
-        sails.log.error(error);
-        msg.channel.send(new msg.client.errorEmbed(error));
-      }
-
-    }
-
-    function configFunc() {
-
-    }
 
   }
-
-}
-
-
-module.exports = ChatBridge;
+};
 </code></pre>
         </article>
     </section>
