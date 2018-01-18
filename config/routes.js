@@ -86,6 +86,8 @@ module.exports.routes = {
 
   'post /api/sdtdserver/addserver': 'SdtdServerController/add-server',
 
+  'get /api/player/kick': "Player.kick",
+
   'get /api/user/ownedServers': {
     controller: 'User',
     action: 'ownedServers',
@@ -110,11 +112,7 @@ module.exports.routes = {
     skipAssets: true
   },
 
-  'get /api/player/kick': {
-    controller: 'Player',
-    action: 'kick',
-    skipAssets: true
-  },
+
 
 
   //  ╦ ╦╔═╗╔╗ ╦ ╦╔═╗╔═╗╦╔═╔═╗

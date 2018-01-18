@@ -116,57 +116,10 @@ async function getLocation(req, res) {
   }
 }
 
-/**
- * @memberof Player
- * @description Kick a player
- * @param {string} steamId  Steam ID of the player
- * @param {string} serverId  ID of the server
- */
 
-async function kick(req, res) {
-  const steamId = req.query.steamId;
-  const serverId = req.query.serverId;
-
-  sails.log.debug(`Kicking player ${steamId} on server ${serverId}`);
-
-  if (_.isUndefined(steamId)) {
-    return res.badRequest('No steam ID given');
-  }
-  if (_.isUndefined(serverId)) {
-    return res.badRequest('No server ID given');
-  }
-
-  let server = await SdtdServer.findOne(serverId);
-  let reason;
-  if (_.isUndefined(req.query.reason)) {
-    reason = 'No reason given';
-  } else {
-    reason = req.query.reason;
-  }
-
-  sevenDays.kickPlayer({
-    ip: server.ip,
-    port: server.webPort,
-    authName: server.authName,
-    authToken: server.authToken,
-    playerID: steamId,
-    reason: reason
-  }).exec({
-    error: function (error) {
-      res.badRequest(error);
-    },
-    unknownPlayer: function () {
-      res.badRequest('Cannot kick player, invalid ID given!');
-    },
-    success: function (response) {
-      res.json(response);
-    }
-  });
-}
 
 module.exports = {
   getInventory: getInventory,
   getBanStatus: getBanStatus,
-  getLocation: getLocation,
-  kick: kick
+  getLocation: getLocation
 };
