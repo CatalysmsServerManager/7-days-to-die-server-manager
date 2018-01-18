@@ -15,15 +15,13 @@
             <button class="btn btn-danger" type="button">
               <em class="glyphicon glyphicon-align-left"></em> Action 1
             </button>
-            <button class="btn btn-default" type="button">
-              <em class="glyphicon glyphicon-align-center"></em> Action 2
-            </button>
-            <button class="btn btn-default" type="button">
-              <em class="glyphicon glyphicon-align-right"></em> Action 3
-            </button>
-            <button class="btn btn-default" type="button">
-              <em class="glyphicon glyphicon-align-justify"></em> Action 4
-            </button>
+            <%- include("./partials/kickPlayerButton", {player: player}) %>
+              <button class="btn btn-default" type="button">
+                <em class="glyphicon glyphicon-align-right"></em> Action 3
+              </button>
+              <button class="btn btn-default" type="button">
+                <em class="glyphicon glyphicon-align-justify"></em> Action 4
+              </button>
           </div>
         </div>
       </div>
