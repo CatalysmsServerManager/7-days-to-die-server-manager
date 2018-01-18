@@ -1,4 +1,6 @@
- <!-- LOGGING SETTINGS -->
+
+
+  <!-- LOGGING SETTINGS -->
   <div class="row">
     <div class="col-md-4">
       <h3>
@@ -34,26 +36,26 @@
     </div>
   </div>
 
-<script>
-  $(document).ready(function () {
+  <script>
+    $(document).ready(function () {
 
-    $('#settings-toggle-logging').click((event) => {
-      event.preventDefault();
-      $.ajax({
-        url: `/api/sdtdserver/togglelogging`,
-        data: {
-          serverId: <%= server.id %>
-        },
-        success: (data, status, xhr) => {
-          location.reload();
-        },
-        error: (xhr, status, error) => {
-          alert('Something went wrong while trying to toggle logging!');
-        }
-      });
+      $('#settings-toggle-logging').click((event) => {
+        event.preventDefault();
+        $.ajax({
+          url: `/api/sdtdserver/togglelogging`,
+          data: {
+            serverId: <%= server.id %>
+          },
+          success: (data, status, xhr) => {
+            location.reload();
+          },
+          error: (xhr, status, error) => {
+            alert('Something went wrong while trying to toggle logging!');
+          }
+        });
+
+      })
 
     })
 
-  })
-
-</script>
+  </script>
