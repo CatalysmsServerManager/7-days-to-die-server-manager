@@ -7,9 +7,9 @@
 }
 
 .chat-message {
-    border-radius: .4em;
+    border-radius: 1em;
     position: relative;
-    padding: 2em;
+    padding: 1em;
     background: #00aabb;
 }
 

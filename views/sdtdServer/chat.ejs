@@ -8,7 +8,7 @@
           <div class="form-group">
             <input type="text" class="form-control" id="chat-message-input" placeholder="Enter message">
           </div>
-          <i class="fa fa-comments-o btn btn-primary" aria-hidden="true" id="send-message">Send</i>
+          <input type="submit" class="fa fa-comments-o btn btn-primary" aria-hidden="true" id="send-message">
         </form>
       </div>
     </div>
@@ -25,7 +25,8 @@
       event.preventDefault();
       let chatMessageToSend = $("#chat-message-input").val();
       $("#chat-message-input").val('');
-      sdtdChatWindow.sendMessage(chatMessageToSend, "<%= req.signedCookies.userProfile.steamProfile._json.personaname %>");
+      sdtdChatWindow.sendMessage(chatMessageToSend,
+        "<%= req.signedCookies.userProfile.steamProfile._json.personaname %>");
     })
 
   })
