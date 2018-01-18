@@ -4,10 +4,8 @@
     <div class="row">
       <div class="col-md-12">
         <h1>Player overview</h1>
-        <% let serverDashboardLink = `/sdtdserver/${server.id}/dashboard`; %>
-          <a href="<%= serverDashboardLink %>">
-            <small class="text-muted">Back to dashboard</small>
-          </a>
+
+        <% include ./partials/backToDashboard %>
 
           <table class="table">
             <thead>

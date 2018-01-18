@@ -1,16 +1,17 @@
 <body>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-md-8 chat-window">
-      </div>
-      <div class="col-md-4">
-        <form id="chat-message-form">
-          <div class="form-group">
-            <input type="text" class="form-control" id="chat-message-input" placeholder="Enter message">
-          </div>
-          <input type="submit" class="fa fa-comments-o btn btn-primary" aria-hidden="true" id="send-message">
-        </form>
-      </div>
+      <% include ./partials/backToDashboard %>
+        <div class="col-md-8 chat-window">
+        </div>
+        <div class="col-md-4">
+          <form id="chat-message-form">
+            <div class="form-group">
+              <input type="text" class="form-control" id="chat-message-input" placeholder="Enter message">
+            </div>
+            <input type="submit" class="fa fa-comments-o btn btn-primary" aria-hidden="true" id="send-message">
+          </form>
+        </div>
     </div>
   </div>
 </body>
