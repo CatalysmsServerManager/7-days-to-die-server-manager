@@ -89,11 +89,9 @@ module.exports.routes = {
 
   'get /api/player/kick': "Player.kick",
 
-  'get /api/user/ownedServers': {
-    controller: 'User',
-    action: 'ownedServers',
-    skipAssets: true
-  },
+  'post /api/player/ban': "Player.ban",
+
+  'get /api/user/ownedServers': "User.get-owned-servers",
 
   'get /api/player/inventory': {
     controller: 'Player',

@@ -32,7 +32,6 @@ module.exports = {
 
     try {
       let user = await User.findOne(inputs.userId).populate('servers');
-      console.log(user);
       return exits.success(user.servers);
 
     } catch (error) {

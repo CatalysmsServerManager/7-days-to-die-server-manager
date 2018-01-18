@@ -31,8 +31,7 @@ module.exports = {
 
   exits: {
 
-    success: {
-    }
+    success: {}
 
   },
 
@@ -63,9 +62,7 @@ module.exports = {
       return exits.success(sdtdServer);
     } catch (error) {
       sails.log.error(`API - addServer - ${error}`);
-      throw {
-        error: error
-      };
+      return exits.error(error)
     }
 
 
