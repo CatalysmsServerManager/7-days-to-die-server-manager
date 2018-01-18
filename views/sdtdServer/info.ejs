@@ -1,0 +1,22 @@
+<h3>
+  Server info
+</h3>
+<small class="text-muted">Detailed server info and settings</small>
+
+<br>
+
+<%- include ./partials/backToDashboard %>
+
+  <ul class="list-group list-group-flush">
+
+
+    <% for (let prop in server.serverInfo) { %>
+      <% if(!_.isNull(server.serverInfo[prop])) { %>
+        <% let gameInfoItem = server.serverInfo[prop] %>
+          <% let gameInfoText = `${prop} : ${gameInfoItem}` %>
+          <li class="list-group-item">
+            <%= gameInfoText %>
+            </li>
+                <% } %>
+                  <% } %>
+  </ul>

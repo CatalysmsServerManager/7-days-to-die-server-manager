@@ -23,7 +23,7 @@
             <% const chatLink = '/sdtdserver/' + server.id + '/chat' %>
               <a href='<%= chatLink %>' class="btn btn-default btn-primary">
                 <em class="glyphicon glyphicon-align-justify"></em>
-                 <i class="fa fa-comments-o" aria-hidden="true"></i> Chat
+                <i class="fa fa-comments-o" aria-hidden="true"></i> Chat
               </a>
 
               <% const settingsLink = '/sdtdserver/' + server.id + '/settings' %>
@@ -48,7 +48,7 @@
       <div class="col-md-4">
         <h2>
           Online players:
-          <%= server.stats.players %>
+          <%= server.stats.players %> / <%= server.serverInfo.MaxPlayers %>
         </h2>
         <table class="table">
           <thead>
@@ -84,23 +84,7 @@
         </p>
       </div>
       <div class="col-md-4">
-        <h2>
-          Server stats
-        </h2>
-        <ul class="list-group">
-          <li class="list-group-item">ID:
-            <p id="server-id">
-              <%= server.id %>
-            </p>
-          </li>
-          <li class="list-group-item">Dapibus ac facilisis in</li>
-          <li class="list-group-item">Morbi leo risus</li>
-          <li class="list-group-item">Porta ac consectetur ac</li>
-          <li class="list-group-item">Vestibulum at eros</li>
-        </ul>
-        <p>
-          <a class="btn" href="#">View details »</a>
-        </p>
+        <%- include('./partials/basicServerInfo', {server: server}) %>
       </div>
       <div class="col-md-4">
         <h2>

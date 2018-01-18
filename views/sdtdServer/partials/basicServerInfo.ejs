@@ -1,0 +1,14 @@
+  <h2>
+          Server stats
+        </h2>
+        <ul class="list-group">
+          <li class="list-group-item">IP:
+              <%= server.ip %>
+          </li>
+          <li class="list-group-item"><%= server.stats.gametime.days %> days <%= server.stats.gametime.hours %> hour(s) <%= server.stats.gametime.minutes %> minute(s) </li>
+          <li class="list-group-item"><%= server.stats.hostiles %> hostiles and <%= server.stats.animals %> animals </li>
+        </ul>
+        <p>
+          <% const infoLink = '/sdtdserver/' + server.id + '/info' %>
+            <a class="btn" href='<%= infoLink %>'>View more info & stats »</a>
+        </p>
