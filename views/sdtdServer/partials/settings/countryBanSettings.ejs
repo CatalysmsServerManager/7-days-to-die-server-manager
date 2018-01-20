@@ -60,7 +60,7 @@
           </li>
           <% } %>
 
-            <button id="settings-reload-countryBan" class="btn btn-default btn-warning" type="button">
+            <button id="settings-reload-countryBan" class="btn btn-default btn-primary" type="button">
               <em class="glyphicon glyphicon-align-right"></em>
               <i class="fa fa-refresh" aria-hidden="true"></i> Apply changes
             </button>
@@ -71,7 +71,7 @@
   </div>
 
   <script>
-    let newCountries = "<%= server.countryBanConfig.bannedCountries %>" || []
+    let newCountries = []
 
     $(document).ready(function () {
 
@@ -91,7 +91,7 @@
       $('#settings-toggle-countryBan').click((event) => {
         event.preventDefault();
         $.ajax({
-          url: `/api/sdtdserver/togglelogging`,
+          url: `/api/sdtdserver/togglecountryban`,
           data: {
             serverId: <%= server.id %>
           },
@@ -99,9 +99,34 @@
             location.reload();
           },
           error: (xhr, status, error) => {
-            alert('Something went wrong while trying to toggle logging!');
+            alert('Something went wrong while trying to toggle country ban!');
           }
         });
+      })
+
+      $('#settings-reload-countryBan').click((event) => {
+        event.preventDefault();
+
+        newConfig = {
+          enabled: true,
+          bannedCountries: newCountries,
+          kickMessage: $('#input-settings-countryBan-kickReason').val()
+        }
+
+        $.ajax({
+          url: `/api/sdtdserver/reloadCountryBan`,
+          data: {
+            newConfig: newConfig,
+            serverId: <%= server.id %>
+          },
+          success: (data, status, xhr) => {
+            location.reload();
+          },
+          error: (xhr, status, error) => {
+            alert('Something went wrong while trying to toggle country ban!');
+          }
+        });
+
 
       })
 

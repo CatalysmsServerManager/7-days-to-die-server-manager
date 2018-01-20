@@ -36,9 +36,13 @@ module.exports = {
     try {
       let server = await SdtdServer.findOne(inputs.serverId);
       let playerList = await getPlayerList(server);
-      playerList = await loadPlayersInventory(playerList.players, server);
-      let newPlayerList = await playerList.map(await updatePlayerInfo);
-      let jsonToSend = await createJSON(newPlayerList);
+      if (playerList.players) {
+        playerList = await loadPlayersInventory(playerList.players, server);
+        let newPlayerList = await playerList.map(await updatePlayerInfo);
+        let jsonToSend = await createJSON(newPlayerList);
+      }
+
+      let jsonToSend = await createJSON(playerList);
       exits.success(jsonToSend);
     } catch (error) {
       sails.log.error(`HELPER - loadPlayerData - ${error}`);

@@ -22,27 +22,26 @@ module.exports = function sdtdLogs(sails) {
      * @private
      */
     initialize: function (cb) {
-      sails.on('hook:orm:loaded', function () {
-        sails.log.debug('HOOK: Initializing sdtdlogs');
-        sails.models.sdtdserver.find({
-          loggingEnabled: true
-        }).exec(function (err, enabledServers) {
-          if (err) {
-            sails.log.error(`HOOKS - sdtdLogs - ${err}`);
-          }
+      sails.on('hook:orm:loaded', async function () {
 
-          _.each(enabledServers, async function (server) {
+        try {
+          sails.log.debug('HOOK: Initializing sdtdlogs');
+          let enabledServers = await sails.models.sdtdserver.find({
+            loggingEnabled: true
+          })
+          await _.each(enabledServers, async function (server) {
             try {
               let loggingObj = await createLogObject(server.id);
               return loggingInfoMap.set(String(server.id), loggingObj);
             } catch (error) {
               sails.log.error(`HOOKS - sdtdLogs - ${error}`);
             }
-
           });
-        });
-        return cb();
-      });
+          return cb();
+        } catch (error) {
+          sails.log.error(`HOOKS - sdtdLogs - ${error}`);
+        }
+      })
     },
 
     /**
