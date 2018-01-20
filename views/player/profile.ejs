@@ -5,10 +5,30 @@
       <h1>
         <%= player.name %>
       </h1>
+
       <div class="row">
         <div class="col-md-8">
           <img alt="Bootstrap Image Preview" src="http://lorempixel.com/140/140/" class="img-circle" />
+          <ul class="list-group">
+            <li class="list-group-item">Steam ID:
+              <%= player.steamId %>
+            </li>
+            <li class="list-group-item">Entity ID:
+              <%= player.entityId %>
+            </li>
+            <li class="list-group-item">Location:
+              <%= player.positionX %>
+                <%= player.positionY %>
+                  <%= player.positionZ %>
+            </li>
+            <li class="list-group-item">Playtime:
+              <%= player.playtime %> seconds</li>
+            <li class="list-group-item">Ban status:
+              <%= player.banned %>
+            </li>
+          </ul>
         </div>
+
         <div class="col-md-4">
           <div class="btn-group btn-group-vertical">
 
@@ -22,108 +42,18 @@
               <button class="btn btn-default" type="button">
                 <em class="glyphicon glyphicon-align-justify"></em> Action 4
               </button>
+
+
           </div>
         </div>
+
       </div>
     </div>
     <div class="col-md-8">
-      <ul class="list-group">
-        <li class="list-group-item">Steam ID:
-          <%= player.steamId %>
-        </li>
-        <li class="list-group-item">Entity ID:
-          <%= player.entityId %>
-        </li>
-        <li class="list-group-item">Location:
-          <%= player.positionX %>
-            <%= player.positionY %>
-              <%= player.positionZ %>
-        </li>
-        <li class="list-group-item">Playtime:
-          <%= player.playtime %> seconds</li>
-        <li class="list-group-item">Ban status:
-          <%= player.banned %>
-        </li>
-      </ul>
+      <%- include('./partials/playerInventory', {player: player}) %>
     </div>
   </div>
-  <div class="row">
-    <div class="col-md-4">
-      <% if(!_.isNull(player.inventory)) { %>
-        <h2>Belt</h2>
-
-        <ul class="list-group">
-          <% console.log(player.inventory.belt) %>
-            <% let beltIterator = 0 %>
-
-              <% for (let invItem of player.inventory.belt) { %>
-
-                <% if(!_.isNull(invItem)) { %>
-                  <% beltIterator += 1 %>
-                    <li id="player-inventory-belt-<%= beltIterator %>" class="list-group-item d-flex justify-content-between align-items-left">
-                      <%= invItem.name %>
-                        <small class="text-muted"> x
-                          <%= invItem.count %>
-                        </small>
-
-                        <% if (invItem.quality != -1) { %>
-                          <span class="badge badge-primary badge-pill">
-                            <%= invItem.quality %>
-                          </span>
-                          <% } %>
-                    </li>
-                    <% } %>
-
-                      <% } %>
-        </ul>
-
-        <h2>Equipment</h2>
-
-        <ul class="list-group">
-          <% for (let prop in player.inventory.equipment) { %>
-            <% if(!_.isNull(player.inventory.equipment[prop])) { %>
-              <% let playerInvItem = player.inventory.equipment[prop] %>
-                <li id="player-equipment-<%= prop %>" class="list-group-item d-flex justify-content-between align-items-center">
-                  <%= playerInvItem.name %>
-                    <span class="badge badge-primary badge-pill">
-                      <%= playerInvItem.quality %>
-                    </span>
-                </li>
-                <% } %>
-                  <% } %>
-
-        </ul>
 
 
-    </div>
-    <div class="col-md-8">
-      <h2> Bag </h2>
-
-      <ul class="list-group">
-        <% let bagIterator = 0 %>
-
-          <% for (let invItem of player.inventory.bag) { %>
-
-            <% if(!_.isNull(invItem)) { %>
-              <% bagIterator += 1 %>
-                <li id="player-inventory-bag-<%= bagIterator %>" class="list-group-item d-flex justify-content-between align-items-left">
-                  <%= invItem.name %>
-                    <small class="text-muted"> x
-                      <%= invItem.count %>
-                    </small>
-
-                    <% if (invItem.quality != -1) { %>
-                      <span class="badge badge-primary badge-pill">
-                        <%= invItem.quality %>
-                      </span>
-                      <% } %>
-                </li>
-                <% } %>
-
-                  <% } %>
-      </ul>
-    </div>
-  </div>
-  <% } %>
 </div>
 </body>

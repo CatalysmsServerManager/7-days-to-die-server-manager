@@ -1,0 +1,74 @@
+<% if(!_.isNull(player.inventory)) { %>
+  <h2>Belt</h2>
+
+  <ul class="list-group">
+    <% console.log(player.inventory.belt) %>
+      <% let beltIterator = 0 %>
+
+        <% for (let invItem of player.inventory.belt) { %>
+
+          <% if(!_.isNull(invItem)) { %>
+            <% beltIterator += 1 %>
+              <li id="player-inventory-belt-<%= beltIterator %>" class="list-group-item d-flex justify-content-between align-items-left">
+                <img src="/images/sdtdicons/<%= invItem.name %>.png">
+                <%= invItem.name %>
+                  <small class="text-muted"> x
+                    <%= invItem.count %>
+                  </small>
+
+                  <% if (invItem.quality != -1) { %>
+                    <span class="badge badge-primary badge-pill">
+                      <%= invItem.quality %>
+                    </span>
+                    <% } %>
+              </li>
+              <% } %>
+
+                <% } %>
+  </ul>
+
+  <h2>Equipment</h2>
+
+  <ul class="list-group">
+    <% for (let prop in player.inventory.equipment) { %>
+      <% if(!_.isNull(player.inventory.equipment[prop])) { %>
+        <% let playerInvItem = player.inventory.equipment[prop] %>
+          <li id="player-equipment-<%= prop %>" class="list-group-item d-flex justify-content-between align-items-center">
+            <img src="/images/sdtdicons/<%= playerInvItem.name %>.png">
+            <%= playerInvItem.name %>
+              <span class="badge badge-primary badge-pill">
+                <%= playerInvItem.quality %>
+              </span>
+          </li>
+          <% } %>
+            <% } %>
+
+  </ul>
+
+  <h2> Bag </h2>
+
+  <ul class="list-group">
+    <% let bagIterator = 0 %>
+
+      <% for (let invItem of player.inventory.bag) { %>
+
+        <% if(!_.isNull(invItem)) { %>
+          <% bagIterator += 1 %>
+            <li id="player-inventory-bag-<%= bagIterator %>" class="list-group-item d-flex justify-content-between align-items-left">
+              <img src="/images/sdtdicons/<%= invItem.name %>.png">
+              <%= invItem.name %>
+                <small class="text-muted"> x
+                  <%= invItem.count %>
+                </small>
+
+                <% if (invItem.quality != -1) { %>
+                  <span class="badge badge-primary badge-pill">
+                    <%= invItem.quality %>
+                  </span>
+                  <% } %>
+            </li>
+            <% } %>
+
+              <% } %>
+                <% } %>
+  </ul>
