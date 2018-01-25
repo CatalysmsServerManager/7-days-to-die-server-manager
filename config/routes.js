@@ -94,6 +94,7 @@ module.exports.routes = {
   'get /api/player/kick': "Player.kick",
 
   'post /api/player/ban': "Player.ban",
+  "post /api/player/unban": "Player.unban",
 
   'get /api/user/ownedServers': "User.get-owned-servers",
 

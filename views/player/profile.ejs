@@ -32,14 +32,20 @@
         <div class="col-md-4">
           <div class="btn-group btn-group-vertical">
 
-            <%- include("./partials/banPlayerButton", {player: player}) %>
-            <%- include("./partials/kickPlayerButton", {player: player}) %>
-              <button class="btn btn-default" type="button">
-                <em class="glyphicon glyphicon-align-right"></em> Action 3
-              </button>
-              <button class="btn btn-default" type="button">
-                <em class="glyphicon glyphicon-align-justify"></em> Action 4
-              </button>
+            <% if (player.banned) { %>
+              <%- include("./partials/unbanPlayerButton", {player: player}) %>
+                <% } else { %>
+
+                  <%- include("./partials/banPlayerButton", {player: player}) %>
+                    <%- include("./partials/kickPlayerButton", {player: player}) %>
+                      <% } %>
+
+                        <button class="btn btn-default" type="button">
+                          <em class="glyphicon glyphicon-align-right"></em> Action 3
+                        </button>
+                        <button class="btn btn-default" type="button">
+                          <em class="glyphicon glyphicon-align-justify"></em> Action 4
+                        </button>
 
 
           </div>

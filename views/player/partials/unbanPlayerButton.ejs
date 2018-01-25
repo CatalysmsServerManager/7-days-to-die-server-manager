@@ -1,0 +1,33 @@
+<%- exposeLocalsToBrowser() %>
+
+  <!-- Button trigger modal -->
+  <button id="unban-player-submit" type="button" class="btn btn-warning">
+    Unban
+  </button>
+
+  <script>
+    $(document).ready(function () {
+      $('#unban-player-submit').click((event) => {
+        event.preventDefault();
+
+        $.ajax({
+          url: `/api/player/unban`,
+          type: "POST",
+          data: {
+            _csrf: window.SAILS_LOCALS._csrf,
+            playerId: <%= player.id %>,
+          },
+          success: (data, status, xhr) => {
+            alert('unbanned player');
+          },
+          error: (xhr, status, error) => {
+            alert('Something went wrong while trying to unban a player!');
+          }
+        });
+      })
+
+
+
+    })
+
+  </script>
