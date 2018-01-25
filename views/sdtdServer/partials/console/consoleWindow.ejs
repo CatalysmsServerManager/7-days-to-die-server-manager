@@ -1,0 +1,29 @@
+<div class="console-window bg-dark text-white">
+  *** STARTING CONSOLE ***
+</div>
+
+
+<script>
+  $(document).ready(function () {
+    let sdtdConsoleWindow = new sdtdConsole(<%= server.id %>)
+    sdtdConsoleWindow.start()
+
+    $("#execCommand").click((event) => {
+      event.preventDefault();
+      let command = $("#consoleCommand").val();
+      $("#consoleCommand").val('');
+      sdtdConsoleWindow.executeCommand(command).then((response) => {
+          $('.console-window').append('<li class=\"log-line\">' + response.msg + '</li>');
+        })
+        .catch((error) => {
+          $('.console-window').append('<li class=\"log-line text-danger\">' + error + '</li>');
+        })
+    })
+
+    $("#clearConsole").click((event) => {
+      event.preventDefault();
+      $(".console-window").empty();
+    })
+  })
+
+</script>

@@ -1,0 +1,36 @@
+ <h2>
+          Online players:
+          <%= server.stats.players %> / <%= server.serverInfo.MaxPlayers %>
+        </h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Game ID</th>
+              <th scope="col">Name</th>
+              <th scope="col">Playtime (s)</th>
+            </tr>
+          </thead>
+          <!-- Load online players -->
+          <% for (let player of players.players) { %>
+            <% if (player.online) { %>
+              <tr>
+                <th scope="row">
+                  <%= player.entityId %>
+                </th>
+                <td>
+                  <% const playerLink = '/player/' + player.id + '/profile' %>
+                    <a href='<%= playerLink %>'>
+                      <%= player.name %>
+                    </a>
+                </td>
+                <td>
+                  <%= player.totalPlaytime %>
+                </td>
+              </tr>
+              <% } } %>
+        </table>
+
+        <p>
+          <% const playersLink = '/sdtdserver/' + server.id + '/players' %>
+            <a class="btn" href='<%= playersLink %>'>View all players »</a>
+        </p>

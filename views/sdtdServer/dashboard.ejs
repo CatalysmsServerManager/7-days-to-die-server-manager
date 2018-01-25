@@ -10,93 +10,24 @@
         </div>
       </div>
       <div class="col-md-4">
+        <%- include('./partials/basicServerInfo', {server: server}) %>
       </div>
       <div class="col-md-4">
-        <div class="btn-group btn-group-vertical btn-group-md">
-
-          <% const consoleLink = '/sdtdserver/' + server.id + '/console' %>
-            <a href='<%= consoleLink %>' class="btn btn-default btn-primary">
-              <em class="glyphicon glyphicon-align-justify"></em>
-              <i class="fa fa-terminal" aria-hidden="true"></i> Console
-            </a>
-
-            <% const chatLink = '/sdtdserver/' + server.id + '/chat' %>
-              <a href='<%= chatLink %>' class="btn btn-default btn-primary">
-                <em class="glyphicon glyphicon-align-justify"></em>
-                 <i class="fa fa-comments-o" aria-hidden="true"></i> Chat
-              </a>
-
-              <% const settingsLink = '/sdtdserver/' + server.id + '/settings' %>
-                <a href='<%= settingsLink %>' class="btn btn-default btn-primary">
-                  <em class="glyphicon glyphicon-align-justify"></em>
-                  <i class="fa fa-cog" aria-hidden="true"></i> Settings
-                </a>
-
-                <% include ./partials/restartServer %>
-
-                  <% const deleteLink = '/sdtdserver/' + server.id + '/delete' %>
-                    <a href='<%= deleteLink %>'>
-                      <button id="delete-server-button" class="btn btn-default btn-danger" type="button">
-                        <em class="glyphicon glyphicon-align-justify"></em>
-                        <i class="fa fa-trash-o" aria-hidden="true"></i> Delete server
-                      </button>
-                    </a>
-        </div>
+        <%- include('./partials/serverControl', {server: server}) %>
       </div>
     </div>
     <div class="row">
       <div class="col-md-4">
-        <h2>
-          Online players:
-          <%= server.stats.players %> / <%= server.serverInfo.MaxPlayers %>
-        </h2>
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">Game ID</th>
-              <th scope="col">Name</th>
-              <th scope="col">Playtime (s)</th>
-            </tr>
-          </thead>
-          <!-- Load online players -->
-          <% for (let player of players.players) { %>
-            <% if (player.online) { %>
-              <tr>
-                <th scope="row">
-                  <%= player.entityId %>
-                </th>
-                <td>
-                  <% const playerLink = '/player/' + player.id + '/profile' %>
-                    <a href='<%= playerLink %>'>
-                      <%= player.name %>
-                    </a>
-                </td>
-                <td>
-                  <%= player.totalPlaytime %>
-                </td>
-              </tr>
-              <% } } %>
-        </table>
+        <%- include('./partials/onlinePlayers', {server: server}) %>
 
-        <p>
-          <% const playersLink = '/sdtdserver/' + server.id + '/players' %>
-            <a class="btn" href='<%= playersLink %>'>View all players »</a>
-        </p>
       </div>
       <div class="col-md-4">
-        <%- include('./partials/basicServerInfo', {server: server}) %>
+        <%- include('./partials/console/consoleWindow', {server: server}) %>
+          <%- include('./partials/console/consoleControls', {server: server}) %>
       </div>
       <div class="col-md-4">
-        <h2>
-          Chat
-        </h2>
-        <p>
-          Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh,
-          ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-        </p>
-        <p>
-          <a class="btn" href="#">View details »</a>
-        </p>
+        <%- include('./partials/chat/chatWindow', {server: server}) %>
+          <%- include('./partials/chat/chatControls', {server: server}) %>
       </div>
     </div>
   </div>

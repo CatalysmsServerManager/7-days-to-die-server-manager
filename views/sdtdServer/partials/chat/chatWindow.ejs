@@ -1,0 +1,20 @@
+<div class="chat-window">
+</div>
+
+<script>
+  $(document).ready(function () {
+
+    let sdtdChatWindow = new sdtdChat(<%= server.id %>)
+    sdtdChatWindow.start()
+
+    $('#chat-message-form').submit((event) => {
+      event.preventDefault();
+      let chatMessageToSend = $("#chat-message-input").val();
+      $("#chat-message-input").val('');
+      sdtdChatWindow.sendMessage(chatMessageToSend,
+        "<%= req.signedCookies.userProfile.steamProfile._json.personaname %>");
+    })
+
+  })
+
+</script>

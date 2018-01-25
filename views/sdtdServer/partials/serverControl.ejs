@@ -1,0 +1,30 @@
+<div class="btn-group btn-group-vertical btn-group-md">
+
+  <% const consoleLink = '/sdtdserver/' + server.id + '/console' %>
+    <a href='<%= consoleLink %>' class="btn btn-default btn-primary">
+      <em class="glyphicon glyphicon-align-justify"></em>
+      <i class="fa fa-terminal" aria-hidden="true"></i> Console
+    </a>
+
+    <% const chatLink = '/sdtdserver/' + server.id + '/chat' %>
+      <a href='<%= chatLink %>' class="btn btn-default btn-primary">
+        <em class="glyphicon glyphicon-align-justify"></em>
+        <i class="fa fa-comments-o" aria-hidden="true"></i> Chat
+      </a>
+
+      <% const settingsLink = '/sdtdserver/' + server.id + '/settings' %>
+        <a href='<%= settingsLink %>' class="btn btn-default btn-primary">
+          <em class="glyphicon glyphicon-align-justify"></em>
+          <i class="fa fa-cog" aria-hidden="true"></i> Settings
+        </a>
+
+        <% include ./restartServer %>
+
+          <% const deleteLink = '/sdtdserver/' + server.id + '/delete' %>
+            <a href='<%= deleteLink %>'>
+              <button id="delete-server-button" class="btn btn-default btn-danger" type="button">
+                <em class="glyphicon glyphicon-align-justify"></em>
+                <i class="fa fa-trash-o" aria-hidden="true"></i> Delete server
+              </button>
+            </a>
+</div>

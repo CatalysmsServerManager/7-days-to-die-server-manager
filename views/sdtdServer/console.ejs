@@ -15,53 +15,13 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-8 console-window bg-dark text-white">
-        *** STARTING CONSOLE ***
-      </div>
-      <div class="col-md-4">
-        <div class="btn-group btn-group-vertical">
-
-          <button class="btn btn-small" type="button" id="clearConsole">
-            <em class="glyphicon glyphicon-align-left"></em> Clear window
-          </button>
-          <form>
-            <div class="form-group">
-              <input type="text" class="form-control" id="consoleCommand" placeholder="Enter command">
-            </div>
-
-            <button class="btn btn-small" type="submit" id='execCommand'>
-              <em class="glyphicon glyphicon-align-left"></em> Exec
-            </button>
-          </form>
-
+      <% include ./partials/console/consoleWindow %>
+        <div class="col-md-4">
+          <% include ./partials/console/consoleControls %>
         </div>
-      </div>
     </div>
   </div>
 </body>
 
 
-<script>
-  $(document).ready(function () {
-    let sdtdConsoleWindow = new sdtdConsole(<%= server.id %>)
-    sdtdConsoleWindow.start()
 
-    $("#execCommand").click((event) => {
-      event.preventDefault();
-      let command = $("#consoleCommand").val();
-      $("#consoleCommand").val('');
-      sdtdConsoleWindow.executeCommand(command).then((response) => {
-          $('.console-window').append('<li class=\"log-line\">' + response.msg + '</li>');
-        })
-        .catch((error) => {
-          $('.console-window').append('<li class=\"log-line text-danger\">' + error + '</li>');
-        })
-    })
-
-    $("#clearConsole").click((event) => {
-      event.preventDefault();
-      $(".console-window").empty();
-    })
-  })
-
-</script>
