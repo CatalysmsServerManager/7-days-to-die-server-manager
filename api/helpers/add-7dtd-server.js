@@ -73,6 +73,9 @@ module.exports = {
       }
 
       let server = await updateOrCreateServer(authInfo)
+      await SdtdConfig.create({
+        server: server.id
+      })
       return exits.success(server)
 
     } catch (error) {

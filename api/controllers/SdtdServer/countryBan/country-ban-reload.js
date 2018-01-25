@@ -46,14 +46,17 @@ module.exports = {
       let server = await SdtdServer.findOne({
         id: inputs.serverId
       });
+
       if (_.isUndefined(server)) {
         return exits.notFound()
       }
 
+      let config = await SdtdConfig.findOne({server: server.id})
+
       if (_.isUndefined(inputs.newConfig)) {
         sails.hooks.countryban.reload(inputs.serverId)
       } else {
-        let configToSend = server.countryBanConfig
+        let configToSend = config.countryBanConfig
 
         if (typeof inputs.newConfig.bannedCountries == typeof new Array()) {
           // Handle the input countries & adjust the config to send accordingly

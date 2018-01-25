@@ -26,11 +26,13 @@ module.exports = function sdtdLogs(sails) {
 
         try {
           sails.log.debug('HOOK: Initializing sdtdlogs');
-          let enabledServers = await sails.models.sdtdserver.find({
+          let enabledServers = await SdtdConfig.find({
             loggingEnabled: true
-          })
-          await _.each(enabledServers, async function (server) {
+          }).populate('server')
+
+          await _.each(enabledServers, async function (config) {
             try {
+              let server = config.server;
               let loggingObj = await createLogObject(server.id);
               return loggingInfoMap.set(String(server.id), loggingObj);
             } catch (error) {
@@ -57,8 +59,8 @@ module.exports = function sdtdLogs(sails) {
       try {
         if (!loggingInfoMap.has(serverID)) {
           sails.log.debug(`HOOKS - sdtdLogs - starting logging for server ${serverID}`)
-          await sails.models.sdtdserver.update({
-            id: serverID
+          await SdtdConfig.update({
+            server: serverID
           }, {
             loggingEnabled: true
           })
@@ -86,8 +88,8 @@ module.exports = function sdtdLogs(sails) {
       try {
         if (loggingInfoMap.has(serverID)) {
           sails.log.debug(`HOOKS - sdtdLogs - stopping logging for server ${serverID}`)
-          await sails.models.sdtdserver.update({
-            id: serverID
+          await SdtdConfig.update({
+            server: serverID
           }, {
             loggingEnabled: false
           })

@@ -14,7 +14,7 @@
 
     <div class="col-md-4">
       <ul class="list-group">
-        <% if(!_.isNull(server.countryBanConfig) && server.countryBanConfig.enabled) {%>
+        <% if(!_.isNull(config.countryBanConfig) && config.countryBanConfig.enabled) {%>
           <li class="list-group-item bg-success">Enabled
           </li>
           <% } else { %>
@@ -24,7 +24,7 @@
               <li class="list-group-item">
                 <label for="input-settings-countryBan-kickReason">Kick reason</label>
 
-                <input type="text" class="form-control" id="input-settings-countryBan-kickReason" placeholder="<%= server.countryBanConfig.kickMessage %>">
+                <input type="text" class="form-control" id="input-settings-countryBan-kickReason" placeholder="<%= config.countryBanConfig.kickMessage %>">
               </li>
 
               <li class="list-group-item">
@@ -42,7 +42,7 @@
 
               <li id="input-settings-countryBan-countries" class="list-group-item">
                 Banned countries:
-                <% for (let country of server.countryBanConfig.bannedCountries) { %>
+                <% for (let country of config.countryBanConfig.bannedCountries) { %>
                   <%= country %>
                     <% } %>
               </li>
@@ -50,7 +50,7 @@
     </div>
 
     <div class="col-md-4">
-      <% if(server.countryBanConfig.enabled) {%>
+      <% if(config.countryBanConfig.enabled) {%>
         <li id='settings-toggle-countryBan' class="btn btn-danger">
           <i class="fa fa-power-off"></i> Disable
         </li>

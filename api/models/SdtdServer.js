@@ -88,34 +88,6 @@ module.exports = {
 
     /**
      * @memberof SdtdServer
-     * @var {boolean} loggingEnabled
-     * @description Whether or not logging is enabled
-     * @default true
-     */
-
-    loggingEnabled: {
-      type: 'boolean',
-      defaultsTo: true
-    },
-
-    /**
-     * @memberof SdtdServer
-     * @var {json} countryBanConfig
-     * @description Config for country ban
-     */
-
-    countryBanConfig: {
-      type: 'json',
-      defaultsTo: {
-        enabled: false,
-        bannedCountries: [],
-        kickMessage: 'Your country has been blocked on this server.',
-        allowNull: true
-      },
-    },
-
-    /**
-     * @memberof SdtdServer
      * @var {string} discordGuildId
      * @description Id of the dicscord guild this server is associated with
      */

@@ -279,10 +279,10 @@ module.exports = function sdtdCountryBan(sails) {
         sails.on('hook:sdtdlogs:loaded', async function () {
           sails.log.debug('HOOK: countryBan Initializing countryBan');
           try {
-            let servers = await SdtdServer.find()
-            _.each(servers, async function (server) {
-              if (server.countryBanConfig.enabled) {
-                startCountryBan(String(server.id))
+            let configs = await SdtdConfig.find()
+            _.each(configs, function (config) {
+              if (config.countryBanConfig.enabled) {
+                startCountryBan(String(config.server))
               }
             })
             return cb();
@@ -328,8 +328,8 @@ module.exports = function sdtdCountryBan(sails) {
       }
 
       currentConfig.enabled = false
-      await SdtdServer.update({
-        id: serverId
+      await SdtdConfig.update({
+        server: serverId
       }, {
         countryBanConfig: currentConfig
       });
@@ -368,19 +368,19 @@ module.exports = function sdtdCountryBan(sails) {
       try {
         sails.log.debug(`HOOK:countryBan Reloading country ban for server ${serverId} `);
 
-        let server = await SdtdServer.findOne(serverId);
+        let config = await SdtdConfig.findOne({server: serverId});
 
-        if (_.isUndefined(server)) {
-          throw new Error('Could not find server with specified ID')
+        if (_.isUndefined(config)) {
+          throw new Error('Could not find server config with specified ID')
         }
 
         if (_.isUndefined(newConfig)) {
-          newConfig = server.countryBanConfig
+          newConfig = config.countryBanConfig
         }
 
 
-        let updatedServer = await SdtdServer.update({
-          id: serverId
+        let updatedServer = await SdtdConfig.update({
+          server: serverId
         }, {
           countryBanConfig: newConfig
         }).fetch()
@@ -404,8 +404,9 @@ module.exports = function sdtdCountryBan(sails) {
         ip: serverIp,
         webPort: serverWebPort
       })
-      if (server.length === 1) {
-        countryBanConfig = server[0].countryBanConfig
+      let config = await SdtdConfig.find({server: server.id})
+      if (config.length === 1) {
+        countryBanConfig = config[0].countryBanConfig
         sails.log.debug(`HOOK:countryBan - Player from ${country} connected to server ${server[0].id}, checking if needs to be kicked`)
         if (countryBanConfig.bannedCountries.includes(country)) {
           sevenDays.kickPlayer({
@@ -434,12 +435,13 @@ module.exports = function sdtdCountryBan(sails) {
   async function startCountryBan(serverId) {
     try {
       let server = await SdtdServer.findOne(serverId);
+      let config = await SdtdConfig.findOne({server: serverId});
 
-      currentConfig = server.countryBanConfig
+      currentConfig = config.countryBanConfig
       currentConfig.enabled = true;
 
-      await SdtdServer.update({
-        id: serverId
+      await SdtdConfig.update({
+       server: serverId
       }, {
         countryBanConfig: currentConfig
       });

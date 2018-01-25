@@ -45,8 +45,10 @@ module.exports = {
 
     try {
       let server = await SdtdServer.findOne(inputs.serverId);
+      let serverConfig = await SdtdConfig.findOne({server: server.id});
       return exits.success({
-        server: server
+        server: server,
+        config: serverConfig
       });
     } catch (error) {
       sails.log.error(`VIEW - SdtdServer:settings - ${error}`);
