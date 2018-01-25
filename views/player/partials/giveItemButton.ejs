@@ -1,0 +1,83 @@
+<%- exposeLocalsToBrowser() %>
+
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#player-give-item-modal">
+    Give item(s)
+  </button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="player-give-item-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">
+            Give item(s) to
+            <%= player.name %>
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="player-give-item-form">
+            <div class="form-group">
+
+              <label class="sr-only" for="player-give-item-input-amount">Amount</label>
+              <input type="text" class="form-control mb-2 mr-sm-2" id="player-give-item-input-amount" placeholder="Amount">
+            </div>
+
+            <label class="sr-only" for="player-give-item-input-itemName">Item Name</label>
+            <div class="input-group mb-2 mr-sm-2">
+              <input type="text" class="form-control" id="player-give-item-input-itemName" placeholder="Item Name">
+            </div>
+
+            <input type="submit" class="fa fa-comments-o btn btn-primary" data-dismiss="modal" aria-hidden="true" id="player-give-item-submit">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <small>Share the wealth </small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    $(document).ready(function () {
+      $('#player-give-item-submit').click((event) => {
+        event.preventDefault();
+        let amount = $('#player-give-item-input-amount').val()
+        let itemName = $('#player-give-item-input-itemName').val()
+
+
+        if (amount == '' || isNaN(amount)) {
+          return alert('Please provide a valid value for amount (number)')
+        }
+
+        if (itemName == '') {
+          return alert('Please provide an item name')
+        }
+
+        $.ajax({
+          url: `/api/player/giveitem`,
+          type: "POST",
+          data: {
+            _csrf: window.SAILS_LOCALS._csrf,
+            playerId: <%= player.id %>,
+            itemName: itemName,
+            amount: amount
+          },
+          success: (data, status, xhr) => {
+            alert('Gave items to player');
+          },
+          error: (xhr, status, error) => {
+            alert('Something went wrong while trying to give items to a player! Make sure you\'re using a valid item name');
+          }
+        });
+      })
+
+
+
+    })
+
+  </script>

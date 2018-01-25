@@ -40,12 +40,9 @@
                     <%- include("./partials/kickPlayerButton", {player: player}) %>
                       <% } %>
 
-                        <button class="btn btn-default" type="button">
-                          <em class="glyphicon glyphicon-align-right"></em> Action 3
-                        </button>
-                        <button class="btn btn-default" type="button">
-                          <em class="glyphicon glyphicon-align-justify"></em> Action 4
-                        </button>
+                        <% if (player.lastOnline == '') { %>
+                          <%- include("./partials/giveItemButton", {player: player}) %>
+                            <% } %>
 
 
           </div>
