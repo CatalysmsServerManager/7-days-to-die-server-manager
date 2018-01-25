@@ -1,0 +1,90 @@
+<%- exposeLocalsToBrowser() %>
+
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#ban-player-modal">
+    Ban
+  </button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="ban-player-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">
+            Ban player
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="ban-player-form">
+            <div class="form-group">
+              <label for="ban-reason-input">Reason</label>
+              <input type="text" class="form-control" id="ban-reason-input" placeholder="Enter message">
+              <label for="ban-player-duration">Duration</label>
+              <input type="text" class="form-control" id="ban-player-duration" placeholder="5">
+              <div class="invalid-feedback">
+                Specify the amount of time the player should be banned
+              </div>
+              <label for="ban-player-unit">Unit</label>
+              <select class="form-control" id="ban-player-unit">
+                <option>Minutes</option>
+                <option>Hours</option>
+                <option>Days</option>
+                <option>Weeks</option>
+                <option>Months</option>
+                <option>Years</option>
+              </select>
+            </div>
+            <input type="submit" class="fa fa-comments-o btn btn-primary" data-dismiss="modal" aria-hidden="true" id="ban-player-submit">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <small>Swing the mighty hammer </small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    $(document).ready(function () {
+      $('#ban-player-submit').click((event) => {
+        event.preventDefault();
+        let reason = $('#ban-reason-input').val()
+        let unit = $('#ban-player-unit').val()
+        let duration = $('#ban-player-duration').val()
+
+        if (_.isUndefined(duration) || duration == "") {
+          return alert('You must provide a duration');
+        }
+
+        if (isNaN(duration)) {
+          return alert('Duration must be a number')
+        }
+
+        $.ajax({
+          url: `/api/player/ban`,
+          type: "POST",
+          data: {
+            _csrf: window.SAILS_LOCALS._csrf,
+            playerId: <%= player.id %>,
+            reason: reason,
+            duration: duration,
+            durationUnit: unit
+          },
+          success: (data, status, xhr) => {
+            alert('Banned player');
+          },
+          error: (xhr, status, error) => {
+            alert('Something went wrong while trying to ban a player!');
+          }
+        });
+      })
+
+
+
+    })
+
+  </script>
