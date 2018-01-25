@@ -37,13 +37,16 @@ module.exports = {
       let server = await SdtdServer.findOne(inputs.serverId);
       let playerList = await getPlayerList(server);
       if (playerList.players) {
-        playerList = await loadPlayersInventory(playerList.players, server);
-        let newPlayerList = await playerList.map(await updatePlayerInfo);
+        let playerListWithInventories = await loadPlayersInventory(playerList.players, server);
+        let newPlayerList = await playerListWithInventories.map(await updatePlayerInfo);
         let jsonToSend = await createJSON(newPlayerList);
+        exits.success(jsonToSend);
+      } else {
+        let jsonToSend = await createJSON(playerList);
+        exits.success(jsonToSend);
       }
 
-      let jsonToSend = await createJSON(playerList);
-      exits.success(jsonToSend);
+      
     } catch (error) {
       sails.log.error(`HELPER - loadPlayerData - ${error}`);
       exits.error(error);
@@ -126,7 +129,6 @@ module.exports = {
 
             playerToSend = playerToSend[0];
             playerToSend.online = newPlayer.online;
-
             resolve(playerToSend);
           });
         } catch (error) {
@@ -169,7 +171,7 @@ module.exports = {
 
 
     async function createJSON(playerList) {
-      return new Promise(async function (resolve) {
+      return new Promise(function (resolve) {
         try {
           let toSend = {};
           Promise.all(playerList).then(resolvedPlayers => {
