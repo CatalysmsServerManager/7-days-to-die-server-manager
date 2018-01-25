@@ -25,7 +25,9 @@ module.exports = {
          */
 
     steamId: {
-      type: 'string'
+      type: 'string',
+      unique: true,
+      required: true
     },
 
     /**
