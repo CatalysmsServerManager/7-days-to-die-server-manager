@@ -41,6 +41,16 @@ module.exports = {
       defaultsTo: true
     },
 
+    /**
+     * @var playerInfo
+     * @description playerInfo at the time the ticket was created
+     * @memberof module:SdtdTicket
+     */
+
+    playerInfo: {
+      type: 'json'
+    },
+
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
