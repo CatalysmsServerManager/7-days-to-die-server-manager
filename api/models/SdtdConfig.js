@@ -41,6 +41,21 @@ module.exports = {
       defaultsTo: '$'
     },
 
+        /**
+     * @memberof SdtdConfig
+     * @var {json} enabledCommands
+     * @description json of enabled commands
+     */
+
+    enabledCommands: {
+      type: 'json',
+      defaultsTo: {
+        sayHi: true
+      }
+    },
+
+
+
 
     //   _                       _             
     //  | |                     (_)            
