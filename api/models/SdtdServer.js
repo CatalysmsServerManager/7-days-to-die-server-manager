@@ -145,6 +145,17 @@ module.exports = {
     players: {
       collection: 'player',
       via: 'server'
+    },
+
+      /**
+     * @memberof SdtdServer
+     * @var tickets
+     * @description Collection of SdtdTickets
+     */
+
+    tickets: {
+      collection: 'sdtdticket',
+      via: 'server'
     }
   },
 
