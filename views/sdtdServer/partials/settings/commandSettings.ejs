@@ -1,0 +1,108 @@
+<!-- COMMANDS SETTINGS -->
+<div class="row">
+
+  <div class="col-md-4">
+    <h3>
+      Ingame commands
+    </h3>
+    <small class="text-muted">Ingame commands to be used by your players
+    </small>
+  </div>
+
+  <div class="col-md-4">
+    <ul class="list-group">
+
+      <% if(!_.isUndefined(config.commandsEnabled) && config.commandsEnabled) {%>
+        <li class="list-group-item bg-success">Enabled
+        </li>
+        <% } else { %>
+          <li class="list-group-item bg-danger">Disabled
+          </li>
+          <% } %>
+
+            <li class="list-group-item">
+              <label for="input-settings-commands-prefix">Command prefix</label>
+
+              <input type="text" class="form-control" id="input-settings-commands-prefix" placeholder="<%= config.commandPrefix %>">
+            </li>
+
+
+    </ul>
+  </div>
+
+  <div class="col-md-4">
+    <% if(!_.isUndefined(config.commandsEnabled) && config.commandsEnabled) {%>
+      <li id='settings-toggle-commands' class="btn btn-danger">
+        <i class="fa fa-power-off"></i> Disable
+      </li>
+      <% } else { %>
+        <li id='settings-toggle-commands' class="btn btn-success">
+          <i class="fa fa-power-off"></i> Enable
+        </li>
+        <% } %>
+
+          <button id="settings-reload-commands" class="btn btn-default btn-primary" type="button">
+            <em class="glyphicon glyphicon-align-right"></em>
+            <i class="fa fa-refresh" aria-hidden="true"></i> Apply changes
+          </button>
+
+
+  </div>
+
+</div>
+
+<script>
+  $(document).ready(function () {
+
+    $('#settings-toggle-commands').click((event) => {
+      event.preventDefault();
+      $.ajax({
+        url: `/api/sdtdserver/togglecommands`,
+        type: 'POST',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: <%= server.id %>
+        },
+        success: (data, status, xhr) => {
+          location.reload();
+        },
+        error: (xhr, status, error) => {
+          alert('Something went wrong while trying to toggle commands!');
+        }
+      });
+    })
+
+    $('#settings-reload-commands').click((event) => {
+      event.preventDefault();
+
+      newConfig = {
+        commandsEnabled: <%= config.commandsEnabled %>,
+        commandPrefix: $('#input-settings-commands-prefix').val()
+      }
+
+      if (newConfig.commandPrefix == "") {
+        return alert(`You cannot set an empty command prefix`)
+      }
+
+      $.ajax({
+        url: `/api/sdtdserver/reloadCommands`,
+        type: 'POST',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          newConfig: newConfig,
+          serverId: <%= server.id %>
+        },
+        success: (data, status, xhr) => {
+          location.reload();
+        },
+        error: (xhr, status, error) => {
+          alert('Something went wrong while trying to toggle country ban!');
+        }
+      });
+
+
+    })
+
+  })
+
+</script>

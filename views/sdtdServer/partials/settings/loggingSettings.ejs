@@ -1,4 +1,4 @@
-
+<%- exposeLocalsToBrowser() %>
 
   <!-- LOGGING SETTINGS -->
   <div class="row">
@@ -43,7 +43,9 @@
         event.preventDefault();
         $.ajax({
           url: `/api/sdtdserver/togglelogging`,
+          type: 'POST',
           data: {
+            _csrf: window.SAILS_LOCALS._csrf,
             serverId: <%= server.id %>
           },
           success: (data, status, xhr) => {
