@@ -37,7 +37,7 @@ class callAdmin extends SdtdCommand {
             sails.log.error(`HOOK - SdtdCommands:callAdmin - Failed to respond to player`)
           },
           success: (result) => {
-              return
+              return ticket
           }
       })
 
