@@ -21,6 +21,7 @@
        * Start listening for commands
        */
       start() {
+        this.commands = CommandHandler.loadCommands.bind(this)()
         let listenerFunction = this.commandListener
         this.loggingObject.on('chatMessage', listenerFunction);
       }
@@ -79,7 +80,7 @@
 
               let commandToRun = this.commands.get(commandName);
 
-              return commandToRun.run(chatMessage, player.id)
+              return commandToRun.run(chatMessage, player.id, args)
             }
             sails.log.debug(`HOOK SdtdCommands:commandListener - Unknown command user by ${chatMessage.playerName} on server ${this.config.server}`)
           }
