@@ -40,7 +40,7 @@ module.exports = {
   exits: {
     success: {
       outputFriendlyName: 'Success',
-      outputType: 'boolean'
+      outputType: 'json'
     },
 
     notAvailable: {
@@ -68,7 +68,7 @@ module.exports = {
       let sdtdServer = await SdtdServer.findOne({
         id: inputs.serverId
       })
-      let player = await player.findOne({
+      let player = await Player.findOne({
         id: inputs.playerId
       })
 

@@ -50,7 +50,8 @@ module.exports = {
     enabledCommands: {
       type: 'json',
       defaultsTo: {
-        sayHi: true
+        sayHi: true,
+        callAdmin: true
       }
     },
 
