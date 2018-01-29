@@ -1,11 +1,15 @@
 <!-- Require ticket info -->
 
 <div class="card" style="width: 18rem;">
-  <div class="card-body">
+<% if (ticket.status) { %>
+  <div class="card-body bg-warning">
+  <% } else { %>
+    <div class="card-body bg-success">
+  <% } %>
     <h5 class="card-title"><%= ticket.title %></h5>
     <h6 class="card-subtitle mb-2 text-muted">Reported by player <%= ticket.player %> </h6>
     <p class="card-text"><%= ticket.description %></p>
-    <a href="#" class="card-link">Details</a>
+    <a href="/sdtdTicket/<%= ticket.id %>" class="card-link">Details</a>
   </div>
 </div>
 
