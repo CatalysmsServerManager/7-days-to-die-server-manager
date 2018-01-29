@@ -1,0 +1,82 @@
+<!-- BASIC SERVER SETTINGS -->
+<div class="row">
+
+  <div class="col-md-4">
+    <h3>
+      Basic server settings
+    </h3>
+    <small class="text-muted">Not happy with some default settings? IP or port changed?
+    </small>
+  </div>
+
+  <div class="col-md-4">
+    <ul class="list-group">
+
+      <li class="list-group-item">
+        <label for="input-settings-server-ip">IP</label>
+        <input type="text" class="form-control" id="input-settings-server-ip" placeholder="<%= server.ip %>">
+      </li>
+      
+      <li class="list-group-item">
+        <label for="inputs-settings-server-webPort">Web port</label>
+        <input type="text" class="form-control" id="inputs-settings-server-webPort" placeholder="<%= server.webPort %>">
+      </li>
+
+      
+      <li class="list-group-item">
+        <label for="input-settings-server-authName">Authentication name</label>
+        <input type="password" class="form-control" id="input-settings-server-authName" placeholder="adminuser">
+      </li>
+
+      
+      <li class="list-group-item">
+        <label for="input-settings-server-authToken">Authentication token</label>
+        <input type="text" class="form-control" id="input-settings-server-authToken" placeholder="admintoken">
+      </li>
+
+
+    </ul>
+  </div>
+
+  <div class="col-md-4">
+    <button id="input-settings-server-update" class="btn btn-default btn-primary" type="button">
+      <em class="glyphicon glyphicon-align-right"></em>
+      <i class="fa fa-refresh" aria-hidden="true"></i> Apply changes
+    </button>
+
+
+  </div>
+
+</div>
+
+<script>
+  $(document).ready(function () {
+
+    $('#input-settings-server-update').click((event) => {
+      event.preventDefault();
+
+      $.ajax({
+        url: `/api/sdtdserver/updateconnectioninfo`,
+        type: 'POST',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: <%= server.id %>,
+          serverIp: $("#input-settings-server-ip").val(),
+          webPort: $("#input-settings-server-webPort").val(),
+          authName: $("#input-settings-server-authName").val(),
+          authToken: $("#input-settings-server-authToken").val(),
+        },
+        success: (data, status, xhr) => {
+          location.reload();
+        },
+        error: (xhr, status, error) => {
+          alert('Something went wrong while trying to update connection info for your server!');
+        }
+      });
+    })
+
+
+
+  })
+
+</script>

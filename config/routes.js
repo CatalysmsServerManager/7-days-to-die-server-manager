@@ -85,14 +85,17 @@ module.exports.routes = {
   'get /api/sdtdserver/players': 'SdtdServerController.get-players',
   'get /api/sdtdserver/info': 'SdtdServerController.load-server-info',
 
+  // Sdtd settings
+
+  'post /api/sdtdserver/updateConnectionInfo': 'SdtdServerController.update-connection-info',
   'post /api/sdtdserver/toggleLogging': 'SdtdServerController.logging-toggle',
   'post /api/sdtdserver/toggleCountryBan': 'SdtdServerController/countryBan.country-ban-toggle',
   'post /api/sdtdserver/reloadCountryBan': 'SdtdServerController/countryBan.country-ban-reload',
   'post /api/sdtdserver/togglecommands': 'SdtdServerController/commands.commands-toggle',
   'post /api/sdtdserver/reloadcommands': 'SdtdServerController/commands.commands-reload',
-
-
+  
   'post /api/sdtdserver/addserver': 'SdtdServerController/add-server',
+
 
   'get /api/player/kick': "Player.kick",
 
