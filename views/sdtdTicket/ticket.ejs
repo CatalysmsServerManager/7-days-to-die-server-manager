@@ -1,6 +1,9 @@
 
 <h1> <%= ticket.title %> </h1>
+<% if (ticket.status) { %>
 <%- include('./partials/closeTicketButton', ticket) %>
+<% } %>
+
 <small> Reported by player <%= ticket.player %> </small>
 
 <br>
