@@ -160,10 +160,13 @@
             </a>
           </li>
           <li class="nav-item">
-            <img id="steam-avatar" src="<%= req.signedCookies.userProfile.steamProfile._json.avatar %>" >
+            <img id="steam-avatar" src="<%= req.signedCookies.userProfile.steamProfile._json.avatar %>">
           </li>
           <a class="nav-link" id="logout-button" href="/auth/logout">
             Logout
+          </a>
+          <a class="nav-link" id="user-tickets-button" href="/user/<%=  req.signedCookies.userProfile.id %>/tickets">
+            Your tickets
           </a>
           <% } else { %>
             <a class="nav-item" id="steam-login-button" href="/auth/steam">
@@ -185,7 +188,7 @@
       </div>
     </div>
   </div>
-  
+
 </body>
 
 
@@ -193,8 +196,6 @@
   <%  if (!_.isUndefined(req.signedCookies.userProfile)) {%>
   loadSdtdServers(<%= req.signedCookies.userProfile.id %>)
   <% } %>
-
-
 
 </script>
 

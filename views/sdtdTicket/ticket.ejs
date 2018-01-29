@@ -1,0 +1,24 @@
+
+<h1> <%= ticket.title %> </h1>
+<% if (ticket.status) { %>
+<%- include('./partials/closeTicketButton', ticket) %>
+<% } %>
+
+<small> Reported by player <%= ticket.player %> </small>
+
+<br>
+
+<% if (ticket.status) { %>
+<%- include('./partials/editTicketDescriptionButton', ticket) %>
+<% } %>
+<%= ticket.description %>
+
+
+<br>
+
+<a href="#ticket-player-info" class="btn btn-default" data-toggle="collapse">Show player details</a>
+<div id="ticket-player-info" class="collapse">
+    <%= JSON.stringify(ticket.playerInfo) %>
+</div>
+
+

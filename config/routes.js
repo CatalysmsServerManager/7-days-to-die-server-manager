@@ -69,9 +69,13 @@ module.exports.routes = {
   'get /sdtdserver/:serverId/delete' : 'SdtdServerController.delete-server',
   'get /sdtdserver/:serverId/settings': 'SdtdServerController.settings',
   'get /sdtdserver/:serverId/info': 'SdtdServerController.server-info-view',
+  'get /sdtdserver/:serverId/tickets': 'SdtdTicket.server-tickets-view',
   
   'get /player/:playerId/profile': 'PlayerController.profile',
+  'get /user/:userId/tickets': 'SdtdTicket.user-tickets-view',
+
   
+  'get /sdtdticket/:ticketId': 'SdtdTicket.view-ticket',
 
 
   //  ╔═╗╔═╗╦  ╔═╗╔╗╔╔╦╗╔═╗╔═╗╦╔╗╔╔╦╗╔═╗
@@ -93,7 +97,10 @@ module.exports.routes = {
   'post /api/sdtdserver/reloadCountryBan': 'SdtdServerController/countryBan.country-ban-reload',
   'post /api/sdtdserver/togglecommands': 'SdtdServerController/commands.commands-toggle',
   'post /api/sdtdserver/reloadcommands': 'SdtdServerController/commands.commands-reload',
-  
+
+  'post /api/sdtdTicket/updateTicketStatus': 'SdtdTicket.update-ticket-status',
+  'post /api/sdtdTicket/editTicket' : 'SdtdTicket.edit-ticket',
+
   'post /api/sdtdserver/addserver': 'SdtdServerController/add-server',
 
 

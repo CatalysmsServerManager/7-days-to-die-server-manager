@@ -1,0 +1,37 @@
+<%- exposeLocalsToBrowser() %>
+
+  <!-- Button trigger modal -->
+  <button id='button-close-ticket' type="button" class="btn btn-danger">
+    Close ticket
+  </button>
+
+
+<script>
+    $(document).ready(function () {
+      $('#button-close-ticket').click((event) => {
+        event.preventDefault();
+
+        $.ajax({
+          url: `/api/sdtdticket/updateticketstatus`,
+          type: "POST",
+          data: {
+            _csrf: window.SAILS_LOCALS._csrf,
+            ticketId: <%= ticket.id %>,
+            status: false
+          },
+          success: (data, status, xhr) => {
+            location.reload()
+          },
+          error: (xhr, status, error) => {
+            alert('Something went wrong while trying to close a ticket');
+          }
+        });
+      })
+
+
+
+    })
+
+  </script>
+
+
