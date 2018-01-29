@@ -2,6 +2,7 @@
   <h1>Settings</h1>
   <% include ./partials/backToDashboard %>
 
+    <%- include('./partials/settings/basicServerSettings', {server: server, config: config}) %>
     <%- include('./partials/settings/loggingSettings', {server: server, config: config}) %>
       <%- include('./partials/settings/countryBanSettings', {server: server, config: config}) %>
        <%- include('./partials/settings/commandSettings', {server: server, config: config}) %>

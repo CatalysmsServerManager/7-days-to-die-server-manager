@@ -3,12 +3,12 @@
   <div class="row">
     <div class="col-md-4">
       <h1>
-        <%= player.name %>
+        <img alt="Bootstrap Image Preview" src="<%= player.avatarUrl %>" class="img-circle" /> <%= player.name %>
       </h1>
 
       <div class="row">
         <div class="col-md-8">
-          <img alt="Bootstrap Image Preview" src="http://lorempixel.com/140/140/" class="img-circle" />
+         
           <ul class="list-group">
             <li class="list-group-item">Steam ID:
               <%= player.steamId %>
@@ -38,6 +38,7 @@
 
                   <%- include("./partials/banPlayerButton", {player: player}) %>
                     <%- include("./partials/kickPlayerButton", {player: player}) %>
+                      <%- include("./partials/teleportPlayerButton", {player: player}) %>
                       <% } %>
 
                         <% if (player.lastOnline == '') { %>
@@ -58,3 +59,5 @@
 
 </div>
 </body>
+
+
