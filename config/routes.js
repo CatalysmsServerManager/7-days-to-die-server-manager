@@ -99,6 +99,7 @@ module.exports.routes = {
   'post /api/player/ban': "Player.ban",
   "post /api/player/unban": "Player.unban",
   "post /api/player/giveitem": "player.give-item",
+  "post /api/player/teleport": "player.teleport",
 
   'get /api/user/ownedServers': "User.get-owned-servers",
 

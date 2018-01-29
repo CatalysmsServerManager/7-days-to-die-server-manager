@@ -1,0 +1,95 @@
+<%- exposeLocalsToBrowser() %>
+
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#player-teleport-modal">
+    Teleport
+  </button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="player-teleport-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">
+            Teleport
+            <%= player.name %>
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+          <form id="player-teleport-form" class="form-group">
+            <div class="row">
+              <div class="col">
+                <input id="player-teleport-x-input" type="text" class="form-control" placeholder="X">
+              </div>
+              <div class="col">
+                <input id="player-teleport-y-input" type="text" class="form-control" placeholder="Y">
+              </div>
+              <div class="col">
+                <input id="player-teleport-z-input" type="text" class="form-control" placeholder="Z">
+              </div>
+              <input type="submit" class="fa fa-comments-o btn btn-primary" data-dismiss="modal" aria-hidden="true" id="player-teleport-submit">
+            </div>
+          </form>
+
+
+
+        </div>
+        <div class="modal-footer">
+          <small>Beam me up Scotty</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    $(document).ready(function () {
+      $('#player-teleport-submit').click((event) => {
+        event.preventDefault();
+
+        let y = $('#player-teleport-y-input').val()
+        let x = $('#player-teleport-x-input').val()
+        let z = $('#player-teleport-z-input').val()
+
+
+        if (x == '' || isNaN(x)) {
+          return alert('Please provide a valid value for X coordinate (number)')
+        }
+
+        if (y == '' || isNaN(y)) {
+          return alert('Please provide a valid value for y coordinate (number)')
+        }
+
+        if (z == '' || isNaN(z)) {
+          return alert('Please provide a valid value for z coordinate (number)')
+        }
+
+
+        $.ajax({
+          url: `/api/player/teleport`,
+          type: "POST",
+          data: {
+            _csrf: window.SAILS_LOCALS._csrf,
+            playerId: <%= player.id %>,
+            coordX : x,
+            coordY: y,
+            coordZ: z
+          },
+          success: (data, status, xhr) => {
+            alert('Teleported player');
+          },
+          error: (xhr, status, error) => {
+            alert('Something went wrong while trying to teleport a player!');
+          }
+        });
+      })
+
+
+
+    })
+
+  </script>
