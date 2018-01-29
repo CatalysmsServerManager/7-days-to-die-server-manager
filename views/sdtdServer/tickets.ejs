@@ -1,0 +1,16 @@
+<div class="container-fluid">
+  <h1>Tickets</h1>
+  <% include ./partials/backToDashboard %>
+
+    <div class="row">
+      <div class="col-md-12">
+        <% tickets.forEach((ticket) => { %>
+          <%- include("./partials/tickets/basicTicket", {ticket: ticket}) %>
+            <% }) %>
+      </div>
+    </div>
+
+
+
+
+</div>

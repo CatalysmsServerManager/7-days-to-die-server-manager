@@ -30,7 +30,7 @@ class callAdmin extends SdtdCommand {
         port: server.webPort,
         authName: server.authName,
         authToken: server.authToken,
-        message: `Your ticket has been created it has an id of ${ticket.id}, check the website to follow up!`,
+        message: `Your ticket has been created, check the website to follow up!`,
         playerId: player.steamId
       }).exec({
           error: (error) => {
