@@ -28,10 +28,10 @@ module.exports = {
   },
 
   /**
-   * @memberof SdtdServer
-   * @name console
-   * @description Server the console view
-   * @param {number} serverID ID of the server
+   * @memberof module:Player
+   * @name profile
+   * @description Serves the player profile view
+   * @param {number} playerId 
    */
 
   fn: async function (inputs, exits) {
@@ -41,12 +41,9 @@ module.exports = {
     try {
       const userProfile = this.req.signedCookies.userProfile;
       let player = await Player.findOne(inputs.playerId);
-      let server = await SdtdServer.findOne(player.server)
-
-      if (server.owner != userProfile.id) {
-        sails.log.debug(`VIEW - Player:profile - User ${userProfile.id} tried to see a player but not authorized`);
-        return exits.forbidden()
-      }
+      let server = await SdtdServer.findOne(player.server);
+      await sails.helpers.loadPlayerData(server.id, player.steamId);
+      player = await Player.findOne(inputs.playerId);
 
       return exits.success({
         player: player

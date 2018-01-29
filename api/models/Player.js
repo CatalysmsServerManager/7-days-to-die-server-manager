@@ -43,6 +43,16 @@ module.exports = {
     },
 
     /**
+     * @var {string} avatarUrl
+     * @description Url of the players' steam avatar
+     * @memberOf Player
+     */
+
+    avatarUrl: {
+      type: 'string'
+    },
+
+    /**
      * @memberof Player
      * @var {string} name
      */
