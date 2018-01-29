@@ -55,8 +55,6 @@ module.exports = {
       let player = await Player.findOne(inputs.playerId).populate('server')
       let server = player.server
 
-      console.log(player)
-
       sevenDays.teleportPlayer({
         ip: server.ip,
         port: server.webPort,
