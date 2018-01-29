@@ -1,7 +1,7 @@
 module.exports = {
 
 
-  friendlyName: 'Tickets view',
+  friendlyName: 'Server tickets view',
 
 
   description: 'Loads relevant ticket data, and serves the view',

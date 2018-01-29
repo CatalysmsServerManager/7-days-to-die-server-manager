@@ -7,7 +7,7 @@
 
 module.exports = {
 
-  toJSON: function() {
+  toJSON: function () {
     var obj = this.toObject();
     delete obj.encryptedPassword;
     return obj;
@@ -20,9 +20,9 @@ module.exports = {
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
 
     /**
-         * @memberof User
-         * @var {string} steamId
-         */
+     * @memberof User
+     * @var {string} steamId
+     */
 
     steamId: {
       type: 'string',
@@ -31,18 +31,18 @@ module.exports = {
     },
 
     /**
-         * memberof User
-         * @var {string} discordId
-         */
+     * memberof User
+     * @var {string} discordId
+     */
 
     discordId: {
       type: 'string'
     },
 
     /**
-         * @memberof User
-         * @var {string} username
-         */
+     * @memberof User
+     * @var {string} username
+     */
 
     username: {
       type: 'string',
@@ -51,11 +51,11 @@ module.exports = {
     },
 
     /**
-         * @var {boolean} admin
-         * @memberof User
-         * @description If a user can perform admin actions on the system
-         * @default false
-         */
+     * @var {boolean} admin
+     * @memberof User
+     * @description If a user can perform admin actions on the system
+     * @default false
+     */
 
     admin: {
       type: 'boolean',
@@ -63,10 +63,10 @@ module.exports = {
     },
 
     /**
-         * @var {boolean} banned
-         * @memberof User
-         * @default false
-         */
+     * @var {boolean} banned
+     * @memberof User
+     * @default false
+     */
 
     banned: {
       type: 'boolean',
@@ -83,10 +83,10 @@ module.exports = {
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
 
     /**
-         * @var players
-         * @description Ingame Players corresponding to a user
-         * @memberof User
-         */
+     * @var players
+     * @description Ingame Players corresponding to a user
+     * @memberof User
+     */
 
     players: {
       collection: 'player',
@@ -94,10 +94,10 @@ module.exports = {
     },
 
     /**
-         * @var servers
-         * @description Servers this User owns
-         * @memberof User
-         */
+     * @var servers
+     * @description Servers this User owns
+     * @memberof User
+     */
 
     servers: {
       collection: 'sdtdServer',
