@@ -21,6 +21,10 @@ module.exports = {
     amount: {
       type: 'number',
       required: true
+    },
+
+    quality: {
+      type: 'string'
     }
   },
 
@@ -42,9 +46,10 @@ module.exports = {
 
     try {
 
-      sails.log.debug(`API - Player:give-item - giving ${inputs.amount} of ${inputs.itemName} to ${inputs.playerId}`);
+      sails.log.debug(`API - Player:give-item - giving ${inputs.amount} of ${inputs.itemName} to ${inputs.playerId} with quality: ${inputs.quality}`);
       let player = await Player.findOne(inputs.playerId).populate('server')
       let server = await SdtdServer.findOne(player.server.id);
+
       return sevenDays.giveItem({
         ip: server.ip,
         port: server.webPort,
@@ -52,7 +57,8 @@ module.exports = {
         authToken: server.authToken,
         entityId: player.entityId,
         itemName: inputs.itemName,
-        amount: inputs.amount
+        amount: inputs.amount,
+        quality: inputs.quality
       }).exec({
         error: function (error) {
           return exits.error(error)
