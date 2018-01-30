@@ -38,7 +38,14 @@
 
             <input type="submit" class="fa fa-comments-o btn btn-primary" data-dismiss="modal" aria-hidden="true" id="player-give-item-submit">
           </form>
+
+          <div>
+            Possible items: <br>
+            <small id='player-give-item-possible-items'> Loading </small>
+          </div>
         </div>
+
+
         <div class="modal-footer">
           <small>Share the wealth </small>
         </div>
@@ -49,6 +56,30 @@
 
   <script>
     $(document).ready(function () {
+
+      $('#player-give-item-input-itemName').keyup((event) => {
+        let itemName = $('#player-give-item-input-itemName').val()
+         $.ajax({
+          url: `/api/sdtdserver/availableitems`,
+          data: {
+            serverId: <%= server.id %>,
+            item: itemName,
+          },
+          success: (data, status, xhr) => {
+            let dataString = new String();
+            data.forEach((item) => {
+              dataString += `${item} `
+            })
+            $('#player-give-item-possible-items').html(dataString)
+          },
+          error: (xhr, status, error) => {
+            console.log(error)
+          }
+        });
+
+      })
+
+
       $('#player-give-item-submit').click((event) => {
         event.preventDefault();
         let amount = $('#player-give-item-input-amount').val()
@@ -57,7 +88,7 @@
 
         if (!(amount == '')) {
           if (isNaN(amount)) {
-          return alert('Please provide a valid value for quality (number)')
+            return alert('Please provide a valid value for quality (number)')
           }
         }
 

@@ -46,7 +46,8 @@ module.exports = {
       player = await Player.findOne(inputs.playerId);
 
       return exits.success({
-        player: player
+        player: player,
+        server: server
       });
     } catch (error) {
       sails.log.error(`VIEW - Player:profile - ${error}`);

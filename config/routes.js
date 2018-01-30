@@ -88,6 +88,7 @@ module.exports.routes = {
   'get /api/sdtdserver/loadServerInfo': 'SdtdServerController.load-server-info',
   'get /api/sdtdserver/players': 'SdtdServerController.get-players',
   'get /api/sdtdserver/info': 'SdtdServerController.load-server-info',
+  'get /api/sdtdserver/availableItems': 'SdtdServerController.available-items',
 
   // Sdtd settings
 
