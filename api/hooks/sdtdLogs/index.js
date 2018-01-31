@@ -180,7 +180,7 @@ module.exports = function sdtdLogs(sails) {
             });
 
             eventEmitter.on('playerDisconnected', function (disconectedMsg) {
-              sails.sockets.broadcast(server.id, 'playerDisconected', disconectedMsg);
+              sails.sockets.broadcast(server.id, 'playerDisconnected', disconectedMsg);
             });
 
             eventEmitter.on('playerDeath', function (deathMessage) {
