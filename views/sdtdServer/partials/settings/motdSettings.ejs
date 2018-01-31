@@ -1,0 +1,73 @@
+<%- exposeLocalsToBrowser() %>
+
+  <!-- MOTD SETTINGS -->
+  <div class="row">
+    <div class="col-md-4">
+      <h3>
+        Message of the day
+      </h3>
+      <small class="text-muted">This message will be sent every x minutes to your server
+      </small>
+    </div>
+    <div class="col-md-4">
+      <ul class="list-group">
+        <% if(config.motdEnabled) {%>
+          <li class="list-group-item bg-success">Enabled
+          </li>
+          <% } else { %>
+            <li class="list-group-item bg-danger">Disabled
+            </li>
+            <% } %>
+              <li class="list-group-item">
+                <label for="inputs-settings-motd-message">Message</label>
+
+                <input type="text" class="form-control" id="inputs-settings-motd-message" placeholder="<%= config.motdMessage %>">
+              </li>
+              <li class="list-group-item">
+                <label for="input-settings-motd-interval">Interval</label>
+                <br>
+                <small> In minutes ! </small>
+
+                <input type="text" class="form-control" id="input-settings-motd-interval" placeholder="<%= config.motdInterval %>">
+              </li>
+      </ul>
+    </div>
+    <div class="col-md-4">
+      <% if(config.motdEnabled) {%>
+        <li id='settings-toggle-logging' class="btn btn-danger">
+          <i class="fa fa-power-off"></i> Disable
+        </li>
+        <% } else { %>
+          <li id='settings-toggle-logging' class="btn btn-success">
+            <i class="fa fa-power-off"></i> Enable
+          </li>
+          <% } %>
+
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function () {
+
+      $('#settings-toggle-logging').click((event) => {
+        event.preventDefault();
+        $.ajax({
+          url: `/api/sdtdserver/togglelogging`,
+          type: 'POST',
+          data: {
+            _csrf: window.SAILS_LOCALS._csrf,
+            serverId: <%= server.id %>
+          },
+          success: (data, status, xhr) => {
+            location.reload();
+          },
+          error: (xhr, status, error) => {
+            alert('Something went wrong while trying to toggle logging!');
+          }
+        });
+
+      })
+
+    })
+
+  </script>
