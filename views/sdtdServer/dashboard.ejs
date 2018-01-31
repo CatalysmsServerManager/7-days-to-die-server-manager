@@ -5,16 +5,16 @@
         <div id="dashboard-title" class="page-header">
           <h1>
             Dashboard
-            <%= server.serverInfo.GameHost %>
           </h1>
         </div>
       </div>
-      <div class="col-md-4">
-        <%- include('./partials/basicServerInfo', {server: server}) %>
-      </div>
-      <div class="col-md-4">
-        <%- include('./partials/serverControl', {server: server}) %>
-      </div>
+      <% if(!_.isUndefined(server.stats && !_.isUndefined(server.serverInfo))) { %>
+        <div class="col-md-4">
+          <%- include('./partials/basicServerInfo', {server: server}) %>
+        </div>
+        <div class="col-md-4">
+          <%- include('./partials/serverControl', {server: server}) %>
+        </div>
     </div>
     <div class="row">
       <div class="col-md-4">
@@ -30,5 +30,16 @@
           <%- include('./partials/chat/chatControls', {server: server}) %>
       </div>
     </div>
+    <% } else { %>
+      <h2> ERROR </h2>
+      <p> Could not connect to your server! </p>
+      <% const deleteLink = '/sdtdserver/' + server.id + '/delete' %>
+        <a href='<%= deleteLink %>'>
+          <button id="delete-server-button" class="btn btn-default btn-danger" type="button">
+            <em class="glyphicon glyphicon-align-justify"></em>
+            <i class="fa fa-trash-o" aria-hidden="true"></i> Delete server
+          </button>
+        </a>
+        <% } %>
   </div>
 </body>

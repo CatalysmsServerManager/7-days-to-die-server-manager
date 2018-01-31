@@ -75,6 +75,9 @@ module.exports = {
         authToken: authToken
       })
 
+    sails.hooks.sdtdlogs.stop(inputs.serverId);
+    sails.hooks.sdtdlogs.start(inputs.serverId);
+
       return exits.success()
     } catch (error) {
       sails.log.error(`API - SdtdServer:update-connection-info - ${error}`);
