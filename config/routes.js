@@ -32,6 +32,10 @@ module.exports.routes = {
     view: 'about'
   },
 
+  '/changelog': {
+    view: 'meta/changeLog'
+  },
+
   '/auth/steam': {
     controller: 'AuthController',
     action: 'steamLogin'
