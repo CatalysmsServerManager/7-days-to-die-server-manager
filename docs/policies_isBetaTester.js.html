@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>controllers/SdtdServer/add-server.js - Documentation</title>
+    <title>policies/isBetaTester.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">controllers/SdtdServer/add-server.js</h1>
+    <h1 class="page-title">policies/isBetaTester.js</h1>
     
 
     
@@ -37,80 +37,23 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>module.exports = {
-
-  friendlyName: 'Add server',
-
-  description: '',
-
-  inputs: {
-
-    serverIp: {
-      description: 'Ip of the SdtdServer',
-      type: 'string',
-      required: true
-    },
-
-    telnetPort: {
-      type: 'number',
-      required: true
-    },
-
-    webPort: {
-      type: 'number',
-      required: true,
-    },
-
-    telnetPassword: {
-      type: 'string',
-      required: true,
+            <pre class="prettyprint source linenums"><code>/**
+ * isBetaTester
+ *
+ * Check if logged in user is registered as beta tester.
+ *
+ */
+module.exports = function isBetaTester(req, res, next) {
+    sails.log.debug(`POLICY - isBetaTester - Check if a user is logged in`);
+    if( sails.config.custom.betaTesters.includes(req.signedCookies.userProfile.steamId) ) {
+      sails.log.debug(`POLICY - isBetaTester - ${req.signedCookies.userProfile.userName} User ${req.signedCookies.userProfile.id} is a beta tester!`);
+      return next();
+    } else {
+      sails.log.debug(`POLICY - isBetaTester - User is not in beta testers list`);
+      return res.forbidden(`You are not a beta tester!`);
     }
-
-  },
-
-  exits: {
-
-    success: {}
-
-  },
-
-  /**
-   * @memberof SdtdServer
-   * @name add-server
-   * @method
-   * @description Add a server to the system
-   * @param {string} serverip Ip of the server to add
-   * @param {number} telnetport Telnet port of the server
-   * @param {string} telnetpassword Telnet password of the server
-   * @param {number} webport Port for webserver added by Alloc's fixes
-   */
-
-  fn: async function (inputs, exits) {
-
-    sails.log.info(`API - SdtdServer:addServer - Adding a new server ${inputs.serverIp} ${inputs.webPort}`);
-
-    try {
-      const userProfile = this.req.signedCookies.userProfile;
-      let sdtdServer = await sails.helpers.add7DtdServer.with({
-        ip: inputs.serverIp,
-        telnetPort: inputs.telnetPort,
-        telnetPassword: inputs.telnetPassword,
-        webPort: inputs.webPort,
-        owner: userProfile.id
-      });
-      return exits.success(sdtdServer);
-    } catch (error) {
-      sails.log.error(`API - addServer - ${error}`);
-      return exits.error(error)
-    }
-
-
-
-  }
-
-
-};
-</code></pre>
+  };
+  </code></pre>
         </article>
     </section>
 

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>controllers/SdtdServer/add-server.js - Documentation</title>
+    <title>controllers/SdtdServer/restart-server.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">controllers/SdtdServer/add-server.js</h1>
+    <h1 class="page-title">controllers/SdtdServer/restart-server.js</h1>
     
 
     
@@ -37,79 +37,72 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>module.exports = {
+            <pre class="prettyprint source linenums"><code>var sevenDays = require('machinepack-7daystodiewebapi');
 
-  friendlyName: 'Add server',
+module.exports = {
 
-  description: '',
+  friendlyName: 'Restart server',
+
+  description: 'Restart a server with configurable countdown',
 
   inputs: {
-
-    serverIp: {
-      description: 'Ip of the SdtdServer',
-      type: 'string',
-      required: true
-    },
-
-    telnetPort: {
+    serverId: {
+      description: 'The ID of the server',
       type: 'number',
       required: true
     },
-
-    webPort: {
-      type: 'number',
-      required: true,
-    },
-
-    telnetPassword: {
-      type: 'string',
-      required: true,
+    delay: {
+      description: 'Time to delay (in minutes)',
+      type: 'number'
     }
-
   },
 
   exits: {
-
-    success: {}
-
+    success: {},
+    notFound: {
+      description: 'No server with the specified ID was found in the database.',
+      responseType: 'notFound'
+    }
   },
 
   /**
    * @memberof SdtdServer
-   * @name add-server
-   * @method
-   * @description Add a server to the system
-   * @param {string} serverip Ip of the server to add
-   * @param {number} telnetport Telnet port of the server
-   * @param {string} telnetpassword Telnet password of the server
-   * @param {number} webport Port for webserver added by Alloc's fixes
+   * @name restart-server
+   * @description Restart a server
+   * @param {string} serverId  ID of the server
+   * @param {number} delay Time to delay the restart (in minutes)
    */
 
   fn: async function (inputs, exits) {
 
-    sails.log.info(`API - SdtdServer:addServer - Adding a new server ${inputs.serverIp} ${inputs.webPort}`);
-
     try {
-      const userProfile = this.req.signedCookies.userProfile;
-      let sdtdServer = await sails.helpers.add7DtdServer.with({
-        ip: inputs.serverIp,
-        telnetPort: inputs.telnetPort,
-        telnetPassword: inputs.telnetPassword,
-        webPort: inputs.webPort,
-        owner: userProfile.id
-      });
-      return exits.success(sdtdServer);
+
+      sails.log.debug(`API - SdtdServer:restart-server - Restarting server ${inputs.serverId} in ${inputs.delay} minutes`);
+
+      if (_.isUndefined(inputs.delay)) {
+          inputs.delay = 5;
+      }
+
     } catch (error) {
-      sails.log.error(`API - addServer - ${error}`);
+      sails.log.error(`API - SdtdServer:restart-server - ${error}`);
       return exits.error(error)
     }
 
 
 
+
   }
-
-
 };
+
+/**
+ * @memberof SdtdServer#restart-server
+ * @param {number} minutesLeft
+ * @param {json} server server object with connection data
+ */
+
+function sendXMinutesUntilRestartToServer(minutesLeft, server) {
+
+}
 </code></pre>
         </article>
     </section>

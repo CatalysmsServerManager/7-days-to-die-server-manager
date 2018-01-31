@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>controllers/SdtdServer/add-server.js - Documentation</title>
+    <title>controllers/SdtdServer/available-items.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">controllers/SdtdServer/add-server.js</h1>
+    <h1 class="page-title">controllers/SdtdServer/available-items.js</h1>
     
 
     
@@ -37,80 +37,87 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>module.exports = {
+            <pre class="prettyprint source linenums"><code>const sevenDays = require('machinepack-7daystodiewebapi')
 
-  friendlyName: 'Add server',
+module.exports = {
 
-  description: '',
 
-  inputs: {
-
-    serverIp: {
-      description: 'Ip of the SdtdServer',
-      type: 'string',
-      required: true
+    friendlyName: 'Get available items',
+  
+  
+    description: 'Returns a list of items on the server',
+  
+  
+    inputs: {
+      serverId: {
+        required: true,
+        example: 4
+      },
+      item: {
+          type: 'string',
+          example: 'stew'
+      }
+  
     },
-
-    telnetPort: {
-      type: 'number',
-      required: true
+  
+    exits: {
+      badRequest: {
+        responseType: 'badRequest'
+      },
+      notFound: {
+        responseType: 'notFound',
+        description: 'Server was not found in DB'
+      }
     },
+  
+    /**
+     * @memberof SdtdServer
+     * @method
+     * @name available-items
+     * @description Returns a list of items on the server
+     * @param {number} serverId ID of the server
+     * @returns {array}
+     */
+  
+    fn: async function (inputs, exits) {
+      sails.log.debug(`API - SdtdServer:available-items - Loading available items!`);
+      try {
+        let server = await SdtdServer.findOne({
+          id: inputs.serverId
+        });
 
-    webPort: {
-      type: 'number',
-      required: true,
-    },
+        if (_.isUndefined(server)) {
+          return exits.notFound();
+        }
 
-    telnetPassword: {
-      type: 'string',
-      required: true,
+        sevenDays.listItems({
+            ip: server.ip,
+            port: server.webPort,
+            authName: server.authName,
+            authToken: server.authToken,
+            itemToSearch: inputs.item
+          }).exec({
+            success: (response) => {
+                return exits.success(response)
+            },
+            unknownCommand: (error) => {
+              return exits.commandError(error)
+            },
+            error: (error) => {
+              return exits.error(error);
+            }
+          });
+
+      } catch (error) {
+        sails.log.error(`API - SdtdServer:available-items - ${error}`)
+        return exits.error(error)
+      }
+  
     }
-
-  },
-
-  exits: {
-
-    success: {}
-
-  },
-
-  /**
-   * @memberof SdtdServer
-   * @name add-server
-   * @method
-   * @description Add a server to the system
-   * @param {string} serverip Ip of the server to add
-   * @param {number} telnetport Telnet port of the server
-   * @param {string} telnetpassword Telnet password of the server
-   * @param {number} webport Port for webserver added by Alloc's fixes
-   */
-
-  fn: async function (inputs, exits) {
-
-    sails.log.info(`API - SdtdServer:addServer - Adding a new server ${inputs.serverIp} ${inputs.webPort}`);
-
-    try {
-      const userProfile = this.req.signedCookies.userProfile;
-      let sdtdServer = await sails.helpers.add7DtdServer.with({
-        ip: inputs.serverIp,
-        telnetPort: inputs.telnetPort,
-        telnetPassword: inputs.telnetPassword,
-        webPort: inputs.webPort,
-        owner: userProfile.id
-      });
-      return exits.success(sdtdServer);
-    } catch (error) {
-      sails.log.error(`API - addServer - ${error}`);
-      return exits.error(error)
-    }
-
-
-
-  }
-
-
-};
-</code></pre>
+  
+  
+  };
+  </code></pre>
         </article>
     </section>
 
