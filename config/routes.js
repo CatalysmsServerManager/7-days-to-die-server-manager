@@ -103,6 +103,7 @@ module.exports.routes = {
   'post /api/sdtdTicket/editTicket' : 'SdtdTicket.edit-ticket',
 
   'post /api/sdtdserver/addserver': 'SdtdServerController/add-server',
+  'post /api/sdtdserver/restartServer': 'SdtdServerController/restart-server',
 
 
   'get /api/player/kick': "Player.kick",
