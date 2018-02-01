@@ -8,6 +8,10 @@ module.exports = {
 
   inputs: {
 
+    serverName: {
+      type: 'string',
+      required: true
+    },
     ip: {
       type: 'string',
       required: true
@@ -95,6 +99,7 @@ module.exports = {
           authName: authInfo.authName,
           authToken: authInfo.authToken
         }, {
+          name: inputs.serverName,
           ip: inputs.ip,
           webPort: inputs.webPort,
           telnetPort: inputs.telnetPort,

@@ -25,6 +25,11 @@ module.exports = {
     telnetPassword: {
       type: 'string',
       required: true,
+    },
+
+    serverName: {
+      type: 'string',
+      required: true
     }
 
   },
@@ -54,6 +59,7 @@ module.exports = {
       const userProfile = this.req.signedCookies.userProfile;
       let sdtdServer = await sails.helpers.add7DtdServer.with({
         ip: inputs.serverIp,
+        serverName: inputs.serverName,
         telnetPort: inputs.telnetPort,
         telnetPassword: inputs.telnetPassword,
         webPort: inputs.webPort,
