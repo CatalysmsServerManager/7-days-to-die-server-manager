@@ -41,7 +41,7 @@ module.exports = {
       defaultsTo: '$'
     },
 
-        /**
+    /**
      * @memberof SdtdConfig
      * @var {json} enabledCommands
      * @description json of enabled commands
@@ -103,6 +103,57 @@ module.exports = {
         allowNull: true
       },
     },
+
+    // __  __  ____ _______ _____  
+    // |  \/  |/ __ \__   __|  __ \ 
+    // | \  / | |  | | | |  | |  | |
+    // | |\/| | |  | | | |  | |  | |
+    // | |  | | |__| | | |  | |__| |
+    // |_|  |_|\____/  |_|  |_____/ 
+
+    /**
+     * @memberof SdtdConfig
+     * @var {boolean} motdEnabled
+     */
+
+    motdEnabled: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
+    /**
+     * @memberof SdtdConfig
+     * @var {string} motdMessage
+     * @description Message to be sent
+     */
+
+    motdMessage: {
+      type: 'string',
+      defaultsTo: 'Enjoy playing on this server!'
+    },
+
+    /**
+     * @memberof SdtdConfig
+     * @var {boolean} motdOnJoinEnabled
+     * @description Wheter MOTD message should be sent to players on joining
+     */
+
+    motdOnJoinEnabled: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
+    /**
+     * @memberof SdtdConfig
+     * @var {number} motdInterval
+     * @description Interval the message is sent in minutes
+     */
+
+    motdInterval: {
+      type: 'number',
+      defaultsTo: 20
+    },
+
 
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗

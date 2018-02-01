@@ -1,36 +1,77 @@
- <h2>
-          Online players:
-          <%= server.stats.players %> / <%= server.serverInfo.MaxPlayers %>
-        </h2>
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">Game ID</th>
-              <th scope="col">Name</th>
-              <th scope="col">Playtime (s)</th>
-            </tr>
-          </thead>
-          <!-- Load online players -->
-          <% for (let player of players.players) { %>
-            <% if (player.online) { %>
-              <tr>
-                <th scope="row">
-                  <%= player.entityId %>
-                </th>
-                <td>
-                  <% const playerLink = '/player/' + player.id + '/profile' %>
-                    <a href='<%= playerLink %>'>
-                      <%= player.name %>
-                    </a>
-                </td>
-                <td>
-                  <%= player.totalPlaytime %>
-                </td>
-              </tr>
-              <% } } %>
-        </table>
+<body>
+  <h2>
+    Online players:
+    <%= server.stats.players %> /
+      <%= server.serverInfo.MaxPlayers %>
+  </h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Game ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Playtime (s)</th>
+      </tr>
+    </thead>
+    <tbody id="online-players">
+    </tbody>
+  </table>
 
-        <p>
-          <% const playersLink = '/sdtdserver/' + server.id + '/players' %>
-            <a class="btn" href='<%= playersLink %>'>View all players »</a>
-        </p>
+  <p>
+    <% const playersLink = '/sdtdserver/' + server.id + '/players' %>
+      <a class="btn" href='<%= playersLink %>'>View all players »</a>
+  </p>
+
+</body>
+
+<script>
+  $(document).ready(function () {
+
+    io.socket.get('/sdtdserver/' + <%= server.id %> + '/socket', function (response) {
+      sendRequestAndUpdatePlayers();
+    });
+
+    io.socket.on('playerConnected', (connectedMessage) => {
+      sendRequestAndUpdatePlayers();
+    })
+
+    io.socket.on('playerDisconnected', (disconnectedMessage) => {
+       sendRequestAndUpdatePlayers();
+    })
+
+
+
+
+
+  })
+
+  function sendRequestAndUpdatePlayers() {
+    $.ajax({
+      url: '/api/sdtdserver/players',
+      data: {
+        serverId: <%= server.id %>
+      },
+      success: (data, status, xhr) => {
+        updatePlayerList(data)
+      },
+      error: (xhr, status, error) => {
+        console.log(`Could not update online players! error: ${error}`)
+      }
+    })
+  }
+
+  function updatePlayerList(players) {
+    let playersHtml = new String();
+    for (let player of players.players) {
+      if (player.online) {
+        let playerIdHtml = `<th scope="row"> ${player.entityId} </th>`
+        let playerNameHtml =
+          `<td> <a href='/player/${player.id}/profile'> ${player.name}</a></td>`
+        let playerPlaytimeHtml = `<td> ${player.totalPlaytime} </td>`
+        let playerRowHtml = `<tr>${playerIdHtml} ${playerNameHtml} ${playerPlaytimeHtml}</tr>`
+        playersHtml += playerRowHtml
+      }
+    }
+    $("#online-players").html(playersHtml)
+  }
+
+</script>

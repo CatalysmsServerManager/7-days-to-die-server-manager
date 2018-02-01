@@ -10,14 +10,55 @@
  * https://sailsjs.com/docs/concepts/logging
  */
 
-const winston = require('winston');
-let customLogger = new winston.Logger();
+// Load env vars
+require('dotenv').config();
 
-// A console transport logging debug and above.
-customLogger.add(winston.transports.Console, {
-  level: 'debug',
-  colorize: true
-});
+const winston = require('winston');
+require('winston-papertrail').Papertrail;
+
+
+
+if (process.env.NODE_ENV == "production") {
+  var customLogger = new winston.Logger({
+    transports: [
+      new winston.transports.Papertrail({
+        host: process.env.PAPERTRAILHOST,
+        port: process.env.PAPERTRAILPORT,
+        colorize: true
+      }),
+      new winston.transports.Console({
+        level: 'debug',
+        colorize: true,
+        timestamp: true,
+        humanReadableUnhandledException: true
+      })
+    ]
+  });
+
+  customLogger.on('error', function (err) {
+    console.log(`ERROR INITIALIZING PAPERTRAIL LOGGER ${err}`)
+  });
+
+}
+
+if (process.env.NODE_ENV == "dev") {
+  var customLogger = new winston.Logger({
+    transports: [
+      new winston.transports.Console({
+        level: 'silly',
+        colorize: true,
+        timestamp: true,
+        humanReadableUnhandledException: true
+      })
+    ]
+  });
+
+}
+
+
+
+
+
 
 module.exports.log = {
   // Pass in our custom logger, and pass all log levels through.

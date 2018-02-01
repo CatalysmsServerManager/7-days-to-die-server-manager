@@ -30,4 +30,7 @@ module.exports.custom = {
   botToken: process.env.DISCORDBOTTOKEN,
   botEmbedLink: 'https://github.com/niekcandaele/7-Days-To-Die-Server-Manager',
   botEmbedTitle: 'Takaro - discord bot',
+
+  // List of steam IDs of accepted beta testers
+  betaTesters: ['76561198028175941'],
 };

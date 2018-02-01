@@ -1,19 +1,58 @@
-<button id="restart-server-button" class="btn btn-default btn-warning" type="button">
+<%- exposeLocalsToBrowser() %>
+
+<button id="restart-server-button" class="btn btn-default btn-warning" type="button"  data-toggle="modal" data-target="#restart-server-modal">
   <em class="glyphicon glyphicon-align-right"></em>
   <i class="fa fa-refresh" aria-hidden="true"></i> Restart
 </button>
+
+<!-- Modal -->
+  <div class="modal fade" id="restart-server-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">
+            Restart server
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+        <h6> You cannot stop a restart once the countdown starts! <br> This function assumes your host will auto-restart the process, if not this is a shutdown button ;) </h6>
+          <form id="restart-server-form">
+            <div class="form-group">
+              <label for="restart-server-duration">Delay</label>
+              <input type="text" class="form-control" id="restart-server-duration" placeholder="5">
+
+            </div>
+            <input type="submit" class="fa fa-comments-o btn btn-primary" data-dismiss="modal" aria-hidden="true" id="restart-server-submit">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
 
 <script>
   $(document).ready(function () {
 
-    $('#restart-server-button').click((event) => {
+    $('#restart-server-submit').click((event) => {
       event.preventDefault();
+
+      let delay = $("#restart-server-duration").val();
+
+      if (delay == '' || isNaN(delay)) {
+        delay = 5
+      }
+
       $.ajax({
-        url: `/api/sdtdserver/executeCommand`,
+        url: `/api/sdtdserver/restartserver`,
+        type: "POST",
         data: {
+          _csrf: window.SAILS_LOCALS._csrf,
           serverId: <%= server.id %>,
-          command: 'shutdown'
+          delay: delay
         },
         success: (data, status, xhr) => {
           alert('Shutting down your server. Please refresh this page in a few minutes');

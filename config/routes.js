@@ -32,6 +32,10 @@ module.exports.routes = {
     view: 'about'
   },
 
+  '/changelog': {
+    view: 'meta/changeLog'
+  },
+
   '/auth/steam': {
     controller: 'AuthController',
     action: 'steamLogin'
@@ -98,11 +102,14 @@ module.exports.routes = {
   'post /api/sdtdserver/reloadCountryBan': 'SdtdServerController/countryBan.country-ban-reload',
   'post /api/sdtdserver/togglecommands': 'SdtdServerController/commands.commands-toggle',
   'post /api/sdtdserver/reloadcommands': 'SdtdServerController/commands.commands-reload',
+  'post /api/sdtdserver/togglemotd': 'SdtdServerController/motd.motd-toggle',
+  'post /api/sdtdserver/reloadmotd': 'SdtdServerController/motd.motd-reload',
 
   'post /api/sdtdTicket/updateTicketStatus': 'SdtdTicket.update-ticket-status',
   'post /api/sdtdTicket/editTicket' : 'SdtdTicket.edit-ticket',
 
   'post /api/sdtdserver/addserver': 'SdtdServerController/add-server',
+  'post /api/sdtdserver/restartServer': 'SdtdServerController/restart-server',
 
 
   'get /api/player/kick': "Player.kick",

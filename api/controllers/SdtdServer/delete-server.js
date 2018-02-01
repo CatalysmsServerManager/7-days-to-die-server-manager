@@ -53,7 +53,9 @@ module.exports = {
 
       sails.hooks.sdtdlogs.stop(server.id)
 
-      SdtdServer.destroy({id: server.id})
+      await SdtdServer.destroy({id: server.id})
+      await SdtdConfig.destroy({server: server.id})
+      sails.hooks.sdtdlogs.stop(server.id)
       exits.success()
 
     } catch (error) {
