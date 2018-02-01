@@ -44,34 +44,34 @@ module.exports = {
         inputs.delay = 5;
       }
 
-      let server = await SdtdServer.findOne(inputs.serverId)
+      let server = await SdtdServer.findOne(inputs.serverId);
 
       setTimeout(() => {
         sevenDays.executeCommand({
-            ip: server.ip,
-            port: server.webPort,
-            authName: server.authName,
-            authToken: server.authToken,
-            command: `shutdown`
+          ip: server.ip,
+          port: server.webPort,
+          authName: server.authName,
+          authToken: server.authToken,
+          command: `shutdown`
         }).exec({
-            error: (error) => {
-                sails.log.error(`API - SdtdServer:restart-server - ${error}`);
-            },
-            success: (response) => {
-                sails.log.debug(`API - SdtdServer:restart-server - Successful restart for server ${inputs.serverId} in ${inputs.delay} minutes`);
+          error: (error) => {
+            sails.log.error(`API - SdtdServer:restart-server - ${error}`);
+          },
+          success: (response) => {
+            sails.log.debug(`API - SdtdServer:restart-server - Successful restart for server ${inputs.serverId} in ${inputs.delay} minutes`);
 
-            }
-        })
-      }, inputs.delay * 60 * 1000)
+          }
+        });
+      }, inputs.delay * 60 * 1000);
 
 
 
       for (let index = 0; index < inputs.delay+1; index++) {
         setTimeout(async function () {
-            if (inputs.delay - index > 0) {
-                await sendXMinutesUntilRestartToServer(inputs.delay - index, server);
-            }
-        }, index * 60 * 1000)
+          if (inputs.delay - index > 0) {
+            await sendXMinutesUntilRestartToServer(inputs.delay - index, server);
+          }
+        }, index * 60 * 1000);
       }
 
       return exits.success();
@@ -79,7 +79,7 @@ module.exports = {
 
     } catch (error) {
       sails.log.error(`API - SdtdServer:restart-server - ${error}`);
-      return exits.error(error)
+      return exits.error(error);
     }
 
 
@@ -98,7 +98,7 @@ module.exports = {
 function sendXMinutesUntilRestartToServer(minutesLeft, server) {
   return new Promise((resolve, reject) => {
     if (isNaN(minutesLeft)) {
-      reject(new Error(`Did not supply a number`))
+      reject(new Error(`Did not supply a number`));
     }
 
     sevenDays.sendMessage({
@@ -109,11 +109,11 @@ function sendXMinutesUntilRestartToServer(minutesLeft, server) {
       message: `Restarting the server in ${minutesLeft} minute(s)`
     }).exec({
       error: (error) => {
-        reject(error)
+        reject(error);
       },
       success: (response) => {
-        resolve(minutesLeft - 1)
+        resolve(minutesLeft - 1);
       }
-    })
-  })
+    });
+  });
 }

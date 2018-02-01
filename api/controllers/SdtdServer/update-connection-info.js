@@ -59,7 +59,7 @@ module.exports = {
     try {
       sails.log.debug(`API - SdtdServer:update-connection-info - Updating connection info for server ${inputs.serverId}`);
 
-      let server = await SdtdServer.findOne(inputs.serverId)
+      let server = await SdtdServer.findOne(inputs.serverId);
 
       let ip = ('' == inputs.serverIp) ? server.ip : inputs.serverIp;
       let webPort = ('' == inputs.webPort) ? server.webPort : inputs.webPort;
@@ -73,15 +73,15 @@ module.exports = {
         webPort: webPort,
         authName: authName,
         authToken: authToken
-      })
+      });
 
-    sails.hooks.sdtdlogs.stop(inputs.serverId);
-    sails.hooks.sdtdlogs.start(inputs.serverId);
+      sails.hooks.sdtdlogs.stop(inputs.serverId);
+      sails.hooks.sdtdlogs.start(inputs.serverId);
 
-      return exits.success()
+      return exits.success();
     } catch (error) {
       sails.log.error(`API - SdtdServer:update-connection-info - ${error}`);
-      return exits.error(error)
+      return exits.error(error);
     }
 
 

@@ -22,7 +22,7 @@ module.exports = {
       responseType: 'notFound'
     },
     success: {
-      description: "",
+      description: '',
       responseType: 'view',
       viewTemplatePath: 'sdtdServer/tickets'
     }
@@ -48,21 +48,21 @@ module.exports = {
       });
       let tickets = await SdtdTicket.find({
         server: inputs.serverId
-      })
+      });
 
       if (_.isUndefined(server) || _.isUndefined(tickets)) {
-        return exits.notFound()
+        return exits.notFound();
       }
 
       sails.log.debug(`API - SdtdServer:tickets-view - Success, loaded ${tickets.length} tickets`);
       return exits.success({
         server: server,
         tickets: tickets
-      })
+      });
 
     } catch (error) {
       sails.log.error(`API - SdtdServer:tickets-view - ${error}`);
-      return exits.error(error)
+      return exits.error(error);
     }
 
 

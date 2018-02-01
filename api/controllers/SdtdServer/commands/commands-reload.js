@@ -26,10 +26,10 @@ module.exports = {
       responseType: 'notFound'
     },
     success: {
-      description: "Returns true if set to enabled, false if set to disabled"
+      description: 'Returns true if set to enabled, false if set to disabled'
     },
     badRequest: {
-        responseType: 'badRequest'
+      responseType: 'badRequest'
     }
 
   },
@@ -54,27 +54,27 @@ module.exports = {
       });
       let config = await SdtdConfig.findOne({
         server: server.id
-      })
+      });
 
       if (_.isUndefined(server)) {
-        return exits.notFound()
+        return exits.notFound();
       }
       if (_.isUndefined(config)) {
-        return exits.notFound()
+        return exits.notFound();
       }
       if (_.isUndefined(inputs.newConfig.commandsEnabled) || _.isUndefined(inputs.newConfig.commandPrefix)) {
         sails.log.error(`API - SdtdServer:commands-reload - Invalid value for commandsEnabled ${inputs.newConfig.commandsEnabled} or commandPrefix ${inputs.newConfig.commandPrefix}`);
-        return exits.badRequest(`Invalid value(s) for new config`)
+        return exits.badRequest(`Invalid value(s) for new config`);
       }
 
       sails.hooks.sdtdcommands.updateConfig(inputs.serverId, inputs.newConfig);
 
       sails.log.debug(`API - SdtdServer:commands-reload - Reloaded config for server ${inputs.serverId}`);
 
-      return exits.success()
+      return exits.success();
     } catch (error) {
       sails.log.error(`API - SdtdServer:commands-reload - ${error}`);
-      return exits.error(error)
+      return exits.error(error);
     }
 
 

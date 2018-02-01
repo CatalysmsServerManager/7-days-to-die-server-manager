@@ -29,7 +29,7 @@ module.exports = function sdtdLogs(sails) {
             sails.log.debug('HOOK: Initializing sdtdMotd');
             let enabledServers = await SdtdConfig.find({
               motdEnabled: true
-            }).populate('server')
+            }).populate('server');
 
             await _.each(enabledServers, async function (config) {
               try {
@@ -46,8 +46,8 @@ module.exports = function sdtdLogs(sails) {
           } catch (error) {
             sails.log.error(`HOOKS - sdtdMotd:initialize - ${error}`);
           }
-        })
-      })
+        });
+      });
     },
 
     /**
@@ -59,17 +59,17 @@ module.exports = function sdtdLogs(sails) {
      */
 
     start: async function (serverId) {
-      serverId = String(serverId)
+      serverId = String(serverId);
       try {
         if (!motdInfoMap.has(serverId)) {
-          sails.log.debug(`HOOKS - sdtdMotd:start - starting motd for server ${serverId}`)
+          sails.log.debug(`HOOKS - sdtdMotd:start - starting motd for server ${serverId}`);
 
           let config = await SdtdConfig.findOne({
             server: serverId
           });
 
           if (!config.motdEnabled) {
-            return
+            return;
           }
 
           let motdSender = new MotdSender(serverId, config);
@@ -97,7 +97,7 @@ module.exports = function sdtdLogs(sails) {
           sails.log.debug(`HOOKS - sdtdMotd:stop - stopping MOTD for server ${serverId}`);
 
           let motdSender = motdInfoMap.get(serverId);
-          motdSender.stop()
+          motdSender.stop();
           return motdInfoMap.delete(serverId);
         }
       } catch (error) {
@@ -117,7 +117,7 @@ module.exports = function sdtdLogs(sails) {
      */
 
     getStatus: function (serverId) {
-      serverId = String(serverId)
+      serverId = String(serverId);
       return motdInfoMap.has(serverId);
     },
 
@@ -144,7 +144,7 @@ module.exports = function sdtdLogs(sails) {
           motdEnabled: newStatus,
           motdOnJoinEnabled: newStatusOnJoin,
           motdInterval: newDelay
-        })
+        });
 
         this.stop(serverId);
         this.start(serverId);

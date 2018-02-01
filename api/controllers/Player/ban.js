@@ -21,7 +21,7 @@ module.exports = {
       type: 'number'
     },
     durationUnit: {
-      description: "Time unit to ban player", //["minutes", "hours", "days", "weeks", "months", "years"]
+      description: 'Time unit to ban player', //["minutes", "hours", "days", "weeks", "months", "years"]
       type: 'string'
     }
   },
@@ -46,7 +46,7 @@ module.exports = {
     try {
 
       sails.log.debug(`API - Player:ban - banning player ${inputs.playerId}`);
-      let player = await Player.findOne(inputs.playerId).populate('server')
+      let player = await Player.findOne(inputs.playerId).populate('server');
       let server = await SdtdServer.findOne(player.server.id);
       return sevenDays.banPlayer({
         ip: server.ip,
@@ -59,19 +59,19 @@ module.exports = {
         durationUnit: inputs.durationUnit.toLowerCase()
       }).exec({
         error: function (error) {
-          return exits.error(error)
+          return exits.error(error);
         },
         unknownPlayer: function () {
           return exits.notFound('Cannot ban player, invalid ID given!');
         },
         success: function (response) {
-          return exits.success(response)
+          return exits.success(response);
         }
       });
 
     } catch (error) {
       sails.log.error(`API - Player:ban - ${error}`);
-      return exits.error(error)
+      return exits.error(error);
     }
 
 

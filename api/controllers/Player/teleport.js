@@ -13,12 +13,12 @@ module.exports = {
       required: true
     },
     coordX: {
-      description: "X coordinate",
+      description: 'X coordinate',
       type: 'number',
       required: true
     },
     coordY: {
-      description: "Y coordinate",
+      description: 'Y coordinate',
       type: 'number',
       required: true
     },
@@ -52,8 +52,8 @@ module.exports = {
 
       sails.log.debug(`API - Player:teleport - teleporting player ${inputs.playerId}`);
 
-      let player = await Player.findOne(inputs.playerId).populate('server')
-      let server = player.server
+      let player = await Player.findOne(inputs.playerId).populate('server');
+      let server = player.server;
 
       sevenDays.teleportPlayer({
         ip: server.ip,
@@ -64,19 +64,19 @@ module.exports = {
         coordinates: `${inputs.coordX} ${inputs.coordY} ${inputs.coordZ}`
       }).exec({
         success: (response) => {
-          sails.log.debug(`API - Player:teleport - Successfully teleported player ${inputs.playerId} to ${inputs.coordX} ${inputs.coordY} ${inputs.coordZ}`)
-          return exits.success()
+          sails.log.debug(`API - Player:teleport - Successfully teleported player ${inputs.playerId} to ${inputs.coordX} ${inputs.coordY} ${inputs.coordZ}`);
+          return exits.success();
         },
         error: (error) => {
           sails.log.error(`API - Player:teleport - ${error}`);
-          return exits.error(error)
+          return exits.error(error);
         }
-      })
+      });
 
 
     } catch (error) {
       sails.log.error(`API - Player:teleport - ${error}`);
-      return exits.error(error)
+      return exits.error(error);
     }
 
 

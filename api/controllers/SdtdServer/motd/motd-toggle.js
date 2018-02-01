@@ -28,7 +28,7 @@ module.exports = {
       responseType: 'notFound'
     },
     success: {
-      description: "Returns true if set to enabled, false if set to disabled"
+      description: 'Returns true if set to enabled, false if set to disabled'
     }
 
   },
@@ -53,25 +53,25 @@ module.exports = {
       });
       let config = await SdtdConfig.findOne({
         server: inputs.serverId
-      })
+      });
 
       if (_.isUndefined(server) || _.isUndefined(config)) {
-        return exits.notFound()
+        return exits.notFound();
       }
 
       if (config.motdEnabled) {
-        await sails.hooks.sdtdmotd.updateConfig(inputs.serverId, config.motdMessage, config.motdInterval, false, config.motdOnJoinEnabled)
+        await sails.hooks.sdtdmotd.updateConfig(inputs.serverId, config.motdMessage, config.motdInterval, false, config.motdOnJoinEnabled);
       } else {
-        await sails.hooks.sdtdmotd.updateConfig(inputs.serverId, config.motdMessage, config.motdInterval, true, config.motdOnJoinEnabled)
+        await sails.hooks.sdtdmotd.updateConfig(inputs.serverId, config.motdMessage, config.motdInterval, true, config.motdOnJoinEnabled);
       }
 
       let status = sails.hooks.sdtdmotd.getStatus(inputs.serverId);
       sails.log.debug(`API - SdtdServer:motd-toggle - New status for server ${inputs.serverId} is ${status}`);
 
-      return exits.success(status)
+      return exits.success(status);
     } catch (error) {
       sails.log.error(`API - SdtdServer:motd-toggle - ${error}`);
-      return exits.error(error)
+      return exits.error(error);
     }
 
 

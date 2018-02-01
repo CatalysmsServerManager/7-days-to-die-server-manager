@@ -44,23 +44,23 @@ module.exports = {
     sails.log.debug(`VIEW - SdtdServer:delete - Deleting server ${inputs.serverId}`);
 
     try {
-      let server = await SdtdServer.findOne(inputs.serverId)
+      let server = await SdtdServer.findOne(inputs.serverId);
       if (_.isUndefined(server)) {
         return exits.notFound();
       }
-    
+
       // TODO: delete web tokens from server
 
-      sails.hooks.sdtdlogs.stop(server.id)
+      sails.hooks.sdtdlogs.stop(server.id);
 
-      await SdtdServer.destroy({id: server.id})
-      await SdtdConfig.destroy({server: server.id})
-      sails.hooks.sdtdlogs.stop(server.id)
-      exits.success()
+      await SdtdServer.destroy({id: server.id});
+      await SdtdConfig.destroy({server: server.id});
+      sails.hooks.sdtdlogs.stop(server.id);
+      exits.success();
 
     } catch (error) {
       sails.log.error(`VIEW - SdtdServer:delete - ${error}`);
-      exits.error(error)
+      exits.error(error);
     }
 
 

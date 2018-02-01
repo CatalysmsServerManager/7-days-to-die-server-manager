@@ -31,7 +31,7 @@ module.exports = {
 
     description: {
       type: 'string',
-      description: "Description of the ticket"
+      description: 'Description of the ticket'
     }
 
   },
@@ -55,9 +55,9 @@ module.exports = {
    * @memberof module:Helpers
    * @returns {json} SdtdTicket
    * @method
-   * @param {number} serverId 
+   * @param {number} serverId
    * @param {number} playerId
-   * @param {string} title 
+   * @param {string} title
    * @param {string} description
    */
 
@@ -67,13 +67,13 @@ module.exports = {
     try {
       let sdtdServer = await SdtdServer.findOne({
         id: inputs.serverId
-      })
+      });
       let player = await Player.findOne({
         id: inputs.playerId
-      })
+      });
 
       if (_.isUndefined(sdtdServer) || _.isUndefined(player)) {
-        return exits.error(new Error(`HELPER - createTicket - Invalid server or player ID`))
+        return exits.error(new Error(`HELPER - createTicket - Invalid server or player ID`));
       }
 
       let ticket = await SdtdTicket.create({
@@ -82,13 +82,13 @@ module.exports = {
         playerInfo: player,
         server: inputs.serverId,
         player: inputs.playerId
-      })
+      });
 
-      return exits.success(ticket)
+      return exits.success(ticket);
 
     } catch (error) {
       sails.log.error(`HELPER - createTicket - ${error}`);
-      return exits.error(error)
+      return exits.error(error);
     }
 
 

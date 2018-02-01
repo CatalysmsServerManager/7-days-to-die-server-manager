@@ -64,7 +64,7 @@ module.exports = {
               steamId: player.steamid
             }).exec({
               error: function (err) {
-                reject(err)
+                reject(err);
               },
               success: function (data) {
                 player.inventory = new Object();
@@ -84,9 +84,9 @@ module.exports = {
       return new Promise(async function (resolve, reject) {
         try {
           newPlayer.then(async function (newPlayer) {
-            let avatarUrl = await loadPlayerProfilePicture(newPlayer.steamid)
+            let avatarUrl = await loadPlayerProfilePicture(newPlayer.steamid);
             if (newPlayer.name === '') {
-              newPlayer.name = 'Unknown name'
+              newPlayer.name = 'Unknown name';
             }
             foundOrCreatedPlayer = await Player.findOrCreate({
               steamId: newPlayer.steamid,
@@ -136,7 +136,7 @@ module.exports = {
             resolve(playerToSend);
           });
         } catch (error) {
-          reject(error)
+          reject(error);
         }
 
       });
@@ -151,7 +151,7 @@ module.exports = {
           authToken: server.authToken
         }).exec({
           error: function (err) {
-            reject(err)
+            reject(err);
           },
           success: function (playerList) {
             // If a steam ID is provided, we filter the list to only 1 player
@@ -210,19 +210,19 @@ module.exports = {
       let request = require('request-promise-native');
       return new Promise((resolve, reject) => {
         request({
-          uri: "http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002",
+          uri: 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002',
           qs: {
             steamids: steamId,
             key: process.env.API_KEY_STEAM,
           },
           json: true
         }).then((response) => {
-          avatarUrl = response.response.players[0].avatar
-          resolve(avatarUrl)
+          avatarUrl = response.response.players[0].avatar;
+          resolve(avatarUrl);
         }).catch((error) => {
-          reject(error)
-        })
-      })
+          reject(error);
+        });
+      });
     }
 
 

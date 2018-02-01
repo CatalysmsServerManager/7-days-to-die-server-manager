@@ -22,7 +22,7 @@ module.exports = {
       responseType: 'notFound'
     },
     success: {
-      description: "Returns true if set to enabled, false if set to disabled"
+      description: 'Returns true if set to enabled, false if set to disabled'
     }
 
   },
@@ -44,16 +44,16 @@ module.exports = {
         id: inputs.serverId
       });
       if (_.isUndefined(server)) {
-        return exits.notFound()
+        return exits.notFound();
       }
       if (!sails.hooks.sdtdlogs.getStatus(inputs.serverId)) {
         await sails.hooks.sdtdlogs.start(inputs.serverId);
       } else {
-        await sails.hooks.sdtdlogs.stop(inputs.serverId)
+        await sails.hooks.sdtdlogs.stop(inputs.serverId);
       }
-      let status = sails.hooks.sdtdlogs.getStatus(inputs.serverId)
+      let status = sails.hooks.sdtdlogs.getStatus(inputs.serverId);
       sails.log.debug(`API - SdtdServer:logging-toggle - New status for server ${inputs.serverId} is ${status}`);
-      return exits.success(status)
+      return exits.success(status);
     } catch (error) {
       sails.log.error(`API - SdtdServer:logging-toggle - ${error}`);
     }

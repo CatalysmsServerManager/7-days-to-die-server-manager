@@ -31,7 +31,7 @@ module.exports = {
    * @memberof module:Player
    * @name profile
    * @description Serves the player profile view
-   * @param {number} playerId 
+   * @param {number} playerId
    */
 
   fn: async function (inputs, exits) {

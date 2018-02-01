@@ -37,10 +37,10 @@ module.exports = {
 
   exits: {
     badTelnet: {
-      description: "Could not connect to telnet"
+      description: 'Could not connect to telnet'
     },
     badWebPort: {
-      description: "WebPort given was not valid"
+      description: 'WebPort given was not valid'
     }
   },
 
@@ -66,24 +66,24 @@ module.exports = {
         ip: inputs.ip,
         port: inputs.telnetPort,
         password: inputs.telnetPassword
-      })
+      });
 
       if (_.isUndefined(authInfo)) {
-        return exits.badTelnet()
+        return exits.badTelnet();
       }
 
-      let server = await updateOrCreateServer(authInfo)
+      let server = await updateOrCreateServer(authInfo);
       await SdtdConfig.create({
         server: server.id
-      })
-      return exits.success(server)
+      });
+      return exits.success(server);
 
     } catch (error) {
       sails.log.error(`HELPER - add7DtdServer - ${error}`);
-      if (error.message == "badWebport") {
-        return exits.badWebPort()
+      if (error.message == 'badWebport') {
+        return exits.badWebPort();
       }
-      return exits.error(error)
+      return exits.error(error);
     }
 
 
@@ -107,12 +107,12 @@ module.exports = {
         let status = await sails.helpers.sdtd.checkIfAvailable(newServer.id)
           .tolerate('notAvailable', function () {
             sails.log.debug(`HELPER - add7DtdServer - not available`);
-            reject(new Error('badWebport'))
-          })
+            reject(new Error('badWebport'));
+          });
         sails.log.debug(`HELPER - add7DtdServer - success`);
         sails.hooks.sdtdlogs.start(newServer.id);
-        resolve(newServer)
-      })
+        resolve(newServer);
+      });
 
 
     }

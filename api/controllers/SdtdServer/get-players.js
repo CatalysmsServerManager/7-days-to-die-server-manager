@@ -48,15 +48,15 @@ module.exports = {
       sails.helpers.loadPlayerData(server.id)
         .switch({
           success: function(data) {
-            return exits.success(data)
+            return exits.success(data);
           },
           error: function(error) {
-            return exits.badRequest()
+            return exits.badRequest();
           }
-        })
+        });
     } catch (error) {
-      sails.log.error(`API - SdtdServer:getPlayers - ${error}`)
-      return exits.error(error)
+      sails.log.error(`API - SdtdServer:getPlayers - ${error}`);
+      return exits.error(error);
     }
 
   }

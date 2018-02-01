@@ -37,7 +37,7 @@ module.exports = {
    * @memberof module:Helpers
    * @returns {boolean}
    * @method
-   * @param {number} serverId 
+   * @param {number} serverId
    */
 
   fn: async function (inputs, exits) {
@@ -46,18 +46,18 @@ module.exports = {
     try {
       let sdtdServer = await SdtdServer.findOne({
         id: inputs.serverId
-      })
+      });
       let statsResponse = await checkStats(sdtdServer);
       let commandResponse = await checkCommand(sdtdServer);
 
       if (statsResponse && commandResponse) {
-        return exits.success(true)
+        return exits.success(true);
       } else {
-        return exits.notAvailable()
+        return exits.notAvailable();
       }
 
     } catch (error) {
-      return exits.error(error)
+      return exits.error(error);
     }
 
 
@@ -70,13 +70,13 @@ module.exports = {
           authToken: sdtdServer.authToken
         }).exec({
           success: (response) => {
-            resolve(true)
+            resolve(true);
           },
           error: (error) => {
-            resolve(false)
+            resolve(false);
           }
-        })
-      })
+        });
+      });
     }
 
     async function checkCommand(sdtdServer) {
@@ -89,13 +89,13 @@ module.exports = {
           command: 'mem'
         }).exec({
           success: (response) => {
-            resolve(true)
+            resolve(true);
           },
           error: (error) => {
-            resolve(false)
+            resolve(false);
           }
-        })
-      })
+        });
+      });
     }
 
 

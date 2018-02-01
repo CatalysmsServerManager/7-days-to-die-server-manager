@@ -11,8 +11,8 @@ const sevenDays = require('machinepack-7daystodiewebapi');
 
 class MotdSender {
   constructor(serverId, config) {
-    this.serverId = serverId
-    this.config = config
+    this.serverId = serverId;
+    this.config = config;
     this.start();
   }
 
@@ -26,24 +26,24 @@ class MotdSender {
 
     try {
       if (!this.config.motdEnabled) {
-        throw new Error(`Invalid usage: MOTD is disabled for this server.`)
+        throw new Error(`Invalid usage: MOTD is disabled for this server.`);
       }
 
       if (this.config.motdInterval) {
         this.motdInterval = setInterval(() => {
-          this.sendMotd(this.config.motdMessage, this.serverId)
-        }, this.config.motdInterval * 1000 * 60)
+          this.sendMotd(this.config.motdMessage, this.serverId);
+        }, this.config.motdInterval * 1000 * 60);
       }
 
       if (this.config.motdOnJoinEnabled) {
         let loggingObj = sails.hooks.sdtdlogs.getLoggingObject(this.serverId);
         this.onJoinListener = MotdSender.onJoinListener.bind(this);
 
-        loggingObj.on('playerConnected', this.onJoinListener)
+        loggingObj.on('playerConnected', this.onJoinListener);
       }
     } catch (error) {
-      sails.log.error(`HOOK 7dtdMOTD:motdSenderClass:start - ${error}`)
-      throw error
+      sails.log.error(`HOOK 7dtdMOTD:motdSenderClass:start - ${error}`);
+      throw error;
     }
 
   }
@@ -56,21 +56,21 @@ class MotdSender {
       }
 
       if (this.motdInterval) {
-        clearInterval(this.motdInterval)
+        clearInterval(this.motdInterval);
       }
 
     } catch (error) {
-      sails.log.error(`HOOK 7dtdMOTD:motdSenderClass:stop - ${error}`)
-      throw error
+      sails.log.error(`HOOK 7dtdMOTD:motdSenderClass:stop - ${error}`);
+      throw error;
     }
 
   }
 
   static async onJoinListener(connectedMessage) {
     try {
-      await this.sendMotd(this.config.motdMessage, this.serverId, connectedMessage.steamID)
+      await this.sendMotd(this.config.motdMessage, this.serverId, connectedMessage.steamID);
     } catch (error) {
-      sails.log.error(`HOOK 7dtdMOTD:motdSenderClass:onJoinListener - ${error}`)
+      sails.log.error(`HOOK 7dtdMOTD:motdSenderClass:onJoinListener - ${error}`);
     }
   }
 
@@ -79,7 +79,7 @@ class MotdSender {
    * @memberof class:MotdSender
    * @description sends the motd to the server or a player (if id is given)
    * @param {string} message
-   * @param {number} serverId 
+   * @param {number} serverId
    * @param {string} playerSteamId If given, message will be sent as PM to the player
    */
 
@@ -108,7 +108,7 @@ class MotdSender {
         error: (error) => {
           sails.log.error(`HOOKS - sdtdMotd:MotdSender:sendMotd - Unknown server id ${serverId}`);
         }
-      })
+      });
 
     } catch (error) {
       sails.log.error(`HOOKS - sdtdMotd:MotdSender:sendMotd - ${error}`);
@@ -117,4 +117,4 @@ class MotdSender {
 
 }
 
-module.exports = MotdSender
+module.exports = MotdSender;

@@ -1,12 +1,12 @@
-let SdtdCommand = require('../command.js')
+let SdtdCommand = require('../command.js');
 const sevenDays = require('machinepack-7daystodiewebapi');
 
 class callAdmin extends SdtdCommand {
   constructor(serverId) {
     super(serverId, {
       name: 'calladmin',
-    })
-    this.serverId = serverId
+    });
+    this.serverId = serverId;
   }
 
   async run(chatMessage, playerId, args) {
@@ -16,10 +16,10 @@ class callAdmin extends SdtdCommand {
 
       let server = await SdtdServer.findOne({
         id: this.serverId
-      })
+      });
       let player = await Player.findOne({
         id: playerId
-      })
+      });
 
       if (args == '') {
         return sevenDays.sendMessage({
@@ -31,19 +31,19 @@ class callAdmin extends SdtdCommand {
           playerId: player.steamId
         }).exec({
           error: (error) => {
-            sails.log.error(`HOOK - SdtdCommands:callAdmin - Failed to respond to player`)
+            sails.log.error(`HOOK - SdtdCommands:callAdmin - Failed to respond to player`);
           },
           success: (result) => {
-            return
+            return;
           }
-        })
+        });
       }
 
       let ticket = await sails.helpers.sdtd.createTicket(
         this.serverId,
         playerId,
         args.join(' ')
-      )
+      );
 
 
       sevenDays.sendMessage({
@@ -55,17 +55,17 @@ class callAdmin extends SdtdCommand {
         playerId: player.steamId
       }).exec({
         error: (error) => {
-          sails.log.error(`HOOK - SdtdCommands:callAdmin - Failed to respond to player`)
+          sails.log.error(`HOOK - SdtdCommands:callAdmin - Failed to respond to player`);
         },
         success: (result) => {
-          return ticket
+          return ticket;
         }
-      })
+      });
 
     } catch (error) {
-      sails.log.error(`HOOK - SdtdCommands:callAdmin - ${error}`)
+      sails.log.error(`HOOK - SdtdCommands:callAdmin - ${error}`);
     }
   }
 }
 
-module.exports = callAdmin
+module.exports = callAdmin;

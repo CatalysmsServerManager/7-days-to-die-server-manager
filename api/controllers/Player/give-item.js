@@ -47,7 +47,7 @@ module.exports = {
     try {
 
       sails.log.debug(`API - Player:give-item - giving ${inputs.amount} of ${inputs.itemName} to ${inputs.playerId} with quality: ${inputs.quality}`);
-      let player = await Player.findOne(inputs.playerId).populate('server')
+      let player = await Player.findOne(inputs.playerId).populate('server');
       let server = await SdtdServer.findOne(player.server.id);
 
       return sevenDays.giveItem({
@@ -61,22 +61,22 @@ module.exports = {
         quality: inputs.quality
       }).exec({
         error: function (error) {
-          return exits.error(error)
+          return exits.error(error);
         },
         playerNotFound: function () {
           return exits.notFound('Did not find online player with given ID');
         },
         itemNotFound: function () {
-            return exits.notFound('Did not find given item');
-          },
+          return exits.notFound('Did not find given item');
+        },
         success: function (response) {
-          return exits.success(response)
+          return exits.success(response);
         }
       });
 
     } catch (error) {
       sails.log.error(`API - Player:give-item - ${error}`);
-      return exits.error(error)
+      return exits.error(error);
     }
 
 

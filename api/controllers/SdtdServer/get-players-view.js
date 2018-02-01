@@ -23,7 +23,7 @@ module.exports = {
 
   },
 
-    /**
+  /**
    * @memberof SdtdServer
    * @name get-players-view
    * @method
@@ -35,7 +35,7 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     try {
-      sails.log.debug('VIEW - SdtdServer:players - serving players view')
+      sails.log.debug('VIEW - SdtdServer:players - serving players view');
       let server = await SdtdServer.findOne({
         id: inputs.serverId
       });
@@ -45,9 +45,9 @@ module.exports = {
       exits.success({
         players: players,
         server: server
-      })
+      });
     } catch (error) {
-      sails.log.error(`VIEW - SdtdServer:players - ${error}`)
+      sails.log.error(`VIEW - SdtdServer:players - ${error}`);
     }
 
   }

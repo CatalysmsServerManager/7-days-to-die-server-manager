@@ -31,7 +31,7 @@ module.exports = {
     sails.log.debug(`API - User:getOwnedServers - Getting servers for user ${inputs.userId}`);
 
     try {
-      let servers = await SdtdServer.find({owner: inputs.userId})
+      let servers = await SdtdServer.find({owner: inputs.userId});
 
 
       return exits.success(servers);

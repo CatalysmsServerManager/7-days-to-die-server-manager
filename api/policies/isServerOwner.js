@@ -11,8 +11,8 @@ module.exports = async function isServerOwner(req, res, next) {
     var isOwner = false;
     let server = await SdtdServer.findOne({
       id: serverId
-    })
-    if (_.isUndefined(server)) return res.notFound();
+    });
+    if (_.isUndefined(server)) {return res.notFound();}
     if (server.owner === req.signedCookies.userProfile.id) {
       sails.log.debug(`POLICY - isServerOwner - User ${req.signedCookies.userProfile.id} is owner of the server, approving request`);
       return next();

@@ -34,7 +34,7 @@ module.exports = {
     try {
 
       sails.log.debug(`API - Player:unban - unbanning player ${inputs.playerId}`);
-      let player = await Player.findOne(inputs.playerId).populate('server')
+      let player = await Player.findOne(inputs.playerId).populate('server');
       let server = await SdtdServer.findOne(player.server.id);
       return sevenDays.unbanPlayer({
         ip: server.ip,
@@ -44,19 +44,19 @@ module.exports = {
         playerId: player.steamId,
       }).exec({
         error: function (error) {
-          return exits.error(error)
+          return exits.error(error);
         },
         unknownPlayer: function () {
           return exits.notFound('Cannot unban player, invalid ID given!');
         },
         success: function (response) {
-          return exits.success(response)
+          return exits.success(response);
         }
       });
 
     } catch (error) {
       sails.log.error(`API - Player:unban - ${error}`);
-      return exits.error(error)
+      return exits.error(error);
     }
 
 

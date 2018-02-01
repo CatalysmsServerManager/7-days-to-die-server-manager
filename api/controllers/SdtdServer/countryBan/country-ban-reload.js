@@ -25,7 +25,7 @@ module.exports = {
       responseType: 'notFound'
     },
     success: {
-      description: "Returns true if set to enabled, false if set to disabled"
+      description: 'Returns true if set to enabled, false if set to disabled'
     }
 
   },
@@ -48,17 +48,17 @@ module.exports = {
       });
 
       if (_.isUndefined(server)) {
-        return exits.notFound()
+        return exits.notFound();
       }
 
-      let config = await SdtdConfig.findOne({server: server.id})
+      let config = await SdtdConfig.findOne({server: server.id});
 
       if (_.isUndefined(inputs.newConfig)) {
-        sails.hooks.countryban.reload(inputs.serverId)
+        sails.hooks.countryban.reload(inputs.serverId);
       } else {
-        let configToSend = config.countryBanConfig
+        let configToSend = config.countryBanConfig;
 
-        if (typeof inputs.newConfig.bannedCountries == typeof new Array()) {
+        if (typeof inputs.newConfig.bannedCountries === typeof new Array()) {
           // Handle the input countries & adjust the config to send accordingly
           for (const country of inputs.newConfig.bannedCountries) {
             if (configToSend.bannedCountries.includes(country)) {
@@ -67,23 +67,23 @@ module.exports = {
                 configToSend.bannedCountries.splice(index, 1);
               }
             } else {
-              configToSend.bannedCountries.push(country)
+              configToSend.bannedCountries.push(country);
             }
           }
         }
 
 
-        configToSend.kickMessage = inputs.newConfig.kickMessage == '' ? configToSend.kickMessage : inputs.newConfig.kickMessage
+        configToSend.kickMessage = inputs.newConfig.kickMessage == '' ? configToSend.kickMessage : inputs.newConfig.kickMessage;
 
-        sails.hooks.countryban.reload(inputs.serverId, configToSend)
+        sails.hooks.countryban.reload(inputs.serverId, configToSend);
       }
 
       sails.log.debug(`API - SdtdServer:country-ban-reload - Reloaded config for server ${inputs.serverId}`);
 
-      return exits.success()
+      return exits.success();
     } catch (error) {
       sails.log.error(`API - SdtdServer:country-ban-reload - ${error}`);
-      return exits.error(error)
+      return exits.error(error);
     }
 
 

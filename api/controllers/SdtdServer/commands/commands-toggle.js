@@ -22,7 +22,7 @@ module.exports = {
       responseType: 'notFound'
     },
     success: {
-      description: "Returns true if set to enabled, false if set to disabled"
+      description: 'Returns true if set to enabled, false if set to disabled'
     }
 
   },
@@ -49,32 +49,32 @@ module.exports = {
       });
 
       if (config.length > 1) {
-          return exits.badRequest(`Found more than one config for this server`)
+        return exits.badRequest(`Found more than one config for this server`);
       }
 
-      config = config[0]
+      config = config[0];
 
       if (_.isUndefined(server)) {
-        return exits.notFound()
+        return exits.notFound();
       }
 
-      let commandStatus = sails.hooks.sdtdcommands.getStatus(inputs.serverId)
+      let commandStatus = sails.hooks.sdtdcommands.getStatus(inputs.serverId);
 
       if (!commandStatus) {
-        config.commandsEnabled = true
+        config.commandsEnabled = true;
       } else {
-        config.commandsEnabled = false
+        config.commandsEnabled = false;
       }
 
-      await sails.hooks.sdtdcommands.updateConfig(inputs.serverId, config)
-      let status = sails.hooks.sdtdcommands.getStatus(inputs.serverId)
+      await sails.hooks.sdtdcommands.updateConfig(inputs.serverId, config);
+      let status = sails.hooks.sdtdcommands.getStatus(inputs.serverId);
 
       sails.log.debug(`API - SdtdServer:commands-toggle - New status for server ${inputs.serverId} is ${status}`);
 
-      return exits.success(status)
+      return exits.success(status);
     } catch (error) {
       sails.log.error(`API - SdtdServer:commands-toggle - ${error}`);
-      return exits.error(error)
+      return exits.error(error);
     }
 
 

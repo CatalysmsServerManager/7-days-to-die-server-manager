@@ -31,7 +31,7 @@ module.exports = {
       responseType: 'notFound'
     },
     success: {
-      description: "Returns true if set to enabled, false if set to disabled"
+      description: 'Returns true if set to enabled, false if set to disabled'
     },
     invalidInput: {
       description: 'invalid inputs',
@@ -58,15 +58,15 @@ module.exports = {
       });
       let config = await SdtdConfig.findOne({
         server: server.id
-      })
+      });
 
       if (_.isUndefined(server)) {
-        return exits.notFound()
+        return exits.notFound();
       }
 
       if (!_.isUndefined(inputs.newDelay)) {
         if (isNaN(inputs.newDelay) || (10 > inputs.newDelay) || (2000 < inputs.newDelay) || !Number.isInteger(Number(inputs.newDelay))) {
-          return exits.invalidInput()
+          return exits.invalidInput();
         }
       }
 
@@ -75,14 +75,14 @@ module.exports = {
         _.isUndefined(inputs.newDelay) ? config.motdInterval : inputs.newDelay,
         config.motdEnabled,
         _.isUndefined(inputs.newStatusOnJoin) ? config.motdOnJoinEnabled : inputs.newStatusOnJoin
-      )
+      );
 
       sails.log.debug(`API - SdtdServer:motd-reload - Reloaded config for server ${inputs.serverId}`);
 
-      return exits.success()
+      return exits.success();
     } catch (error) {
       sails.log.error(`API - SdtdServer:motd-reload - ${error}`);
-      return exits.error(error)
+      return exits.error(error);
     }
 
 

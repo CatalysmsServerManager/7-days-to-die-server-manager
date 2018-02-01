@@ -28,7 +28,7 @@ module.exports = function sdtdLogs(sails) {
           sails.log.debug('HOOK: Initializing sdtdlogs');
           let enabledServers = await SdtdConfig.find({
             loggingEnabled: true
-          }).populate('server')
+          }).populate('server');
 
           await _.each(enabledServers, async function (config) {
             try {
@@ -43,7 +43,7 @@ module.exports = function sdtdLogs(sails) {
         } catch (error) {
           sails.log.error(`HOOKS - sdtdLogs - ${error}`);
         }
-      })
+      });
     },
 
     /**
@@ -55,19 +55,19 @@ module.exports = function sdtdLogs(sails) {
      */
 
     start: async function (serverID) {
-      serverID = String(serverID)
+      serverID = String(serverID);
       try {
         if (!loggingInfoMap.has(serverID)) {
-          sails.log.debug(`HOOKS - sdtdLogs - starting logging for server ${serverID}`)
+          sails.log.debug(`HOOKS - sdtdLogs - starting logging for server ${serverID}`);
           await SdtdConfig.update({
             server: serverID
           }, {
             loggingEnabled: true
-          })
+          });
           let loggingObj = await createLogObject(serverID);
           return loggingInfoMap.set(serverID, loggingObj);
         } else {
-          throw new Error(`Tried to start logging for a server that already had it enables`)
+          throw new Error(`Tried to start logging for a server that already had it enables`);
         }
 
       } catch (error) {
@@ -87,12 +87,12 @@ module.exports = function sdtdLogs(sails) {
 
       try {
         if (loggingInfoMap.has(serverID)) {
-          sails.log.debug(`HOOKS - sdtdLogs - stopping logging for server ${serverID}`)
+          sails.log.debug(`HOOKS - sdtdLogs - stopping logging for server ${serverID}`);
           await SdtdConfig.update({
             server: serverID
           }, {
             loggingEnabled: false
-          })
+          });
           let loggingObj = loggingInfoMap.get(serverID);
           loggingInfoMap.delete(serverID);
           return loggingObj.stop();
@@ -114,7 +114,7 @@ module.exports = function sdtdLogs(sails) {
 
     getLoggingObject: function (serverId) {
       let obj = loggingInfoMap.get(String(serverId));
-      return obj
+      return obj;
     },
 
     /**
@@ -126,9 +126,9 @@ module.exports = function sdtdLogs(sails) {
      */
 
     getStatus: function (serverId) {
-      serverId = String(serverId)
+      serverId = String(serverId);
       let status = loggingInfoMap.has(serverId);
-      return status
+      return status;
     }
   };
 
@@ -147,7 +147,7 @@ module.exports = function sdtdLogs(sails) {
         id: serverID
       }).exec(function (error, server) {
         if (error) {
-          reject(error)
+          reject(error);
         }
 
         sevenDays.startLoggingEvents({
@@ -157,7 +157,7 @@ module.exports = function sdtdLogs(sails) {
           authToken: server.authToken,
         }).exec({
           error: function (error) {
-            reject(error)
+            reject(error);
           },
           success: function (eventEmitter) {
             eventEmitter.on('logLine', function (logLine) {
@@ -174,7 +174,7 @@ module.exports = function sdtdLogs(sails) {
                 sails.sockets.broadcast(server.id, 'playerConnected', connectedMsg);
               } catch (error) {
                 sails.sockets.broadcast(server.id, 'playerConnected', connectedMsg);
-                sails.log.error(`HOOKS - sdtdLogs - ${error}`)
+                sails.log.error(`HOOKS - sdtdLogs - ${error}`);
               }
 
             });
@@ -186,11 +186,11 @@ module.exports = function sdtdLogs(sails) {
             eventEmitter.on('playerDeath', function (deathMessage) {
               sails.sockets.broadcast(server.id, 'playerDeath', deathMessage);
             });
-            resolve(eventEmitter)
+            resolve(eventEmitter);
           }
         });
       });
-    })
+    });
 
 
   }

@@ -1,4 +1,4 @@
-const CommandHandler = require('./commandHandler.js')
+const CommandHandler = require('./commandHandler.js');
 /**
  * @module SdtdCommandsHook
  * @description a Sails project hook. Ingame command handler for Sdtd
@@ -36,12 +36,12 @@ module.exports = function sdtdCommands(sails) {
               commandsEnabled: true
             });
             enabledServers.forEach(serverConfig => {
-              start(serverConfig.server)
+              start(serverConfig.server);
             });
           } catch (error) {
-            sails.log.error(`HOOK SdtdCommands:initialize - ${error}`)
+            sails.log.error(`HOOK SdtdCommands:initialize - ${error}`);
           }
-          cb()
+          cb();
         });
       });
     },
@@ -73,7 +73,7 @@ module.exports = function sdtdCommands(sails) {
      */
 
     getStatus: function (serverId) {
-      return commandInfoMap.has(serverId)
+      return commandInfoMap.has(serverId);
     },
 
     /**
@@ -85,10 +85,10 @@ module.exports = function sdtdCommands(sails) {
 
     updateConfig: async function (serverId, newConfig) {
       try {
-        sails.log.debug(`HOOK sdtdCommands:updateConfig - Updating commands config for server ${serverId}`)
+        sails.log.debug(`HOOK sdtdCommands:updateConfig - Updating commands config for server ${serverId}`);
 
         if (_.isUndefined(newConfig.commandPrefix) || _.isUndefined(newConfig.commandsEnabled)) {
-          throw new Error('Missing value(s) for command config. Please check input')
+          throw new Error('Missing value(s) for command config. Please check input');
         }
 
         await SdtdConfig.update({
@@ -96,18 +96,18 @@ module.exports = function sdtdCommands(sails) {
         }, {
           commandsEnabled: newConfig.commandsEnabled,
           commandPrefix: newConfig.commandPrefix
-        })
+        });
 
         if (newConfig.commandsEnabled) {
-          this.stop(serverId)
-          this.start(serverId)
+          this.stop(serverId);
+          this.start(serverId);
         } else {
-          this.stop(serverId)
+          this.stop(serverId);
         }
 
       } catch (error) {
-        sails.log.error(`HOOK SdtdCommands:updateConfig - ${error}`)
-        throw error
+        sails.log.error(`HOOK SdtdCommands:updateConfig - ${error}`);
+        throw error;
       }
     }
 
@@ -116,34 +116,34 @@ module.exports = function sdtdCommands(sails) {
   async function start(serverId) {
 
     try {
-      sails.log.debug(`HOOK sdtdCommands:start - Starting commands for server ${serverId}`)
+      sails.log.debug(`HOOK sdtdCommands:start - Starting commands for server ${serverId}`);
       let serverConfig = await SdtdConfig.findOne({
         server: serverId
       });
       if (serverConfig.commandsEnabled) {
         let serverLoggingObj = sails.hooks.sdtdlogs.getLoggingObject(String(serverId));
-        let commandHandler = new CommandHandler(serverId, serverLoggingObj, serverConfig)
+        let commandHandler = new CommandHandler(serverId, serverLoggingObj, serverConfig);
         commandInfoMap.set(String(serverId), commandHandler);
-        return true
+        return true;
       }
     } catch (error) {
-      sails.log.error(`HOOK SdtdCommands:start - ${error}`)
-      throw error
+      sails.log.error(`HOOK SdtdCommands:start - ${error}`);
+      throw error;
     }
   }
 
   async function stop(serverId) {
     try {
-      sails.log.debug(`HOOK sdtdCommands:stop - Stopping commands for server ${serverId}`)
+      sails.log.debug(`HOOK sdtdCommands:stop - Stopping commands for server ${serverId}`);
       let commandHandler = commandInfoMap.get(String(serverId));
       if (!_.isUndefined(commandHandler)) {
-        commandHandler.stop()
-        return commandInfoMap.delete(String(serverId))
+        commandHandler.stop();
+        return commandInfoMap.delete(String(serverId));
       }
-      return
+      return;
     } catch (error) {
-      sails.log.error(`HOOK SdtdCommands:stop - ${error}`)
-      throw error
+      sails.log.error(`HOOK SdtdCommands:stop - ${error}`);
+      throw error;
     }
   }
 };

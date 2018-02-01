@@ -147,7 +147,7 @@ module.exports = {
       via: 'server'
     },
 
-      /**
+    /**
      * @memberof SdtdServer
      * @var tickets
      * @description Collection of SdtdTickets
