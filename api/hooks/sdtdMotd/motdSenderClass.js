@@ -30,7 +30,9 @@ class MotdSender {
       }
 
       if (this.config.motdInterval) {
-        // Start interval
+        this.motdInterval = setInterval(() => {
+          this.sendMotd(this.config.motdMessage, this.serverId)
+        }, this.config.motdInterval * 1000 * 60)
       }
 
       if (this.config.motdOnJoinEnabled) {
@@ -51,6 +53,10 @@ class MotdSender {
       if (this.onJoinListener) {
         let loggingObj = sails.hooks.sdtdlogs.getLoggingObject(this.serverId);
         loggingObj.removeListener('playerConnected', this.onJoinListener);
+      }
+
+      if (this.motdInterval) {
+        clearInterval(this.motdInterval)
       }
 
     } catch (error) {

@@ -65,7 +65,7 @@ module.exports = {
       }
 
       if (!_.isUndefined(inputs.newDelay)) {
-        if (2000 < inputs.newDelay < 10) {
+        if (isNaN(inputs.newDelay) || (10 > inputs.newDelay) || (2000 < inputs.newDelay) || !Number.isInteger(Number(inputs.newDelay))) {
           return exits.invalidInput()
         }
       }
