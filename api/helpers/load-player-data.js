@@ -39,6 +39,10 @@ module.exports = {
       if (playerList.players) {
         let playerListWithInventories = await loadPlayersInventory(playerList.players, server);
         let newPlayerList = await playerListWithInventories.map(await updatePlayerInfo);
+
+        if (inputs.steamId) {
+          await loadPlayerProfilePicture(inputs.steamId);
+        }
         let jsonToSend = await createJSON(newPlayerList);
         exits.success(jsonToSend);
       } else {
@@ -84,7 +88,6 @@ module.exports = {
       return new Promise(async function (resolve, reject) {
         try {
           newPlayer.then(async function (newPlayer) {
-            let avatarUrl = await loadPlayerProfilePicture(newPlayer.steamid);
             if (newPlayer.name === '') {
               newPlayer.name = 'Unknown name';
             }
@@ -98,7 +101,6 @@ module.exports = {
               entityId: newPlayer.entityid,
               name: newPlayer.name,
               ip: newPlayer.ip,
-              avatarUrl: avatarUrl
             });
             if (newPlayer.online) {
               playerToSend = await Player.update({
@@ -113,7 +115,6 @@ module.exports = {
                 playtime: newPlayer.totalplaytime,
                 inventory: newPlayer.inventory,
                 banned: newPlayer.banned,
-                avatarUrl: avatarUrl
               }).fetch();
             } else {
               playerToSend = await Player.update({
@@ -127,7 +128,6 @@ module.exports = {
                 positionZ: newPlayer.position.z,
                 playtime: newPlayer.totalplaytime,
                 banned: newPlayer.banned,
-                avatarUrl: await loadPlayerProfilePicture(newPlayer.steamid)
               }).fetch();
             }
 
@@ -216,9 +216,21 @@ module.exports = {
             key: process.env.API_KEY_STEAM,
           },
           json: true
-        }).then((response) => {
-          avatarUrl = response.response.players[0].avatar;
-          resolve(avatarUrl);
+        }).then(async (response) => {
+          try {
+            if (!_.isUndefined(response.response) || !_.isUndefined(response.response.players) ) {
+              let avatarUrl = response.response.players[0].avatarfull;
+              let updatedPlayer = await Player.update({steamId: steamId}, {avatarUrl: avatarUrl}).fetch();
+              resolve(avatarUrl);
+            } else {
+              reject(new Error(`Did not find avatar in response`));
+            }
+          } catch (error) {
+            sails.log.error(`HELPER - loadPlayerData:loadPlayerProfilePicture - ${error}`);
+          }
+
+
+
         }).catch((error) => {
           reject(error);
         });
