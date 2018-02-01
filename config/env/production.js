@@ -133,7 +133,8 @@ module.exports = {
     cors: {
       allowOrigins: [
         "https://csmm.herokuapp.com",
-        "http://catalysm.ddns.net"
+        "http://catalysm.ddns.net",
+        "http://217.182.139.168:2000"
       ]
     },
 
@@ -203,7 +204,7 @@ module.exports = {
          *                                                                          *
          ***************************************************************************/
     cookie: {
-      secure: true,
+      secure: false,
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
     },
 
@@ -234,6 +235,7 @@ module.exports = {
          ***************************************************************************/
     onlyAllowOrigins: [
       "https://csmm.herokuapp.com",
+      "http://217.182.139.168:2000"
     ],
 
 
@@ -318,7 +320,7 @@ module.exports = {
      * this, just try deploying without setting it and see if it works.)       *
      *                                                                         *
      ***************************************************************************/
-  //port: 2000,
+  port: 2000,
 
 
 
