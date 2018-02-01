@@ -14,6 +14,13 @@ class callAdmin extends SdtdCommand {
 
     try {
 
+      let server = await SdtdServer.findOne({
+        id: this.serverId
+      })
+      let player = await Player.findOne({
+        id: playerId
+      })
+
       if (args == '') {
         return sevenDays.sendMessage({
           ip: server.ip,
@@ -37,12 +44,7 @@ class callAdmin extends SdtdCommand {
         playerId,
         args.join(' ')
       )
-      let server = await SdtdServer.findOne({
-        id: this.serverId
-      })
-      let player = await Player.findOne({
-        id: playerId
-      })
+
 
       sevenDays.sendMessage({
         ip: server.ip,
