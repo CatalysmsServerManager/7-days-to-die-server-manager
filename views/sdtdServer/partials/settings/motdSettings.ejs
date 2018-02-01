@@ -19,29 +19,44 @@
             </li>
             <% } %>
               <li class="list-group-item">
-                <label for="inputs-settings-motd-message">Message</label>
+                <label for="input-settings-motd-message">Message</label>
 
-                <input type="text" class="form-control" id="inputs-settings-motd-message" placeholder="<%= config.motdMessage %>">
+                <input type="text" class="form-control" id="input-settings-motd-message" placeholder="<%= config.motdMessage %>">
               </li>
               <li class="list-group-item">
                 <label for="input-settings-motd-interval">Interval</label>
                 <br>
-                <small> In minutes ! </small>
+                <small> In minutes. Set to 0 to disable </small>
 
                 <input type="text" class="form-control" id="input-settings-motd-interval" placeholder="<%= config.motdInterval %>">
+              </li>
+              <li class="list-group-item form-control">
+                <% if (config.motdOnJoinEnabled) { %>
+                  <input type="checkbox" value="" id="inputs-settings-motd-playerOnJoin" checked>
+                  <% } else { %>
+                    <input type="checkbox" value="" id="inputs-settings-motd-playerOnJoin">
+                    <% } %>
+                      <label for="inputs-settings-motd-playerOnJoin">
+                        Send message to players on connect
+                      </label>
               </li>
       </ul>
     </div>
     <div class="col-md-4">
       <% if(config.motdEnabled) {%>
-        <li id='settings-toggle-logging' class="btn btn-danger">
+        <li id='input-settings-motd-toggle' class="btn btn-danger">
           <i class="fa fa-power-off"></i> Disable
         </li>
         <% } else { %>
-          <li id='settings-toggle-logging' class="btn btn-success">
+          <li id='input-settings-motd-toggle' class="btn btn-success">
             <i class="fa fa-power-off"></i> Enable
           </li>
           <% } %>
+
+            <button id="settings-reload-motd" class="btn btn-default btn-primary" type="button">
+              <em class="glyphicon glyphicon-align-right"></em>
+              <i class="fa fa-refresh" aria-hidden="true"></i> Apply changes
+            </button>
 
     </div>
   </div>
@@ -49,10 +64,10 @@
   <script>
     $(document).ready(function () {
 
-      $('#settings-toggle-logging').click((event) => {
+      $('#input-settings-motd-toggle').click((event) => {
         event.preventDefault();
         $.ajax({
-          url: `/api/sdtdserver/togglelogging`,
+          url: `/api/sdtdserver/togglemotd`,
           type: 'POST',
           data: {
             _csrf: window.SAILS_LOCALS._csrf,
@@ -62,9 +77,52 @@
             location.reload();
           },
           error: (xhr, status, error) => {
-            alert('Something went wrong while trying to toggle logging!');
+            alert('Something went wrong while trying to toggle motd!');
           }
         });
+      })
+
+
+      $('#settings-reload-motd').click((event) => {
+        event.preventDefault();
+
+        let newMessage = $('#input-settings-motd-message').val();
+
+        let newDelay = $('#input-settings-motd-interval').val();
+
+        if (newDelay != '') {
+
+          if (isNaN(newDelay) || (10 > newDelay) || (2000 < newDelay) || !Number.isInteger(Number(newDelay))) {
+            return alert(`Interval must be an integer between 10 and 2000`)
+          }
+        }
+
+        let newOnJoinEnabled
+
+        if ($('#inputs-settings-motd-playerOnJoin').is(":checked")) {
+          newOnJoinEnabled = true
+        } else {
+          newOnJoinEnabled = false
+        }
+
+        $.ajax({
+          url: `/api/sdtdserver/reloadmotd`,
+          type: "POST",
+          data: {
+            _csrf: window.SAILS_LOCALS._csrf,
+            serverId: <%= server.id %>,
+            newMessage: (newMessage == '') ? undefined : newMessage,
+            newDelay: (newDelay == '') ? undefined : newDelay,
+            newStatusOnJoin: newOnJoinEnabled
+          },
+          success: (data, status, xhr) => {
+            location.reload();
+          },
+          error: (xhr, status, error) => {
+            alert('Something went wrong while trying to toggle country ban!');
+          }
+        });
+
 
       })
 

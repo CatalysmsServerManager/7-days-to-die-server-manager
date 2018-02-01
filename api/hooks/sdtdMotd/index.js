@@ -1,4 +1,5 @@
 var sevenDays = require('machinepack-7daystodiewebapi');
+const MotdSender = require('./motdSenderClass.js');
 
 /**
  * @module 7dtdMOTDHook
@@ -23,25 +24,29 @@ module.exports = function sdtdLogs(sails) {
      */
     initialize: function (cb) {
       sails.on('hook:orm:loaded', async function () {
+        sails.on('hook:sdtdlogs:loaded', async function () {
+          try {
+            sails.log.debug('HOOK: Initializing sdtdMotd');
+            let enabledServers = await SdtdConfig.find({
+              motdEnabled: true
+            }).populate('server')
 
-        try {
-          sails.log.debug('HOOK: Initializing sdtdMotd');
-          let enabledServers = await SdtdConfig.find({
-            motdEnabled: true
-          }).populate('server')
+            await _.each(enabledServers, async function (config) {
+              try {
+                let server = config.server;
+                let motdSender = new MotdSender(server.id, config);
 
-          await _.each(enabledServers, async function (config) {
-            try {
-              let server = config.server;
-              // await this.start
-            } catch (error) {
-              sails.log.error(`HOOKS - sdtdMotd:initialize - ${error}`);
-            }
-          });
-          return cb();
-        } catch (error) {
-          sails.log.error(`HOOKS - sdtdMotd:initialize - ${error}`);
-        }
+                return motdInfoMap.set(server.id, motdSender);
+
+              } catch (error) {
+                sails.log.error(`HOOKS - sdtdMotd:initialize - ${error}`);
+              }
+            });
+            return cb();
+          } catch (error) {
+            sails.log.error(`HOOKS - sdtdMotd:initialize - ${error}`);
+          }
+        })
       })
     },
 
@@ -59,19 +64,17 @@ module.exports = function sdtdLogs(sails) {
         if (!motdInfoMap.has(serverId)) {
           sails.log.debug(`HOOKS - sdtdMotd:start - starting motd for server ${serverId}`)
 
-          let config = await SdtdConfig.update({
+          let config = await SdtdConfig.findOne({
             server: serverId
-          }, {
-            motdEnabled: true
-          }).fetch().limit(1)
+          });
 
-          let loggingObj = sails.hooks.sdtdlogs.getLoggingObject(serverId);
+          if (!config.motdEnabled) {
+            return
+          }
 
-          loggingObj.on('playerConnected', async function motdListener(connectedMessage) {
-            await sendMotd(config.motdMessage, serverId, connectedMessage.steamID);
-          })
+          let motdSender = new MotdSender(serverId, config);
 
-          return motdInfoMap.set(serverId, {});
+          return motdInfoMap.set(serverId, motdSender);
         }
 
       } catch (error) {
@@ -90,18 +93,12 @@ module.exports = function sdtdLogs(sails) {
     stop: async function (serverId) {
 
       try {
-        if (motdInfoMap.has(serverId)) {
+        if (motdInfoMap.has(String(serverId))) {
           sails.log.debug(`HOOKS - sdtdMotd:stop - stopping MOTD for server ${serverId}`);
 
-          await SdtdConfig.update({
-            server: serverId
-          }, {
-            motdEnabled: false
-          })
-
-
-          motdInfoMap.delete(serverId);
-          return loggingObj.stop();
+          let motdSender = motdInfoMap.get(serverId);
+          motdSender.stop()
+          return motdInfoMap.delete(serverId);
         }
       } catch (error) {
         sails.log.error(`HOOKS - sdtdMotd:stop - ${error}`);
@@ -131,54 +128,33 @@ module.exports = function sdtdLogs(sails) {
      * @param {number} serverId - Id of the server
      * @param {string} newMessage
      * @param {number} newDelay
+     * @param {boolean} newStatus motdEnabled
+     * @param {boolean} newStatusOnJoin motdOnJoinEnabled
      * @method
      */
 
-    updateConfig: async function (serverId, newMessage, newDelay) {
+    updateConfig: async function (serverId, newMessage, newDelay, newStatus, newStatusOnJoin) {
+
+      try {
+
+        await SdtdConfig.update({
+          server: serverId
+        }, {
+          motdMessage: newMessage,
+          motdEnabled: newStatus,
+          motdOnJoinEnabled: newStatusOnJoin,
+          motdInterval: newDelay
+        })
+
+        this.stop(serverId);
+        this.start(serverId);
+
+      } catch (error) {
+        return sails.log.error(`HOOKS - sdtdMotd:updateConfig - ${error}`);
+      }
 
     }
   };
 
 
 };
-
-/**
- * @name sendMotd
- * @memberof module:7dtdMOTDHook
- * @description sends the motd to the server or a player (if id is given)
- * @param {string} message
- * @param {number} serverId 
- * @param {string} playerSteamId If given, message will be sent as PM to the player
- */
-
-async function sendMotd(message, serverId, playerSteamId) {
-  try {
-    let server = SdtdServer.findOne(serverId);
-
-    if (_.isUndefined(server)) {
-      return sails.log.error(`HOOKS - sdtdMotd:sendMotd - Unknown server id ${serverId}`);
-    }
-
-    sevenDays.sendMessage({
-      ip: server.ip,
-      port: server.webPort,
-      authName: server.authName,
-      authToken: server.authToken,
-      message: message,
-      playerID: playerSteamId,
-    }).exec({
-      success: (response) => {
-        sails.log.debug(`HOOKS - sdtdMotd:sendMotd - Successfully sent MOTD message to server ${serverId}`);
-      },
-      unknownPlayer: (error) => {
-        sails.log.error(`HOOKS - sdtdMotd:sendMotd - Tried to send message to unknown player ${serverId}`);
-      },
-      error: (error) => {
-        sails.log.error(`HOOKS - sdtdMotd:sendMotd - Unknown server id ${serverId}`);
-      }
-    })
-
-  } catch (error) {
-    sails.log.error(`HOOKS - sdtdMotd:sendMotd - ${error}`);
-  }
-}

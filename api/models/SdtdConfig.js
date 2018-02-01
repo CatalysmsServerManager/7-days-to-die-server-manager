@@ -110,7 +110,7 @@ module.exports = {
     // | |\/| | |  | | | |  | |  | |
     // | |  | | |__| | | |  | |__| |
     // |_|  |_|\____/  |_|  |_____/ 
-    
+
     /**
      * @memberof SdtdConfig
      * @var {boolean} motdEnabled
@@ -123,7 +123,7 @@ module.exports = {
 
     /**
      * @memberof SdtdConfig
-     * @var {json} motdMessage
+     * @var {string} motdMessage
      * @description Message to be sent
      */
 
@@ -132,7 +132,18 @@ module.exports = {
       defaultsTo: 'Enjoy playing on this server!'
     },
 
-        /**
+    /**
+     * @memberof SdtdConfig
+     * @var {boolean} motdOnJoinEnabled
+     * @description Wheter MOTD message should be sent to players on joining
+     */
+
+    motdOnJoinEnabled: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
+    /**
      * @memberof SdtdConfig
      * @var {number} motdInterval
      * @description Interval the message is sent in minutes

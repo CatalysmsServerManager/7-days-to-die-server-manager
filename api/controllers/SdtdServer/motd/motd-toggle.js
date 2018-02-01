@@ -59,8 +59,13 @@ module.exports = {
         return exits.notFound()
       }
 
+      if (config.motdEnabled) {
+        await sails.hooks.sdtdmotd.updateConfig(inputs.serverId, config.motdMessage, config.motdInterval, false, config.motdOnJoinEnabled)
+      } else {
+        await sails.hooks.sdtdmotd.updateConfig(inputs.serverId, config.motdMessage, config.motdInterval, true, config.motdOnJoinEnabled)
+      }
 
-
+      let status = sails.hooks.sdtdmotd.getStatus(inputs.serverId);
       sails.log.debug(`API - SdtdServer:motd-toggle - New status for server ${inputs.serverId} is ${status}`);
 
       return exits.success(status)
