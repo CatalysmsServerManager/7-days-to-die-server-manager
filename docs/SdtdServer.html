@@ -2,34 +2,41 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>SdtdServer - Documentation</title>
+    <title>Class: SdtdServer | CSMM</title>
 
-    <script src="scripts/prettify/prettify.js"></script>
-    <script src="scripts/prettify/lang-css.js"></script>
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <link type="text/css" rel="stylesheet" href="styles/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-jsdoc.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/tui-doc.css">
+
+    
 </head>
 <body>
-
-<input type="checkbox" id="nav-trigger" class="nav-trigger" />
-<label for="nav-trigger" class="navicon-button x">
-  <div class="navicon"></div>
-</label>
-
-<label for="nav-trigger" class="overlay"></label>
-
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ChatBridgeChannel.html">ChatBridgeChannel</a></li><li><a href="CustomDiscordEmbed.html">CustomDiscordEmbed</a></li><li><a href="module-7dtdMOTDHook.MotdSender.html">MotdSender</a></li><li><a href="Player.html">Player</a><ul class='methods'><li data-type='method'><a href="Player.html#.fn">fn</a></li><li data-type='method'><a href="Player.html#.fn">fn</a></li><li data-type='method'><a href="Player.html#.fn">fn</a></li><li data-type='method'><a href="Player.html#.fn">fn</a></li><li data-type='method'><a href="Player.html#.fn">fn</a></li><li data-type='method'><a href="Player.html#.getBanStatus">getBanStatus</a></li><li data-type='method'><a href="Player.html#.getInventory">getInventory</a></li><li data-type='method'><a href="Player.html#.getLocation">getLocation</a></li></ul></li><li><a href="SdtdServer.html">SdtdServer</a><ul class='methods'><li data-type='method'><a href="SdtdServer.html#.add-server">add-server</a></li><li data-type='method'><a href="SdtdServer.html#.available-items">available-items</a></li><li data-type='method'><a href="SdtdServer.html#.commands-reload">commands-reload</a></li><li data-type='method'><a href="SdtdServer.html#.commands-toggle">commands-toggle</a></li><li data-type='method'><a href="SdtdServer.html#.console">console</a></li><li data-type='method'><a href="SdtdServer.html#.country-ban-reload">country-ban-reload</a></li><li data-type='method'><a href="SdtdServer.html#.country-ban-toggle">country-ban-toggle</a></li><li data-type='method'><a href="SdtdServer.html#.dashboard">dashboard</a></li><li data-type='method'><a href="SdtdServer.html#.delete">delete</a></li><li data-type='method'><a href="SdtdServer.html#.executeCommand">executeCommand</a></li><li data-type='method'><a href="SdtdServer.html#.get-players">get-players</a></li><li data-type='method'><a href="SdtdServer.html#.get-players-view">get-players-view</a></li><li data-type='method'><a href="SdtdServer.html#.load-server-info">load-server-info</a></li><li data-type='method'><a href="SdtdServer.html#.logging-toggle">logging-toggle</a></li><li data-type='method'><a href="SdtdServer.html#.motd-reload">motd-reload</a></li><li data-type='method'><a href="SdtdServer.html#.motd-toggle">motd-toggle</a></li><li data-type='method'><a href="SdtdServer.html#.sendMessage">sendMessage</a></li><li data-type='method'><a href="SdtdServer.html#.server-infoview">server-infoview</a></li><li data-type='method'><a href="SdtdServer.html#.settings">settings</a></li><li data-type='method'><a href="SdtdServer.html#.subscribe-to-socket">subscribe-to-socket</a></li><li data-type='method'><a href="SdtdServer.html#.tickets-view">tickets-view</a></li><li data-type='method'><a href="SdtdServer.html#.update-connection-info">update-connection-info</a></li><li data-type='method'><a href="SdtdServer.html#.user-tickets-view">user-tickets-view</a></li></ul></li><li><a href="User.html">User</a></li></ul><h3>Modules</h3><ul><li><a href="module-7dtdCountryBan.html">7dtdCountryBan</a><ul class='methods'><li data-type='method'><a href="module-7dtdCountryBan.html#.getStatus">getStatus</a></li><li data-type='method'><a href="module-7dtdCountryBan.html#.reload">reload</a></li><li data-type='method'><a href="module-7dtdCountryBan.html#.start">start</a></li><li data-type='method'><a href="module-7dtdCountryBan.html#.stop">stop</a></li></ul></li><li><a href="module-7dtdLoggingHook.html">7dtdLoggingHook</a><ul class='methods'><li data-type='method'><a href="module-7dtdLoggingHook.html#.getLoggingObject">getLoggingObject</a></li><li data-type='method'><a href="module-7dtdLoggingHook.html#.getStatus">getStatus</a></li><li data-type='method'><a href="module-7dtdLoggingHook.html#.start">start</a></li><li data-type='method'><a href="module-7dtdLoggingHook.html#.stop">stop</a></li></ul></li><li><a href="module-7dtdMOTDHook.html">7dtdMOTDHook</a><ul class='methods'><li data-type='method'><a href="module-7dtdMOTDHook.html#.getStatus">getStatus</a></li><li data-type='method'><a href="module-7dtdMOTDHook.html#.start">start</a></li><li data-type='method'><a href="module-7dtdMOTDHook.html#.stop">stop</a></li><li data-type='method'><a href="module-7dtdMOTDHook.html#.updateConfig">updateConfig</a></li></ul></li><li><a href="module-AuthController.html">AuthController</a><ul class='methods'><li data-type='method'><a href="module-AuthController.html#.logout">logout</a></li><li data-type='method'><a href="module-AuthController.html#.steamLogin">steamLogin</a></li><li data-type='method'><a href="module-AuthController.html#.steamReturn">steamReturn</a></li></ul></li><li><a href="module-DiscordBot.html">DiscordBot</a><ul class='methods'><li data-type='method'><a href="module-DiscordBot.html#.getClient">getClient</a></li><li data-type='method'><a href="module-DiscordBot.html#.initialize">initialize</a></li></ul></li><li><a href="module-DiscordCommands.html">DiscordCommands</a></li><li><a href="module-Helpers.html">Helpers</a><ul class='methods'><li data-type='method'><a href="module-Helpers.html#.Add7dtdServer">Add7dtdServer</a></li><li data-type='method'><a href="module-Helpers.html#.checkIfAvailable">checkIfAvailable</a></li><li data-type='method'><a href="module-Helpers.html#.createTicket">createTicket</a></li><li data-type='method'><a href="module-Helpers.html#.createWebTokens">createWebTokens</a></li><li data-type='method'><a href="module-Helpers.html#.loadPlayerData">loadPlayerData</a></li><li data-type='method'><a href="module-Helpers.html#.loadSdtdServerInfo">loadSdtdServerInfo</a></li></ul></li><li><a href="module-SdtdCommands.html">SdtdCommands</a></li><li><a href="module-SdtdCommandsHook.html">SdtdCommandsHook</a><ul class='methods'><li data-type='method'><a href="module-SdtdCommandsHook.html#.getStatus">getStatus</a></li><li data-type='method'><a href="module-SdtdCommandsHook.html#.initialize">initialize</a></li><li data-type='method'><a href="module-SdtdCommandsHook.html#.start">start</a></li><li data-type='method'><a href="module-SdtdCommandsHook.html#.stop">stop</a></li><li data-type='method'><a href="module-SdtdCommandsHook.html#.updateConfig">updateConfig</a></li></ul></li><li><a href="module-SdtdConfig.html">SdtdConfig</a></li><li><a href="module-SdtdTicket.html">SdtdTicket</a></li></ul><h3>Global</h3><ul><li><a href="global.html#discordId">discordId</a></li></ul>
+<nav class="lnb" id="lnb">
+    <div class="logo" style="">
+        
+            <img src="img/toast-ui.png" width="100%" height="100%">
+        
+    </div>
+    <div class="title">
+        <h1><a href="index.html" class="link">CSMM</a></h1>
+        
+    </div>
+    <div class="search-container" id="search-container">
+        <input type="text" placeholder="Search">
+        <ul></ul>
+    </div>
+    
+    <div class="lnb-api hidden"><h3>Modules</h3><ul><li><a href="module-7dtdCountryBan.html">7dtdCountryBan</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:7dtdCountryBan_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="module-7dtdCountryBan.html#.getStatus">getStatus</a></li><li><a href="module-7dtdCountryBan.html#.reload">reload</a></li><li><a href="module-7dtdCountryBan.html#.start">start</a></li><li><a href="module-7dtdCountryBan.html#.stop">stop</a></li></ul></div></li><li><a href="module-7dtdLoggingHook.html">7dtdLoggingHook</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:7dtdLoggingHook_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="module-7dtdLoggingHook.html#.getLoggingObject">getLoggingObject</a></li><li><a href="module-7dtdLoggingHook.html#.getStatus">getStatus</a></li><li><a href="module-7dtdLoggingHook.html#.start">start</a></li><li><a href="module-7dtdLoggingHook.html#.stop">stop</a></li></ul></div></li><li><a href="module-7dtdMOTDHook.html">7dtdMOTDHook</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:7dtdMOTDHook_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="module-7dtdMOTDHook.html#.getStatus">getStatus</a></li><li><a href="module-7dtdMOTDHook.html#.start">start</a></li><li><a href="module-7dtdMOTDHook.html#.stop">stop</a></li><li><a href="module-7dtdMOTDHook.html#.updateConfig">updateConfig</a></li></ul></div></li><li><a href="module-AuthController.html">AuthController</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:AuthController_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="module-AuthController.html#.logout">logout</a></li><li><a href="module-AuthController.html#.steamLogin">steamLogin</a></li><li><a href="module-AuthController.html#.steamReturn">steamReturn</a></li></ul></div></li><li><a href="module-DiscordBot.html">DiscordBot</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:DiscordBot_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="module-DiscordBot.html#.getClient">getClient</a></li><li><a href="module-DiscordBot.html#.initialize">initialize</a></li></ul></div></li><li><a href="module-DiscordCommands.html">DiscordCommands</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:DiscordCommands_sub"><div class="member-type">Members</div><ul class="inner"><li><a href="module-DiscordCommands.html#.AddServer">AddServer</a></li><li><a href="module-DiscordCommands.html#.ChatBridge">ChatBridge</a></li><li><a href="module-DiscordCommands.html#.Day7">Day7</a></li><li><a href="module-DiscordCommands.html#.PlayerInfo">PlayerInfo</a></li></ul></div></li><li><a href="module-Helpers.html">Helpers</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:Helpers_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="module-Helpers.html#.Add7dtdServer">Add7dtdServer</a></li><li><a href="module-Helpers.html#.checkIfAvailable">checkIfAvailable</a></li><li><a href="module-Helpers.html#.createTicket">createTicket</a></li><li><a href="module-Helpers.html#.createWebTokens">createWebTokens</a></li><li><a href="module-Helpers.html#.loadPlayerData">loadPlayerData</a></li><li><a href="module-Helpers.html#.loadSdtdServerInfo">loadSdtdServerInfo</a></li></ul></div></li><li><a href="module-SdtdCommands.html">SdtdCommands</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:SdtdCommands_sub"></div></li><li><a href="module-SdtdCommandsHook.html">SdtdCommandsHook</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:SdtdCommandsHook_sub"><div class="member-type">Members</div><ul class="inner"><li><a href="module-SdtdCommandsHook.html#.commandHandler">commandHandler</a></li><li><a href="module-SdtdCommandsHook.html#.SdtdCommand">SdtdCommand</a></li><li><a href="module-SdtdCommandsHook.html#.server">server</a></li></ul><div class="member-type">Methods</div><ul class="inner"><li><a href="module-SdtdCommandsHook.html#.getStatus">getStatus</a></li><li><a href="module-SdtdCommandsHook.html#.initialize">initialize</a></li><li><a href="module-SdtdCommandsHook.html#.start">start</a></li><li><a href="module-SdtdCommandsHook.html#.stop">stop</a></li><li><a href="module-SdtdCommandsHook.html#.updateConfig">updateConfig</a></li></ul></div></li><li><a href="module-SdtdConfig.html">SdtdConfig</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:SdtdConfig_sub"></div></li><li><a href="module-SdtdTicket.html">SdtdTicket</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:SdtdTicket_sub"><div class="member-type">Members</div><ul class="inner"><li><a href="module-SdtdTicket.html#.description">description</a></li><li><a href="module-SdtdTicket.html#.player">player</a></li><li><a href="module-SdtdTicket.html#.playerInfo">playerInfo</a></li><li><a href="module-SdtdTicket.html#.server">server</a></li><li><a href="module-SdtdTicket.html#.status">status</a></li><li><a href="module-SdtdTicket.html#.title">title</a></li></ul></div></li></ul></div><div class="lnb-api hidden"><h3>Classes</h3><ul><li><a href="ChatBridgeChannel.html">ChatBridgeChannel</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="ChatBridgeChannel_sub"></div></li><li><a href="CustomDiscordEmbed.html">CustomDiscordEmbed</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="CustomDiscordEmbed_sub"></div></li><li><a href="MotdSender.html">MotdSender</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="MotdSender_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="MotdSender.html#.onJoinListener">onJoinListener</a></li><li><a href="MotdSender.html#sendMotd">sendMotd</a></li><li><a href="MotdSender.html#start">start</a></li><li><a href="MotdSender.html#stop">stop</a></li></ul></div></li><li><a href="Player.html">Player</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Player_sub"><div class="member-type">Members</div><ul class="inner"><li><a href="Player.html#.avatarUrl">avatarUrl</a></li><li><a href="Player.html#.banned">banned</a></li><li><a href="Player.html#.entityId">entityId</a></li><li><a href="Player.html#.inventory">inventory</a></li><li><a href="Player.html#.ip">ip</a></li><li><a href="Player.html#.lastOnline">lastOnline</a></li><li><a href="Player.html#.name">name</a></li><li><a href="Player.html#.playtime">playtime</a></li><li><a href="Player.html#.positionX">positionX</a></li><li><a href="Player.html#.positionY">positionY</a></li><li><a href="Player.html#.positionZ">positionZ</a></li><li><a href="Player.html#.server">server</a></li><li><a href="Player.html#.user">user</a></li></ul><div class="member-type">Methods</div><ul class="inner"><li><a href="Player.html#.ban">ban</a></li><li><a href="Player.html#.getBanStatus">getBanStatus</a></li><li><a href="Player.html#.getInventory">getInventory</a></li><li><a href="Player.html#.getLocation">getLocation</a></li><li><a href="Player.html#.give-item">give-item</a></li><li><a href="Player.html#.kick">kick</a></li><li><a href="Player.html#.teleport">teleport</a></li><li><a href="Player.html#.unban">unban</a></li></ul></div></li><li><a href="SdtdServer.html">SdtdServer</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="SdtdServer_sub"><div class="member-type">Members</div><ul class="inner"><li><a href="SdtdServer.html#.admins">admins</a></li><li><a href="SdtdServer.html#.authName">authName</a></li><li><a href="SdtdServer.html#.authToken">authToken</a></li><li><a href="SdtdServer.html#.chat*@method">chat   * @method</a></li><li><a href="SdtdServer.html#.chatChannelId">chatChannelId</a></li><li><a href="SdtdServer.html#.discordGuildId">discordGuildId</a></li><li><a href="SdtdServer.html#.gamePort">gamePort</a></li><li><a href="SdtdServer.html#.ip">ip</a></li><li><a href="SdtdServer.html#.name">name</a></li><li><a href="SdtdServer.html#.owner">owner</a></li><li><a href="SdtdServer.html#.players">players</a></li><li><a href="SdtdServer.html#.restart-server">restart-server</a></li><li><a href="SdtdServer.html#.telnetPort">telnetPort</a></li><li><a href="SdtdServer.html#.tickets">tickets</a></li><li><a href="SdtdServer.html#.webPort">webPort</a></li></ul><div class="member-type">Methods</div><ul class="inner"><li><a href="SdtdServer.html#.add-server">add-server</a></li><li><a href="SdtdServer.html#.available-items">available-items</a></li><li><a href="SdtdServer.html#.commands-reload">commands-reload</a></li><li><a href="SdtdServer.html#.commands-toggle">commands-toggle</a></li><li><a href="SdtdServer.html#.console">console</a></li><li><a href="SdtdServer.html#.country-ban-reload">country-ban-reload</a></li><li><a href="SdtdServer.html#.country-ban-toggle">country-ban-toggle</a></li><li><a href="SdtdServer.html#.dashboard">dashboard</a></li><li><a href="SdtdServer.html#.delete">delete</a></li><li><a href="SdtdServer.html#.executeCommand">executeCommand</a></li><li><a href="SdtdServer.html#.get-players">get-players</a></li><li><a href="SdtdServer.html#.get-players-view">get-players-view</a></li><li><a href="SdtdServer.html#.load-server-info">load-server-info</a></li><li><a href="SdtdServer.html#.logging-toggle">logging-toggle</a></li><li><a href="SdtdServer.html#.motd-reload">motd-reload</a></li><li><a href="SdtdServer.html#.motd-toggle">motd-toggle</a></li><li><a href="SdtdServer.html#.sendMessage">sendMessage</a></li><li><a href="SdtdServer.html#.server-infoview">server-infoview</a></li><li><a href="SdtdServer.html#.settings">settings</a></li><li><a href="SdtdServer.html#.subscribe-to-socket">subscribe-to-socket</a></li><li><a href="SdtdServer.html#.tickets-view">tickets-view</a></li><li><a href="SdtdServer.html#.update-connection-info">update-connection-info</a></li><li><a href="SdtdServer.html#.user-tickets-view">user-tickets-view</a></li></ul></div></li><li><a href="User.html">User</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="User_sub"><div class="member-type">Members</div><ul class="inner"><li><a href="User.html#.admin">admin</a></li><li><a href="User.html#.banned">banned</a></li><li><a href="User.html#.getOwnedServers">getOwnedServers</a></li><li><a href="User.html#.players">players</a></li><li><a href="User.html#.servers">servers</a></li><li><a href="User.html#.steamId">steamId</a></li><li><a href="User.html#.username">username</a></li></ul></div></li></ul></div><div class="lnb-api hidden"><h3>Global</h3><ul><li><a href="global.html#discordId">discordId</a></li></ul></div>
 </nav>
+<div id="resizer"></div>
 
-<div id="main">
-    
-    <h1 class="page-title">SdtdServer</h1>
-    
-
+<div class="main" id="main">
     
 
 
@@ -39,35 +46,66 @@
 
 <header>
     
-        <h2>
-        SdtdServer
-        </h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>SdtdServer<span class="signature">()</span><span class="type-signature"></span></h2>
         
     
 </header>
 
 <article>
-    <div class="container-overview">
     
+        <div class="container-overview">
         
+            
+
+<dt>
+    
+        <h4 class="name" id="SdtdServer">
+            
+                new <span class="type-signature"></span>SdtdServer<span class="signature">()</span><span class="type-signature"></span>
+                
+            
+            <div class="container-source members">
+                <code><a href="models_SdtdServer.js.html">models/SdtdServer.js</a></code>,
+                <code><a href="models_SdtdServer.js.html#line1">line 1</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Represents a 7 Days to Die server
+    </div>
+    
 
     
 
-    <h4 class="name" id="SdtdServer"><span class="type-signature"></span>new SdtdServer<span class="signature">()</span><span class="type-signature"></span></h4>
+    
 
     
 
+    
 
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_SdtdServer.js.html">models/SdtdServer.js</a>, <a href="models_SdtdServer.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
 
     
 
@@ -101,39 +139,15 @@
 </dl>
 
 
+    
 
+</dd>
 
-
-<div class="description">
-    Represents a 7 Days to Die server
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        
+        </div>
+    
 
     
-    </div>
 
     
 
@@ -141,29 +155,44 @@
 
     
 
-     
+    
 
     
 
     
         <h3 class="subsection-title">Members</h3>
 
-        
+        <dl>
             
-<h4 class="name" id=".admins"><span class="type-signature">(static) </span>admins<span class="type-signature"></span></h4>
+
+<dt>
+<h4 class="name" id=".admins">
+    <span class="type-signature"><span class="icon green">static</span> </span>admins<span class="type-signature"></span>
+    
+    <div class="container-source members">
+        <code><a href="models_SdtdServer.js.html">models/SdtdServer.js</a></code>,
+        <code><a href="models_SdtdServer.js.html#line129">line 129</a></code>
+    </div>
+    
+</h4>
 
 
+</dt>
+<dd>
+    
+    <div class="description">
+        Users allowed to perform admin actions on the server
+    </div>
+    
 
+    <!--
+    
+    -->
+
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_SdtdServer.js.html">models/SdtdServer.js</a>, <a href="models_SdtdServer.js.html#line129">line 129</a>
-    </li></ul></dd>
-    
 
     
 
@@ -197,109 +226,52 @@
 </dl>
 
 
+    
 
-
-
-<div class="description">
-    Users allowed to perform admin actions on the server
-</div>
-
-
-
-
-
-
-
+    
+</dd>
 
         
             
-<h4 class="name" id=".authName"><span class="type-signature">(static) </span>authName<span class="type-signature"> :string</span></h4>
 
-
-
-
-
-<dl class="details">
-
+<dt>
+<h4 class="name" id=".authName">
+    <span class="type-signature"><span class="icon green">static</span> </span>authName<span class="type-signature"> :string</span>
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_SdtdServer.js.html">models/SdtdServer.js</a>, <a href="models_SdtdServer.js.html#line69">line 69</a>
-    </li></ul></dd>
+    <div class="container-source members">
+        <code><a href="models_SdtdServer.js.html">models/SdtdServer.js</a></code>,
+        <code><a href="models_SdtdServer.js.html#line69">line 69</a></code>
+    </div>
     
+</h4>
 
+
+</dt>
+<dd>
     
-
-    
-
-    
-
+    <div class="description">
+        adminuser to use during webrequests
+    </div>
     
 
+    <!--
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    adminuser to use during webrequests
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
 <span class="param-type">string</span>
 
 
-        </li>
-    </ul>
+            </li>
+        </ul>
+    
+    -->
 
-
-
-
-
-
-        
-            
-<h4 class="name" id=".authToken"><span class="type-signature">(static) </span>authToken<span class="type-signature"> :string</span></h4>
-
-
-
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_SdtdServer.js.html">models/SdtdServer.js</a>, <a href="models_SdtdServer.js.html#line79">line 79</a>
-    </li></ul></dd>
-    
 
     
 
@@ -333,46 +305,52 @@
 </dl>
 
 
+    
 
+    
+</dd>
 
-
-<div class="description">
-    admintoken to use during webrequests
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
+        
             
+
+<dt>
+<h4 class="name" id=".authToken">
+    <span class="type-signature"><span class="icon green">static</span> </span>authToken<span class="type-signature"> :string</span>
+    
+    <div class="container-source members">
+        <code><a href="models_SdtdServer.js.html">models/SdtdServer.js</a></code>,
+        <code><a href="models_SdtdServer.js.html#line79">line 79</a></code>
+    </div>
+    
+</h4>
+
+
+</dt>
+<dd>
+    
+    <div class="description">
+        admintoken to use during webrequests
+    </div>
+    
+
+    <!--
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
 <span class="param-type">string</span>
 
 
-        </li>
-    </ul>
+            </li>
+        </ul>
+    
+    -->
 
-
-
-
-
-
-        
-            
-<h4 class="name" id=".chat*@method"><span class="type-signature">(static) </span>chat   * @method<span class="type-signature"></span></h4>
-
-
-
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdServer_chat.js.html">controllers/SdtdServer/chat.js</a>, <a href="controllers_SdtdServer_chat.js.html#line30">line 30</a>
-    </li></ul></dd>
-    
 
     
 
@@ -406,36 +384,42 @@
 </dl>
 
 
+    
 
-
-
-<div class="description">
-    Serves the chatbridge view
-</div>
-
-
-
-
-
-
-
+    
+</dd>
 
         
             
-<h4 class="name" id=".chatChannelId"><span class="type-signature">(static) </span>chatChannelId<span class="type-signature"> :string</span></h4>
+
+<dt>
+<h4 class="name" id=".chat*@method">
+    <span class="type-signature"><span class="icon green">static</span> </span>chat   * @method<span class="type-signature"></span>
+    
+    <div class="container-source members">
+        <code><a href="controllers_SdtdServer_chat.js.html">controllers/SdtdServer/chat.js</a></code>,
+        <code><a href="controllers_SdtdServer_chat.js.html#line30">line 30</a></code>
+    </div>
+    
+</h4>
 
 
+</dt>
+<dd>
+    
+    <div class="description">
+        Serves the chatbridge view
+    </div>
+    
 
+    <!--
+    
+    -->
+
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_SdtdServer.js.html">models/SdtdServer.js</a>, <a href="models_SdtdServer.js.html#line99">line 99</a>
-    </li></ul></dd>
-    
 
     
 
@@ -469,46 +453,52 @@
 </dl>
 
 
+    
 
+    
+</dd>
 
-
-<div class="description">
-    Id of the discord channel for chat bridge
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
+        
             
+
+<dt>
+<h4 class="name" id=".chatChannelId">
+    <span class="type-signature"><span class="icon green">static</span> </span>chatChannelId<span class="type-signature"> :string</span>
+    
+    <div class="container-source members">
+        <code><a href="models_SdtdServer.js.html">models/SdtdServer.js</a></code>,
+        <code><a href="models_SdtdServer.js.html#line99">line 99</a></code>
+    </div>
+    
+</h4>
+
+
+</dt>
+<dd>
+    
+    <div class="description">
+        Id of the discord channel for chat bridge
+    </div>
+    
+
+    <!--
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
 <span class="param-type">string</span>
 
 
-        </li>
-    </ul>
+            </li>
+        </ul>
+    
+    -->
 
-
-
-
-
-
-        
-            
-<h4 class="name" id=".discordGuildId"><span class="type-signature">(static) </span>discordGuildId<span class="type-signature"> :string</span></h4>
-
-
-
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_SdtdServer.js.html">models/SdtdServer.js</a>, <a href="models_SdtdServer.js.html#line89">line 89</a>
-    </li></ul></dd>
-    
 
     
 
@@ -542,46 +532,52 @@
 </dl>
 
 
+    
 
+    
+</dd>
 
-
-<div class="description">
-    Id of the dicscord guild this server is associated with
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
+        
             
+
+<dt>
+<h4 class="name" id=".discordGuildId">
+    <span class="type-signature"><span class="icon green">static</span> </span>discordGuildId<span class="type-signature"> :string</span>
+    
+    <div class="container-source members">
+        <code><a href="models_SdtdServer.js.html">models/SdtdServer.js</a></code>,
+        <code><a href="models_SdtdServer.js.html#line89">line 89</a></code>
+    </div>
+    
+</h4>
+
+
+</dt>
+<dd>
+    
+    <div class="description">
+        Id of the dicscord guild this server is associated with
+    </div>
+    
+
+    <!--
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
 <span class="param-type">string</span>
 
 
-        </li>
-    </ul>
+            </li>
+        </ul>
+    
+    -->
 
-
-
-
-
-
-        
-            
-<h4 class="name" id=".gamePort"><span class="type-signature">(static) </span>gamePort<span class="type-signature"> :number</span></h4>
-
-
-
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_SdtdServer.js.html">models/SdtdServer.js</a>, <a href="models_SdtdServer.js.html#line39">line 39</a>
-    </li></ul></dd>
-    
 
     
 
@@ -615,46 +611,52 @@
 </dl>
 
 
+    
 
+    
+</dd>
 
-
-<div class="description">
-    Port used by players to join the game
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
+        
             
+
+<dt>
+<h4 class="name" id=".gamePort">
+    <span class="type-signature"><span class="icon green">static</span> </span>gamePort<span class="type-signature"> :number</span>
+    
+    <div class="container-source members">
+        <code><a href="models_SdtdServer.js.html">models/SdtdServer.js</a></code>,
+        <code><a href="models_SdtdServer.js.html#line39">line 39</a></code>
+    </div>
+    
+</h4>
+
+
+</dt>
+<dd>
+    
+    <div class="description">
+        Port used by players to join the game
+    </div>
+    
+
+    <!--
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
 <span class="param-type">number</span>
 
 
-        </li>
-    </ul>
+            </li>
+        </ul>
+    
+    -->
 
-
-
-
-
-
-        
-            
-<h4 class="name" id=".ip"><span class="type-signature">(static) </span>ip<span class="type-signature"> :string</span></h4>
-
-
-
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_SdtdServer.js.html">models/SdtdServer.js</a>, <a href="models_SdtdServer.js.html#line29">line 29</a>
-    </li></ul></dd>
-    
 
     
 
@@ -688,42 +690,48 @@
 </dl>
 
 
+    
 
+    
+</dd>
 
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
+        
             
+
+<dt>
+<h4 class="name" id=".ip">
+    <span class="type-signature"><span class="icon green">static</span> </span>ip<span class="type-signature"> :string</span>
+    
+    <div class="container-source members">
+        <code><a href="models_SdtdServer.js.html">models/SdtdServer.js</a></code>,
+        <code><a href="models_SdtdServer.js.html#line29">line 29</a></code>
+    </div>
+    
+</h4>
+
+
+</dt>
+<dd>
+    
+
+    <!--
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
 <span class="param-type">string</span>
 
 
-        </li>
-    </ul>
+            </li>
+        </ul>
+    
+    -->
 
-
-
-
-
-
-        
-            
-<h4 class="name" id=".name"><span class="type-signature">(static) </span>name<span class="type-signature"> :string</span></h4>
-
-
-
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_SdtdServer.js.html">models/SdtdServer.js</a>, <a href="models_SdtdServer.js.html#line20">line 20</a>
-    </li></ul></dd>
-    
 
     
 
@@ -757,42 +765,48 @@
 </dl>
 
 
+    
 
+    
+</dd>
 
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
+        
             
+
+<dt>
+<h4 class="name" id=".name">
+    <span class="type-signature"><span class="icon green">static</span> </span>name<span class="type-signature"> :string</span>
+    
+    <div class="container-source members">
+        <code><a href="models_SdtdServer.js.html">models/SdtdServer.js</a></code>,
+        <code><a href="models_SdtdServer.js.html#line20">line 20</a></code>
+    </div>
+    
+</h4>
+
+
+</dt>
+<dd>
+    
+
+    <!--
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
 <span class="param-type">string</span>
 
 
-        </li>
-    </ul>
+            </li>
+        </ul>
+    
+    -->
 
-
-
-
-
-
-        
-            
-<h4 class="name" id=".owner"><span class="type-signature">(static) </span>owner<span class="type-signature"></span></h4>
-
-
-
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_SdtdServer.js.html">models/SdtdServer.js</a>, <a href="models_SdtdServer.js.html#line118">line 118</a>
-    </li></ul></dd>
-    
 
     
 
@@ -826,36 +840,42 @@
 </dl>
 
 
+    
 
-
-
-<div class="description">
-    Owner of the server, corresponds to a User
-</div>
-
-
-
-
-
-
-
+    
+</dd>
 
         
             
-<h4 class="name" id=".players"><span class="type-signature">(static) </span>players<span class="type-signature"></span></h4>
+
+<dt>
+<h4 class="name" id=".owner">
+    <span class="type-signature"><span class="icon green">static</span> </span>owner<span class="type-signature"></span>
+    
+    <div class="container-source members">
+        <code><a href="models_SdtdServer.js.html">models/SdtdServer.js</a></code>,
+        <code><a href="models_SdtdServer.js.html#line118">line 118</a></code>
+    </div>
+    
+</h4>
 
 
+</dt>
+<dd>
+    
+    <div class="description">
+        Owner of the server, corresponds to a User
+    </div>
+    
 
+    <!--
+    
+    -->
+
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_SdtdServer.js.html">models/SdtdServer.js</a>, <a href="models_SdtdServer.js.html#line139">line 139</a>
-    </li></ul></dd>
-    
 
     
 
@@ -889,36 +909,42 @@
 </dl>
 
 
+    
 
-
-
-<div class="description">
-    Collection of Players that have logged on the server
-</div>
-
-
-
-
-
-
-
+    
+</dd>
 
         
             
-<h4 class="name" id=".restart-server"><span class="type-signature">(static) </span>restart-server<span class="type-signature"></span></h4>
+
+<dt>
+<h4 class="name" id=".players">
+    <span class="type-signature"><span class="icon green">static</span> </span>players<span class="type-signature"></span>
+    
+    <div class="container-source members">
+        <code><a href="models_SdtdServer.js.html">models/SdtdServer.js</a></code>,
+        <code><a href="models_SdtdServer.js.html#line139">line 139</a></code>
+    </div>
+    
+</h4>
 
 
+</dt>
+<dd>
+    
+    <div class="description">
+        Collection of Players that have logged on the server
+    </div>
+    
 
+    <!--
+    
+    -->
+
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdServer_restart-server.js.html">controllers/SdtdServer/restart-server.js</a>, <a href="controllers_SdtdServer_restart-server.js.html#line29">line 29</a>
-    </li></ul></dd>
-    
 
     
 
@@ -952,36 +978,42 @@
 </dl>
 
 
+    
 
-
-
-<div class="description">
-    Restart a server
-</div>
-
-
-
-
-
-
-
+    
+</dd>
 
         
             
-<h4 class="name" id=".telnetPort"><span class="type-signature">(static) </span>telnetPort<span class="type-signature"> :number</span></h4>
+
+<dt>
+<h4 class="name" id=".restart-server">
+    <span class="type-signature"><span class="icon green">static</span> </span>restart-server<span class="type-signature"></span>
+    
+    <div class="container-source members">
+        <code><a href="controllers_SdtdServer_restart-server.js.html">controllers/SdtdServer/restart-server.js</a></code>,
+        <code><a href="controllers_SdtdServer_restart-server.js.html#line29">line 29</a></code>
+    </div>
+    
+</h4>
 
 
+</dt>
+<dd>
+    
+    <div class="description">
+        Restart a server
+    </div>
+    
 
+    <!--
+    
+    -->
+
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_SdtdServer.js.html">models/SdtdServer.js</a>, <a href="models_SdtdServer.js.html#line49">line 49</a>
-    </li></ul></dd>
-    
 
     
 
@@ -1015,42 +1047,48 @@
 </dl>
 
 
+    
 
+    
+</dd>
 
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
+        
             
+
+<dt>
+<h4 class="name" id=".telnetPort">
+    <span class="type-signature"><span class="icon green">static</span> </span>telnetPort<span class="type-signature"> :number</span>
+    
+    <div class="container-source members">
+        <code><a href="models_SdtdServer.js.html">models/SdtdServer.js</a></code>,
+        <code><a href="models_SdtdServer.js.html#line49">line 49</a></code>
+    </div>
+    
+</h4>
+
+
+</dt>
+<dd>
+    
+
+    <!--
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
 <span class="param-type">number</span>
 
 
-        </li>
-    </ul>
+            </li>
+        </ul>
+    
+    -->
 
-
-
-
-
-
-        
-            
-<h4 class="name" id=".tickets"><span class="type-signature">(static) </span>tickets<span class="type-signature"></span></h4>
-
-
-
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_SdtdServer.js.html">models/SdtdServer.js</a>, <a href="models_SdtdServer.js.html#line150">line 150</a>
-    </li></ul></dd>
-    
 
     
 
@@ -1084,36 +1122,42 @@
 </dl>
 
 
+    
 
-
-
-<div class="description">
-    Collection of SdtdTickets
-</div>
-
-
-
-
-
-
-
+    
+</dd>
 
         
             
-<h4 class="name" id=".webPort"><span class="type-signature">(static) </span>webPort<span class="type-signature"> :number</span></h4>
+
+<dt>
+<h4 class="name" id=".tickets">
+    <span class="type-signature"><span class="icon green">static</span> </span>tickets<span class="type-signature"></span>
+    
+    <div class="container-source members">
+        <code><a href="models_SdtdServer.js.html">models/SdtdServer.js</a></code>,
+        <code><a href="models_SdtdServer.js.html#line150">line 150</a></code>
+    </div>
+    
+</h4>
 
 
+</dt>
+<dd>
+    
+    <div class="description">
+        Collection of SdtdTickets
+    </div>
+    
 
+    <!--
+    
+    -->
+
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="models_SdtdServer.js.html">models/SdtdServer.js</a>, <a href="models_SdtdServer.js.html#line59">line 59</a>
-    </li></ul></dd>
-    
 
     
 
@@ -1147,61 +1191,122 @@
 </dl>
 
 
+    
 
+    
+</dd>
 
-
-<div class="description">
-    Port provided by Alloc's webserver
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
+        
             
+
+<dt>
+<h4 class="name" id=".webPort">
+    <span class="type-signature"><span class="icon green">static</span> </span>webPort<span class="type-signature"> :number</span>
+    
+    <div class="container-source members">
+        <code><a href="models_SdtdServer.js.html">models/SdtdServer.js</a></code>,
+        <code><a href="models_SdtdServer.js.html#line59">line 59</a></code>
+    </div>
+    
+</h4>
+
+
+</dt>
+<dd>
+    
+    <div class="description">
+        Port provided by Alloc's webserver
+    </div>
+    
+
+    <!--
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
 <span class="param-type">number</span>
 
 
-        </li>
-    </ul>
+            </li>
+        </ul>
+    
+    -->
+
+    
 
 
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
 
 
+    
 
+    
+</dd>
 
-        
+        </dl>
     
 
     
         <h3 class="subsection-title">Methods</h3>
 
-        
+        <dl>
+                
+
+<dt>
+    
+        <h4 class="name" id=".add-server">
             
+                <span class="type-signature"><span class="icon green">static</span> </span>add-server<span class="signature">(serverip, telnetport, telnetpassword, webport)</span><span class="type-signature"></span>
+                
+            
+            <div class="container-source members">
+                <code><a href="controllers_SdtdServer_add-server.js.html">controllers/SdtdServer/add-server.js</a></code>,
+                <code><a href="controllers_SdtdServer_add-server.js.html#line43">line 43</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
 
     
-
-    <h4 class="name" id=".add-server"><span class="type-signature">(static) </span>add-server<span class="signature">(serverip, telnetport, telnetpassword, webport)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdServer_add-server.js.html">controllers/SdtdServer/add-server.js</a>, <a href="controllers_SdtdServer_add-server.js.html#line38">line 38</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
+    <div class="description">
+        Add a server to the system
+    </div>
     
 
     
@@ -1211,45 +1316,9 @@
     
 
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Add a server to the system
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -1364,41 +1433,25 @@
     </tbody>
 </table>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
+    </div>
+    
 
     
 
-    <h4 class="name" id=".available-items"><span class="type-signature">(static) </span>available-items<span class="signature">(serverId)</span><span class="type-signature"> &rarr; {array}</span></h4>
+    
 
     
 
+    
 
+    
+
+    
+
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdServer_available-items.js.html">controllers/SdtdServer/available-items.js</a>, <a href="controllers_SdtdServer_available-items.js.html#line34">line 34</a>
-    </li></ul></dd>
-    
 
     
 
@@ -1432,26 +1485,48 @@
 </dl>
 
 
-
-
-
-<div class="description">
-    Returns a list of items on the server
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
 
+</dd>
+
+            
+                
+
+<dt>
+    
+        <h4 class="name" id=".available-items">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>available-items<span class="signature">(serverId)</span><span class="type-signature"> &rarr; {array}</span>
+                
+            
+            <div class="container-source members">
+                <code><a href="controllers_SdtdServer_available-items.js.html">controllers/SdtdServer/available-items.js</a></code>,
+                <code><a href="controllers_SdtdServer_available-items.js.html#line34">line 34</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Returns a list of items on the server
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -1497,61 +1572,46 @@
     </tbody>
 </table>
 
+    </div>
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
+    
+    <div class="container-returns">
+        <h5>Returns:</h5>
         
+                
 
 
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
+
 <span class="param-type">array</span>
 
 
-    </dd>
-</dl>
-
-    
 
 
-        
+
+
+
+
             
-
+    </div>
     
 
-    <h4 class="name" id=".commands-reload"><span class="type-signature">(static) </span>commands-reload<span class="signature">(serverId, newConfig)</span><span class="type-signature"></span></h4>
-
     
-
-
 
 
 <dl class="details">
 
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdServer_commands_commands-reload.js.html">controllers/SdtdServer/commands/commands-reload.js</a>, <a href="controllers_SdtdServer_commands_commands-reload.js.html#line37">line 37</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
@@ -1583,26 +1643,48 @@
 </dl>
 
 
-
-
-
-<div class="description">
-    Reloads the config of the country ban hook for a server
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
 
+</dd>
+
+            
+                
+
+<dt>
+    
+        <h4 class="name" id=".commands-reload">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>commands-reload<span class="signature">(serverId, newConfig)</span><span class="type-signature"></span>
+                
+            
+            <div class="container-source members">
+                <code><a href="controllers_SdtdServer_commands_commands-reload.js.html">controllers/SdtdServer/commands/commands-reload.js</a></code>,
+                <code><a href="controllers_SdtdServer_commands_commands-reload.js.html#line37">line 37</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Reloads the config of the country ban hook for a server
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -1671,41 +1753,25 @@
     </tbody>
 </table>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
+    </div>
+    
 
     
 
-    <h4 class="name" id=".commands-toggle"><span class="type-signature">(static) </span>commands-toggle<span class="signature">(serverId)</span><span class="type-signature"></span></h4>
+    
 
     
 
+    
 
+    
+
+    
+
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdServer_commands_commands-toggle.js.html">controllers/SdtdServer/commands/commands-toggle.js</a>, <a href="controllers_SdtdServer_commands_commands-toggle.js.html#line30">line 30</a>
-    </li></ul></dd>
-    
 
     
 
@@ -1739,26 +1805,48 @@
 </dl>
 
 
-
-
-
-<div class="description">
-    Toggles the status of the commands hook for a server
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
 
+</dd>
+
+            
+                
+
+<dt>
+    
+        <h4 class="name" id=".commands-toggle">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>commands-toggle<span class="signature">(serverId)</span><span class="type-signature"></span>
+                
+            
+            <div class="container-source members">
+                <code><a href="controllers_SdtdServer_commands_commands-toggle.js.html">controllers/SdtdServer/commands/commands-toggle.js</a></code>,
+                <code><a href="controllers_SdtdServer_commands_commands-toggle.js.html#line30">line 30</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Toggles the status of the commands hook for a server
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -1804,41 +1892,25 @@
     </tbody>
 </table>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
+    </div>
+    
 
     
 
-    <h4 class="name" id=".console"><span class="type-signature">(static) </span>console<span class="signature">(serverID)</span><span class="type-signature"></span></h4>
+    
 
     
 
+    
 
+    
+
+    
+
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdServer_console.js.html">controllers/SdtdServer/console.js</a>, <a href="controllers_SdtdServer_console.js.html#line30">line 30</a>
-    </li></ul></dd>
-    
 
     
 
@@ -1872,26 +1944,48 @@
 </dl>
 
 
-
-
-
-<div class="description">
-    Server the console view
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
 
+</dd>
+
+            
+                
+
+<dt>
+    
+        <h4 class="name" id=".console">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>console<span class="signature">(serverID)</span><span class="type-signature"></span>
+                
+            
+            <div class="container-source members">
+                <code><a href="controllers_SdtdServer_console.js.html">controllers/SdtdServer/console.js</a></code>,
+                <code><a href="controllers_SdtdServer_console.js.html#line30">line 30</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Server the console view
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -1937,41 +2031,25 @@
     </tbody>
 </table>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
+    </div>
+    
 
     
 
-    <h4 class="name" id=".country-ban-reload"><span class="type-signature">(static) </span>country-ban-reload<span class="signature">(serverId)</span><span class="type-signature"></span></h4>
+    
 
     
 
+    
 
+    
+
+    
+
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdServer_countryBan_country-ban-reload.js.html">controllers/SdtdServer/countryBan/country-ban-reload.js</a>, <a href="controllers_SdtdServer_countryBan_country-ban-reload.js.html#line33">line 33</a>
-    </li></ul></dd>
-    
 
     
 
@@ -2005,26 +2083,48 @@
 </dl>
 
 
-
-
-
-<div class="description">
-    Reloads the config of the country ban hook for a server
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
 
+</dd>
+
+            
+                
+
+<dt>
+    
+        <h4 class="name" id=".country-ban-reload">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>country-ban-reload<span class="signature">(serverId)</span><span class="type-signature"></span>
+                
+            
+            <div class="container-source members">
+                <code><a href="controllers_SdtdServer_countryBan_country-ban-reload.js.html">controllers/SdtdServer/countryBan/country-ban-reload.js</a></code>,
+                <code><a href="controllers_SdtdServer_countryBan_country-ban-reload.js.html#line33">line 33</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Reloads the config of the country ban hook for a server
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -2070,41 +2170,25 @@
     </tbody>
 </table>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
+    </div>
+    
 
     
 
-    <h4 class="name" id=".country-ban-toggle"><span class="type-signature">(static) </span>country-ban-toggle<span class="signature">(serverId)</span><span class="type-signature"></span></h4>
+    
 
     
 
+    
 
+    
+
+    
+
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdServer_countryBan_country-ban-toggle.js.html">controllers/SdtdServer/countryBan/country-ban-toggle.js</a>, <a href="controllers_SdtdServer_countryBan_country-ban-toggle.js.html#line30">line 30</a>
-    </li></ul></dd>
-    
 
     
 
@@ -2138,26 +2222,48 @@
 </dl>
 
 
-
-
-
-<div class="description">
-    Toggles the status of the country ban hook for a server
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
 
+</dd>
+
+            
+                
+
+<dt>
+    
+        <h4 class="name" id=".country-ban-toggle">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>country-ban-toggle<span class="signature">(serverId)</span><span class="type-signature"></span>
+                
+            
+            <div class="container-source members">
+                <code><a href="controllers_SdtdServer_countryBan_country-ban-toggle.js.html">controllers/SdtdServer/countryBan/country-ban-toggle.js</a></code>,
+                <code><a href="controllers_SdtdServer_countryBan_country-ban-toggle.js.html#line30">line 30</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Toggles the status of the country ban hook for a server
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -2203,41 +2309,25 @@
     </tbody>
 </table>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
+    </div>
+    
 
     
 
-    <h4 class="name" id=".dashboard"><span class="type-signature">(static) </span>dashboard<span class="signature">()</span><span class="type-signature"></span></h4>
+    
 
     
 
+    
 
+    
+
+    
+
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdServer_dashboard.js.html">controllers/SdtdServer/dashboard.js</a>, <a href="controllers_SdtdServer_dashboard.js.html#line30">line 30</a>
-    </li></ul></dd>
-    
 
     
 
@@ -2271,57 +2361,62 @@
 </dl>
 
 
+    
 
+</dd>
 
+            
+                
 
-<div class="description">
-    Serves the dashboard for a 7 Days to die server
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<dt>
+    
+        <h4 class="name" id=".dashboard">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>dashboard<span class="signature">()</span><span class="type-signature"></span>
+                
+            
+            <div class="container-source members">
+                <code><a href="controllers_SdtdServer_dashboard.js.html">controllers/SdtdServer/dashboard.js</a></code>,
+                <code><a href="controllers_SdtdServer_dashboard.js.html#line30">line 30</a></code>
+            </div>
+            
+        </h4>
 
         
-            
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Serves the dashboard for a 7 Days to die server
+    </div>
+    
 
     
 
-    <h4 class="name" id=".delete"><span class="type-signature">(static) </span>delete<span class="signature">(serverID)</span><span class="type-signature"></span></h4>
+    
 
     
 
+    
 
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdServer_delete-server.js.html">controllers/SdtdServer/delete-server.js</a>, <a href="controllers_SdtdServer_delete-server.js.html#line30">line 30</a>
-    </li></ul></dd>
-    
 
     
 
@@ -2355,26 +2450,48 @@
 </dl>
 
 
-
-
-
-<div class="description">
-    Deletes a server from the system
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
 
+</dd>
+
+            
+                
+
+<dt>
+    
+        <h4 class="name" id=".delete">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>delete<span class="signature">(serverID)</span><span class="type-signature"></span>
+                
+            
+            <div class="container-source members">
+                <code><a href="controllers_SdtdServer_delete-server.js.html">controllers/SdtdServer/delete-server.js</a></code>,
+                <code><a href="controllers_SdtdServer_delete-server.js.html#line30">line 30</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Deletes a server from the system
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -2420,41 +2537,25 @@
     </tbody>
 </table>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
+    </div>
+    
 
     
 
-    <h4 class="name" id=".executeCommand"><span class="type-signature">(static) </span>executeCommand<span class="signature">(serverId, command)</span><span class="type-signature"></span></h4>
+    
 
     
 
+    
 
+    
+
+    
+
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdServer_execute-command.js.html">controllers/SdtdServer/execute-command.js</a>, <a href="controllers_SdtdServer_execute-command.js.html#line34">line 34</a>
-    </li></ul></dd>
-    
 
     
 
@@ -2488,26 +2589,48 @@
 </dl>
 
 
-
-
-
-<div class="description">
-    Executes a command on a 7dtd server
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
 
+</dd>
+
+            
+                
+
+<dt>
+    
+        <h4 class="name" id=".executeCommand">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>executeCommand<span class="signature">(serverId, command)</span><span class="type-signature"></span>
+                
+            
+            <div class="container-source members">
+                <code><a href="controllers_SdtdServer_execute-command.js.html">controllers/SdtdServer/execute-command.js</a></code>,
+                <code><a href="controllers_SdtdServer_execute-command.js.html#line34">line 34</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Executes a command on a 7dtd server
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -2576,41 +2699,25 @@
     </tbody>
 </table>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
+    </div>
+    
 
     
 
-    <h4 class="name" id=".get-players"><span class="type-signature">(static) </span>get-players<span class="signature">(serverId)</span><span class="type-signature"></span></h4>
+    
 
     
 
+    
 
+    
+
+    
+
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdServer_get-players.js.html">controllers/SdtdServer/get-players.js</a>, <a href="controllers_SdtdServer_get-players.js.html#line31">line 31</a>
-    </li></ul></dd>
-    
 
     
 
@@ -2644,26 +2751,48 @@
 </dl>
 
 
-
-
-
-<div class="description">
-    Get information about all players that have logged into the server
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
 
+</dd>
+
+            
+                
+
+<dt>
+    
+        <h4 class="name" id=".get-players">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>get-players<span class="signature">(serverId)</span><span class="type-signature"></span>
+                
+            
+            <div class="container-source members">
+                <code><a href="controllers_SdtdServer_get-players.js.html">controllers/SdtdServer/get-players.js</a></code>,
+                <code><a href="controllers_SdtdServer_get-players.js.html#line31">line 31</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Get information about all players that have logged into the server
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -2709,41 +2838,25 @@
     </tbody>
 </table>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
+    </div>
+    
 
     
 
-    <h4 class="name" id=".get-players-view"><span class="type-signature">(static) </span>get-players-view<span class="signature">(serverId)</span><span class="type-signature"></span></h4>
+    
 
     
 
+    
 
+    
+
+    
+
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdServer_get-players-view.js.html">controllers/SdtdServer/get-players-view.js</a>, <a href="controllers_SdtdServer_get-players-view.js.html#line26">line 26</a>
-    </li></ul></dd>
-    
 
     
 
@@ -2777,26 +2890,48 @@
 </dl>
 
 
-
-
-
-<div class="description">
-    Serve the players views
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
 
+</dd>
+
+            
+                
+
+<dt>
+    
+        <h4 class="name" id=".get-players-view">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>get-players-view<span class="signature">(serverId)</span><span class="type-signature"></span>
+                
+            
+            <div class="container-source members">
+                <code><a href="controllers_SdtdServer_get-players-view.js.html">controllers/SdtdServer/get-players-view.js</a></code>,
+                <code><a href="controllers_SdtdServer_get-players-view.js.html#line26">line 26</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Serve the players views
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -2842,41 +2977,25 @@
     </tbody>
 </table>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
+    </div>
+    
 
     
 
-    <h4 class="name" id=".load-server-info"><span class="type-signature">(static) </span>load-server-info<span class="signature">(serverId)</span><span class="type-signature"></span></h4>
+    
 
     
 
+    
 
+    
+
+    
+
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdServer_load-server-info.js.html">controllers/SdtdServer/load-server-info.js</a>, <a href="controllers_SdtdServer_load-server-info.js.html#line25">line 25</a>
-    </li></ul></dd>
-    
 
     
 
@@ -2910,26 +3029,48 @@
 </dl>
 
 
-
-
-
-<div class="description">
-    Load/update server info and save to DB
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
 
+</dd>
+
+            
+                
+
+<dt>
+    
+        <h4 class="name" id=".load-server-info">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>load-server-info<span class="signature">(serverId)</span><span class="type-signature"></span>
+                
+            
+            <div class="container-source members">
+                <code><a href="controllers_SdtdServer_load-server-info.js.html">controllers/SdtdServer/load-server-info.js</a></code>,
+                <code><a href="controllers_SdtdServer_load-server-info.js.html#line25">line 25</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Load/update server info and save to DB
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -2975,41 +3116,25 @@
     </tbody>
 </table>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
+    </div>
+    
 
     
 
-    <h4 class="name" id=".logging-toggle"><span class="type-signature">(static) </span>logging-toggle<span class="signature">(serverId)</span><span class="type-signature"></span></h4>
+    
 
     
 
+    
 
+    
+
+    
+
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdServer_logging-toggle.js.html">controllers/SdtdServer/logging-toggle.js</a>, <a href="controllers_SdtdServer_logging-toggle.js.html#line30">line 30</a>
-    </li></ul></dd>
-    
 
     
 
@@ -3043,26 +3168,48 @@
 </dl>
 
 
-
-
-
-<div class="description">
-    Toggles the status of the logging hook for a server
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
 
+</dd>
+
+            
+                
+
+<dt>
+    
+        <h4 class="name" id=".logging-toggle">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>logging-toggle<span class="signature">(serverId)</span><span class="type-signature"></span>
+                
+            
+            <div class="container-source members">
+                <code><a href="controllers_SdtdServer_logging-toggle.js.html">controllers/SdtdServer/logging-toggle.js</a></code>,
+                <code><a href="controllers_SdtdServer_logging-toggle.js.html#line30">line 30</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Toggles the status of the logging hook for a server
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -3108,41 +3255,25 @@
     </tbody>
 </table>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
+    </div>
+    
 
     
 
-    <h4 class="name" id=".motd-reload"><span class="type-signature">(static) </span>motd-reload<span class="signature">(serverId)</span><span class="type-signature"></span></h4>
+    
 
     
 
+    
 
+    
+
+    
+
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdServer_motd_motd-reload.js.html">controllers/SdtdServer/motd/motd-reload.js</a>, <a href="controllers_SdtdServer_motd_motd-reload.js.html#line43">line 43</a>
-    </li></ul></dd>
-    
 
     
 
@@ -3176,26 +3307,48 @@
 </dl>
 
 
-
-
-
-<div class="description">
-    Reloads the config of the country ban hook for a server
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
 
+</dd>
+
+            
+                
+
+<dt>
+    
+        <h4 class="name" id=".motd-reload">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>motd-reload<span class="signature">(serverId)</span><span class="type-signature"></span>
+                
+            
+            <div class="container-source members">
+                <code><a href="controllers_SdtdServer_motd_motd-reload.js.html">controllers/SdtdServer/motd/motd-reload.js</a></code>,
+                <code><a href="controllers_SdtdServer_motd_motd-reload.js.html#line43">line 43</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Reloads the config of the country ban hook for a server
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -3241,41 +3394,25 @@
     </tbody>
 </table>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
+    </div>
+    
 
     
 
-    <h4 class="name" id=".motd-toggle"><span class="type-signature">(static) </span>motd-toggle<span class="signature">(serverId, message, interval)</span><span class="type-signature"></span></h4>
+    
 
     
 
+    
 
+    
+
+    
+
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdServer_motd_motd-toggle.js.html">controllers/SdtdServer/motd/motd-toggle.js</a>, <a href="controllers_SdtdServer_motd_motd-toggle.js.html#line36">line 36</a>
-    </li></ul></dd>
-    
 
     
 
@@ -3309,26 +3446,48 @@
 </dl>
 
 
-
-
-
-<div class="description">
-    Toggles the status of the motd hook for a server
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
 
+</dd>
+
+            
+                
+
+<dt>
+    
+        <h4 class="name" id=".motd-toggle">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>motd-toggle<span class="signature">(serverId, message, interval)</span><span class="type-signature"></span>
+                
+            
+            <div class="container-source members">
+                <code><a href="controllers_SdtdServer_motd_motd-toggle.js.html">controllers/SdtdServer/motd/motd-toggle.js</a></code>,
+                <code><a href="controllers_SdtdServer_motd_motd-toggle.js.html#line36">line 36</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Toggles the status of the motd hook for a server
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -3420,41 +3579,25 @@
     </tbody>
 </table>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
+    </div>
+    
 
     
 
-    <h4 class="name" id=".sendMessage"><span class="type-signature">(static) </span>sendMessage<span class="signature">(serverID, message, destinationPlayer)</span><span class="type-signature"></span></h4>
+    
 
     
 
+    
 
+    
+
+    
+
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdServer_send-message.js.html">controllers/SdtdServer/send-message.js</a>, <a href="controllers_SdtdServer_send-message.js.html#line35">line 35</a>
-    </li></ul></dd>
-    
 
     
 
@@ -3488,26 +3631,48 @@
 </dl>
 
 
-
-
-
-<div class="description">
-    sends a message on a 7dtd server
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
 
+</dd>
+
+            
+                
+
+<dt>
+    
+        <h4 class="name" id=".sendMessage">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>sendMessage<span class="signature">(serverID, message, destinationPlayer)</span><span class="type-signature"></span>
+                
+            
+            <div class="container-source members">
+                <code><a href="controllers_SdtdServer_send-message.js.html">controllers/SdtdServer/send-message.js</a></code>,
+                <code><a href="controllers_SdtdServer_send-message.js.html#line35">line 35</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        sends a message on a 7dtd server
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -3599,41 +3764,25 @@
     </tbody>
 </table>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
+    </div>
+    
 
     
 
-    <h4 class="name" id=".server-infoview"><span class="type-signature">(static) </span>server-infoview<span class="signature">(serverId)</span><span class="type-signature"></span></h4>
+    
 
     
 
+    
 
+    
+
+    
+
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdServer_server-info-view.js.html">controllers/SdtdServer/server-info-view.js</a>, <a href="controllers_SdtdServer_server-info-view.js.html#line30">line 30</a>
-    </li></ul></dd>
-    
 
     
 
@@ -3667,26 +3816,48 @@
 </dl>
 
 
-
-
-
-<div class="description">
-    Serves the serverinfo view
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
 
+</dd>
+
+            
+                
+
+<dt>
+    
+        <h4 class="name" id=".server-infoview">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>server-infoview<span class="signature">(serverId)</span><span class="type-signature"></span>
+                
+            
+            <div class="container-source members">
+                <code><a href="controllers_SdtdServer_server-info-view.js.html">controllers/SdtdServer/server-info-view.js</a></code>,
+                <code><a href="controllers_SdtdServer_server-info-view.js.html#line30">line 30</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Serves the serverinfo view
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -3732,41 +3903,25 @@
     </tbody>
 </table>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
+    </div>
+    
 
     
 
-    <h4 class="name" id=".settings"><span class="type-signature">(static) </span>settings<span class="signature">(serverId)</span><span class="type-signature"></span></h4>
+    
 
     
 
+    
 
+    
+
+    
+
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdServer_settings.js.html">controllers/SdtdServer/settings.js</a>, <a href="controllers_SdtdServer_settings.js.html#line30">line 30</a>
-    </li></ul></dd>
-    
 
     
 
@@ -3800,26 +3955,48 @@
 </dl>
 
 
-
-
-
-<div class="description">
-    Serves the settings view
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
 
+</dd>
+
+            
+                
+
+<dt>
+    
+        <h4 class="name" id=".settings">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>settings<span class="signature">(serverId)</span><span class="type-signature"></span>
+                
+            
+            <div class="container-source members">
+                <code><a href="controllers_SdtdServer_settings.js.html">controllers/SdtdServer/settings.js</a></code>,
+                <code><a href="controllers_SdtdServer_settings.js.html#line30">line 30</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Serves the settings view
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -3865,41 +4042,25 @@
     </tbody>
 </table>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
+    </div>
+    
 
     
 
-    <h4 class="name" id=".subscribe-to-socket"><span class="type-signature">(static) </span>subscribe-to-socket<span class="signature">()</span><span class="type-signature"></span></h4>
+    
 
     
 
+    
 
+    
+
+    
+
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdServer_subscribe-to-socket.js.html">controllers/SdtdServer/subscribe-to-socket.js</a>, <a href="controllers_SdtdServer_subscribe-to-socket.js.html#line31">line 31</a>
-    </li></ul></dd>
-    
 
     
 
@@ -3933,26 +4094,48 @@
 </dl>
 
 
-
-
-
-<div class="description">
-    Subscribe to a socket to receive event notifications
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
 
+</dd>
+
+            
+                
+
+<dt>
+    
+        <h4 class="name" id=".subscribe-to-socket">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>subscribe-to-socket<span class="signature">()</span><span class="type-signature"></span>
+                
+            
+            <div class="container-source members">
+                <code><a href="controllers_SdtdServer_subscribe-to-socket.js.html">controllers/SdtdServer/subscribe-to-socket.js</a></code>,
+                <code><a href="controllers_SdtdServer_subscribe-to-socket.js.html#line31">line 31</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Subscribe to a socket to receive event notifications
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -3994,41 +4177,25 @@
     </tbody>
 </table>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
+    </div>
+    
 
     
 
-    <h4 class="name" id=".tickets-view"><span class="type-signature">(static) </span>tickets-view<span class="signature">(serverId)</span><span class="type-signature"></span></h4>
+    
 
     
 
+    
 
+    
+
+    
+
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdTicket_server-tickets-view.js.html">controllers/SdtdTicket/server-tickets-view.js</a>, <a href="controllers_SdtdTicket_server-tickets-view.js.html#line32">line 32</a>
-    </li></ul></dd>
-    
 
     
 
@@ -4062,26 +4229,48 @@
 </dl>
 
 
-
-
-
-<div class="description">
-    Loads relevant ticket data, and serves the view
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
 
+</dd>
+
+            
+                
+
+<dt>
+    
+        <h4 class="name" id=".tickets-view">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>tickets-view<span class="signature">(serverId)</span><span class="type-signature"></span>
+                
+            
+            <div class="container-source members">
+                <code><a href="controllers_SdtdTicket_server-tickets-view.js.html">controllers/SdtdTicket/server-tickets-view.js</a></code>,
+                <code><a href="controllers_SdtdTicket_server-tickets-view.js.html#line32">line 32</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Loads relevant ticket data, and serves the view
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -4127,41 +4316,25 @@
     </tbody>
 </table>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
+    </div>
+    
 
     
 
-    <h4 class="name" id=".update-connection-info"><span class="type-signature">(static) </span>update-connection-info<span class="signature">(serverId, serverIp, webPort, authName, authToken)</span><span class="type-signature"></span></h4>
+    
 
     
 
+    
 
+    
+
+    
+
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdServer_update-connection-info.js.html">controllers/SdtdServer/update-connection-info.js</a>, <a href="controllers_SdtdServer_update-connection-info.js.html#line44">line 44</a>
-    </li></ul></dd>
-    
 
     
 
@@ -4195,26 +4368,48 @@
 </dl>
 
 
-
-
-
-<div class="description">
-    Updates basic connection info for a server in the DB
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
 
+</dd>
+
+            
+                
+
+<dt>
+    
+        <h4 class="name" id=".update-connection-info">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>update-connection-info<span class="signature">(serverId, serverIp, webPort, authName, authToken)</span><span class="type-signature"></span>
+                
+            
+            <div class="container-source members">
+                <code><a href="controllers_SdtdServer_update-connection-info.js.html">controllers/SdtdServer/update-connection-info.js</a></code>,
+                <code><a href="controllers_SdtdServer_update-connection-info.js.html#line44">line 44</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Updates basic connection info for a server in the DB
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -4352,41 +4547,25 @@
     </tbody>
 </table>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
+    </div>
+    
 
     
 
-    <h4 class="name" id=".user-tickets-view"><span class="type-signature">(static) </span>user-tickets-view<span class="signature">(userId)</span><span class="type-signature"></span></h4>
+    
 
     
 
+    
 
+    
+
+    
+
+    
 
 
 <dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_SdtdTicket_user-tickets-view.js.html">controllers/SdtdTicket/user-tickets-view.js</a>, <a href="controllers_SdtdTicket_user-tickets-view.js.html#line32">line 32</a>
-    </li></ul></dd>
-    
 
     
 
@@ -4420,26 +4599,48 @@
 </dl>
 
 
-
-
-
-<div class="description">
-    Loads relevant ticket data, and serves the view
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
 
+</dd>
+
+            
+                
+
+<dt>
+    
+        <h4 class="name" id=".user-tickets-view">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>user-tickets-view<span class="signature">(userId)</span><span class="type-signature"></span>
+                
+            
+            <div class="container-source members">
+                <code><a href="controllers_SdtdTicket_user-tickets-view.js.html">controllers/SdtdTicket/user-tickets-view.js</a></code>,
+                <code><a href="controllers_SdtdTicket_user-tickets-view.js.html#line32">line 32</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Loads relevant ticket data, and serves the view
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -4485,22 +4686,63 @@
     </tbody>
 </table>
 
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 
 
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
 
 
+    
 
+</dd>
 
-
-
-
-
-
-
-
-
-
-        
+            </dl>
     
 
     
@@ -4515,13 +4757,24 @@
 
 </div>
 
-<br class="clear">
-
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Feb 01 2018 13:20:32 GMT+0100 (Romance Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    <img class="logo" src="img/toast-ui.png" style="">
+    <div class="footer-text">7DTD server manager</div>
 </footer>
-
 <script>prettyPrint();</script>
+<script src="scripts/jquery.min.js"></script>
+<script src="scripts/tui-doc.js"></script>
 <script src="scripts/linenumber.js"></script>
+
+    <script>
+        var id = 'SdtdServer_sub'.replace(/"/g, '_');
+        var selectedApi = document.getElementById(id); // do not use jquery selector
+        var $selectedApi = $(selectedApi);
+
+        $selectedApi.removeClass('hidden');
+        $selectedApi.parent().find('.glyphicon').removeClass('glyphicon-plus').addClass('glyphicon-minus');
+        showLnbApi();
+    </script>
+
 </body>
 </html>

@@ -1,15 +1,13 @@
 const sevenDays = require('machinepack-7daystodiewebapi');
 
-/**
- * @memberof module:7dtdMOTDHook
- * @description Class to handle motd sending
- * @class
- * @name MotdSender
- * @param {number} serverId
- * @param {json} config
- */
+/** Class to send MOTD messages */
 
 class MotdSender {
+  /**
+   * Create the class
+   * @param {number} serverId 
+   * @param {json} config 
+   */
   constructor(serverId, config) {
     this.serverId = serverId;
     this.config = config;
@@ -17,11 +15,8 @@ class MotdSender {
   }
 
   /**
-   * @public
-   * @memberof class:MotdSender
-   * @description Start.. duh ;)
+   * Start it
    */
-
   async start() {
 
     try {
@@ -48,6 +43,9 @@ class MotdSender {
 
   }
 
+  /**
+   * Stop it
+   */
   async stop() {
     try {
       if (this.onJoinListener) {
@@ -66,6 +64,11 @@ class MotdSender {
 
   }
 
+  /**
+   * Function to attach to event emitter (loggingObj)
+   * @param {json} connectedMessage
+   */
+
   static async onJoinListener(connectedMessage) {
     try {
       await this.sendMotd(this.config.motdMessage, this.serverId, connectedMessage.steamID);
@@ -75,14 +78,11 @@ class MotdSender {
   }
 
   /**
-   * @name sendMotd
-   * @memberof class:MotdSender
-   * @description sends the motd to the server or a player (if id is given)
-   * @param {string} message
-   * @param {number} serverId
-   * @param {string} playerSteamId If given, message will be sent as PM to the player
+   * Send the message to the server or a player if steamId is given
+   * @param {string} message 
+   * @param {number} serverId 
+   * @param {string} playerSteamId 
    */
-
   async sendMotd(message, serverId, playerSteamId) {
     try {
       let server = await SdtdServer.findOne(serverId);

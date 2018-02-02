@@ -1,35 +1,44 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>hooks/countryBan/index.js - Documentation</title>
+    <title>Source: hooks/countryBan/index.js | CSMM</title>
 
-    <script src="scripts/prettify/prettify.js"></script>
-    <script src="scripts/prettify/lang-css.js"></script>
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <link type="text/css" rel="stylesheet" href="styles/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-jsdoc.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/tui-doc.css">
+
+    
 </head>
 <body>
-
-<input type="checkbox" id="nav-trigger" class="nav-trigger" />
-<label for="nav-trigger" class="navicon-button x">
-  <div class="navicon"></div>
-</label>
-
-<label for="nav-trigger" class="overlay"></label>
-
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ChatBridgeChannel.html">ChatBridgeChannel</a></li><li><a href="CustomDiscordEmbed.html">CustomDiscordEmbed</a></li><li><a href="module-7dtdMOTDHook.MotdSender.html">MotdSender</a></li><li><a href="Player.html">Player</a><ul class='methods'><li data-type='method'><a href="Player.html#.fn">fn</a></li><li data-type='method'><a href="Player.html#.fn">fn</a></li><li data-type='method'><a href="Player.html#.fn">fn</a></li><li data-type='method'><a href="Player.html#.fn">fn</a></li><li data-type='method'><a href="Player.html#.fn">fn</a></li><li data-type='method'><a href="Player.html#.getBanStatus">getBanStatus</a></li><li data-type='method'><a href="Player.html#.getInventory">getInventory</a></li><li data-type='method'><a href="Player.html#.getLocation">getLocation</a></li></ul></li><li><a href="SdtdServer.html">SdtdServer</a><ul class='methods'><li data-type='method'><a href="SdtdServer.html#.add-server">add-server</a></li><li data-type='method'><a href="SdtdServer.html#.available-items">available-items</a></li><li data-type='method'><a href="SdtdServer.html#.commands-reload">commands-reload</a></li><li data-type='method'><a href="SdtdServer.html#.commands-toggle">commands-toggle</a></li><li data-type='method'><a href="SdtdServer.html#.console">console</a></li><li data-type='method'><a href="SdtdServer.html#.country-ban-reload">country-ban-reload</a></li><li data-type='method'><a href="SdtdServer.html#.country-ban-toggle">country-ban-toggle</a></li><li data-type='method'><a href="SdtdServer.html#.dashboard">dashboard</a></li><li data-type='method'><a href="SdtdServer.html#.delete">delete</a></li><li data-type='method'><a href="SdtdServer.html#.executeCommand">executeCommand</a></li><li data-type='method'><a href="SdtdServer.html#.get-players">get-players</a></li><li data-type='method'><a href="SdtdServer.html#.get-players-view">get-players-view</a></li><li data-type='method'><a href="SdtdServer.html#.load-server-info">load-server-info</a></li><li data-type='method'><a href="SdtdServer.html#.logging-toggle">logging-toggle</a></li><li data-type='method'><a href="SdtdServer.html#.motd-reload">motd-reload</a></li><li data-type='method'><a href="SdtdServer.html#.motd-toggle">motd-toggle</a></li><li data-type='method'><a href="SdtdServer.html#.sendMessage">sendMessage</a></li><li data-type='method'><a href="SdtdServer.html#.server-infoview">server-infoview</a></li><li data-type='method'><a href="SdtdServer.html#.settings">settings</a></li><li data-type='method'><a href="SdtdServer.html#.subscribe-to-socket">subscribe-to-socket</a></li><li data-type='method'><a href="SdtdServer.html#.tickets-view">tickets-view</a></li><li data-type='method'><a href="SdtdServer.html#.update-connection-info">update-connection-info</a></li><li data-type='method'><a href="SdtdServer.html#.user-tickets-view">user-tickets-view</a></li></ul></li><li><a href="User.html">User</a></li></ul><h3>Modules</h3><ul><li><a href="module-7dtdCountryBan.html">7dtdCountryBan</a><ul class='methods'><li data-type='method'><a href="module-7dtdCountryBan.html#.getStatus">getStatus</a></li><li data-type='method'><a href="module-7dtdCountryBan.html#.reload">reload</a></li><li data-type='method'><a href="module-7dtdCountryBan.html#.start">start</a></li><li data-type='method'><a href="module-7dtdCountryBan.html#.stop">stop</a></li></ul></li><li><a href="module-7dtdLoggingHook.html">7dtdLoggingHook</a><ul class='methods'><li data-type='method'><a href="module-7dtdLoggingHook.html#.getLoggingObject">getLoggingObject</a></li><li data-type='method'><a href="module-7dtdLoggingHook.html#.getStatus">getStatus</a></li><li data-type='method'><a href="module-7dtdLoggingHook.html#.start">start</a></li><li data-type='method'><a href="module-7dtdLoggingHook.html#.stop">stop</a></li></ul></li><li><a href="module-7dtdMOTDHook.html">7dtdMOTDHook</a><ul class='methods'><li data-type='method'><a href="module-7dtdMOTDHook.html#.getStatus">getStatus</a></li><li data-type='method'><a href="module-7dtdMOTDHook.html#.start">start</a></li><li data-type='method'><a href="module-7dtdMOTDHook.html#.stop">stop</a></li><li data-type='method'><a href="module-7dtdMOTDHook.html#.updateConfig">updateConfig</a></li></ul></li><li><a href="module-AuthController.html">AuthController</a><ul class='methods'><li data-type='method'><a href="module-AuthController.html#.logout">logout</a></li><li data-type='method'><a href="module-AuthController.html#.steamLogin">steamLogin</a></li><li data-type='method'><a href="module-AuthController.html#.steamReturn">steamReturn</a></li></ul></li><li><a href="module-DiscordBot.html">DiscordBot</a><ul class='methods'><li data-type='method'><a href="module-DiscordBot.html#.getClient">getClient</a></li><li data-type='method'><a href="module-DiscordBot.html#.initialize">initialize</a></li></ul></li><li><a href="module-DiscordCommands.html">DiscordCommands</a></li><li><a href="module-Helpers.html">Helpers</a><ul class='methods'><li data-type='method'><a href="module-Helpers.html#.Add7dtdServer">Add7dtdServer</a></li><li data-type='method'><a href="module-Helpers.html#.checkIfAvailable">checkIfAvailable</a></li><li data-type='method'><a href="module-Helpers.html#.createTicket">createTicket</a></li><li data-type='method'><a href="module-Helpers.html#.createWebTokens">createWebTokens</a></li><li data-type='method'><a href="module-Helpers.html#.loadPlayerData">loadPlayerData</a></li><li data-type='method'><a href="module-Helpers.html#.loadSdtdServerInfo">loadSdtdServerInfo</a></li></ul></li><li><a href="module-SdtdCommands.html">SdtdCommands</a></li><li><a href="module-SdtdCommandsHook.html">SdtdCommandsHook</a><ul class='methods'><li data-type='method'><a href="module-SdtdCommandsHook.html#.getStatus">getStatus</a></li><li data-type='method'><a href="module-SdtdCommandsHook.html#.initialize">initialize</a></li><li data-type='method'><a href="module-SdtdCommandsHook.html#.start">start</a></li><li data-type='method'><a href="module-SdtdCommandsHook.html#.stop">stop</a></li><li data-type='method'><a href="module-SdtdCommandsHook.html#.updateConfig">updateConfig</a></li></ul></li><li><a href="module-SdtdConfig.html">SdtdConfig</a></li><li><a href="module-SdtdTicket.html">SdtdTicket</a></li></ul><h3>Global</h3><ul><li><a href="global.html#discordId">discordId</a></li></ul>
+<nav class="lnb" id="lnb">
+    <div class="logo" style="">
+        
+            <img src="img/toast-ui.png" width="100%" height="100%">
+        
+    </div>
+    <div class="title">
+        <h1><a href="index.html" class="link">CSMM</a></h1>
+        
+    </div>
+    <div class="search-container" id="search-container">
+        <input type="text" placeholder="Search">
+        <ul></ul>
+    </div>
+    
+    <div class="lnb-api hidden"><h3>Modules</h3><ul><li><a href="module-7dtdCountryBan.html">7dtdCountryBan</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:7dtdCountryBan_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="module-7dtdCountryBan.html#.getStatus">getStatus</a></li><li><a href="module-7dtdCountryBan.html#.reload">reload</a></li><li><a href="module-7dtdCountryBan.html#.start">start</a></li><li><a href="module-7dtdCountryBan.html#.stop">stop</a></li></ul></div></li><li><a href="module-7dtdLoggingHook.html">7dtdLoggingHook</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:7dtdLoggingHook_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="module-7dtdLoggingHook.html#.getLoggingObject">getLoggingObject</a></li><li><a href="module-7dtdLoggingHook.html#.getStatus">getStatus</a></li><li><a href="module-7dtdLoggingHook.html#.start">start</a></li><li><a href="module-7dtdLoggingHook.html#.stop">stop</a></li></ul></div></li><li><a href="module-7dtdMOTDHook.html">7dtdMOTDHook</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:7dtdMOTDHook_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="module-7dtdMOTDHook.html#.getStatus">getStatus</a></li><li><a href="module-7dtdMOTDHook.html#.start">start</a></li><li><a href="module-7dtdMOTDHook.html#.stop">stop</a></li><li><a href="module-7dtdMOTDHook.html#.updateConfig">updateConfig</a></li></ul></div></li><li><a href="module-AuthController.html">AuthController</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:AuthController_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="module-AuthController.html#.logout">logout</a></li><li><a href="module-AuthController.html#.steamLogin">steamLogin</a></li><li><a href="module-AuthController.html#.steamReturn">steamReturn</a></li></ul></div></li><li><a href="module-DiscordBot.html">DiscordBot</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:DiscordBot_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="module-DiscordBot.html#.getClient">getClient</a></li><li><a href="module-DiscordBot.html#.initialize">initialize</a></li></ul></div></li><li><a href="module-DiscordCommands.html">DiscordCommands</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:DiscordCommands_sub"><div class="member-type">Members</div><ul class="inner"><li><a href="module-DiscordCommands.html#.AddServer">AddServer</a></li><li><a href="module-DiscordCommands.html#.ChatBridge">ChatBridge</a></li><li><a href="module-DiscordCommands.html#.Day7">Day7</a></li><li><a href="module-DiscordCommands.html#.PlayerInfo">PlayerInfo</a></li></ul></div></li><li><a href="module-Helpers.html">Helpers</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:Helpers_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="module-Helpers.html#.Add7dtdServer">Add7dtdServer</a></li><li><a href="module-Helpers.html#.checkIfAvailable">checkIfAvailable</a></li><li><a href="module-Helpers.html#.createTicket">createTicket</a></li><li><a href="module-Helpers.html#.createWebTokens">createWebTokens</a></li><li><a href="module-Helpers.html#.loadPlayerData">loadPlayerData</a></li><li><a href="module-Helpers.html#.loadSdtdServerInfo">loadSdtdServerInfo</a></li></ul></div></li><li><a href="module-SdtdCommands.html">SdtdCommands</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:SdtdCommands_sub"></div></li><li><a href="module-SdtdCommandsHook.html">SdtdCommandsHook</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:SdtdCommandsHook_sub"><div class="member-type">Members</div><ul class="inner"><li><a href="module-SdtdCommandsHook.html#.commandHandler">commandHandler</a></li><li><a href="module-SdtdCommandsHook.html#.SdtdCommand">SdtdCommand</a></li><li><a href="module-SdtdCommandsHook.html#.server">server</a></li></ul><div class="member-type">Methods</div><ul class="inner"><li><a href="module-SdtdCommandsHook.html#.getStatus">getStatus</a></li><li><a href="module-SdtdCommandsHook.html#.initialize">initialize</a></li><li><a href="module-SdtdCommandsHook.html#.start">start</a></li><li><a href="module-SdtdCommandsHook.html#.stop">stop</a></li><li><a href="module-SdtdCommandsHook.html#.updateConfig">updateConfig</a></li></ul></div></li><li><a href="module-SdtdConfig.html">SdtdConfig</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:SdtdConfig_sub"></div></li><li><a href="module-SdtdTicket.html">SdtdTicket</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:SdtdTicket_sub"><div class="member-type">Members</div><ul class="inner"><li><a href="module-SdtdTicket.html#.description">description</a></li><li><a href="module-SdtdTicket.html#.player">player</a></li><li><a href="module-SdtdTicket.html#.playerInfo">playerInfo</a></li><li><a href="module-SdtdTicket.html#.server">server</a></li><li><a href="module-SdtdTicket.html#.status">status</a></li><li><a href="module-SdtdTicket.html#.title">title</a></li></ul></div></li></ul></div><div class="lnb-api hidden"><h3>Classes</h3><ul><li><a href="ChatBridgeChannel.html">ChatBridgeChannel</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="ChatBridgeChannel_sub"></div></li><li><a href="CustomDiscordEmbed.html">CustomDiscordEmbed</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="CustomDiscordEmbed_sub"></div></li><li><a href="MotdSender.html">MotdSender</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="MotdSender_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="MotdSender.html#.onJoinListener">onJoinListener</a></li><li><a href="MotdSender.html#sendMotd">sendMotd</a></li><li><a href="MotdSender.html#start">start</a></li><li><a href="MotdSender.html#stop">stop</a></li></ul></div></li><li><a href="Player.html">Player</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Player_sub"><div class="member-type">Members</div><ul class="inner"><li><a href="Player.html#.avatarUrl">avatarUrl</a></li><li><a href="Player.html#.banned">banned</a></li><li><a href="Player.html#.entityId">entityId</a></li><li><a href="Player.html#.inventory">inventory</a></li><li><a href="Player.html#.ip">ip</a></li><li><a href="Player.html#.lastOnline">lastOnline</a></li><li><a href="Player.html#.name">name</a></li><li><a href="Player.html#.playtime">playtime</a></li><li><a href="Player.html#.positionX">positionX</a></li><li><a href="Player.html#.positionY">positionY</a></li><li><a href="Player.html#.positionZ">positionZ</a></li><li><a href="Player.html#.server">server</a></li><li><a href="Player.html#.user">user</a></li></ul><div class="member-type">Methods</div><ul class="inner"><li><a href="Player.html#.ban">ban</a></li><li><a href="Player.html#.getBanStatus">getBanStatus</a></li><li><a href="Player.html#.getInventory">getInventory</a></li><li><a href="Player.html#.getLocation">getLocation</a></li><li><a href="Player.html#.give-item">give-item</a></li><li><a href="Player.html#.kick">kick</a></li><li><a href="Player.html#.teleport">teleport</a></li><li><a href="Player.html#.unban">unban</a></li></ul></div></li><li><a href="SdtdServer.html">SdtdServer</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="SdtdServer_sub"><div class="member-type">Members</div><ul class="inner"><li><a href="SdtdServer.html#.admins">admins</a></li><li><a href="SdtdServer.html#.authName">authName</a></li><li><a href="SdtdServer.html#.authToken">authToken</a></li><li><a href="SdtdServer.html#.chat*@method">chat   * @method</a></li><li><a href="SdtdServer.html#.chatChannelId">chatChannelId</a></li><li><a href="SdtdServer.html#.discordGuildId">discordGuildId</a></li><li><a href="SdtdServer.html#.gamePort">gamePort</a></li><li><a href="SdtdServer.html#.ip">ip</a></li><li><a href="SdtdServer.html#.name">name</a></li><li><a href="SdtdServer.html#.owner">owner</a></li><li><a href="SdtdServer.html#.players">players</a></li><li><a href="SdtdServer.html#.restart-server">restart-server</a></li><li><a href="SdtdServer.html#.telnetPort">telnetPort</a></li><li><a href="SdtdServer.html#.tickets">tickets</a></li><li><a href="SdtdServer.html#.webPort">webPort</a></li></ul><div class="member-type">Methods</div><ul class="inner"><li><a href="SdtdServer.html#.add-server">add-server</a></li><li><a href="SdtdServer.html#.available-items">available-items</a></li><li><a href="SdtdServer.html#.commands-reload">commands-reload</a></li><li><a href="SdtdServer.html#.commands-toggle">commands-toggle</a></li><li><a href="SdtdServer.html#.console">console</a></li><li><a href="SdtdServer.html#.country-ban-reload">country-ban-reload</a></li><li><a href="SdtdServer.html#.country-ban-toggle">country-ban-toggle</a></li><li><a href="SdtdServer.html#.dashboard">dashboard</a></li><li><a href="SdtdServer.html#.delete">delete</a></li><li><a href="SdtdServer.html#.executeCommand">executeCommand</a></li><li><a href="SdtdServer.html#.get-players">get-players</a></li><li><a href="SdtdServer.html#.get-players-view">get-players-view</a></li><li><a href="SdtdServer.html#.load-server-info">load-server-info</a></li><li><a href="SdtdServer.html#.logging-toggle">logging-toggle</a></li><li><a href="SdtdServer.html#.motd-reload">motd-reload</a></li><li><a href="SdtdServer.html#.motd-toggle">motd-toggle</a></li><li><a href="SdtdServer.html#.sendMessage">sendMessage</a></li><li><a href="SdtdServer.html#.server-infoview">server-infoview</a></li><li><a href="SdtdServer.html#.settings">settings</a></li><li><a href="SdtdServer.html#.subscribe-to-socket">subscribe-to-socket</a></li><li><a href="SdtdServer.html#.tickets-view">tickets-view</a></li><li><a href="SdtdServer.html#.update-connection-info">update-connection-info</a></li><li><a href="SdtdServer.html#.user-tickets-view">user-tickets-view</a></li></ul></div></li><li><a href="User.html">User</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="User_sub"><div class="member-type">Members</div><ul class="inner"><li><a href="User.html#.admin">admin</a></li><li><a href="User.html#.banned">banned</a></li><li><a href="User.html#.getOwnedServers">getOwnedServers</a></li><li><a href="User.html#.players">players</a></li><li><a href="User.html#.servers">servers</a></li><li><a href="User.html#.steamId">steamId</a></li><li><a href="User.html#.username">username</a></li></ul></div></li></ul></div><div class="lnb-api hidden"><h3>Global</h3><ul><li><a href="global.html#discordId">discordId</a></li></ul></div>
 </nav>
+<div id="resizer"></div>
 
-<div id="main">
-    
-    <h1 class="page-title">hooks/countryBan/index.js</h1>
-    
-
+<div class="main" id="main">
     
 
 
@@ -57,260 +66,260 @@ module.exports = function sdtdCountryBan(sails) {
     },
 
     countryList: [
-      ["A1", "Anonymous Proxy"],
-      ["A2", "Satellite Provider"],
-      ["O1", "Other Country"],
-      ["AD", "Andorra"],
-      ["AE", "United Arab Emirates"],
-      ["AF", "Afghanistan"],
-      ["AG", "Antigua and Barbuda"],
-      ["AI", "Anguilla"],
-      ["AL", "Albania"],
-      ["AM", "Armenia"],
-      ["AO", "Angola"],
-      ["AP", "Asia/Pacific Region"],
-      ["AQ", "Antarctica"],
-      ["AR", "Argentina"],
-      ["AS", "American Samoa"],
-      ["AT", "Austria"],
-      ["AU", "Australia"],
-      ["AW", "Aruba"],
-      ["AX", "Aland Islands"],
-      ["AZ", "Azerbaijan"],
-      ["BA", "Bosnia and Herzegovina"],
-      ["BB", "Barbados"],
-      ["BD", "Bangladesh"],
-      ["BE", "Belgium"],
-      ["BF", "Burkina Faso"],
-      ["BG", "Bulgaria"],
-      ["BH", "Bahrain"],
-      ["BI", "Burundi"],
-      ["BJ", "Benin"],
-      ["BL", "Saint Bartelemey"],
-      ["BM", "Bermuda"],
-      ["BN", "Brunei Darussalam"],
-      ["BO", "Bolivia"],
-      ["BQ", "Bonaire, Saint Eustatius and Saba"],
-      ["BR", "Brazil"],
-      ["BS", "Bahamas"],
-      ["BT", "Bhutan"],
-      ["BV", "Bouvet Island"],
-      ["BW", "Botswana"],
-      ["BY", "Belarus"],
-      ["BZ", "Belize"],
-      ["CA", "Canada"],
-      ["CC", "Cocos (Keeling) Islands"],
-      ["CD", "Congo, The Democratic Republic of the"],
-      ["CF", "Central African Republic"],
-      ["CG", "Congo"],
-      ["CH", "Switzerland"],
-      ["CI", "Cote d'Ivoire"],
-      ["CK", "Cook Islands"],
-      ["CL", "Chile"],
-      ["CM", "Cameroon"],
-      ["CN", "China"],
-      ["CO", "Colombia"],
-      ["CR", "Costa Rica"],
-      ["CU", "Cuba"],
-      ["CV", "Cape Verde"],
-      ["CW", "Curacao"],
-      ["CX", "Christmas Island"],
-      ["CY", "Cyprus"],
-      ["CZ", "Czech Republic"],
-      ["DE", "Germany"],
-      ["DJ", "Djibouti"],
-      ["DK", "Denmark"],
-      ["DM", "Dominica"],
-      ["DO", "Dominican Republic"],
-      ["DZ", "Algeria"],
-      ["EC", "Ecuador"],
-      ["EE", "Estonia"],
-      ["EG", "Egypt"],
-      ["EH", "Western Sahara"],
-      ["ER", "Eritrea"],
-      ["ES", "Spain"],
-      ["ET", "Ethiopia"],
-      ["EU", "Europe"],
-      ["FI", "Finland"],
-      ["FJ", "Fiji"],
-      ["FK", "Falkland Islands (Malvinas)"],
-      ["FM", "Micronesia, Federated States of"],
-      ["FO", "Faroe Islands"],
-      ["FR", "France"],
-      ["GA", "Gabon"],
-      ["GB", "United Kingdom"],
-      ["GD", "Grenada"],
-      ["GE", "Georgia"],
-      ["GF", "French Guiana"],
-      ["GG", "Guernsey"],
-      ["GH", "Ghana"],
-      ["GI", "Gibraltar"],
-      ["GL", "Greenland"],
-      ["GM", "Gambia"],
-      ["GN", "Guinea"],
-      ["GP", "Guadeloupe"],
-      ["GQ", "Equatorial Guinea"],
-      ["GR", "Greece"],
-      ["GS", "South Georgia and the South Sandwich Islands"],
-      ["GT", "Guatemala"],
-      ["GU", "Guam"],
-      ["GW", "Guinea-Bissau"],
-      ["GY", "Guyana"],
-      ["HK", "Hong Kong"],
-      ["HM", "Heard Island and McDonald Islands"],
-      ["HN", "Honduras"],
-      ["HR", "Croatia"],
-      ["HT", "Haiti"],
-      ["HU", "Hungary"],
-      ["ID", "Indonesia"],
-      ["IE", "Ireland"],
-      ["IL", "Israel"],
-      ["IM", "Isle of Man"],
-      ["IN", "India"],
-      ["IO", "British Indian Ocean Territory"],
-      ["IQ", "Iraq"],
-      ["IR", "Iran, Islamic Republic of"],
-      ["IS", "Iceland"],
-      ["IT", "Italy"],
-      ["JE", "Jersey"],
-      ["JM", "Jamaica"],
-      ["JO", "Jordan"],
-      ["JP", "Japan"],
-      ["KE", "Kenya"],
-      ["KG", "Kyrgyzstan"],
-      ["KH", "Cambodia"],
-      ["KI", "Kiribati"],
-      ["KM", "Comoros"],
-      ["KN", "Saint Kitts and Nevis"],
-      ["KP", "Korea, Democratic People's Republic of"],
-      ["KR", "Korea, Republic of"],
-      ["KW", "Kuwait"],
-      ["KY", "Cayman Islands"],
-      ["KZ", "Kazakhstan"],
-      ["LA", "Lao People's Democratic Republic"],
-      ["LB", "Lebanon"],
-      ["LC", "Saint Lucia"],
-      ["LI", "Liechtenstein"],
-      ["LK", "Sri Lanka"],
-      ["LR", "Liberia"],
-      ["LS", "Lesotho"],
-      ["LT", "Lithuania"],
-      ["LU", "Luxembourg"],
-      ["LV", "Latvia"],
-      ["LY", "Libyan Arab Jamahiriya"],
-      ["MA", "Morocco"],
-      ["MC", "Monaco"],
-      ["MD", "Moldova, Republic of"],
-      ["ME", "Montenegro"],
-      ["MF", "Saint Martin"],
-      ["MG", "Madagascar"],
-      ["MH", "Marshall Islands"],
-      ["MK", "Macedonia"],
-      ["ML", "Mali"],
-      ["MM", "Myanmar"],
-      ["MN", "Mongolia"],
-      ["MO", "Macao"],
-      ["MP", "Northern Mariana Islands"],
-      ["MQ", "Martinique"],
-      ["MR", "Mauritania"],
-      ["MS", "Montserrat"],
-      ["MT", "Malta"],
-      ["MU", "Mauritius"],
-      ["MV", "Maldives"],
-      ["MW", "Malawi"],
-      ["MX", "Mexico"],
-      ["MY", "Malaysia"],
-      ["MZ", "Mozambique"],
-      ["NA", "Namibia"],
-      ["NC", "New Caledonia"],
-      ["NE", "Niger"],
-      ["NF", "Norfolk Island"],
-      ["NG", "Nigeria"],
-      ["NI", "Nicaragua"],
-      ["NL", "Netherlands"],
-      ["NO", "Norway"],
-      ["NP", "Nepal"],
-      ["NR", "Nauru"],
-      ["NU", "Niue"],
-      ["NZ", "New Zealand"],
-      ["OM", "Oman"],
-      ["PA", "Panama"],
-      ["PE", "Peru"],
-      ["PF", "French Polynesia"],
-      ["PG", "Papua New Guinea"],
-      ["PH", "Philippines"],
-      ["PK", "Pakistan"],
-      ["PL", "Poland"],
-      ["PM", "Saint Pierre and Miquelon"],
-      ["PN", "Pitcairn"],
-      ["PR", "Puerto Rico"],
-      ["PS", "Palestinian Territory"],
-      ["PT", "Portugal"],
-      ["PW", "Palau"],
-      ["PY", "Paraguay"],
-      ["QA", "Qatar"],
-      ["RE", "Reunion"],
-      ["RO", "Romania"],
-      ["RS", "Serbia"],
-      ["RU", "Russian Federation"],
-      ["RW", "Rwanda"],
-      ["SA", "Saudi Arabia"],
-      ["SB", "Solomon Islands"],
-      ["SC", "Seychelles"],
-      ["SD", "Sudan"],
-      ["SE", "Sweden"],
-      ["SG", "Singapore"],
-      ["SH", "Saint Helena"],
-      ["SI", "Slovenia"],
-      ["SJ", "Svalbard and Jan Mayen"],
-      ["SK", "Slovakia"],
-      ["SL", "Sierra Leone"],
-      ["SM", "San Marino"],
-      ["SN", "Senegal"],
-      ["SO", "Somalia"],
-      ["SR", "Suriname"],
-      ["SS", "South Sudan"],
-      ["ST", "Sao Tome and Principe"],
-      ["SV", "El Salvador"],
-      ["SX", "Sint Maarten"],
-      ["SY", "Syrian Arab Republic"],
-      ["SZ", "Swaziland"],
-      ["TC", "Turks and Caicos Islands"],
-      ["TD", "Chad"],
-      ["TF", "French Southern Territories"],
-      ["TG", "Togo"],
-      ["TH", "Thailand"],
-      ["TJ", "Tajikistan"],
-      ["TK", "Tokelau"],
-      ["TL", "Timor-Leste"],
-      ["TM", "Turkmenistan"],
-      ["TN", "Tunisia"],
-      ["TO", "Tonga"],
-      ["TR", "Turkey"],
-      ["TT", "Trinidad and Tobago"],
-      ["TV", "Tuvalu"],
-      ["TW", "Taiwan"],
-      ["TZ", "Tanzania, United Republic of"],
-      ["UA", "Ukraine"],
-      ["UG", "Uganda"],
-      ["UM", "United States Minor Outlying Islands"],
-      ["US", "United States"],
-      ["UY", "Uruguay"],
-      ["UZ", "Uzbekistan"],
-      ["VA", "Holy See (Vatican City State)"],
-      ["VC", "Saint Vincent and the Grenadines"],
-      ["VE", "Venezuela"],
-      ["VG", "Virgin Islands, British"],
-      ["VI", "Virgin Islands, U.S."],
-      ["VN", "Vietnam"],
-      ["VU", "Vanuatu"],
-      ["WF", "Wallis and Futuna"],
-      ["WS", "Samoa"],
-      ["YE", "Yemen"],
-      ["YT", "Mayotte"],
-      ["ZA", "South Africa"],
-      ["ZM", "Zambia"],
-      ["ZW", "Zimbabwe"]
+      ['A1', 'Anonymous Proxy'],
+      ['A2', 'Satellite Provider'],
+      ['O1', 'Other Country'],
+      ['AD', 'Andorra'],
+      ['AE', 'United Arab Emirates'],
+      ['AF', 'Afghanistan'],
+      ['AG', 'Antigua and Barbuda'],
+      ['AI', 'Anguilla'],
+      ['AL', 'Albania'],
+      ['AM', 'Armenia'],
+      ['AO', 'Angola'],
+      ['AP', 'Asia/Pacific Region'],
+      ['AQ', 'Antarctica'],
+      ['AR', 'Argentina'],
+      ['AS', 'American Samoa'],
+      ['AT', 'Austria'],
+      ['AU', 'Australia'],
+      ['AW', 'Aruba'],
+      ['AX', 'Aland Islands'],
+      ['AZ', 'Azerbaijan'],
+      ['BA', 'Bosnia and Herzegovina'],
+      ['BB', 'Barbados'],
+      ['BD', 'Bangladesh'],
+      ['BE', 'Belgium'],
+      ['BF', 'Burkina Faso'],
+      ['BG', 'Bulgaria'],
+      ['BH', 'Bahrain'],
+      ['BI', 'Burundi'],
+      ['BJ', 'Benin'],
+      ['BL', 'Saint Bartelemey'],
+      ['BM', 'Bermuda'],
+      ['BN', 'Brunei Darussalam'],
+      ['BO', 'Bolivia'],
+      ['BQ', 'Bonaire, Saint Eustatius and Saba'],
+      ['BR', 'Brazil'],
+      ['BS', 'Bahamas'],
+      ['BT', 'Bhutan'],
+      ['BV', 'Bouvet Island'],
+      ['BW', 'Botswana'],
+      ['BY', 'Belarus'],
+      ['BZ', 'Belize'],
+      ['CA', 'Canada'],
+      ['CC', 'Cocos (Keeling) Islands'],
+      ['CD', 'Congo, The Democratic Republic of the'],
+      ['CF', 'Central African Republic'],
+      ['CG', 'Congo'],
+      ['CH', 'Switzerland'],
+      ['CI', 'Cote d\'Ivoire'],
+      ['CK', 'Cook Islands'],
+      ['CL', 'Chile'],
+      ['CM', 'Cameroon'],
+      ['CN', 'China'],
+      ['CO', 'Colombia'],
+      ['CR', 'Costa Rica'],
+      ['CU', 'Cuba'],
+      ['CV', 'Cape Verde'],
+      ['CW', 'Curacao'],
+      ['CX', 'Christmas Island'],
+      ['CY', 'Cyprus'],
+      ['CZ', 'Czech Republic'],
+      ['DE', 'Germany'],
+      ['DJ', 'Djibouti'],
+      ['DK', 'Denmark'],
+      ['DM', 'Dominica'],
+      ['DO', 'Dominican Republic'],
+      ['DZ', 'Algeria'],
+      ['EC', 'Ecuador'],
+      ['EE', 'Estonia'],
+      ['EG', 'Egypt'],
+      ['EH', 'Western Sahara'],
+      ['ER', 'Eritrea'],
+      ['ES', 'Spain'],
+      ['ET', 'Ethiopia'],
+      ['EU', 'Europe'],
+      ['FI', 'Finland'],
+      ['FJ', 'Fiji'],
+      ['FK', 'Falkland Islands (Malvinas)'],
+      ['FM', 'Micronesia, Federated States of'],
+      ['FO', 'Faroe Islands'],
+      ['FR', 'France'],
+      ['GA', 'Gabon'],
+      ['GB', 'United Kingdom'],
+      ['GD', 'Grenada'],
+      ['GE', 'Georgia'],
+      ['GF', 'French Guiana'],
+      ['GG', 'Guernsey'],
+      ['GH', 'Ghana'],
+      ['GI', 'Gibraltar'],
+      ['GL', 'Greenland'],
+      ['GM', 'Gambia'],
+      ['GN', 'Guinea'],
+      ['GP', 'Guadeloupe'],
+      ['GQ', 'Equatorial Guinea'],
+      ['GR', 'Greece'],
+      ['GS', 'South Georgia and the South Sandwich Islands'],
+      ['GT', 'Guatemala'],
+      ['GU', 'Guam'],
+      ['GW', 'Guinea-Bissau'],
+      ['GY', 'Guyana'],
+      ['HK', 'Hong Kong'],
+      ['HM', 'Heard Island and McDonald Islands'],
+      ['HN', 'Honduras'],
+      ['HR', 'Croatia'],
+      ['HT', 'Haiti'],
+      ['HU', 'Hungary'],
+      ['ID', 'Indonesia'],
+      ['IE', 'Ireland'],
+      ['IL', 'Israel'],
+      ['IM', 'Isle of Man'],
+      ['IN', 'India'],
+      ['IO', 'British Indian Ocean Territory'],
+      ['IQ', 'Iraq'],
+      ['IR', 'Iran, Islamic Republic of'],
+      ['IS', 'Iceland'],
+      ['IT', 'Italy'],
+      ['JE', 'Jersey'],
+      ['JM', 'Jamaica'],
+      ['JO', 'Jordan'],
+      ['JP', 'Japan'],
+      ['KE', 'Kenya'],
+      ['KG', 'Kyrgyzstan'],
+      ['KH', 'Cambodia'],
+      ['KI', 'Kiribati'],
+      ['KM', 'Comoros'],
+      ['KN', 'Saint Kitts and Nevis'],
+      ['KP', 'Korea, Democratic People\'s Republic of'],
+      ['KR', 'Korea, Republic of'],
+      ['KW', 'Kuwait'],
+      ['KY', 'Cayman Islands'],
+      ['KZ', 'Kazakhstan'],
+      ['LA', 'Lao People\'s Democratic Republic'],
+      ['LB', 'Lebanon'],
+      ['LC', 'Saint Lucia'],
+      ['LI', 'Liechtenstein'],
+      ['LK', 'Sri Lanka'],
+      ['LR', 'Liberia'],
+      ['LS', 'Lesotho'],
+      ['LT', 'Lithuania'],
+      ['LU', 'Luxembourg'],
+      ['LV', 'Latvia'],
+      ['LY', 'Libyan Arab Jamahiriya'],
+      ['MA', 'Morocco'],
+      ['MC', 'Monaco'],
+      ['MD', 'Moldova, Republic of'],
+      ['ME', 'Montenegro'],
+      ['MF', 'Saint Martin'],
+      ['MG', 'Madagascar'],
+      ['MH', 'Marshall Islands'],
+      ['MK', 'Macedonia'],
+      ['ML', 'Mali'],
+      ['MM', 'Myanmar'],
+      ['MN', 'Mongolia'],
+      ['MO', 'Macao'],
+      ['MP', 'Northern Mariana Islands'],
+      ['MQ', 'Martinique'],
+      ['MR', 'Mauritania'],
+      ['MS', 'Montserrat'],
+      ['MT', 'Malta'],
+      ['MU', 'Mauritius'],
+      ['MV', 'Maldives'],
+      ['MW', 'Malawi'],
+      ['MX', 'Mexico'],
+      ['MY', 'Malaysia'],
+      ['MZ', 'Mozambique'],
+      ['NA', 'Namibia'],
+      ['NC', 'New Caledonia'],
+      ['NE', 'Niger'],
+      ['NF', 'Norfolk Island'],
+      ['NG', 'Nigeria'],
+      ['NI', 'Nicaragua'],
+      ['NL', 'Netherlands'],
+      ['NO', 'Norway'],
+      ['NP', 'Nepal'],
+      ['NR', 'Nauru'],
+      ['NU', 'Niue'],
+      ['NZ', 'New Zealand'],
+      ['OM', 'Oman'],
+      ['PA', 'Panama'],
+      ['PE', 'Peru'],
+      ['PF', 'French Polynesia'],
+      ['PG', 'Papua New Guinea'],
+      ['PH', 'Philippines'],
+      ['PK', 'Pakistan'],
+      ['PL', 'Poland'],
+      ['PM', 'Saint Pierre and Miquelon'],
+      ['PN', 'Pitcairn'],
+      ['PR', 'Puerto Rico'],
+      ['PS', 'Palestinian Territory'],
+      ['PT', 'Portugal'],
+      ['PW', 'Palau'],
+      ['PY', 'Paraguay'],
+      ['QA', 'Qatar'],
+      ['RE', 'Reunion'],
+      ['RO', 'Romania'],
+      ['RS', 'Serbia'],
+      ['RU', 'Russian Federation'],
+      ['RW', 'Rwanda'],
+      ['SA', 'Saudi Arabia'],
+      ['SB', 'Solomon Islands'],
+      ['SC', 'Seychelles'],
+      ['SD', 'Sudan'],
+      ['SE', 'Sweden'],
+      ['SG', 'Singapore'],
+      ['SH', 'Saint Helena'],
+      ['SI', 'Slovenia'],
+      ['SJ', 'Svalbard and Jan Mayen'],
+      ['SK', 'Slovakia'],
+      ['SL', 'Sierra Leone'],
+      ['SM', 'San Marino'],
+      ['SN', 'Senegal'],
+      ['SO', 'Somalia'],
+      ['SR', 'Suriname'],
+      ['SS', 'South Sudan'],
+      ['ST', 'Sao Tome and Principe'],
+      ['SV', 'El Salvador'],
+      ['SX', 'Sint Maarten'],
+      ['SY', 'Syrian Arab Republic'],
+      ['SZ', 'Swaziland'],
+      ['TC', 'Turks and Caicos Islands'],
+      ['TD', 'Chad'],
+      ['TF', 'French Southern Territories'],
+      ['TG', 'Togo'],
+      ['TH', 'Thailand'],
+      ['TJ', 'Tajikistan'],
+      ['TK', 'Tokelau'],
+      ['TL', 'Timor-Leste'],
+      ['TM', 'Turkmenistan'],
+      ['TN', 'Tunisia'],
+      ['TO', 'Tonga'],
+      ['TR', 'Turkey'],
+      ['TT', 'Trinidad and Tobago'],
+      ['TV', 'Tuvalu'],
+      ['TW', 'Taiwan'],
+      ['TZ', 'Tanzania, United Republic of'],
+      ['UA', 'Ukraine'],
+      ['UG', 'Uganda'],
+      ['UM', 'United States Minor Outlying Islands'],
+      ['US', 'United States'],
+      ['UY', 'Uruguay'],
+      ['UZ', 'Uzbekistan'],
+      ['VA', 'Holy See (Vatican City State)'],
+      ['VC', 'Saint Vincent and the Grenadines'],
+      ['VE', 'Venezuela'],
+      ['VG', 'Virgin Islands, British'],
+      ['VI', 'Virgin Islands, U.S.'],
+      ['VN', 'Vietnam'],
+      ['VU', 'Vanuatu'],
+      ['WF', 'Wallis and Futuna'],
+      ['WS', 'Samoa'],
+      ['YE', 'Yemen'],
+      ['YT', 'Mayotte'],
+      ['ZA', 'South Africa'],
+      ['ZM', 'Zambia'],
+      ['ZW', 'Zimbabwe']
     ],
 
     initialize: function (cb) {
@@ -318,20 +327,20 @@ module.exports = function sdtdCountryBan(sails) {
         sails.on('hook:sdtdlogs:loaded', async function () {
           sails.log.debug('HOOK: countryBan Initializing countryBan');
           try {
-            let configs = await SdtdConfig.find()
+            let configs = await SdtdConfig.find();
             _.each(configs, function (config) {
               if (config.countryBanConfig.enabled) {
-                startCountryBan(String(config.server))
+                startCountryBan(String(config.server));
               }
-            })
+            });
             return cb();
           } catch (error) {
             sails.log.error(`HOOK:countryBan ${error}`);
           }
 
 
-        })
-      })
+        });
+      });
     },
 
     /**
@@ -344,7 +353,7 @@ module.exports = function sdtdCountryBan(sails) {
 
     start: async function start(serverId) {
       sails.log.debug(`HOOK:countryBan Starting countryBan for server ${serverId}`);
-      startCountryBan(serverId)
+      startCountryBan(serverId);
     },
 
     /**
@@ -360,13 +369,13 @@ module.exports = function sdtdCountryBan(sails) {
 
       let loggingObj = sails.hooks.sdtdlogs.getLoggingObject(serverId);
 
-      let currentConfig = countryBanInfoMap.get(serverId)
+      let currentConfig = countryBanInfoMap.get(serverId);
 
       if (_.isUndefined(currentConfig)) {
-        return
+        return;
       }
 
-      currentConfig.enabled = false
+      currentConfig.enabled = false;
       await SdtdConfig.update({
         server: serverId
       }, {
@@ -374,11 +383,11 @@ module.exports = function sdtdCountryBan(sails) {
       });
 
       if (_.isUndefined(loggingObj)) {
-        throw new Error('Could not find logging object for server')
+        throw new Error('Could not find logging object for server');
       }
-      loggingObj.removeListener('playerConnected', handleCountryBan)
+      loggingObj.removeListener('playerConnected', handleCountryBan);
 
-      countryBanInfoMap.delete(serverId)
+      countryBanInfoMap.delete(serverId);
     },
 
     /**
@@ -391,7 +400,7 @@ module.exports = function sdtdCountryBan(sails) {
 
     getStatus: function (serverId) {
       sails.log.debug(`HOOK:countryBan Getting countryBan status for server ${serverId} `);
-      return countryBanInfoMap.get(serverId)
+      return countryBanInfoMap.get(serverId);
     },
 
     /**
@@ -410,11 +419,11 @@ module.exports = function sdtdCountryBan(sails) {
         let config = await SdtdConfig.findOne({server: serverId});
 
         if (_.isUndefined(config)) {
-          throw new Error('Could not find server config with specified ID')
+          throw new Error('Could not find server config with specified ID');
         }
 
         if (_.isUndefined(newConfig)) {
-          newConfig = config.countryBanConfig
+          newConfig = config.countryBanConfig;
         }
 
 
@@ -422,11 +431,11 @@ module.exports = function sdtdCountryBan(sails) {
           server: serverId
         }, {
           countryBanConfig: newConfig
-        }).fetch()
-        countryBanInfoMap.set(serverId, newConfig)
+        }).fetch();
+        countryBanInfoMap.set(serverId, newConfig);
 
-        await this.stop(serverId)
-        return await this.start(serverId)
+        await this.stop(serverId);
+        return await this.start(serverId);
       } catch (error) {
         sails.log.error(`HOOK:countryBan ${error}`);
       }
@@ -435,18 +444,18 @@ module.exports = function sdtdCountryBan(sails) {
   };
 
   async function handleCountryBan(connectedMessage) {
-    let country = connectedMessage.country
-    let serverIp = this.serverIp
-    let serverWebPort = this.port
+    let country = connectedMessage.country;
+    let serverIp = this.serverIp;
+    let serverWebPort = this.port;
     try {
       let server = await SdtdServer.find({
         ip: serverIp,
         webPort: serverWebPort
-      })
-      let config = await SdtdConfig.find({server: server.id})
+      });
+      let config = await SdtdConfig.find({server: server.id});
       if (config.length === 1) {
-        countryBanConfig = config[0].countryBanConfig
-        sails.log.debug(`HOOK:countryBan - Player from ${country} connected to server ${server[0].id}, checking if needs to be kicked`)
+        countryBanConfig = config[0].countryBanConfig;
+        sails.log.debug(`HOOK:countryBan - Player from ${country} connected to server ${server[0].id}, checking if needs to be kicked`);
         if (countryBanConfig.bannedCountries.includes(country)) {
           sevenDays.kickPlayer({
             ip: server[0].ip,
@@ -457,12 +466,12 @@ module.exports = function sdtdCountryBan(sails) {
             playerId: connectedMessage.steamID
           }).exec({
             error: (error) => {
-              sails.log.warn(`HOOK:countryBan - Failed to kick player from server ${server[0].id} - ${error}`)
+              sails.log.warn(`HOOK:countryBan - Failed to kick player from server ${server[0].id} - ${error}`);
             },
             success: () => {
-              sails.log.debug(`HOOK:countryBan - Kicked player ${connectedMessage.playerName} from server ${server[0].id}`)
+              sails.log.debug(`HOOK:countryBan - Kicked player ${connectedMessage.playerName} from server ${server[0].id}`);
             }
-          })
+          });
         }
       }
     } catch (error) {
@@ -476,27 +485,27 @@ module.exports = function sdtdCountryBan(sails) {
       let server = await SdtdServer.findOne(serverId);
       let config = await SdtdConfig.findOne({server: serverId});
 
-      currentConfig = config.countryBanConfig
+      currentConfig = config.countryBanConfig;
       currentConfig.enabled = true;
 
       await SdtdConfig.update({
-       server: serverId
+        server: serverId
       }, {
         countryBanConfig: currentConfig
       });
 
       let loggingObj = sails.hooks.sdtdlogs.getLoggingObject(serverId);
       if (_.isUndefined(loggingObj)) {
-        return sails.log.error('Could not find logging object for server')
+        return sails.log.error('Could not find logging object for server');
       }
 
-      loggingObj.on('playerConnected', handleCountryBan)
+      loggingObj.on('playerConnected', handleCountryBan);
 
 
       countryBanInfoMap.set(serverId, currentConfig);
     } catch (error) {
       sails.log.error(`HOOK:countryBan ${error}`);
-      throw error
+      throw error;
     }
   }
 };
@@ -509,13 +518,24 @@ module.exports = function sdtdCountryBan(sails) {
 
 </div>
 
-<br class="clear">
-
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Feb 01 2018 13:20:32 GMT+0100 (Romance Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    <img class="logo" src="img/toast-ui.png" style="">
+    <div class="footer-text">7DTD server manager</div>
 </footer>
-
 <script>prettyPrint();</script>
+<script src="scripts/jquery.min.js"></script>
+<script src="scripts/tui-doc.js"></script>
 <script src="scripts/linenumber.js"></script>
+
+    <script>
+        var id = '_sub'.replace(/"/g, '_');
+        var selectedApi = document.getElementById(id); // do not use jquery selector
+        var $selectedApi = $(selectedApi);
+
+        $selectedApi.removeClass('hidden');
+        $selectedApi.parent().find('.glyphicon').removeClass('glyphicon-plus').addClass('glyphicon-minus');
+        showLnbApi();
+    </script>
+
 </body>
 </html>

@@ -139,7 +139,7 @@
         </li>
 
         <% 
-      if (!_.isUndefined(req.signedCookies.userProfile)) {
+      if (!_.isUndefined(req.session.userId)) {
         %>
 
           <li class="nav-item dropdown">
@@ -155,17 +155,17 @@
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="/user/<%= req.signedCookies.userProfile.id %>">
-              <%= req.signedCookies.userProfile.steamProfile._json.personaname %>
+            <a class="nav-link" href="/user/<%= req.session.userId %>">
+              User <%= req.session.userId %>
             </a>
           </li>
           <li class="nav-item">
-            <img id="steam-avatar" src="<%= req.signedCookies.userProfile.steamProfile._json.avatar %>">
+            <img id="steam-avatar" src="">
           </li>
           <a class="nav-link" id="logout-button" href="/auth/logout">
             Logout
           </a>
-          <a class="nav-link" id="user-tickets-button" href="/user/<%=  req.signedCookies.userProfile.id %>/tickets">
+          <a class="nav-link" id="user-tickets-button" href="/user/<%=  req.session.userId %>/tickets">
             Your tickets
           </a>
           <% } else { %>
@@ -195,7 +195,7 @@
 
 <script>
   <%  if (!_.isUndefined(req.signedCookies.userProfile)) {%>
-  loadSdtdServers(<%= req.signedCookies.userProfile.id %>)
+  loadSdtdServers(<%= req.session.userId %>)
   <% } %>
 
 </script>

@@ -24,6 +24,7 @@ module.exports = {
 
   /**
    * @memberof Player
+   * @method unban
    * @description unban a player
    * @param {string} steamId  Steam ID of the player
    * @param {string} serverId  ID of the server

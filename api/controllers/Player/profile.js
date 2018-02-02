@@ -29,7 +29,7 @@ module.exports = {
 
   /**
    * @memberof module:Player
-   * @name profile
+   * @method profile
    * @description Serves the player profile view
    * @param {number} playerId
    */

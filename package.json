@@ -36,7 +36,7 @@
     "winston-papertrail": "^1.0.5"
   },
   "scripts": {
-    "start": "node app.js --prod",
+    "start": "npm run build-docs && node app.js --prod",
     "test": "npm run custom-tests && echo 'Done.'",
     "build-docs": "./node_modules/.bin/jsdoc -c ./.jsdoc.json",
     "custom-tests": "npm run unit-service-tests",
@@ -67,6 +67,7 @@
     "mochawesome": "^3.0.1",
     "nyc": "^11.4.1",
     "selenium-standalone": "^6.12.0",
-    "supertest": "^3.0.0"
+    "supertest": "^3.0.0",
+    "tui-jsdoc-template": "^1.2.2"
   }
 }

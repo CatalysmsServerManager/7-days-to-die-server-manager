@@ -38,6 +38,7 @@ module.exports = {
 
   /**
    * @memberof Player
+   * @method give-item
    * @description Give items to a player
    * @param {string} playerId  Id of the player
    */
