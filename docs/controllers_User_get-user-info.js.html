@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Source: hooks/sdtdCommands/command.js | CSMM</title>
+    <title>Source: controllers/User/get-user-info.js | CSMM</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -46,29 +46,49 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
-     * @memberof module:SdtdCommandsHook
-     * @name SdtdCommand
-     * @param {number} serverId
-     * @description Abstract class to represent ingame commands
-     */
+            <pre class="prettyprint source linenums"><code>module.exports = {
 
-class SdtdCommand {
-  constructor(serverId) {
-    /**
-         * @param {number} serverId
-         * @name SdtdCommand#serverId
-         */
-    this.serverId;
+  friendlyName: 'Get user info',
+
+  description: 'Get users profile info',
+
+  inputs: {
+    userId: {
+      description: 'The ID of the user to look up.',
+      type: 'number',
+      required: true
+    }
+  },
+
+  exits: {
+    success: {},
+    notFound: {
+      description: 'No user with the specified ID was found in the database.',
+      responseType: 'notFound'
+    }
+  },
+
+  /**
+   * @memberof User
+   * @name get-user-info
+   * @description gets servers this user is owner of
+   * @param {number} userId
+   */
+
+  fn: async function (inputs, exits) {
+    sails.log.debug(`API - User:get-user-info - Getting profile for user ${inputs.userId}`);
+
+    try {
+      let user = await User.findOne(inputs.userId)
+      return exits.success(user);
+
+    } catch (error) {
+      sails.log.error(`API - SdtdServer:get-user-info - ${error}`);
+      return exits.error(error);
+    }
+
   }
-
-
-  async run(chatMessage, playerId) {
-    throw new Error(`${this.constructor.name} doesn't have a run() method.`);
-  }
-}
-
-module.exports = SdtdCommand;
+};
 </code></pre>
         </article>
     </section>
