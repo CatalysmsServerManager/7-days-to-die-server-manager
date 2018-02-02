@@ -51,6 +51,9 @@ module.exports.routes = {
     action: 'logout'
   },
 
+  '/auth/discord': 'AuthController.discordLogin',
+  '/auth/discord/return': 'AuthController.discordReturn',
+
   /***************************************************************************
      *                                                                          *
      * More custom routes here...                                               *
