@@ -194,7 +194,7 @@
 
 
 <script>
-  <%  if (!_.isUndefined(req.signedCookies.userProfile)) {%>
+  <%  if (!_.isUndefined( req.session.userId)) {%>
   loadSdtdServers(<%= req.session.userId %>)
   <% } %>
 

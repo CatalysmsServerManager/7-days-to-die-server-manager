@@ -56,7 +56,7 @@ module.exports = {
     sails.log.info(`API - SdtdServer:addServer - Adding a new server ${inputs.serverIp} ${inputs.webPort}`);
 
     try {
-      const userProfile = this.req.signedCookies.userProfile;
+      let userProfile = await User.findOne(this.req.session.userId);
       let sdtdServer = await sails.helpers.add7DtdServer.with({
         ip: inputs.serverIp,
         serverName: inputs.serverName,
