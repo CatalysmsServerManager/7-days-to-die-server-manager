@@ -3,9 +3,13 @@
         "include": ["./api"]
     },
     "opts": {
-        "template": "node_modules/docdash",
+        "template": "node_modules/tui-jsdoc-template",
         "encoding": "utf8",               
-        "destination": "./docs/",          
+        "destination": "./docs",          
         "recurse": true               
+    },
+    "templates": {
+        "name": "CSMM",
+        "footerText": "7DTD server manager"
     }
 }

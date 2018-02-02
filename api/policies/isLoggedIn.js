@@ -8,11 +8,11 @@
  */
 module.exports = function isLoggedIn(req, res, next) {
   sails.log.debug(`POLICY - isLoggedIn - Check if a user is logged in`);
-  if(!_.isUndefined(req.signedCookies.userProfile)) {
-    sails.log.debug(`POLICY - isLoggedIn - User ${req.signedCookies.userProfile.id} identified`);
+  if(!_.isUndefined(req.session.userId)) {
+    sails.log.debug(`POLICY - isLoggedIn - User ${req.session.userId} identified`);
     return next();
   } else {
-    sails.log.debug(`POLICY - isLoggedIn - Cannot identify user`);
+    sails.log.warn(`POLICY - isLoggedIn - ${req.ip} tried to access a protected resource!`);
     return res.forbidden();
   }
 };

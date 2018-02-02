@@ -29,7 +29,7 @@ module.exports = {
 
   /**
    * @memberof module:Player
-   * @name profile
+   * @method profile
    * @description Serves the player profile view
    * @param {number} playerId
    */
@@ -39,7 +39,6 @@ module.exports = {
     sails.log.debug(`VIEW - Player:profile - Showing profile for ${inputs.playerId}`);
 
     try {
-      const userProfile = this.req.signedCookies.userProfile;
       let player = await Player.findOne(inputs.playerId);
       let server = await SdtdServer.findOne(player.server);
       await sails.helpers.loadPlayerData(server.id, player.steamId);

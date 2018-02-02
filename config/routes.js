@@ -76,6 +76,7 @@ module.exports.routes = {
   'get /sdtdserver/:serverId/tickets': 'SdtdTicket.server-tickets-view',
   
   'get /player/:playerId/profile': 'PlayerController.profile',
+
   'get /user/:userId/tickets': 'SdtdTicket.user-tickets-view',
 
   
@@ -119,6 +120,7 @@ module.exports.routes = {
   "post /api/player/giveitem": "player.give-item",
   "post /api/player/teleport": "player.teleport",
 
+  'get /api/user/info': 'User.get-user-info',
   'get /api/user/ownedServers': "User.get-owned-servers",
 
   'get /api/player/inventory': {

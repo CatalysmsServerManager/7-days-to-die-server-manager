@@ -139,7 +139,7 @@
         </li>
 
         <% 
-      if (!_.isUndefined(req.signedCookies.userProfile)) {
+      if (!_.isUndefined(req.session.userId)) {
         %>
 
           <li class="nav-item dropdown">
@@ -155,17 +155,17 @@
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="/user/<%= req.signedCookies.userProfile.id %>">
-              <%= req.signedCookies.userProfile.steamProfile._json.personaname %>
+            <a class="nav-link" href="/user/<%= req.session.userId %>">
+              User <%= req.session.userId %>
             </a>
           </li>
           <li class="nav-item">
-            <img id="steam-avatar" src="<%= req.signedCookies.userProfile.steamProfile._json.avatar %>">
+            <img id="steam-avatar" src="">
           </li>
           <a class="nav-link" id="logout-button" href="/auth/logout">
             Logout
           </a>
-          <a class="nav-link" id="user-tickets-button" href="/user/<%=  req.signedCookies.userProfile.id %>/tickets">
+          <a class="nav-link" id="user-tickets-button" href="/user/<%=  req.session.userId %>/tickets">
             Your tickets
           </a>
           <% } else { %>
@@ -187,15 +187,15 @@
       <div class="col-md-1">
       </div>
     </div>
-   <script type="text/javascript" src="http://192.168.1.101:8080/s/f5cd53826ebcb4579171f0581f7167b5-T/di7oqu/76002/b6b48b2829824b869586ac216d119363/2.0.24/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=1a1854dd"></script> 
+   <script type="text/javascript" src="http://catalysm.ddns.net/s/f5cd53826ebcb4579171f0581f7167b5-T/di7oqu/76002/b6b48b2829824b869586ac216d119363/2.0.24/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=1a1854dd"></script> 
   </div>
 
 </body>
 
 
 <script>
-  <%  if (!_.isUndefined(req.signedCookies.userProfile)) {%>
-  loadSdtdServers(<%= req.signedCookies.userProfile.id %>)
+  <%  if (!_.isUndefined( req.session.userId)) {%>
+  loadSdtdServers(<%= req.session.userId %>)
   <% } %>
 
 </script>

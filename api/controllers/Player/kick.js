@@ -29,6 +29,7 @@ module.exports = {
   /**
    * @memberof Player
    * @description Kick a player
+   * @method kick
    * @param {string} steamId  Steam ID of the player
    * @param {string} serverId  ID of the server
    */

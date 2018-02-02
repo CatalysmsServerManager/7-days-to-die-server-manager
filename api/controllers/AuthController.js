@@ -36,7 +36,7 @@ module.exports = {
         return res.serverError(err);
       };
       sails.log.debug(`User with id ${user.id} successfully logged in`);
-      res.cookie('userProfile', user, { signed: true });
+      req.session.userId = user.id;
       try {
         let players = await Player.find({steamId: user.steamId});
         let playerIds = players.map((player) => {return player.id;});
@@ -54,7 +54,7 @@ module.exports = {
      */
 
   logout: function(req, res) {
-    res.clearCookie('userProfile');
+    delete req.session.userId;
     return res.redirect('/');
   },
 

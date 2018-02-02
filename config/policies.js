@@ -55,8 +55,8 @@ module.exports.policies = {
       '*': ['isLoggedIn', 'isBetaTester']
   },
 
-  // userController: {
-  //     'welcome': 'isLoggedIn'
-  // },
+  userController: {
+      '*': 'isLoggedIn'
+  },
 
 };

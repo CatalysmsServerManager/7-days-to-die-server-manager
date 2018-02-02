@@ -20,10 +20,6 @@ module.exports = {
     notFound: {
       description: 'No server with the specified ID was found in the database.',
       responseType: 'notFound'
-    },
-    notLoggedIn: {
-      responseType: 'badRequest',
-      description: 'User is not logged in (check signedCookies)'
     }
   },
 
@@ -35,11 +31,6 @@ module.exports = {
    */
 
   fn: async function (inputs, exits) {
-
-    if (_.isUndefined(this.req.signedCookies.userProfile)) {
-      throw 'notLoggedIn';
-    }
-
     sails.log.debug(`VIEW - SdtdServer:dashboard - Showing dashboard for ${inputs.serverId}`);
 
     try {

@@ -3,6 +3,8 @@
  *
  * @description A model definition.  Represents a ingame player
  * @class Player
+ * @param {number} steamId
+ * @param {number} entityId
  */
 
 module.exports = {
@@ -12,11 +14,6 @@ module.exports = {
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
-
-    /**
-     * @var {string} steamId
-     * @memberof Player
-     */
 
     steamId: {
       type: 'string',

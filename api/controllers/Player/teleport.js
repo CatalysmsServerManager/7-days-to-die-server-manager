@@ -40,6 +40,7 @@ module.exports = {
   /**
    * @memberof Player
    * @description ban a player
+   * @method teleport
    * @param {string} playerId
    * @param {number} coordX
    * @param {number} coordY
