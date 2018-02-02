@@ -218,21 +218,34 @@ module.exports = {
           json: true
         }).then(async (response) => {
           try {
-            if (!_.isUndefined(response.response) || !_.isUndefined(response.response.players) ) {
+            if (!_.isUndefined(response.response) || !_.isUndefined(response.response.players)) {
               let avatarUrl = response.response.players[0].avatarfull;
-              let updatedPlayer = await Player.update({steamId: steamId}, {avatarUrl: avatarUrl}).fetch();
+              let updatedPlayer = await Player.update({
+                steamId: steamId
+              }, {
+                avatarUrl: avatarUrl
+              });
               resolve(avatarUrl);
             } else {
-              reject(new Error(`Did not find avatar in response`));
+              let avatarUrl = 'https://i.imgur.com/NMvWd07.png';
+              let updatedPlayer = await Player.update({
+                steamId: steamId
+              }, {
+                avatarUrl: avatarUrl
+              });
+              resolve(avatarUrl);
             }
           } catch (error) {
             sails.log.error(`HELPER - loadPlayerData:loadPlayerProfilePicture - ${error}`);
           }
-
-
-
-        }).catch((error) => {
-          reject(error);
+        }).catch(async (error) => {
+          let avatarUrl = 'https://i.imgur.com/NMvWd07.png';
+          let updatedPlayer = await Player.update({
+            steamId: steamId
+          }, {
+            avatarUrl: avatarUrl
+          });
+          resolve(avatarUrl);
         });
       });
     }
