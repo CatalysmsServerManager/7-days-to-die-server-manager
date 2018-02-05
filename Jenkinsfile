@@ -4,6 +4,8 @@ pipeline {
         stage('build') {
             steps {
                 sh 'npm --version'
+                sh 'npm install'
+                sh 'npm start'
             }
         }
     }
