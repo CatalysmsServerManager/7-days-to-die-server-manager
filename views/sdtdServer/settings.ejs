@@ -2,10 +2,6 @@
   <h1>Settings</h1>
   <% include ./partials/backToDashboard %>
 
-
-
-
-
     <div id="settings-accordion">
 
       <!-- Basic server settings -->
@@ -20,10 +16,32 @@
           </h5>
         </div>
 
-        <div id="settings-collapse-basicServerSettings" class="collapse" aria-labelledby="settings-heading-basicServerSettings"
-          data-parent="#accordion">
+        <div id="settings-collapse-basicServerSettings" class="collapse" aria-labelledby="settings-heading-basicServerSettings" data-parent="#accordion">
           <div class="card-body">
             <%- include('./partials/settings/basicServerSettings', {server: server, config: config}) %>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Discord settings -->
+
+      <div class="card">
+        <div class="card-header" id="settings-heading-discordSettings">
+          <h5 class="mb-0">
+            <button class="btn btn-link" data-toggle="collapse" data-target="#settings-collapse-discordSettings" aria-expanded="true"
+              aria-controls="settings-collapse-discordSettings">
+              Discord settings
+            </button>
+            <a href="/auth/discord">
+              <img src="../../images/discordIcon.png" width="10%">
+            </a>
+          </h5>
+        </div>
+
+        <div id="settings-collapse-discordSettings" class="collapse" aria-labelledby="settings-heading-discordSettings" data-parent="#accordion">
+          <div class="card-body">
+            <%- include('./partials/settings/discordSettings', {server: server, config: config, user: user}) %>
           </div>
         </div>
 
@@ -41,8 +59,7 @@
           </h5>
         </div>
 
-        <div id="settings-collapse-countryBanSettings" class="collapse" aria-labelledby="settings-heading-countryBanSettings"
-          data-parent="#accordion">
+        <div id="settings-collapse-countryBanSettings" class="collapse" aria-labelledby="settings-heading-countryBanSettings" data-parent="#accordion">
           <div class="card-body">
 
             <%- include('./partials/settings/countryBanSettings', {server: server, config: config}) %>
@@ -79,7 +96,7 @@
         <div class="card-header" id="settings-heading-motdSettings">
           <h5 class="mb-0">
             <button class="btn btn-link" data-toggle="collapse" data-target="#settings-collapse-motdSettings" aria-expanded="true" aria-controls="settings-collapse-motdSettings">
-              Message of the day 
+              Message of the day
             </button>
           </h5>
         </div>

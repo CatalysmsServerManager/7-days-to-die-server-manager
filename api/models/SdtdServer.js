@@ -8,7 +8,7 @@
 module.exports = {
 
   customToJSON: function () {
-    return _.omit(this, ['authToken', 'authName', 'telnetPort', 'telnetPassword']);
+    return _.omit(this, ['authToken', 'authName', 'telnetPort']);
   },
 
   attributes: {
@@ -89,7 +89,7 @@ module.exports = {
     /**
      * @memberof SdtdServer
      * @var {string} discordGuildId
-     * @description Id of the dicscord guild this server is associated with
+     * @description Id of the disccord guild this server is associated with
      */
 
     discordGuildId: {

@@ -1,0 +1,75 @@
+<!-- DISCORD SETTINGS -->
+<div class="row">
+
+  <div class="col-md-4">
+    <small class="text-muted">Control how the bot behaves in your server
+    </small>
+  </div>
+
+  <div class="col-md-4">
+    <ul class="list-group">
+
+    <% if (_.isNull(user.ownedDiscordGuilds) || _.isUndefined(user.discordId)) { %>
+
+    No discord info available, please login.
+
+    <%  } else { %>
+
+      <li class='list-group-item'>
+        <label for="input-settings-discord-guild">Select discord guild to associate with this 7DTD server</label>
+        <br>
+        <small> If this list is not correct, please log in via discord again </small>
+        <select class="form-control" id="input-settings-discord-guild">
+          <% user.ownedDiscordGuilds.forEach(guild => { %>
+            <option>
+              <%= guild.name %>
+            </option>
+            <% }) %>
+        </select>
+      </li>
+      <% } %>
+    </ul>
+  </div>
+
+  <div class="col-md-4">
+    <button id="input-settings-discord-update" class="btn btn-default btn-primary" type="button">
+      <em class="glyphicon glyphicon-align-right"></em>
+      <i class="fa fa-refresh" aria-hidden="true"></i> Apply changes
+    </button>
+
+
+  </div>
+
+</div>
+
+<script>
+  $(document).ready(function () {
+
+    <% console.log(user.ownedDiscordGuilds) %>
+   // console.log(ownedDiscordGuilds)
+
+    $('#inputs.settings-discord-update').click(event => {
+      event.preventDefault();
+
+
+
+                $.ajax({
+            url: `/api/sdtdserver/reloaddiscord`,
+            type: "POST",
+            data: {
+              _csrf: window.SAILS_LOCALS._csrf,
+              newConfig: newConfig,
+              serverId: <%= server.id %>
+            },
+            success: (data, status, xhr) => {
+              location.reload();
+            },
+            error: (xhr, status, error) => {
+              alert('Something went wrong while trying to toggle country ban!');
+            }
+          });
+    })
+
+  })
+
+</script>

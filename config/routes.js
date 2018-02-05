@@ -108,6 +108,7 @@ module.exports.routes = {
   'post /api/sdtdserver/reloadcommands': 'SdtdServerController/commands.commands-reload',
   'post /api/sdtdserver/togglemotd': 'SdtdServerController/motd.motd-toggle',
   'post /api/sdtdserver/reloadmotd': 'SdtdServerController/motd.motd-reload',
+  'post /api/sdtdserver/reloadDiscord' : 'SdtdServerController/discordBot.reload-discord-settings',
 
   'post /api/sdtdTicket/updateTicketStatus': 'SdtdTicket.update-ticket-status',
   'post /api/sdtdTicket/editTicket' : 'SdtdTicket.edit-ticket',
