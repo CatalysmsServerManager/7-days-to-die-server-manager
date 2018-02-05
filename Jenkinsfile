@@ -4,12 +4,21 @@ pipeline {
         npm_config_cache= 'npm-cache'
     }
     stages {
-        stage('build') {
+        stage('Build') {
             steps {
                 sh 'npm --version'
                 sh 'node -v'
                 sh 'npm install'
-                sh 'npm start'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'npm test'
+            }
+        }
+        post {
+            always {
+                archiveArtifacts actifacts: './test/output/**/*', fingerprint: true
             }
         }
     }

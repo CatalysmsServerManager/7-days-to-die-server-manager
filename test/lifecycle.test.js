@@ -57,7 +57,7 @@ before(function (done) {
         telnetPassword: process.env.CSMM_TEST_TELNETPW,
         webPort: process.env.CSMM_TEST_WEBPORT,
         owner: testUser.id,
-        discordGuildId: client.channels.get(process.env.DISCORDTESTCHANNEL).guild.id
+        serverName: 'Test server'
       });
 
       sails.testUser = testUser;
