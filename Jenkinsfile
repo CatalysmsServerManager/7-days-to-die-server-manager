@@ -1,5 +1,5 @@
 pipeline {
-    agent { docker 'node:6.3' }
+    agent { docker 'node:8.9' }
     environment {
         npm_config_cache= 'npm-cache'
     }
