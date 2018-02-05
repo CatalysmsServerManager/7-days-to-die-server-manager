@@ -1,7 +1,7 @@
 pipeline {
     agent { docker 'node:8.9' }
     environment {
-        npm_config_cache= 'npm-cache'
+        npm_config_cache = 'npm-cache'
         CSMM_TEST_IP = '192.168.0.201'
         CSMM_TEST_WEBPORT ='8084'
         CSMM_TEST_TELNETPORT = '8081'
@@ -25,10 +25,10 @@ pipeline {
                 sh 'npm test'
             }
         }
-        post {
-            always {
-                archiveArtifacts actifacts: './test/output/**/*', fingerprint: true
-            }
+    }
+    post {
+        always {
+            archiveArtifacts actifacts: './test/output/**/*', fingerprint: true
         }
     }
 }
