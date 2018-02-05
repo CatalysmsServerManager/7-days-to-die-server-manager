@@ -49,6 +49,7 @@ class Day7 extends Commando.Command {
       return msg.channel.send(resultEmbed);
     } catch (error) {
       sails.log.error(`HOOK DiscordBot:day7 - ${error}`);
+      return msg.reply(`An error occurred while running the command: ${error}`)
     }
 
 
