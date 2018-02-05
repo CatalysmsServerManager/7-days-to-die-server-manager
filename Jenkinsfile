@@ -28,7 +28,7 @@ pipeline {
     }
     post {
         always {
-            archiveArtifacts actifacts: './test/output/**/*', fingerprint: true
+            archiveArtifacts artifacts: './test/output/**/*', fingerprint: true
         }
     }
 }
