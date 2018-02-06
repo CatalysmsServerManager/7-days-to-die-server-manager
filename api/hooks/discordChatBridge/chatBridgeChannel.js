@@ -18,8 +18,6 @@ class ChatBridgeChannel {
   }
 
   start() {
-    sails.log.debug(`Starting chat bridge for sdtd server ${this.sdtdServer.id}`);
-
     // Bind 'this' to sendMessage functions
     this.sendChatMessageToDiscord = this.sendChatMessageToDiscord.bind(this);
     this.sendConnectedMessageToDiscord = this.sendConnectedMessageToDiscord.bind(this);

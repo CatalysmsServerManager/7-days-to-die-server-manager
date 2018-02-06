@@ -277,7 +277,6 @@ module.exports = function sdtdCountryBan(sails) {
     initialize: function (cb) {
       sails.on('hook:orm:loaded', function () {
         sails.on('hook:sdtdlogs:loaded', async function () {
-          sails.log.debug('HOOK: countryBan Initializing countryBan');
           try {
             let configs = await SdtdConfig.find();
             _.each(configs, function (config) {
@@ -285,6 +284,7 @@ module.exports = function sdtdCountryBan(sails) {
                 startCountryBan(String(config.server));
               }
             });
+            sails.log.info(`HOOK: countryBan - Initialized ${configs.length} country ban instances`);
             return cb();
           } catch (error) {
             sails.log.error(`HOOK:countryBan ${error}`);

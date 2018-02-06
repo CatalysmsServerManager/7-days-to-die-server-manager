@@ -25,8 +25,6 @@ module.exports = function discordBot(sails) {
     initialize: function (cb) {
       sails.on('hook:orm:loaded', function () {
         sails.on('hook:sdtdlogs:loaded', function () {
-          sails.log.debug('HOOK: Initializing discord bot');
-
           client = new Commando.Client({
             owner: sails.config.custom.botOwners
           });
@@ -59,9 +57,9 @@ module.exports = function discordBot(sails) {
           // Login
 
           client.login(sails.config.custom.botToken).then(() => {
-            sails.log.debug('Bot successfully logged in!');
-            return cb();
-          })
+              sails.log.info(`Discord bot logged in - ${client.guilds.size} guilds`);
+              return cb();
+            })
             .catch((err) => {
               sails.log.error(err);
             });
@@ -76,7 +74,7 @@ module.exports = function discordBot(sails) {
      * @description returns the discord client
      */
 
-    getClient: function() {
+    getClient: function () {
       return sails.discordBotClient;
     }
   };

@@ -26,7 +26,6 @@ module.exports = function SdtdDiscordChatBridge(sails) {
     initialize: async function (cb) {
       sails.on('hook:orm:loaded', async function () {
         sails.on('hook:discordbot:loaded', async function () {
-          sails.log.silly('HOOK SdtdDiscordChatBridge:initialize Initializing Sdtd commands');
           try {
             let enabledServers = await SdtdConfig.find({
               chatChannelId: {
@@ -36,7 +35,7 @@ module.exports = function SdtdDiscordChatBridge(sails) {
             enabledServers.forEach(serverConfig => {
               start(serverConfig.server);
             });
-            sails.log.debug(`HOOK SdtdDiscordChatBridge:initialize - Initialized ${enabledServers.length} chatbridge(s)`)
+            sails.log.info(`HOOK SdtdDiscordChatBridge:initialize - Initialized ${enabledServers.length} chatbridge(s)`);
           } catch (error) {
             sails.log.error(`HOOK SdtdDiscordChatBridge:initialize - ${error}`);
           }
@@ -80,11 +79,11 @@ module.exports = function SdtdDiscordChatBridge(sails) {
   async function start(serverId) {
 
     try {
-      sails.log.debug(`HOOK SdtdDiscordChatBridge:start - Starting chatbridge for server ${serverId}`);
+      sails.log.silly(`HOOK SdtdDiscordChatBridge:start - Starting chatbridge for server ${serverId}`);
       let discordClient = sails.hooks.discordbot.getClient();
       let config = await SdtdConfig.find({
         server: serverId
-      }).limit(1)
+      }).limit(1);
 
       config = config[0]
 
@@ -114,7 +113,7 @@ module.exports = function SdtdDiscordChatBridge(sails) {
 
   async function stop(serverId) {
     try {
-      sails.log.debug(`HOOK SdtdDiscordChatBridge:stop - Stopping chatbridge for server ${serverId}`);
+      sails.log.silly(`HOOK SdtdDiscordChatBridge:stop - Stopping chatbridge for server ${serverId}`);
       let chatBridge = chatBridgeInfoMap.get(serverId);
       if (!_.isUndefined(chatBridge)) {
         chatBridge.stop();

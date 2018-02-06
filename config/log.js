@@ -63,7 +63,6 @@ if (process.env.NODE_ENV == "dev") {
 module.exports.log = {
   // Pass in our custom logger, and pass all log levels through.
   custom: customLogger,
-  level: 'debug',
 
   // Disable captain's log so it doesn't prefix or stringify our meta data.
   inspect: false
