@@ -28,9 +28,14 @@ module.exports = function SdtdDiscordChatBridge(sails) {
         sails.on('hook:discordbot:loaded', async function () {
           try {
             let enabledServers = await SdtdConfig.find({
-              chatChannelId: {
-                '!=': null
-              }
+              or: [{
+                chatChannelId: {
+                  '!=': null
+                },
+                chatChannelId: {
+                  '!=': 0
+                }
+              }]
             });
             enabledServers.forEach(serverConfig => {
               start(serverConfig.server);
