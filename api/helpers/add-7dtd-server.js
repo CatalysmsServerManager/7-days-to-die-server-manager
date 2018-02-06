@@ -92,7 +92,7 @@ module.exports = {
 
 
     async function updateOrCreateServer(authInfo) {
-      return new Promise(async(resolve, reject) => {
+      return new Promise(async (resolve, reject) => {
         let newServer = await SdtdServer.findOrCreate({
           ip: inputs.ip,
           webPort: inputs.webPort,
@@ -105,8 +105,7 @@ module.exports = {
           telnetPort: inputs.telnetPort,
           authName: authInfo.authName,
           authToken: authInfo.authToken,
-          owner: inputs.owner,
-          discordGuildId: inputs.discordGuildId ? inputs.discordGuildId : 0
+          owner: inputs.owner
         });
 
         let status = await sails.helpers.sdtd.checkIfAvailable(newServer.id)

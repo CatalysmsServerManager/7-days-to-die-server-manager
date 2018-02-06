@@ -37,13 +37,16 @@ module.exports = {
       let sdtdServer = await SdtdServer.findOne(inputs.serverId);
       sdtdServerInfo = await sails.helpers.loadSdtdserverInfo(inputs.serverId)
         .tolerate('unauthorized', (error) => {
+          sails.log.warn(`VIEW - SdtdServer:dashboard - unauthorized for server cannot load serverInfo ${inputs.serverId}`)
         });
+
       if (!_.isUndefined(sdtdServerInfo)) {
         sdtdServer = sdtdServerInfo;
       }
       let players = await sails.helpers.loadPlayerData(inputs.serverId)
         .tolerate('unauthorized', (error) => {
-
+          sails.log.warn(`VIEW - SdtdServer:dashboard - unauthorized for server cannot load playerInfo ${inputs.serverId}`)
+   
         });
       return exits.success({
         server: sdtdServer,

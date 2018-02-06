@@ -31,12 +31,12 @@ module.exports = {
   },
 
   /**
-     * @description Loads server information
-     * @name loadSdtdServerInfo
-     * @param {number} serverId
-     * @memberof module:Helpers
-     * @method
-     */
+   * @description Loads server information
+   * @name loadSdtdServerInfo
+   * @param {number} serverId
+   * @memberof module:Helpers
+   * @method
+   */
 
 
   fn: async function (inputs, exits) {
@@ -49,6 +49,7 @@ module.exports = {
       server.serverInfo = await loadServerInfo(server);
       exits.success(server);
     } catch (error) {
+      sails.log.warn(`HELPER - load-sdtdServer-info - Failed to load info ${error}`)
       return exits.error(error);
     }
 
@@ -62,8 +63,8 @@ module.exports = {
           authToken: server.authToken
         }).exec({
           error: error => {
-            sails.log.error(error);
-            reject(error);
+            sails.log.warn(error);
+            resolve(undefined);
           },
           success: data => {
             resolve(data);
@@ -81,8 +82,8 @@ module.exports = {
           authToken: server.authToken
         }).exec({
           error: error => {
-            sails.log.error(error);
-            reject(error);
+            sails.log.warn(error);
+            resolve(undefined);
           },
           success: data => {
             for (const dataPoint in data) {

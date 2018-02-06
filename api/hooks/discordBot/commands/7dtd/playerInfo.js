@@ -30,21 +30,21 @@ class PlayerInfo extends Commando.Command {
       let sdtdServer = await SdtdServer.find({
         discordGuildId: msg.guild.id
       }).limit(1);
-      sails.helpers.loadPlayerData(sdtdServer[0].id, args.steamId).exec((err, playerInfo) => {
-        if (err) {
-          sails.log.error(err);
-          let errorEmbed = new msg.client.errorEmbed(err);
-          return msg.channel.send(errorEmbed);
-        }
-        playerInfo = playerInfo.players[0];
-        let resultEmbed = new msg.client.customEmbed();
-        resultEmbed.setTitle(playerInfo.name)
-          .addField('Location', `${playerInfo.location.x} | ${playerInfo.location.y} | ${playerInfo.location.z}`, true)
-          .addField('Banned', playerInfo.banned ? ':white_check_mark:' : ':x:', true)
-          .addField('Playtime', `${playerInfo.totalPlaytime} seconds`);
+      let playerInfo = await sails.helpers.loadPlayerData(sdtdServer[0].id, args.steamId)
+      playerInfo = playerInfo.players[0];
 
-        msg.channel.send(resultEmbed);
-      });
+      if (_.isUndefined(playerInfo)) {
+        return msg.reply(`Could not load player data!`);
+      }
+
+      let resultEmbed = new msg.client.customEmbed();
+      resultEmbed.setTitle(playerInfo.name)
+        .addField('Location', `${playerInfo.location.x} | ${playerInfo.location.y} | ${playerInfo.location.z}`, true)
+        .addField('Banned', playerInfo.banned ? ':white_check_mark:' : ':x:', true)
+        .addField('Playtime', `${playerInfo.totalPlaytime} seconds`);
+
+      msg.channel.send(resultEmbed);
+
     } catch (error) {
       let errorEmbed = new msg.client.errorEmbed(error);
       msg.channel.send(errorEmbed);

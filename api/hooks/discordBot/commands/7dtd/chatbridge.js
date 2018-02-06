@@ -52,11 +52,13 @@ class ChatBridge extends Commando.Command {
           discordGuildId: msg.guild.id
         });
         await SdtdServer.update({
-          ip: sdtdServer.ip,
           discordGuildId: msg.guild.id
         }, {
           chatChannelId: msg.channel.id
         });
+        if (_.isUndefined(sdtdServer)) {
+          return msg.reply(`Did not find a server associated with this guild! Contact your server staff to configure the bot`)
+        }
         msg.guild.chatBridge = new ChatBridgeChannel(msg.channel, sdtdServer);
         msg.guild.chatBridge.start();
       } catch (error) {
@@ -73,7 +75,6 @@ class ChatBridge extends Commando.Command {
           discordGuildId: msg.guild.id
         });
         await SdtdServer.update({
-          ip: sdtdServer.ip,
           discordGuildId: msg.guild.id
         }, {
           chatChannelId: 0
