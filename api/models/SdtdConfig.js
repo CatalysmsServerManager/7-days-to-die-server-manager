@@ -55,6 +55,34 @@ module.exports = {
       }
     },
 
+    // _____  _                       _ 
+    // |  __ \(_)                     | |
+    // | |  | |_ ___  ___ ___  _ __ __| |
+    // | |  | | / __|/ __/ _ \| '__/ _` |
+    // | |__| | \__ \ (_| (_) | | | (_| |
+    // |_____/|_|___/\___\___/|_|  \__,_|
+
+
+    /**
+     * @memberof SdtdServer
+     * @var {string} discordGuildId
+     * @description Id of the disccord guild this server is associated with
+     */
+
+    discordGuildId: {
+      type: 'string'
+    },
+
+    /**
+     * @memberof SdtdServer
+     * @var {string} chatChannelId
+     * @description Id of the discord channel for chat bridge
+     */
+
+    chatChannelId: {
+      type: 'string'
+    },
+
 
 
 

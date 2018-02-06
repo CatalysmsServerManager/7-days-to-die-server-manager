@@ -1,5 +1,4 @@
 const Commando = require('discord.js-commando');
-const ChatBridgeChannel = require('./util/chatBridgeChannel.js');
 const path = require('path');
 
 /**
@@ -61,7 +60,6 @@ module.exports = function discordBot(sails) {
 
           client.login(sails.config.custom.botToken).then(() => {
             sails.log.debug('Bot successfully logged in!');
-            initChatBridges(client);
             return cb();
           })
             .catch((err) => {
@@ -83,23 +81,4 @@ module.exports = function discordBot(sails) {
     }
   };
 
-  async function initChatBridges(client) {
-    // Find server that have chatbridge enabled
-    let serversWithChatbridges = await SdtdServer.find({
-      chatChannelId: {
-        '!=': [0]
-      }
-    });
-
-    // loop over enabled servers and create chatBridge class
-    for (let index = 0; index < serversWithChatbridges.length; index++) {
-      const element = serversWithChatbridges[index];
-      let discordguild = client.guilds.get(element.discordGuildId);
-      let textChannel = client.channels.get(element.chatChannelId);
-      if (!_.isUndefined(textChannel) && !_.isUndefined(discordguild)) {
-        discordguild.chatBridge = new ChatBridgeChannel(textChannel, element);
-        discordguild.chatBridge.start();
-      }
-    }
-  }
 };

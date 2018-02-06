@@ -14,6 +14,7 @@ class ChatBridgeChannel {
     this.channel = textChannel;
     this.sdtdServer = sdtdServer;
     this.loggingObject = sails.hooks.sdtdlogs.getLoggingObject(this.sdtdServer.id);
+    this.start()
   }
 
   start() {
@@ -45,7 +46,10 @@ class ChatBridgeChannel {
     this.loggingObject.removeListener('playerDeath', this.sendDeathMessageToDiscord);
     this.loggingObject.removeListener('playerConnected', this.sendConnectedMessageToDiscord);
     this.loggingObject.removeListener('playerDisconnected', this.sendDisconnectedMessageToDiscord);
-    this.textChannel.client.removeListener('message', this.sendMessageToGame);
+    this.channel.client.removeListener('message', this.sendMessageToGame);
+    let embed = new this.channel.client.customEmbed();
+    embed.setDescription(':x: Disabled chat bridge');
+    this.channel.send(embed);
   }
 
   sendChatMessageToDiscord(chatMessage) {

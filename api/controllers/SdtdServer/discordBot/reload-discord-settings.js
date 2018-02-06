@@ -8,9 +8,12 @@ module.exports = {
 
 
   inputs: {
-    newGuildName: {
+    newGuildId: {
       required: true,
-      example: 'CSMM Dev'
+      example: '336821518250147850'
+    },
+    newChatChannelId: {
+      example: '336823516383150080'
     },
     serverId: {
       required: true,
@@ -22,6 +25,12 @@ module.exports = {
   exits: {
     badRequest: {
       responseType: 'badRequest'
+    },
+    botNotInServer: {
+      statusCode: 200
+    },
+    invalidChatChannel: {
+      statusCode: 200
     }
   },
 
@@ -29,8 +38,8 @@ module.exports = {
    * @memberof SdtdServer
    * @method
    * @name reload-discord-settings
-   * @param {number} newGuildId discord guild id
-   * @returns {array}
+   * @param {string} newGuildId discord guild id
+   * @param {string} newChatChannelId
    */
 
   fn: async function (inputs, exits) {
@@ -40,19 +49,55 @@ module.exports = {
       let server = await SdtdServer.findOne(inputs.serverId);
 
       let discordClient = sails.hooks.discordbot.getClient();
-      let newGuild = discordClient.guilds.find('name', inputs.newGuildName)
+      let newGuild = discordClient.guilds.get(inputs.newGuildId);
 
       if (!_.isUndefined(newGuild)) {
-        await SdtdServer.update({
-          id: inputs.serverId
+        await SdtdConfig.update({
+          server: inputs.serverId
         }, {
           discordGuildId: newGuild.id
         });
         sails.log.debug(`API - SdtdServer:reload-discord-settings - updated discord guild ID for server ${inputs.serverId} to ${inputs.newGuildName}`);
-        exits.success();
       } else {
-        exits.error(new Error(`Bot is not in selected guild!`));
+        sails.log.warn(`API - SdtdServer:reload-discord-settings - bot is not in server`);
+        return exits.botNotInServer({
+          error: 'botNotInGuild'
+        });
       }
+
+      // Handle chat channel config
+      if (!_.isUndefined(inputs.newChatChannelId) && inputs.newChatChannelId != '0') {
+        let chatChannel = newGuild.channels.get(inputs.newChatChannelId);
+        if (_.isUndefined(chatChannel)) {
+          return exits.invalidChatChannel({
+            error: 'invalidChatChannel'
+          });
+        }
+        await SdtdConfig.update({
+          server: inputs.serverId
+        }, {
+          chatChannelId: chatChannel.id
+        });
+        if (sails.hooks.discordchatbridge.getStatus(inputs.serverId)) {
+          sails.hooks.discordchatbridge.stop(inputs.serverId);
+          sails.hooks.discordchatbridge.start(inputs.serverId);
+        } else {
+          sails.hooks.discordchatbridge.start(inputs.serverId);
+        }
+      }
+      if (inputs.newChatChannelId == '0') {
+        await SdtdConfig.update({
+          server: inputs.serverId
+        }, {
+          chatChannelId: 0
+        });
+        sails.log.debug(`API - SdtdServer:reload-discord-settings - Stopping chat bridge for server ${inputs.serverId}`);
+        sails.hooks.discordchatbridge.stop(inputs.serverId);
+      }
+
+
+
+      return exits.success()
 
 
     } catch (error) {

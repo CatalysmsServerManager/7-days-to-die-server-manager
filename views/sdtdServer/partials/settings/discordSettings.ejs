@@ -15,17 +15,39 @@
 
         <%  } else { %>
 
+          <!-- Server select -->
+
           <li class='list-group-item'>
             <label for="input-settings-discord-guild">Select discord guild to associate with this 7DTD server</label>
             <br>
             <small> If this list is not correct, please log in via discord again </small>
             <select class="form-control" id="input-settings-discord-guild">
               <% user.ownedDiscordGuilds.forEach(guild => { %>
-                <option>
-                  <%= guild.name %>
-                </option>
-                <% }) %>
+                <% if(guild.id === config.discordGuildId) { %>
+
+                  <option value="<%= guild.id %>" selected>
+                    <%= guild.name %>
+                  </option>
+                  <% } else { %>
+
+                    <option value="<%= guild.id %>">
+                      <%= guild.name %>
+                    </option>
+
+                    <% } %>
+                      <% }) %>
             </select>
+          </li>
+
+          <!-- Chat channel select -->
+
+          <li class='list-group-item'>
+            <label for="input-settings-discord-chatchannel">Chat channel ID</label>
+            <br>
+            <small> Enable discord developer mode to see channel IDs
+              <br> Set to 0 to disable chatbridge </small>
+            <input type="text" class="form-control" id="input-settings-discord-chatchannel" placeholder="<%= config.chatChannelId %>">
+
           </li>
           <% } %>
     </ul>
@@ -48,21 +70,28 @@
     $('#input-settings-discord-update').click(event => {
       event.preventDefault();
 
-    let newGuildName = $('#input-settings-discord-guild').val();
+      let newGuildId = $('#input-settings-discord-guild').val();
+      let newChatChannelId = $('#input-settings-discord-chatchannel').val()
 
       $.ajax({
         url: `/api/sdtdserver/reloaddiscord`,
         type: "POST",
         data: {
           _csrf: window.SAILS_LOCALS._csrf,
-          newGuildName: newGuildName,
+          newGuildId: newGuildId,
+          newChatChannelId: newChatChannelId,
           serverId: <%= server.id %>
         },
         success: (data, status, xhr) => {
+          if (data.error == 'botNotInGuild') {
+            alert(
+              `The bot is not in your server! Make sure you have invited the bot to the right server then try again`
+            )
+          }
           location.reload();
         },
         error: (xhr, status, error) => {
-          alert('Something went wrong while trying to toggle country ban!');
+          alert('Something went wrong while trying to apply discord settings!\n' + error);
         }
       });
     })
