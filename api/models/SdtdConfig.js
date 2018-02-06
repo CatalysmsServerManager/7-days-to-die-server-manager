@@ -83,8 +83,15 @@ module.exports = {
       type: 'string'
     },
 
+    /**
+     * @memberof SdtdServer
+     * @var {string} notificationChannelId
+     * @description Id of the discord channel for notifications
+     */
 
-
+    notificationChannelId: {
+      type: 'string'
+    },
 
     //   _                       _
     //  | |                     (_)

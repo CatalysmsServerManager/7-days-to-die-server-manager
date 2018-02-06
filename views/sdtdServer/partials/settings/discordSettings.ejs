@@ -3,6 +3,7 @@
 
   <div class="col-md-4">
     <small class="text-muted">Control how the bot behaves in your server
+      <br> Enable discord developer mode to see channel IDs
     </small>
   </div>
 
@@ -44,9 +45,20 @@
           <li class='list-group-item'>
             <label for="input-settings-discord-chatchannel">Chat channel ID</label>
             <br>
-            <small> Enable discord developer mode to see channel IDs
+            <small>Designate a discord channel to create a chat bridge to your server with
               <br> Set to 0 to disable chatbridge </small>
             <input type="text" class="form-control" id="input-settings-discord-chatchannel" placeholder="<%= config.chatChannelId %>">
+
+          </li>
+
+          <!-- Notification channel select -->
+
+          <li class='list-group-item'>
+            <label for="input-settings-discord-notificationChannel">Notification channel ID</label>
+            <br>
+            <small>Designate a discord channel to receive CSMM notifications
+              <br>Set to 0 to disable discord notifications </small>
+            <input type="text" class="form-control" id="input-settings-discord-notificationChannel" placeholder="<%= config.notificationChannelId %>">
 
           </li>
           <% } %>
@@ -71,7 +83,8 @@
       event.preventDefault();
 
       let newGuildId = $('#input-settings-discord-guild').val();
-      let newChatChannelId = $('#input-settings-discord-chatchannel').val()
+      let newChatChannelId = $('#input-settings-discord-chatchannel').val();
+      let newNotificationChannelId = $('#input-settings-discord-notificationChannel').val();
 
       $.ajax({
         url: `/api/sdtdserver/reloaddiscord`,
@@ -80,6 +93,7 @@
           _csrf: window.SAILS_LOCALS._csrf,
           newGuildId: newGuildId,
           newChatChannelId: newChatChannelId,
+          newNotificationChannelId: newNotificationChannelId,
           serverId: <%= server.id %>
         },
         success: (data, status, xhr) => {

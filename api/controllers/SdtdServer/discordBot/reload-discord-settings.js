@@ -15,6 +15,9 @@ module.exports = {
     newChatChannelId: {
       example: '336823516383150080'
     },
+    newNotificationChannelId: {
+      example: '336823516383150080'
+    },
     serverId: {
       required: true,
       example: 24
@@ -30,6 +33,9 @@ module.exports = {
       statusCode: 200
     },
     invalidChatChannel: {
+      statusCode: 200
+    },
+    invalidNotificationChannel: {
       statusCode: 200
     }
   },
@@ -85,6 +91,7 @@ module.exports = {
           sails.hooks.discordchatbridge.start(inputs.serverId);
         }
       }
+
       if (inputs.newChatChannelId == '0') {
         await SdtdConfig.update({
           server: inputs.serverId
@@ -93,6 +100,23 @@ module.exports = {
         });
         sails.log.debug(`API - SdtdServer:reload-discord-settings - Stopping chat bridge for server ${inputs.serverId}`);
         sails.hooks.discordchatbridge.stop(inputs.serverId);
+      }
+
+      // Handle notification channel config
+
+      if(!_.isUndefined(inputs.newNotificationChannelId)) {
+        let notificationChannel = newGuild.channels.get(inputs.newNotificationChannelId);
+        if (_.isUndefined(notificationChannel)) {
+          return exits.invalidNotificationChannel({
+            error: 'invalidNotificationChannel'
+          });
+        }
+        await SdtdConfig.update({
+          server: inputs.serverId
+        }, {
+          notificationChannelId: notificationChannel.id
+        });
+        sails.log.debug(`API - SdtdServer:reload-discord-settings - Updated notification channel for server ${inputs.serverId}`);
       }
 
 
