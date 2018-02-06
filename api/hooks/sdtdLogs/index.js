@@ -84,7 +84,7 @@ module.exports = function sdtdLogs(sails) {
      */
 
     stop: async function (serverID) {
-
+      serverID = String(serverID);
       try {
         if (loggingInfoMap.has(serverID)) {
           sails.log.debug(`HOOKS - sdtdLogs - stopping logging for server ${serverID}`);
