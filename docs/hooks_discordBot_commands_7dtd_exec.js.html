@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Source: controllers/SdtdServer/execute-command.js | CSMM</title>
+    <title>Source: hooks/discordBot/commands/7dtd/exec.js | CSMM</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -46,86 +46,66 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const sevenDays = require('machinepack-7daystodiewebapi');
+            <pre class="prettyprint source linenums"><code>const Commando = require('discord.js-commando');
 
-module.exports = {
+/**
+ * @memberof module:DiscordCommands
+ * @name Exec
+ * @description Displays basic information about a 7 Days to Die server
+ */
 
-  friendlyName: 'Execute command',
+class Exec extends Commando.Command {
+  constructor(client) {
+    super(client, {
+      name: 'exec',
+      group: '7dtd',
+      aliases: [],
+      memberName: 'exec',
+      description: 'Execute a command on a 7dtd server',
+      details: 'For more information see the website'
+    });
+  }
 
-  description: 'Execute a command on a 7 Days to Die server',
-
-  inputs: {
-    serverId: {
-      description: 'The ID of the server to look up.',
-      type: 'number',
-      required: true
-    },
-    command: {
-      description: 'Command to execute',
-      type: 'string',
-      required: true
-    }
-  },
-
-  exits: {
-    success: {},
-    notFound: {
-      description: 'No server with the specified ID was found in the database.',
-      responseType: 'notFound'
-    },
-    commandError: {
-      description: 'Error executing the command',
-      responseType: 'badRequest'
-    }
-  },
-
-  /**
-   * @memberof SdtdServer
-   * @name executeCommand
-   * @method
-   * @description Executes a command on a 7dtd server
-   * @param {number} serverId ID of the server
-   * @param {string} command Command to be executed
-   */
-
-  fn: async function (inputs, exits) {
-    sails.log.debug(`API - SdtdServer:executeCommand - Executing a command on server ${inputs.serverId}`);
+  async run(msg, args) {
 
     try {
-      let sdtdServer = await SdtdServer.findOne(inputs.serverId);
-      if (_.isUndefined(sdtdServer)) {
-        return exits.notFound();
-      }
-      sevenDays.executeCommand({
-        ip: sdtdServer.ip,
-        port: sdtdServer.webPort,
-        authName: sdtdServer.authName,
-        authToken: sdtdServer.authToken,
-        command: inputs.command
-      }).exec({
-        success: (response) => {
-          let logLine = {
-            msg: response.result,
-            date: new Date(),
-            type: 'commandResponse'
-          };
-          return exits.success(logLine);
-        },
-        unknownCommand: (error) => {
-          return exits.commandError(error);
-        },
-        error: (error) => {
-          return exits.error(error);
-        }
-      });
+      let sdtdServer = await SdtdServer.find({
+        discordGuildId: msg.guild.id
+      }).limit(1);
 
+      let serverInfo = await sails.helpers.loadSdtdserverInfo(sdtdServer[0].id);
+      let playerInfo = await sails.helpers.loadPlayerData(sdtdServer[0].id);
+      let onlinePlayers = playerInfo.players.filter(player => {
+        return player.online;
+      });
+      let onlinePlayerNames = new Array();
+      onlinePlayers.forEach(player => {
+        onlinePlayerNames.push(player.name);
+      })
+      if (onlinePlayerNames.length === 0) {
+        onlinePlayerNames = `No players online`;
+      }
+      let resultEmbed = new msg.client.customEmbed();
+      resultEmbed
+        .setColor('GREEN')
+        .addField('Game time', `${serverInfo.stats.gametime.days} day(s), ${serverInfo.stats.gametime.hours} hour(s), ${serverInfo.stats.gametime.minutes} minute(s)`)
+        .addField(`Online Players: ${serverInfo.stats.players}`, onlinePlayerNames , true)
+        .addField('Ping', serverInfo.serverInfo.Ping, true)
+        .addField('Hostiles / Animals', `${serverInfo.stats.hostiles} / ${serverInfo.stats.animals}`)
+        .setFooter(serverInfo.name);
+
+      return msg.channel.send(resultEmbed);
     } catch (error) {
-      sails.log.error(`API - SdtdServer:executeCommand - ${error}`);
-      return exits.error(error);
+      sails.log.error(`HOOK DiscordBot:day7 - ${error}`);
+      return msg.reply(`An error occurred while running the command: ${error}`)
     }
 
+
   }
-};
+}
+
+
+module.exports = Exec;
 </code></pre>
         </article>
     </section>

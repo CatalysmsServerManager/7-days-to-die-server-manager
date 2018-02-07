@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Source: controllers/SdtdServer/execute-command.js | CSMM</title>
+    <title>Source: controllers/SdtdServer/discordBot/check-if-bot-is-in-guild.js | CSMM</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -46,85 +46,53 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const sevenDays = require('machinepack-7daystodiewebapi');
+            <pre class="prettyprint source linenums"><code>module.exports = {
 
-module.exports = {
 
-  friendlyName: 'Execute command',
+  friendlyName: 'Check if bot is in guild',
 
-  description: 'Execute a command on a 7 Days to Die server',
+
+  description: 'Checks if the discord bot is in a discord guild with given ID.',
+
 
   inputs: {
-    serverId: {
-      description: 'The ID of the server to look up.',
-      type: 'number',
-      required: true
-    },
-    command: {
-      description: 'Command to execute',
-      type: 'string',
-      required: true
+    guildId: {
+      required: true,
+      example: '336821518250147850'
     }
+
   },
 
   exits: {
-    success: {},
-    notFound: {
-      description: 'No server with the specified ID was found in the database.',
-      responseType: 'notFound'
-    },
-    commandError: {
-      description: 'Error executing the command',
+    badRequest: {
       responseType: 'badRequest'
     }
   },
 
   /**
-   * @memberof SdtdServer
-   * @name executeCommand
-   * @method
-   * @description Executes a command on a 7dtd server
-   * @param {number} serverId ID of the server
-   * @param {string} command Command to be executed
-   */
+     * @memberof SdtdServer
+     * @method
+     * @name check-if-bot-is-in-guild
+     * @param {number} guildId discord guild id
+     * @returns {array}
+     */
 
   fn: async function (inputs, exits) {
-    sails.log.debug(`API - SdtdServer:executeCommand - Executing a command on server ${inputs.serverId}`);
-
+    sails.log.debug(`API - SdtdServer:check-if-bot-is-in-guild - Check if the bot is in server ${inputs.guildId}!`);
     try {
-      let sdtdServer = await SdtdServer.findOne(inputs.serverId);
-      if (_.isUndefined(sdtdServer)) {
-        return exits.notFound();
-      }
-      sevenDays.executeCommand({
-        ip: sdtdServer.ip,
-        port: sdtdServer.webPort,
-        authName: sdtdServer.authName,
-        authToken: sdtdServer.authToken,
-        command: inputs.command
-      }).exec({
-        success: (response) => {
-          let logLine = {
-            msg: response.result,
-            date: new Date(),
-            type: 'commandResponse'
-          };
-          return exits.success(logLine);
-        },
-        unknownCommand: (error) => {
-          return exits.commandError(error);
-        },
-        error: (error) => {
-          return exits.error(error);
-        }
-      });
+
+      let discordClient = sails.hooks.discordbot.getClient();
+
+      exits.success(discordClient.guilds.has(inputs.guildId));
 
     } catch (error) {
-      sails.log.error(`API - SdtdServer:executeCommand - ${error}`);
+      sails.log.error(`API - SdtdServer:check-if-bot-is-in-guild - ${error}`);
       return exits.error(error);
     }
 
   }
+
+
 };
 </code></pre>
         </article>
