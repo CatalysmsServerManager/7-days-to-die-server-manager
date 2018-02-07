@@ -48,7 +48,7 @@ passport.use(new SteamStrategy({
 let discordScopes = ['identify', 'guilds'];
 
 passport.use(new DiscordStrategy({
-  clientID: '324843053921861634',
+  clientID: process.env.DISCORDCLIENTID,
   clientSecret: process.env.DISCORDCLIENTSECRET,
   callbackURL: `${process.env.CSMM_HOSTNAME}/auth/discord/return`,
   scope: discordScopes
