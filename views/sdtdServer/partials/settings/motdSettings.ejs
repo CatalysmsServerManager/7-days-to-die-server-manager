@@ -88,7 +88,7 @@
 
         let newDelay = $('#input-settings-motd-interval').val();
 
-        if (newDelay != '') {
+        if (newDelay != '' && newDelay != '0') {
 
           if (isNaN(newDelay) || (10 > newDelay) || (2000 < newDelay) || !Number.isInteger(Number(newDelay))) {
             return alert(`Interval must be an integer between 10 and 2000`)
