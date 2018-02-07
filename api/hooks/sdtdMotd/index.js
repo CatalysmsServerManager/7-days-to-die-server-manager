@@ -26,7 +26,6 @@ module.exports = function sdtdLogs(sails) {
       sails.on('hook:orm:loaded', async function () {
         sails.on('hook:sdtdlogs:loaded', async function () {
           try {
-            sails.log.debug('HOOK: Initializing sdtdMotd');
             let enabledServers = await SdtdConfig.find({
               motdEnabled: true
             }).populate('server');
@@ -42,6 +41,7 @@ module.exports = function sdtdLogs(sails) {
                 sails.log.error(`HOOKS - sdtdMotd:initialize - ${error}`);
               }
             });
+            sails.log.info(`HOOK: sdtdMotd - Initialized ${enabledServers.length} MOTD instances`);
             return cb();
           } catch (error) {
             sails.log.error(`HOOKS - sdtdMotd:initialize - ${error}`);

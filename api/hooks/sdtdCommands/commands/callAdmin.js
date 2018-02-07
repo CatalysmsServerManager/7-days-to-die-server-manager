@@ -45,7 +45,6 @@ class callAdmin extends SdtdCommand {
         args.join(' ')
       );
 
-
       sevenDays.sendMessage({
         ip: server.ip,
         port: server.webPort,

@@ -40,7 +40,6 @@ module.exports = {
       if (_.isUndefined(server)) {
         return exits.notFound();
       }
-
       // TODO: delete web tokens from server
 
       sails.hooks.sdtdlogs.stop(server.id);

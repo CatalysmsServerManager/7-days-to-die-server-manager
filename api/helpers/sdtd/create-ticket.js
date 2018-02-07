@@ -82,7 +82,11 @@ module.exports = {
         playerInfo: player,
         server: inputs.serverId,
         player: inputs.playerId
-      });
+      }).fetch();
+
+      let notificationMsg = `New Ticket by ${player.name}\n${ticket.title}\n${ticket.description}`;
+
+      sails.hooks.discordbot.sendNotification(inputs.serverId, notificationMsg);
 
       return exits.success(ticket);
 

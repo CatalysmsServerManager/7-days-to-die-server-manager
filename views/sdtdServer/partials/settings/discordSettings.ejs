@@ -1,0 +1,144 @@
+<!-- DISCORD SETTINGS -->
+<div class="row">
+
+  <div class="col-md-4">
+    <small class="text-muted">Control how the bot behaves in your server
+      <br> Enable discord developer mode to see channel IDs
+    </small>
+  </div>
+
+  <div class="col-md-4">
+    <ul class="list-group">
+
+      <% if (_.isNull(user.ownedDiscordGuilds) || _.isUndefined(user.discordId)) { %>
+
+        No discord info available, please login.
+
+        <%  } else { %>
+
+          <!-- Server select -->
+
+          <li class='list-group-item'>
+            <label for="input-settings-discord-guild">Select discord guild to associate with this 7DTD server</label>
+            <br>
+            <small> If this list is not correct, please log in via discord again </small>
+            <select class="form-control" id="input-settings-discord-guild">
+              <% user.ownedDiscordGuilds.forEach(guild => { %>
+                <% if(guild.id === config.discordGuildId) { %>
+
+                  <option value="<%= guild.id %>" selected>
+                    <%= guild.name %>
+                  </option>
+                  <% } else { %>
+
+                    <option value="<%= guild.id %>">
+                      <%= guild.name %>
+                    </option>
+
+                    <% } %>
+                      <% }) %>
+            </select>
+          </li>
+
+          <!-- Chat channel select -->
+
+          <li class='list-group-item'>
+            <label for="input-settings-discord-chatchannel">Chat channel ID</label>
+            <br>
+            <small>Designate a discord channel to create a chat bridge to your server with
+              <br> Set to 0 to disable chatbridge </small>
+            <input type="text" class="form-control" id="input-settings-discord-chatchannel" placeholder="<%= config.chatChannelId %>">
+            <div class="form-check">
+              <% if(config.chatChannelRichMessages) { %>
+                <input class="form-check-input" type="checkbox" value="" id="input-settings-discord-chatchannel-richmessages" checked>
+                <% } else { %>
+                  <input class="form-check-input" type="checkbox" value="" id="input-settings-discord-chatchannel-richmessages">
+                  <% } %>
+                    <label class="form-check-label" for="input-settings-discord-chatchannel-richmessages">
+                      Rich messages
+                      <br>
+                      <small> Displays additional information on player (dis)connect </small>
+                    </label>
+            </div>
+          </li>
+
+          <!-- Notification channel select -->
+
+          <li class='list-group-item'>
+            <label for="input-settings-discord-notificationChannel">Notification channel ID</label>
+            <br>
+            <small>Designate a discord channel to receive CSMM notifications
+              <br>Set to 0 to disable discord notifications </small>
+            <input type="text" class="form-control" id="input-settings-discord-notificationChannel" placeholder="<%= config.notificationChannelId %>">
+
+          </li>
+          <% } %>
+    </ul>
+  </div>
+
+  <div class="col-md-4">
+    <button id="input-settings-discord-update" class="btn btn-default btn-primary" type="button">
+      <em class="glyphicon glyphicon-align-right"></em>
+      <i class="fa fa-refresh" aria-hidden="true"></i> Apply changes
+    </button>
+
+
+  </div>
+
+</div>
+
+<script>
+  $(document).ready(function () {
+
+    $('#input-settings-discord-update').click(event => {
+      event.preventDefault();
+
+      let newGuildId = $('#input-settings-discord-guild').val();
+      let newChatChannelId = $('#input-settings-discord-chatchannel').val();
+      let newNotificationChannelId = $('#input-settings-discord-notificationChannel').val();
+      let newRichMessages
+
+      if ($('#input-settings-discord-chatchannel-richmessages').is(":checked")) {
+        newRichMessages = true
+      } else {
+        newRichMessages = false
+      }
+
+      $.ajax({
+        url: `/api/sdtdserver/reloaddiscord`,
+        type: "POST",
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          newGuildId: newGuildId,
+          newChatChannelId: newChatChannelId,
+          newNotificationChannelId: newNotificationChannelId,
+          newRichMessages: newRichMessages,
+          serverId: <%= server.id %>
+        },
+        success: (data, status, xhr) => {
+          if (data.error == 'botNotInGuild') {
+            alert(
+              `The bot is not in your server! Make sure you have invited the bot to the right server then try again`
+            )
+          }
+          if (data.error == 'invalidNotificationChannel') {
+            alert(
+              `Invalid notification channel! Make sure you have invited the bot to the right server and has access to this channel then try again`
+            )
+          }
+          if (data.error == 'invalidChatChannel') {
+            alert(
+              `Invalid chat channel! Make sure you have invited the bot to the right server and has access to this channel then try again`
+            )
+          }
+          location.reload();
+        },
+        error: (xhr, status, error) => {
+          alert('Something went wrong while trying to apply discord settings!\n' + error);
+        }
+      });
+    })
+
+  })
+
+</script>

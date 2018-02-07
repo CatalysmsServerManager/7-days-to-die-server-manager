@@ -2,10 +2,116 @@
   <h1>Settings</h1>
   <% include ./partials/backToDashboard %>
 
-    <%- include('./partials/settings/basicServerSettings', {server: server, config: config}) %>
-    <%- include('./partials/settings/loggingSettings', {server: server, config: config}) %>
-      <%- include('./partials/settings/countryBanSettings', {server: server, config: config}) %>
-       <%- include('./partials/settings/commandSettings', {server: server, config: config}) %>
-              <%- include('./partials/settings/motdSettings', {server: server, config: config}) %>
+    <div id="settings-accordion">
+
+      <!-- Basic server settings -->
+
+      <div class="card">
+        <div class="card-header" id="settings-heading-basicServerSettings">
+          <h5 class="mb-0">
+            <button class="btn btn-link" data-toggle="collapse" data-target="#settings-collapse-basicServerSettings" aria-expanded="true"
+              aria-controls="settings-collapse-basicServerSettings">
+              Basic server settings
+            </button>
+          </h5>
+        </div>
+
+        <div id="settings-collapse-basicServerSettings" class="collapse" aria-labelledby="settings-heading-basicServerSettings" data-parent="#accordion">
+          <div class="card-body">
+            <%- include('./partials/settings/basicServerSettings', {server: server, config: config}) %>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Discord settings -->
+
+      <div class="card">
+        <div class="card-header" id="settings-heading-discordSettings">
+          <h5 class="mb-0">
+            <button class="btn btn-link" data-toggle="collapse" data-target="#settings-collapse-discordSettings" aria-expanded="true"
+              aria-controls="settings-collapse-discordSettings">
+              Discord settings
+            </button>
+            <a href="/auth/discord">
+              <img src="../../images/discordIcon.png" width="10%">
+            </a>
+          </h5>
+        </div>
+
+        <div id="settings-collapse-discordSettings" class="collapse" aria-labelledby="settings-heading-discordSettings" data-parent="#accordion">
+          <div class="card-body">
+            <%- include('./partials/settings/discordSettings', {server: server, config: config, user: user}) %>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Country ban settings -->
+
+      <div class="card">
+        <div class="card-header" id="settings-heading-countryBanSettings">
+          <h5 class="mb-0">
+            <button class="btn btn-link" data-toggle="collapse" data-target="#settings-collapse-countryBanSettings" aria-expanded="true"
+              aria-controls="settings-collapse-countryBanSettings">
+              Country ban
+            </button>
+          </h5>
+        </div>
+
+        <div id="settings-collapse-countryBanSettings" class="collapse" aria-labelledby="settings-heading-countryBanSettings" data-parent="#accordion">
+          <div class="card-body">
+
+            <%- include('./partials/settings/countryBanSettings', {server: server, config: config}) %>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Ingame commands settings -->
+
+      <div class="card">
+        <div class="card-header" id="settings-heading-ingameCommandsSettings">
+          <h5 class="mb-0">
+            <button class="btn btn-link" data-toggle="collapse" data-target="#settings-collapse-ingameCommandsSettings" aria-expanded="true"
+              aria-controls="settings-collapse-ingameCommandsSettings">
+              Ingame commands
+            </button>
+          </h5>
+        </div>
+
+        <div id="settings-collapse-ingameCommandsSettings" class="collapse" aria-labelledby="settings-heading-ingameCommandsSettings"
+          data-parent="#accordion">
+          <div class="card-body">
+
+            <%- include('./partials/settings/commandSettings', {server: server, config: config}) %>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Message of the day settings -->
+
+      <div class="card">
+        <div class="card-header" id="settings-heading-motdSettings">
+          <h5 class="mb-0">
+            <button class="btn btn-link" data-toggle="collapse" data-target="#settings-collapse-motdSettings" aria-expanded="true" aria-controls="settings-collapse-motdSettings">
+              Message of the day
+            </button>
+          </h5>
+        </div>
+
+        <div id="settings-collapse-motdSettings" class="collapse" aria-labelledby="settings-heading-motdSettings" data-parent="#accordion">
+          <div class="card-body">
+            <%- include('./partials/settings/motdSettings', {server: server, config: config}) %>
+
+          </div>
+        </div>
+
+      </div>
+
+
+
+    </div>
 
 </div>

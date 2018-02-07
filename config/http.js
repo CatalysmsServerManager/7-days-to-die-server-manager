@@ -10,13 +10,14 @@
  */
 
 /**
-  * PASSPORT CONFIGURATION
-  */
+ * PASSPORT CONFIGURATION
+ */
 
 var passport = require('passport');
 var SteamStrategy = require('passport-steam');
-var JWTStrategy = require('passport-jwt').Strategy;
-var ExtractJWT = require('passport-jwt').ExtractJwt;
+var DiscordStrategy = require('passport-discord').Strategy;
+
+
 
 /**
  * Steam strategy config
@@ -27,8 +28,13 @@ passport.use(new SteamStrategy({
   returnURL: `${process.env.CSMM_HOSTNAME}/auth/steam/return`,
   realm: `${process.env.CSMM_HOSTNAME}`,
   apiKey: steamAPIkey
-}, function(identifier, profile, done) {
-  User.findOrCreate({ steamId: profile.id }, { steamId: profile.id, username: profile.displayName })
+}, function (identifier, profile, done) {
+  User.findOrCreate({
+      steamId: profile.id
+    }, {
+      steamId: profile.id,
+      username: profile.displayName
+    })
     .then(foundUser => {
       foundUser.steamProfile = profile;
       return done(null, foundUser);
@@ -39,35 +45,30 @@ passport.use(new SteamStrategy({
     });
 }));
 
-/**
- * JWT strategy config
- */
+let discordScopes = ['identify', 'guilds'];
 
-// let jwtOpts = {
-//     jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-//     secretOrKey: process.env.JWTSECRET,
-// }
-
-//  passport.use(new JWTStrategy(jwtOpts, function(jwtPayload, done) {
-//      sails.log.warn("JWT STRAT USED WOOOOOOOO")
-//      User.find({id: jwtPayload.sub})
-//      .then(foundUser => {
-//         sails.log.debug(`User ${foundUser.id} authenticated via jwt`);
-//         return done(null, foundUser);
-//      })
-//      .catch(err => {
-//          sails.log.err(err)
-//          return done(err)
-//      })
-//  }))
+passport.use(new DiscordStrategy({
+  clientID: '324843053921861634',
+  clientSecret: process.env.DISCORDCLIENTSECRET,
+  callbackURL: `${process.env.CSMM_HOSTNAME}/auth/discord/return`,
+  scope: discordScopes
+}, async function (accessToken, refreshToken, profile, cb) {
+  try {
+    return cb(null, profile);
+  } catch (error) {
+    sails.log.error(`Discord auth error! ${error}`)
+  }
+}));
 
 
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function (user, done) {
   done(null, user.id);
 });
 
-passport.deserializeUser(function(steamId, done) {
-  User.findOne({ steamId: steamId }, function(err, user) {
+passport.deserializeUser(function (steamId, done) {
+  User.findOne({
+    steamId: steamId
+  }, function (err, user) {
     sails.log.error(err);
     done(err, user);
   });
@@ -77,13 +78,13 @@ passport.deserializeUser(function(steamId, done) {
 module.exports.http = {
 
   /****************************************************************************
-     *                                                                           *
-     * Sails/Express middleware to run for every HTTP request.                   *
-     * (Only applies to HTTP requests -- not virtual WebSocket requests.)        *
-     *                                                                           *
-     * https://sailsjs.com/documentation/concepts/middleware                     *
-     *                                                                           *
-     ****************************************************************************/
+   *                                                                           *
+   * Sails/Express middleware to run for every HTTP request.                   *
+   * (Only applies to HTTP requests -- not virtual WebSocket requests.)        *
+   *                                                                           *
+   * https://sailsjs.com/documentation/concepts/middleware                     *
+   *                                                                           *
+   ****************************************************************************/
 
   middleware: {
 
@@ -91,11 +92,11 @@ module.exports.http = {
     passportSession: require('passport').session(),
 
     /***************************************************************************
-         *                                                                          *
-         * The order in which middleware should be run for HTTP requests.           *
-         * (This Sails app's routes are handled by the "router" middleware below.)  *
-         *                                                                          *
-         ***************************************************************************/
+     *                                                                          *
+     * The order in which middleware should be run for HTTP requests.           *
+     * (This Sails app's routes are handled by the "router" middleware below.)  *
+     *                                                                          *
+     ***************************************************************************/
 
     order: [
       'cookieParser',
@@ -112,12 +113,12 @@ module.exports.http = {
 
 
     /***************************************************************************
-         *                                                                          *
-         * The body parser that will handle incoming multipart HTTP requests.       *
-         *                                                                          *
-         * https://sailsjs.com/config/http#?customizing-the-body-parser             *
-         *                                                                          *
-         ***************************************************************************/
+     *                                                                          *
+     * The body parser that will handle incoming multipart HTTP requests.       *
+     *                                                                          *
+     * https://sailsjs.com/config/http#?customizing-the-body-parser             *
+     *                                                                          *
+     ***************************************************************************/
 
     // bodyParser: (function _configureBodyParser(){
     //   var skipper = require('skipper');

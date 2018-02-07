@@ -1,8 +1,9 @@
 <body>
   <h2>
     Online players:
-    <%= server.stats.players %> /
-      <%= server.serverInfo.MaxPlayers %>
+    <div id="amount-of-online-players">
+      <%= server.stats.players %>
+    </div>
   </h2>
   <table class="table">
     <thead>
@@ -35,7 +36,7 @@
     })
 
     io.socket.on('playerDisconnected', (disconnectedMessage) => {
-       sendRequestAndUpdatePlayers();
+      sendRequestAndUpdatePlayers();
     })
 
 
@@ -61,8 +62,10 @@
 
   function updatePlayerList(players) {
     let playersHtml = new String();
+    let amountOfOnlinePlayers = 0
     for (let player of players.players) {
       if (player.online) {
+        amountOfOnlinePlayers++
         let playerIdHtml = `<th scope="row"> ${player.entityId} </th>`
         let playerNameHtml =
           `<td> <a href='/player/${player.id}/profile'> ${player.name}</a></td>`
@@ -72,6 +75,7 @@
       }
     }
     $("#online-players").html(playersHtml)
+    $('#amount-of-online-players').text(`${amountOfOnlinePlayers} / <%= server.serverInfo.MaxPlayers %>`)
   }
 
 </script>

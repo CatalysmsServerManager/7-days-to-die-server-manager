@@ -17,20 +17,20 @@
 module.exports.policies = {
 
   /***************************************************************************
-     *                                                                          *
-     * Default policy for all controllers and actions (`true` allows public     *
-     * access)                                                                  *
-     *                                                                          *
-     ***************************************************************************/
+   *                                                                          *
+   * Default policy for all controllers and actions (`true` allows public     *
+   * access)                                                                  *
+   *                                                                          *
+   ***************************************************************************/
 
   //'*': 'isLoggedIn',
 
   /***************************************************************************
-     *                                                                          *
-     * Here's an example of mapping some policies to run before a controller    *
-     * and its actions                                                          *
-     *                                                                          *
-     ***************************************************************************/
+   *                                                                          *
+   * Here's an example of mapping some policies to run before a controller    *
+   * and its actions                                                          *
+   *                                                                          *
+   ***************************************************************************/
   // UserController: {
   //
   //   // We might mandate that requests come from a logged-in user for
@@ -52,11 +52,16 @@ module.exports.policies = {
   },
 
   playerController: {
-      '*': ['isLoggedIn', 'isBetaTester']
+    '*': ['isLoggedIn', 'isBetaTester']
   },
 
   userController: {
-      '*': 'isLoggedIn'
+    '*': 'isLoggedIn'
   },
+
+  authController: {
+    'discordLogin': 'isLoggedIn',
+    'discordReturn': 'isLoggedIn'
+  }
 
 };

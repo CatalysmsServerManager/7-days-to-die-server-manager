@@ -8,7 +8,7 @@
 module.exports = {
 
   customToJSON: function () {
-    return _.omit(this, ['authToken', 'authName', 'telnetPort', 'telnetPassword']);
+    return _.omit(this, ['authToken', 'authName', 'telnetPort']);
   },
 
   attributes: {
@@ -86,25 +86,7 @@ module.exports = {
       type: 'string'
     },
 
-    /**
-     * @memberof SdtdServer
-     * @var {string} discordGuildId
-     * @description Id of the dicscord guild this server is associated with
-     */
 
-    discordGuildId: {
-      type: 'string'
-    },
-
-    /**
-     * @memberof SdtdServer
-     * @var {string} chatChannelId
-     * @description Id of the discord channel for chat bridge
-     */
-
-    chatChannelId: {
-      type: 'string'
-    },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗

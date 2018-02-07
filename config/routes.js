@@ -51,6 +51,9 @@ module.exports.routes = {
     action: 'logout'
   },
 
+  '/auth/discord': 'AuthController.discordLogin',
+  '/auth/discord/return': 'AuthController.discordReturn',
+
   /***************************************************************************
      *                                                                          *
      * More custom routes here...                                               *
@@ -94,9 +97,9 @@ module.exports.routes = {
   'get /api/sdtdserver/players': 'SdtdServerController.get-players',
   'get /api/sdtdserver/info': 'SdtdServerController.load-server-info',
   'get /api/sdtdserver/availableItems': 'SdtdServerController.available-items',
-
+  
   // Sdtd settings
-
+  
   'post /api/sdtdserver/updateConnectionInfo': 'SdtdServerController.update-connection-info',
   'post /api/sdtdserver/toggleLogging': 'SdtdServerController.logging-toggle',
   'post /api/sdtdserver/toggleCountryBan': 'SdtdServerController/countryBan.country-ban-toggle',
@@ -105,9 +108,11 @@ module.exports.routes = {
   'post /api/sdtdserver/reloadcommands': 'SdtdServerController/commands.commands-reload',
   'post /api/sdtdserver/togglemotd': 'SdtdServerController/motd.motd-toggle',
   'post /api/sdtdserver/reloadmotd': 'SdtdServerController/motd.motd-reload',
-
+  'post /api/sdtdserver/reloadDiscord' : 'SdtdServerController/discordBot.reload-discord-settings',
+  
   'post /api/sdtdTicket/updateTicketStatus': 'SdtdTicket.update-ticket-status',
   'post /api/sdtdTicket/editTicket' : 'SdtdTicket.edit-ticket',
+  'get /api/sdtdticket/opentickets' : 'SdtdTicketController.open-tickets',
 
   'post /api/sdtdserver/addserver': 'SdtdServerController/add-server',
   'post /api/sdtdserver/restartServer': 'SdtdServerController/restart-server',

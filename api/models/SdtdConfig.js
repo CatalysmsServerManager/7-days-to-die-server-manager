@@ -55,8 +55,54 @@ module.exports = {
       }
     },
 
+    // _____  _                       _ 
+    // |  __ \(_)                     | |
+    // | |  | |_ ___  ___ ___  _ __ __| |
+    // | |  | | / __|/ __/ _ \| '__/ _` |
+    // | |__| | \__ \ (_| (_) | | | (_| |
+    // |_____/|_|___/\___\___/|_|  \__,_|
 
 
+    /**
+     * @memberof SdtdServer
+     * @var {string} discordGuildId
+     * @description Id of the disccord guild this server is associated with
+     */
+
+    discordGuildId: {
+      type: 'string'
+    },
+
+    /**
+     * @memberof SdtdServer
+     * @var {string} chatChannelId
+     * @description Id of the discord channel for chat bridge
+     */
+
+    chatChannelId: {
+      type: 'string'
+    },
+
+        /**
+     * @memberof SdtdServer
+     * @var {string} chatChannelRichMessages
+     * @description Whether to use rich messages for (dis)connect messages
+     */
+
+    chatChannelRichMessages: {
+      type: 'boolean',
+      defaultsTo: true
+    },
+
+    /**
+     * @memberof SdtdServer
+     * @var {string} notificationChannelId
+     * @description Id of the discord channel for notifications
+     */
+
+    notificationChannelId: {
+      type: 'string'
+    },
 
     //   _                       _
     //  | |                     (_)
@@ -100,7 +146,8 @@ module.exports = {
         enabled: false,
         bannedCountries: [],
         kickMessage: 'Your country has been blocked on this server.',
-        allowNull: true
+        allowNull: true,
+        whiteListedSteamIds: []
       },
     },
 

@@ -1,5 +1,4 @@
 const Commando = require('discord.js-commando');
-const ChatBridgeChannel = require('./util/chatBridgeChannel.js');
 const path = require('path');
 
 /**
@@ -26,8 +25,6 @@ module.exports = function discordBot(sails) {
     initialize: function (cb) {
       sails.on('hook:orm:loaded', function () {
         sails.on('hook:sdtdlogs:loaded', function () {
-          sails.log.debug('HOOK: Initializing discord bot');
-
           client = new Commando.Client({
             owner: sails.config.custom.botOwners
           });
@@ -60,10 +57,9 @@ module.exports = function discordBot(sails) {
           // Login
 
           client.login(sails.config.custom.botToken).then(() => {
-            sails.log.debug('Bot successfully logged in!');
-            initChatBridges(client);
-            return cb();
-          })
+              sails.log.info(`Discord bot logged in - ${client.guilds.size} guilds`);
+              return cb();
+            })
             .catch((err) => {
               sails.log.error(err);
             });
@@ -78,28 +74,37 @@ module.exports = function discordBot(sails) {
      * @description returns the discord client
      */
 
-    getClient: function() {
+    getClient: function () {
       return sails.discordBotClient;
+    },
+
+    /**
+     * @memberof module:DiscordBot
+     * @method
+     * @name sendNotification
+     * @description Sends a notification to servers notification channel
+     * @param {string} serverId
+     * @param {string} message
+     */
+
+    sendNotification: async function (serverId, message) {
+      try {
+        let server = await SdtdServer.find({id: serverId}).limit(1);
+        let config = await SdtdConfig.find({id: server.config}).limit(1);
+        server = server[0];
+        config = config[0];
+
+        if (config.notificationChannelId) {
+          let notificationChannel = sails.discordBotClient.channels.get(config.notificationChannelId);
+          let embed = new client.customEmbed()
+          embed.setDescription(message);
+          await notificationChannel.send(embed);
+        }
+
+      } catch (error) {
+        sails.log.error(`HOOK - discordBot:sendNotification - ${error}`);
+      }
     }
   };
 
-  async function initChatBridges(client) {
-    // Find server that have chatbridge enabled
-    let serversWithChatbridges = await SdtdServer.find({
-      chatChannelId: {
-        '!=': [0]
-      }
-    });
-
-    // loop over enabled servers and create chatBridge class
-    for (let index = 0; index < serversWithChatbridges.length; index++) {
-      const element = serversWithChatbridges[index];
-      let discordguild = client.guilds.get(element.discordGuildId);
-      let textChannel = client.channels.get(element.chatChannelId);
-      if (!_.isUndefined(textChannel) && !_.isUndefined(discordguild)) {
-        discordguild.chatBridge = new ChatBridgeChannel(textChannel, element);
-        discordguild.chatBridge.start();
-      }
-    }
-  }
 };

@@ -30,7 +30,6 @@ module.exports = function sdtdCommands(sails) {
     initialize: async function (cb) {
       sails.on('hook:orm:loaded', async function () {
         sails.on('hook:sdtdlogs:loaded', async function () {
-          sails.log.debug('HOOK sdtdCommands:initialize Initializing Sdtd commands');
           try {
             let enabledServers = await SdtdConfig.find({
               commandsEnabled: true
@@ -38,6 +37,7 @@ module.exports = function sdtdCommands(sails) {
             enabledServers.forEach(serverConfig => {
               start(serverConfig.server);
             });
+            sails.log.info(`HOOK SdtdCommands - initialized ${enabledServers.length} ingame command listeners`);
           } catch (error) {
             sails.log.error(`HOOK SdtdCommands:initialize - ${error}`);
           }
@@ -116,7 +116,7 @@ module.exports = function sdtdCommands(sails) {
   async function start(serverId) {
 
     try {
-      sails.log.debug(`HOOK sdtdCommands:start - Starting commands for server ${serverId}`);
+      sails.log.silly(`HOOK sdtdCommands:start - Starting commands for server ${serverId}`);
       let serverConfig = await SdtdConfig.findOne({
         server: serverId
       });
@@ -134,7 +134,7 @@ module.exports = function sdtdCommands(sails) {
 
   async function stop(serverId) {
     try {
-      sails.log.debug(`HOOK sdtdCommands:stop - Stopping commands for server ${serverId}`);
+      sails.log.silly(`HOOK sdtdCommands:stop - Stopping commands for server ${serverId}`);
       let commandHandler = commandInfoMap.get(String(serverId));
       if (!_.isUndefined(commandHandler)) {
         commandHandler.stop();

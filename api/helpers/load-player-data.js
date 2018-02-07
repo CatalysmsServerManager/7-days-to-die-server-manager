@@ -68,7 +68,8 @@ module.exports = {
               steamId: player.steamid
             }).exec({
               error: function (err) {
-                reject(err);
+                sails.log.warn(err);
+                resolve(player);
               },
               success: function (data) {
                 player.inventory = new Object();
@@ -136,7 +137,8 @@ module.exports = {
             resolve(playerToSend);
           });
         } catch (error) {
-          reject(error);
+          sails.log.warn(error);
+          resolve(foundOrCreatedPlayer)
         }
 
       });
@@ -151,7 +153,10 @@ module.exports = {
           authToken: server.authToken
         }).exec({
           error: function (err) {
-            reject(err);
+            sails.log.warn(err);
+            resolve({
+              players: []
+            });
           },
           success: function (playerList) {
             // If a steam ID is provided, we filter the list to only 1 player
