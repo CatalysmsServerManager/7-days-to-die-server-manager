@@ -84,7 +84,7 @@ module.exports = function SdtdDiscordChatBridge(sails) {
   async function start(serverId) {
 
     try {
-      sails.log.silly(`HOOK SdtdDiscordChatBridge:start - Starting chatbridge for server ${serverId}`);
+      sails.log.debug(`HOOK SdtdDiscordChatBridge:start - Starting chatbridge for server ${serverId}`);
       let discordClient = sails.hooks.discordbot.getClient();
       let config = await SdtdConfig.find({
         server: serverId
@@ -107,7 +107,7 @@ module.exports = function SdtdDiscordChatBridge(sails) {
       if (_.isUndefined(textChannel)) {
         throw new Error(`Did not find textchannel corresponding to ID in config.`);
       }
-
+      
       let chatBridge = new ChatBridgeChannel(textChannel, server);
       chatBridgeInfoMap.set(serverId, chatBridge);
     } catch (error) {
@@ -118,7 +118,7 @@ module.exports = function SdtdDiscordChatBridge(sails) {
 
   async function stop(serverId) {
     try {
-      sails.log.silly(`HOOK SdtdDiscordChatBridge:stop - Stopping chatbridge for server ${serverId}`);
+      sails.log.debug(`HOOK SdtdDiscordChatBridge:stop - Stopping chatbridge for server ${serverId}`);
       let chatBridge = chatBridgeInfoMap.get(serverId);
       if (!_.isUndefined(chatBridge)) {
         chatBridge.stop();

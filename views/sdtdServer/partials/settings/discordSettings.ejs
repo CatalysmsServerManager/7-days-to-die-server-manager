@@ -48,7 +48,18 @@
             <small>Designate a discord channel to create a chat bridge to your server with
               <br> Set to 0 to disable chatbridge </small>
             <input type="text" class="form-control" id="input-settings-discord-chatchannel" placeholder="<%= config.chatChannelId %>">
-
+            <div class="form-check">
+              <% if(config.chatChannelRichMessages) { %>
+                <input class="form-check-input" type="checkbox" value="" id="input-settings-discord-chatchannel-richmessages" checked>
+                <% } else { %>
+                  <input class="form-check-input" type="checkbox" value="" id="input-settings-discord-chatchannel-richmessages">
+                  <% } %>
+                    <label class="form-check-label" for="input-settings-discord-chatchannel-richmessages">
+                      Rich messages
+                      <br>
+                      <small> Displays additional information on player (dis)connect </small>
+                    </label>
+            </div>
           </li>
 
           <!-- Notification channel select -->
@@ -85,6 +96,13 @@
       let newGuildId = $('#input-settings-discord-guild').val();
       let newChatChannelId = $('#input-settings-discord-chatchannel').val();
       let newNotificationChannelId = $('#input-settings-discord-notificationChannel').val();
+      let newRichMessages
+
+      if ($('#input-settings-discord-chatchannel-richmessages').is(":checked")) {
+        newRichMessages = true
+      } else {
+        newRichMessages = false
+      }
 
       $.ajax({
         url: `/api/sdtdserver/reloaddiscord`,
@@ -94,12 +112,23 @@
           newGuildId: newGuildId,
           newChatChannelId: newChatChannelId,
           newNotificationChannelId: newNotificationChannelId,
+          newRichMessages: newRichMessages,
           serverId: <%= server.id %>
         },
         success: (data, status, xhr) => {
           if (data.error == 'botNotInGuild') {
             alert(
               `The bot is not in your server! Make sure you have invited the bot to the right server then try again`
+            )
+          }
+          if (data.error == 'invalidNotificationChannel') {
+            alert(
+              `Invalid notification channel! Make sure you have invited the bot to the right server and has access to this channel then try again`
+            )
+          }
+          if (data.error == 'invalidChatChannel') {
+            alert(
+              `Invalid chat channel! Make sure you have invited the bot to the right server and has access to this channel then try again`
             )
           }
           location.reload();

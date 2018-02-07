@@ -83,6 +83,17 @@ module.exports = {
       type: 'string'
     },
 
+        /**
+     * @memberof SdtdServer
+     * @var {string} chatChannelRichMessages
+     * @description Whether to use rich messages for (dis)connect messages
+     */
+
+    chatChannelRichMessages: {
+      type: 'boolean',
+      defaultsTo: true
+    },
+
     /**
      * @memberof SdtdServer
      * @var {string} notificationChannelId
