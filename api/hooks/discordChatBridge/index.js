@@ -30,10 +30,7 @@ module.exports = function SdtdDiscordChatBridge(sails) {
             let enabledServers = await SdtdConfig.find({
               or: [{
                 chatChannelId: {
-                  '!=': null
-                },
-                chatChannelId: {
-                  '!=': 0
+                  '!=': ''
                 }
               }]
             });

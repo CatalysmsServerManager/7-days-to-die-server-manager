@@ -43,6 +43,12 @@
                     <%= country %>
                       <% } %>
                 </li>
+
+                <li class="list-group-item">
+                  <label for="input-settings-countryban-whitelist">Whitelist (Steam IDs separated by ,) </label>
+
+                  <input type="text" class="form-control" id="input-settings-countryban-whitelist" value="<%= config.countryBanConfig.whiteListedSteamIds %>">
+                </li>
         </ul>
       </div>
 
@@ -106,10 +112,14 @@
         $('#settings-reload-countryBan').click((event) => {
           event.preventDefault();
 
+          let whiteListedSteamIdsString = $('#input-settings-countryban-whitelist').val();
+          let whiteListedSteamIds = whiteListedSteamIdsString.split(',')
+
           newConfig = {
             enabled: true,
             bannedCountries: newCountries,
-            kickMessage: $('#input-settings-countryBan-kickReason').val()
+            kickMessage: $('#input-settings-countryBan-kickReason').val(),
+            whiteListedSteamIds: whiteListedSteamIds
           }
 
           $.ajax({

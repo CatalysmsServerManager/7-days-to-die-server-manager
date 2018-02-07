@@ -98,7 +98,7 @@ module.exports = {
           await SdtdConfig.update({
             server: inputs.serverId
           }, {
-            chatChannelId: 0
+            chatChannelId: ''
           });
           sails.log.debug(`API - SdtdServer:reload-discord-settings - Stopping chat bridge for server ${inputs.serverId}`);
           sails.hooks.discordchatbridge.stop(inputs.serverId);

@@ -146,7 +146,8 @@ module.exports = {
         enabled: false,
         bannedCountries: [],
         kickMessage: 'Your country has been blocked on this server.',
-        allowNull: true
+        allowNull: true,
+        whiteListedSteamIds: []
       },
     },
 
