@@ -74,6 +74,11 @@ passport.deserializeUser(function (steamId, done) {
   });
 });
 
+/* SENTRY CONFIG */
+
+const Raven = require('raven');
+Raven.config(process.env.SENTRY_DSN).install();
+
 
 module.exports.http = {
 
@@ -90,6 +95,8 @@ module.exports.http = {
 
     passportInit: require('passport').initialize(),
     passportSession: require('passport').session(),
+    ravenRequestHandler: Raven.requestHandler(),
+    ravenErrorHandler: Raven.errorHandler(),
 
     /***************************************************************************
      *                                                                          *
@@ -99,6 +106,7 @@ module.exports.http = {
      ***************************************************************************/
 
     order: [
+      'ravenRequestHandler',
       'cookieParser',
       'session',
       'passportInit',
@@ -107,6 +115,7 @@ module.exports.http = {
       'compress',
       'poweredBy',
       'router',
+      'ravenErrorHandler',
       'www',
       'favicon',
     ],
