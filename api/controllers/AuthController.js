@@ -62,7 +62,7 @@ module.exports = {
           sails.log.error(`Discord auth error - ${err}`);
           return res.serverError(err);
         };
-
+        console.log(discordProfile)
         try {
           let ownedServers = discordProfile.guilds.filter(guild => {
             return guild.owner === true;

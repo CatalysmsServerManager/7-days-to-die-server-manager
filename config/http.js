@@ -45,7 +45,7 @@ passport.use(new SteamStrategy({
     });
 }));
 
-let discordScopes = ['identify', 'guilds'];
+let discordScopes = ['identify', 'guilds', 'bot'];
 
 passport.use(new DiscordStrategy({
   clientID: process.env.DISCORDCLIENTID,

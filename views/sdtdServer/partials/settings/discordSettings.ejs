@@ -12,7 +12,9 @@
 
       <% if (_.isNull(user.ownedDiscordGuilds) || _.isUndefined(user.discordId)) { %>
 
-        No discord info available, please login.
+                   <a href="/auth/discord">
+              <img src="../../images/discordIcon.png" width="10%">
+            </a>
 
         <%  } else { %>
 
