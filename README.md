@@ -1,4 +1,4 @@
-# 7DTD Server manager [![Build Status](https://travis-ci.org/niekcandaele/7-Days-To-Die-Server-Manager.svg?branch=master)](https://travis-ci.org/niekcandaele/7-Days-To-Die-Server-Manager)
+# 7DTD Server manager 
 
 ## [Documentation](https://niekcandaele.github.io/7-Days-To-Die-Server-Manager/)
 
@@ -11,8 +11,7 @@ To start the application, you need to add these environment variables;
  - CSMM_HOSTNAME
  - API_KEY_STEAM
  - DISCORDBOTTOKEN
- - PAPERTRAILHOST
- - PAPERTRAILPORT
+ - SENTRY_DSN
 
 To test the application, add these env vars;
 
@@ -29,7 +28,3 @@ To test the application, add these env vars;
  - DISCORDTESTGUILD
 
 Test output is saved at ./test/output
-
-Made possible by
-[![LDH](https://i.imgur.com/rfmQjA2.png)](https://letsdohosting.com/?p=Register&ref=Cata)
-All game servers € 0.35/day
