@@ -24,6 +24,7 @@
     "passport-jwt": "^3.0.1",
     "passport-steam": "^1.0.8",
     "rand-token": "^0.3.0",
+    "raven": "^2.4.0",
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5",
     "sails": "^1.0.0-45",
@@ -33,8 +34,7 @@
     "sails-mysql": "^1.0.0-16",
     "telnet-client": "^0.15.5",
     "validator": "^9.3.0",
-    "winston": "^2.4.0",
-    "winston-papertrail": "^1.0.5"
+    "winston": "^2.4.0"
   },
   "scripts": {
     "start": "npm run build-docs && node app.js --prod",

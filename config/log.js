@@ -14,18 +14,12 @@
 require('dotenv').config();
 
 const winston = require('winston');
-require('winston-papertrail').Papertrail;
 
 
 
 if (process.env.NODE_ENV == "production") {
   var customLogger = new winston.Logger({
     transports: [
-      new winston.transports.Papertrail({
-        host: process.env.PAPERTRAILHOST,
-        port: process.env.PAPERTRAILPORT,
-        colorize: true
-      }),
       new winston.transports.Console({
         level: 'debug',
         colorize: true,
