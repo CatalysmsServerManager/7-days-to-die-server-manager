@@ -10,11 +10,11 @@
   <div class="col-md-4">
     <ul class="list-group">
 
-      <% if (_.isNull(user.ownedDiscordGuilds) || _.isUndefined(user.discordId)) { %>
+      <% if ('' === user.discordId) { %>
 
-                   <a href="/auth/discord">
-              <img src="../../images/discordIcon.png" width="10%">
-            </a>
+        <a href="/auth/discord">
+          <img src="../../images/discordIcon.png" width="50%">
+        </a>
 
         <%  } else { %>
 
@@ -25,20 +25,8 @@
             <br>
             <small> If this list is not correct, please log in via discord again </small>
             <select class="form-control" id="input-settings-discord-guild">
-              <% user.ownedDiscordGuilds.forEach(guild => { %>
-                <% if(guild.id === config.discordGuildId) { %>
 
-                  <option value="<%= guild.id %>" selected>
-                    <%= guild.name %>
-                  </option>
-                  <% } else { %>
 
-                    <option value="<%= guild.id %>">
-                      <%= guild.name %>
-                    </option>
-
-                    <% } %>
-                      <% }) %>
             </select>
           </li>
 
@@ -49,7 +37,8 @@
             <br>
             <small>Designate a discord channel to create a chat bridge to your server with
               <br> Set to 0 to disable chatbridge </small>
-            <input type="text" class="form-control" id="input-settings-discord-chatchannel" placeholder="<%= config.chatChannelId %>">
+            <select class="form-control" id="input-settings-discord-chatchannel">
+            </select>
             <div class="form-check">
               <% if(config.chatChannelRichMessages) { %>
                 <input class="form-check-input" type="checkbox" value="" id="input-settings-discord-chatchannel-richmessages" checked>
@@ -71,26 +60,81 @@
             <br>
             <small>Designate a discord channel to receive CSMM notifications
               <br>Set to 0 to disable discord notifications </small>
-            <input type="text" class="form-control" id="input-settings-discord-notificationChannel" placeholder="<%= config.notificationChannelId %>">
-
+            <select class="form-control" id="input-settings-discord-notificationChannel">
+            </select>
           </li>
           <% } %>
     </ul>
   </div>
 
-  <div class="col-md-4">
-    <button id="input-settings-discord-update" class="btn btn-default btn-primary" type="button">
-      <em class="glyphicon glyphicon-align-right"></em>
-      <i class="fa fa-refresh" aria-hidden="true"></i> Apply changes
-    </button>
+  <% if ('' !== user.discordId) { %>
+    <div class="col-md-4">
+      <button id="input-settings-discord-update" class="btn btn-default btn-primary" type="button">
+        <em class="glyphicon glyphicon-align-right"></em>
+        <i class="fa fa-refresh" aria-hidden="true"></i> Apply changes
+      </button>
 
+      <% } %>
 
-  </div>
+    </div>
 
 </div>
 
 <script>
   $(document).ready(function () {
+
+    // Load guilds the user can manage & add them to select
+    $.ajax({
+      url: `/api/user/findguildsmanagedbyuser`,
+      data: {
+        userId: <%= req.session.userId %>
+      },
+      success: (data, status, xhr) => {
+        let foundGuilds = data;
+        foundGuilds.forEach(guild => {
+          $('#input-settings-discord-guild').append($('<option>', {
+              value: guild.id
+            })
+            .text(guild.name));
+        })
+        updateChannels(chatChannelSelect, $('#input-settings-discord-guild').val())
+        updateChannels(notificationChannelSelect, $('#input-settings-discord-guild').val())
+
+      },
+      error: (xhr, status, error) => {
+        console.log(error);
+      }
+    })
+
+    // Loads channels of a guild the bot can write in.
+    function updateChannels(element, guildId) {
+      $.ajax({
+        url: `/api/sdtdserver/findwriteablechannelsinguild`,
+        data: {
+          guildId: guildId,
+          serverId: <%= server.id %>
+        },
+        success: (data, status, xhr) => {
+          let foundChannels = data;
+          foundChannels.forEach(channel => {
+            element.append($('<option>', {
+                value: channel.id
+              })
+              .text(channel.name));
+          })
+
+        },
+        error: (xhr, status, error) => {
+          console.log(error);
+        }
+      })
+    }
+
+    let chatChannelSelect = $('#input-settings-discord-chatchannel');
+    let notificationChannelSelect = $('#input-settings-discord-notificationChannel');
+
+
+
 
     $('#input-settings-discord-update').click(event => {
       event.preventDefault();

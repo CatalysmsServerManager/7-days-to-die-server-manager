@@ -62,16 +62,12 @@ module.exports = {
           sails.log.error(`Discord auth error - ${err}`);
           return res.serverError(err);
         };
-        console.log(discordProfile)
+
         try {
-          let ownedServers = discordProfile.guilds.filter(guild => {
-            return guild.owner === true;
-          });
           await User.update({
             id: req.session.userId
           }, {
             discordId: discordProfile.id,
-            ownedDiscordGuilds: ownedServers
           });
           sails.log.debug(`User ${req.session.userId} updated discord info successfully`);
           res.redirect('/');

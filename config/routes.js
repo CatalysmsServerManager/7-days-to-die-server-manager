@@ -97,6 +97,7 @@ module.exports.routes = {
   'get /api/sdtdserver/players': 'SdtdServerController.get-players',
   'get /api/sdtdserver/info': 'SdtdServerController.load-server-info',
   'get /api/sdtdserver/availableItems': 'SdtdServerController.available-items',
+  'get /api/sdtdserver/findwriteablechannelsinguild' : 'SdtdServerController/discordBot.find-writeable-channels-in-guild',
   
   // Sdtd settings
   
@@ -127,6 +128,7 @@ module.exports.routes = {
 
   'get /api/user/info': 'User.get-user-info',
   'get /api/user/ownedServers': "User.get-owned-servers",
+  'get /api/user/findguildsmanagedbyuser': "User.find-guilds-managed-by-user",
 
   'get /api/player/inventory': {
     controller: 'Player',
