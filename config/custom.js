@@ -28,9 +28,9 @@ module.exports.custom = {
   // Discord bot config
   botOwners: ['220554523561820160', '252369082991509514'],
   botToken: process.env.DISCORDBOTTOKEN,
-  botEmbedLink: 'https://github.com/niekcandaele/7-Days-To-Die-Server-Manager',
-  botEmbedTitle: 'Takaro - discord bot',
+  botEmbedLink: `${process.env.CSMM_HOSTNAME}`,
+  botEmbedTitle: 'CSMM',
 
   // List of steam IDs of accepted beta testers
-  betaTesters: ['76561198028175941', '76561197970840634', '76561197999724620', '76561198046102521', '76561197996291089'],
+  betaTesters: ['76561198028175941', '76561197970840634', '76561197999724620', '76561198046102521', '76561197996291089', '76561198267206692', '76561198257684623'],
 };
