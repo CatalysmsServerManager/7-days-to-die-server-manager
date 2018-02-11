@@ -1,3 +1,5 @@
+const sevenDays = require('machinepack-7daystodiewebapi');
+
 module.exports = {
 
   friendlyName: 'Add 7 Days to Die server',
@@ -70,22 +72,42 @@ module.exports = {
         ip: inputs.ip,
         port: inputs.telnetPort,
         password: inputs.telnetPassword
-      });
+      }).tolerate('badTelnet',() => {
+        return undefined
+      })
 
       if (_.isUndefined(authInfo)) {
-        return exits.badTelnet();
+        return exits.badTelnet({error: 'badTelnet'});
       }
 
-      let server = await updateOrCreateServer(authInfo);
-      await SdtdConfig.create({
-        server: server.id
-      });
-      return exits.success(server);
+      await sevenDays.getStats({
+        ip: inputs.ip,
+        port: inputs.webPort,
+        authName: authInfo.authName,
+        authToken: authInfo.authToken
+      }).exec({
+        success: async response => {
+          if (!response.gametime) {
+            return exits.badWebPort({error: 'badWebPort'});
+          } else {
+            let server = await updateOrCreateServer(authInfo);
+            await SdtdConfig.create({
+              server: server.id
+            });
+            return exits.success(server);
+          }
+        },
+        error: err => {
+          return exits.error(err)
+        }
+      })
+
+
 
     } catch (error) {
       sails.log.error(`HELPER - add7DtdServer - ${error}`);
       if (error.message == 'badWebport') {
-        return exits.badWebPort();
+        return exits.badWebPort({error: 'badWebPort'});
       }
       return exits.error(error);
     }
@@ -99,19 +121,13 @@ module.exports = {
           authName: authInfo.authName,
           authToken: authInfo.authToken
         }, {
-          name: inputs.serverName,
-          ip: inputs.ip,
-          webPort: inputs.webPort,
-          telnetPort: inputs.telnetPort,
-          authName: authInfo.authName,
-          authToken: authInfo.authToken,
-          owner: inputs.owner
-        });
-
-        let status = await sails.helpers.sdtd.checkIfAvailable(newServer.id)
-          .tolerate('notAvailable', function () {
-            sails.log.debug(`HELPER - add7DtdServer - not available`);
-            reject(new Error('badWebport'));
+            name: inputs.serverName,
+            ip: inputs.ip,
+            webPort: inputs.webPort,
+            telnetPort: inputs.telnetPort,
+            authName: authInfo.authName,
+            authToken: authInfo.authToken,
+            owner: inputs.owner
           });
         sails.log.debug(`HELPER - add7DtdServer - success`);
         sails.hooks.sdtdlogs.start(newServer.id);

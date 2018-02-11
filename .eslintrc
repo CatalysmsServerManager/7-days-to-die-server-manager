@@ -50,7 +50,7 @@
     "eol-last":                     [1],
     "handle-callback-err":          [2],
     "indent":                       [1, 2, {"SwitchCase": 1}],
-    "linebreak-style":              [2, "windows"],
+    "linebreak-style":              [2, ["windows", "unix"]],
     "no-dupe-keys":                 [2],
     "no-duplicate-case":            [2],
     "no-mixed-spaces-and-tabs":     [2, "smart-tabs"],
