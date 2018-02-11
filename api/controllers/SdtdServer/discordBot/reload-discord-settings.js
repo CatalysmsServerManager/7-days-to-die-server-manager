@@ -69,8 +69,8 @@ module.exports = {
           await SdtdConfig.update({
             server: inputs.serverId
           }, {
-            discordGuildId: newGuild.id
-          });
+              discordGuildId: newGuild.id
+            });
           sails.log.debug(`API - SdtdServer:reload-discord-settings - updated discord guild ID for server ${inputs.serverId} to ${inputs.newGuildId}`);
         } else {
           sails.log.warn(`API - SdtdServer:reload-discord-settings - bot is not in server`);
@@ -91,15 +91,15 @@ module.exports = {
           await SdtdConfig.update({
             server: inputs.serverId
           }, {
-            chatChannelId: chatChannel.id,
-          });
+              chatChannelId: chatChannel.id,
+            });
         }
         if (inputs.newChatChannelId == '0') {
           await SdtdConfig.update({
             server: inputs.serverId
           }, {
-            chatChannelId: ''
-          });
+              chatChannelId: ''
+            });
           sails.log.debug(`API - SdtdServer:reload-discord-settings - Stopping chat bridge for server ${inputs.serverId}`);
           sails.hooks.discordchatbridge.stop(inputs.serverId);
         }
@@ -119,8 +119,12 @@ module.exports = {
           await SdtdConfig.update({
             server: inputs.serverId
           }, {
-            notificationChannelId: notificationChannel.id
-          });
+              notificationChannelId: notificationChannel.id
+            });
+          let embed = new discordClient.customEmbed()
+            .setTitle('Notification channeld initialized')
+            .addField('7dtd Server', server.name)
+          notificationChannel.send(embed)
           sails.log.debug(`API - SdtdServer:reload-discord-settings - Updated notification channel for server ${inputs.serverId}`);
         }
       }
@@ -128,8 +132,8 @@ module.exports = {
       await SdtdConfig.update({
         server: inputs.serverId
       }, {
-        chatChannelRichMessages: inputs.newRichMessages
-      });
+          chatChannelRichMessages: inputs.newRichMessages
+        });
 
       sails.hooks.discordchatbridge.stop(inputs.serverId);
       sails.hooks.discordchatbridge.start(inputs.serverId);

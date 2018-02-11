@@ -83,6 +83,9 @@
 <script>
   $(document).ready(function () {
 
+    let notificationChannelId = <%= config.notificationChannelId %>;
+    let chatChannelId = <%= config.chatChannelId %>;
+
     // Load guilds the user can manage & add them to select
     $.ajax({
       url: `/api/user/findguildsmanagedbyuser`,
@@ -93,8 +96,8 @@
         let foundGuilds = data;
         foundGuilds.forEach(guild => {
           $('#input-settings-discord-guild').append($('<option>', {
-              value: guild.id
-            })
+            value: guild.id
+          })
             .text(guild.name));
         })
         updateChannels(chatChannelSelect, $('#input-settings-discord-guild').val())
@@ -117,12 +120,22 @@
         success: (data, status, xhr) => {
           let foundChannels = data;
           foundChannels.forEach(channel => {
-            element.append($('<option>', {
+            if (chatChannelId == channel.id || notificationChannelId == channel.id) {
+              element.append($('<option selected>', {
                 value: channel.id
               })
-              .text(channel.name));
+                .text(channel.name));
+            } else {
+              element.append($('<option>', {
+                value: channel.id
+              })
+                .text(channel.name));
+            }
           })
-
+          element.append($('<option>', {
+            value: 0
+          })
+            .text('none'));
         },
         error: (xhr, status, error) => {
           console.log(error);

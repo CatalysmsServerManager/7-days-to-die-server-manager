@@ -81,6 +81,7 @@ module.exports.routes = {
   'get /player/:playerId/profile': 'PlayerController.profile',
 
   'get /user/:userId/tickets': 'SdtdTicket.user-tickets-view',
+  'get /user/:userId/profile': 'User.profile',
 
   
   'get /sdtdticket/:ticketId': 'SdtdTicket.view-ticket',
