@@ -31,8 +31,9 @@
       </div>
     </div>
     <% } else { %>
-      <h2> ERROR </h2>
-      <p> Could not connect to your server! </p>
+      <h2> ERROR </h2> <br>
+      <p> Could not connect to your server! </p> <br>
+
       <% const deleteLink = '/sdtdserver/' + server.id + '/delete' %>
         <a href='<%= deleteLink %>'>
           <button id="delete-server-button" class="btn btn-default btn-danger" type="button">
@@ -40,6 +41,16 @@
             <i class="fa fa-trash-o" aria-hidden="true"></i> Delete server
           </button>
         </a>
+
+        <% const settingsLink = '/sdtdserver/' + server.id + '/settings' %>
+        <a href='<%= settingsLink %>'>
+          <button id="settings-server-button" class="btn btn-default btn-primary" type="button">
+            <em class="glyphicon glyphicon-align-justify"></em>
+            <i class="fa fa-cog" aria-hidden="true"></i> Change settings
+          </button>
+        </a>
+
+
         <% } %>
   </div>
 </body>
