@@ -9,6 +9,11 @@
   <div class="col-md-4">
     <ul class="list-group">
 
+        <li class="list-group-item">
+            <label for="input-settings-server-servername">Server name</label>
+            <input type="text" class="form-control" id="input-settings-server-servername" placeholder="<%= server.name %>">
+          </li>
+
       <li class="list-group-item">
         <label for="input-settings-server-ip">IP</label>
         <input type="text" class="form-control" id="input-settings-server-ip" placeholder="<%= server.ip %>">
@@ -62,6 +67,7 @@
           webPort: $("#input-settings-server-webPort").val(),
           authName: $("#input-settings-server-authName").val(),
           authToken: $("#input-settings-server-authToken").val(),
+          serverName: $('#input-settings-server-servername').val()
         },
         success: (data, status, xhr) => {
           location.reload();
