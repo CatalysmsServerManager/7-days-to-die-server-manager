@@ -1,7 +1,9 @@
 class sdtdChat {
   constructor(serverId) {
     this.serverId = serverId;
+    this.start();
   }
+
 
   start() {
     console.log('Starting chat for server with id ' + this.serverId);
@@ -9,16 +11,8 @@ class sdtdChat {
     io.socket.get('/sdtdserver/' + this.serverId + '/socket', function (response) {
       console.log('Subscribed to socket ' + response);
     });
-    io.socket.on('chatMessage', function addNewChatMessage(chatMessage) {
-
-      if (chatMessage.playerName == 'Server') {
-        $('.chat-window').append(`<li class=\"chat-message\">${chatMessage.messageText} </li>`);
-
-      } else {
-        $('.chat-window').append(`<li class=\"chat-message\">${chatMessage.playerName}: ${chatMessage.messageText} </li>`);
-      }
-      $('.chat-window').scrollTop($('.chat-window')[0].scrollHeight);
-    });
+    io.socket.on('chatMessage', addNewChatMessage);
+    addSavedMessagesToChatWindow();
   }
 
   stop() {
@@ -43,4 +37,44 @@ class sdtdChat {
       });
     });
   }
+}
+
+function addNewChatMessage(chatMessage) {
+
+  if (chatMessage.playerName == 'Server') {
+    $('.chat-window').append(`<li class=\"chat-message\">${chatMessage.messageText} </li>`);
+    addMessageToStorage(`${chatMessage.messageText}`)
+
+  } else {
+    $('.chat-window').append(`<li class=\"chat-message\">${chatMessage.playerName}: ${chatMessage.messageText} </li>`);
+    addMessageToStorage(`${chatMessage.playerName}: ${chatMessage.messageText}`)
+  }
+  $('.chat-window').scrollTop($('.chat-window')[0].scrollHeight);
+
+}
+
+function addMessageToStorage(newMessage) {
+  let storage = window.localStorage
+  let savedMessages = JSON.parse(storage.getItem('chatMessages'));
+
+  if (!savedMessages) {
+    savedMessages = new Array('Starting chat');
+  }
+
+  if (savedMessages.length > 50) {
+    savedMessages.shift();
+  }
+
+  savedMessages.push(newMessage);
+  storage.setItem('chatMessages', JSON.stringify(savedMessages));
+}
+
+function addSavedMessagesToChatWindow() {
+  let savedMessages = JSON.parse(window.localStorage.getItem('chatMessages'));
+  if (savedMessages) {
+    savedMessages.forEach(msg => {
+      $('.chat-window').append(`<li class=\"chat-message\">${msg} </li>`);
+    })
+  }
+  $('.chat-window').scrollTop($('.chat-window')[0].scrollHeight);
 }
