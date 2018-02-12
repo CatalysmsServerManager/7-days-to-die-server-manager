@@ -42,12 +42,12 @@ class sdtdChat {
 function addNewChatMessage(chatMessage) {
 
   if (chatMessage.playerName == 'Server') {
-    $('.chat-window').append(`<li class=\"chat-message\">${chatMessage.messageText} </li>`);
-    addMessageToStorage(`${chatMessage.messageText}`)
+    $('.chat-window').append(`<li class=\"chat-message\">[${chatMessage.time}] ${chatMessage.messageText} </li>`);
+    addMessageToStorage(`[${chatMessage.time}] ${chatMessage.messageText}`)
 
   } else {
-    $('.chat-window').append(`<li class=\"chat-message\">${chatMessage.playerName}: ${chatMessage.messageText} </li>`);
-    addMessageToStorage(`${chatMessage.playerName}: ${chatMessage.messageText}`)
+    $('.chat-window').append(`<li class=\"chat-message\">[${chatMessage.time}] ${chatMessage.playerName}: ${chatMessage.messageText} </li>`);
+    addMessageToStorage(`[${chatMessage.time}] ${chatMessage.playerName}: ${chatMessage.messageText}`)
   }
   $('.chat-window').scrollTop($('.chat-window')[0].scrollHeight);
 

@@ -2,12 +2,16 @@
     overflow: scroll;
     height: 20em;
     resize: both;
-    padding: 2em;
     list-style-type: none;
+    border: 0.5em solid black;
+    border-radius: 5px;
 }
 
 .chat-message {
     border-radius: 1em;
     position: relative;
     padding: 0.5em;
+    border: 0.1em solid dimgray;
+    border-radius: 0px;
+
 }
