@@ -1,6 +1,7 @@
 class sdtdChat {
   constructor(serverId) {
     this.serverId = serverId;
+    this.addNewChatMessage = addNewChatMessage.bind(this);
     this.start();
   }
 
@@ -11,12 +12,12 @@ class sdtdChat {
     io.socket.get('/sdtdserver/' + this.serverId + '/socket', function (response) {
       console.log('Subscribed to socket ' + response);
     });
-    io.socket.on('chatMessage', addNewChatMessage);
-    addSavedMessagesToChatWindow();
+    io.socket.on('chatMessage', this.addNewChatMessage);
+    addSavedMessagesToChatWindow(this.serverId);
   }
 
   stop() {
-    io.socket.removeListener('chatMessage', addNewChatMessage);
+    io.socket.removeListener('chatMessage', this.addNewChatMessage);
   }
 
   sendMessage(message, username) {
@@ -43,19 +44,19 @@ function addNewChatMessage(chatMessage) {
 
   if (chatMessage.playerName == 'Server') {
     $('.chat-window').append(`<li class=\"chat-message\">[${chatMessage.time}] ${chatMessage.messageText} </li>`);
-    addMessageToStorage(`[${chatMessage.time}] ${chatMessage.messageText}`)
+    addMessageToStorage(`[${chatMessage.time}] ${chatMessage.messageText}`, this.serverId)
 
   } else {
     $('.chat-window').append(`<li class=\"chat-message\">[${chatMessage.time}] ${chatMessage.playerName}: ${chatMessage.messageText} </li>`);
-    addMessageToStorage(`[${chatMessage.time}] ${chatMessage.playerName}: ${chatMessage.messageText}`)
+    addMessageToStorage(`[${chatMessage.time}] ${chatMessage.playerName}: ${chatMessage.messageText}`, this.serverId)
   }
   $('.chat-window').scrollTop($('.chat-window')[0].scrollHeight);
 
 }
 
-function addMessageToStorage(newMessage) {
+function addMessageToStorage(newMessage, serverId) {
   let storage = window.localStorage
-  let savedMessages = JSON.parse(storage.getItem('chatMessages'));
+  let savedMessages = JSON.parse(storage.getItem(`chatMessages-${serverId}`));
 
   if (!savedMessages) {
     savedMessages = new Array('Starting chat');
@@ -66,11 +67,11 @@ function addMessageToStorage(newMessage) {
   }
 
   savedMessages.push(newMessage);
-  storage.setItem('chatMessages', JSON.stringify(savedMessages));
+  storage.setItem(`chatMessages-${serverId}`, JSON.stringify(savedMessages));
 }
 
-function addSavedMessagesToChatWindow() {
-  let savedMessages = JSON.parse(window.localStorage.getItem('chatMessages'));
+function addSavedMessagesToChatWindow(serverId) {
+  let savedMessages = JSON.parse(window.localStorage.getItem(`chatMessages-${serverId}`));
   if (savedMessages) {
     savedMessages.forEach(msg => {
       $('.chat-window').append(`<li class=\"chat-message\">${msg} </li>`);

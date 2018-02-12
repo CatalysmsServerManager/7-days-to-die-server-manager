@@ -1,6 +1,7 @@
 class sdtdConsole {
   constructor(serverId) {
     this.serverId = serverId;
+    this.addNewLogLine = addNewLogLine.bind(this)
     this.start()
   }
 
@@ -8,13 +9,13 @@ class sdtdConsole {
     this.status = true;
     $(".console-window").empty();
     io.socket.get('/sdtdserver/' + this.serverId + '/socket', function (response) { });
-    io.socket.on('logLine', addNewLogLine);
-    addSavedMessagesToConsoleWindow()
+    io.socket.on('logLine', this.addNewLogLine);
+    addSavedMessagesToConsoleWindow(this.serverId)
   }
 
   stop() {
     this.status = false;
-    io.socket.off('logLine', addNewLogLine);
+    io.socket.off('logLine', this.addNewLogLine);
   }
 
   executeCommand(command) {
@@ -43,14 +44,14 @@ function addNewLogLine(logLine) {
   } else {
     $('.console-window').append('<li class=\"log-line\">' + logLine.msg + '</li>');
   }
-  updateConsoleStorage(logLine.msg);
+  updateConsoleStorage(logLine.msg, this.serverId);
   $('.console-window').scrollTop($('.console-window')[0].scrollHeight);
 }
 
 
-function updateConsoleStorage(newMessage) {
+function updateConsoleStorage(newMessage, serverId) {
   let storage = window.localStorage
-  let savedMessages = JSON.parse(storage.getItem('consoleMessages'));
+  let savedMessages = JSON.parse(storage.getItem(`consoleMessages-${serverId}`));
   if (!savedMessages) {
     savedMessages = new Array('Starting console');
   }
@@ -60,11 +61,11 @@ function updateConsoleStorage(newMessage) {
   }
 
   savedMessages.push(newMessage);
-  storage.setItem('consoleMessages', JSON.stringify(savedMessages));
+  storage.setItem(`consoleMessages-${serverId}`, JSON.stringify(savedMessages));
 }
 
-function addSavedMessagesToConsoleWindow() {
-  let savedMessages = JSON.parse(window.localStorage.getItem('consoleMessages'));
+function addSavedMessagesToConsoleWindow(serverId) {
+  let savedMessages = JSON.parse(window.localStorage.getItem(`consoleMessages-${serverId}`));
   if (savedMessages) {
     savedMessages.forEach(msg => {
       if (msg.includes("error")) {
