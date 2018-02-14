@@ -7,7 +7,9 @@
       <div class="col-md-4">
           <h1><%= server.name %></h1>
         <div id="dashboard-title" class="page-header">
+              <% if(!_.isUndefined(server.stats) && !_.isUndefined(server.serverInfo)) { %>
           <%- include('./partials/onlinePlayers', {server: server}) %>
+          <% } %>
         </div>
       </div>
       <% if(!_.isUndefined(server.stats) && !_.isUndefined(server.serverInfo)) { %>
