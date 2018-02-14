@@ -22,7 +22,7 @@ class ChatBridgeChannel {
 
     try {
       this.config = await SdtdConfig.find({
-        id: this.sdtdServer.config
+        server: this.sdtdServer.id
       }).limit(1);
       this.config = this.config[0];
       // Bind 'this' to sendMessage functions

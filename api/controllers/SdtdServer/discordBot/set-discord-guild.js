@@ -31,6 +31,7 @@ module.exports = {
     try {
       let server = await SdtdServer.findOne(inputs.serverId);
       let discordClient = sails.hooks.discordbot.getClient();
+      let chatBridgeHook = sails.hooks.discordchatbridge
 
       if (!discordClient.guilds.has(inputs.discordGuildId)) {
         return exits.badGuild();
@@ -39,6 +40,10 @@ module.exports = {
       if (_.isUndefined(server)){
         return exits.notFound()
       }
+
+      if (chatBridgeHook.getStatus(inputs.serverId)) {
+        chatBridgeHook.stop(inputs.serverId);
+      } 
 
       await SdtdConfig.update({
         server: inputs.serverId

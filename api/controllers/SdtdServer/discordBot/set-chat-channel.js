@@ -7,7 +7,7 @@ module.exports = {
   inputs: {
     serverId: {
       required: true,
-      type: 'number'
+      type: 'string'
     },
     chatChannelId: {
       required: true,

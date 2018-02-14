@@ -138,7 +138,7 @@ module.exports = {
     tickets: {
       collection: 'sdtdticket',
       via: 'server'
-    }
+    },
   },
 
 };
