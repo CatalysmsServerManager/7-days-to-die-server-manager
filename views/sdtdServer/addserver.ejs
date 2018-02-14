@@ -1,7 +1,7 @@
 <body>
   <%- exposeLocalsToBrowser() %>
 
-    <form id="addServer" class="w-25 p-3 float-left">
+    <form id="addServer">
       <div class="form-group">
         <label for="serverip">Name</label>
         <input type="text" class="form-control" id="servername" aria-describedby="server-name-help" placeholder="World's best server!!">
@@ -12,7 +12,7 @@
         <input type="text" class="form-control" id="serverip" placeholder="Server IP address">
       </div>
       <div class="form-group">
-        <label for="webport">Web port</label>
+        <label for="webport">Web API port</label>
         <input type="number" class="form-control" id="webport" aria-describedby="webportHelp" placeholder="ex. 8084">
         <small id="webportHelp" class="form-text text-muted">Port added by Allocs fixes</small>
       </div>
@@ -73,10 +73,24 @@
         telnetPassword: telnetpassword
       },
       success: (data, status, xhr) => {
-        window.location.replace(`/sdtdserver/${data.id}/dashboard`)
+        let errorMessage = new String();
+        if (data.error) {
+          switch (data.error) {
+            case 'badTelnet':
+              errorMessage = `Could not connect to telnet! Confirm the values you entered for telnet connection are correct!`
+              break;
+            case 'badWebPort':
+              errorMessage = `Could not connect to your server! Confirm the web port is correct!`
+              break;
+            default:
+              break;
+          }
+          return $('#message').text(errorMessage)
+        } else {
+          window.location.replace(`/sdtdserver/${data.id}/dashboard`)
+        }
       },
       error: (xhr, status, error) => {
-        console.log(xhr)
         let htmlToAdd =
           `<h2>Error</h2> <br> <p>${xhr.responseText}</p> <br> <p>Contact support for more help please</p>`
         $("#message").append(htmlToAdd)

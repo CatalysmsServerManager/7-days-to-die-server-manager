@@ -134,7 +134,7 @@ module.exports = {
       allowOrigins: [
         "https://csmm.herokuapp.com",
         "http://catalysm.ddns.net",
-        "http://217.182.139.168:2000"
+        process.env.CSMM_HOSTNAME
       ]
     },
 
@@ -235,7 +235,7 @@ module.exports = {
          ***************************************************************************/
     onlyAllowOrigins: [
       "https://csmm.herokuapp.com",
-      "http://217.182.139.168:2000"
+      process.env.CSMM_HOSTNAME
     ],
 
 

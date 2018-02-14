@@ -36,7 +36,15 @@ module.exports = {
 
   exits: {
 
-    success: {}
+    success: {},
+    badTelnet: {
+      description: 'Could not connect to telnet!',
+      statusCode: 200
+    },
+    badWebPort: {
+      description: 'WebPort given was not valid',
+      statusCode: 200
+    }
 
   },
 
@@ -64,9 +72,20 @@ module.exports = {
         telnetPassword: inputs.telnetPassword,
         webPort: inputs.webPort,
         owner: userProfile.id
-      });
+      })
+
       return exits.success(sdtdServer);
     } catch (error) {
+      switch (error.code) {
+        case 'badTelnet':
+          exits.badTelnet({error: 'badTelnet'})
+          break;
+        case 'badWebPort':
+          exits.badWebPort({error: 'badWebPort'})
+          break;
+        default:
+          break;
+      }
       sails.log.error(`API - addServer - ${error}`);
       return exits.error(error);
     }

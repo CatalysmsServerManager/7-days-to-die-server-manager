@@ -155,9 +155,8 @@
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="/user/<%= req.session.userId %>">
-              User
-              <%= req.session.userId %>
+            <a class="nav-link" href="/user/<%= req.session.userId %>/profile">
+              Your profile
             </a>
           </li>
           <li class="nav-item">
@@ -165,9 +164,6 @@
           </li>
           <a class="nav-link" id="logout-button" href="/auth/logout">
             Logout
-          </a>
-          <a class="nav-link" id="user-tickets-button" href="/user/<%=  req.session.userId %>/tickets">
-            Your tickets
           </a>
           <% } else { %>
             <a class="nav-item" id="steam-login-button" href="/auth/steam">
@@ -188,7 +184,7 @@
       <div class="col-md-1">
       </div>
     </div>
-    </div>
+  </div>
 
 </body>
 

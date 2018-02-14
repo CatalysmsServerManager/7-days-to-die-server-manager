@@ -1,3 +1,5 @@
+const sevenDays = require('machinepack-7daystodiewebapi');
+
 module.exports = {
 
   friendlyName: 'Delete server',
@@ -40,13 +42,33 @@ module.exports = {
       if (_.isUndefined(server)) {
         return exits.notFound();
       }
-      // TODO: delete web tokens from server
 
-      sails.hooks.sdtdlogs.stop(server.id);
+      await sails.hooks.sdtdlogs.stop(server.id);
 
-      await SdtdServer.destroy({id: server.id});
-      await SdtdConfig.destroy({server: server.id});
-      sails.hooks.sdtdlogs.stop(server.id);
+      sevenDays.executeCommand({
+        ip: server.ip,
+        port: server.webPort,
+        authName: server.authName,
+        authToken: server.authToken,
+        command: `webtokens remove ${server.authName}`
+      }).exec({
+        success: result => {
+        },
+        error: error => {
+          sails.log.warn(`VIEW - SdtdServer:delete- Error while trying to delete token - ${error}`);
+        }
+      })
+
+      await SdtdConfig.destroy({
+        server: server.id
+      });
+      await Player.destroy({
+        server: server.id
+      })
+      await SdtdServer.destroy({
+        id: server.id
+      });
+
       exits.success();
 
     } catch (error) {

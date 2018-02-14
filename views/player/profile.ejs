@@ -2,55 +2,59 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-4">
-          <% include ../sdtdServer/partials/backToDashboard %>
-      <h1>
-        <img alt="Bootstrap Image Preview" src="<%= player.avatarUrl %>" class="img-circle" /> <%= player.name %>
-      </h1>
+      <% include ../sdtdServer/partials/backToDashboard %>
+        <h1>
+          <img alt="Bootstrap Image Preview" src="<%= player.avatarUrl %>" class="img-circle" />
+          <%= player.name %>
+        </h1>
 
-      <div class="row">
-        <div class="col-md-8">
-         
-          <ul class="list-group">
-            <li class="list-group-item">Steam ID:
-              <%= player.steamId %>
-            </li>
-            <li class="list-group-item">Entity ID:
-              <%= player.entityId %>
-            </li>
-            <li class="list-group-item">Location:
-              <%= player.positionX %>
-                <%= player.positionY %>
-                  <%= player.positionZ %>
-            </li>
-            <li class="list-group-item">Playtime:
-              <%= player.playtime %> seconds</li>
-            <li class="list-group-item">Ban status:
-              <%= player.banned %>
-            </li>
-          </ul>
-        </div>
+        <div class="row">
+          <div class="col-md-8">
 
-        <div class="col-md-4">
-          <div class="btn-group btn-group-vertical">
-
-            <% if (player.banned) { %>
-              <%- include("./partials/unbanPlayerButton", {player: player}) %>
-                <% } else { %>
-
-                  <%- include("./partials/banPlayerButton", {player: player}) %>
-                    <%- include("./partials/kickPlayerButton", {player: player}) %>
-                      <%- include("./partials/teleportPlayerButton", {player: player}) %>
-                      <% } %>
-
-                        <% if (player.lastOnline == '') { %>
-                          <%- include("./partials/giveItemButton", {player: player}) %>
-                            <% } %>
-
-
+            <ul class="list-group">
+              <li class="list-group-item">Steam ID:
+                <%= player.steamId %>
+              </li>
+              <li class="list-group-item">Entity ID:
+                <%= player.entityId %>
+              </li>
+              <li class="list-group-item">Location:
+                <%= player.positionX %>
+                  <%= player.positionY %>
+                    <%= player.positionZ %>
+              </li>
+              <li class="list-group-item">Playtime:
+                <%= player.playtime %> seconds</li>
+              <li class="list-group-item">Ban status:
+                <%= player.banned %>
+              </li>
+              <li class="list-group-item">Server:
+                <%= server.name %>
+              </li>
+            </ul>
           </div>
-        </div>
 
-      </div>
+          <div class="col-md-4">
+            <div class="btn-group btn-group-vertical">
+
+              <% if (player.banned) { %>
+                <%- include("./partials/unbanPlayerButton", {player: player}) %>
+                  <% } else { %>
+
+                    <%- include("./partials/banPlayerButton", {player: player}) %>
+                      <%- include("./partials/kickPlayerButton", {player: player}) %>
+                        <%- include("./partials/teleportPlayerButton", {player: player}) %>
+                          <% } %>
+
+                            <% if (player.lastOnline == '') { %>
+                              <%- include("./partials/giveItemButton", {player: player}) %>
+                                <% } %>
+
+
+            </div>
+          </div>
+
+        </div>
     </div>
     <div class="col-md-8">
       <%- include('./partials/playerInventory', {player: player}) %>
@@ -60,5 +64,3 @@
 
 </div>
 </body>
-
-

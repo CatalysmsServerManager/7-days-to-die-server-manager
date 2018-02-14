@@ -70,7 +70,11 @@ module.exports = {
           authToken: sdtdServer.authToken
         }).exec({
           success: (response) => {
-            resolve(true);
+            if (response.gametime && response.players) {
+              resolve(true);
+            } else {
+              resolve(false)
+            }
           },
           error: (error) => {
             resolve(false);

@@ -81,6 +81,7 @@ module.exports.routes = {
   'get /player/:playerId/profile': 'PlayerController.profile',
 
   'get /user/:userId/tickets': 'SdtdTicket.user-tickets-view',
+  'get /user/:userId/profile': 'User.profile',
 
   
   'get /sdtdticket/:ticketId': 'SdtdTicket.view-ticket',
@@ -90,25 +91,15 @@ module.exports.routes = {
   //  ╠═╣╠═╝║  ║╣ ║║║ ║║╠═╝║ ║║║║║ ║ ╚═╗
   //  ╩ ╩╩  ╩  ╚═╝╝╚╝═╩╝╩  ╚═╝╩╝╚╝ ╩ ╚═╝
 
-  
+  // SDTDSERVER
+
   'get /api/sdtdserver/executeCommand': 'SdtdServerController.execute-command',
   'get /api/sdtdserver/sendMessage': 'SdtdServerController.send-message',
   'get /api/sdtdserver/loadServerInfo': 'SdtdServerController.load-server-info',
   'get /api/sdtdserver/players': 'SdtdServerController.get-players',
   'get /api/sdtdserver/info': 'SdtdServerController.load-server-info',
   'get /api/sdtdserver/availableItems': 'SdtdServerController.available-items',
-  
-  // Sdtd settings
-  
-  'post /api/sdtdserver/updateConnectionInfo': 'SdtdServerController.update-connection-info',
-  'post /api/sdtdserver/toggleLogging': 'SdtdServerController.logging-toggle',
-  'post /api/sdtdserver/toggleCountryBan': 'SdtdServerController/countryBan.country-ban-toggle',
-  'post /api/sdtdserver/reloadCountryBan': 'SdtdServerController/countryBan.country-ban-reload',
-  'post /api/sdtdserver/togglecommands': 'SdtdServerController/commands.commands-toggle',
-  'post /api/sdtdserver/reloadcommands': 'SdtdServerController/commands.commands-reload',
-  'post /api/sdtdserver/togglemotd': 'SdtdServerController/motd.motd-toggle',
-  'post /api/sdtdserver/reloadmotd': 'SdtdServerController/motd.motd-reload',
-  'post /api/sdtdserver/reloadDiscord' : 'SdtdServerController/discordBot.reload-discord-settings',
+  'get /api/sdtdserver/findwriteablechannelsinguild' : 'SdtdServerController/discordBot.find-writeable-channels-in-guild',
   
   'post /api/sdtdTicket/updateTicketStatus': 'SdtdTicket.update-ticket-status',
   'post /api/sdtdTicket/editTicket' : 'SdtdTicket.edit-ticket',
@@ -117,6 +108,26 @@ module.exports.routes = {
   'post /api/sdtdserver/addserver': 'SdtdServerController/add-server',
   'post /api/sdtdserver/restartServer': 'SdtdServerController/restart-server',
 
+  // Sdtd settings
+  
+  'post /api/sdtdserver/updateConnectionInfo': 'SdtdServerController.update-connection-info',
+  'post /api/sdtdserver/toggleLogging': 'SdtdServerController.logging-toggle',
+
+  'post /api/sdtdserver/toggleCountryBan': 'SdtdServerController/countryBan.country-ban-toggle',
+  'post /api/sdtdserver/reloadCountryBan': 'SdtdServerController/countryBan.country-ban-reload',
+
+  'post /api/sdtdserver/togglecommands': 'SdtdServerController/commands.commands-toggle',
+  'post /api/sdtdserver/reloadcommands': 'SdtdServerController/commands.commands-reload',
+
+  'post /api/sdtdserver/togglemotd': 'SdtdServerController/motd.motd-toggle',
+  'post /api/sdtdserver/reloadmotd': 'SdtdServerController/motd.motd-reload',
+
+  'post /api/sdtdserver/setGuild': 'SdtdServerController/discordBot.set-discord-guild',
+  'post /api/sdtdserver/setchatchannel': 'SdtdServerController/discordBot.set-chat-channel',
+  'post /api/sdtdserver/setnotificationchannel': 'SdtdServerController/discordBot.set-notification-channel',
+
+
+  // PLAYER
 
   'get /api/player/kick': "Player.kick",
 
@@ -127,6 +138,7 @@ module.exports.routes = {
 
   'get /api/user/info': 'User.get-user-info',
   'get /api/user/ownedServers': "User.get-owned-servers",
+  'get /api/user/findguildsmanagedbyuser': "User.find-guilds-managed-by-user",
 
   'get /api/player/inventory': {
     controller: 'Player',

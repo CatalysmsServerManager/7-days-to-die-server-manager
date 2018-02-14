@@ -1,6 +1,25 @@
 <form id="chat-message-form">
+  <button class="btn btn-primary" type="button" id="clearChat">
+    Clear window
+  </button>
   <div class="form-group">
     <input type="text" class="form-control" id="chat-message-input" placeholder="Enter message">
   </div>
   <input type="submit" class="fa fa-comments-o btn btn-primary" aria-hidden="true" id="send-message">
 </form>
+
+
+<script>
+
+  $(document).ready(function () {
+
+    $('#clearChat').click(event => {
+      event.preventDefault();
+
+      window.localStorage.removeItem('chatMessages')
+      $(".chat-window").empty();
+    })
+
+  })
+
+</script>
