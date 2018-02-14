@@ -3,16 +3,25 @@
 
   <div class="col-md-4">
     <small class="text-muted">Control how the bot behaves in your server
-      <br> Enable discord developer mode to see channel IDs
     </small>
+
+    <% if ('' !== user.discordId) { %>
+
+      <a href="/auth/discord">
+        <img src="../../images/discordIcon.png" width="50%">
+      </a>
+
+      <%  } %>
   </div>
 
-  <div class="col-md-4">
+  <div class="col-md-8">
     <ul class="list-group">
 
-      <% if (_.isNull(user.ownedDiscordGuilds) || _.isUndefined(user.discordId)) { %>
+      <% if ('' === user.discordId) { %>
 
-        No discord info available, please login.
+        <a href="/auth/discord">
+          <img src="../../images/discordIcon.png" width="50%">
+        </a>
 
         <%  } else { %>
 
@@ -20,123 +29,245 @@
 
           <li class='list-group-item'>
             <label for="input-settings-discord-guild">Select discord guild to associate with this 7DTD server</label>
-            <br>
-            <small> If this list is not correct, please log in via discord again </small>
-            <select class="form-control" id="input-settings-discord-guild">
-              <% user.ownedDiscordGuilds.forEach(guild => { %>
-                <% if(guild.id === config.discordGuildId) { %>
+            <div class="form-inline">
+              <select class="form-control" id="input-settings-discord-guild">
 
-                  <option value="<%= guild.id %>" selected>
-                    <%= guild.name %>
-                  </option>
-                  <% } else { %>
 
-                    <option value="<%= guild.id %>">
-                      <%= guild.name %>
-                    </option>
-
-                    <% } %>
-                      <% }) %>
-            </select>
+              </select>
+              <button id="input-settings-discord-setguild-btn" type="button" class="btn btn-primary">Set guild</button>
+            </div>
           </li>
+
+
+
 
           <!-- Chat channel select -->
 
           <li class='list-group-item'>
-            <label for="input-settings-discord-chatchannel">Chat channel ID</label>
+            <label for="input-settings-discord-chatchannel">Chat channel</label>
             <br>
             <small>Designate a discord channel to create a chat bridge to your server with
-              <br> Set to 0 to disable chatbridge </small>
-            <input type="text" class="form-control" id="input-settings-discord-chatchannel" placeholder="<%= config.chatChannelId %>">
-            <div class="form-check">
-              <% if(config.chatChannelRichMessages) { %>
-                <input class="form-check-input" type="checkbox" value="" id="input-settings-discord-chatchannel-richmessages" checked>
-                <% } else { %>
-                  <input class="form-check-input" type="checkbox" value="" id="input-settings-discord-chatchannel-richmessages">
-                  <% } %>
-                    <label class="form-check-label" for="input-settings-discord-chatchannel-richmessages">
-                      Rich messages
-                      <br>
-                      <small> Displays additional information on player (dis)connect </small>
-                    </label>
-            </div>
+
+              <select class="form-control" id="input-settings-discord-chatchannel">
+              </select>
+              <div class="form-check">
+                <% if(config.chatChannelRichMessages) { %>
+                  <input class="form-check-input" type="checkbox" value="" id="input-settings-discord-chatchannel-richmessages" checked>
+                  <% } else { %>
+                    <input class="form-check-input" type="checkbox" value="" id="input-settings-discord-chatchannel-richmessages">
+                    <% } %>
+                      <label class="form-check-label" for="input-settings-discord-chatchannel-richmessages">
+                        Rich messages
+                        <br>
+                        <small> Displays additional information on player (dis)connect </small>
+                      </label>
+                      <button id="input-settings-discord-setChatChannel-btn" type="button" class="btn btn-primary">Set chat channel</button>
+
+              </div>
           </li>
+
+
 
           <!-- Notification channel select -->
 
           <li class='list-group-item'>
-            <label for="input-settings-discord-notificationChannel">Notification channel ID</label>
-            <br>
-            <small>Designate a discord channel to receive CSMM notifications
-              <br>Set to 0 to disable discord notifications </small>
-            <input type="text" class="form-control" id="input-settings-discord-notificationChannel" placeholder="<%= config.notificationChannelId %>">
-
+            <label for="input-settings-discord-notificationChannel">Notification channel</label>
+            <small>Designate a discord channel to receive CSMM notifications</small>
+            <div class="form-inline">
+              <select class="form-control" id="input-settings-discord-notificationChannel">
+              </select>
+              <button id="input-settings-discord-setnotificationChannel-btn" type="button" class="btn btn-primary">Set notification channel</button>
+            </div>
           </li>
           <% } %>
+
     </ul>
   </div>
 
-  <div class="col-md-4">
-    <button id="input-settings-discord-update" class="btn btn-default btn-primary" type="button">
-      <em class="glyphicon glyphicon-align-right"></em>
-      <i class="fa fa-refresh" aria-hidden="true"></i> Apply changes
-    </button>
-
-
-  </div>
+</div>
 
 </div>
 
 <script>
   $(document).ready(function () {
 
-    $('#input-settings-discord-update').click(event => {
-      event.preventDefault();
+    let discordGuildId = window.SAILS_LOCALS.config.discordGuildId;
+    let notificationChannelId = window.SAILS_LOCALS.config.notificationChannelId;
+    let chatChannelId = window.SAILS_LOCALS.config.chatChannelId;
 
+    // Load guilds the user can manage & add them to select
+    $.ajax({
+      url: `/api/user/findguildsmanagedbyuser`,
+      data: {
+        userId: <%= req.session.userId %>
+      },
+      success: (data, status, xhr) => {
+        let foundGuilds = data;
+        foundGuilds.forEach(guild => {
+          $('#input-settings-discord-guild').append($('<option>', {
+              value: guild.id
+            })
+            .text(guild.name));
+        })
+        $(`#input-settings-discord-guild option[value='${discordGuildId}']`).prop('selected', true);
+        updateChatChannels($('#input-settings-discord-guild').val())
+        updateNotificationChannels($('#input-settings-discord-guild').val())
+      },
+      error: (xhr, status, error) => {
+        console.log(error);
+      }
+    })
+
+    // Loads channels of a guild the bot can write in.
+    function updateChatChannels(guildId) {
+      $('#input-settings-discord-chatchannel').empty()
+      $.ajax({
+        url: `/api/sdtdserver/findwriteablechannelsinguild`,
+        data: {
+          guildId: guildId,
+          serverId: <%= server.id %>
+        },
+        success: (data, status, xhr) => {
+          let foundChannels = data;
+          let enabled = false
+          foundChannels.forEach(channel => {
+            $('#input-settings-discord-chatchannel').append($('<option>', {
+                value: channel.id
+              })
+              .text(channel.name));
+            enabled = true
+          })
+          if (enabled) {
+            $('#input-settings-discord-chatchannel').append($('<option>', {
+                value: 0
+              })
+              .text('Disabled'));
+          }
+          $(`#input-settings-discord-chatchannel option[value='${chatChannelId}'`).prop('selected', true);
+        },
+        error: (xhr, status, error) => {
+          console.log(error);
+        }
+      })
+    }
+
+    function updateNotificationChannels(guildId) {
+      $('#input-settings-discord-notificationChannel').empty()
+      $.ajax({
+        url: `/api/sdtdserver/findwriteablechannelsinguild`,
+        data: {
+          guildId: guildId,
+          serverId: <%= server.id %>
+        },
+        success: (data, status, xhr) => {
+          let foundChannels = data;
+          let enabled = false
+          foundChannels.forEach(channel => {
+            $('#input-settings-discord-notificationChannel').append($('<option>', {
+                value: channel.id
+              })
+              .text(channel.name));
+            enabled = true
+          })
+          if (enabled) {
+            $('#input-settings-discord-notificationChannel').append($('<option>', {
+                value: 0
+              })
+              .text('Disabled'));
+          }
+          $(`#input-settings-discord-notificationChannel option[value='${notificationChannelId}'`).prop(
+            'selected', true);
+        },
+        error: (xhr, status, error) => {
+          console.log(error);
+        }
+      })
+    }
+
+
+
+    // change guild click
+
+    $("#input-settings-discord-setguild-btn").click(e => {
+      e.preventDefault();
       let newGuildId = $('#input-settings-discord-guild').val();
-      let newChatChannelId = $('#input-settings-discord-chatchannel').val();
-      let newNotificationChannelId = $('#input-settings-discord-notificationChannel').val();
-      let newRichMessages
+      $.ajax({
+        url: '/api/sdtdserver/setGuild',
+        type: 'POST',
+        data: {
+          discordGuildId: newGuildId,
+          serverId: <%= server.id %>,
+          _csrf: window.SAILS_LOCALS._csrf
+        },
+        success: (data, status, xhr) => {
+          updateChatChannels($('#input-settings-discord-guild').val())
+          updateNotificationChannels($('#input-settings-discord-guild').val())
+          $('#input-settings-discord-guild').addClass("bg-success").removeClass("bg-danger");
+        },
+        error: (xhr, status, error) => {
+          alert(`Whoa can't set server to that guild! error: ${error}`)
+          $('#input-settings-discord-guild').addClass("bg-danger").removeClass("bg-success");
+          console.log(error);
+        }
+      })
+    })
 
+    // Change chat click
+
+    $("#input-settings-discord-setChatChannel-btn").click(e => {
+      e.preventDefault();
+
+      let newChatChannelId = $('#input-settings-discord-chatchannel').val();
+      let newRichMessages
       if ($('#input-settings-discord-chatchannel-richmessages').is(":checked")) {
         newRichMessages = true
       } else {
         newRichMessages = false
       }
-
       $.ajax({
-        url: `/api/sdtdserver/reloaddiscord`,
-        type: "POST",
+        url: '/api/sdtdserver/setchatchannel',
+        type: 'POST',
         data: {
-          _csrf: window.SAILS_LOCALS._csrf,
-          newGuildId: newGuildId,
-          newChatChannelId: newChatChannelId,
-          newNotificationChannelId: newNotificationChannelId,
-          newRichMessages: newRichMessages,
-          serverId: <%= server.id %>
+          chatChannelId: newChatChannelId,
+          serverId: <%= server.id %>,
+          richMessages: newRichMessages,
+          _csrf: window.SAILS_LOCALS._csrf
         },
         success: (data, status, xhr) => {
-          if (data.error == 'botNotInGuild') {
-            alert(
-              `The bot is not in your server! Make sure you have invited the bot to the right server then try again`
-            )
-          }
-          if (data.error == 'invalidNotificationChannel') {
-            alert(
-              `Invalid notification channel! Make sure you have invited the bot to the right server and has access to this channel then try again`
-            )
-          }
-          if (data.error == 'invalidChatChannel') {
-            alert(
-              `Invalid chat channel! Make sure you have invited the bot to the right server and has access to this channel then try again`
-            )
-          }
-          location.reload();
+          $('#input-settings-discord-chatchannel').addClass("bg-success").removeClass("bg-danger");
         },
         error: (xhr, status, error) => {
-          alert('Something went wrong while trying to apply discord settings!\n' + error);
+          alert(`Whoa can't set chat to that channel! error: ${error}`)
+          $('#input-settings-discord-chatchannel').addClass("bg-danger").removeClass("bg-success");
+          console.log(error);
         }
-      });
+      })
+    })
+
+    // Change notification click
+
+    $("#input-settings-discord-setnotificationChannel-btn").click(e => {
+      e.preventDefault();
+      let newNotificationChannelId = $('#input-settings-discord-notificationChannel').val();
+
+      $.ajax({
+        url: '/api/sdtdserver/setnotificationchannel',
+        type: 'POST',
+        data: {
+          notificationChannelId: newNotificationChannelId,
+          serverId: <%= server.id %>,
+          _csrf: window.SAILS_LOCALS._csrf
+        },
+        success: (data, status, xhr) => {
+          $('#input-settings-discord-notificationChannel').addClass("bg-success").removeClass("bg-danger");
+        },
+        error: (xhr, status, error) => {
+          alert(`Whoa can't set notification to that channel! error: ${error}`)
+          $('#input-settings-discord-notificationChannel').addClass("bg-danger").removeClass("bg-success");
+          console.log(error);
+        }
+      })
+
     })
 
   })

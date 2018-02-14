@@ -64,14 +64,10 @@ module.exports = {
         };
 
         try {
-          let ownedServers = discordProfile.guilds.filter(guild => {
-            return guild.owner === true;
-          });
           await User.update({
             id: req.session.userId
           }, {
             discordId: discordProfile.id,
-            ownedDiscordGuilds: ownedServers
           });
           sails.log.debug(`User ${req.session.userId} updated discord info successfully`);
           res.redirect('/');

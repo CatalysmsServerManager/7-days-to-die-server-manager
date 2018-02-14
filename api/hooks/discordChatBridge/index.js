@@ -89,7 +89,7 @@ module.exports = function SdtdDiscordChatBridge(sails) {
 
       config = config[0]
 
-      if (_.isUndefined(config) || _.isUndefined(config.chatChannelId)) {
+      if (_.isUndefined(config) || !config.chatChannelId) {
         throw new Error(`Tried to start chatbridge for server without config`);
       }
 
@@ -104,7 +104,7 @@ module.exports = function SdtdDiscordChatBridge(sails) {
       if (_.isUndefined(textChannel)) {
         throw new Error(`Did not find textchannel corresponding to ID in config.`);
       }
-      
+
       let chatBridge = new ChatBridgeChannel(textChannel, server);
       chatBridgeInfoMap.set(serverId, chatBridge);
     } catch (error) {

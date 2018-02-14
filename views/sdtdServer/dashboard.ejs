@@ -1,11 +1,15 @@
+
+
 <body>
   <div class="container-fluid">
     <div class="row">
+
       <div class="col-md-4">
+          <h1><%= server.name %></h1>
         <div id="dashboard-title" class="page-header">
-          <h1>
-            Dashboard
-          </h1>
+              <% if(!_.isUndefined(server.stats) && !_.isUndefined(server.serverInfo)) { %>
+          <%- include('./partials/onlinePlayers', {server: server}) %>
+          <% } %>
         </div>
       </div>
       <% if(!_.isUndefined(server.stats) && !_.isUndefined(server.serverInfo)) { %>
@@ -17,18 +21,16 @@
         </div>
     </div>
     <div class="row">
-      <div class="col-md-4">
-        <%- include('./partials/onlinePlayers', {server: server}) %>
+      <div class="col-md-6">
+        <%- include('./partials/chat/chatWindow', {server: server}) %>
+          <%- include('./partials/chat/chatControls', {server: server}) %>
 
       </div>
-      <div class="col-md-4">
+      <div class="col-md-6">
         <%- include('./partials/console/consoleWindow', {server: server}) %>
           <%- include('./partials/console/consoleControls', {server: server}) %>
       </div>
-      <div class="col-md-4">
-        <%- include('./partials/chat/chatWindow', {server: server}) %>
-          <%- include('./partials/chat/chatControls', {server: server}) %>
-      </div>
+
     </div>
     <% } else { %>
       <h2> ERROR </h2> <br>

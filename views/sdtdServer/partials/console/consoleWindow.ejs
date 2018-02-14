@@ -32,6 +32,7 @@
 
     $("#clearConsole").click((event) => {
       event.preventDefault();
+      window.localStorage.removeItem('consoleMessages')
       $(".console-window").empty();
     })
   })

@@ -4,15 +4,27 @@
 <script>
   $(document).ready(function () {
 
-    let sdtdChatWindow = new sdtdChat(<%= server.id %>)
-    sdtdChatWindow.start()
+    let sdtdChatWindow = new sdtdChat(<%= server.id %>);
+    let userName = `user <%= req.session.userId %>`
+
+    $.ajax({
+      url: '/api/user/info',
+      data: {
+        userId: <%= req.session.userId %>
+      },
+      success: (response) => {
+        userName = response.username
+      },
+      error: (error) => {
+
+      }
+    })
 
     $('#chat-message-form').submit((event) => {
       event.preventDefault();
       let chatMessageToSend = $("#chat-message-input").val();
       $("#chat-message-input").val('');
-      sdtdChatWindow.sendMessage(chatMessageToSend,
-        "<%= req.session.userId %>");
+      sdtdChatWindow.sendMessage(chatMessageToSend, userName);
     })
 
   })
