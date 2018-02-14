@@ -91,7 +91,8 @@ module.exports.routes = {
   //  ╠═╣╠═╝║  ║╣ ║║║ ║║╠═╝║ ║║║║║ ║ ╚═╗
   //  ╩ ╩╩  ╩  ╚═╝╝╚╝═╩╝╩  ╚═╝╩╝╚╝ ╩ ╚═╝
 
-  
+  // SDTDSERVER
+
   'get /api/sdtdserver/executeCommand': 'SdtdServerController.execute-command',
   'get /api/sdtdserver/sendMessage': 'SdtdServerController.send-message',
   'get /api/sdtdserver/loadServerInfo': 'SdtdServerController.load-server-info',
@@ -100,18 +101,6 @@ module.exports.routes = {
   'get /api/sdtdserver/availableItems': 'SdtdServerController.available-items',
   'get /api/sdtdserver/findwriteablechannelsinguild' : 'SdtdServerController/discordBot.find-writeable-channels-in-guild',
   
-  // Sdtd settings
-  
-  'post /api/sdtdserver/updateConnectionInfo': 'SdtdServerController.update-connection-info',
-  'post /api/sdtdserver/toggleLogging': 'SdtdServerController.logging-toggle',
-  'post /api/sdtdserver/toggleCountryBan': 'SdtdServerController/countryBan.country-ban-toggle',
-  'post /api/sdtdserver/reloadCountryBan': 'SdtdServerController/countryBan.country-ban-reload',
-  'post /api/sdtdserver/togglecommands': 'SdtdServerController/commands.commands-toggle',
-  'post /api/sdtdserver/reloadcommands': 'SdtdServerController/commands.commands-reload',
-  'post /api/sdtdserver/togglemotd': 'SdtdServerController/motd.motd-toggle',
-  'post /api/sdtdserver/reloadmotd': 'SdtdServerController/motd.motd-reload',
-  'post /api/sdtdserver/reloadDiscord' : 'SdtdServerController/discordBot.reload-discord-settings',
-  
   'post /api/sdtdTicket/updateTicketStatus': 'SdtdTicket.update-ticket-status',
   'post /api/sdtdTicket/editTicket' : 'SdtdTicket.edit-ticket',
   'get /api/sdtdticket/opentickets' : 'SdtdTicketController.open-tickets',
@@ -119,6 +108,25 @@ module.exports.routes = {
   'post /api/sdtdserver/addserver': 'SdtdServerController/add-server',
   'post /api/sdtdserver/restartServer': 'SdtdServerController/restart-server',
 
+  // Sdtd settings
+  
+  'post /api/sdtdserver/updateConnectionInfo': 'SdtdServerController.update-connection-info',
+  'post /api/sdtdserver/toggleLogging': 'SdtdServerController.logging-toggle',
+
+  'post /api/sdtdserver/toggleCountryBan': 'SdtdServerController/countryBan.country-ban-toggle',
+  'post /api/sdtdserver/reloadCountryBan': 'SdtdServerController/countryBan.country-ban-reload',
+
+  'post /api/sdtdserver/togglecommands': 'SdtdServerController/commands.commands-toggle',
+  'post /api/sdtdserver/reloadcommands': 'SdtdServerController/commands.commands-reload',
+
+  'post /api/sdtdserver/togglemotd': 'SdtdServerController/motd.motd-toggle',
+  'post /api/sdtdserver/reloadmotd': 'SdtdServerController/motd.motd-reload',
+
+  'post /api/sdtdserver/setGuild': 'SdtdServerController/discordBot.set-discord-guild',
+  'post /api/sdtdserver/setchatchannel': 'SdtdServerController/discordBot.set-chat-channel',
+
+
+  // PLAYER
 
   'get /api/player/kick': "Player.kick",
 
