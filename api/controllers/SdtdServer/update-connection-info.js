@@ -1,3 +1,5 @@
+const sevenDays = require('machinepack-7daystodiewebapi');
+
 module.exports = {
 
 
@@ -78,6 +80,22 @@ module.exports = {
         authToken: authToken,
         name: serverName
       });
+
+      if (inputs.authName || inputs.authToken) {
+        sevenDays.executeCommand({
+          ip: server.ip,
+          port: server.webPort,
+          authName: server.authName,
+          authToken: server.authToken,
+          command: `webtokens remove ${server.authName}`
+        }).exec({
+          success: result => {
+          },
+          error: error => {
+            sails.log.warn(`API - SdtdServer:update-connection-info- Error while trying to delete token - ${error}`);
+          }
+        })
+      }
 
       sails.hooks.sdtdlogs.stop(inputs.serverId);
       sails.hooks.sdtdlogs.start(inputs.serverId);
