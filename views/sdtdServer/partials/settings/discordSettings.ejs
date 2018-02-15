@@ -110,8 +110,12 @@
             .text(guild.name));
         })
         $(`#input-settings-discord-guild option[value='${discordGuildId}']`).prop('selected', true);
-        updateChatChannels($('#input-settings-discord-guild').val())
-        updateNotificationChannels($('#input-settings-discord-guild').val())
+
+        if (discordGuildId) {
+          updateChatChannels($('#input-settings-discord-guild').val())
+          updateNotificationChannels($('#input-settings-discord-guild').val())
+        }
+
       },
       error: (xhr, status, error) => {
         console.log(error);
@@ -224,6 +228,11 @@
       } else {
         newRichMessages = false
       }
+
+      if (!newChatChannelId) {
+        return alert('Error! Make sure you have a guild set and are selecting a valid channel')
+      }
+
       $.ajax({
         url: '/api/sdtdserver/setchatchannel',
         type: 'POST',
@@ -249,6 +258,10 @@
     $("#input-settings-discord-setnotificationChannel-btn").click(e => {
       e.preventDefault();
       let newNotificationChannelId = $('#input-settings-discord-notificationChannel').val();
+
+      if (!newNotificationChannelId) {
+        return alert('Error! Make sure you have a guild set and are selecting a valid channel')
+      }
 
       $.ajax({
         url: '/api/sdtdserver/setnotificationchannel',
