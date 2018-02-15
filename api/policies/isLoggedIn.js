@@ -11,6 +11,6 @@ module.exports = function isLoggedIn(req, res, next) {
     return next();
   } else {
     sails.log.warn(`POLICY - isLoggedIn - ${req.ip} tried to access a protected resource!`);
-    return res.forbidden();
+    return res.redirect('/auth/steam');
   }
 };

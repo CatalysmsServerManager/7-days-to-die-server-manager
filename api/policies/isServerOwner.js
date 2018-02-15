@@ -5,7 +5,7 @@ module.exports = async function isServerOwner(req, res, next) {
   }
 
   if (_.isUndefined(req.session.userId)) {
-    return res.forbidden('Must be logged in')
+    return res.redirect('/auth/steam');
   }
 
   try {
@@ -20,7 +20,7 @@ module.exports = async function isServerOwner(req, res, next) {
       return res.notFound();
     }
     if (_.isUndefined(user)) {
-      return res.forbidden();
+      return res.redirect('/auth/steam');
     }
 
 
