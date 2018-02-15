@@ -36,6 +36,10 @@ module.exports.routes = {
     view: 'meta/changeLog'
   },
 
+  '/sponsors/ldh': {
+    view: 'meta/sponsors/letsdohosting'
+  },
+
   '/auth/steam': {
     controller: 'AuthController',
     action: 'steamLogin'
