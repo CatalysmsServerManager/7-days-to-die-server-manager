@@ -52,7 +52,7 @@ module.exports.policies = {
   },
 
   playerController: {
-    '*': ['isLoggedIn', 'isBetaTester']
+    '*': ['isLoggedIn', 'isBetaTester', 'isPlayerOwner']
   },
 
   userController: {
