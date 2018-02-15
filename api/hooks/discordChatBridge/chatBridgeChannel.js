@@ -50,7 +50,7 @@ class ChatBridgeChannel {
         this.channel.client.on('message', this.sendMessageToGame);
         let embed = new this.channel.client.customEmbed();
         embed.setDescription(':white_check_mark: Initialized a chat bridge')
-        .addField(`Rich messages`, this.config.chatChannelRichMessages ? ':white_check_mark:' : ':x:')
+          .addField(`Rich messages`, this.config.chatChannelRichMessages ? ':white_check_mark:' : ':x:')
         this.channel.send(embed);
       } else {
         this.channel.send(new this.channel.client.errorEmbed(':x: Could not find a logging object for this server'));
@@ -102,16 +102,20 @@ class ChatBridgeChannel {
     })
     connectedPlayer = connectedPlayer[0]
     let embed = new this.channel.client.customEmbed();
+
     embed.setTitle(`${this.sdtdServer.name} --- ${connectedMsg.playerName} connected`)
       .addField('Steam ID', `[${connectedMsg.steamID}](https://steamidfinder.com/lookup/${connectedMsg.steamID}/)`, true)
       .addField('Country', connectedMsg.country, true)
-      .addField('Playtime (seconds)', connectedPlayer.playtime ? connectedPlayer.playtime : "New player!", true)
-      .addField('CSMM profile', `${process.env.CSMM_HOSTNAME}/player/${connectedPlayer.id}/profile`)
       .setColor('GREEN')
 
-      if (connectedPlayer.avatarUrl) {
-        embed.setThumbnail(connectedPlayer.avatarUrl)
-      }
+    if (connectedPlayer) {
+      embed.addField('Playtime (seconds)', connectedPlayer.playtime ? connectedPlayer.playtime : "New player!", true)
+        .addField('CSMM profile', `${process.env.CSMM_HOSTNAME}/player/${connectedPlayer.id}/profile`)
+    }
+
+    if (connectedPlayer.avatarUrl) {
+      embed.setThumbnail(connectedPlayer.avatarUrl)
+    }
     this.channel.send(embed);
   }
 
@@ -123,10 +127,10 @@ class ChatBridgeChannel {
     disconnectedPlayer = disconnectedPlayer[0]
     let embed = new this.channel.client.customEmbed();
     embed.setTitle(`${this.sdtdServer.name} --- ${disconnectedMsg.playerName} disconnected`)
-    .addField('Steam ID', disconnectedPlayer.steamId ? `[${disconnectedPlayer.steamId}](https://steamidfinder.com/lookup/${disconnectedPlayer.steamId}/)` : `Unknown`, true)
-    .addField('Playtime (seconds)', disconnectedPlayer.playtime, true)
-    .addField('CSMM profile', `${process.env.CSMM_HOSTNAME}/player/${disconnectedPlayer.id}/profile`)
-    .setColor('RED')
+      .addField('Steam ID', disconnectedPlayer.steamId ? `[${disconnectedPlayer.steamId}](https://steamidfinder.com/lookup/${disconnectedPlayer.steamId}/)` : `Unknown`, true)
+      .addField('Playtime (seconds)', disconnectedPlayer.playtime, true)
+      .addField('CSMM profile', `${process.env.CSMM_HOSTNAME}/player/${disconnectedPlayer.id}/profile`)
+      .setColor('RED')
     if (disconnectedPlayer.avatarUrl) {
       embed.setThumbnail(disconnectedPlayer.avatarUrl);
     }
