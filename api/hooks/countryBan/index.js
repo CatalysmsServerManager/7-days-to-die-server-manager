@@ -279,11 +279,13 @@ module.exports = function sdtdCountryBan(sails) {
         sails.on('hook:sdtdlogs:loaded', async function () {
           try {
             let configs = await SdtdConfig.find();
-            _.each(configs, async function (config) {
+
+            for (const config of configs) {
               if (config.countryBanConfig.enabled) {
                 await startCountryBan(config.server);
               }
-            });
+            }
+
             sails.log.info(`HOOK: countryBan - Initialized ${countryBanInfoMap.size} country ban instances`);
             return cb();
           } catch (error) {

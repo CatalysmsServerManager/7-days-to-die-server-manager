@@ -29,16 +29,12 @@ module.exports = function sdtdLogs(sails) {
             loggingEnabled: true
           }).populate('server');
 
-          await _.each(enabledServers, async function (config) {
-            try {
-              let server = config.server;
-              let loggingObj = await createLogObject(server.id);
-              return loggingInfoMap.set(String(server.id), loggingObj);
-            } catch (error) {
-              sails.log.error(`HOOKS - sdtdLogs - ${error}`);
-            }
-          });
-          sails.log.info(`HOOK: Sdtdlogs - Initialized ${enabledServers.length} logging instances`);
+          for (let config of enabledServers) {
+            let server = config.server;
+            let loggingObj = await createLogObject(server.id);
+            loggingInfoMap.set(String(server.id), loggingObj);
+          }
+          sails.log.info(`HOOK: Sdtdlogs - Initialized ${loggingInfoMap.size} logging instances`);
           return cb();
         } catch (error) {
           sails.log.error(`HOOKS - sdtdLogs - ${error}`);

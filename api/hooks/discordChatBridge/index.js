@@ -34,17 +34,13 @@ module.exports = function SdtdDiscordChatBridge(sails) {
                 }
               }]
             });
-            enabledServers.forEach(serverConfig => {
-              sails.helpers.sdtd.checkIfAvailable(serverConfig.server).switch({
-                success: response => {
-                  start(serverConfig.server);
-                },
-                error: error => {
 
-                }
-              })
-            });
-            sails.log.info(`HOOK SdtdDiscordChatBridge:initialize - Initialized ${enabledServers.length} chatbridge(s)`);
+            for (const serverConfig of enabledServers) {
+              await start(serverConfig.server);
+            }
+            sails.log.info(`HOOK SdtdDiscordChatBridge:initialize - Initialized ${chatBridgeInfoMap.size} chatbridge(s)`);
+
+
           } catch (error) {
             sails.log.error(`HOOK SdtdDiscordChatBridge:initialize - ${error}`);
           }

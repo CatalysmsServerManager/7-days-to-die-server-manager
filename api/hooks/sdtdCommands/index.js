@@ -34,10 +34,12 @@ module.exports = function sdtdCommands(sails) {
             let enabledServers = await SdtdConfig.find({
               commandsEnabled: true
             });
-            enabledServers.forEach(serverConfig => {
-              start(serverConfig.server);
-            });
-            sails.log.info(`HOOK SdtdCommands - initialized ${enabledServers.length} ingame command listeners`);
+
+            for (const config of enabledServers) {
+              await start(config.server);
+            }
+
+            sails.log.info(`HOOK SdtdCommands - initialized ${commandInfoMap.size} ingame command listeners`);
           } catch (error) {
             sails.log.error(`HOOK SdtdCommands:initialize - ${error}`);
           }

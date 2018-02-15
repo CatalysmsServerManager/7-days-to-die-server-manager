@@ -30,18 +30,12 @@ module.exports = function sdtdLogs(sails) {
               motdEnabled: true
             }).populate('server');
 
-            await _.each(enabledServers, async function (config) {
-              try {
-                let server = config.server;
-                let motdSender = new MotdSender(server.id, config);
-
-                return motdInfoMap.set(server.id, motdSender);
-
-              } catch (error) {
-                sails.log.error(`HOOKS - sdtdMotd:initialize - ${error}`);
-              }
-            });
-            sails.log.info(`HOOK: sdtdMotd - Initialized ${enabledServers.length} MOTD instances`);
+            for (const config of enabledServers) {
+              let server = config.server;
+              let motdSender = new MotdSender(server.id, config);
+              motdInfoMap.set(server.id, motdSender);
+            }
+            sails.log.info(`HOOK: sdtdMotd - Initialized ${motdInfoMap.size} MOTD instances`);
             return cb();
           } catch (error) {
             sails.log.error(`HOOKS - sdtdMotd:initialize - ${error}`);
