@@ -19,6 +19,8 @@
  * https://sailsjs.com/docs/concepts/deployment
  */
 
+
+
 module.exports = {
 
 
@@ -132,8 +134,6 @@ module.exports = {
          ***************************************************************************/
     cors: {
       allowOrigins: [
-        "https://csmm.herokuapp.com",
-        "http://catalysm.ddns.net",
         process.env.CSMM_HOSTNAME
       ]
     },
@@ -234,7 +234,6 @@ module.exports = {
          *                                                                          *
          ***************************************************************************/
     onlyAllowOrigins: [
-      "https://csmm.herokuapp.com",
       process.env.CSMM_HOSTNAME
     ],
 
@@ -341,7 +340,13 @@ module.exports = {
      * > https://sailsjs.com/config/*#?ssl-configuration-example               *
      *                                                                         *
      **************************************************************************/
-  // ssl: undefined,
+
+     
+    ssl: {
+      ca: require('fs').readFileSync(require('path').resolve(__dirname,'./ssl/chain.pem')),
+      key: require('fs').readFileSync(require('path').resolve(__dirname,'./ssl/privkey.pem')),
+      cert: require('fs').readFileSync(require('path').resolve(__dirname,'./ssl/fullchain.pem'))
+    },
 
 
 

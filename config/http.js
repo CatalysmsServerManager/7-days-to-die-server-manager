@@ -85,7 +85,6 @@ Raven.config(process.env.SENTRY_DSN, {
   captureUnhandledRejections: true
 }).install();
 
-
 module.exports.http = {
 
   /****************************************************************************
