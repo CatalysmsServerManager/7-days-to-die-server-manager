@@ -41,8 +41,6 @@ module.exports = {
    */
 
   fn: async function (inputs, exits) {
-    sails.log.debug(`HELPER - checkIfAvailable - checking if server ${inputs.serverId} is available`);
-
     try {
       let sdtdServer = await SdtdServer.findOne({
         id: inputs.serverId
@@ -53,6 +51,7 @@ module.exports = {
       if (statsResponse && commandResponse) {
         return exits.success(true);
       } else {
+        sails.log.debug(`HELPER - checkIfAvailable - Server ${inputs.serverId} is not available`);
         return exits.notAvailable();
       }
 

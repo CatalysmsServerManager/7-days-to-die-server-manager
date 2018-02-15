@@ -80,9 +80,8 @@ const Raven = require('raven');
 Raven.config(process.env.SENTRY_DSN, {
   autoBreadcrumbs: {
     'console': true,
-    'http': true
   },
-  captureUnhandledRejections: true
+  captureUnhandledRejections: true,
 }).install();
 
 module.exports.http = {
