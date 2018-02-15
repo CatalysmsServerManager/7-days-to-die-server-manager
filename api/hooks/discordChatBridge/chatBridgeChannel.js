@@ -62,15 +62,19 @@ class ChatBridgeChannel {
   }
 
   stop() {
-    this.loggingObject.removeListener('chatMessage', this.sendChatMessageToDiscord);
-    this.loggingObject.removeListener('playerDeath', this.sendDeathMessageToDiscord);
-    this.loggingObject.removeListener('playerConnected', this.sendConnectedMessageToDiscord);
-    this.loggingObject.removeListener('playerDisconnected', this.sendDisconnectedMessageToDiscord);
-    this.loggingObject.removeListener('playerConnected', this.sendRichConnectedMessageToDiscord);
-    this.loggingObject.removeListener('playerDisconnected', this.sendRichDisconnectedMessageToDiscord);
-    this.channel.client.removeListener('message', this.sendMessageToGame);
     let embed = new this.channel.client.customEmbed();
-    embed.setDescription(':x: Disabled chat bridge');
+    if (this.loggingObject) {
+      this.loggingObject.removeListener('chatMessage', this.sendChatMessageToDiscord);
+      this.loggingObject.removeListener('playerDeath', this.sendDeathMessageToDiscord);
+      this.loggingObject.removeListener('playerConnected', this.sendConnectedMessageToDiscord);
+      this.loggingObject.removeListener('playerDisconnected', this.sendDisconnectedMessageToDiscord);
+      this.loggingObject.removeListener('playerConnected', this.sendRichConnectedMessageToDiscord);
+      this.loggingObject.removeListener('playerDisconnected', this.sendRichDisconnectedMessageToDiscord);
+      this.channel.client.removeListener('message', this.sendMessageToGame);
+      embed.setDescription(':x: Disabled chat bridge');
+    } else {
+      embed.setDescription('Tried to stop chatbridge in this channel but something went wrong!')
+    }
     this.channel.send(embed);
   }
 

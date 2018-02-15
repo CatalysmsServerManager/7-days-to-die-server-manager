@@ -114,6 +114,9 @@ module.exports = function sdtdLogs(sails) {
 
     getLoggingObject: function (serverId) {
       let obj = loggingInfoMap.get(String(serverId));
+      if (!obj) {
+        throw new Error(`Did not find a logging object! This shouldn't happen!`)
+      }
       return obj;
     },
 
