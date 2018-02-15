@@ -123,7 +123,7 @@ class ChatBridgeChannel {
     disconnectedPlayer = disconnectedPlayer[0]
     let embed = new this.channel.client.customEmbed();
     embed.setTitle(`${this.sdtdServer.name} --- ${disconnectedMsg.playerName} disconnected`)
-    .addField('Steam ID', `[${disconnectedPlayer.steamId}](https://steamidfinder.com/lookup/${disconnectedPlayer.steamId}/)`, true)
+    .addField('Steam ID', disconnectedPlayer.steamId ? `[${disconnectedPlayer.steamId}](https://steamidfinder.com/lookup/${disconnectedPlayer.steamId}/)` : `Unknown`, true)
     .addField('Playtime (seconds)', disconnectedPlayer.playtime, true)
     .addField('CSMM profile', `${process.env.CSMM_HOSTNAME}/player/${disconnectedPlayer.id}/profile`)
     .setColor('RED')
