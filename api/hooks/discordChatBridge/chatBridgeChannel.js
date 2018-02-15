@@ -105,7 +105,7 @@ class ChatBridgeChannel {
     embed.setTitle(`${this.sdtdServer.name} --- ${connectedMsg.playerName} connected`)
       .addField('Steam ID', `[${connectedMsg.steamID}](https://steamidfinder.com/lookup/${connectedMsg.steamID}/)`, true)
       .addField('Country', connectedMsg.country, true)
-      .addField('Playtime (seconds)', connectedPlayer.playtime, true)
+      .addField('Playtime (seconds)', connectedPlayer.playtime ? connectedPlayer.playtime : "New player!", true)
       .addField('CSMM profile', `${process.env.CSMM_HOSTNAME}/player/${connectedPlayer.id}/profile`)
       .setColor('GREEN')
 
