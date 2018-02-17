@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const sevenDays = require('machinepack-7daystodiewebapi');
+const hhmmss = require('@streammedev/hhmmss')
 
 
 /**
@@ -113,7 +114,7 @@ class ChatBridgeChannel {
       .setColor('GREEN')
 
     if (connectedPlayer) {
-      embed.addField('Playtime (seconds)', connectedPlayer.playtime ? connectedPlayer.playtime : "New player!", true)
+      embed.addField('Playtime', connectedPlayer.playtime ? hhmmss(connectedPlayer.playtime) : "New player!", true)
         .addField('CSMM profile', `${process.env.CSMM_HOSTNAME}/player/${connectedPlayer.id}/profile`)
     }
 
@@ -132,7 +133,7 @@ class ChatBridgeChannel {
     let embed = new this.channel.client.customEmbed();
     embed.setTitle(`${this.sdtdServer.name} --- ${disconnectedMsg.playerName} disconnected`)
       .addField('Steam ID', disconnectedPlayer.steamId ? `[${disconnectedPlayer.steamId}](https://steamidfinder.com/lookup/${disconnectedPlayer.steamId}/)` : `Unknown`, true)
-      .addField('Playtime (seconds)', disconnectedPlayer.playtime, true)
+      .addField('Playtime', hhmmss(disconnectedPlayer.playtime), true)
       .addField('CSMM profile', `${process.env.CSMM_HOSTNAME}/player/${disconnectedPlayer.id}/profile`)
       .setColor('RED')
     if (disconnectedPlayer.avatarUrl) {
