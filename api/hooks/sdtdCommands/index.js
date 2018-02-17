@@ -78,6 +78,10 @@ module.exports = function sdtdCommands(sails) {
       return commandInfoMap.has(serverId);
     },
 
+    getAmount: function() {
+      return commandInfoMap.size;
+    },
+
     /**
      * @memberof module:SdtdCommandsHook
      * @method

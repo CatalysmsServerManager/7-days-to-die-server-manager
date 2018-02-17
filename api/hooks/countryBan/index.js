@@ -357,6 +357,10 @@ module.exports = function sdtdCountryBan(sails) {
       return countryBanInfoMap.get(String(serverId));
     },
 
+    getAmount: function() {
+      return countryBanInfoMap.size;
+    },
+
     /**
      * @name reload
      * @memberof module:7dtdCountryBan

@@ -39,12 +39,13 @@ module.exports = function discordBot(sails) {
           // Register some stuff in the registry... yeah..
           client.registry
             .registerGroups([
-              ['7dtd', '7 Days to die']
+              ['7dtd', '7 Days to die'],
+              ['meta', 'Commands about the system']
             ])
             .registerDefaults()
             .registerCommandsIn(path.join(__dirname, 'commands'));
-
-          // Listeners
+            
+            // Listeners
 
           client.on('commandError', (command, error) => {
             sails.log.error(`Command error! ${command.memberName} trace: ${error.stack}`);

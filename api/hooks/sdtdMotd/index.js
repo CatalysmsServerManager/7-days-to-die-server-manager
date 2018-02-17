@@ -115,6 +115,10 @@ module.exports = function sdtdLogs(sails) {
       return motdInfoMap.has(serverId);
     },
 
+    getAmount: function() {
+      return motdInfoMap.size;
+    },
+
     /**
      * @name updateConfig
      * @memberof module:7dtdMOTDHook
