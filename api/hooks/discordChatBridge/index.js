@@ -36,7 +36,11 @@ module.exports = function SdtdDiscordChatBridge(sails) {
             });
 
             for (const serverConfig of enabledServers) {
-              await start(serverConfig.server);
+              try {
+                await start(serverConfig.server);
+              } catch (error) {
+                sails.log.error(`HOOK - DiscordChatBridge:initialize - Error for server ${serverConfig.server} - ${error}`)
+              }
             }
             sails.log.info(`HOOK SdtdDiscordChatBridge:initialize - Initialized ${chatBridgeInfoMap.size} chatbridge(s)`);
 
@@ -102,7 +106,7 @@ module.exports = function SdtdDiscordChatBridge(sails) {
 
       let server = await SdtdServer.findOne(serverId);
       let guild = discordClient.guilds.get(config.discordGuildId);
-      let textChannel = guild.channels.get(config.chatChannelId);
+      let textChannel = discordClient.channels.get(config.chatChannelId);
 
       if (_.isUndefined(server)) {
         throw new Error(`Unknown server`);
