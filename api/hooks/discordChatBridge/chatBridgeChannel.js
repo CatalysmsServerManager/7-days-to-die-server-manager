@@ -79,7 +79,11 @@ class ChatBridgeChannel {
   }
 
   sendChatMessageToDiscord(chatMessage) {
-    this.channel.send(`${chatMessage.playerName}: ${chatMessage.messageText}`);
+    if (chatMessage.playerName == 'Server') {
+      this.channel.send(`\`${chatMessage.messageText}\``);
+    } else {
+      this.channel.send(`${chatMessage.playerName}: ${chatMessage.messageText}`);
+    }
   }
 
   sendDeathMessageToDiscord(deathMessage) {
