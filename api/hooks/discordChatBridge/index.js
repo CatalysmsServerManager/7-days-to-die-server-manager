@@ -36,7 +36,11 @@ module.exports = function SdtdDiscordChatBridge(sails) {
             });
 
             for (const serverConfig of enabledServers) {
-              await start(serverConfig.server);
+              try {
+                await start(serverConfig.server);
+              } catch (error) {
+                sails.log.error(`HOOK - DiscordChatBridge:initialize - Error for server ${serverConfig.server} - ${error}`)
+              }
             }
             sails.log.info(`HOOK SdtdDiscordChatBridge:initialize - Initialized ${chatBridgeInfoMap.size} chatbridge(s)`);
 
