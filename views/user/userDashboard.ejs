@@ -1,0 +1,11 @@
+<div class="container-fluid">
+  <div class="row">
+    <h1> Welcome,
+      <%= user.username %>
+    </h1>
+  </div>
+
+  <div class="row">
+    <%- include('./partials/listOfOwnedServers', {servers: ownedServers}) %>
+  </div>
+</div>

@@ -49,7 +49,7 @@ module.exports = {
           sails.log.error(`AuthController - Error updating user profile ${error}`);
         }
 
-        res.redirect('/');
+        res.redirect(`/user/${user.id}/dashboard`);
       })(req, res);
   },
 

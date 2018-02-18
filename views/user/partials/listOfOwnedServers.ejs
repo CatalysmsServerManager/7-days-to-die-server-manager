@@ -1,0 +1,71 @@
+<%- exposeLocalsToBrowser() %>
+
+  <div id="list-of-owned-servers" aria-multiselectable="true">
+
+    <div class="card">
+
+
+      <% ownedServers.forEach(server => { %>
+
+        <div class="card-header" id="list-of-owned-servers-server-<%= server.id %>">
+          <h5 class="mb-0">
+            <a data-toggle="collapse" data-parent="#list-of-owned-servers" href="#list-of-owned-servers-server-<%= server.id %>-content"
+              aria-expanded="true" aria-controls="list-of-owned-servers-server-<%= server.id %>-content">
+              <%= server.name %> <div id="list-of-owned-servers-server-<%= server.id %>-online-players"> 0 online</div>           <a name="" id="" class="btn btn-primary" href="/sdtdserver/<%= server.id %>/dashboard" role="button">Dashboard</a>
+            </a>
+          </h5>
+        </div>
+        <div id="list-of-owned-servers-server-<%= server.id %>-content" class="collapse in" role="tabpanel" aria-labelledby="list-of-owned-servers-server-<%= server.id %>">
+          <div class="card-body">
+          <%- include('../../sdtdserver/partials/serverControl', {server: server}) %>
+          </div>
+        </div>
+    </div>
+
+    <% }) %>
+
+  </div>
+
+  <script>
+    $(document).ready(function () {
+
+      let listOfServers = window.SAILS_LOCALS.ownedServers
+
+      listOfServers.forEach(server => {
+        io.socket.get('/sdtdserver/' +  server.id  + '/socket', function (response) {
+          sendRequestAndUpdatePlayers(server);
+        });
+
+        io.socket.on('playerConnected', (connectedMessage) => {
+          sendRequestAndUpdatePlayers(server);
+        })
+
+        io.socket.on('playerDisconnected', (disconnectedMessage) => {
+          sendRequestAndUpdatePlayers(server);
+        })
+
+      })
+
+
+    })
+
+
+    function sendRequestAndUpdatePlayers(server) {
+      $.ajax({
+        url: '/api/sdtdserver/players',
+        data: {
+          serverId: server.id
+        },
+        success: (data, status, xhr) => {
+          let onlinePlayers = data.players.filter(player => {
+              return player.online
+          })
+            $(`#list-of-owned-servers-server-${server.id}-online-players`).text(`${onlinePlayers.length} online`)
+        },
+        error: (xhr, status, error) => {
+          console.log(`Could not update online players! error: ${error}`)
+        }
+      })
+    }
+
+  </script>
