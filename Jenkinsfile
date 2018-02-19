@@ -23,7 +23,7 @@ pipeline {
     }
     stages {
         stage('Build') {
-                parallel(
+                parallel {
                     stage('Install CSMM') {
                         steps {
                             sh 'npm --version'
@@ -38,7 +38,7 @@ pipeline {
                             sh 'selenium-standalone start'
                         }
                     }
-                )
+                }
             }
         stage('Mocha tests') {
             steps {
