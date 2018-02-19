@@ -26,7 +26,6 @@ pipeline {
                 sh 'npm --version'
                 sh 'node -v'
                 sh 'npm install'
-                sh 'which java'
                 sh 'java -version'
             }
         }
@@ -44,7 +43,7 @@ pipeline {
     post {
         always {
              publishHTML target: [
-            allowMissing: false,
+            allowMissing: true,
             alwaysLinkToLastBuild: false,
             keepAll: true,
             reportDir: 'test/output/coverage',
@@ -52,7 +51,7 @@ pipeline {
             reportName: 'Coverage report'
           ]
            publishHTML target: [
-            allowMissing: false,
+            allowMissing: true,
             alwaysLinkToLastBuild: false,
             keepAll: true,
             reportDir: 'test/output/mochawesome',
