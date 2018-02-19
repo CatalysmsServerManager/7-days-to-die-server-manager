@@ -1,73 +1,126 @@
-<% if(!_.isNull(player.inventory)) { %>
-  <h2>Belt</h2>
+<div class="container-fluid">
 
-  <ul class="list-group">
-      <% let beltIterator = 0 %>
+  <div class="row">
+      <h2> Bag </h2>
+      <table class="table table-striped  table-responsive">
+        <thead class="thead-default">
+          <tr>
+            <th>Icon</th>
+            <th>Name</th>
+            <th>Amount</th>
+            <th>Quality</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <% for (let invItem of player.inventory.bag) { %>
+            <% if(!_.isNull(invItem)) { %>
+
+              <tr>
+                <td scope="row">
+                  <img src="../../images/sdtdicons/<%= invItem.name %>.png">
+                </td>
+                <td>
+                  <%= invItem.name %>
+                </td>
+                <td>
+                  <%= invItem.count %>
+                </td>
+                <% if (invItem.quality != -1) { %>
+                  <td>
+                    <%= invItem.quality %>
+                  </td>
+                  <% } %>
+              </tr>
+
+              <% } %>
+                <% } %>
+
+        </tbody>
+      </table>
+    </div>
+
+
+  <div class="row">
+    <h2> Belt </h2>
+    <table class="table table-striped  table-responsive">
+      <thead class="thead-default">
+        <tr>
+          <th>Icon</th>
+          <th>Name</th>
+          <th>Amount</th>
+          <th>Quality</th>
+        </tr>
+      </thead>
+      <tbody>
 
         <% for (let invItem of player.inventory.belt) { %>
-
           <% if(!_.isNull(invItem)) { %>
-            <% beltIterator += 1 %>
-              <li id="player-inventory-belt-<%= beltIterator %>" class="list-group-item d-flex justify-content-between align-items-left">
+
+            <tr>
+              <td scope="row">
                 <img src="../../images/sdtdicons/<%= invItem.name %>.png">
+              </td>
+              <td>
                 <%= invItem.name %>
-                  <small class="text-muted"> x
-                    <%= invItem.count %>
-                  </small>
+              </td>
+              <td>
+                <%= invItem.count %>
+              </td>
+              <% if (invItem.quality != -1) { %>
+                <td>
+                  <%= invItem.quality %>
+                </td>
+                <% } %>
+            </tr>
 
-                  <% if (invItem.quality != -1) { %>
-                    <span class="badge badge-primary badge-pill">
-                      <%= invItem.quality %>
-                    </span>
-                    <% } %>
-              </li>
+            <% } %>
               <% } %>
 
-                <% } %>
-  </ul>
+      </tbody>
+    </table>
+  </div>
 
-  <h2>Equipment</h2>
+  <div class="row">
+    <h2> Equipment </h2>
+    <table class="table table-striped  table-responsive">
+      <thead class="thead-default">
+        <tr>
+          <th>Icon</th>
+          <th>Name</th>
+          <th>Amount</th>
+          <th>Quality</th>
+        </tr>
+      </thead>
+      <tbody>
 
-  <ul class="list-group">
-    <% for (let prop in player.inventory.equipment) { %>
-      <% if(!_.isNull(player.inventory.equipment[prop])) { %>
-        <% let playerInvItem = player.inventory.equipment[prop] %>
-          <li id="player-equipment-<%= prop %>" class="list-group-item d-flex justify-content-between align-items-center">
-            <img src="../../images/sdtdicons/<%= playerInvItem.name %>.png">
-            <%= playerInvItem.name %>
-              <span class="badge badge-primary badge-pill">
-                <%= playerInvItem.quality %>
-              </span>
-          </li>
-          <% } %>
-            <% } %>
+        <% for (let prop in player.inventory.equipment) { %>
+          <% if(!_.isNull(player.inventory.equipment[prop])) { %>
+            <% let playerInvItem = player.inventory.equipment[prop] %>
 
-  </ul>
-
-  <h2> Bag </h2>
-
-  <ul class="list-group">
-    <% let bagIterator = 0 %>
-
-      <% for (let invItem of player.inventory.bag) { %>
-
-        <% if(!_.isNull(invItem)) { %>
-          <% bagIterator += 1 %>
-            <li id="player-inventory-bag-<%= bagIterator %>" class="list-group-item d-flex justify-content-between align-items-left">
-              <img src="../../images/sdtdicons/<%= invItem.name %>.png">
-              <%= invItem.name %>
-                <small class="text-muted"> x
+              <tr>
+                <td scope="row">
+                  <img src="../../images/sdtdicons/<%= invItem.name %>.png">
+                </td>
+                <td>
+                  <%= invItem.name %>
+                </td>
+                <td>
                   <%= invItem.count %>
-                </small>
-
+                </td>
                 <% if (invItem.quality != -1) { %>
-                  <span class="badge badge-primary badge-pill">
+                  <td>
                     <%= invItem.quality %>
-                  </span>
+                  </td>
                   <% } %>
-            </li>
-            <% } %>
+              </tr>
 
               <% } %>
                 <% } %>
-  </ul>
+
+      </tbody>
+    </table>
+  </div>
+
+
+</div>

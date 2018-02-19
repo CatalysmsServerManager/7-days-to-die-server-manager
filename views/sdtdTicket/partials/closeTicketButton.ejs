@@ -1,14 +1,13 @@
 <%- exposeLocalsToBrowser() %>
 
   <!-- Button trigger modal -->
-  <button id='button-close-ticket' type="button" class="btn btn-danger">
+  <button id='button-close-ticket-<%= ticket.id %>' type="button" class="btn btn-danger">
     Close ticket
   </button>
 
-
 <script>
     $(document).ready(function () {
-      $('#button-close-ticket').click((event) => {
+      $('#button-close-ticket-<%= ticket.id %>').click((event) => {
         event.preventDefault();
 
         $.ajax({
@@ -16,7 +15,7 @@
           type: "POST",
           data: {
             _csrf: window.SAILS_LOCALS._csrf,
-            ticketId: <%= ticket.id %>,
+            ticketId: window.SAILS_LOCALS.ticket.id,
             status: false
           },
           success: (data, status, xhr) => {

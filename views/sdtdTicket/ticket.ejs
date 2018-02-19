@@ -1,24 +1,59 @@
-
-<h1> <%= ticket.title %> </h1>
-<% if (ticket.status) { %>
-<%- include('./partials/closeTicketButton', ticket) %>
-<% } %>
-
-<small> Reported by player <%= ticket.player %> </small>
-
-<br>
-
-<% if (ticket.status) { %>
-<%- include('./partials/editTicketDescriptionButton', ticket) %>
-<% } %>
-<%= ticket.description %>
+<div class="container">
+  <h1>
+    <%= ticket.title %>
+  </h1>
 
 
-<br>
 
-<a href="#ticket-player-info" class="btn btn-default" data-toggle="collapse">Show player details</a>
-<div id="ticket-player-info" class="collapse">
-    <%= JSON.stringify(ticket.playerInfo) %>
+  <div class="row">
+    <div class="col-12">
+      <div class="card text-center">
+        <img class="card-img-top" src="holder.js/100px180/" alt="">
+        <div class="card-body">
+          <h4 class="card-title">Info</h4>
+          <p class="card-text">
+            <% if (ticket.status) { %>
+              <%- include('./partials/closeTicketButton', ticket) %>
+                <% } %>
+                  <% if (ticket.status) { %>
+                    <%- include('./partials/editTicketDescriptionButton', ticket) %>
+                      <% } %>
+                        <%= ticket.description %>
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col-4">
+
+      <h2> Player info </h2>
+      <table class="table">
+        <tbody>
+          <tr>
+            <td>Name</td>
+            <td>
+              <a href="/player/<%= ticket.playerInfo.id %>/profile">
+                <%= ticket.playerInfo.name %>
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td>Location</td>
+            <td>
+              <%= ticket.playerInfo.location.x %>
+                <%= ticket.playerInfo.location.y %>
+                  <%= ticket.playerInfo.location.z %>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-8">
+      <%- include('../player/partials/playerInventory', {player: ticket.playerInfo}) %>
+    </div>
+  </div>
 </div>
-
-
+</div>

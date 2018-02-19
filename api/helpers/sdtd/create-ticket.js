@@ -68,9 +68,8 @@ module.exports = {
       let sdtdServer = await SdtdServer.findOne({
         id: inputs.serverId
       });
-      let player = await Player.findOne({
-        id: inputs.playerId
-      });
+      let player = await Player.findOne(inputs.playerId);
+      let playerInfo = await sails.helpers.loadPlayerData(inputs.serverId, player.steamId);
 
       if (_.isUndefined(sdtdServer) || _.isUndefined(player)) {
         return exits.error(new Error(`HELPER - createTicket - Invalid server or player ID`));
@@ -79,7 +78,7 @@ module.exports = {
       let ticket = await SdtdTicket.create({
         description: inputs.description,
         title: inputs.title,
-        playerInfo: player,
+        playerInfo: playerInfo.players[0],
         server: inputs.serverId,
         player: inputs.playerId
       }).fetch();

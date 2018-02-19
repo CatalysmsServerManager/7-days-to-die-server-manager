@@ -28,7 +28,6 @@ module.exports = function sdtdLogs(sails) {
           let enabledServers = await SdtdConfig.find({
             loggingEnabled: true
           }).populate('server');
-
           for (let config of enabledServers) {
             let server = config.server;
             let loggingObj = await createLogObject(server.id);

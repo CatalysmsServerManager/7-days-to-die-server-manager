@@ -48,7 +48,7 @@ module.exports = {
       });
       let tickets = await SdtdTicket.find({
         server: inputs.serverId
-      });
+      }).populate('player')
 
       if (_.isUndefined(server) || _.isUndefined(tickets)) {
         return exits.notFound();

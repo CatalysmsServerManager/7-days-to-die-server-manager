@@ -1,15 +1,83 @@
 <div class="container-fluid">
-  <h1>Tickets</h1>
+  <h1>Open tickets</h1>
 
 
-    <div class="row">
-      <div class="col-md-12">
-        <% tickets.forEach((ticket) => { %>
-          <%- include("./partials/tickets/basicTicket", {ticket: ticket}) %>
-            <% }) %>
-      </div>
+  <div class="row">
+    <div class="col-md-12">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Reporter</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% tickets.forEach((ticket) => { %>
+            <% if (ticket.status) { %>
+              <tr>
+                <td scope="row">
+                  <a href="/sdtdticket/<%= ticket.id %>">
+                    <%= ticket.id %>
+                  </a>
+                </td>
+                <td>
+                  <%= ticket.title %>
+                </td>
+                <td>
+                  <a href="/player/<%= ticket.player.id %>/profile">
+                    <%= ticket.player.name %>
+                  </a>
+                </td>
+              </tr>
+              <% } %>
+                <% }) %>
+
+
+        </tbody>
+      </table>
     </div>
+  </div>
 
+
+
+  <div class="row">
+    <div class="col-md-12">
+      <h2>Closed tickets</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Reporter</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% tickets.forEach((ticket) => { %>
+            <% if (!ticket.status) { %>
+              <tr>
+                <td scope="row">
+                  <a href="/sdtdticket/<%= ticket.id %>">
+                    <%= ticket.id %>
+                  </a>
+                </td>
+                <td>
+                  <%= ticket.title %>
+                </td>
+                <td>
+                  <a href="/player/<%= ticket.player.id %>/profile">
+                    <%= ticket.player.name %>
+                  </a>
+                </td>
+              </tr>
+              <% } %>
+                <% }) %>
+
+
+        </tbody>
+      </table>
+    </div>
+  </div>
 
 
 
