@@ -15,7 +15,7 @@
       <% const ticketsLink = '/sdtdserver/' + server.id + '/tickets' %>
         <a href='<%= ticketsLink %>' class="btn btn-default btn-primary">
           <em class="glyphicon glyphicon-align-justify"></em>
-          <i class="fa fa-ticket" aria-hidden="true"></i> Tickets <span id="sdtd-server-tickets-badge" class="badge badge-secondary"><i class="fa fa-cog" aria-hidden="true"></i></span>
+          <i class="fa fa-ticket" aria-hidden="true"></i> Tickets <span id="sdtd-server-<%= server.id %>-tickets-badge" class="badge badge-secondary"><i class="fa fa-cog" aria-hidden="true"></i></span>
         </a>
 
         <% const settingsLink = '/sdtdserver/' + server.id + '/settings' %>
@@ -44,7 +44,7 @@
             },
             success: (data, status, xhr) => {
               let opentickets = data;
-              $('#sdtd-server-tickets-badge').text(opentickets.length)
+              $('#sdtd-server-<%= server.id %>-tickets-badge').text(opentickets.length)
 
             },
             error: (xhr, status, error) => {

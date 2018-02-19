@@ -89,13 +89,6 @@ module.exports = {
 
       });
     });
-
-    connection.on('error', function(error) {
-      sails.log.error(`HELPER - createWebTokens - ${error}`);
-      return exits.badTelnet(error);
-    });
-
-
   }
 
 
