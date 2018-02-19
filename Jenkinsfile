@@ -23,23 +23,12 @@ pipeline {
     }
     stages {
         stage('Build') {
-                parallel {
-                    stage('Install CSMM') {
-                        steps {
-                            sh 'npm --version'
-                            sh 'node -v'
-                            sh 'npm install'
-                        }
-                    }
-                    stage('Install & start Selenium') {
-                        steps {
-                            sh 'npm install selenium-standalone'
-                            sh 'selenium-standalone install'
-                            sh 'selenium-standalone start'
-                        }
-                    }
-                }
+            steps {
+                sh 'npm --version'
+                sh 'node -v'
+                sh 'npm install'
             }
+        }
         stage('Mocha tests') {
             steps {
                 sh 'npm run unit-service-tests'
@@ -47,6 +36,8 @@ pipeline {
         }
         stage('Feature tests') {
             steps {
+                sh './node_modules/.bin/selenium-standalone install'
+                sh './node_modules/.bin/selenium-standalone start'
                 sh 'npm run feature-tests'
             }
         }
