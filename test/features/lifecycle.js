@@ -1,5 +1,4 @@
 var sails = require('sails');
-var selenium = require('selenium-standalone');
 
 module.exports = {
   bootstrap: function (done) {
@@ -33,8 +32,8 @@ module.exports = {
           telnetPassword: process.env.CSMM_TEST_TELNETPW,
           webPort: process.env.CSMM_TEST_WEBPORT,
         }
-        await installSelenium()
-        sails.seleniumServer = await startSelenium()
+        // await installSelenium()
+        // sails.seleniumServer = await startSelenium()
         return done()
       } catch (error) {
         done(error)
@@ -45,7 +44,7 @@ module.exports = {
 
   teardown: async function (done) {
     try {
-      await sails.seleniumServer.kill();
+     // await sails.seleniumServer.kill();
     } catch (error) {
       done(error)
     }
