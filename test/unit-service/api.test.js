@@ -9,55 +9,9 @@ describe('API @api', function () {
         ip: process.env.CSMM_TEST_IP,
         telnetPort: process.env.CSMM_TEST_TELNETPORT,
         telnetPassword: process.env.CSMM_TEST_TELNETPW,
-        webPort:  process.env.CSMM_TEST_WEBPORT+1,
+        webPort: process.env.CSMM_TEST_WEBPORT + 11,
         owner: sails.testUser.id,
       }).fetch()
-    })
-
-    describe('GET /api/sdtdserver/togglelogging', function () {
-      this.timeout(5000)
-      it('Can stop logging', function (done) {
-        supertest(sails.hooks.http.app)
-          .get('/api/sdtdserver/toggleLogging')
-          .query({
-            serverId: sails.testServer.id
-          })
-          .expect('Content-Type', /json/)
-          .expect(200)
-          .then((response) => {
-            assert.notEqual(true, sails.hooks.sdtdlogs.getStatus(sails.testServer.id))
-            done();
-          })
-          .catch((err) => {
-            done(err);
-          })
-      })
-
-      it('Can start logging', function (done) {
-        let loggingStatus = sails.hooks.sdtdlogs.getStatus(sails.testServer.id);
-        supertest(sails.hooks.http.app)
-          .get('/api/sdtdserver/toggleLogging')
-          .query({
-            serverId: sails.testServer.id
-          })
-          .expect('Content-Type', /json/)
-          .expect(200)
-          .then((response) => {
-            assert.notEqual(false, sails.hooks.sdtdlogs.getStatus(sails.testServer.id))
-            done();
-          })
-          .catch((err) => {
-            done(err);
-          })
-      });
-      it('Returns "notFound" when invalid ID is given', function (done) {
-        supertest(sails.hooks.http.app)
-          .get('/api/sdtdserver/toggleLogging')
-          .query({
-            serverId: sails.testServer.id + 111
-          })
-          .expect(404, done)
-      })
     })
 
     describe('GET /api/sdtdserver/players', function () {
@@ -88,15 +42,6 @@ describe('API @api', function () {
       it('Should error when no serverID given', function (done) {
         supertest(sails.hooks.http.app)
           .get('/api/sdtdserver/players')
-          .expect(400, done);
-      });
-      it('Returns badRequest when server info is invalid', function (done) {
-        this.timeout(5000)
-        supertest(sails.hooks.http.app)
-          .get('/api/sdtdserver/players')
-          .query({
-            serverId: sails.serverWithBadWebPort.id
-          })
           .expect(400, done);
       });
       it('Should error when invalid serverID given', function (done) {
@@ -185,7 +130,7 @@ describe('API @api', function () {
       })
     })
 
-    describe('GET /api/sdtdserver/sendmessage', function() {
+    describe('GET /api/sdtdserver/sendmessage', function () {
 
       it('Should return OK & JSON', function (done) {
         supertest(sails.hooks.http.app)

@@ -1,13 +1,15 @@
 Feature('SdtdServer server management');
 
 Scenario('Add a server', (I) => {
+  I.loginSteam();
   I.addTestServer();
+  I.deleteTestServer()
 });
 
+
 Scenario('Delete a server', (I) => {
+  I.loginSteam();
   I.addTestServer();
-  I.waitForElement("#delete-server-button", 10);
-  I.click('Delete server');
-  I.amOnPage("/");
-  I.dontSee(sails.testServer.ip);
+  I.deleteTestServer()
+  I.dontSee(process.env.CSMM_TEST_SERVERNAME);
 })

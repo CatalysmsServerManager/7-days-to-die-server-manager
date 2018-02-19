@@ -41,7 +41,7 @@
     "start": "npm run build-docs && node app.js --prod",
     "test": "npm run custom-tests && echo 'Done.'",
     "build-docs": "./node_modules/.bin/jsdoc -c ./.jsdoc.json",
-    "custom-tests": "npm run unit-service-tests",
+    "custom-tests": "npm run unit-service-tests && npm run feature-tests",
     "unit-service-tests": "./node_modules/.bin/nyc --reporter=html --report-dir=./test/output/coverage mocha test/lifecycle.test.js ./test/unit-service/*.test.js --reporter mochawesome --reporter-options reportDir=./test/output/mochawesome --exit",
     "feature-tests": "./node_modules/.bin/codeceptjs run -c ./test",
     "debug": "node debug app.js"

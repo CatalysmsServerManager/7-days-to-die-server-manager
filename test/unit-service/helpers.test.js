@@ -194,7 +194,8 @@ describe('Helpers', function () {
         telnetPort: sails.testServer.telnetPort,
         telnetPassword: sails.testServer.telnetPassword,
         webPort: sails.testServer.webPort,
-        owner: sails.testUser.id
+        owner: sails.testUser.id,
+        serverName: `CSMM-test`
       }).switch({
         error: function (err) {
           done(err);
@@ -204,33 +205,14 @@ describe('Helpers', function () {
         }
       });
     })
-    it('Returns badWebPort if invalid webport given', function (done) {
-      this.timeout(15000)
-      sails.helpers.add7DtdServer.with({
-        ip: sails.testServer.ip,
-        telnetPort: sails.testServer.telnetPort,
-        telnetPassword: sails.testServer.telnetPassword,
-        webPort: sails.testServer.webPort + 1,
-        owner: sails.testUser.id
-      }).switch({
-        error: function (err) {
-          done(err);
-        },
-        badWebPort: function (error) {
-          done()
-        },
-        success: function (data) {
-          done(new Error('Success but should have errored'));
-        }
-      });
-    });
     it('Returns badTelnet if invalid telnet info given', function (done) {
       sails.helpers.add7DtdServer.with({
         ip: sails.testServer.ip,
         telnetPort: sails.testServer.telnetPort,
         telnetPassword: "WRONGPASSWORD",
         webPort: sails.testServer.webPort,
-        owner: sails.testUser.id
+        owner: sails.testUser.id,
+        serverName: `CSMM-test`
       }).switch({
         error: function (err) {
           done();

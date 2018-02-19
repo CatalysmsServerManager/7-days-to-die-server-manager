@@ -11,13 +11,14 @@
         browser: "chrome",
         desiredCapabilities: {
           chromeOptions: {
-            args: ["--headless", "--disable-gpu", "--window-size=800,600"]
+            args: ["--window-size=800,600"]
           }
         }
       }
     },
     include: {
-      I: "./features/steps_file.js"
+      I: "./features/steps_file.js",
+      dashboardPage: './pages/dashboard.js'
     },
     bootstrap: "./features/lifecycle.js",
     teardown: "./features/lifecycle.js",

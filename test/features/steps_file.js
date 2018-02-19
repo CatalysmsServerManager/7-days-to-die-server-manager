@@ -23,10 +23,10 @@ module.exports = function () {
     },
 
     addTestServer: async function () {
-      this.loginSteam();
       this.amOnPage('/sdtdserver/addserver');
+      this.fillField('Name', process.env.CSMM_TEST_SERVERNAME);
       this.fillField('Server IP', process.env.CSMM_TEST_IP);
-      this.fillField('Web port', process.env.CSMM_TEST_WEBPORT);
+      this.fillField('Web API port', process.env.CSMM_TEST_WEBPORT);
       this.fillField('Telnet port', process.env.CSMM_TEST_TELNETPORT);
       this.fillField('Telnet password', process.env.CSMM_TEST_TELNETPW);
       this.click('Submit');
@@ -35,8 +35,9 @@ module.exports = function () {
 
     // Assumes you are on dashboard already !
     deleteTestServer: async function () {
+      this.scrollPageToTop();
       this.waitForElement("#delete-server-button", 10);
-      this.click('Delete server');
+      this.click("#delete-server-button");
     }
 
   });

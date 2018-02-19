@@ -3,9 +3,8 @@ Feature('Player features');
 // All these tests start on server dashboard
 
 Before((I) => {
-  I.amOnPage('/');
+  I.loginSteam();
   I.addTestServer();
-  I.see('Dashboard')
 });
 
 After((I) => {
