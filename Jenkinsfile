@@ -25,8 +25,8 @@ pipeline {
             steps {
                 sh 'npm --version'
                 sh 'node -v'
-                sh 'npm install'
                 sh 'java -version'
+                sh 'npm install'
             }
         }
         stage('Mocha tests') {
