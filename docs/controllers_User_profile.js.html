@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Source: controllers/SdtdServer/restart-server.js | CSMM</title>
+    <title>Source: controllers/User/profile.js | CSMM</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -46,125 +46,59 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>var sevenDays = require('machinepack-7daystodiewebapi');
+            <pre class="prettyprint source linenums"><code>module.exports = {
 
-module.exports = {
+    friendlyName: 'Get user profile',
 
-  friendlyName: 'Restart server',
+    description: 'Serves user profile view',
 
-  description: 'Restart a server with configurable countdown',
-
-  inputs: {
-    serverId: {
-      description: 'The ID of the server',
-      type: 'number',
-      required: true
+    inputs: {
+        userId: {
+            description: 'The ID of the user to look up.',
+            type: 'number',
+            required: true
+        }
     },
-    delay: {
-      description: 'Time to delay (in minutes)',
-      type: 'number'
+
+    exits: {
+        success: {
+            responseType: 'view',
+            viewTemplatePath: 'user/profile'
+        },
+        notFound: {
+            description: 'No user with the specified ID was found in the database.',
+            responseType: 'notFound'
+        }
+    },
+
+    /**
+     * @memberof User
+     * @name profile
+     * @description Serves user profile view
+     * @param {number} userId
+     */
+
+    fn: async function (inputs, exits) {
+        sails.log.debug(`API - User:profile - Getting profile for user ${inputs.userId}`);
+
+        try {
+            let user = await User.findOne(inputs.userId);
+            let servers = await SdtdServer.find({ owner: inputs.userId });
+            let players = await Player.find({ steamId: user.steamId });
+
+            return exits.success({
+                user: user,
+                servers: servers,
+                players: players
+            })
+
+        } catch (error) {
+            sails.log.error(`API - SdtdServer:profile - ${error}`);
+            return exits.error(error);
+        }
+
     }
-  },
-
-  exits: {
-    success: {},
-    notFound: {
-      description: 'No server with the specified ID was found in the database.',
-      responseType: 'notFound'
-    }
-  },
-
-  /**
-   * @memberof SdtdServer
-   * @name restart-server
-   * @description Restart a server
-   * @param {string} serverId  ID of the server
-   * @param {number} delay Time to delay the restart (in minutes)
-   */
-
-  fn: async function (inputs, exits) {
-
-    try {
-
-      sails.log.debug(`API - SdtdServer:restart-server - Restarting server ${inputs.serverId} in ${inputs.delay} minutes`);
-
-      if (_.isUndefined(inputs.delay)) {
-        inputs.delay = 5;
-      }
-
-      let server = await SdtdServer.findOne(inputs.serverId);
-
-      setTimeout(() => {
-        sevenDays.executeCommand({
-          ip: server.ip,
-          port: server.webPort,
-          authName: server.authName,
-          authToken: server.authToken,
-          command: `shutdown`
-        }).exec({
-          error: (error) => {
-            sails.log.error(`API - SdtdServer:restart-server - ${error}`);
-          },
-          success: (response) => {
-            sails.log.debug(`API - SdtdServer:restart-server - Successful restart for server ${inputs.serverId} in ${inputs.delay} minutes`);
-
-          }
-        });
-      }, inputs.delay * 60 * 1000);
-
-
-
-      for (let index = 0; index &lt; inputs.delay+1; index++) {
-        setTimeout(async function () {
-          if (inputs.delay - index > 0) {
-            await sendXMinutesUntilRestartToServer(inputs.delay - index, server);
-          }
-        }, index * 60 * 1000);
-      }
-
-      return exits.success();
-
-
-    } catch (error) {
-      sails.log.error(`API - SdtdServer:restart-server - ${error}`);
-      return exits.error(error);
-    }
-
-
-
-
-  }
 };
-
-/**
- * @memberof SdtdServer#restart-server
- * @param {number} minutesLeft
- * @param {json} server server object with connection data
- * @returns {number} Amount of minutes left after message (eg input - 1)
- */
-
-function sendXMinutesUntilRestartToServer(minutesLeft, server) {
-  return new Promise((resolve, reject) => {
-    if (isNaN(minutesLeft)) {
-      reject(new Error(`Did not supply a number`));
-    }
-
-    sevenDays.sendMessage({
-      ip: server.ip,
-      port: server.webPort,
-      authName: server.authName,
-      authToken: server.authToken,
-      message: `Restarting the server in ${minutesLeft} minute(s)`
-    }).exec({
-      error: (error) => {
-        reject(error);
-      },
-      success: (response) => {
-        resolve(minutesLeft - 1);
-      }
-    });
-  });
-}
 </code></pre>
         </article>
     </section>

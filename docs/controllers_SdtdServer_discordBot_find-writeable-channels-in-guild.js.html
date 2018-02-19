@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Source: controllers/SdtdServer/restart-server.js | CSMM</title>
+    <title>Source: controllers/SdtdServer/discordBot/find-writeable-channels-in-guild.js | CSMM</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -46,126 +46,68 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>var sevenDays = require('machinepack-7daystodiewebapi');
+            <pre class="prettyprint source linenums"><code>module.exports = {
 
-module.exports = {
 
-  friendlyName: 'Restart server',
-
-  description: 'Restart a server with configurable countdown',
-
-  inputs: {
-    serverId: {
-      description: 'The ID of the server',
-      type: 'number',
-      required: true
+    friendlyName: 'Find channels the bot can write in for a guild ID',
+  
+  
+    description: '',
+  
+  
+    inputs: {
+      guildId: {
+        example: '1337'
+      }
+  
     },
-    delay: {
-      description: 'Time to delay (in minutes)',
-      type: 'number'
-    }
-  },
-
-  exits: {
-    success: {},
-    notFound: {
-      description: 'No server with the specified ID was found in the database.',
-      responseType: 'notFound'
-    }
-  },
-
-  /**
-   * @memberof SdtdServer
-   * @name restart-server
-   * @description Restart a server
-   * @param {string} serverId  ID of the server
-   * @param {number} delay Time to delay the restart (in minutes)
-   */
-
-  fn: async function (inputs, exits) {
-
-    try {
-
-      sails.log.debug(`API - SdtdServer:restart-server - Restarting server ${inputs.serverId} in ${inputs.delay} minutes`);
-
-      if (_.isUndefined(inputs.delay)) {
-        inputs.delay = 5;
+  
+    exits: {
+      badRequest: {
+        responseType: 'badRequest'
       }
+    },
+  
+    /**
+       * @memberof SdtdServer
+       * @method
+       * @name find-writeable-channels-in-guild
+       * @param {string} guildId
+       * @returns {array}
+       */
+  
+    fn: async function (inputs, exits) {
 
-      let server = await SdtdServer.findOne(inputs.serverId);
+      try {
+  
+        let discordClient = sails.hooks.discordbot.getClient();
+        let guild = discordClient.guilds.get(inputs.guildId);
+        if (_.isUndefined(guild)) {
+            return exits.badRequest();
+        }
 
-      setTimeout(() => {
-        sevenDays.executeCommand({
-          ip: server.ip,
-          port: server.webPort,
-          authName: server.authName,
-          authToken: server.authToken,
-          command: `shutdown`
-        }).exec({
-          error: (error) => {
-            sails.log.error(`API - SdtdServer:restart-server - ${error}`);
-          },
-          success: (response) => {
-            sails.log.debug(`API - SdtdServer:restart-server - Successful restart for server ${inputs.serverId} in ${inputs.delay} minutes`);
-
-          }
+        let foundChannels = guild.channels.filter(channel => {
+            if (channel.type !== 'text') {
+                return false;
+            }
+            let userPerms = channel.permissionsFor(discordClient.user)
+            return userPerms.has('SEND_MESSAGES')
         });
-      }, inputs.delay * 60 * 1000);
 
+        let foundChannelsArray = Array.from(foundChannels.values());
 
-
-      for (let index = 0; index &lt; inputs.delay+1; index++) {
-        setTimeout(async function () {
-          if (inputs.delay - index > 0) {
-            await sendXMinutesUntilRestartToServer(inputs.delay - index, server);
-          }
-        }, index * 60 * 1000);
+        exits.success(foundChannelsArray);
+        sails.log.debug(`API - SdtdServer:find-writeable-channels-in-guild - Found ${foundChannelsArray.length} channels for guild ${inputs.guildId}!`);
+      } catch (error) {
+        sails.log.error(`API - SdtdServer:find-writeable-channels-in-guild - ${error}`);
+        return exits.error(error);
       }
-
-      return exits.success();
-
-
-    } catch (error) {
-      sails.log.error(`API - SdtdServer:restart-server - ${error}`);
-      return exits.error(error);
+  
     }
-
-
-
-
-  }
-};
-
-/**
- * @memberof SdtdServer#restart-server
- * @param {number} minutesLeft
- * @param {json} server server object with connection data
- * @returns {number} Amount of minutes left after message (eg input - 1)
- */
-
-function sendXMinutesUntilRestartToServer(minutesLeft, server) {
-  return new Promise((resolve, reject) => {
-    if (isNaN(minutesLeft)) {
-      reject(new Error(`Did not supply a number`));
-    }
-
-    sevenDays.sendMessage({
-      ip: server.ip,
-      port: server.webPort,
-      authName: server.authName,
-      authToken: server.authToken,
-      message: `Restarting the server in ${minutesLeft} minute(s)`
-    }).exec({
-      error: (error) => {
-        reject(error);
-      },
-      success: (response) => {
-        resolve(minutesLeft - 1);
-      }
-    });
-  });
-}
-</code></pre>
+  
+  
+  };
+  </code></pre>
         </article>
     </section>
 
