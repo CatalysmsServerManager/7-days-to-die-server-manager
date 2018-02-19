@@ -36,8 +36,6 @@ pipeline {
         }
         stage('Feature tests') {
             steps {
-                sh './node_modules/.bin/selenium-standalone install'
-                sh './node_modules/.bin/selenium-standalone start'
                 sh 'npm run feature-tests'
             }
         }
