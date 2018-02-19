@@ -18,6 +18,7 @@ pipeline {
         SENTRY_DSN = credentials('SENTRY_DSN')
         CSMM_TEST_STEAM_USERNAME = credentials('CSMM_TEST_STEAM_USERNAME')
         CSMM_TEST_STEAM_PASSWORD = credentials('CSMM_TEST_STEAM_PASSWORD')
+        JAVA_HOME = '/usr/bin/java'
 
     }
     stages {
