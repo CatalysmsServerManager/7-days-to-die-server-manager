@@ -41,7 +41,22 @@ pipeline {
     }
     post {
         always {
-            archiveArtifacts artifacts: './test/output/**/*', fingerprint: true
+             publishHTML target: [
+            allowMissing: false,
+            alwaysLinkToLastBuild: false,
+            keepAll: true,
+            reportDir: 'test/output/coverage',
+            reportFiles: 'index.html',
+            reportName: 'Coverage report'
+          ]
+           publishHTML target: [
+            allowMissing: false,
+            alwaysLinkToLastBuild: false,
+            keepAll: true,
+            reportDir: 'test/output/mochawesome',
+            reportFiles: 'mochawesome.html',
+            reportName: 'Mocha report'
+          ]
         }
     }
 }
