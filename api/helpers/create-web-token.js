@@ -76,12 +76,14 @@ module.exports = {
     connection.connect(params);
 
     connection.on('ready', function(prompt) {
-      connection.exec(`webtokens add ${authName} ${authToken} 0`, function(err, response) {
+      connection.exec(`webtokens add ${authName} ${authToken} 0`, async function(err, response) {
         if (err) { return exits.error(err); }
         if (_.isUndefined(response) || response.length <= 0) {
+          await connection.end();
           return exits.badTelnet(new Error('Did not receive a response from the server'));
         } else {
           sails.log.debug('HELPER - createWebTokens - successfully created tokens');
+          await connection.end();
           return exits.success({ authName: authName, authToken: authToken });
         }
 
