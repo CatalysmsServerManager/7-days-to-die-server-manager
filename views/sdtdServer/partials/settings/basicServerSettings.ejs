@@ -24,19 +24,6 @@
         <input type="text" class="form-control" id="inputs-settings-server-webPort" placeholder="<%= server.webPort %>">
       </li>
 
-      
-      <li class="list-group-item">
-        <label for="input-settings-server-authName">Authentication name</label>
-        <input type="password" class="form-control" id="input-settings-server-authName" placeholder="adminuser">
-      </li>
-
-      
-      <li class="list-group-item">
-        <label for="input-settings-server-authToken">Authentication token</label>
-        <input type="text" class="form-control" id="input-settings-server-authToken" placeholder="admintoken">
-      </li>
-
-
     </ul>
   </div>
 
@@ -65,8 +52,6 @@
           serverId: <%= server.id %>,
           serverIp: $("#input-settings-server-ip").val(),
           webPort: $("#input-settings-server-webPort").val(),
-          authName: $("#input-settings-server-authName").val(),
-          authToken: $("#input-settings-server-authToken").val(),
           serverName: $('#input-settings-server-servername').val()
         },
         success: (data, status, xhr) => {

@@ -67,8 +67,6 @@ module.exports = {
 
       let ip = ('' == inputs.serverIp) ? server.ip : inputs.serverIp;
       let webPort = ('' == inputs.webPort) ? server.webPort : inputs.webPort;
-      let authName = ('' == inputs.authName) ? server.authName : inputs.authName;
-      let authToken = ('' == inputs.authToken) ? server.authToken : inputs.authToken;
       let serverName = ('' == inputs.serverName) ? server.name : inputs.serverName;
 
       await SdtdServer.update({
@@ -76,30 +74,13 @@ module.exports = {
       }, {
         ip: ip,
         webPort: webPort,
-        authName: authName,
-        authToken: authToken,
         name: serverName
       });
 
-      if (inputs.authName || inputs.authToken) {
-        sevenDays.executeCommand({
-          ip: server.ip,
-          port: server.webPort,
-          authName: server.authName,
-          authToken: server.authToken,
-          command: `webtokens remove ${server.authName}`
-        }).exec({
-          success: result => {
-          },
-          error: error => {
-            sails.log.warn(`API - SdtdServer:update-connection-info- Error while trying to delete token - ${error}`);
-          }
-        })
+      if (inputs.webPort || inputs.serverIp) {
+        sails.hooks.sdtdlogs.stop(inputs.serverId);
+        sails.hooks.sdtdlogs.start(inputs.serverId);
       }
-
-      sails.hooks.sdtdlogs.stop(inputs.serverId);
-      sails.hooks.sdtdlogs.start(inputs.serverId);
-
       return exits.success();
     } catch (error) {
       sails.log.error(`API - SdtdServer:update-connection-info - ${error}`);
