@@ -32,10 +32,12 @@ module.exports = function SdtdDiscordChatBridge(sails) {
               "!=": ""
             }
           })
-          
+
           for (const serverConfig of configs) {
-              let systemBootNotification = getNotificationClass('systemboot');
-              systemBootNotification.sendNotification({}, {serverId: serverConfig.server})
+            await sendNotification({
+              serverId: serverConfig.server,
+              notificationType: 'systemboot'
+            })
           }
 
           cb()
@@ -43,6 +45,8 @@ module.exports = function SdtdDiscordChatBridge(sails) {
 
       });
     },
+
+    sendNotification: sendNotification,
 
     /**
      * @memberof module:SdtdDiscordNotificationHook
@@ -62,21 +66,6 @@ module.exports = function SdtdDiscordChatBridge(sails) {
 
     stop: (notificationType, serverId) => {},
 
-    /**
-     * @memberof module:SdtdDiscordNotificationHook
-     * @method
-     * @name getStatus
-     * @description Get the notification status for a server
-     * @returns {boolean}
-     */
-
-    getStatus: function (serverId) {
-      return discordNotificationInfoMap.get(serverId);
-    },
-
-    getAmount: function () {
-      return discordNotificationInfoMap.size
-    },
   };
 
   function loadNotifications() {
@@ -98,6 +87,26 @@ module.exports = function SdtdDiscordChatBridge(sails) {
   }
 
   function getNotificationClass(notificationName) {
-      return loadedNotifications.get(notificationName)
+    return loadedNotifications.get(notificationName)
+  }
+
+  async function sendNotification(notificationOptions) {
+    if (!notificationOptions.serverId) {
+      throw new Error(`Must specify a serverId in options to send notification`)
+    }
+    if (!notificationOptions.notificationType) {
+      throw new Error(`Must specify a notificationType in options`)
+    }
+
+    try {
+        let serverConfig = await SdtdConfig.findOne({server: notificationOptions.serverId})
+        if (serverConfig.discordNotificationConfig[notificationOptions.notificationType]) {
+            let notificationClass = getNotificationClass(notificationOptions.notificationType);
+            notificationClass.sendNotification(notificationOptions)
+        }
+    } catch (error) {
+        sails.log.error(`HOOK - DiscordNotifications:sendNotification - ${error}`)
+    }
+
   }
 }

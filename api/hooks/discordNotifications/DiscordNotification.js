@@ -10,14 +10,14 @@ class DiscordNotification {
     throw new Error(`makeEmbed has to be implemented.`)
   }
 
-  async sendNotification(notificationEvent, notificationOptions) {
-
-    let enrichedEvent = await this.enrichEvent(notificationEvent, notificationOptions.serverId);
-    let embedToSend = await this.makeEmbed(enrichedEvent);
+  async sendNotification(notificationOptions) {
+    let enrichedOptions = await this.enrichEvent(notificationOptions);
+    let embedToSend = await this.makeEmbed(enrichedOptions);
+    embedToSend.setFooter(`CSMM notification for ${enrichedOptions.server.name}`)
 
     try {
         let discordClient = sails.hooks.discordbot.getClient();
-        let discordChannel = await discordClient.channels.get(enrichedEvent.server.config.notificationChannelId);
+        let discordChannel = await discordClient.channels.get(enrichedOptions.server.config.notificationChannelConfig[notificationOptions.notificationType]);
         if (discordChannel) {
             discordChannel.send(embedToSend);
         }
@@ -27,15 +27,15 @@ class DiscordNotification {
 
   }
 
-  async enrichEvent(notificationEvent, serverId) {
-    if (!serverId) {
+  async enrichEvent(notificationOptions) {
+    if (!notificationOptions.serverId) {
         throw new Error(`Must specify a server ID to send notifications`)
     }
-    let sdtdServer = await SdtdServer.findOne(serverId).populate('config');
+    let sdtdServer = await SdtdServer.findOne(notificationOptions.serverId).populate('config');
     sdtdServer.config = sdtdServer.config[0]
 
-    notificationEvent.server = sdtdServer
-    return notificationEvent
+    notificationOptions.server = sdtdServer
+    return notificationOptions
   }
 }
 

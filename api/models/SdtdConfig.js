@@ -104,6 +104,16 @@ module.exports = {
       type: 'string'
     },
 
+
+    discordNotificationConfig: {
+      type: 'json',
+      defaultsTo: {
+        systemboot: '',
+        playerConnected: '',
+        playerDisconnected: '',
+      },
+    },
+
     //   _                       _
     //  | |                     (_)
     //  | |     ___   __ _  __ _ _ _ __   __ _
