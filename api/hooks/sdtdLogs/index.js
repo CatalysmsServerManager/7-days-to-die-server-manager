@@ -185,6 +185,22 @@ module.exports = function sdtdLogs(sails) {
               })
             });
 
+            eventEmitter.on('connectionLost', async function (eventMsg) {
+              sails.sockets.broadcast(server.id, 'connectionLost', eventMsg);
+              await sails.hooks.discordnotifications.sendNotification({
+                serverId: server.id,
+                notificationType: 'connectionlost'
+              })
+            });
+
+            eventEmitter.on('connected', async function (eventMsg) {
+              sails.sockets.broadcast(server.id, 'connected', eventMsg);
+              await sails.hooks.discordnotifications.sendNotification({
+                serverId: server.id,
+                notificationType: 'connected'
+              })
+            });
+
             eventEmitter.on('playerDeath', function (deathMessage) {
               sails.sockets.broadcast(server.id, 'playerDeath', deathMessage);
             });

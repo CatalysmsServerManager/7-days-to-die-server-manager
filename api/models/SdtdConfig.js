@@ -111,6 +111,8 @@ module.exports = {
         systemboot: '',
         playerConnected: '',
         playerDisconnected: '',
+        connectionLost: '',
+        connected: '',
       },
     },
 
