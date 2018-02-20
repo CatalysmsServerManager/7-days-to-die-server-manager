@@ -209,12 +209,13 @@ module.exports = {
     /**
      * @var server
      * @description Server this config belongs to
-     * @memberof module:SdtdCommandsHook
+     * @memberof SdtdConfig
      */
 
     server: {
+      required: true,
+  //    unique: true,
       model: 'sdtdserver',
-      required: true
     },
 
   },
