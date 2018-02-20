@@ -116,11 +116,12 @@ class ChatBridgeChannel {
     if (connectedPlayer) {
       embed.addField('Playtime', connectedPlayer.playtime ? hhmmss(connectedPlayer.playtime) : "New player!", true)
         .addField('CSMM profile', `${process.env.CSMM_HOSTNAME}/player/${connectedPlayer.id}/profile`)
+      if (connectedPlayer.avatarUrl) {
+        embed.setThumbnail(connectedPlayer.avatarUrl)
+      }
+
     }
 
-    if (connectedPlayer.avatarUrl) {
-      embed.setThumbnail(connectedPlayer.avatarUrl)
-    }
     this.channel.send(embed);
   }
 
@@ -132,12 +133,15 @@ class ChatBridgeChannel {
     disconnectedPlayer = disconnectedPlayer[0]
     let embed = new this.channel.client.customEmbed();
     embed.setTitle(`${this.sdtdServer.name} --- ${disconnectedMsg.playerName} disconnected`)
-      .addField('Steam ID', disconnectedPlayer.steamId ? `[${disconnectedPlayer.steamId}](https://steamidfinder.com/lookup/${disconnectedPlayer.steamId}/)` : `Unknown`, true)
-      .addField('Playtime', hhmmss(disconnectedPlayer.playtime), true)
-      .addField('CSMM profile', `${process.env.CSMM_HOSTNAME}/player/${disconnectedPlayer.id}/profile`)
       .setColor('RED')
-    if (disconnectedPlayer.avatarUrl) {
-      embed.setThumbnail(disconnectedPlayer.avatarUrl);
+
+    if (disconnectedPlayer) {
+      embed.addField('Steam ID', disconnectedPlayer.steamId ? `[${disconnectedPlayer.steamId}](https://steamidfinder.com/lookup/${disconnectedPlayer.steamId}/)` : `Unknown`, true)
+        .addField('Playtime', hhmmss(disconnectedPlayer.playtime), true)
+        .addField('CSMM profile', `${process.env.CSMM_HOSTNAME}/player/${disconnectedPlayer.id}/profile`)
+        if (disconnectedPlayer.avatarUrl) {
+          embed.setThumbnail(disconnectedPlayer.avatarUrl);
+        }
     }
     this.channel.send(embed);
   }
