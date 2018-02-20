@@ -12,6 +12,10 @@ module.exports = {
       notificationChannelId: {
         required: true,
         type: 'string'
+      },
+      notificationType: {
+        required: true,
+        type: 'string'
       }
     },
   
@@ -41,15 +45,10 @@ module.exports = {
           return exits.badChannel();
         }
   
-        await SdtdConfig.update({
-          server: inputs.serverId
-        }, {
-          notificationChannelId: inputs.notificationChannelId,
-        });
-
-        let notificationMessage = await sails.helpers.discord.sendNotification(server.id, `Initialized this channel as a notification channel!`);
-  
-        sails.log.debug(`API - SdtdServer:set-notification-channel - set notification channel ${inputs.notificationChannelId} for server ${inputs.serverId}`);
+        let currentConfig = await SdtdConfig.findOne({server: inputs.serverId});
+        currentConfig.discordNotificationConfig[inputs.notificationType] = inputs.notificationChannelId
+        await SdtdConfig.update({server: inputs.serverId}, {discordNotificationConfig: currentConfig.discordNotificationConfig});
+        sails.log.debug(`API - SdtdServer:set-notification-channel - set notification channel for ${inputs.notificationType} ${inputs.notificationChannelId} for server ${inputs.serverId}`);
         return exits.success();
       } catch (error) {
         sails.log.error(`API - SdtdServer:set-notification-channel - ${error}`);

@@ -17,7 +17,7 @@ class DiscordNotification {
 
     try {
         let discordClient = sails.hooks.discordbot.getClient();
-        let discordChannel = await discordClient.channels.get(enrichedOptions.server.config.notificationChannelConfig[notificationOptions.notificationType]);
+        let discordChannel = await discordClient.channels.get(enrichedOptions.server.config.discordNotificationConfig[notificationOptions.notificationType]);
         if (discordChannel) {
             discordChannel.send(embedToSend);
         }
