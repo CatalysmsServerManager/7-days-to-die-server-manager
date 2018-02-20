@@ -10,6 +10,7 @@ class PlayerDisconnected extends DiscordNotification {
     let embed = new client.customEmbed()
 
     embed.setTitle('Player disconnected')
+    .setColor("RED")
     return embed
   }
 }

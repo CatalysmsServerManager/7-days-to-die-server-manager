@@ -42,7 +42,6 @@ module.exports = {
         }
 
         if (_.isUndefined(notificationChannel) && inputs.notificationChannelId != "0") {
-          console.log('badhcan')
           return exits.badChannel();
         }
   

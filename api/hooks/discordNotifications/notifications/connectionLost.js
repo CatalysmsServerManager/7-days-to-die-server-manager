@@ -10,6 +10,7 @@ class ConnectionLost extends DiscordNotification {
     let embed = new client.customEmbed()
 
     embed.setTitle('Lost connection to CSMM')
+    .setColor("RED")
     return embed
   }
 }

@@ -10,6 +10,7 @@ class PlayerConnected extends DiscordNotification {
     let embed = new client.customEmbed()
 
     embed.setTitle('Player connected')
+    .setColor("GREEN")
     return embed
   }
 }

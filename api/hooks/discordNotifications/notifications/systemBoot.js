@@ -10,6 +10,7 @@ class SystemBoot extends DiscordNotification {
     let embed = new client.customEmbed()
 
     embed.setTitle('CSMM has (re)started')
+    .setColor("RANDOM")
     return embed
   }
 }

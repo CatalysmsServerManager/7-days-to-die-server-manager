@@ -435,8 +435,6 @@
         return alert('Error! Make sure you have a guild set and are selecting a valid channel')
       }
 
-      console.log(newNotificationChannelId)
-
       $.ajax({
         url: '/api/sdtdserver/setnotificationchannel',
         type: 'POST',
