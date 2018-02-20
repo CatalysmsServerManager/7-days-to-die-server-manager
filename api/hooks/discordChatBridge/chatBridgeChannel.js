@@ -162,6 +162,9 @@ class ChatBridgeChannel {
         },
         success: () => {
           return true;
+        },
+        connectionRefused: () => {
+          message.react("⚠")
         }
       });
     }
