@@ -48,6 +48,11 @@ module.exports = {
         let currentConfig = await SdtdConfig.findOne({server: inputs.serverId});
         currentConfig.discordNotificationConfig[inputs.notificationType] = inputs.notificationChannelId
         await SdtdConfig.update({server: inputs.serverId}, {discordNotificationConfig: currentConfig.discordNotificationConfig});
+
+        if (notificationChannel) {
+          notificationChannel.send(`This channel has been selected to receive ${inputs.notificationType} notifications for ${server.name}`)
+        }
+
         sails.log.debug(`API - SdtdServer:set-notification-channel - set notification channel for ${inputs.notificationType} ${inputs.notificationChannelId} for server ${inputs.serverId}`);
         return exits.success();
       } catch (error) {
