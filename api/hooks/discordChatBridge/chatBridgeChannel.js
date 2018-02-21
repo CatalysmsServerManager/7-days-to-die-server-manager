@@ -145,7 +145,7 @@ class ChatBridgeChannel {
     }
     this.channel.send(embed);
   }
-
+  
   sendMessageToGame(message) {
 
     if (message.channel.id === this.channel.id && message.author.id != message.client.user.id) {
