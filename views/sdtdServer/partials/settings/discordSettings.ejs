@@ -142,14 +142,14 @@
 
         if (discordGuildId) {
           updateChatChannels($('#input-settings-discord-guild').val())
-          updateNotificationChannels($('#input-settings-discord-guild').val(),
+                   updateNotificationChannels($('#input-settings-discord-guild').val(),
             "discord-settings-notifications-reboots-select", "systemboot")
           updateNotificationChannels($('#input-settings-discord-guild').val(),
-            "discord-settings-notifications-playerconnect-select", "playerconnected")
+            "discord-settings-notifications-playerconnect-select", "playerConnected")
           updateNotificationChannels($('#input-settings-discord-guild').val(),
-            "discord-settings-notifications-playerdisconnect-select", "playerdisconnected")
+            "discord-settings-notifications-playerdisconnect-select", "playerDisconnected")
           updateNotificationChannels($('#input-settings-discord-guild').val(),
-            "discord-settings-notifications-connectionlost-select", "connectionlost")
+            "discord-settings-notifications-connectionlost-select", "connectionLost")
           updateNotificationChannels($('#input-settings-discord-guild').val(),
             "discord-settings-notifications-connected-select", "connected")
 
@@ -250,11 +250,11 @@
           updateNotificationChannels($('#input-settings-discord-guild').val(),
             "discord-settings-notifications-reboots-select", "systemboot")
           updateNotificationChannels($('#input-settings-discord-guild').val(),
-            "discord-settings-notifications-playerconnect-select", "playerconnected")
+            "discord-settings-notifications-playerconnect-select", "playerConnected")
           updateNotificationChannels($('#input-settings-discord-guild').val(),
-            "discord-settings-notifications-playerdisconnect-select", "playerdisconnected")
+            "discord-settings-notifications-playerdisconnect-select", "playerDisconnected")
           updateNotificationChannels($('#input-settings-discord-guild').val(),
-            "discord-settings-notifications-connectionlost-select", "connectionlost")
+            "discord-settings-notifications-connectionlost-select", "connectionLost")
           updateNotificationChannels($('#input-settings-discord-guild').val(),
             "discord-settings-notifications-connected-select", "connected")
           $('#input-settings-discord-guild').addClass("bg-success").removeClass("bg-danger");
@@ -350,7 +350,7 @@
         data: {
           notificationChannelId: newNotificationChannelId,
           serverId: <%= server.id %>,
-          notificationType: 'playerconnected',
+          notificationType: 'playerConnected',
           _csrf: window.SAILS_LOCALS._csrf
         },
         success: (data, status, xhr) => {
@@ -380,7 +380,7 @@
         data: {
           notificationChannelId: newNotificationChannelId,
           serverId: <%= server.id %>,
-          notificationType: 'playerdisconnected',
+          notificationType: 'playerDisconnected',
           _csrf: window.SAILS_LOCALS._csrf
         },
         success: (data, status, xhr) => {
@@ -441,7 +441,7 @@
         data: {
           notificationChannelId: newNotificationChannelId,
           serverId: <%= server.id %>,
-          notificationType: 'connectionlost',
+          notificationType: 'connectionLost',
           _csrf: window.SAILS_LOCALS._csrf
         },
         success: (data, status, xhr) => {

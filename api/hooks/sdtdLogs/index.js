@@ -167,7 +167,7 @@ module.exports = function sdtdLogs(sails) {
               sails.sockets.broadcast(server.id, 'playerConnected', connectedMsg);
               await sails.hooks.discordnotifications.sendNotification({
                 serverId: server.id,
-                notificationType: 'playerconnected'
+                notificationType: 'playerConnected'
               })
               try {
                 await sails.helpers.loadPlayerData(server.id, connectedMsg.steamID);
@@ -181,7 +181,7 @@ module.exports = function sdtdLogs(sails) {
               sails.sockets.broadcast(server.id, 'playerDisconnected', disconectedMsg);
               await sails.hooks.discordnotifications.sendNotification({
                 serverId: server.id,
-                notificationType: 'playerdisconnected'
+                notificationType: 'playerDisconnected'
               })
             });
 
@@ -189,7 +189,7 @@ module.exports = function sdtdLogs(sails) {
               sails.sockets.broadcast(server.id, 'connectionLost', eventMsg);
               await sails.hooks.discordnotifications.sendNotification({
                 serverId: server.id,
-                notificationType: 'connectionlost'
+                notificationType: 'connectionLost'
               })
             });
 
