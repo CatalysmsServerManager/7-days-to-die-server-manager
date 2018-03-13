@@ -139,6 +139,11 @@ module.exports = {
       collection: 'sdtdticket',
       via: 'server'
     },
+
+    config: {
+      collection: 'SdtdConfig',
+      via: 'server'
+    }
   },
 
 };

@@ -80,7 +80,7 @@ module.exports = function SdtdDiscordChatBridge(sails) {
      */
 
     getStatus: function (serverId) {
-      return chatBridgeInfoMap.has(serverId);
+      return chatBridgeInfoMap.has(String(serverId));
     },
 
     getAmount: function() {
@@ -116,8 +116,14 @@ module.exports = function SdtdDiscordChatBridge(sails) {
         throw new Error(`Did not find textchannel corresponding to ID in config.`);
       }
 
+      let oldChat = getChatBridge(serverId);
+
+      if (oldChat) {
+        await stop(serverId);
+      }
+
       let chatBridge = new ChatBridgeChannel(textChannel, server);
-      chatBridgeInfoMap.set(serverId, chatBridge);
+      setChatBridge(serverId, chatBridge)
     } catch (error) {
       sails.log.error(`HOOK SdtdDiscordChatBridge:start - ${error}`);
       throw error;
@@ -127,15 +133,24 @@ module.exports = function SdtdDiscordChatBridge(sails) {
   async function stop(serverId) {
     try {
       sails.log.debug(`HOOK SdtdDiscordChatBridge:stop - Stopping chatbridge for server ${serverId}`);
-      let chatBridge = chatBridgeInfoMap.get(serverId);
+      let chatBridge = getChatBridge(serverId)
       if (!_.isUndefined(chatBridge)) {
+        console.log(chatBridge)
         chatBridge.stop();
-        return chatBridgeInfoMap.delete(serverId);
+        return chatBridgeInfoMap.delete(String(serverId));
       }
       return;
     } catch (error) {
       sails.log.error(`HOOK SdtdDiscordChatBridge:stop - ${error}`);
       throw error;
     }
+  }
+
+  function getChatBridge(serverId) {
+    return chatBridgeInfoMap.get(String(serverId))
+  }
+
+  function setChatBridge(serverId, chatBridgeObj) {
+    return chatBridgeInfoMap.set(String(serverId), chatBridgeObj)
   }
 };
