@@ -104,6 +104,18 @@ module.exports = {
       type: 'string'
     },
 
+
+    discordNotificationConfig: {
+      type: 'json',
+      defaultsTo: {
+        systemboot: '',
+        playerConnected: '',
+        playerDisconnected: '',
+        connectionLost: '',
+        connected: '',
+      },
+    },
+
     //   _                       _
     //  | |                     (_)
     //  | |     ___   __ _  __ _ _ _ __   __ _
@@ -209,12 +221,13 @@ module.exports = {
     /**
      * @var server
      * @description Server this config belongs to
-     * @memberof module:SdtdCommandsHook
+     * @memberof SdtdConfig
      */
 
     server: {
+      required: true,
+  //    unique: true,
       model: 'sdtdserver',
-      required: true
     },
 
   },
