@@ -134,15 +134,15 @@
         let foundGuilds = data;
         foundGuilds.forEach(guild => {
           $('#input-settings-discord-guild').append($('<option>', {
-              value: guild.id
-            })
+            value: guild.id
+          })
             .text(guild.name));
         })
         $(`#input-settings-discord-guild option[value='${discordGuildId}']`).prop('selected', true);
 
         if (discordGuildId) {
           updateChatChannels($('#input-settings-discord-guild').val())
-                   updateNotificationChannels($('#input-settings-discord-guild').val(),
+          updateNotificationChannels($('#input-settings-discord-guild').val(),
             "discord-settings-notifications-reboots-select", "systemboot")
           updateNotificationChannels($('#input-settings-discord-guild').val(),
             "discord-settings-notifications-playerconnect-select", "playerConnected")
@@ -175,15 +175,15 @@
           let enabled = false
           foundChannels.forEach(channel => {
             $('#input-settings-discord-chatchannel').append($('<option>', {
-                value: channel.id
-              })
+              value: channel.id
+            })
               .text(channel.name));
             enabled = true
           })
           if (enabled) {
             $('#input-settings-discord-chatchannel').append($('<option>', {
-                value: 0
-              })
+              value: 0
+            })
               .text('Disabled'));
           }
           $(`#input-settings-discord-chatchannel option[value='${chatChannelId}'`).prop('selected', true);
@@ -196,6 +196,12 @@
 
     function updateNotificationChannels(guildId, selectId, notificationType) {
       $(`#${selectId}`).empty()
+      let idToLookFor = window.SAILS_LOCALS.config.discordNotificationConfig[notificationType]
+
+      if (!idToLookFor) {
+        idToLookFor = '0'
+      }
+
       $.ajax({
         url: `/api/sdtdserver/findwriteablechannelsinguild`,
         data: {
@@ -207,22 +213,26 @@
           let enabled = false
           foundChannels.forEach(channel => {
             $(`#${selectId}`).append($('<option>', {
-                value: channel.id
-              })
+              value: channel.id
+            })
               .text(channel.name));
-            enabled = true
+
+            if (channel.id === idToLookFor) {
+              $(`#${selectId} option[value='${idToLookFor}'`).prop('selected', true)
+              enabled = true
+            }
           })
-          if (enabled) {
-            $(`#${selectId}`).append($('<option>', {
-                value: 0
-              })
-              .text('Disabled'));
+
+          $(`#${selectId}`).append($('<option>', {
+            value: 0
+          })
+            .text('Disabled'));
+
+          if (!enabled) {
+            $(`#${selectId} option[value='0'`).prop('selected', true)
           }
-          let idToLookFor = window.SAILS_LOCALS.config.discordNotificationConfig[notificationType]
-          if (!idToLookFor) {
-            idToLookFor = '0'
-          }
-          $(`#${selectId} option[value='${idToLookFor}'`).prop('selected', true);
+
+
         },
         error: (xhr, status, error) => {
           console.log(error);
@@ -396,7 +406,7 @@
       })
     })
 
-    
+
     $("#discord-settings-notifications-connected-select").change(e => {
 
       let newNotificationChannelId = $('#discord-settings-notifications-connected-select').val();
@@ -427,7 +437,7 @@
       })
     })
 
-        $("#discord-settings-notifications-connectionlost-select").change(e => {
+    $("#discord-settings-notifications-connectionlost-select").change(e => {
 
       let newNotificationChannelId = $('#discord-settings-notifications-connectionlost-select').val();
 
