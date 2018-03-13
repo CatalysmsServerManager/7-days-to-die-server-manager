@@ -1,5 +1,7 @@
 # 7DTD Server manager 
 
+[![Waffle.io - Columns and their card count](https://badge.waffle.io/niekcandaele/CSMM-issues.png?columns=all)](https://waffle.io/niekcandaele/CSMM-issues?utm_source=badge)
+
 ## [Documentation](https://niekcandaele.github.io/7-Days-To-Die-Server-Manager/)
 
 The documentation is still a work in progress!
