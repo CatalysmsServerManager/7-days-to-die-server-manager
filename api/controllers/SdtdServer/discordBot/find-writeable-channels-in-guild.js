@@ -43,7 +43,7 @@ module.exports = {
           return false;
         }
         let userPerms = channel.permissionsFor(discordClient.user)
-        return (userPerms.has('SEND_MESSAGES') && userPerms.has('EMBED_LINKS'))
+        return (userPerms.has('SEND_MESSAGES') && userPerms.has('EMBED_LINKS') && userPerms.has('VIEW_CHANNEL'))
       });
 
       let foundChannelsArray = Array.from(foundChannels.values());
