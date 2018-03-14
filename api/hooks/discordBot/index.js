@@ -26,7 +26,8 @@ module.exports = function discordBot(sails) {
       sails.on('hook:orm:loaded', function () {
         sails.on('hook:sdtdlogs:loaded', function () {
           client = new Commando.Client({
-            owner: sails.config.custom.botOwners
+            owner: sails.config.custom.botOwners,
+            unknownCommandResponse: false
           });
 
           sails.discordBotClient = client;
