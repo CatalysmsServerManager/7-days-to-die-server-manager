@@ -22,6 +22,11 @@ class Toptime extends Commando.Command {
 
   async run(msg, args) {
     let sdtdServer = await findSdtdServer(msg);
+
+    if (!sdtdServer) {
+      return msg.channel.send(`Could not determine what server to work with! Make sure your settings are correct.`)
+    }
+    
     let serverInfo = await sails.helpers.loadSdtdserverInfo(sdtdServer.id);
     let playerInfo = await sails.helpers.loadPlayerData(sdtdServer.id);
     let embed = new this.client.customEmbed();

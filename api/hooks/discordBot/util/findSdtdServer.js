@@ -17,8 +17,12 @@ async function findSdtdServer(discordMessage) {
         }
     }
 
-    let server = await SdtdServer.findOne(serverId);
-    return server
+    if (serverId) {
+        let server = await SdtdServer.findOne(serverId);
+        return server
+    } else {
+        return undefined
+    }
 }
 
 module.exports = findSdtdServer
