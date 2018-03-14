@@ -130,6 +130,7 @@ module.exports.routes = {
   'post /api/sdtdserver/setGuild': 'SdtdServerController/discordBot.set-discord-guild',
   'post /api/sdtdserver/setchatchannel': 'SdtdServerController/discordBot.set-chat-channel',
   'post /api/sdtdserver/setnotificationchannel': 'SdtdServerController/discordBot.set-notification-channel',
+  'post /api/sdtdserver/setcommandschannel': 'SdtdServerController/discordBot.set-commands-channel',
 
 
   // PLAYER
