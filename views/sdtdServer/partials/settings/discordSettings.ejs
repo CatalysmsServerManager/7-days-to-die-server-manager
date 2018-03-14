@@ -304,6 +304,7 @@
         },
         success: (data, status, xhr) => {
           updateChatChannels($('#input-settings-discord-guild').val())
+          updateCommandChannels($('#input-settings-discord-guild').val())
           updateNotificationChannels($('#input-settings-discord-guild').val(),
             "discord-settings-notifications-reboots-select", "systemboot")
           updateNotificationChannels($('#input-settings-discord-guild').val(),
