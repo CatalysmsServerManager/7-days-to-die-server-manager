@@ -113,6 +113,8 @@ module.exports.routes = {
   'post /api/sdtdserver/addserver': 'SdtdServerController/add-server',
   'post /api/sdtdserver/restartServer': 'SdtdServerController/restart-server',
 
+  'post /api/sdtdserver/addadmin': 'SdtdController/add-admin',
+
   // Sdtd settings
   
   'post /api/sdtdserver/updateConnectionInfo': 'SdtdServerController.update-connection-info',
