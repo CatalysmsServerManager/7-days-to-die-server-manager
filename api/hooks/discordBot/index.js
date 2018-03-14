@@ -39,7 +39,7 @@ module.exports = function discordBot(sails) {
           // Register some stuff in the registry... yeah..
           client.registry
             .registerGroups([
-              ['7dtd', '7 Days to die'],
+              ['sdtd', '7 Days to die'],
               ['meta', 'Commands about the system']
             ])
             .registerDefaults()
