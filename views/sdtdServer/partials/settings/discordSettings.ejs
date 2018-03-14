@@ -67,6 +67,18 @@
           </li>
 
 
+          <!-- Commands channel select -->
+
+          <li class='list-group-item'>
+            <label for="input-settings-discord-commandschannel">Command channel</label>
+            <br>
+            <small>Designate a discord channel to use commands for this server </small>
+
+            <select class="form-control" id="input-settings-discord-commandschannel">
+            </select>
+          </li>
+
+
 
           <!-- Notification channel select -->
 
@@ -142,6 +154,7 @@
 
         if (discordGuildId) {
           updateChatChannels($('#input-settings-discord-guild').val())
+          updateCommandChannels($('#input-settings-discord-guild').val())
           updateNotificationChannels($('#input-settings-discord-guild').val(),
             "discord-settings-notifications-reboots-select", "systemboot")
           updateNotificationChannels($('#input-settings-discord-guild').val(),
@@ -187,6 +200,40 @@
               .text('Disabled'));
           }
           $(`#input-settings-discord-chatchannel option[value='${chatChannelId}'`).prop('selected', true);
+        },
+        error: (xhr, status, error) => {
+          console.log(error);
+        }
+      })
+    }
+
+    // Loads channels of a guild the bot can write in.
+    function updateCommandChannels(guildId) {
+      $('#input-settings-discord-commandschannel').empty()
+      $.ajax({
+        url: `/api/sdtdserver/findwriteablechannelsinguild`,
+        data: {
+          guildId: guildId,
+          serverId: <%= server.id %>
+        },
+        success: (data, status, xhr) => {
+          console.log(data)
+          let foundChannels = data;
+          let enabled = false
+          foundChannels.forEach(channel => {
+            $('#input-settings-discord-commandschannel').append($('<option>', {
+              value: channel.id
+            })
+              .text(channel.name));
+            enabled = true
+          })
+          if (enabled) {
+            $('#input-settings-discord-commandschannel').append($('<option>', {
+              value: 0
+            })
+              .text('Disabled'));
+          }
+          $(`#input-settings-discord-commandschannel option[value='${chatChannelId}'`).prop('selected', true);
         },
         error: (xhr, status, error) => {
           console.log(error);
@@ -309,6 +356,36 @@
         error: (xhr, status, error) => {
           alert(`Whoa can't set chat to that channel! error: ${error}`)
           $('#input-settings-discord-chatchannel').addClass("bg-danger").removeClass("bg-success");
+          console.log(error);
+        }
+      })
+    })
+
+        // Change command channel click
+
+    $("#input-settings-discord-commandschannel").change(e => {
+      e.preventDefault();
+
+      let newCommandsChannelId = $('#input-settings-discord-commandschannel').val();
+
+      if (!newCommandsChannelId) {
+        return alert('Error! Make sure you have a guild set and are selecting a valid channel')
+      }
+
+      $.ajax({
+        url: '/api/sdtdserver/setcommandschannel',
+        type: 'POST',
+        data: {
+          channelId: newCommandsChannelId,
+          serverId: <%= server.id %>,
+          _csrf: window.SAILS_LOCALS._csrf
+        },
+        success: (data, status, xhr) => {
+          $('#input-settings-discord-commandschannel').addClass("bg-success").removeClass("bg-danger");
+        },
+        error: (xhr, status, error) => {
+          alert(`Whoa can't set commands to that channel! error: ${error}`)
+          $('#input-settings-discord-commandschannel').addClass("bg-danger").removeClass("bg-success");
           console.log(error);
         }
       })

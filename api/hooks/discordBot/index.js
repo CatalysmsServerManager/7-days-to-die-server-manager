@@ -26,7 +26,8 @@ module.exports = function discordBot(sails) {
       sails.on('hook:orm:loaded', function () {
         sails.on('hook:sdtdlogs:loaded', function () {
           client = new Commando.Client({
-            owner: sails.config.custom.botOwners
+            owner: sails.config.custom.botOwners,
+            unknownCommandResponse: false
           });
 
           sails.discordBotClient = client;
@@ -39,7 +40,7 @@ module.exports = function discordBot(sails) {
           // Register some stuff in the registry... yeah..
           client.registry
             .registerGroups([
-              ['7dtd', '7 Days to die'],
+              ['sdtd', '7 Days to die'],
               ['meta', 'Commands about the system']
             ])
             .registerDefaults()

@@ -15,5 +15,4 @@ class PlayerConnected extends DiscordNotification {
   }
 }
 
-
 module.exports = PlayerConnected

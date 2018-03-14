@@ -92,7 +92,7 @@ module.exports = {
   },
 
   /**
-   * @description Log out a user, clears the encrypted cookie
+   * @description Log out a user
    */
 
   logout: function (req, res) {

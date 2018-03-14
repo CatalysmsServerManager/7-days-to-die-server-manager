@@ -62,6 +62,16 @@ module.exports = {
     // | |__| | \__ \ (_| (_) | | | (_| |
     // |_____/|_|___/\___\___/|_|  \__,_|
 
+    /**
+     * @memberof SdtdServer
+     * @var {string} discordCommandsChannelId
+     * @description A specific discord channel to use for this server
+     */
+
+     discordCommandsChannelId: {
+      type: 'string'
+     },
+
 
     /**
      * @memberof SdtdServer

@@ -1,4 +1,5 @@
 var sevenDays = require('machinepack-7daystodiewebapi');
+const hhmmss = require('@streammedev/hhmmss');
 
 module.exports = {
   friendlyName: 'Load player data',
@@ -198,6 +199,9 @@ module.exports = {
               playerData.location.z = player.positionZ;
               playerData.inventory = player.inventory;
               playerData.totalPlaytime = player.playtime;
+              Object.defineProperty(playerData, 'playtimeHHMMSS', {
+                value: hhmmss(player.playtime)
+              })
               playerData.banned = player.banned;
               playerData.server = player.server;
               playerData.name = player.name;
