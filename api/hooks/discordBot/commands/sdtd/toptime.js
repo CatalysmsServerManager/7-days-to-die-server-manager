@@ -34,8 +34,10 @@ class Toptime extends Commando.Command {
 
     for (let index = 0; index <= amountOfPlayersToShow-1; index++) {
         let player = playerInfo.players[index]
-        embed.addField(`${index+1} - ${player.name}`, `${player.playtimeHHMMSS}`)
+        embed.addField(`${index+1} - ${player.name}`, `${player.playtimeHHMMSS}`, true)
     }
+
+    embed.setTitle(`${sdtdServer.name} - Top ${amountOfPlayersToShow} players by playtime`)
 
     msg.channel.send(embed)
 
