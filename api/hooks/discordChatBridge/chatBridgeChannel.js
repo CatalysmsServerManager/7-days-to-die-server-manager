@@ -108,10 +108,11 @@ class ChatBridgeChannel {
     connectedPlayer = connectedPlayer[0]
     let embed = new this.channel.client.customEmbed();
 
-    embed.setTitle(`${this.sdtdServer.name} --- ${connectedMsg.playerName} connected`)
+    embed.setTitle(`${connectedMsg.playerName} connected`)
       .addField('Steam ID', `[${connectedMsg.steamID}](https://steamidfinder.com/lookup/${connectedMsg.steamID}/)`, true)
       .addField('Country', connectedMsg.country, true)
       .setColor('GREEN')
+      .setFooter(`${this.sdtdServer.name}`)
 
     if (connectedPlayer) {
       embed.addField('Playtime', connectedPlayer.playtime ? hhmmss(connectedPlayer.playtime) : "New player!", true)
@@ -132,8 +133,9 @@ class ChatBridgeChannel {
     })
     disconnectedPlayer = disconnectedPlayer[0]
     let embed = new this.channel.client.customEmbed();
-    embed.setTitle(`${this.sdtdServer.name} --- ${disconnectedMsg.playerName} disconnected`)
+    embed.setTitle(`${disconnectedMsg.playerName} disconnected`)
       .setColor('RED')
+      .setFooter(`${this.sdtdServer.name}`)
 
     if (disconnectedPlayer) {
       embed.addField('Steam ID', disconnectedPlayer.steamId ? `[${disconnectedPlayer.steamId}](https://steamidfinder.com/lookup/${disconnectedPlayer.steamId}/)` : `Unknown`, true)
