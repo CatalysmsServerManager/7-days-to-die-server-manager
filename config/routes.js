@@ -124,6 +124,9 @@ module.exports.routes = {
 
   'post /api/sdtdserver/toggleCountryBan': 'SdtdServerController/countryBan.country-ban-toggle',
   'post /api/sdtdserver/reloadCountryBan': 'SdtdServerController/countryBan.country-ban-reload',
+  'get /api/sdtdserver/countryban/country': 'SdtdServerController/countryBan.get-banned-countries',
+  'post /api/sdtdserver/countryban/country':'SdtdServerController/countryBan.add-country',
+  'delete /api/sdtdserver/countryban/country': 'SdtdServerController/countryBan.remove-country',
 
   'post /api/sdtdserver/togglecommands': 'SdtdServerController/commands.commands-toggle',
   'post /api/sdtdserver/reloadcommands': 'SdtdServerController/commands.commands-reload',
