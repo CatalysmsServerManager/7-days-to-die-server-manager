@@ -131,7 +131,6 @@
 
 <script>
   $(document).ready(function () {
-    console.log(window.SAILS_LOCALS.config)
     let discordGuildId = window.SAILS_LOCALS.config.discordGuildId;
     let notificationChannelId = window.SAILS_LOCALS.config.notificationChannelId;
     let chatChannelId = window.SAILS_LOCALS.config.chatChannelId;
@@ -217,7 +216,6 @@
           serverId: <%= server.id %>
         },
         success: (data, status, xhr) => {
-          console.log(data)
           let foundChannels = data;
           let enabled = false
           foundChannels.forEach(channel => {

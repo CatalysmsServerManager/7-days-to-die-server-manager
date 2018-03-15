@@ -13,7 +13,7 @@ module.exports = async function isServerOwner(req, res, next) {
     var isOwner = false;
     let server = await SdtdServer.findOne({
       id: serverId
-    });
+    }).populate('admins');
     let user = await User.findOne(req.session.userId);
 
     if (_.isUndefined(server)) {
@@ -25,6 +25,16 @@ module.exports = async function isServerOwner(req, res, next) {
 
 
     if (server.owner === user.id) {
+      isOwner = true
+    } 
+
+    server.admins.forEach(admin => {
+      if (admin.id === user.id) {
+        isOwner= true
+      }
+    })
+
+    if (isOwner) {
       sails.log.silly(`POLICY - isServerOwner - User ${user.id} is owner of the server, approving request`);
       return next();
     } else {

@@ -109,9 +109,13 @@ module.exports.routes = {
   'post /api/sdtdTicket/updateTicketStatus': 'SdtdTicket.update-ticket-status',
   'post /api/sdtdTicket/editTicket' : 'SdtdTicket.edit-ticket',
   'get /api/sdtdticket/opentickets' : 'SdtdTicketController.open-tickets',
-
+  
   'post /api/sdtdserver/addserver': 'SdtdServerController/add-server',
   'post /api/sdtdserver/restartServer': 'SdtdServerController/restart-server',
+  
+  'get /api/sdtdserver/admins': 'SdtdServerController.get-admins',
+  'post /api/sdtdserver/admin': 'SdtdServerController.add-admin',
+  'delete /api/sdtdserver/admin': 'SdtdServerController.remove-admin',
 
   // Sdtd settings
   
@@ -164,7 +168,7 @@ module.exports.routes = {
     skipAssets: true
   },
 
-
+  "get /api/user/steamid": "User.find-users-by-steam-id",
 
 
   //  ╦ ╦╔═╗╔╗ ╦ ╦╔═╗╔═╗╦╔═╔═╗

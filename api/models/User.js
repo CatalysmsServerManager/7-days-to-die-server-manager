@@ -104,6 +104,11 @@ module.exports = {
       via: 'owner'
     },
 
+    adminOf: {
+      collection: 'sdtdServer',
+      via: 'admins'
+    }
+
   },
 
 };

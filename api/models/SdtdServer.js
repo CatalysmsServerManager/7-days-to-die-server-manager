@@ -116,6 +116,7 @@ module.exports = {
 
     admins: {
       collection: 'user',
+      via: 'adminOf'
     },
 
     /**

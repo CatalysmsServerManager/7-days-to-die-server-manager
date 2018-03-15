@@ -33,11 +33,11 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     try {
-      let user = await User.findOne(inputs.userId).populate('servers');
+      let user = await User.findOne(inputs.userId).populate('servers').populate('adminOf');
       if (_.isUndefined(user)) {
         return exits.notFound()
       }
-      let ownedServers = user.servers;
+      let ownedServers = user.servers.concat(user.adminOf)
       let ownedServersWithInfo = new Array();
 
       for (const server of ownedServers) {

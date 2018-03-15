@@ -31,10 +31,9 @@ module.exports = {
     sails.log.debug(`API - User:getOwnedServers - Getting servers for user ${inputs.userId}`);
 
     try {
-      let servers = await SdtdServer.find({owner: inputs.userId});
-
-
-      return exits.success(servers);
+      let foundUser = await User.findOne({id: inputs.userId}).populate('adminOf').populate('servers');
+      let ownedServers = foundUser.servers.concat(foundUser.adminOf)
+      return exits.success(ownedServers);
 
     } catch (error) {
       sails.log.error(`API - SdtdServer:sendMessage - ${error}`);

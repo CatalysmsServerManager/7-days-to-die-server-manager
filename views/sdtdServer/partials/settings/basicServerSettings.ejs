@@ -9,20 +9,74 @@
   <div class="col-md-4">
     <ul class="list-group">
 
-        <li class="list-group-item">
-            <label for="input-settings-server-servername">Server name</label>
-            <input type="text" class="form-control" id="input-settings-server-servername" placeholder="<%= server.name %>">
-          </li>
+      <li class="list-group-item">
+        <label for="input-settings-server-servername">Server name</label>
+        <input type="text" class="form-control" id="input-settings-server-servername" placeholder="<%= server.name %>">
+      </li>
 
       <li class="list-group-item">
         <label for="input-settings-server-ip">IP</label>
         <input type="text" class="form-control" id="input-settings-server-ip" placeholder="<%= server.ip %>">
       </li>
-      
+
       <li class="list-group-item">
         <label for="inputs-settings-server-webPort">Web port</label>
         <input type="text" class="form-control" id="inputs-settings-server-webPort" placeholder="<%= server.webPort %>">
       </li>
+
+      <!-- Button trigger modal admins -->
+      <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#inputs-settings-server-admins-modal">
+        Add/remove admins
+      </button>
+
+      <!-- Modal admins -->
+      <div class="modal fade" id="inputs-settings-server-admins-modal" tabindex="-1" role="dialog" aria-labelledby="inputs-settings-server-admins-modal-title"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title" id="inputs-settings-server-admins-modal-title">Admin management</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="inputs-settings-server-admins-steamid">Add admin</label>
+                    <input type="text" class="form-control" name="inputs-settings-server-admins-steamid" id="inputs-settings-server-admins-steamid"
+                      aria-describedby="inputs-settings-server-admins-helpid" placeholder="76561198028175941">
+                    <small id="inputs-settings-server-admins-helpid" class="form-text text-muted">Fill in a steam ID - Make sure the other person has at least logged on once to CSMM</small>
+                  </div>
+                  <div class="card text-center">
+                    <div class="card-body">
+                      <h4 class="card-title" id="inputs-settings-server-admins-founduser-name"></h4>
+                      <p class="card-text" id="inputs-settings-server-admins-founduser-info"></p>
+                      <button type="button" name="inputs-settings-server-admins-addadmin-btn" id="inputs-settings-server-admins-addadmin-btn" class="btn btn-success btn-lg btn-block">Add</button>
+                      <button type="button" name="inputs-settings-server-admins-removeadmin-btn" id="inputs-settings-server-admins-removeadmin-btn"
+                        class="btn btn-danger btn-lg btn-block">Remove</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <h4>Current admins</h4>
+                  <div class="list-group" id="input-settings-server-admin-list">
+
+
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+            <div class="modal-footer">
+              <p>IMPORTANT! Giving someone admin permission here means this person can do everything with your server! Be very careful who you give this to.</p>
+            </div>
+          </div>
+        </div>
+      </div>
 
     </ul>
   </div>
@@ -40,6 +94,10 @@
 
 <script>
   $(document).ready(function () {
+    $("#inputs-settings-server-admins-addadmin-btn").hide();
+    $("#inputs-settings-server-admins-removeadmin-btn").hide();
+    loadCurrentAdmins();
+    let selectedAdmin
 
     $('#input-settings-server-update').click((event) => {
       event.preventDefault();
@@ -63,6 +121,98 @@
       });
     })
 
+
+    $('#inputs-settings-server-admins-steamid').keyup(event => {
+      let steamIdToSearchFor = $('#inputs-settings-server-admins-steamid').val();
+      $.ajax({
+        url: `/api/user/steamid`,
+        data: { steamId: steamIdToSearchFor },
+        error: (xhr, status, error) => {
+          $("#inputs-settings-server-admins-founduser-name").text('Not found')
+          $("#inputs-settings-server-admins-founduser-info").empty();
+          $("#inputs-settings-server-admins-addadmin-btn").hide();
+          $("#inputs-settings-server-admins-removeadmin-btn").hide();
+        },
+        success: (data, status, xhr) => {
+          $("#inputs-settings-server-admins-founduser-name").text(data.username);
+          $("#inputs-settings-server-admins-addadmin-btn").show();
+          $("#inputs-settings-server-admins-removeadmin-btn").show();
+          selectedAdmin = data.id;
+
+        }
+      })
+    })
+
+    $("#inputs-settings-server-admins-addadmin-btn").click(event => {
+      event.preventDefault();
+      let steamIdToAdd = $('#inputs-settings-server-admins-steamid').val();
+      $.ajax({
+        url: "/api/sdtdserver/admin",
+        method: "POST",
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+          userId: selectedAdmin
+        },
+        error: (xhr, status, error) => {
+        },
+        success: (data, status, xhr) => {
+          loadCurrentAdmins();
+        }
+      })
+    })
+
+    $("#inputs-settings-server-admins-removeadmin-btn").click(event => {
+      event.preventDefault();
+      let steamIdToRemove = $('#inputs-settings-server-admins-steamid').val();
+      $.ajax({
+        url: "/api/sdtdserver/admin",
+        method: "DELETE",
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+          userId: selectedAdmin
+        },
+        error: (xhr, status, error) => {
+        },
+        success: (data, status, xhr) => {
+          loadCurrentAdmins();
+        }
+      })
+    })
+
+
+    async function loadCurrentAdmins() {
+      let serverId = window.SAILS_LOCALS.server.id;
+      let adminData = await loadAdminData();
+      $("#input-settings-server-admin-list").empty();
+      drawAdmins(adminData);
+
+      function drawAdmins(admins) {
+        admins.forEach(admin => {
+          let element = $('<a>').addClass('list-group-item').text(`${admin.username} \n${admin.steamId}`)
+          $("#input-settings-server-admin-list").append(element);
+        })
+      }
+
+      function loadAdminData() {
+        return new Promise((resolve, reject) => {
+          $.ajax({
+            url: "/api/sdtdserver/admins",
+            data: {
+              serverId: serverId
+            },
+            error: (xhr, status, error) => {
+              console.log(error);
+              resolve([])
+            },
+            success: (data, status, xhr) => {
+              resolve(data)
+            }
+          })
+        })
+      }
+    }
 
 
   })
