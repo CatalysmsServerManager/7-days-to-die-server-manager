@@ -1,6 +1,6 @@
 module.exports = {
 
-    friendlyName: 'Get banned countries',
+    friendlyName: 'Get countryban whitelist',
 
     description: 'Get countries that are banned',
 
@@ -20,7 +20,7 @@ module.exports = {
     fn: async function (inputs, exits) {
 
         let config = await SdtdConfig.findOne({ server: inputs.serverId });
-        return exits.success(config.countryBanConfig.bannedCountries)
+        return exits.success(config.countryBanConfig.whiteListedSteamIds)
 
     }
 };

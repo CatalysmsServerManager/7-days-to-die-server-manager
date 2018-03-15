@@ -18,10 +18,12 @@
               <li class="list-group-item bg-danger">Disabled
               </li>
               <% } %>
+
                 <li class="list-group-item">
                   <label for="input-settings-countryBan-kickReason">Kick reason</label>
 
                   <input type="text" class="form-control" id="input-settings-countryBan-kickReason" placeholder="<%= config.countryBanConfig.kickMessage %>">
+                  <a name="" id="" class="btn btn-primary" href="#" role="button">Set</a>
                 </li>
 
                 <li class="list-group-item">
@@ -63,11 +65,6 @@
             </li>
             <% } %>
 
-              <button id="settings-reload-countryBan" class="btn btn-default btn-primary" type="button">
-                <em class="glyphicon glyphicon-align-right"></em>
-                <i class="fa fa-refresh" aria-hidden="true"></i> Apply changes
-              </button>
-
 
       </div>
 
@@ -107,38 +104,6 @@
               alert('Something went wrong while trying to toggle country ban!');
             }
           });
-        })
-
-        $('#settings-reload-countryBan').click((event) => {
-          event.preventDefault();
-
-          let whiteListedSteamIdsString = $('#input-settings-countryban-whitelist').val();
-          let whiteListedSteamIds = whiteListedSteamIdsString.split(',')
-
-          newConfig = {
-            enabled: true,
-            bannedCountries: newCountries,
-            kickMessage: $('#input-settings-countryBan-kickReason').val(),
-            whiteListedSteamIds: whiteListedSteamIds
-          }
-
-          $.ajax({
-            url: `/api/sdtdserver/reloadCountryBan`,
-            type: "POST",
-            data: {
-              _csrf: window.SAILS_LOCALS._csrf,
-              newConfig: newConfig,
-              serverId: <%= server.id %>
-            },
-            success: (data, status, xhr) => {
-              location.reload();
-            },
-            error: (xhr, status, error) => {
-              alert('Something went wrong while trying to toggle country ban!');
-            }
-          });
-
-
         })
 
       })
