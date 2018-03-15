@@ -18,10 +18,6 @@ module.exports = {
     exits: {
         success: {
         },
-        notFound: {
-            description: 'No server/user with the specified ID was found in the database.',
-            responseType: 'notFound'
-        }
     },
 
     /**
