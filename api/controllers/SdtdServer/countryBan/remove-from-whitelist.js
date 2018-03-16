@@ -28,9 +28,10 @@ module.exports = {
 
         if (countryBanConfig.whiteListedSteamIds.includes(inputs.newSteamId)) {
             let idx = countryBanConfig.whiteListedSteamIds.indexOf(inputs.newSteamId);
-            let ajdustedWhitelist = countryBanConfig.whiteListedSteamIds.slice(idx);
-            countryBanConfig.whiteListedSteamIds = ajdustedWhitelist;
-            await SdtdConfig.update({ server: inputs.serverId }, { countryBanConfig: countryBanConfig })
+            let adjustedWhitelist = _.without(countryBanConfig.whiteListedSteamIds, inputs.newSteamId);
+            countryBanConfig.whiteListedSteamIds = adjustedWhitelist;
+            await SdtdConfig.update({ server: inputs.serverId }, { countryBanConfig: countryBanConfig });
+            await sails.hooks.countryban.reload(inputs.serverId);
             return exits.success();
         } else {
             return exits.success();

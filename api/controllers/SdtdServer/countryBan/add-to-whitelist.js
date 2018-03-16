@@ -30,7 +30,8 @@ module.exports = {
             return exits.success();
         } else {
             countryBanConfig.whiteListedSteamIds.push(inputs.newSteamId);
-            await SdtdConfig.update({ server: inputs.serverId }, { countryBanConfig: countryBanConfig })
+            await SdtdConfig.update({ server: inputs.serverId }, { countryBanConfig: countryBanConfig });
+            await sails.hooks.countryban.reload(inputs.serverId);
             return exits.success();
         }
 

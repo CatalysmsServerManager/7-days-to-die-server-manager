@@ -30,7 +30,9 @@ module.exports = {
             return exits.success();
         } else {
             countryBanConfig.bannedCountries.push(inputs.newCountry);
-            await SdtdConfig.update({ server: inputs.serverId }, { countryBanConfig: countryBanConfig })
+            await SdtdConfig.update({ server: inputs.serverId }, { countryBanConfig: countryBanConfig });
+
+            await sails.hooks.countryban.reload(inputs.serverId);
             return exits.success();
         }
 

@@ -26,31 +26,91 @@
                   <a name="" id="" class="btn btn-primary" href="#" role="button">Set</a>
                 </li>
 
-                <li class="list-group-item">
-                  <label for="input-settings-countryBan-country">Select country to toggle on ban list</label>
-                  <select class="form-control" id="input-settings-countryBan-country">
+                <!-- country ban countries Button trigger modal -->
+                <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#input-settings-countryban-countries-modal">
+                  Manage banned countries
+                </button>
 
-                    <% for (let country of countryList) {%>
-                      <option>
-                        <%= country %>
-                      </option>
-                      <% } %>
-                  </select>
-                  <div id="input-settings-countryBan-countriesToToggle"></div>
-                </li>
+                <!-- country ban countries Modal -->
+                <div class="modal fade" id="input-settings-countryban-countries-modal" tabindex="-1" role="dialog" aria-labelledby="input-settings-countryban-countries-modal-title"
+                  aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title" id="input-settings-countryban-countries-modal-title">Manage banned countries</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="row">
+                          <div class="col-6">
+                            <div class="form-group">
+                              <label for="inputs-settings-countryban-country-input">Country</label>
+                              <input type="text" class="form-control" name="inputs-settings-countryban-country-input" id="inputs-settings-countryban-country-input"
+                                aria-describedby="inputs-settings-countryban-country-input-helpId" placeholder="BE">
+                              <small id="inputs-settings-countryban-country-input-helpId" class="form-text text-muted">Country to add/remove from banned list.
+                                <a target="_blank" href="http://www.nationsonline.org/oneworld/country_code_list.htm">This is a 2 character ISO code.</a>
+                              </small>
+                              <button type="button" name="inputs-settings-server-countryban-addcountry-btn" id="inputs-settings-server-countryban-addcountry-btn"
+                                class="btn btn-success btn-lg btn-block">Add</button>
+                              <button type="button" name="inputs-settings-server-countryban-removecountry-btn" id="inputs-settings-server-countryban-removecountry-btn"
+                                class="btn btn-danger btn-lg btn-block">Remove</button>
+                            </div>
+                          </div>
 
-                <li id="input-settings-countryBan-countries" class="list-group-item">
-                  Banned countries:
-                  <% for (let country of config.countryBanConfig.bannedCountries) { %>
-                    <%= country %>
-                      <% } %>
-                </li>
+                          <div class="col-6">
+                            <h4>Banned countries</h4>
+                            <div class="list-group" id="inputs-settings-countryban-bannedcountries-list">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-                <li class="list-group-item">
-                  <label for="input-settings-countryban-whitelist">Whitelist (Steam IDs separated by ,) </label>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#inputs-settings-countryban-whitelist-modal">
+                  Manage whitelist
+                </button>
 
-                  <input type="text" class="form-control" id="input-settings-countryban-whitelist" value="<%= config.countryBanConfig.whiteListedSteamIds %>">
-                </li>
+                <!-- Modal -->
+                <div class="modal fade" id="inputs-settings-countryban-whitelist-modal" tabindex="-1" role="dialog" aria-labelledby="inputs-settings-countryban-whitelist-modal-title"
+                  aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title" id="inputs-settings-countryban-whitelist-modal-title">Countryban whitelist</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="row">
+                          <div class="col-6">
+                            <div class="form-group">
+                              <label for="inputs-settings-countryban-whitelist-steamid">Steam ID</label>
+                              <input type="text" class="form-control" name="inputs-settings-countryban-whitelist-steamid" id="inputs-settings-countryban-whitelist-steamid"
+                                aria-describedby="inputs-settings-countryban-whitelist-steamid-help" placeholder="76561198028175941">
+                              <small id="inputs-settings-countryban-whitelist-steamid-help" class="form-text text-muted">Fill in a steam ID here</small>
+                            </div>
+                            <button type="button" name="inputs-settings-server-countryban-whitelist-add-btn" id="inputs-settings-server-countryban-whitelist-add-btn"
+                              class="btn btn-success btn-lg btn-block">Add</button>
+                            <button type="button" name="inputs-settings-server-countryban-whitelist-remove-btn" id="inputs-settings-server-countryban-whitelist-remove-btn"
+                              class="btn btn-danger btn-lg btn-block">Remove</button>
+                          </div>
+                          <div class="col-6">
+                            <h4>Whitelist</h4>
+                            <div id="inputs-settings-countryban-whitelist-list">
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
         </ul>
       </div>
 
@@ -71,22 +131,88 @@
     </div>
 
     <script>
-      let newCountries = []
 
       $(document).ready(function () {
 
-        $('#input-settings-countryBan-country').change(function () {
-          $('#input-settings-countryBan-countriesToToggle').append($(this).val() + " ")
-          let countryCode = $(this).val().slice(0, 2)
-          if (!newCountries.includes(countryCode)) {
-            newCountries.push(countryCode)
-          } else {
-            var index = newCountries.indexOf(countryCode);
-            if (index > -1) {
-              newCountries.splice(index, 1);
-            }
+        updateCountriesList();
+        updateWhitelist();
+
+        async function updateCountriesList() {
+          let bannedCountries = await loadBannedCountries();
+          drawBannedCountries(bannedCountries);
+
+          function drawBannedCountries(bannedCountries) {
+
+            $("#inputs-settings-countryban-bannedcountries-list").empty();
+            bannedCountries.forEach(country => {
+              let element = $("<a>").addClass('list-group-item').text(country);
+              $("#inputs-settings-countryban-bannedcountries-list").append(element);
+            })
+
           }
+
+          function loadBannedCountries() {
+            return new Promise((resolve, reject) => {
+              $.ajax({
+                url: '/api/sdtdserver/countryban/country',
+                data: {
+                  serverId: window.SAILS_LOCALS.server.id
+                },
+                success: (data, status, xhr) => {
+                  resolve(data)
+                },
+                error: (xhr, status, error) => {
+                  console.log(error)
+                  resolve([])
+                }
+              })
+            })
+
+          }
+        }
+
+        $('#inputs-settings-server-countryban-addcountry-btn').click(event => {
+          event.preventDefault();
+          let countryToAdd = $('#inputs-settings-countryban-country-input').val();
+
+          $.ajax({
+            url: '/api/sdtdserver/countryban/country',
+            method: "POST",
+            data: {
+              _csrf: window.SAILS_LOCALS._csrf,
+              serverId: window.SAILS_LOCALS.server.id,
+              newCountry: countryToAdd
+            },
+            success: (data, status, xhr) => {
+              updateCountriesList();
+            },
+            error: (xhr, status, error) => {
+              console.log(error)
+            }
+          })
         })
+
+        $('#inputs-settings-server-countryban-removecountry-btn').click(event => {
+          event.preventDefault();
+          let countryToRemove = $('#inputs-settings-countryban-country-input').val();
+
+          $.ajax({
+            url: '/api/sdtdserver/countryban/country',
+            method: "DELETE",
+            data: {
+              _csrf: window.SAILS_LOCALS._csrf,
+              serverId: window.SAILS_LOCALS.server.id,
+              newCountry: countryToRemove
+            },
+            success: (data, status, xhr) => {
+              updateCountriesList();
+            },
+            error: (xhr, status, error) => {
+              console.log(error)
+            }
+          })
+        })
+
 
         $('#settings-toggle-countryBan').click((event) => {
           event.preventDefault();
@@ -95,7 +221,7 @@
             type: "POST",
             data: {
               _csrf: window.SAILS_LOCALS._csrf,
-              serverId: <%= server.id %>
+              serverId: window.SAILS_LOCALS.server.id
             },
             success: (data, status, xhr) => {
               location.reload();
@@ -104,6 +230,82 @@
               alert('Something went wrong while trying to toggle country ban!');
             }
           });
+        })
+
+        async function updateWhitelist() {
+          let currentWhitelist = await loadWhitelist();
+          drawWhitelist(currentWhitelist);
+
+          function drawWhitelist(currentWhitelist) {
+
+            $("#inputs-settings-countryban-whitelist-list").empty();
+            currentWhitelist.forEach(whitelistEntry => {
+              let element = $("<a>").addClass('list-group-item').text(whitelistEntry);
+              $("#inputs-settings-countryban-whitelist-list").append(element);
+            })
+
+          }
+
+          function loadWhitelist() {
+            return new Promise((resolve, reject) => {
+              $.ajax({
+                url: '/api/sdtdserver/countryban/whitelist',
+                data: {
+                  serverId: window.SAILS_LOCALS.server.id
+                },
+                success: (data, status, xhr) => {
+                  resolve(data)
+                },
+                error: (xhr, status, error) => {
+                  console.log(error)
+                  resolve([]);
+                }
+              })
+            })
+
+          }
+        }
+
+        $('#inputs-settings-server-countryban-whitelist-add-btn').click(event => {
+          event.preventDefault();
+          let steamIdToAdd = $('#inputs-settings-countryban-whitelist-steamid').val();
+
+          $.ajax({
+            url: '/api/sdtdserver/countryban/whitelist',
+            method: "POST",
+            data: {
+              _csrf: window.SAILS_LOCALS._csrf,
+              serverId: window.SAILS_LOCALS.server.id,
+              newSteamId: steamIdToAdd
+            },
+            success: (data, status, xhr) => {
+              updateWhitelist();
+            },
+            error: (xhr, status, error) => {
+              console.log(error)
+            }
+          })
+        })
+
+        $('#inputs-settings-server-countryban-whitelist-remove-btn').click(event => {
+          event.preventDefault();
+          let steamIdToRemove = $('#inputs-settings-countryban-whitelist-steamid').val();
+
+          $.ajax({
+            url: '/api/sdtdserver/countryban/whitelist',
+            method: "DELETE",
+            data: {
+              _csrf: window.SAILS_LOCALS._csrf,
+              serverId: window.SAILS_LOCALS.server.id,
+              newSteamId: steamIdToRemove
+            },
+            success: (data, status, xhr) => {
+              updateWhitelist();
+            },
+            error: (xhr, status, error) => {
+              console.log(error)
+            }
+          })
         })
 
       })

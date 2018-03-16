@@ -28,9 +28,10 @@ module.exports = {
 
         if (countryBanConfig.bannedCountries.includes(inputs.newCountry)) {
             let idx = countryBanConfig.bannedCountries.indexOf(inputs.newCountry);
-            let adjustedCountries = countryBanConfig.bannedCountries.slice(idx);
+            let adjustedCountries = _.without(countryBanConfig.bannedCountries, inputs.newCountry);
             countryBanConfig.bannedCountries = adjustedCountries;
             await SdtdConfig.update({ server: inputs.serverId }, { countryBanConfig: countryBanConfig })
+            await sails.hooks.countryban.reload(inputs.serverId);
             return exits.success();
         } else {
             return exits.success();
