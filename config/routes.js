@@ -105,6 +105,7 @@ module.exports.routes = {
   'get /api/sdtdserver/info': 'SdtdServerController.load-server-info',
   'get /api/sdtdserver/availableItems': 'SdtdServerController.available-items',
   'get /api/sdtdserver/findwriteablechannelsinguild' : 'SdtdServerController/discordBot.find-writeable-channels-in-guild',
+  'get /api/sdtdserver/onlinestatus': 'SdtdServerController.is-online',
   
   'post /api/sdtdTicket/updateTicketStatus': 'SdtdTicket.update-ticket-status',
   'post /api/sdtdTicket/editTicket' : 'SdtdTicket.edit-ticket',
