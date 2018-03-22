@@ -128,6 +128,66 @@ module.exports = {
       defaultsTo: false
     },
 
+    /**
+     * @memberof Player
+     * @var {number} deaths
+     * @description How many times has the player died
+     * @default 0
+     */
+
+    deaths: {
+      type: 'number',
+      defaultsTo: 0
+    },
+
+    /**
+     * @memberof Player
+     * @var {number} zombieKills
+     * @description How many zombies the player has killed
+     * @default 0
+     */
+
+    zombieKills: {
+      type: 'number',
+      defaultsTo: 0
+    },
+
+    /**
+     * @memberof Player
+     * @var {number} playerKills
+     * @description How many players the player has killed
+     * @default 0
+     */
+
+    playerKills: {
+      type: 'number',
+      defaultsTo: 0
+    },
+
+    /**
+     * @memberof Player
+     * @var {number} score
+     * @description Players score
+     * @default 0
+     */
+
+    score: {
+      type: 'number',
+      defaultsTo: 0
+    },
+
+    /**
+     * @memberof Player
+     * @var {number} level
+     * @description The players level
+     * @default 0
+     */
+
+    level: {
+      type: 'number',
+      defaultsTo: 0
+    },
+
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗

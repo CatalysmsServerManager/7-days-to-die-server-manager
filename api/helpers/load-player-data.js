@@ -44,6 +44,7 @@ module.exports = {
         if (inputs.steamId) {
           await loadPlayerProfilePicture(inputs.steamId);
         }
+        let playerStats = await sails.helpers.sdtd.loadPlayerStats(inputs.serverId);
         let jsonToSend = await createJSON(newPlayerList);
         exits.success(jsonToSend);
       } else {
