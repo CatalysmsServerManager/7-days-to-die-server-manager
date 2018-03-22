@@ -10,6 +10,7 @@
       <div class="form-group">
         <label for="serverip">Server IP</label>
         <input type="text" class="form-control" id="serverip" placeholder="Server IP address">
+        <small>Provide a valid IPv4/6 adress or a <a href="https://en.wikipedia.org/wiki/Fully_qualified_domain_name">FQDN</a></small>
       </div>
       <div class="form-group">
         <label for="webport">Web API port</label>
@@ -41,18 +42,24 @@
       telnetpassword = $("#telnetpassword").val(),
       servername = $("#servername").val()
 
+      $('#servername').removeClass("is-invalid");
+      $('#serverip').removeClass("is-invalid");
+      $('#webport').removeClass("is-invalid");
+      $('#telnetport').removeClass("is-invalid");
+      $('#telnetpassword').removeClass("is-invalid");
+
     if (servername === '') {
       return $('#servername').addClass("is-invalid")
     }
 
-    if (serverip === '') {
+    if (serverip === '' || !(validator.isIP(serverip) || validator.isFQDN(serverip))) {
       return $('#serverip').addClass("is-invalid")
     }
 
-    if (webport === '') {
+    if (webport === '' || !validator.isPort(webport)) {
       return $('#webport').addClass("is-invalid")
     }
-    if (telnetport === '') {
+    if (telnetport === '' || !validator.isPort(telnetport)) {
       return $('#telnetport').addClass("is-invalid")
     }
     if (telnetpassword === '') {
