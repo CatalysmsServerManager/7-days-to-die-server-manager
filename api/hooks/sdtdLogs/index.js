@@ -165,23 +165,23 @@ module.exports = function sdtdLogs(sails) {
 
             eventEmitter.on('playerConnected', async function (connectedMsg) {
               sails.sockets.broadcast(server.id, 'playerConnected', connectedMsg);
+              let playerData = await sails.helpers.loadPlayerData(server.id, connectedMsg.steamID);
               await sails.hooks.discordnotifications.sendNotification({
                 serverId: server.id,
-                notificationType: 'playerConnected'
+                notificationType: 'playerConnected',
+                player: playerData.players[0]
               })
-              try {
-                await sails.helpers.loadPlayerData(server.id, connectedMsg.steamID);
-              } catch (error) {
-                sails.log.error(`HOOKS - sdtdLogs - ${error}`);
-              }
+
 
             });
 
-            eventEmitter.on('playerDisconnected', async function (disconectedMsg) {
-              sails.sockets.broadcast(server.id, 'playerDisconnected', disconectedMsg);
+            eventEmitter.on('playerDisconnected', async function (disconnectedMsg) {
+              sails.sockets.broadcast(server.id, 'playerDisconnected', disconnectedMsg);
+              let playerData = await sails.helpers.loadPlayerData(server.id, disconnectedMsg.steamID);
               await sails.hooks.discordnotifications.sendNotification({
                 serverId: server.id,
-                notificationType: 'playerDisconnected'
+                notificationType: 'playerDisconnected',
+                player: playerData.players[0]
               })
             });
 
