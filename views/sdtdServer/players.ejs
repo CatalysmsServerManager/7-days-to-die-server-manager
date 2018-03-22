@@ -19,6 +19,18 @@
                 <th>
                   Location
                 </th>
+                <th>
+                  Level
+                </th>
+                <th>
+                  Zombie kills
+                </th>
+                <th>
+                  Player kills
+                </th>
+                <th>
+                  Score
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -36,6 +48,18 @@
                   <td>
                     <% let locationString = `${player.positionX} ${player.positionY} ${player.positionZ}` %>
                       <%= locationString %>
+                  </td>
+                  <td>
+                    <%= player.level %>
+                  </td>
+                  <td>
+                    <%= player.zombieKills %>
+                  </td>
+                  <td>
+                    <%= player.playerKills %>
+                  </td>
+                  <td>
+                    <%= player.score %>
                   </td>
                 </tr>
                 <% }) %>
