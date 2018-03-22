@@ -27,7 +27,6 @@ module.exports = {
     },
 
     fn: async function (inputs, exits) {
-        sails.log(`LOADING PLAYER STATS`)
         let server = await SdtdServer.findOne({ id: inputs.serverId });
 
         sevenDays.executeCommand({
