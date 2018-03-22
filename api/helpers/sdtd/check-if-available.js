@@ -41,68 +41,63 @@ module.exports = {
    */
 
   fn: async function (inputs, exits) {
-    try {
-      let sdtdServer = await SdtdServer.findOne({
-        id: inputs.serverId
-      });
-      let statsResponse = await checkStats(sdtdServer);
-      let commandResponse = await checkCommand(sdtdServer);
+    let sdtdServer = await SdtdServer.findOne({
+      id: inputs.serverId
+    });
+    let statsResponse = await checkStats(sdtdServer);
+    let commandResponse = await checkCommand(sdtdServer);
 
-      if (statsResponse && commandResponse) {
-        return exits.success(true);
-      } else {
-        sails.log.debug(`HELPER - checkIfAvailable - Server ${inputs.serverId} is not available`);
-        return exits.notAvailable();
-      }
-
-    } catch (error) {
-      return exits.error(error);
+    if (statsResponse && commandResponse) {
+      return exits.success(true);
+    } else {
+      return exits.success(false);
     }
-
-
-    async function checkStats(sdtdServer) {
-      return new Promise(resolve => {
-        let statsResponse = sevenDays.getStats({
-          ip: sdtdServer.ip,
-          port: sdtdServer.webPort,
-          authName: sdtdServer.authName,
-          authToken: sdtdServer.authToken
-        }).exec({
-          success: (response) => {
-            if (response.gametime && response.players) {
-              resolve(true);
-            } else {
-              resolve(false)
-            }
-          },
-          error: (error) => {
-            resolve(false);
-          }
-        });
-      });
-    }
-
-    async function checkCommand(sdtdServer) {
-      return new Promise(resolve => {
-        let statsResponse = sevenDays.executeCommand({
-          ip: sdtdServer.ip,
-          port: sdtdServer.webPort,
-          authName: sdtdServer.authName,
-          authToken: sdtdServer.authToken,
-          command: 'mem'
-        }).exec({
-          success: (response) => {
-            resolve(true);
-          },
-          error: (error) => {
-            resolve(false);
-          }
-        });
-      });
-    }
-
-
   }
-
-
 };
+
+async function checkStats(sdtdServer) {
+  return new Promise(resolve => {
+    let statsResponse = sevenDays.getStats({
+      ip: sdtdServer.ip,
+      port: sdtdServer.webPort,
+      authName: sdtdServer.authName,
+      authToken: sdtdServer.authToken
+    }).exec({
+      success: (response) => {
+        if (response.gametime) {
+          resolve(true);
+        } else {
+          resolve(false)
+        }
+      },
+      error: (error) => {
+        resolve(false);
+      },
+      connectionRefused: error => {
+        resolve(false);
+      }
+    });
+  })
+}
+
+async function checkCommand(sdtdServer) {
+  return new Promise(resolve => {
+    let statsResponse = sevenDays.executeCommand({
+      ip: sdtdServer.ip,
+      port: sdtdServer.webPort,
+      authName: sdtdServer.authName,
+      authToken: sdtdServer.authToken,
+      command: 'mem'
+    }).exec({
+      success: (response) => {
+        resolve(true);
+      },
+      error: (error) => {
+        resolve(false);
+      },
+      connectionRefused: error => {
+        resolve(false)
+      }
+    });
+  });
+}

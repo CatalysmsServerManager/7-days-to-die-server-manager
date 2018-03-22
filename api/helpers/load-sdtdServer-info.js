@@ -63,7 +63,6 @@ module.exports = {
           authToken: server.authToken
         }).exec({
           error: error => {
-            sails.log.warn(error);
             resolve(undefined);
           },
           success: data => {
@@ -82,7 +81,6 @@ module.exports = {
           authToken: server.authToken
         }).exec({
           error: error => {
-            sails.log.warn(error);
             resolve(undefined);
           },
           success: data => {
