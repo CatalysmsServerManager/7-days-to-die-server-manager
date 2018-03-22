@@ -141,16 +141,16 @@ class ChatBridgeChannel {
       embed.addField('Steam ID', disconnectedPlayer.steamId ? `[${disconnectedPlayer.steamId}](https://steamidfinder.com/lookup/${disconnectedPlayer.steamId}/)` : `Unknown`, true)
         .addField('Playtime', hhmmss(disconnectedPlayer.playtime), true)
         .addField('CSMM profile', `${process.env.CSMM_HOSTNAME}/player/${disconnectedPlayer.id}/profile`)
-        if (disconnectedPlayer.avatarUrl) {
-          embed.setThumbnail(disconnectedPlayer.avatarUrl);
-        }
+      if (disconnectedPlayer.avatarUrl) {
+        embed.setThumbnail(disconnectedPlayer.avatarUrl);
+      }
     }
     this.channel.send(embed);
   }
-  
+
   sendMessageToGame(message) {
 
-    if (message.channel.id === this.channel.id && message.author.id != message.client.user.id) {
+    if (message.channel.id === this.channel.id && message.author.id != message.client.user.id && (!message.content.startsWith(message.client.commandPrefix))) {
       sevenDays.sendMessage({
         ip: this.sdtdServer.ip,
         port: this.sdtdServer.webPort,
