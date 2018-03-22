@@ -54,7 +54,6 @@ module.exports = {
 
 
     } catch (error) {
-      sails.log.error(`HELPER - loadPlayerData - ${error}`);
       exits.error(error);
     }
 
@@ -70,7 +69,6 @@ module.exports = {
               steamId: player.steamid
             }).exec({
               error: function (err) {
-                sails.log.warn(err);
                 resolve(player);
               },
               success: function (data) {
@@ -139,7 +137,6 @@ module.exports = {
             resolve(playerToSend);
           });
         } catch (error) {
-          sails.log.warn(error);
           resolve(foundOrCreatedPlayer)
         }
 
@@ -155,7 +152,6 @@ module.exports = {
           authToken: server.authToken
         }).exec({
           error: function (err) {
-            sails.log.warn(err);
             resolve({
               players: []
             });
