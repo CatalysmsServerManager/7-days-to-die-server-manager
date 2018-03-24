@@ -5,6 +5,7 @@ class Toptime extends Commando.Command {
   constructor(client) {
     super(client, {
       name: 'toptime',
+      aliases: ['toptime', 'time', 'timeplayed'],
       group: 'sdtd',
       memberName: 'toptime',
       description: '',
