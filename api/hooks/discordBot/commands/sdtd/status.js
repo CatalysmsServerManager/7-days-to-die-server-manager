@@ -5,6 +5,7 @@ class Status extends Commando.Command {
   constructor(client) {
     super(client, {
       name: 'status',
+      aliases: ['d7', '7day', 'day7'],
       group: 'sdtd',
       memberName: 'status',
       description: '',
