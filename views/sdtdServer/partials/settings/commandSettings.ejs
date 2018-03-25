@@ -55,13 +55,24 @@
 
     function updateCommandsStatus() {
       $.get('/api/sdtdserver/commands', { serverId: window.SAILS_LOCALS.server.id }, status => {
-        console.log(status)
         if (status) {
           $('#settings-enable-commands-btn').hide()
           $('#settings-disable-commands-btn').show()
         } else {
           $('#settings-disable-commands-btn').hide()
           $('#settings-enable-commands-btn').show()
+        }
+      })
+
+      $.get('/api/sdtdserver/commands/calladmin', { serverId: window.SAILS_LOCALS.server.id }, status => {
+        if (status) {
+          $('#input-settings-commands-calladmin-checkbox').prop('checked', true)
+        }
+      })
+
+      $.get('/api/sdtdserver/commands/playerteleports', { serverId: window.SAILS_LOCALS.server.id }, status => {
+        if (status) {
+          $('#input-settings-commands-playerTeleports-checkbox').prop('checked', true)
         }
       })
     }
@@ -130,6 +141,71 @@
         }
       })
     })
+
+    $('#input-settings-commands-playerTeleports-checkbox').change(e => {
+      let currentStatus = $("#input-settings-commands-playerTeleports-checkbox").prop('checked');
+
+      if (!currentStatus) {
+        $.ajax({
+          url: '/api/sdtdserver/commands/playerteleports',
+          method: 'DELETE',
+          data: {
+            _csrf: window.SAILS_LOCALS._csrf,
+            serverId: window.SAILS_LOCALS.server.id,
+          },
+          success: data => {
+          },
+          error: e => {
+            alert('Error! ' + e)
+          }
+        })
+      } else {
+        $.ajax({
+          url: '/api/sdtdserver/commands/playerteleports',
+          method: 'POST',
+          data: {
+            _csrf: window.SAILS_LOCALS._csrf,
+            serverId: window.SAILS_LOCALS.server.id,
+          },
+          error: e => {
+            alert('Error! ' + e)
+          }
+        })
+      }
+    })
+
+    $('#input-settings-commands-calladmin-checkbox').change(e => {
+      let currentStatus = $("#input-settings-commands-calladmin-checkbox").prop('checked');
+      if (!currentStatus) {
+        $.ajax({
+          url: '/api/sdtdserver/commands/calladmin',
+          method: 'DELETE',
+          data: {
+            _csrf: window.SAILS_LOCALS._csrf,
+            serverId: window.SAILS_LOCALS.server.id,
+          },
+          success: data => {
+          },
+          error: e => {
+            alert('Error! ' + e)
+          }
+        })
+      } else {
+        $.ajax({
+          url: '/api/sdtdserver/commands/calladmin',
+          method: 'POST',
+          data: {
+            _csrf: window.SAILS_LOCALS._csrf,
+            serverId: window.SAILS_LOCALS.server.id,
+          },
+          error: e => {
+            alert('Error! ' + e)
+          }
+        })
+      }
+    })
+
+
 
 
 

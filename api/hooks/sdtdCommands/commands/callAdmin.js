@@ -16,10 +16,28 @@ class callAdmin extends SdtdCommand {
 
       let server = await SdtdServer.findOne({
         id: this.serverId
-      });
+      }).populate('config');
       let player = await Player.findOne({
         id: playerId
       });
+
+      if (!server.config[0].enabledCallAdmin) {
+        return sevenDays.sendMessage({
+          ip: server.ip,
+          port: server.webPort,
+          authName: server.authName,
+          authToken: server.authToken,
+          message: `This command is disabled! Ask your server admin to enable this.`,
+          playerId: player.steamId
+        }).exec({
+          error: (error) => {
+            sails.log.error(`HOOK - SdtdCommands:callAdmin - Failed to respond to player`);
+          },
+          success: (result) => {
+            return;
+          }
+        });
+      }
 
       if (args == '') {
         return sevenDays.sendMessage({
