@@ -9,39 +9,54 @@
   <div class="col-md-4">
     <ul class="list-group">
 
-      <% if(!_.isUndefined(config.commandsEnabled) && config.commandsEnabled) {%>
-        <li class="list-group-item bg-success">Enabled
-        </li>
-        <% } else { %>
-          <li class="list-group-item bg-danger">Disabled
-          </li>
-          <% } %>
+      <li class="list-group-item">
+        <label for="input-settings-commands-prefix">Command prefix</label>
 
-            <li class="list-group-item">
-              <label for="input-settings-commands-prefix">Command prefix</label>
+        <input type="text" class="form-control" id="input-settings-commands-prefix" placeholder="<%= config.commandPrefix %>">
+        <input name="input-settings-commands-prefix-set-btn" id="input-settings-commands-prefix-set-btn" class="btn btn-primary"
+          type="button" value="Set">
+      </li>
 
-              <input type="text" class="form-control" id="input-settings-commands-prefix" placeholder="<%= config.commandPrefix %>">
-            </li>
+      <li class="list-group-item">
+        <label for="input-settings-commands-prefix">Commands</label>
+
+        <div class="form-check">
+          <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" name="input-settings-commands-calladmin-checkbox" id="input-settings-commands-calladmin-checkbox"
+              value="callAdmin"> Call admin
+          </label>
+        </div>
+        <div class="form-check">
+          <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" name="input-settings-commands-playerTeleports-checkbox" id="input-settings-commands-playerTeleports-checkbox"
+              value="playerTeleports"> Player teleports
+          </label>
+        </div>
+      </li>
+
+      <li class="list-group-item">
+        <label for="inputs-settings-commands-reload">Reload commands hook
+          <small>This applies all your new settings</small>
+        </label>
+
+        <input name="inputs-settings-commands-reload-btn" id="inputs-settings-commands-reload-set-btn" class="btn btn-primary" type="button"
+          value="Reload">
+      </li>
+
+
 
 
     </ul>
   </div>
 
-  <div class="col-md-4">
-    <% if(!_.isUndefined(config.commandsEnabled) && config.commandsEnabled) {%>
-      <li id='settings-toggle-commands' class="btn btn-danger">
-        <i class="fa fa-power-off"></i> Disable
-      </li>
-      <% } else { %>
-        <li id='settings-toggle-commands' class="btn btn-success">
-          <i class="fa fa-power-off"></i> Enable
-        </li>
-        <% } %>
+  <div id='settings-commands-enableordisable-btn' class="col-md-4">
 
-          <button id="settings-reload-commands" class="btn btn-default btn-primary" type="button">
-            <em class="glyphicon glyphicon-align-right"></em>
-            <i class="fa fa-refresh" aria-hidden="true"></i> Apply changes
-          </button>
+    <li id='settings-disable-commands-btn' class="btn btn-danger">
+      <i class="fa fa-power-off"></i> Disable
+    </li>
+    <li id='settings-enable-commands-btn' class="btn btn-success">
+      <i class="fa fa-power-off"></i> Enable
+    </li>
 
 
   </div>
@@ -51,52 +66,73 @@
 <script>
   $(document).ready(function () {
 
-    $('#settings-toggle-commands').click((event) => {
-      event.preventDefault();
+    function updateCommandsStatus() {
+      $.get('/api/sdtdserver/commands', { serverId: window.SAILS_LOCALS.server.id }, status => {
+        console.log(status)
+        if (status) {
+          $('#settings-enable-commands-btn').hide()
+          $('#settings-disable-commands-btn').show()
+        } else {
+          $('#settings-disable-commands-btn').hide()
+          $('#settings-enable-commands-btn').show()
+        }
+      })
+    }
+
+    updateCommandsStatus()
+
+    $('#settings-disable-commands-btn').click(e => {
+      e.preventDefault();
       $.ajax({
-        url: `/api/sdtdserver/togglecommands`,
-        type: 'POST',
+        url: '/api/sdtdserver/commands',
+        method: 'DELETE',
         data: {
           _csrf: window.SAILS_LOCALS._csrf,
-          serverId: <%= server.id %>
+          serverId: window.SAILS_LOCALS.server.id,
         },
         success: (data, status, xhr) => {
-          location.reload();
+          updateCommandsStatus();
         },
         error: (xhr, status, error) => {
-          alert('Something went wrong while trying to toggle commands!');
+          console.log(error)
         }
-      });
+      })
     })
 
-    $('#settings-reload-commands').click((event) => {
-      event.preventDefault();
-
-      newConfig = {
-        commandsEnabled: <%= config.commandsEnabled %>,
-        commandPrefix: $('#input-settings-commands-prefix').val()
-      }
-
-      if (newConfig.commandPrefix == "") {
-        return alert(`You cannot set an empty command prefix`)
-      }
-
+    $('#settings-enable-commands-btn').click(e => {
+      e.preventDefault();
       $.ajax({
-        url: `/api/sdtdserver/reloadCommands`,
-        type: 'POST',
+        url: '/api/sdtdserver/commands',
+        method: 'POST',
         data: {
           _csrf: window.SAILS_LOCALS._csrf,
-          newConfig: newConfig,
-          serverId: <%= server.id %>
+          serverId: window.SAILS_LOCALS.server.id,
         },
         success: (data, status, xhr) => {
-          location.reload();
+          updateCommandsStatus();
         },
         error: (xhr, status, error) => {
-          alert('Something went wrong while trying to toggle country ban!');
+          console.log(error)
         }
-      });
+      })
+    })
 
+    $("#inputs-settings-commands-reload-btn").click(e => {
+      e.preventDefault();
+      $.ajax({
+        url: '/api/sdtdserver/commands/reload',
+        method: 'POST',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+        },
+        success: (data, status, xhr) => {
+          updateCommandsStatus();
+        },
+        error: (xhr, status, error) => {
+          console.log(error)
+        }
+      })
 
     })
 
