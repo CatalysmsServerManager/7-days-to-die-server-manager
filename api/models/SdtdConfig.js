@@ -63,7 +63,7 @@ module.exports = {
     enabledPlayerTeleports: {
       type: 'boolean',
       defaultsTo: true
-    }
+    },
 
     // _____  _                       _ 
     // |  __ \(_)                     | |
