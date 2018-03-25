@@ -85,34 +85,24 @@ module.exports = function sdtdCommands(sails) {
     /**
      * @memberof module:SdtdCommandsHook
      * @method
-     * @name updateConfig
+     * @name reload
      * @description Updates command config for a server and reload the hook
      */
 
-    updateConfig: async function (serverId, newConfig) {
+    reload: async function (serverId) {
       try {
-        sails.log.debug(`HOOK sdtdCommands:updateConfig - Updating commands config for server ${serverId}`);
+        sails.log.debug(`HOOK sdtdCommands:reload - Reloading commands config for server ${serverId}`);
 
-        if (_.isUndefined(newConfig.commandPrefix) || _.isUndefined(newConfig.commandsEnabled)) {
-          throw new Error('Missing value(s) for command config. Please check input');
-        }
-
-        await SdtdConfig.update({
-          server: serverId
-        }, {
-          commandsEnabled: newConfig.commandsEnabled,
-          commandPrefix: newConfig.commandPrefix
-        });
+        let newConfig = await SdtdConfig.findOne({server: serverId});
 
         if (newConfig.commandsEnabled) {
-          this.stop(serverId);
           this.start(serverId);
         } else {
           this.stop(serverId);
         }
 
       } catch (error) {
-        sails.log.error(`HOOK SdtdCommands:updateConfig - ${error}`);
+        sails.log.error(`HOOK SdtdCommands:reload - ${error}`);
         throw error;
       }
     }
@@ -122,11 +112,16 @@ module.exports = function sdtdCommands(sails) {
   async function start(serverId) {
 
     try {
-      sails.log.silly(`HOOK sdtdCommands:start - Starting commands for server ${serverId}`);
+      sails.log.debug(`HOOK sdtdCommands:start - Starting commands for server ${serverId}`);
       let serverConfig = await SdtdConfig.findOne({
         server: serverId
       });
       if (serverConfig.commandsEnabled) {
+
+        if (commandInfoMap.has(String(serverId))) {
+          await this.stop(serverId)
+        }
+
         let serverLoggingObj = sails.hooks.sdtdlogs.getLoggingObject(String(serverId));
         let commandHandler = new CommandHandler(serverId, serverLoggingObj, serverConfig);
         commandInfoMap.set(String(serverId), commandHandler);
@@ -140,7 +135,7 @@ module.exports = function sdtdCommands(sails) {
 
   async function stop(serverId) {
     try {
-      sails.log.silly(`HOOK sdtdCommands:stop - Stopping commands for server ${serverId}`);
+      sails.log.debug(`HOOK sdtdCommands:stop - Stopping commands for server ${serverId}`);
       let commandHandler = commandInfoMap.get(String(serverId));
       if (!_.isUndefined(commandHandler)) {
         commandHandler.stop();
