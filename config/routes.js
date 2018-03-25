@@ -156,6 +156,9 @@ module.exports.routes = {
   'post /api/sdtdserver/commands/playerteleports/maxlocations' : "SdtdServerController/commands.set-max-teleport-locations",
   'get /api/sdtdserver/commands/playerteleports/maxlocations' : "SdtdServerController/commands.get-max-teleport-locations",
 
+  'post /api/sdtdserver/commands/playerteleports/timeout' : "SdtdServerController/commands.set-teleport-timeout",
+  'get /api/sdtdserver/commands/playerteleports/timeout' : "SdtdServerController/commands.get-teleport-timeout",
+
   // MOTD
   'post /api/sdtdserver/togglemotd': 'SdtdServerController/motd.motd-toggle',
   'post /api/sdtdserver/reloadmotd': 'SdtdServerController/motd.motd-reload',
