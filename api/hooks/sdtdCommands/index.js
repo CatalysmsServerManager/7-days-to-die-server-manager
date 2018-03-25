@@ -75,7 +75,7 @@ module.exports = function sdtdCommands(sails) {
      */
 
     getStatus: function (serverId) {
-      return commandInfoMap.has(serverId);
+      return commandInfoMap.has(String(serverId));
     },
 
     getAmount: function() {
