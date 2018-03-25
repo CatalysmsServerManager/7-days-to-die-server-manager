@@ -188,6 +188,18 @@ module.exports = {
       defaultsTo: 0
     },
 
+    // {
+    //   name: 'xxx',
+    //   x: "",
+    //   y: '',
+    //   z: ''
+    // }
+
+    teleportLocations: {
+      type: 'json',
+      columnType: 'array'
+    },
+
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
