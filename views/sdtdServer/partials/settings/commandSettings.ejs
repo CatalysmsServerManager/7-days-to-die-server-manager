@@ -33,6 +33,23 @@
           </label>
         </div>
       </li>
+
+      <li class="list-group-item">
+        <h4>Player teleport settings</h4>
+        <div class="form-group">
+          <label for="">Max locations that players can set</label>
+          <input type="text" class="form-control" name="inputs-settings-commands-playerteleports-maxlocations" id="inputs-settings-commands-playerteleports-maxlocations" placeholder="<%= config.maxPlayerTeleportLocations %>">
+          <input name="inputs-settings-playerteleports-maxlocations-btn" id="inputs-settings-playerteleports-maxlocations-btn" class="btn btn-primary" type="button" value="Set">
+        </div>
+        <div class="form-group">
+          <label for="">Time (in seconds) that a player has to wait before teleporting again</label>
+          <input type="text" class="form-control" name="inputs-settings-commands-playerteleports-timeout" id="inputs-settings-commands-playerteleports-timeout" placeholder="<%= config.playerTeleportTimeout %>">
+          <input name="inputs-settings-playerteleports-timeout-btn" id="inputs-settings-playerteleports-timeout-btn" class="btn btn-primary" type="button" value="Set">
+        </div>
+      </li>
+
+
+
     </ul>
   </div>
 
@@ -205,7 +222,47 @@
       }
     })
 
+    $('#inputs-settings-playerteleports-maxlocations-btn').click(e => {
+      e.preventDefault();
+      let newMax = $('#inputs-settings-commands-playerteleports-maxlocations').val();
+      if (!validator.isInt(newMax, {min: 1})) {
+        return alert('Please provide a valid value for max locations.')
+      }
 
+        $.ajax({
+          url: '/api/sdtdserver/commands/playerteleports/maxlocations',
+          method: 'POST',
+          data: {
+            _csrf: window.SAILS_LOCALS._csrf,
+            serverId: window.SAILS_LOCALS.server.id,
+            maxLocations: newMax
+          },
+          error: e => {
+            alert('Error! ' + e)
+          }
+        })
+    })
+
+        $('#inputs-settings-playerteleports-timeout-btn').click(e => {
+      e.preventDefault();
+      let newTimeout = $('#inputs-settings-commands-playerteleports-timeout').val();
+      if (!validator.isInt(newTimeout, {min: 3})) {
+        return alert('Please provide a valid value for timeout. (number larger than 3)')
+      }
+
+        $.ajax({
+          url: '/api/sdtdserver/commands/playerteleports/timeout',
+          method: 'POST',
+          data: {
+            _csrf: window.SAILS_LOCALS._csrf,
+            serverId: window.SAILS_LOCALS.server.id,
+            timeout: newTimeout
+          },
+          error: e => {
+            alert('Error! ' + e)
+          }
+        })
+    })
 
 
 
