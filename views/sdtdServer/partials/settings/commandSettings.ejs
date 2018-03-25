@@ -33,19 +33,6 @@
           </label>
         </div>
       </li>
-
-      <li class="list-group-item">
-        <label for="inputs-settings-commands-reload">Reload commands hook
-          <small>This applies all your new settings</small>
-        </label>
-
-        <input name="inputs-settings-commands-reload-btn" id="inputs-settings-commands-reload-set-btn" class="btn btn-primary" type="button"
-          value="Reload">
-      </li>
-
-
-
-
     </ul>
   </div>
 
@@ -117,24 +104,34 @@
       })
     })
 
-    $("#inputs-settings-commands-reload-btn").click(e => {
+    $('#input-settings-commands-prefix-set-btn').click(e => {
       e.preventDefault();
+
+      let newPrefix = $("#input-settings-commands-prefix").val();
+
+      if (newPrefix.length > 1) {
+        return alert(`Prefix is maximum one character!`)
+      }
+
       $.ajax({
-        url: '/api/sdtdserver/commands/reload',
+        url: '/api/sdtdserver/commands/prefix',
         method: 'POST',
         data: {
           _csrf: window.SAILS_LOCALS._csrf,
           serverId: window.SAILS_LOCALS.server.id,
+          prefix: newPrefix
         },
-        success: (data, status, xhr) => {
-          updateCommandsStatus();
+        success: data => {
+          $("#input-settings-commands-prefix").empty();
         },
-        error: (xhr, status, error) => {
-          console.log(error)
+        error: error => {
+          alert('Error! ' + error)
+          console.log(error);
         }
       })
-
     })
+
+
 
   })
 
