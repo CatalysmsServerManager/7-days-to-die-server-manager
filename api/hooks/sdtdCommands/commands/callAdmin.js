@@ -31,7 +31,7 @@ class callAdmin extends SdtdCommand {
           playerId: player.steamId
         }).exec({
           error: (error) => {
-            sails.log.error(`HOOK - SdtdCommands:callAdmin - Failed to respond to player`);
+            sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
           },
           success: (result) => {
             return;
