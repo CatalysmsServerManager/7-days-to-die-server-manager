@@ -57,8 +57,8 @@ module.exports = function sdtdLogs(sails) {
           await SdtdConfig.update({
             server: serverID
           }, {
-            loggingEnabled: true
-          });
+              loggingEnabled: true
+            });
           let loggingObj = await createLogObject(serverID);
           return loggingInfoMap.set(serverID, loggingObj);
         } else {
@@ -86,8 +86,8 @@ module.exports = function sdtdLogs(sails) {
           await SdtdConfig.update({
             server: serverID
           }, {
-            loggingEnabled: false
-          });
+              loggingEnabled: false
+            });
           let loggingObj = loggingInfoMap.get(serverID);
           loggingInfoMap.delete(serverID);
           return loggingObj.stop();
@@ -137,79 +137,73 @@ module.exports = function sdtdLogs(sails) {
    */
 
   function createLogObject(serverID) {
-    return new Promise((resolve, reject) => {
-      sails.models.sdtdserver.findOne({
-        id: serverID
-      }).exec(function (error, server) {
-        if (error) {
+    return new Promise(async (resolve, reject) => {
+      let server = await SdtdServer.findOne(serverID);
+      sevenDays.startLoggingEvents({
+        ip: server.ip,
+        port: server.webPort,
+        authName: server.authName,
+        authToken: server.authToken,
+      }).exec({
+        error: function (error) {
           reject(error);
+        },
+        success: function (eventEmitter) {
+          eventEmitter.on('logLine', function (logLine) {
+            sails.sockets.broadcast(server.id, 'logLine', logLine);
+          });
+
+          eventEmitter.on('chatMessage', function (chatMessage) {
+            sails.sockets.broadcast(server.id, 'chatMessage', chatMessage);
+          });
+
+          eventEmitter.on('playerConnected', async function (connectedMsg) {
+            sails.sockets.broadcast(server.id, 'playerConnected', connectedMsg);
+            let playerData = await sails.helpers.loadPlayerData(server.id, connectedMsg.steamID);
+            await sails.hooks.discordnotifications.sendNotification({
+              serverId: server.id,
+              notificationType: 'playerConnected',
+              player: playerData.players[0]
+            })
+
+
+          });
+
+          eventEmitter.on('playerDisconnected', async function (disconnectedMsg) {
+            sails.sockets.broadcast(server.id, 'playerDisconnected', disconnectedMsg);
+            let playerData = await sails.helpers.loadPlayerData(server.id, disconnectedMsg.steamID);
+            await sails.hooks.discordnotifications.sendNotification({
+              serverId: server.id,
+              notificationType: 'playerDisconnected',
+              player: playerData.players[0]
+            })
+          });
+
+          eventEmitter.on('connectionLost', async function (eventMsg) {
+            sails.sockets.broadcast(server.id, 'connectionLost', eventMsg);
+            await sails.hooks.discordnotifications.sendNotification({
+              serverId: server.id,
+              notificationType: 'connectionLost'
+            })
+          });
+
+          eventEmitter.on('connected', async function (eventMsg) {
+            sails.sockets.broadcast(server.id, 'connected', eventMsg);
+            await sails.hooks.discordnotifications.sendNotification({
+              serverId: server.id,
+              notificationType: 'connected'
+            })
+          });
+
+          eventEmitter.on('playerDeath', function (deathMessage) {
+            sails.sockets.broadcast(server.id, 'playerDeath', deathMessage);
+          });
+          resolve(eventEmitter);
         }
-
-        sevenDays.startLoggingEvents({
-          ip: server.ip,
-          port: server.webPort,
-          authName: server.authName,
-          authToken: server.authToken,
-        }).exec({
-          error: function (error) {
-            reject(error);
-          },
-          success: function (eventEmitter) {
-            eventEmitter.on('logLine', function (logLine) {
-              sails.sockets.broadcast(server.id, 'logLine', logLine);
-            });
-
-            eventEmitter.on('chatMessage', function (chatMessage) {
-              sails.sockets.broadcast(server.id, 'chatMessage', chatMessage);
-            });
-
-            eventEmitter.on('playerConnected', async function (connectedMsg) {
-              sails.sockets.broadcast(server.id, 'playerConnected', connectedMsg);
-              let playerData = await sails.helpers.loadPlayerData(server.id, connectedMsg.steamID);
-              await sails.hooks.discordnotifications.sendNotification({
-                serverId: server.id,
-                notificationType: 'playerConnected',
-                player: playerData.players[0]
-              })
-
-
-            });
-
-            eventEmitter.on('playerDisconnected', async function (disconnectedMsg) {
-              sails.sockets.broadcast(server.id, 'playerDisconnected', disconnectedMsg);
-              let playerData = await sails.helpers.loadPlayerData(server.id, disconnectedMsg.steamID);
-              await sails.hooks.discordnotifications.sendNotification({
-                serverId: server.id,
-                notificationType: 'playerDisconnected',
-                player: playerData.players[0]
-              })
-            });
-
-            eventEmitter.on('connectionLost', async function (eventMsg) {
-              sails.sockets.broadcast(server.id, 'connectionLost', eventMsg);
-              await sails.hooks.discordnotifications.sendNotification({
-                serverId: server.id,
-                notificationType: 'connectionLost'
-              })
-            });
-
-            eventEmitter.on('connected', async function (eventMsg) {
-              sails.sockets.broadcast(server.id, 'connected', eventMsg);
-              await sails.hooks.discordnotifications.sendNotification({
-                serverId: server.id,
-                notificationType: 'connected'
-              })
-            });
-
-            eventEmitter.on('playerDeath', function (deathMessage) {
-              sails.sockets.broadcast(server.id, 'playerDeath', deathMessage);
-            });
-            resolve(eventEmitter);
-          }
-        });
       });
-    });
 
-
+    })
   }
+
+
 };
