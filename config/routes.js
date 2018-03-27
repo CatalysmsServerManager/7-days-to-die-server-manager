@@ -123,6 +123,7 @@ module.exports.routes = {
   'post /api/sdtdserver/updateConnectionInfo': 'SdtdServerController.update-connection-info',
   'post /api/sdtdserver/toggleLogging': 'SdtdServerController.logging-toggle',
 
+  // Countryban
   'post /api/sdtdserver/toggleCountryBan': 'SdtdServerController/countryBan.country-ban-toggle',
   'post /api/sdtdserver/reloadCountryBan': 'SdtdServerController/countryBan.country-ban-reload',
 
@@ -134,12 +135,35 @@ module.exports.routes = {
   'post /api/sdtdserver/countryban/whitelist':'SdtdServerController/countryBan.add-to-whitelist',
   'delete /api/sdtdserver/countryban/whitelist': 'SdtdServerController/countryBan.remove-from-whitelist',
 
-  'post /api/sdtdserver/togglecommands': 'SdtdServerController/commands.commands-toggle',
-  'post /api/sdtdserver/reloadcommands': 'SdtdServerController/commands.commands-reload',
+  // Commands
+  'post /api/sdtdserver/commands/reload': 'SdtdServerController/commands.commands-reload',
 
+  'post /api/sdtdserver/commands': "SdtdServerController/commands.enable-commands",  
+  'get /api/sdtdserver/commands': "SdtdServerController/commands.get-commands-status",  
+  'delete /api/sdtdserver/commands': "SdtdServerController/commands.disable-commands",  
+
+  'post /api/sdtdserver/commands/prefix': "SdtdServerController/commands.set-prefix",  
+  'get /api/sdtdserver/commands/prefix': "SdtdServerController/commands.get-prefix",  
+
+  'post /api/sdtdserver/commands/calladmin': "SdtdServerController/commands.enable-calladmin",
+  'delete /api/sdtdserver/commands/calladmin': "SdtdServerController/commands.disable-calladmin",
+  'get /api/sdtdserver/commands/calladmin': "SdtdServerController/commands.get-calladmin",
+
+  'post /api/sdtdserver/commands/playerteleports': "SdtdServerController/commands.enable-player-teleports",
+  'delete /api/sdtdserver/commands/playerteleports': "SdtdServerController/commands.disable-player-teleports",
+  'get /api/sdtdserver/commands/playerteleports': "SdtdServerController/commands.get-player-teleports",
+
+  'post /api/sdtdserver/commands/playerteleports/maxlocations' : "SdtdServerController/commands.set-max-teleport-locations",
+  'get /api/sdtdserver/commands/playerteleports/maxlocations' : "SdtdServerController/commands.get-max-teleport-locations",
+
+  'post /api/sdtdserver/commands/playerteleports/timeout' : "SdtdServerController/commands.set-teleport-timeout",
+  'get /api/sdtdserver/commands/playerteleports/timeout' : "SdtdServerController/commands.get-teleport-timeout",
+
+  // MOTD
   'post /api/sdtdserver/togglemotd': 'SdtdServerController/motd.motd-toggle',
   'post /api/sdtdserver/reloadmotd': 'SdtdServerController/motd.motd-reload',
 
+  //Discord
   'post /api/sdtdserver/setGuild': 'SdtdServerController/discordBot.set-discord-guild',
   'post /api/sdtdserver/setchatchannel': 'SdtdServerController/discordBot.set-chat-channel',
   'post /api/sdtdserver/setnotificationchannel': 'SdtdServerController/discordBot.set-notification-channel',
@@ -149,6 +173,7 @@ module.exports.routes = {
   // PLAYER
 
   'get /api/player/kick': "Player.kick",
+  'get /api/player/teleports' : 'Player.get-teleports',
 
   'post /api/player/ban': "Player.ban",
   "post /api/player/unban": "Player.unban",

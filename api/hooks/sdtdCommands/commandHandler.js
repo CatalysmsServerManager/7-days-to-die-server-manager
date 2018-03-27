@@ -36,7 +36,7 @@ class CommandHandler {
   }
 
   /**
-       * Load enabled commands
+       * Load commands
        * @returns {Map}
        */
 
@@ -49,9 +49,7 @@ class CommandHandler {
 
     require('fs').readdirSync(normalizedPath).forEach(function (file) {
       let command = require('./commands/' + file);
-      if (config.enabledCommands[command.name] === true) {
-        commands.set(command.name.toLowerCase(), new command(config.server));
-      }
+      commands.set(command.name.toLowerCase(), new command(config.server));
 
     });
 
@@ -75,7 +73,7 @@ class CommandHandler {
         let args = splitString.splice(1, splitString.length);
 
         if (this.commands.has(commandName)) {
-          let player = await Player.find({name: chatMessage.playerName, server: this.config.server});
+          let player = await Player.find({ name: chatMessage.playerName, server: this.config.server });
           player = player[0];
 
           let commandToRun = this.commands.get(commandName);

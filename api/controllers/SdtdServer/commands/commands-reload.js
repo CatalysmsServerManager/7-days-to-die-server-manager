@@ -47,30 +47,8 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     try {
-      sails.log.debug(`API - SdtdServer:commands-reload - Reloading config for server ${inputs.serverId}`);
-
-      let server = await SdtdServer.findOne({
-        id: inputs.serverId
-      });
-      let config = await SdtdConfig.findOne({
-        server: server.id
-      });
-
-      if (_.isUndefined(server)) {
-        return exits.notFound();
-      }
-      if (_.isUndefined(config)) {
-        return exits.notFound();
-      }
-      if (_.isUndefined(inputs.newConfig.commandsEnabled) || _.isUndefined(inputs.newConfig.commandPrefix)) {
-        sails.log.error(`API - SdtdServer:commands-reload - Invalid value for commandsEnabled ${inputs.newConfig.commandsEnabled} or commandPrefix ${inputs.newConfig.commandPrefix}`);
-        return exits.badRequest(`Invalid value(s) for new config`);
-      }
-
-      sails.hooks.sdtdcommands.updateConfig(inputs.serverId, inputs.newConfig);
-
+      sails.hooks.sdtdcommands.reload(inputs.serverId);
       sails.log.debug(`API - SdtdServer:commands-reload - Reloaded config for server ${inputs.serverId}`);
-
       return exits.success();
     } catch (error) {
       sails.log.error(`API - SdtdServer:commands-reload - ${error}`);

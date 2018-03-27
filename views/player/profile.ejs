@@ -33,6 +33,18 @@
               <li class="list-group-item">Level:
                 <%= player.level %>
               </li>
+              <li class="list-group-item">Teleport locations:
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Location</th>
+                    </tr>
+                  </thead>
+                  <tbody id='player-teleport-locations'>
+                  </tbody>
+                </table>
+              </li>
               <li class="list-group-item">Zombie kills:
                 <%= player.zombieKills %>
               </li>
@@ -78,3 +90,20 @@
 
 </div>
 </body>
+
+<script>
+
+  $(document).ready(function () {
+    updateTeleportLocations()
+    function updateTeleportLocations() {
+      let playerId = window.SAILS_LOCALS.player.id;
+      $.get('/api/player/teleports', {playerId: playerId}, teleportLocations => {
+        teleportLocations.forEach(teleport => {
+          let teleportHtml = `<tr><td>${teleport.name}</td><td>${teleport.x},${teleport.y},${teleport.z}</td></tr>`
+          $("#player-teleport-locations").append(teleportHtml)
+
+        })
+      })
+    }
+  })
+</script>

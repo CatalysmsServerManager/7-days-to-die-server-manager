@@ -55,6 +55,26 @@ module.exports = {
       }
     },
 
+    enabledCallAdmin : {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
+    enabledPlayerTeleports: {
+      type: 'boolean',
+      defaultsTo: true
+    },
+
+    maxPlayerTeleportLocations: {
+      type: 'number',
+      defaultsTo: 3
+    },
+
+    playerTeleportTimeout: {
+      type: 'number',
+      defaultsTo: 60
+    },
+
     // _____  _                       _ 
     // |  __ \(_)                     | |
     // | |  | |_ ___  ___ ___  _ __ __| |
