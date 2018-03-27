@@ -1,5 +1,6 @@
 let SdtdCommand = require('../command.js');
 const sevenDays = require('machinepack-7daystodiewebapi');
+var validator = require('validator');
 
 class setTele extends SdtdCommand {
   constructor(serverId) {
@@ -109,6 +110,24 @@ class setTele extends SdtdCommand {
         authName: server.authName,
         authToken: server.authToken,
         message: `That name is already in use! Pick another one please.`,
+        playerId: player.steamId
+      }).exec({
+        error: (error) => {
+          sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
+        },
+        success: (result) => {
+          return;
+        }
+      });
+    }
+
+    if (!validator.isAlphanumeric(args[0])) {
+      return sevenDays.sendMessage({
+        ip: server.ip,
+        port: server.webPort,
+        authName: server.authName,
+        authToken: server.authToken,
+        message: `Only alphanumeric values are allowed for teleport names.`,
         playerId: player.steamId
       }).exec({
         error: (error) => {
