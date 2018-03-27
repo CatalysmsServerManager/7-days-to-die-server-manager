@@ -17,8 +17,10 @@ class setTele extends SdtdCommand {
     let player = await Player.findOne({
       id: playerId
     });
+    let playerTeleports = await PlayerTeleport.find({ player: playerId });
+
     let args = chatMessage.messageText.split(' ');
-    args.splice(0,1)
+    args.splice(0, 1)
 
 
     if (!server.config[0].enabledPlayerTeleports) {
@@ -75,18 +77,76 @@ class setTele extends SdtdCommand {
       });
     }
 
+    if (playerTeleports.length >= server.config[0].maxPlayerTeleportLocations) {
+      return sevenDays.sendMessage({
+        ip: server.ip,
+        port: server.webPort,
+        authName: server.authName,
+        authToken: server.authToken,
+        message: `You've set too many locations already, remove one before adding any more`,
+        playerId: player.steamId
+      }).exec({
+        error: (error) => {
+          sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
+        },
+        success: (result) => {
+          return;
+        }
+      });
+    }
+
+    let nameAlreadyInUse = false
+    playerTeleports.forEach(teleport => {
+      if (teleport.name == args[0]) {
+        nameAlreadyInUse = true
+      }
+    })
+
+    if (nameAlreadyInUse) {
+      return sevenDays.sendMessage({
+        ip: server.ip,
+        port: server.webPort,
+        authName: server.authName,
+        authToken: server.authToken,
+        message: `That name is already in use! Pick another one please.`,
+        playerId: player.steamId
+      }).exec({
+        error: (error) => {
+          sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
+        },
+        success: (result) => {
+          return;
+        }
+      });
+    }
+
     let playerData = await sails.helpers.loadPlayerData(server.id, player.steamId);
     let location = playerData.players[0].location
 
-    let locationObj = {
+    let createdTeleport = await PlayerTeleport.create({
       name: args[0],
       x: location.x,
       y: location.y,
-      z: location.z
-    }
+      z: location.z,
+      player: playerId
+    }).fetch();
 
-    console.log(locationObj)
-    
+    return sevenDays.sendMessage({
+      ip: server.ip,
+      port: server.webPort,
+      authName: server.authName,
+      authToken: server.authToken,
+      message: `Your teleport ${createdTeleport.name} has been made! (${createdTeleport.x},${createdTeleport.y},${createdTeleport.z})`,
+      playerId: player.steamId
+    }).exec({
+      error: (error) => {
+        sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
+      },
+      success: (result) => {
+        return;
+      }
+    });
+
 
 
   }
