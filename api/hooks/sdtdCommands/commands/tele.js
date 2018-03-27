@@ -66,6 +66,27 @@ class tele extends SdtdCommand {
       });
     }
 
+    let currentTime = new Date();
+    let lastTeleportTime = new Date(player.lastTeleportTime)
+    if (((currentTime - lastTeleportTime)/1000) < server.config[0].playerTeleportTimeout) {
+      let secondsToWait = Math.floor(server.config[0].playerTeleportTimeout - ((currentTime - lastTeleportTime)/1000));
+      return sevenDays.sendMessage({
+        ip: server.ip,
+        port: server.webPort,
+        authName: server.authName,
+        authToken: server.authToken,
+        message: `You need to wait ${secondsToWait} seconds to teleport again!`,
+        playerId: player.steamId
+      }).exec({
+        error: (error) => {
+          sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
+        },
+        success: (result) => {
+          return;
+        }
+      });
+    }
+
     sevenDays.teleportPlayer({
       ip: server.ip,
       port: server.webPort,
@@ -86,7 +107,8 @@ class tele extends SdtdCommand {
           error: (error) => {
             sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
           },
-          success: (result) => {
+          success: async (result) => {
+            await Player.update({id: player.id}, {lastTeleportTime: new Date()})
             return;
           }
         });

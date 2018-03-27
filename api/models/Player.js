@@ -188,6 +188,11 @@ module.exports = {
       defaultsTo: 0
     },
 
+    lastTeleportTime: {
+      type: 'ref',
+      defaultsTo: new Date()
+    },
+
 
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
