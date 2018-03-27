@@ -46,7 +46,8 @@ module.exports = {
        * @description What player the teleport belongs to
        */
       player: {
-          model: 'player'
+          model: 'player',
+          required: true
       },
 
 
