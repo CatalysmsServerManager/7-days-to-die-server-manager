@@ -173,6 +173,7 @@ module.exports.routes = {
   // PLAYER
 
   'get /api/player/kick': "Player.kick",
+  'get /api/player/teleports' : 'Player.get-teleports',
 
   'post /api/player/ban': "Player.ban",
   "post /api/player/unban": "Player.unban",
