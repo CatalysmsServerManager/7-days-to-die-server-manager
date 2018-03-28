@@ -2,29 +2,58 @@
 
   <div id="list-of-owned-servers" aria-multiselectable="true">
 
-    <div class="card">
+
+    <table class="table table-hover} table-responsive">
+      <thead class="thead-inverse">
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Online players</th>
+          <th>FPS</th>
+          <th>Dashboard</th>
+          <th>Settings</th>
+        </tr>
+      </thead>
+      <tbody>
 
 
-      <% ownedServers.forEach(server => { %>
+        <% ownedServers.forEach(server => { %>
 
-        <div class="card-header" id="list-of-owned-servers-server-<%= server.id %>">
-          <h5 class="mb-0">
-            <a data-toggle="collapse" data-parent="#list-of-owned-servers" href="#list-of-owned-servers-server-<%= server.id %>-content"
-              aria-expanded="true" aria-controls="list-of-owned-servers-server-<%= server.id %>-content">
+          <tr>
+            <td scope="row">
+              <%= server.id %>
+            </td>
+            <td>
               <%= server.name %>
-                <div id="list-of-owned-servers-server-<%= server.id %>-online-players">Loading</div>
-                <a name="" id="" class="btn btn-primary" href="/sdtdserver/<%= server.id %>/dashboard" role="button">Dashboard</a>
-            </a>
-          </h5>
-        </div>
-        <div id="list-of-owned-servers-server-<%= server.id %>-content" class="collapse in" role="tabpanel" aria-labelledby="list-of-owned-servers-server-<%= server.id %>">
-          <div class="card-body">
-            <%- include('../../sdtdServer/partials/serverControl', {server: server}) %>
-          </div>
-        </div>
-    </div>
+            </td>
+            <% let playersId = `server-${server.id}-players` %>
+              <td id=<%= playersId %>>
+                <%= server.stats.players %>
+              </td>
+              <% let fpsId = `server-${server.id}-fps` %>
+                <td id=<%= fpsId %>>Loading</td>
+                <td>
+                  <% const dashboardLink = '/sdtdserver/' + server.id + '/dashboard' %>
+                    <a href='<%= dashboardLink %>' class="btn btn-default btn-primary">
+                      <em class="glyphicon glyphicon-align-justify"></em>
+                      Dashboard
+                    </a>
+                </td>
+                <td>
+                  <% const settingsLink = '/sdtdserver/' + server.id + '/settings' %>
+                    <a href='<%= settingsLink %>' class="btn btn-default btn-primary">
+                      <em class="glyphicon glyphicon-align-justify"></em>
+                      <i class="fa fa-cog" aria-hidden="true"></i> Settings
+                    </a>
+                </td>
+          </tr>
+          <% }) %>
 
-    <% }) %>
+
+      </tbody>
+    </table>
+
+
 
   </div>
 
@@ -33,7 +62,15 @@
 
       let listOfServers = window.SAILS_LOCALS.ownedServers
 
+
+      setInterval(function () {
+        listOfServers.forEach(server => {
+          sendRequestAndUpdateFps(server)
+        })
+      }, 1000)
+
       listOfServers.forEach(server => {
+        sendRequestAndUpdateFps(server)
         io.socket.get('/sdtdserver/' + server.id + '/socket', function (response) {
           sendRequestAndUpdatePlayers(server);
         });
@@ -47,9 +84,16 @@
         })
 
       })
-
-
     })
+
+    function sendRequestAndUpdateFps(server) {
+
+      let serverId = server.id;
+      $.get('/api/sdtdserver/fps', { serverId: serverId }, response => {
+        $(`#server-${server.id}-fps`).text(`${response}`)
+      })
+
+    }
 
 
     function sendRequestAndUpdatePlayers(server) {
@@ -62,7 +106,7 @@
           let onlinePlayers = data.players.filter(player => {
             return player.online
           })
-          $(`#list-of-owned-servers-server-${server.id}-online-players`).text(`${onlinePlayers.length} online`)
+          $(`#server-${server.id}-players`).text(`${onlinePlayers.length}`)
         },
         error: (xhr, status, error) => {
           console.log(`Could not update online players! error: ${error}`)

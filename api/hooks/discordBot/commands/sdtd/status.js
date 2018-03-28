@@ -22,6 +22,7 @@ class Status extends Commando.Command {
 
     let serverInfo = await sails.helpers.loadSdtdserverInfo(sdtdServer.id);
     let playerInfo = await sails.helpers.loadPlayerData(sdtdServer.id)
+    let fps = await sails.helpers.sdtd.loadFps(sdtdServer.id);
 
     let onlinePlayers = playerInfo.players.filter(player => {
       return player.online
@@ -36,6 +37,7 @@ class Status extends Commando.Command {
     let embed = new this.client.customEmbed()
 
     embed.setTitle(`${serverInfo.name} - status`)
+      .addField('FPS', `${fps}`, true)
       .addField(`Gametime`, `${serverInfo.stats.gametime.days} days ${serverInfo.stats.gametime.hours} hours ${serverInfo.stats.gametime.minutes} minutes`, true)
       .addField(`${serverInfo.stats.hostiles} hostiles`, `${serverInfo.stats.animals} animals`, true)
       .addField(`${serverInfo.stats.players} players online`, onlinePlayersStringList.length > 0 ? onlinePlayersStringList : "None")
