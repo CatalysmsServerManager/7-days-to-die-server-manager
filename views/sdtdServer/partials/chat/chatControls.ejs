@@ -16,7 +16,7 @@
     $('#clearChat').click(event => {
       event.preventDefault();
 
-      window.localStorage.removeItem('chatMessages')
+      window.localStorage.removeItem(`chatMessages-${window.SAILS_LOCALS.server.id}`)
       $(".chat-window").empty();
     })
 
