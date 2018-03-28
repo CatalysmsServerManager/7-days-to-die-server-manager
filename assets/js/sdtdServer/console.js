@@ -43,6 +43,8 @@ function addNewLogLine(logLine) {
     return 
   }
 
+  logLine.msg = logLine.msg.replace(/(\r\n|\n|\r)/gm, "<br />");
+
   if (logLine.msg.includes("error")) {
     $('.console-window').append('<li class=\"log-line text-danger\">' + logLine.msg + '</li>');
   } else {

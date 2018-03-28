@@ -23,10 +23,12 @@
       $("#consoleCommand").val('');
       sdtdConsoleWindow.executeCommand(command).then((response) => {
         response.msg = response.msg.replace(/(\r\n|\n|\r)/gm, "<br />");
-          $('.console-window').append('<li class=\"log-line\">' + response.msg + '</li>');
-        })
+        $('.console-window').append('<li class=\"log-line\">' + response.msg + '</li>');
+      })
         .catch((error) => {
           $('.console-window').append('<li class=\"log-line text-danger\">' + error + '</li>');
+        }).finally(() => {
+          $('.console-window').scrollTop($('.console-window')[0].scrollHeight);
         })
     })
 
