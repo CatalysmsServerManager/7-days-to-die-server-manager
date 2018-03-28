@@ -39,10 +39,14 @@ class sdtdConsole {
 
 
 function addNewLogLine(logLine) {
+  if(logLine.msg.includes('WebCommandResult.SendLines():') || logLine.msg.includes('WebCommandResult_for_')) {
+    return 
+  }
+
   if (logLine.msg.includes("error")) {
     $('.console-window').append('<li class=\"log-line text-danger\">' + logLine.msg + '</li>');
   } else {
-    $('.console-window').append('<li class=\"log-line\">' + logLine.msg + '</li>');
+    $('.console-window').append(`<li class=\"log-line\"> ${logLine.msg} </li>`);
   }
   updateConsoleStorage(logLine.msg, this.serverId);
   $('.console-window').scrollTop($('.console-window')[0].scrollHeight);
@@ -71,7 +75,7 @@ function addSavedMessagesToConsoleWindow(serverId) {
       if (msg.includes("error")) {
         $('.console-window').append('<li class=\"log-line text-danger\">' + msg + '</li>');
       } else {
-        $('.console-window').append('<li class=\"log-line\">' + msg + '</li>');
+        $('.console-window').append(`<li class=\"log-line\"> ${msg} </li>`);
       }
     })
     $('.console-window').scrollTop($('.console-window')[0].scrollHeight);
