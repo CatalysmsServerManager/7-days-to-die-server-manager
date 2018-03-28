@@ -34,7 +34,7 @@
 
     $("#clearConsole").click((event) => {
       event.preventDefault();
-      window.localStorage.removeItem('consoleMessages')
+      window.localStorage.removeItem(`consoleMessages-${window.SAILS_LOCALS.server.id}`)
       $(".console-window").empty();
     })
   })
