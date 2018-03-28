@@ -1,14 +1,37 @@
-  <h2>
-          Server stats
-        </h2>
-        <ul class="list-group">
-          <li class="list-group-item">IP:
-              <%= server.ip %>
-          </li>
-          <li class="list-group-item"><%= server.stats.gametime.days %> days <%= server.stats.gametime.hours %> hour(s) <%= server.stats.gametime.minutes %> minute(s) </li>
-          <li class="list-group-item"><%= server.stats.hostiles %> hostiles and <%= server.stats.animals %> animals </li>
-        </ul>
-        <p>
-          <% const infoLink = '/sdtdserver/' + server.id + '/info' %>
-            <a class="btn" href='<%= infoLink %>'>View more info & stats »</a>
-        </p>
+<h2>
+  Server stats
+</h2>
+<ul class="list-group">
+  <li class="list-group-item">IP:
+    <%= server.ip %>
+  </li>
+  <li class="list-group-item">
+    <%= server.stats.gametime.days %> days
+      <%= server.stats.gametime.hours %> hour(s)
+        <%= server.stats.gametime.minutes %> minute(s) </li>
+  <li class="list-group-item">
+    <%= server.stats.hostiles %> hostiles and
+      <%= server.stats.animals %> animals </li>
+  <li class="list-group-item" id='server-info-fps'> FPS : loading </li>
+</ul>
+<p>
+  <% const infoLink = '/sdtdserver/' + server.id + '/info' %>
+    <a class="btn" href='<%= infoLink %>'>View more info & stats »</a>
+</p>
+
+
+<script>
+  $(document).ready(e => {
+    loadAndDrawFps();
+    setInterval(loadAndDrawFps, 10000)
+
+  })
+
+  function loadAndDrawFps() {
+    let serverId = window.SAILS_LOCALS.server.id;
+    $.get('/api/sdtdserver/fps', {serverId: serverId}, response => {
+      $('#server-info-fps').text(`FPS: ${response}`)
+    })
+  }
+
+</script>
