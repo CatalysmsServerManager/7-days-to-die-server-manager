@@ -61,7 +61,7 @@ class listTele extends SdtdCommand {
 
         let stringToSend = new String(`Found ${playerTeleports.length} ${playerTeleports.length > 1 ? 'teleports' : 'teleport'}: `);
         playerTeleports.forEach(teleport => {
-            stringToSend += `- ${teleport.name} at ${teleport.x},${teleport.y},${teleport.z}`;
+            stringToSend += `${teleport.public ? 'PUBLIC' : 'PRIVATE'}- ${teleport.name} at ${teleport.x},${teleport.y},${teleport.z}`;
         })
 
         return sevenDays.sendMessage({
