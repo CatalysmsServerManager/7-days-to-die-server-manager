@@ -18,6 +18,11 @@ class tele extends SdtdCommand {
       id: playerId
     });
     let playerTeleports = await PlayerTeleport.find({ player: playerId });
+    let publicTeleports = await PlayerTeleport.find({ public: true });
+
+    let serverTeleportsFound = playerTeleports.concat(publicTeleports);
+    // Remove duplicates
+    serverTeleportsFound = _.uniq(serverTeleportsFound, 'id');
 
     let args = chatMessage.messageText.split(' ');
     args.splice(0, 1)
@@ -42,7 +47,7 @@ class tele extends SdtdCommand {
     }
 
     let teleportFound = false
-    playerTeleports.forEach(teleport => {
+    serverTeleportsFound.forEach(teleport => {
       if (teleport.name == args[0]) {
         teleportFound = teleport
       }
@@ -110,7 +115,6 @@ class tele extends SdtdCommand {
           success: async (result) => {
             await Player.update({id: player.id}, {lastTeleportTime: new Date()})
             await PlayerTeleport.update({id: teleportFound.id}, {timesUsed: teleportFound.timesUsed+1});
-            console.log(teleportFound)
             return;
           }
         });
