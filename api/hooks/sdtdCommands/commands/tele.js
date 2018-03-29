@@ -109,6 +109,8 @@ class tele extends SdtdCommand {
           },
           success: async (result) => {
             await Player.update({id: player.id}, {lastTeleportTime: new Date()})
+            await PlayerTeleport.update({id: teleportFound.id}, {timesUsed: teleportFound.timesUsed+1});
+            console.log(teleportFound)
             return;
           }
         });
