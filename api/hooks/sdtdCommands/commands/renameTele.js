@@ -1,10 +1,11 @@
 let SdtdCommand = require('../command.js');
 const sevenDays = require('machinepack-7daystodiewebapi');
+var validator = require('validator');
 
-class tele extends SdtdCommand {
+class renameTele extends SdtdCommand {
   constructor(serverId) {
     super(serverId, {
-      name: 'tele',
+      name: 'renametele',
     });
     this.serverId = serverId;
   }
@@ -18,11 +19,6 @@ class tele extends SdtdCommand {
       id: playerId
     });
     let playerTeleports = await PlayerTeleport.find({ player: playerId });
-    let publicTeleports = await PlayerTeleport.find({ public: true });
-
-    let serverTeleportsFound = playerTeleports.concat(publicTeleports);
-    // Remove duplicates
-    serverTeleportsFound = _.uniq(serverTeleportsFound, 'id');
 
     let args = chatMessage.messageText.split(' ');
     args.splice(0, 1)
@@ -46,86 +42,129 @@ class tele extends SdtdCommand {
       });
     }
 
+    if (args.length < 2) {
+      return sevenDays.sendMessage({
+        ip: server.ip,
+        port: server.webPort,
+        authName: server.authName,
+        authToken: server.authToken,
+        message: `Please provide a name for your teleport and a new name.`,
+        playerId: player.steamId
+      }).exec({
+        error: (error) => {
+          sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
+        },
+        success: (result) => {
+          return;
+        }
+      });
+    }
+
+    if (args.length > 2) {
+      return sevenDays.sendMessage({
+        ip: server.ip,
+        port: server.webPort,
+        authName: server.authName,
+        authToken: server.authToken,
+        message: `Too many arguments! Just provide a teleport name and new name please.`,
+        playerId: player.steamId
+      }).exec({
+        error: (error) => {
+          sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
+        },
+        success: (result) => {
+          return;
+        }
+      });
+    }
+
     let teleportFound = false
-    serverTeleportsFound.forEach(teleport => {
+    playerTeleports.forEach(teleport => {
       if (teleport.name == args[0]) {
         teleportFound = teleport
       }
     })
 
     if (!teleportFound) {
-      return sevenDays.sendMessage({
-        ip: server.ip,
-        port: server.webPort,
-        authName: server.authName,
-        authToken: server.authToken,
-        message: `No teleport with that name found`,
-        playerId: player.steamId
-      }).exec({
-        error: (error) => {
-          sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
-        },
-        success: (result) => {
-          return;
-        }
-      });
-    }
-
-    let currentTime = new Date();
-    let lastTeleportTime = new Date(player.lastTeleportTime)
-    if (((currentTime - lastTeleportTime)/1000) < server.config[0].playerTeleportTimeout) {
-      let secondsToWait = Math.floor(server.config[0].playerTeleportTimeout - ((currentTime - lastTeleportTime)/1000));
-      return sevenDays.sendMessage({
-        ip: server.ip,
-        port: server.webPort,
-        authName: server.authName,
-        authToken: server.authToken,
-        message: `You need to wait ${secondsToWait} seconds to teleport again!`,
-        playerId: player.steamId
-      }).exec({
-        error: (error) => {
-          sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
-        },
-        success: (result) => {
-          return;
-        }
-      });
-    }
-
-    sevenDays.teleportPlayer({
-      ip: server.ip,
-      port: server.webPort,
-      authName: server.authName,
-      authToken: server.authToken,
-      playerId: player.steamId,
-      coordinates: `${teleportFound.x} ${teleportFound.y} ${teleportFound.z}`
-    }).exec({
-      success: (response) => {
         return sevenDays.sendMessage({
           ip: server.ip,
           port: server.webPort,
           authName: server.authName,
           authToken: server.authToken,
-          message: `Woosh! Welcome to ${teleportFound.name}`,
+          message: `No teleport with that name found`,
           playerId: player.steamId
         }).exec({
           error: (error) => {
             sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
           },
-          success: async (result) => {
-            await Player.update({id: player.id}, {lastTeleportTime: new Date()})
-            await PlayerTeleport.update({id: teleportFound.id}, {timesUsed: teleportFound.timesUsed+1});
+          success: (result) => {
             return;
           }
         });
-      },
+      }
+
+
+    let nameAlreadyInUse = false
+    playerTeleports.forEach(teleport => {
+      if (teleport.name == args[1]) {
+        nameAlreadyInUse = true
+      }
+    })
+
+    if (nameAlreadyInUse) {
+      return sevenDays.sendMessage({
+        ip: server.ip,
+        port: server.webPort,
+        authName: server.authName,
+        authToken: server.authToken,
+        message: `That name is already in use! Pick another one please.`,
+        playerId: player.steamId
+      }).exec({
+        error: (error) => {
+          sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
+        },
+        success: (result) => {
+          return;
+        }
+      });
+    }
+
+    if (!validator.isAlphanumeric(args[1])) {
+      return sevenDays.sendMessage({
+        ip: server.ip,
+        port: server.webPort,
+        authName: server.authName,
+        authToken: server.authToken,
+        message: `Only alphanumeric values are allowed for teleport names.`,
+        playerId: player.steamId
+      }).exec({
+        error: (error) => {
+          sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
+        },
+        success: (result) => {
+          return;
+        }
+      });
+    }
+
+    await PlayerTeleport.update({id: teleportFound.id}, {name: args[1]});
+
+    return sevenDays.sendMessage({
+      ip: server.ip,
+      port: server.webPort,
+      authName: server.authName,
+      authToken: server.authToken,
+      message: `Your teleport ${teleportFound.name} was renamed to ${args[1]}`,
+      playerId: player.steamId
+    }).exec({
       error: (error) => {
-        sails.log.error(`Hook - sdtdCommands:teleport - ${error}`);
-        return exits.error(error);
+        sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
+      },
+      success: (result) => {
+        return;
       }
     });
-
   }
 }
 
-module.exports = tele;
+module.exports = renameTele;

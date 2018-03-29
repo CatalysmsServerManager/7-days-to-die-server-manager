@@ -1,10 +1,10 @@
 let SdtdCommand = require('../command.js');
 const sevenDays = require('machinepack-7daystodiewebapi');
 
-class listTele extends SdtdCommand {
+class telePublic extends SdtdCommand {
     constructor(serverId) {
         super(serverId, {
-            name: 'listtele',
+            name: 'telepublic',
         });
         this.serverId = serverId;
     }
@@ -59,30 +59,51 @@ class listTele extends SdtdCommand {
             });
         }
 
-        let stringToSend = new String(`Found ${playerTeleports.length} ${playerTeleports.length > 1 ? 'teleports' : 'teleport'}: `);
+        let teleportFound = false
         playerTeleports.forEach(teleport => {
-            stringToSend += `${teleport.public ? 'PUBLIC' : 'PRIVATE'}- ${teleport.name} at ${teleport.x},${teleport.y},${teleport.z}`;
+          if (teleport.name == args[0]) {
+            teleportFound = teleport
+          }
         })
 
-        return sevenDays.sendMessage({
+        if (!teleportFound) {
+            return sevenDays.sendMessage({
+              ip: server.ip,
+              port: server.webPort,
+              authName: server.authName,
+              authToken: server.authToken,
+              message: `No teleport with that name found`,
+              playerId: player.steamId
+            }).exec({
+              error: (error) => {
+                sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
+              },
+              success: (result) => {
+                return;
+              }
+            });
+          }
+
+          await PlayerTeleport.update({id: teleportFound.id}, {public: true});
+          return sevenDays.sendMessage({
             ip: server.ip,
             port: server.webPort,
             authName: server.authName,
             authToken: server.authToken,
-            message: stringToSend,
+            message: `Your teleport ${teleportFound.name} has been set as public.`,
             playerId: player.steamId
-        }).exec({
+          }).exec({
             error: (error) => {
-                sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
+              sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
             },
             success: (result) => {
-                return;
+              return;
             }
-        });
+          });
 
 
 
     }
 }
 
-module.exports = listTele;
+module.exports = telePublic;

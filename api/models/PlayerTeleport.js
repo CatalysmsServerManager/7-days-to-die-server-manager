@@ -26,6 +26,11 @@ module.exports = {
           required: true
       },
 
+      public: {
+          type: 'boolean',
+          defaultsTo: false
+      },
+
       timesUsed: {
         type: 'number',
         defaultsTo: 0
