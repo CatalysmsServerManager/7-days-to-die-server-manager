@@ -19,6 +19,7 @@ class setTele extends SdtdCommand {
       id: playerId
     });
     let playerTeleports = await PlayerTeleport.find({ player: playerId });
+    let publicTeleports = await PlayerTeleport.find({ public: true });
 
     let args = chatMessage.messageText.split(' ');
     args.splice(0, 1)
@@ -96,8 +97,14 @@ class setTele extends SdtdCommand {
       });
     }
 
+
+    let teleportsToCheckForName = playerTeleports.concat(publicTeleports);
+    // Remove duplicates
+    teleportsToCheckForName = _.uniq(teleportsToCheckForName, 'id');
+
+
     let nameAlreadyInUse = false
-    playerTeleports.forEach(teleport => {
+    teleportsToCheckForName.forEach(teleport => {
       if (teleport.name == args[0]) {
         nameAlreadyInUse = true
       }
@@ -165,9 +172,6 @@ class setTele extends SdtdCommand {
         return;
       }
     });
-
-
-
   }
 }
 
