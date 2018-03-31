@@ -57,7 +57,8 @@ module.exports.policies = {
 
   userController: {
     '*': 'isLoggedIn',
-    'profile': 'isLoggedInUser'
+    'profile': 'isLoggedInUser',
+    'dashboard': 'isLoggedInUser'
   },
 
   authController: {
