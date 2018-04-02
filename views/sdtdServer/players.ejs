@@ -1,71 +1,85 @@
-<body>
+<%- exposeLocalsToBrowser() %>
 
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-12">
-        <h1>Player overview</h1>
+  <body>
 
-        <% include ./partials/backToDashboard %>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <h1>Player overview</h1>
 
-          <table class="table">
-            <thead>
-              <tr>
-                <th>
-                  ID
-                </th>
-                <th>
-                  Name
-                </th>
-                <th>
-                  Location
-                </th>
-                <th>
-                  Level
-                </th>
-                <th>
-                  Zombie kills
-                </th>
-                <th>
-                  Player kills
-                </th>
-                <th>
-                  Score
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <% players.forEach(player => { %>
+          <% include ./partials/backToDashboard %>
+
+            <table id='players-overview' class="table display hover">
+              <thead>
                 <tr>
-                  <th scope="row">
-                    <%= player.entityId %>
-                  </th>
-                  <td>
-                    <% const playerLink = '/player/' + player.id + '/profile' %>
-                      <a href='<%= playerLink %>'>
-                        <%= player.name %>
-                      </a>
-                  </td>
-                  <td>
-                    <% let locationString = `${player.positionX} ${player.positionY} ${player.positionZ}` %>
-                      <%= locationString %>
-                  </td>
-                  <td>
-                    <%= player.level %>
-                  </td>
-                  <td>
-                    <%= player.zombieKills %>
-                  </td>
-                  <td>
-                    <%= player.playerKills %>
-                  </td>
-                  <td>
-                    <%= player.score %>
-                  </td>
+                  <th>Name</th>
+                  <th>Entity ID</th>
+                  <th>Steam ID</th>
+                  <th>IP</th>
+                  <th>Playtime</th>
+                  <th>Level</th>
+                  <th>Score</th>
+                  <th>Deaths</th>
+                  <th>Players killed</th>
+                  <th>Zombies killed
                 </tr>
-                <% }) %>
-            </tbody>
-          </table>
+              </thead>
+            </table>
+        </div>
       </div>
     </div>
-  </div>
-</body>
+  </body>
+
+
+  <script>
+    $(document).ready(function () {
+      $('#players-overview').DataTable({
+        data: window.SAILS_LOCALS.players,
+        dom: 'Bfrtip',
+        fixedHeader: true,
+        responsive: true,
+        buttons: [
+          'copy', 'excel', 'pdf', 'print'
+        ],
+        columns: [{
+            data: "name",
+            render: function (data, type, row, meta) {
+              return `<a href="/player/${row.id}/profile">${data}</a>`;
+            }
+          },
+          {
+            data: 'entityId'
+          },
+          {
+            data: 'steamId'
+          },
+          {
+            data: 'ip'
+          },
+          {
+            data: 'playtime',
+            render: function (data, type, row, meta) {
+              return `${row.playtimeHHMMSS}`
+            }
+          },
+          {
+            data: 'level'
+          },
+          {
+            data: 'score'
+          },
+          {
+            data: 'deaths'
+          },
+          {
+            data: 'playerKills'
+          },
+          {
+            data: 'zombieKills'
+          }
+
+        ]
+      });
+    });
+
+  </script>

@@ -41,8 +41,13 @@
   <link rel="stylesheet" href="/styles/sdtd/chat.css">
   <link rel="stylesheet" href="/styles/sdtd/console.css">
   <!--STYLES END-->
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.16/datatables.min.css"/>
- 
+
+
+  <!-- Datatables -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.16/b-1.5.1/b-html5-1.5.1/b-print-1.5.1/fc-3.2.4/fh-3.1.3/r-2.2.1/datatables.min.css"
+  />
+
+
   <!--
         Client-side Templates
         ========================
@@ -123,8 +128,10 @@
   <script src="/js/sdtdServer/chat.js"></script>
   <script src="/js/sdtdServer/console.js"></script>
   <!--SCRIPTS END-->
-<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.16/datatables.min.js"></script>
 
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.16/b-1.5.1/b-html5-1.5.1/b-print-1.5.1/fc-3.2.4/fh-3.1.3/r-2.2.1/datatables.min.js"></script>
 
 </head>
 
@@ -183,11 +190,11 @@
             </a>
             <% } %>
 
-            <li class="nav-item">
-              <a class="nav-link" href="http://csmm.readthedocs.io">
-                Documentation
-              </a>
-            </li>
+              <li class="nav-item">
+                <a class="nav-link" href="http://csmm.readthedocs.io">
+                  Documentation
+                </a>
+              </li>
       </ul>
 
     </div>
