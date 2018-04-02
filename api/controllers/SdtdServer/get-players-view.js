@@ -42,6 +42,14 @@ module.exports = {
       let players = await Player.find({
         server: server.id
       });
+
+      players.map(player => {
+        const hhmmss = require('@streammedev/hhmmss')
+        let newPlaytime = hhmmss(player.playtime);
+        player.playtimeHHMMSS = newPlaytime;
+        return player;
+      })
+
       exits.success({
         players: players,
         server: server
