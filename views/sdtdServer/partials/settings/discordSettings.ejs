@@ -62,8 +62,8 @@
                       <br>
                       <small> Displays additional information on player (dis)connect </small>
                     </label>
-
             </div>
+            <button id="input-settings-discord-setchatchannel-btn" type="button" class="btn btn-primary">Set chat channel</button>
           </li>
 
 
@@ -76,6 +76,7 @@
 
             <select class="form-control" id="input-settings-discord-commandschannel">
             </select>
+            <button id="input-settings-discord-setcommandschannel-btn" type="button" class="btn btn-primary">Set commands channel</button>
           </li>
 
 
@@ -92,6 +93,7 @@
               <select class="form-control" name="discord-settings-notifications-reboots-select" id="discord-settings-notifications-reboots-select">
                 <option>Loading</option>
               </select>
+              <button id="input-settings-discord-setnotification-systemboot-btn" type="button" class="btn btn-primary">Set reboot notification</button>
             </div>
 
             <div class="form-group">
@@ -99,6 +101,7 @@
               <select class="form-control" name="discord-settings-notifications-playerconnect-select" id="discord-settings-notifications-playerconnect-select">
                 <option>Loading</option>
               </select>
+              <button id="input-settings-discord-setnotification-playerConnected-btn" type="button" class="btn btn-primary">Set player connect notification</button>
             </div>
 
             <div class="form-group">
@@ -106,6 +109,7 @@
               <select class="form-control" name="discord-settings-notifications-playerdisconnect-select" id="discord-settings-notifications-playerdisconnect-select">
                 <option>Loading</option>
               </select>
+              <button id="input-settings-discord-setnotification-playerDisconnected-btn" type="button" class="btn btn-primary">Set player disconnect notification</button>
             </div>
 
             <div class="form-group">
@@ -113,6 +117,7 @@
               <select class="form-control" name="discord-settings-notifications-connectionlost-select" id="discord-settings-notifications-connectionlost-select">
                 <option>Loading</option>
               </select>
+              <button id="input-settings-discord-setnotification-connectionLost-btn" type="button" class="btn btn-primary">Set CSMM disconnect notification</button>
             </div>
 
             <div class="form-group">
@@ -120,7 +125,9 @@
               <select class="form-control" name="discord-settings-notifications-connected-select" id="discord-settings-notifications-connected-select">
                 <option>Loading</option>
               </select>
+              <button id="input-settings-discord-setnotification-connected-btn" type="button" class="btn btn-primary">Set CSMM connected notification</button>
             </div>
+
           </li>
           <% } %>
 
@@ -132,8 +139,37 @@
 <script>
   $(document).ready(function () {
     let discordGuildId = window.SAILS_LOCALS.config.discordGuildId;
-    let notificationChannelId = window.SAILS_LOCALS.config.notificationChannelId;
-    let chatChannelId = window.SAILS_LOCALS.config.chatChannelId;
+
+    let writableChannels = new Array();
+    let selectsWithDiscordChannels = [{
+      select: $("#discord-settings-notifications-reboots-select"),
+      option: 'systemboot'
+    },
+    {
+      select: $("#discord-settings-notifications-playerconnect-select"),
+      option: 'playerConnected'
+    },
+    {
+      select: $("#discord-settings-notifications-playerdisconnect-select"),
+      option: 'playerDisconnected'
+    },
+    {
+      select: $("#discord-settings-notifications-connectionlost-select"),
+      option: 'connectionLost'
+    },
+    {
+      select: $("#discord-settings-notifications-connected-select"),
+      option: 'connected'
+    },
+    {
+      select: $("#input-settings-discord-chatchannel"),
+      option: 'chatChannel'
+    },
+    {
+      select: $("#input-settings-discord-commandschannel"),
+      option: 'commandsChannel'
+    }
+    ]
 
     // Load guilds the user can manage & add them to select
     $.ajax({
@@ -150,146 +186,78 @@
             .text(guild.name));
         })
         $(`#input-settings-discord-guild option[value='${discordGuildId}']`).prop('selected', true);
-
         if (discordGuildId) {
-          updateChatChannels($('#input-settings-discord-guild').val())
-          updateCommandChannels($('#input-settings-discord-guild').val())
-          updateNotificationChannels($('#input-settings-discord-guild').val(),
-            "discord-settings-notifications-reboots-select", "systemboot")
-          updateNotificationChannels($('#input-settings-discord-guild').val(),
-            "discord-settings-notifications-playerconnect-select", "playerConnected")
-          updateNotificationChannels($('#input-settings-discord-guild').val(),
-            "discord-settings-notifications-playerdisconnect-select", "playerDisconnected")
-          updateNotificationChannels($('#input-settings-discord-guild').val(),
-            "discord-settings-notifications-connectionlost-select", "connectionLost")
-          updateNotificationChannels($('#input-settings-discord-guild').val(),
-            "discord-settings-notifications-connected-select", "connected")
-
+          let selectedGuildId = $('#input-settings-discord-guild').val()
+          getWritableChannels(selectedGuildId).then(channels => {
+            writeableChannels = channels
+            selectsWithDiscordChannels.forEach(select => {
+              fillSelectWithDiscordChannels(select, channels)
+            })
+          })
+            .catch(e => {
+              console.log(e)
+            })
         }
-
       },
       error: (xhr, status, error) => {
         console.log(error);
       }
     })
 
-    // Loads channels of a guild the bot can write in.
-    function updateChatChannels(guildId) {
-      $('#input-settings-discord-chatchannel').empty()
-      $.ajax({
-        url: `/api/sdtdserver/findwriteablechannelsinguild`,
-        data: {
-          guildId: guildId,
-          serverId: <%= server.id %>
-        },
-        success: (data, status, xhr) => {
-          let foundChannels = data;
-          let enabled = false
-          foundChannels.forEach(channel => {
-            $('#input-settings-discord-chatchannel').append($('<option>', {
-              value: channel.id
-            })
-              .text(channel.name));
-            enabled = true
-          })
-          if (enabled) {
-            $('#input-settings-discord-chatchannel').append($('<option>', {
-              value: 0
-            })
-              .text('Disabled'));
+
+
+
+    async function getWritableChannels(guildId) {
+      return new Promise((resolve, reject) => {
+        $.ajax({
+          url: `/api/sdtdserver/findwriteablechannelsinguild`,
+          data: {
+            guildId: guildId,
+            serverId: window.SAILS_LOCALS.server.id
+          },
+          success: (data, status, xhr) => {
+            let foundChannels = data;
+            resolve(foundChannels);
+          },
+          error: (xhr, status, error) => {
+            console.log(error);
           }
-          $(`#input-settings-discord-chatchannel option[value='${chatChannelId}'`).prop('selected', true);
-        },
-        error: (xhr, status, error) => {
-          console.log(error);
-        }
+        })
       })
     }
 
-    // Loads channels of a guild the bot can write in.
-    function updateCommandChannels(guildId) {
-      $('#input-settings-discord-commandschannel').empty()
-      $.ajax({
-        url: `/api/sdtdserver/findwriteablechannelsinguild`,
-        data: {
-          guildId: guildId,
-          serverId: <%= server.id %>
-        },
-        success: (data, status, xhr) => {
-          let foundChannels = data;
-          let enabled = false
-          foundChannels.forEach(channel => {
-            $('#input-settings-discord-commandschannel').append($('<option>', {
-              value: channel.id
-            })
-              .text(channel.name));
-            enabled = true
-          })
-          if (enabled) {
-            $('#input-settings-discord-commandschannel').append($('<option>', {
-              value: 0
-            })
-              .text('Disabled'));
-          }
-          $(`#input-settings-discord-commandschannel option[value='${chatChannelId}'`).prop('selected', true);
-        },
-        error: (xhr, status, error) => {
-          console.log(error);
-        }
-      })
-    }
+    function fillSelectWithDiscordChannels(element, channels) {
+      element.select.empty();
+      let idToLookFor
+      idToLookFor = window.SAILS_LOCALS.config.discordNotificationConfig[element.option];
 
-    function updateNotificationChannels(guildId, selectId, notificationType) {
-      $(`#${selectId}`).empty()
-      let idToLookFor = window.SAILS_LOCALS.config.discordNotificationConfig[notificationType]
+      if (element.option === 'chatChannel') {
+        idToLookFor = window.SAILS_LOCALS.config.chatChannelId;
+      }
+
+
+      if (element.option === 'commandsChannel') {
+        idToLookFor = window.SAILS_LOCALS.config.discordCommandsChannelId;
+      }
 
       if (!idToLookFor) {
         idToLookFor = '0'
       }
-
-      $.ajax({
-        url: `/api/sdtdserver/findwriteablechannelsinguild`,
-        data: {
-          guildId: guildId,
-          serverId: <%= server.id %>
-        },
-        success: (data, status, xhr) => {
-          let foundChannels = data;
-          let enabled = false
-          foundChannels.forEach(channel => {
-            $(`#${selectId}`).append($('<option>', {
-              value: channel.id
-            })
-              .text(channel.name));
-
-            if (channel.id === idToLookFor) {
-              $(`#${selectId} option[value='${idToLookFor}'`).prop('selected', true)
-              enabled = true
-            }
-          })
-
-          $(`#${selectId}`).append($('<option>', {
-            value: 0
-          })
-            .text('Disabled'));
-
-          if (!enabled) {
-            $(`#${selectId} option[value='0'`).prop('selected', true)
-          }
-
-
-        },
-        error: (xhr, status, error) => {
-          console.log(error);
-        }
+      element.select.append($('<option>', {
+        value: 0
       })
+        .text('Disabled'));
+      channels.forEach(channel => {
+        element.select.append($('<option>', {
+          value: channel.id
+        })
+          .text(channel.name));
+      })
+      element.select.val(idToLookFor);
     }
 
 
-
-    // change guild click
-
-    $("#input-settings-discord-setguild-btn").click(e => {
+    $('#input-settings-discord-setguild-btn').click(e => {
       e.preventDefault();
       let newGuildId = $('#input-settings-discord-guild').val();
       $.ajax({
@@ -301,18 +269,6 @@
           _csrf: window.SAILS_LOCALS._csrf
         },
         success: (data, status, xhr) => {
-          updateChatChannels($('#input-settings-discord-guild').val())
-          updateCommandChannels($('#input-settings-discord-guild').val())
-          updateNotificationChannels($('#input-settings-discord-guild').val(),
-            "discord-settings-notifications-reboots-select", "systemboot")
-          updateNotificationChannels($('#input-settings-discord-guild').val(),
-            "discord-settings-notifications-playerconnect-select", "playerConnected")
-          updateNotificationChannels($('#input-settings-discord-guild').val(),
-            "discord-settings-notifications-playerdisconnect-select", "playerDisconnected")
-          updateNotificationChannels($('#input-settings-discord-guild').val(),
-            "discord-settings-notifications-connectionlost-select", "connectionLost")
-          updateNotificationChannels($('#input-settings-discord-guild').val(),
-            "discord-settings-notifications-connected-select", "connected")
           $('#input-settings-discord-guild').addClass("bg-success").removeClass("bg-danger");
         },
         error: (xhr, status, error) => {
@@ -321,13 +277,11 @@
           console.log(error);
         }
       })
+
     })
 
-    // Change chat click
-
-    $("#input-settings-discord-chatchannel").change(e => {
+    $("#input-settings-discord-setchatchannel-btn").click(e => {
       e.preventDefault();
-
       let newChatChannelId = $('#input-settings-discord-chatchannel').val();
       let newRichMessages
       if ($('#input-settings-discord-chatchannel-richmessages').is(":checked")) {
@@ -335,11 +289,9 @@
       } else {
         newRichMessages = false
       }
-
       if (!newChatChannelId) {
         return alert('Error! Make sure you have a guild set and are selecting a valid channel')
       }
-
       $.ajax({
         url: '/api/sdtdserver/setchatchannel',
         type: 'POST',
@@ -360,17 +312,12 @@
       })
     })
 
-        // Change command channel click
-
-    $("#input-settings-discord-commandschannel").change(e => {
+    $("#input-settings-discord-setcommandschannel-btn").click(e => {
       e.preventDefault();
-
       let newCommandsChannelId = $('#input-settings-discord-commandschannel').val();
-
       if (!newCommandsChannelId) {
         return alert('Error! Make sure you have a guild set and are selecting a valid channel')
       }
-
       $.ajax({
         url: '/api/sdtdserver/setcommandschannel',
         type: 'POST',
@@ -390,16 +337,11 @@
       })
     })
 
-    // Change notification click
-
-    $("#discord-settings-notifications-reboots-select").change(e => {
-
+    $("#input-settings-discord-setnotification-systemboot-btn").click(e => {
       let newNotificationChannelId = $('#discord-settings-notifications-reboots-select').val();
-
       if (!newNotificationChannelId) {
         return alert('Error! Make sure you have a guild set and are selecting a valid channel')
       }
-
       $.ajax({
         url: '/api/sdtdserver/setnotificationchannel',
         type: 'POST',
@@ -422,14 +364,11 @@
       })
     })
 
-    $("#discord-settings-notifications-playerconnect-select").change(e => {
-
+    $("#input-settings-discord-setnotification-playerConnected-btn").click(e => {
       let newNotificationChannelId = $('#discord-settings-notifications-playerconnect-select').val();
-
       if (!newNotificationChannelId) {
         return alert('Error! Make sure you have a guild set and are selecting a valid channel')
       }
-
       $.ajax({
         url: '/api/sdtdserver/setnotificationchannel',
         type: 'POST',
@@ -452,14 +391,11 @@
       })
     })
 
-    $("#discord-settings-notifications-playerdisconnect-select").change(e => {
-
+    $("#input-settings-discord-setnotification-playerDisconnected-btn").click(e => {
       let newNotificationChannelId = $('#discord-settings-notifications-playerdisconnect-select').val();
-
       if (!newNotificationChannelId) {
         return alert('Error! Make sure you have a guild set and are selecting a valid channel')
       }
-
       $.ajax({
         url: '/api/sdtdserver/setnotificationchannel',
         type: 'POST',
@@ -482,15 +418,11 @@
       })
     })
 
-
-    $("#discord-settings-notifications-connected-select").change(e => {
-
+    $("#input-settings-discord-setnotification-connected-btn").click(e => {
       let newNotificationChannelId = $('#discord-settings-notifications-connected-select').val();
-
       if (!newNotificationChannelId) {
         return alert('Error! Make sure you have a guild set and are selecting a valid channel')
       }
-
       $.ajax({
         url: '/api/sdtdserver/setnotificationchannel',
         type: 'POST',
@@ -513,14 +445,11 @@
       })
     })
 
-    $("#discord-settings-notifications-connectionlost-select").change(e => {
-
+    $("#input-settings-discord-setnotification-connectionLost-btn").click(e => {
       let newNotificationChannelId = $('#discord-settings-notifications-connectionlost-select').val();
-
       if (!newNotificationChannelId) {
         return alert('Error! Make sure you have a guild set and are selecting a valid channel')
       }
-
       $.ajax({
         url: '/api/sdtdserver/setnotificationchannel',
         type: 'POST',
@@ -542,7 +471,6 @@
         }
       })
     })
-
   })
 
 </script>
