@@ -56,7 +56,8 @@ module.exports = {
 
     name: {
       type: 'string',
-      required: true
+      required: true,
+      columnType: "VARCHAR(255) CHARACTER SET utf8mb4"
     },
 
     /**
