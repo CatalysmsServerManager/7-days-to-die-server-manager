@@ -171,7 +171,7 @@ module.exports = function sdtdLogs(sails) {
 
           eventEmitter.on('playerDisconnected', async function (disconnectedMsg) {
             sails.sockets.broadcast(server.id, 'playerDisconnected', disconnectedMsg);
-            let playerData = await sails.helpers.loadPlayerData(server.id, disconnectedMsg.steamID);
+            let playerData = await sails.helpers.loadPlayerData(server.id, disconnectedMsg.playerID);
             await sails.hooks.discordnotifications.sendNotification({
               serverId: server.id,
               notificationType: 'playerDisconnected',
