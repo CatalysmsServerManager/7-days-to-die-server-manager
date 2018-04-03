@@ -10,17 +10,33 @@ class listTele extends SdtdCommand {
     }
 
     async run(chatMessage, playerId) {
+        let args = chatMessage.messageText.split(' ');
+        args.splice(0, 1)
 
         let server = await SdtdServer.findOne({
             id: this.serverId
-        }).populate('config');
+        }).populate('config').populate('players');
         let player = await Player.findOne({
             id: playerId
         });
-        let playerTeleports = await PlayerTeleport.find({ player: playerId });
 
-        let args = chatMessage.messageText.split(' ');
-        args.splice(0, 1)
+        let playerTeleports = await loadTeleports()
+
+        async function loadTeleports() {
+            let playerTeleports = new Array();
+            if (args[0] == 'public') {
+                for (const player of server.players) {
+                    let publicTelesByPlayer = await PlayerTeleport.find({ player: player.id, public: true });
+                    playerTeleports = playerTeleports.concat(publicTelesByPlayer);
+                }
+                playerTeleports = _.uniq(playerTeleports, 'id');
+                return playerTeleports;
+            } else {
+                playerTeleports = await PlayerTeleport.find({ player: playerId });
+                return playerTeleports;
+            }
+
+        }
 
 
         if (!server.config[0].enabledPlayerTeleports) {
@@ -30,6 +46,24 @@ class listTele extends SdtdCommand {
                 authName: server.authName,
                 authToken: server.authToken,
                 message: `This command is disabled! Ask your server admin to enable this.`,
+                playerId: player.steamId
+            }).exec({
+                error: (error) => {
+                    sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
+                },
+                success: (result) => {
+                    return;
+                }
+            });
+        }
+
+        if (args.length > 1) {
+            return sevenDays.sendMessage({
+                ip: server.ip,
+                port: server.webPort,
+                authName: server.authName,
+                authToken: server.authToken,
+                message: `Too many arguments! You can only provide a 'public' argumant.`,
                 playerId: player.steamId
             }).exec({
                 error: (error) => {
