@@ -36,6 +36,10 @@ module.exports.routes = {
     view: 'meta/changeLog'
   },
 
+  '/donate': {
+    view: 'meta/donate'
+  },
+
   '/sponsors/ldh': {
     view: 'meta/sponsors/letsdohosting'
   },
