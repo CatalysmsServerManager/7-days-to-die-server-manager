@@ -1,5 +1,4 @@
 var passport = require('passport');
-var jwt = require('jsonwebtoken');
 
 /**
  * AuthController
