@@ -128,6 +128,16 @@
               <button id="input-settings-discord-setnotification-connected-btn" type="button" class="btn btn-primary">Set CSMM connected notification</button>
             </div>
 
+            <div class="form-group">
+                <label for="discord-settings-notifications-countrybankick-select">Country ban kick</label> 
+                <small>Psst, this only makes sense to enable if you have country ban enabled ;)</small>
+                <select class="form-control" name="discord-settings-notifications-countrybankick-select" id="discord-settings-notifications-countrybankick-select">
+                  <option>Loading</option>
+                </select>
+                <button id="input-settings-discord-setnotification-countrybankick-btn" type="button" class="btn btn-primary">Set country ban kick notification</button>
+              </div>
+  
+
           </li>
           <% } %>
 
@@ -168,6 +178,10 @@
     {
       select: $("#input-settings-discord-commandschannel"),
       option: 'commandsChannel'
+    },
+    {
+      select: $("#discord-settings-notifications-countrybankick-select"),
+      option: 'countrybanKick'
     }
     ]
 
@@ -466,6 +480,34 @@
         error: (xhr, status, error) => {
           alert(`Whoa can't set chat to that channel! error: ${error}`)
           $('#discord-settings-notifications-connectionlost-select').addClass("bg-danger").removeClass(
+            "bg-success");
+          console.log(error);
+        }
+      })
+    })
+
+
+    $("#input-settings-discord-setnotification-countrybankick-btn").click(e => {
+      let newNotificationChannelId = $('#discord-settings-notifications-countrybankick-select').val();
+      if (!newNotificationChannelId) {
+        return alert('Error! Make sure you have a guild set and are selecting a valid channel')
+      }
+      $.ajax({
+        url: '/api/sdtdserver/setnotificationchannel',
+        type: 'POST',
+        data: {
+          notificationChannelId: newNotificationChannelId,
+          serverId: <%= server.id %>,
+          notificationType: 'countrybanKick',
+          _csrf: window.SAILS_LOCALS._csrf
+        },
+        success: (data, status, xhr) => {
+          $('#discord-settings-notifications-countrybankick-select').addClass("bg-success").removeClass(
+            "bg-danger");
+        },
+        error: (xhr, status, error) => {
+          alert(`Whoa can't set chat to that channel! error: ${error}`)
+          $('#discord-settings-notifications-countrybankick-select').addClass("bg-danger").removeClass(
             "bg-success");
           console.log(error);
         }
