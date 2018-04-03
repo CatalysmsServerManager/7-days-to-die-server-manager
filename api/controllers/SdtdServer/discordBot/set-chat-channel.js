@@ -42,7 +42,7 @@ module.exports = {
         return exits.notFound()
       }
 
-      if (_.isUndefined(chatChannel) && inputs.chatChannelId) {
+      if ((_.isUndefined(chatChannel) && inputs.chatChannelId) && inputs.chatChannelId != 0) {
         return exits.badChannel();
       }
 

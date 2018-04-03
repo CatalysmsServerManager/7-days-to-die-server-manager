@@ -36,14 +36,16 @@ module.exports = {
     fn: async function (inputs, exits) {
 
         let discordClient = sails.hooks.discordbot.getClient();
-        if (!discordClient.channels.has(inputs.channelId)) {
+        if ((!discordClient.channels.has(inputs.channelId)) && inputs.channelId != 0) {
             return exits.badChannel()
         }
 
         try {
             let server = await SdtdServer.findOne({id: inputs.serverId});
-            let channel = discordClient.channels.get(inputs.channelId);
-            await channel.send(`:white_check_mark: Set this channel to use commands for ${server.name}.`);
+            if (discordClient.channels.has(inputs.channelId)) {
+                let channel = discordClient.channels.get(inputs.channelId);
+                await channel.send(`:white_check_mark: Set this channel to use commands for ${server.name}.`);
+            }
             await SdtdConfig.update({ server: inputs.serverId }, { discordCommandsChannelId: inputs.channelId });
             return exits.success();
         } catch (error) {
