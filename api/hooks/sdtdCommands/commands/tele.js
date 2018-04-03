@@ -13,12 +13,19 @@ class tele extends SdtdCommand {
 
     let server = await SdtdServer.findOne({
       id: this.serverId
-    }).populate('config');
+    }).populate('config').populate('players');
     let player = await Player.findOne({
       id: playerId
     });
+
+    let publicTeleports = new Array();
+
+    for (const player of server.players) {
+      let publicTelesByPlayer = await PlayerTeleport.find({player: player.id, public: true});
+      publicTeleports = publicTeleports.concat(publicTelesByPlayer);
+    }
+
     let playerTeleports = await PlayerTeleport.find({ player: playerId });
-    let publicTeleports = await PlayerTeleport.find({ public: true });
 
     let serverTeleportsFound = playerTeleports.concat(publicTeleports);
     // Remove duplicates
