@@ -129,14 +129,14 @@
             </div>
 
             <div class="form-group">
-                <label for="discord-settings-notifications-countrybankick-select">Country ban kick</label> 
-                <small>Psst, this only makes sense to enable if you have country ban enabled ;)</small>
-                <select class="form-control" name="discord-settings-notifications-countrybankick-select" id="discord-settings-notifications-countrybankick-select">
-                  <option>Loading</option>
-                </select>
-                <button id="input-settings-discord-setnotification-countrybankick-btn" type="button" class="btn btn-primary">Set country ban kick notification</button>
-              </div>
-  
+              <label for="discord-settings-notifications-countrybankick-select">Country ban kick</label>
+              <small>Psst, this only makes sense to enable if you have country ban enabled ;)</small>
+              <select class="form-control" name="discord-settings-notifications-countrybankick-select" id="discord-settings-notifications-countrybankick-select">
+                <option>Loading</option>
+              </select>
+              <button id="input-settings-discord-setnotification-countrybankick-btn" type="button" class="btn btn-primary">Set country ban kick notification</button>
+            </div>
+
 
           </li>
           <% } %>
@@ -284,6 +284,17 @@
         },
         success: (data, status, xhr) => {
           $('#input-settings-discord-guild').addClass("bg-success").removeClass("bg-danger");
+
+          let selectedGuildId = $('#input-settings-discord-guild').val()
+          getWritableChannels(selectedGuildId).then(channels => {
+            writeableChannels = channels
+            selectsWithDiscordChannels.forEach(select => {
+              fillSelectWithDiscordChannels(select, channels)
+            })
+          })
+            .catch(e => {
+              console.log(e)
+            })
         },
         error: (xhr, status, error) => {
           alert(`Whoa can't set server to that guild! error: ${error}`)

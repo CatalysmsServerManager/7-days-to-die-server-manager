@@ -12,7 +12,7 @@ class CountrybanKick extends DiscordNotification {
     embed.setTitle(`:flag_${event.player.country.toLowerCase()}: Country ban kicked: ${event.player.playerName}`)
     .setColor("ORANGE")
     .addField('Steam ID', `[${event.player.steamID}](https://steamidfinder.com/lookup/${event.player.steamID}/)`, true)
-    .addfiel('Entity ID', `${event.player.entityID}`, true)
+    .addField('Entity ID', `${event.player.entityID}`, true)
     .setFooter(`${event.server.name}`)
     .setURL(`${process.env.CSMM_HOSTNAME}/player/${event.player.id}/profile`)
 
