@@ -10,6 +10,7 @@
     "discord.js": "git://github.com/hydrabolt/discord.js.git",
     "discord.js-commando": "git://github.com/Gawdl3y/discord.js-commando.git",
     "dotenv": "^4.0.0",
+    "frontail": "^4.1.1",
     "grunt": "1.0.1",
     "lodash": "3.10.1",
     "machinepack-7daystodiewebapi": "git://github.com/niekcandaele/machinepack-7Days-webapi.git",
