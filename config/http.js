@@ -101,6 +101,7 @@ module.exports.http = {
     passportSession: require('passport').session(),
     ravenRequestHandler: Raven.requestHandler(),
     ravenErrorHandler: Raven.errorHandler(),
+    xframe: require('lusca').xframe('SAMEORIGIN'),
 
     /***************************************************************************
      *                                                                          *
@@ -115,6 +116,7 @@ module.exports.http = {
       'session',
       'passportInit',
       'passportSession',
+      'xframe',
       'bodyParser',
       'compress',
       'poweredBy',
