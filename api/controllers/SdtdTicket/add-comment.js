@@ -30,7 +30,15 @@ module.exports = {
             commentText: inputs.commentText,
             ticket: inputs.ticketId,
             userThatPlacedTheComment: this.req.session.userId
-        })
+        });
+        let ticket = await SdtdTicket.findOne(inputs.ticketId);
+
+        await sails.hooks.discordnotifications.sendNotification({
+            serverId: ticket.server,
+            notificationType: 'ticket',
+            ticketNotificationType: 'New comment',
+            ticket: ticket
+          })
         return exits.success();
 
     }

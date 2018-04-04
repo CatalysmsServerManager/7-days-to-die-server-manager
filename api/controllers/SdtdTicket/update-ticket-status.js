@@ -42,11 +42,19 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     try {
-      sails.log.debug(`API - SdtdTicket:update-ticket-status - Updating status for ticket ${inputs.ticketId}`);
 
-      await SdtdTicket.update({id: inputs.ticketId}, {
+      let ticket = await SdtdTicket.update({id: inputs.ticketId}, {
         status: inputs.status
-      });
+      }).fetch()
+
+      ticket = ticket[0]
+
+      await sails.hooks.discordnotifications.sendNotification({
+        serverId: ticket.server,
+        notificationType: 'ticket',
+        ticketNotificationType: `${inputs.status ? 'Open' : 'Closed'}`,
+        ticket: ticket
+      })
 
       return exits.success();
     } catch (error) {
