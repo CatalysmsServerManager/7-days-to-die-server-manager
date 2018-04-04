@@ -111,10 +111,15 @@ module.exports.routes = {
   'get /api/sdtdserver/findwriteablechannelsinguild' : 'SdtdServerController/discordBot.find-writeable-channels-in-guild',
   'get /api/sdtdserver/onlinestatus': 'SdtdServerController.is-online',
   'get /api/sdtdserver/fps': 'SdtdServerController.get-fps',
+
+  // Tickets
   
   'post /api/sdtdTicket/updateTicketStatus': 'SdtdTicket.update-ticket-status',
   'post /api/sdtdTicket/editTicket' : 'SdtdTicket.edit-ticket',
   'get /api/sdtdticket/opentickets' : 'SdtdTicketController.open-tickets',
+  'post /api/sdtdticket/comment' : 'sdtdTicketController.add-comment',
+  'delete /api/sdtdticket/comment' : 'sdtdTicketController.remove-comment',
+  'put /api/sdtdticket/comment' : 'sdtdTicketController.edit-comment',
   
   'post /api/sdtdserver/addserver': 'SdtdServerController/add-server',
   'post /api/sdtdserver/restartServer': 'SdtdServerController/restart-server',
