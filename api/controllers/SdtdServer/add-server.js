@@ -1,3 +1,5 @@
+const sevenDays = require('machinepack-7daystodiewebapi');
+
 module.exports = {
 
   friendlyName: 'Add server',
@@ -12,19 +14,18 @@ module.exports = {
       required: true
     },
 
-    telnetPort: {
-      type: 'number',
-      required: true
-    },
-
     webPort: {
       type: 'number',
       required: true,
     },
 
-    telnetPassword: {
+    authName: {
       type: 'string',
-      required: true,
+      required: true
+    },
+    authToken: {
+      type: 'string',
+      required: true
     },
 
     serverName: {
@@ -36,63 +37,143 @@ module.exports = {
 
   exits: {
 
-    success: {},
-    badTelnet: {
-      description: 'Could not connect to telnet!',
-      statusCode: 200
+    success: {
+      description: 'Server was added successfully',
     },
-    badWebPort: {
-      description: 'WebPort given was not valid',
-      statusCode: 200
+    serverExists: {
+      description: 'Server with inputted data was found in the system!',
+      responseType: 'badRequest',
+      statusCode: 400
+    },
+    cantConnect: {
+      description: 'Cant connect to the server',
+      responseType: 'badRequest',
+      statusCode: 400
     }
 
   },
 
-  /**
-   * @memberof SdtdServer
-   * @name add-server
-   * @method
-   * @description Add a server to the system
-   * @param {string} serverip Ip of the server to add
-   * @param {number} telnetport Telnet port of the server
-   * @param {string} telnetpassword Telnet password of the server
-   * @param {number} webport Port for webserver added by Alloc's fixes
-   */
-
   fn: async function (inputs, exits) {
 
-    sails.log.info(`API - SdtdServer:addServer - Adding a new server ${inputs.serverIp} ${inputs.webPort}`);
+    let userProfile = await User.findOne(this.req.session.userId);
 
-    try {
-      let userProfile = await User.findOne(this.req.session.userId);
-      let sdtdServer = await sails.helpers.add7DtdServer.with({
-        ip: inputs.serverIp,
-        serverName: inputs.serverName,
-        telnetPort: inputs.telnetPort,
-        telnetPassword: inputs.telnetPassword,
-        webPort: inputs.webPort,
-        owner: userProfile.id
-      })
-
-      return exits.success(sdtdServer);
-    } catch (error) {
-      switch (error.code) {
-        case 'badTelnet':
-          exits.badTelnet({error: 'badTelnet'})
-          break;
-        case 'badWebPort':
-          exits.badWebPort({error: 'badWebPort'})
-          break;
-        default:
-          break;
-      }
-      sails.log.error(`API - addServer - ${error}`);
-      return exits.error(error);
+    let sdtdServer = {
+      ip: inputs.serverIp,
+      webPort: inputs.webPort,
+      authName: inputs.authName,
+      authToken: inputs.authToken,
+      name: inputs.serverName,
+      owner: userProfile.id
     }
 
+    let serverCheck = await checkServerResponse(sdtdServer);
+    let existsCheck = await checkIfServerExists(sdtdServer);
 
+    if (!serverCheck) {
+      return exits.cantConnect("cantConnect");
+    }
 
+    if (existsCheck) {
+      return exits.serverExists("serverExists");
+    }
+
+    let addedServer = await addServerToDb(sdtdServer);
+
+    if (addedServer) {
+      return exits.success(addedServer);
+    }
   }
 
 
 };
+
+async function checkServerResponse(sdtdServer) {
+
+  let statsResponse = await checkStats(sdtdServer);
+  let commandResponse = await checkCommand(sdtdServer);
+
+  if (statsResponse && commandResponse) {
+    return true
+  } else {
+    return false
+  }
+
+  async function checkStats(sdtdServer) {
+    return new Promise(resolve => {
+      let statsResponse = sevenDays.getStats({
+        ip: sdtdServer.ip,
+        port: sdtdServer.webPort,
+        authName: sdtdServer.authName,
+        authToken: sdtdServer.authToken
+      }).exec({
+        success: (response) => {
+          if (response.gametime) {
+            resolve(true);
+          } else {
+            resolve(false)
+          }
+        },
+        error: (error) => {
+          resolve(false);
+        },
+        connectionRefused: error => {
+          resolve(false);
+        }
+      });
+    })
+  }
+
+  async function checkCommand(sdtdServer) {
+    return new Promise(resolve => {
+      let statsResponse = sevenDays.executeCommand({
+        ip: sdtdServer.ip,
+        port: sdtdServer.webPort,
+        authName: sdtdServer.authName,
+        authToken: sdtdServer.authToken,
+        command: 'mem'
+      }).exec({
+        success: (response) => {
+          resolve(true);
+        },
+        error: (error) => {
+          resolve(false);
+        },
+        connectionRefused: error => {
+          resolve(false)
+        }
+      });
+    });
+  }
+
+}
+
+async function checkIfServerExists(sdtdServerToAdd) {
+  let existingServers = await SdtdServer.find({
+    ip: sdtdServerToAdd.ip,
+    webPort: sdtdServerToAdd.webPort
+  })
+
+  if (existingServers && existingServers.length > 0) {
+    return true
+  } else {
+    return false
+  }
+}
+
+
+async function addServerToDb(sdtdServerToAdd) {
+  let createdServer = await SdtdServer.create({
+    ip: sdtdServerToAdd.ip,
+    webPort: sdtdServerToAdd.webPort,
+    authName: sdtdServerToAdd.authName,
+    authToken: sdtdServerToAdd.authToken,
+    name: sdtdServerToAdd.name,
+    owner: sdtdServerToAdd.owner
+  }).fetch();
+
+  let createdConfig = await SdtdConfig.create({
+    server: createdServer.id
+  });
+  await sails.hooks.sdtdlogs.start(createdServer.id);
+  return createdServer
+}
