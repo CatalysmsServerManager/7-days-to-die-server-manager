@@ -48,16 +48,6 @@ module.exports = {
 
     /**
      * @memberof SdtdServer
-     * @var {number} telnetPort
-     */
-
-    telnetPort: {
-      type: 'number',
-      required: true
-    },
-
-    /**
-     * @memberof SdtdServer
      * @var {number} webPort
      * @description Port provided by Alloc's webserver
      */
