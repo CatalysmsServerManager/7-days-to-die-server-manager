@@ -28,21 +28,21 @@ passport.use(new SteamStrategy({
   returnURL: `${process.env.CSMM_HOSTNAME}/auth/steam/return`,
   realm: `${process.env.CSMM_HOSTNAME}`,
   apiKey: steamAPIkey
-}, function (identifier, profile, done) {
-  User.findOrCreate({
-      steamId: profile.id
-    }, {
-      steamId: profile.id,
-      username: profile.displayName
+}, async function (identifier, profile, done) {
+  let foundUser = await User.findOrCreate({
+    steamId: profile._json.steamid
+  }, {
+      steamId: profile._json.steamid,
+      username: profile._json.personaname
     })
-    .then(foundUser => {
-      foundUser.steamProfile = profile;
-      return done(null, foundUser);
-    })
-    .catch(err => {
-      sails.log.error(err);
-      return done(err);
-    });
+  let updatedUser = await User.update({
+    id: foundUser.id
+  }, {
+      username: profile._json.personaname,
+      avatar: profile._json.avatarfull
+    }).fetch()
+  foundUser.steamProfile = profile;
+  return done(null, foundUser);
 }));
 
 let discordScopes = ['identify', 'guilds', 'bot'];

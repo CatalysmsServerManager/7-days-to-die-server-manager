@@ -50,6 +50,10 @@ module.exports = {
       unique: true
     },
 
+    avatar: {
+      type: 'string'
+    },
+
     /**
      * @var {boolean} admin
      * @memberof User
