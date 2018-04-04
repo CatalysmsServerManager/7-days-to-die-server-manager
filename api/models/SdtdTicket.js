@@ -75,6 +75,11 @@ module.exports = {
     player: {
       model: 'player',
       required: true
+    },
+
+    comments: {
+      collection: 'ticketcomment',
+      via: 'ticket'
     }
 
   },
