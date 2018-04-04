@@ -9,11 +9,11 @@
         <%= ticket.description %>
       </p>
 
-      <h2> Player info </h2>
+      <h2> Details </h2>
       <table class="table">
         <tbody>
           <tr>
-            <td>Name</td>
+            <td>Player name</td>
             <td>
               <a href="/player/<%= ticket.playerInfo.id %>/profile">
                 <%= ticket.playerInfo.name %>
@@ -28,6 +28,14 @@
                   <%= ticket.playerInfo.location.z %>
             </td>
           </tr>
+          <tr>
+              <td>Created on</td>
+              <% let ticketDate = new Date(ticket.createdAt) %>
+              <td>
+                  <%= ticketDate.toDateString() %>
+                  <%= ticketDate.toTimeString() %>
+              </td>
+            </tr>
         </tbody>
       </table>
     </div>

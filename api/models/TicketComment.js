@@ -11,7 +11,8 @@ module.exports = {
   
       commentText: {
         type: 'string',
-        required: true
+        required: true,
+        columnType: "TEXT CHARACTER SET utf8mb4"
       },
   
       //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
