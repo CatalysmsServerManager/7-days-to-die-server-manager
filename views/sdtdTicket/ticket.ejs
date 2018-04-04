@@ -1,33 +1,13 @@
-<div class="container">
-  <h1>
-    <%= ticket.title %>
-  </h1>
-
-
-
+<div class="container-fluid">
   <div class="row">
-    <div class="col-12">
-      <div class="card text-center">
-        <img class="card-img-top" src="holder.js/100px180/" alt="">
-        <div class="card-body">
-          <h4 class="card-title">Info</h4>
-          <p class="card-text">
-            <% if (ticket.status) { %>
-              <%- include('./partials/closeTicketButton', ticket) %>
-                <% } %>
-                  <% if (ticket.status) { %>
-                    <%- include('./partials/editTicketDescriptionButton', ticket) %>
-                      <% } %>
-                        <%= ticket.description %>
-          </p>
-        </div>
-      </div>
-    </div>
+    <div class="col-md-6">
+      <h1>
+        <%= ticket.title %>
+      </h1>
 
-  </div>
-
-  <div class="row">
-    <div class="col-4">
+      <p>
+        <%= ticket.description %>
+      </p>
 
       <h2> Player info </h2>
       <table class="table">
@@ -51,9 +31,50 @@
         </tbody>
       </table>
     </div>
-    <div class="col-8">
+    <div class="col-md-2">
+      <div class="btn-group btn-group-sm btn-group-vertical" role="group">
+
+        <% if (ticket.status) { %>
+          <%- include('./partials/editTicketDescriptionButton', ticket) %>
+            <% } %>
+
+              <% if (ticket.status) { %>
+                <%- include('./partials/closeTicketButton', ticket) %>
+                  <% } else { %>
+                    <%- include('./partials/openTicketButton', ticket) %>
+                      <% } %>
+                        <button id="btn-toggle-inventory" class="btn btn-secondary" type="button">
+                          Toggle inventory
+                        </button>
+                        <%- include('./partials/addCommentButton', ticket) %>
+      </div>
+    </div>
+    <div id="player-inventory" class="col-md-4">
       <%- include('../player/partials/playerInventory', {player: ticket.playerInfo}) %>
     </div>
+
   </div>
+  <% console.log(ticket.comments) %>
+
+    <div class="row">
+      <div class="col-md-8">
+        <% comments.forEach(comment => { %>
+          <%- include('./partials/ticketComment', comment) %>
+            <% }) %>
+      </div>
+      <div class="col-md-4">
+      </div>
+    </div>
 </div>
-</div>
+
+<script>
+
+  $(document).ready(function () {
+    $('#player-inventory').hide();
+    $('#btn-toggle-inventory').click(e => {
+      e.preventDefault();
+      $('#player-inventory').fadeToggle();
+    })
+  })
+
+</script>
