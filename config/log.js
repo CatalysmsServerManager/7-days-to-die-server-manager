@@ -16,57 +16,27 @@ require('dotenv').config();
 const winston = require('winston');
 
 
-
-if (process.env.NODE_ENV == "production") {
-  var customLogger = new winston.Logger({
-    transports: [
-      new winston.transports.Console({
-        level: 'debug',
-        colorize: true,
-        timestamp: true,
-        humanReadableUnhandledException: true
-      }),
-      new winston.transports.File({
-        level: 'error',
-        timestamp: true,
-        humanReadableUnhandledException: true,
-        filename: './logs/error.log',
-        zippedArchive: true
-      })
-    ]
-  });
-
-  customLogger.on('error', function (err) {
-    console.log(`ERROR INITIALIZING PAPERTRAIL LOGGER ${err}`)
-  });
-
-}
-
-if (process.env.NODE_ENV == "dev") {
-  var customLogger = new winston.Logger({
-    transports: [
-      new winston.transports.Console({
-        level: 'silly',
-        colorize: true,
-        timestamp: true,
-        humanReadableUnhandledException: true
-      }),
-      new winston.transports.File({
-        level: 'error',
-        timestamp: true,
-        humanReadableUnhandledException: true,
-        filename: './logs/error.log',
-        zippedArchive: true
-      })
-    ]
-  });
-
-}
-
-
-
-
-
+var customLogger = new winston.Logger({
+  transports: [
+    new winston.transports.Console({
+      level: 'silly',
+      colorize: true,
+      timestamp: true,
+      humanReadableUnhandledException: true
+    }),
+    new winston.transports.File({
+      level: 'debug',
+      timestamp: true,
+      humanReadableUnhandledException: true,
+      filename: './logs/devlog.log',
+      tailable: true,
+      maxsize: 1000,
+      maxFiles: 3,
+      json: false,
+      colorize: true
+    })
+  ]
+});
 
 module.exports.log = {
   // Pass in our custom logger, and pass all log levels through.

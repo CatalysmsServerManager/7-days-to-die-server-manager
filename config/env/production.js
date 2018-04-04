@@ -18,6 +18,27 @@
  * For more best practices and tips, see:
  * https://sailsjs.com/docs/concepts/deployment
  */
+const winston = require('winston');
+
+customLogger = new winston.Logger({
+  transports: [
+    new winston.transports.File({
+      level: 'info',
+      timestamp: true,
+      humanReadableUnhandledException: true,
+      filename: './logs/prod.log',
+      tailable: true,
+      maxsize: 1000,
+      maxFiles: 3,
+      json: false,
+      colorize: true
+    })
+  ]
+})
+
+
+const { exec } = require('child_process');
+exec('"./node_modules/.bin/frontail" ./logs/prod.log -n 20 -t dark --ui-highlight');
 
 
 
@@ -48,8 +69,8 @@ module.exports = {
          *                                                                          *
          ***************************************************************************/
     default: {
-       adapter: 'sails-mysql',
-       url: process.env.DBSTRING
+      adapter: 'sails-mysql',
+      url: process.env.DBSTRING
     },
 
   },
@@ -195,7 +216,7 @@ module.exports = {
          *                                                                          *
          ***************************************************************************/
     cookie: {
-      secure: false,
+      secure: true,
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
     },
 
@@ -264,9 +285,16 @@ module.exports = {
      * (https://sailsjs.com/config/log)                                        *
      *                                                                         *
      ***************************************************************************/
-  // log: {
-  //   level: 'debug'
-  // },
+
+
+
+  log: {
+    // Pass in our custom logger, and pass all log levels through.
+    custom: customLogger,
+
+    // Disable captain's log so it doesn't prefix or stringify our meta data.
+    inspect: false
+  },
 
 
 
@@ -311,7 +339,7 @@ module.exports = {
      *                                                                         *
      ***************************************************************************/
   port: 443,
-explicitHost: "54.36.0.1",
+  explicitHost: "54.36.0.1",
 
 
   /**************************************************************************
@@ -332,12 +360,12 @@ explicitHost: "54.36.0.1",
      *                                                                         *
      **************************************************************************/
 
-     
-    ssl: {
-      ca: require('fs').readFileSync(require('path').resolve(__dirname,'./ssl/chain.pem')),
-      key: require('fs').readFileSync(require('path').resolve(__dirname,'./ssl/privkey.pem')),
-      cert: require('fs').readFileSync(require('path').resolve(__dirname,'./ssl/fullchain.pem'))
-    },
+
+  ssl: {
+    ca: require('fs').readFileSync(require('path').resolve(__dirname,'./ssl/chain.pem')),
+    key: require('fs').readFileSync(require('path').resolve(__dirname,'./ssl/privkey.pem')),
+    cert: require('fs').readFileSync(require('path').resolve(__dirname,'./ssl/fullchain.pem'))
+  },
 
 
 
