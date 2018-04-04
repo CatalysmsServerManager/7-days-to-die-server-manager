@@ -137,6 +137,15 @@
               <button id="input-settings-discord-setnotification-countrybankick-btn" type="button" class="btn btn-primary">Set country ban kick notification</button>
             </div>
 
+            <div class="form-group">
+              <label for="discord-settings-notifications-ticket-select">Tickets</label>
+              <small>Receive notifications for calladmin ticket updates</small>
+              <select class="form-control" name="discord-settings-notifications-ticket-select" id="discord-settings-notifications-ticket-select">
+                <option>Loading</option>
+              </select>
+              <button id="input-settings-discord-setnotification-ticket-btn" type="button" class="btn btn-primary">Set tickets notification</button>
+            </div>
+
 
           </li>
           <% } %>
@@ -182,7 +191,11 @@
     {
       select: $("#discord-settings-notifications-countrybankick-select"),
       option: 'countrybanKick'
-    }
+    },
+    {
+      select: $("#discord-settings-notifications-ticket-select"),
+      option: 'ticket'
+    },
     ]
 
     // Load guilds the user can manage & add them to select
@@ -519,6 +532,33 @@
         error: (xhr, status, error) => {
           alert(`Whoa can't set chat to that channel! error: ${error}`)
           $('#discord-settings-notifications-countrybankick-select').addClass("bg-danger").removeClass(
+            "bg-success");
+          console.log(error);
+        }
+      })
+    })
+
+    $("#input-settings-discord-setnotification-ticket-btn").click(e => {
+      let newNotificationChannelId = $('#discord-settings-notifications-ticket-select').val();
+      if (!newNotificationChannelId) {
+        return alert('Error! Make sure you have a guild set and are selecting a valid channel')
+      }
+      $.ajax({
+        url: '/api/sdtdserver/setnotificationchannel',
+        type: 'POST',
+        data: {
+          notificationChannelId: newNotificationChannelId,
+          serverId: <%= server.id %>,
+          notificationType: 'ticket',
+          _csrf: window.SAILS_LOCALS._csrf
+        },
+        success: (data, status, xhr) => {
+          $('#discord-settings-notifications-ticket-select').addClass("bg-success").removeClass(
+            "bg-danger");
+        },
+        error: (xhr, status, error) => {
+          alert(`Whoa can't set notifications to that channel! error: ${error}`)
+          $('#discord-settings-notifications-ticket-select').addClass("bg-danger").removeClass(
             "bg-success");
           console.log(error);
         }
