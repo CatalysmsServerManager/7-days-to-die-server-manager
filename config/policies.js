@@ -64,6 +64,12 @@ module.exports.policies = {
   authController: {
     'discordLogin': 'isLoggedIn',
     'discordReturn': 'isLoggedIn'
+  },
+
+  sdtdTicketController: {
+    'view-ticket': 'canSeeTicket',
+    'open-tickets': true,
+    'server-tickets-view': 'isServerOwner',
   }
 
 };
