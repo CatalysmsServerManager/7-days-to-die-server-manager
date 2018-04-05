@@ -10,6 +10,7 @@
             <th>#</th>
             <th>Title</th>
             <th>Reporter</th>
+            <th>Opened on</th>
           </tr>
         </thead>
         <tbody>
@@ -28,6 +29,10 @@
                   <a href="/player/<%= ticket.player.id %>/profile">
                     <%= ticket.player.name %>
                   </a>
+                </td>
+                <td>
+                  <% let ticketCreatedDate = new Date(ticket.createdAt); %>
+                  <%= ticketCreatedDate.toDateString() %>
                 </td>
               </tr>
               <% } %>
@@ -50,6 +55,7 @@
             <th>#</th>
             <th>Title</th>
             <th>Reporter</th>
+            <th>Opened on</th>
           </tr>
         </thead>
         <tbody>
@@ -69,6 +75,10 @@
                     <%= ticket.player.name %>
                   </a>
                 </td>
+                <td>
+                    <% let ticketCreatedDate = new Date(ticket.createdAt); %>
+                    <%= ticketCreatedDate.toDateString() %>
+                  </td>
               </tr>
               <% } %>
                 <% }) %>
