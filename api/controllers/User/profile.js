@@ -36,7 +36,7 @@ module.exports = {
         try {
             let user = await User.findOne(inputs.userId);
             let servers = await SdtdServer.find({ owner: inputs.userId });
-            let players = await Player.find({ steamId: user.steamId });
+            let players = await Player.find({ steamId: user.steamId }).populate('tickets').populate('server');
 
             return exits.success({
                 user: user,
