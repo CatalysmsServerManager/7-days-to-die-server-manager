@@ -1,0 +1,55 @@
+<%- exposeLocalsToBrowser() %>
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#remove-comment-modal-<%= comment.id %>">
+        Remove comment
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="remove-comment-modal-<%= comment.id %>" tabindex="-1" role="dialog" aria-labelledby="remove-comment-modal-title-<%= comment.id %>"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="remove-comment-modal-title-<%= comment.id %>">Remove comment on ticket 
+                        <%= ticket.id %>
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="remove-comment-textarea"> Comment </label>
+                        <textarea readonly class="form-control" name="remove-comment-textarea" id="remove-comment-textarea" rows="3"> <%= comment.commentText %>  </textarea>
+                        <button id='remove-comment-<%= comment.id %>' class="btn btn-danger">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        $(document).ready(function () {
+            $('#remove-comment-<%= comment.id %>').click(e => {
+                e.preventDefault();
+                $.ajax({
+                    url: '/api/sdtdticket/comment',
+                    method: 'DELETE',
+                    data: {
+                        _csrf: window.SAILS_LOCALS._csrf,
+                        commentId: <%= comment.id %>
+                    },
+                    success: (data, status, xhr) => {
+                        location.reload()
+                    },
+                    error: (xhr, status, error) => {
+                        alert('Something went wrong while trying to removes a comment');
+                    }
+                })
+            })
+        })
+
+    </script>

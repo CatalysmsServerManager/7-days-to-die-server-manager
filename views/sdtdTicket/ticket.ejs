@@ -29,13 +29,13 @@
             </td>
           </tr>
           <tr>
-              <td>Created on</td>
-              <% let ticketDate = new Date(ticket.createdAt) %>
+            <td>Created on</td>
+            <% let ticketDate = new Date(ticket.createdAt) %>
               <td>
-                  <%= ticketDate.toDateString() %>
+                <%= ticketDate.toDateString() %>
                   <%= ticketDate.toTimeString() %>
               </td>
-            </tr>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -63,15 +63,15 @@
 
   </div>
 
-    <div class="row">
-      <div class="col-md-8">
-        <% comments.forEach(comment => { %>
-          <%- include('./partials/ticketComment', comment) %>
-            <% }) %>
-      </div>
-      <div class="col-md-4">
-      </div>
+  <div class="row">
+    <div class="col-md-8">
+      <% comments.forEach(comment => { %>
+        <%- include('./partials/ticketComment', {comment: comment, ticket: ticket}) %>
+          <% }) %>
     </div>
+    <div class="col-md-4">
+    </div>
+  </div>
 </div>
 
 <script>
