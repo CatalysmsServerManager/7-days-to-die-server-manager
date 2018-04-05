@@ -43,13 +43,35 @@ module.exports = {
     try {
       sails.log.debug(`API - SdtdTicket:viewTicket - Loading ticket view for ticket ${inputs.ticketId}`);
 
-      let ticket = await SdtdTicket.findOne(inputs.ticketId);
+      let ticket = await SdtdTicket.findOne(inputs.ticketId).populate('comments');
       let server = await SdtdServer.findOne(ticket.server);
 
-      return exits.success({
-        server: server,
-        ticket: ticket
-      });
+      let promises = ticket.comments.map(comment => {
+        return new Promise((resolve, reject) => {
+          User.findOne(comment.userThatPlacedTheComment).exec((err, foundUser) => {
+            if (err) {
+              reject(err)
+            }
+            comment.userInfo = foundUser
+            resolve(comment)
+          })
+        })
+      })
+
+      Promise.all(promises).then((comments) => {
+        return exits.success({
+          server: server,
+          ticket: ticket,
+          comments: comments
+        });
+      }).catch(error => {
+        return exits.success({
+          server: server,
+          ticket: ticket,
+          comments: []
+        });
+      })
+
 
     } catch (error) {
       sails.log.error(`API - SdtdTicket:viewTicket - ${error}`);

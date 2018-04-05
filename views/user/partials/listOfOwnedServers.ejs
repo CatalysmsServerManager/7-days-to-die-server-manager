@@ -3,7 +3,7 @@
   <div id="list-of-owned-servers" aria-multiselectable="true">
 
 
-    <table class="table table-hover} table-responsive">
+    <table class="table table-hover table-responsive">
       <thead class="thead-inverse">
         <tr>
           <th>ID</th>
@@ -12,10 +12,11 @@
           <th>FPS</th>
           <th>Dashboard</th>
           <th>Settings</th>
+          <th>Tickets</th>
+          <th>Players</th>
         </tr>
       </thead>
       <tbody>
-
 
         <% ownedServers.forEach(server => { %>
 
@@ -27,24 +28,37 @@
               <%= server.name %>
             </td>
             <% let playersId = `server-${server.id}-players` %>
-              <td id=<%= playersId %>>
-                Loading
+              <td id="<%=playersId %>"> Loading
               </td>
               <% let fpsId = `server-${server.id}-fps` %>
-                <td id=<%= fpsId %>>Loading</td>
+                <td id="<%= fpsId %>">Loading</td>
                 <td>
                   <% const dashboardLink = '/sdtdserver/' + server.id + '/dashboard' %>
-                    <a href='<%= dashboardLink %>' class="btn btn-default btn-primary">
+                    <a href='<%= dashboardLink %>' class="btn btn-sm btn-primary">
                       <em class="glyphicon glyphicon-align-justify"></em>
                       Dashboard
                     </a>
                 </td>
                 <td>
                   <% const settingsLink = '/sdtdserver/' + server.id + '/settings' %>
-                    <a href='<%= settingsLink %>' class="btn btn-default btn-primary">
+                    <a href='<%= settingsLink %>' class="btn btn-sm btn-primary">
                       <em class="glyphicon glyphicon-align-justify"></em>
                       <i class="fa fa-cog" aria-hidden="true"></i> Settings
                     </a>
+                </td>
+                <td>
+                  <% const ticketsLink = '/sdtdserver/' + server.id + '/tickets' %>
+                    <a href='<%= ticketsLink %>' class="btn btn-sm btn-primary">
+                      <em class="glyphicon glyphicon-align-justify"></em>
+                      <i class="fa fa-ticket" aria-hidden="true"></i> Tickets
+                      <span id="sdtd-server-<%= server.id %>-tickets-badge" class="badge badge-secondary">
+                        <i class="fa fa-cog" aria-hidden="true"></i>
+                      </span>
+                    </a>
+                </td>
+                <td>
+                    <% const playersLink = '/sdtdserver/' + server.id + '/players' %>
+                  <a name="" id="" class="btn btn-primary btn-sm" href="<%= playersLink %>" role="button">Players</a>
                 </td>
           </tr>
           <% }) %>
@@ -70,6 +84,21 @@
       }, 300000)
 
       listOfServers.forEach(server => {
+        $.ajax({
+          url: `/api/sdtdticket/opentickets`,
+          data: {
+            serverId: server.id
+            },
+          success: (data, status, xhr) => {
+            let opentickets = data;
+            $(`#sdtd-server-${server.id}-tickets-badge`).text(opentickets.length)
+
+          },
+          error: (xhr, status, error) => {
+            console.log(error)
+          }
+        });
+
         sendRequestAndUpdateFps(server)
         io.socket.get('/sdtdserver/' + server.id + '/socket', function (response) {
           sendRequestAndUpdatePlayers(server);
@@ -113,5 +142,6 @@
         }
       })
     }
+
 
   </script>

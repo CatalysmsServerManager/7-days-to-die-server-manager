@@ -75,6 +75,12 @@ class callAdmin extends SdtdCommand {
           sails.log.error(`HOOK - SdtdCommands:callAdmin - Failed to respond to player`);
         },
         success: (result) => {
+          sails.hooks.discordnotifications.sendNotification({
+            serverId: ticket.server,
+            notificationType: 'ticket',
+            ticketNotificationType: 'New ticket',
+            ticket: ticket
+          })
           return ticket;
         }
       });

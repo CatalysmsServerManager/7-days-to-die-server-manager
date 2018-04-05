@@ -224,6 +224,11 @@ module.exports = {
       model: 'user'
     },
 
+    tickets: {
+      collection: 'sdtdTicket',
+      via: 'player'
+    },
+
     teleports: {
       collection: 'playerTeleport',
       via: 'player'
