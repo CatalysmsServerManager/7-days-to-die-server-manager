@@ -1,0 +1,60 @@
+<%- exposeLocalsToBrowser() %>
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#edit-comment-modal-<%= comment.id %>">
+        Edit comment
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="edit-comment-modal-<%= comment.id %>" tabindex="-1" role="dialog" aria-labelledby="edit-comment-modal-title-<%= comment.id %>"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="edit-comment-modal-title-<%= comment.id %>">Edit comment on ticket 
+                        <%= ticket.id %>
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="edit-comment-textarea-<%= comment.id %>">Edit comment </label>
+                        <textarea class="form-control" name="edit-comment-textarea-<%= comment.id %>" id="edit-comment-textarea-<%= comment.id %>" rows="3"> <%= comment.commentText %>  </textarea>
+                        <button id='edit-comment-<%= comment.id %>' class="btn btn-primary">Edit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        $(document).ready(function () {
+
+            $('#edit-comment-<%= comment.id %>').click(e => {
+                e.preventDefault();
+                let commentText = $('#edit-comment-textarea-<%= comment.id %>').val();
+                let commentId = <%= comment.id %>
+
+                $.ajax({
+                    url: '/api/sdtdticket/comment',
+                    method: 'PUT',
+                    data: {
+                        _csrf: window.SAILS_LOCALS._csrf,
+                        newText: commentText,
+                        commentId: commentId
+                    },
+                    success: (data, status, xhr) => {
+                        location.reload()
+                    },
+                    error: (xhr, status, error) => {
+                        alert('Something went wrong while trying to edit a comment');
+                    }
+                })
+            })
+        })
+
+    </script>
