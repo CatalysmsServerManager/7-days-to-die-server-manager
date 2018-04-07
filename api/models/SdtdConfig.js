@@ -82,6 +82,11 @@ module.exports = {
     // | |__| | \__ \ (_| (_) | | | (_| |
     // |_____/|_|___/\___\___/|_|  \__,_|
 
+    discordPrefix: {
+      type: 'string',
+      defaultsTo: "$"
+    },
+
     /**
      * @memberof SdtdServer
      * @var {string} discordCommandsChannelId
