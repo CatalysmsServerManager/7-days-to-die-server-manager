@@ -15,7 +15,6 @@ require('dotenv').config();
 
 const winston = require('winston');
 
-
 var customLogger = new winston.Logger({
   transports: [
     new winston.transports.Console({

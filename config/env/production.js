@@ -23,7 +23,7 @@ const winston = require('winston');
 customLogger = new winston.Logger({
   transports: [
     new winston.transports.File({
-      level: 'info',
+      level: 'debug',
       timestamp: true,
       humanReadableUnhandledException: true,
       filename: './logs/prod.log',
@@ -38,7 +38,7 @@ customLogger = new winston.Logger({
 
 
 const { exec } = require('child_process');
-exec('"./node_modules/.bin/frontail" ./logs/prod.log -n 20 -t dark --ui-highlight');
+exec(`"/home/i107/7-Days-To-Die-Server-Manager/node_modules/frontail/bin/frontail" -h ${process.env.CSMM_IP} -p 2010 -n 20 -t dark --ui-highlight -U ${process.env.LOG_USER} -P ${process.env.LOG_PW} /home/i107/7-Days-To-Die-Server-Manager/logs/prod.log`);
 
 
 
