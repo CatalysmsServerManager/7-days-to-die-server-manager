@@ -39,6 +39,10 @@ module.exports = {
       type: 'string'
     },
 
+    country: {
+      type: 'string'
+    },
+
     /**
      * @var {string} avatarUrl
      * @description Url of the players' steam avatar
