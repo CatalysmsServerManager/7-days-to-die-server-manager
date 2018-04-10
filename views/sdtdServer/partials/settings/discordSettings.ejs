@@ -247,6 +247,7 @@
     $('#inputs-setting-discord-prefix-btn').click(e => {
       e.preventDefault();
       let newPrefix = $('#input-settings-discord-prefix').val();
+      let guildId = $('#input-settings-discord-guild').val();
       if (!validator.isLength(newPrefix, {min:0, max: 3})) {
         $('#input-settings-discord-prefix').addClass("bg-danger").removeClass("bg-success");
         return alert('Prefix is maximum 3 characters long');
@@ -258,11 +259,11 @@
         data: {
           _csrf: window.SAILS_LOCALS._csrf,
           prefix: newPrefix,
+          guildId: guildId,
           serverId: window.SAILS_LOCALS.server.id
         },
         success: (data, status, xhr) => {
           $('#input-settings-discord-prefix').addClass("bg-success").removeClass("bg-danger");
-          console.log('success')
           },
           error: (xhr, status, error) => {
             $('#input-settings-discord-prefix').addClass("bg-danger").removeClass("bg-success");
