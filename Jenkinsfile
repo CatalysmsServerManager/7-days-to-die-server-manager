@@ -17,6 +17,8 @@ pipeline {
         CSMM_TEST_STEAM_USERNAME = credentials('CSMM_TEST_STEAM_USERNAME')
         CSMM_TEST_STEAM_PASSWORD = credentials('CSMM_TEST_STEAM_PASSWORD')
         JAVA_HOME = '/usr/bin/java'
+        GIT_COMMITTER_NAME = 'niekcandaele'
+        GIT_COMMITTER_EMAIL = 'niekcandaele@gmail.com'
 
     }
     stages {
