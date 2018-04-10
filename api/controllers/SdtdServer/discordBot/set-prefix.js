@@ -7,6 +7,10 @@ module.exports = {
             required: true,
             type: 'number'
         },
+        guildId: {
+            required: true,
+            type: 'string'
+        },
         prefix: {
             required: true,
             type: 'string'
@@ -21,7 +25,14 @@ module.exports = {
     fn: async function (inputs, exits) {
 
         await SdtdConfig.update({ id: inputs.serverId }, { discordPrefix: inputs.prefix });
-        return exits.success();
+        let discordClient = sails.hooks.discordbot.getClient();
+        let guild = discordClient.guilds.get(inputs.guildId);
+        if (guild) {
+            guild.commandPrefix = inputs.prefix;
+            return exits.success();
+        } else {
+            return exits.error();
+        }
 
     }
 };
