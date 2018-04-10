@@ -26,7 +26,7 @@ pipeline {
             steps {
                 sh 'npm --version'
                 sh 'node -v'
-                sh 'npm install'
+                sh 'sudo npm install'
             }
         }
         stage('Run') {
