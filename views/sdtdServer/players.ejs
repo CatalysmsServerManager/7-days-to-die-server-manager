@@ -16,12 +16,13 @@
                   <th>Entity ID</th>
                   <th>Steam ID</th>
                   <th>IP</th>
+                  <th>Country</th>
                   <th>Playtime</th>
                   <th>Level</th>
                   <th>Score</th>
                   <th>Deaths</th>
                   <th>Players killed</th>
-                  <th>Zombies killed
+                  <th>Zombies killed</th>
                 </tr>
               </thead>
             </table>
@@ -42,41 +43,52 @@
           'copy', 'excel', 'pdf', 'print'
         ],
         columns: [{
-            data: "name",
-            render: function (data, type, row, meta) {
-              return `<a href="/player/${row.id}/profile">${data}</a>`;
-            }
-          },
-          {
-            data: 'entityId'
-          },
-          {
-            data: 'steamId'
-          },
-          {
-            data: 'ip'
-          },
-          {
-            data: 'playtime',
-            render: function (data, type, row, meta) {
-              return `${row.playtimeHHMMSS}`
-            }
-          },
-          {
-            data: 'level'
-          },
-          {
-            data: 'score'
-          },
-          {
-            data: 'deaths'
-          },
-          {
-            data: 'playerKills'
-          },
-          {
-            data: 'zombieKills'
+          data: "name",
+          render: function (data, type, row, meta) {
+            return `<a href="/player/${row.id}/profile">${data}</a>`;
           }
+        },
+        {
+          data: 'entityId'
+        },
+        {
+          data: 'steamId'
+        },
+        {
+          data: 'ip'
+        },
+        {
+          data: 'country',
+          render: function (data, type, row, meta) {
+            if (row.country) {
+              let flagImg = `<img src="../../images/flags/blank.gif" class="flag flag-${row.country.toLowerCase()}"/>`
+              return `${flagImg} ${row.country}`;
+            } else {
+              return `Unknown`
+            }
+          }
+        },
+        {
+          data: 'playtime',
+          render: function (data, type, row, meta) {
+            return `${row.playtimeHHMMSS}`
+          }
+        },
+        {
+          data: 'level'
+        },
+        {
+          data: 'score'
+        },
+        {
+          data: 'deaths'
+        },
+        {
+          data: 'playerKills'
+        },
+        {
+          data: 'zombieKills'
+        }
 
         ]
       });

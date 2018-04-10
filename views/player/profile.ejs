@@ -18,6 +18,13 @@
               <li class="list-group-item">Entity ID:
                 <%= player.entityId %>
               </li>
+              <% if (player.country) { %>
+              <li class="list-group-item">
+                <% let lowerCaseCountry = player.country.toLowerCase(); %>
+                <img src="../../images/flags/blank.gif" class="flag flag-<%= lowerCaseCountry %>" />
+                <%= player.country %>
+              </li>
+              <% } %>
               <li class="list-group-item">Location:
                 <%= player.positionX %>
                   <%= player.positionY %>
@@ -97,7 +104,7 @@
     updateTeleportLocations()
     function updateTeleportLocations() {
       let playerId = window.SAILS_LOCALS.player.id;
-      $.get('/api/player/teleports', {playerId: playerId}, teleportLocations => {
+      $.get('/api/player/teleports', { playerId: playerId }, teleportLocations => {
         teleportLocations.forEach(teleport => {
           let teleportHtml = `<tr><td>${teleport.name}</td><td>${teleport.x},${teleport.y},${teleport.z}</td></tr>`
           $("#player-teleport-locations").append(teleportHtml)
