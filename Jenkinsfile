@@ -4,7 +4,7 @@ pipeline {
         npm_config_cache = 'npm-cache'
         CSMM_TEST_SERVERNAME = 'CSMM-test'
         CSMM_TEST_IP = '192.168.0.201'
-        CSMM_TEST_WEBPORT ='8084'
+        CSMM_TEST_WEBPORT ='8082'
         CSMM_TEST_TELNETPORT = '8081'
         CSMM_TEST_AUTHNAME = 'niek'
         CSMM_TEST_AUTHTOKEN = 'test'
@@ -29,35 +29,10 @@ pipeline {
                 sh 'npm install'
             }
         }
-        stage('Mocha tests') {
+        stage('Run') {
             steps {
-                sh 'npm run unit-service-tests'
+                sh 'node app.js'
             }
-        }
-        stage('Feature tests') {
-            steps {
-                sh 'npm run feature-tests'
-            }
-        }
-    }
-    post {
-        always {
-             publishHTML target: [
-            allowMissing: true,
-            alwaysLinkToLastBuild: false,
-            keepAll: true,
-            reportDir: 'test/output/coverage',
-            reportFiles: 'index.html',
-            reportName: 'Coverage report'
-          ]
-           publishHTML target: [
-            allowMissing: true,
-            alwaysLinkToLastBuild: false,
-            keepAll: true,
-            reportDir: 'test/output/mochawesome',
-            reportFiles: 'mochawesome.html',
-            reportName: 'Mocha report'
-          ]
         }
     }
 }
