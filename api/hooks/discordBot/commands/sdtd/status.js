@@ -7,6 +7,7 @@ class Status extends Commando.Command {
       name: 'status',
       aliases: ['d7', '7day', 'day7'],
       group: 'sdtd',
+      guildOnly: true,
       memberName: 'status',
       description: '',
       details: "Show server status",
