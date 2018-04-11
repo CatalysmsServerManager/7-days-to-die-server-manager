@@ -45,8 +45,8 @@ module.exports = function discordBot(sails) {
             ])
             .registerDefaults()
             .registerCommandsIn(path.join(__dirname, 'commands'));
-            
-            // Listeners
+
+          // Listeners
 
           client.on('commandError', (command, error) => {
             sails.log.error(`Command error! ${command.memberName} trace: ${error.stack}`);
@@ -56,12 +56,15 @@ module.exports = function discordBot(sails) {
             sails.log.info(`Command ${command.name} ran by ${message.author.username}`);
           });
 
+
+
           // Login
 
           client.login(sails.config.custom.botToken).then(() => {
-              sails.log.info(`Discord bot logged in - ${client.guilds.size} guilds`);
-              return cb();
-            })
+            sails.log.info(`Discord bot logged in - ${client.guilds.size} guilds`);
+            initializeGuildPrefixes();
+            return cb();
+          })
             .catch((err) => {
               sails.log.error(err);
             });
@@ -91,8 +94,8 @@ module.exports = function discordBot(sails) {
 
     sendNotification: async function (serverId, message) {
       try {
-        let server = await SdtdServer.find({id: serverId}).limit(1);
-        let config = await SdtdConfig.find({id: server.config}).limit(1);
+        let server = await SdtdServer.find({ id: serverId }).limit(1);
+        let config = await SdtdConfig.find({ id: server.config }).limit(1);
         server = server[0];
         config = config[0];
 
@@ -110,3 +113,20 @@ module.exports = function discordBot(sails) {
   };
 
 };
+
+
+async function initializeGuildPrefixes() {
+  let serversWithDiscordEnabled = await SdtdConfig.find({
+    discordGuildId: {
+      '!=': ['']
+    }
+  })
+
+  serversWithDiscordEnabled.forEach(serverConfig => {
+    let guild = client.guilds.get(serverConfig.discordGuildId);
+    if (guild) {
+      guild.commandPrefix = serverConfig.discordPrefix;
+    }
+  })
+
+}

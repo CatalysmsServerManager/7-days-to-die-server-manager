@@ -38,6 +38,19 @@
             </div>
           </li>
 
+          <!-- Prefix select -->
+
+          <li class='list-group-item'>
+            <div class="form-inline">
+              <div class="form-group">
+                <label for="input-settings-discord-prefix">Prefix</label>
+                <input type="text" class="form-control" name="input-settings-discord-prefix" id="input-settings-discord-prefix" aria-describedby="discord-prefix-help"
+                  placeholder="<%= config.discordPrefix %>">
+                <small id="discord-prefix-help" class="form-text text-muted"></small>
+              </div>
+              <button id="inputs-setting-discord-prefix-btn" type="button" class="btn btn-primary">Set prefix</button>
+            </div>
+          </li>
 
 
 
@@ -231,7 +244,33 @@
       }
     })
 
+    $('#inputs-setting-discord-prefix-btn').click(e => {
+      e.preventDefault();
+      let newPrefix = $('#input-settings-discord-prefix').val();
+      let guildId = $('#input-settings-discord-guild').val();
+      if (!validator.isLength(newPrefix, {min:0, max: 3})) {
+        $('#input-settings-discord-prefix').addClass("bg-danger").removeClass("bg-success");
+        return alert('Prefix is maximum 3 characters long');
+      }
 
+      $.ajax({
+        url: '/api/sdtdserver/discord/prefix',
+        method: 'POST',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          prefix: newPrefix,
+          guildId: guildId,
+          serverId: window.SAILS_LOCALS.server.id
+        },
+        success: (data, status, xhr) => {
+          $('#input-settings-discord-prefix').addClass("bg-success").removeClass("bg-danger");
+          },
+          error: (xhr, status, error) => {
+            $('#input-settings-discord-prefix').addClass("bg-danger").removeClass("bg-success");
+            console.log(error);
+          }
+      })
+    })
 
 
     async function getWritableChannels(guildId) {

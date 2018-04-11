@@ -178,6 +178,7 @@ module.exports.routes = {
   'post /api/sdtdserver/setchatchannel': 'SdtdServerController/discordBot.set-chat-channel',
   'post /api/sdtdserver/setnotificationchannel': 'SdtdServerController/discordBot.set-notification-channel',
   'post /api/sdtdserver/setcommandschannel': 'SdtdServerController/discordBot.set-commands-channel',
+  'post /api/sdtdserver/discord/prefix' : 'SdtdServerController/discordBot.set-prefix',
 
 
   // PLAYER
