@@ -22,7 +22,7 @@ class Status extends Commando.Command {
     }
 
     let serverInfo = await sails.helpers.loadSdtdserverInfo(sdtdServer.id);
-    let playerInfo = await sails.helpers.loadPlayerData.with({server: sdtdServer.id, onlyOnline: true});
+    let playerInfo = await sails.helpers.loadPlayerData.with({serverId: sdtdServer.id, onlyOnline: true});
     let fps = await sails.helpers.sdtd.loadFps(sdtdServer.id);
 
     let onlinePlayers = playerInfo.players.filter(player => {
