@@ -46,7 +46,7 @@ module.exports = {
         playerList.total = playerList.players.length;
         playerList.totalUnfiltered = playerList.players.length;
       }
-      
+
       if (playerList.players) {
         let playerListWithInventories = await loadPlayersInventory(playerList.players, server);
         let newPlayerList = await playerListWithInventories.map(await updatePlayerInfo);
@@ -110,6 +110,7 @@ module.exports = {
               steamId: newPlayer.steamid,
               server: inputs.serverId,
               entityId: newPlayer.entityid,
+              lastOnline: newPlayer.lastonline,
               name: newPlayer.name,
               ip: newPlayer.ip,
             });
@@ -124,6 +125,7 @@ module.exports = {
                 positionY: newPlayer.position.y,
                 positionZ: newPlayer.position.z,
                 playtime: newPlayer.totalplaytime,
+                lastOnline: newPlayer.lastonline,
                 inventory: newPlayer.inventory,
                 banned: newPlayer.banned,
               }).fetch();
@@ -137,6 +139,7 @@ module.exports = {
                 positionX: newPlayer.position.x,
                 positionY: newPlayer.position.y,
                 positionZ: newPlayer.position.z,
+                lastOnline: newPlayer.lastonline,
                 playtime: newPlayer.totalplaytime,
                 banned: newPlayer.banned,
               }).fetch();
@@ -206,6 +209,7 @@ module.exports = {
               playerData.location.z = player.positionZ;
               playerData.inventory = player.inventory;
               playerData.totalPlaytime = player.playtime;
+              playerData.lastOnline = player.lastOnline,
               Object.defineProperty(playerData, 'playtimeHHMMSS', {
                 value: hhmmss(player.playtime)
               })
@@ -213,6 +217,7 @@ module.exports = {
               playerData.server = player.server;
               playerData.name = player.name;
               toSend.players.push(playerData);
+              console.log(playerData)
             });
             resolve(toSend);
           });
