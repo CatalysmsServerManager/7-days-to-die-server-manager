@@ -164,7 +164,6 @@ module.exports = {
       return new Promise((resolve, reject) => {
 
         if (inputs.onlyOnline) {
-          console.log('ONLY ONLINE')
           sevenDays.getOnlinePlayers({
             ip: server.ip,
             port: server.webPort,
@@ -177,13 +176,10 @@ module.exports = {
               });
             },
             success: function (playerList) {
-
-              console.log(playerList)
               resolve(playerList);
             }
           });
         } else {
-          console.log('ALL')
           sevenDays.getPlayerList({
             ip: server.ip,
             port: server.webPort,
@@ -233,7 +229,6 @@ module.exports = {
               playerData.server = player.server;
               playerData.name = player.name;
               toSend.players.push(playerData);
-              console.log(playerData)
             });
             resolve(toSend);
           });
