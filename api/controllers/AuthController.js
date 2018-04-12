@@ -14,7 +14,6 @@ module.exports = {
    * @description Authenticate a user via steam
    */
   steamLogin: function (req, res, next) {
-    sails.log.debug(`Logging in a user via steam`);
     passport.authenticate('steam', {
       failureRedirect: `${process.env.CSMM_HOSTNAME}`
     })(req, res);
