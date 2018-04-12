@@ -29,12 +29,13 @@ class ExecCommand extends Commando.Command {
 
     async run(msg, args) {
         let sdtdServer = await findSdtdServer(msg);
-        let isAdmin = await checkIfAdmin(msg.author.id, sdtdServer.id);
+
         if (!sdtdServer) {
             let errorEmbed = new client.errorEmbed(`Could not find a server to execute this command for! Make sure to add your server via the website and configure a channel to execute commands in.`)
             return msg.channel.send(errorEmbed)
         }
 
+        let isAdmin = await checkIfAdmin(msg.author.id, sdtdServer.id);
         if (!isAdmin) {
             let errorEmbed = new client.errorEmbed(`You are not authorized to execute commands! The server owner can add you as admin on the website`)
             return msg.channel.send(errorEmbed)
