@@ -200,6 +200,10 @@ module.exports = function sdtdLogs(sails) {
           eventEmitter.on('playerDeath', function (deathMessage) {
             sails.sockets.broadcast(server.id, 'playerDeath', deathMessage);
           });
+
+          eventEmitter.on('memUpdate', function(memUpdate) {
+            sails.sockets.broadcast(server.id, 'memUpdate', memUpdate);
+          })
           resolve(eventEmitter);
         }
       });
