@@ -11,6 +11,10 @@ module.exports = {
     },
     steamId: {
       type: 'string'
+    },
+    onlyOnline: {
+      type: 'boolean',
+      description: 'Should we only load info about online players?'
     }
   },
   exits: {
@@ -158,34 +162,46 @@ module.exports = {
 
     async function getPlayerList(server) {
       return new Promise((resolve, reject) => {
-        sevenDays.getPlayerList({
-          ip: server.ip,
-          port: server.webPort,
-          authName: server.authName,
-          authToken: server.authToken
-        }).exec({
-          error: function (err) {
-            resolve({
-              players: []
-            });
-          },
-          success: function (playerList) {
-            // If a steam ID is provided, we filter the list to only 1 player
-            if (inputs.steamId) {
-              let playerToFind;
-              playerList.players.forEach(player => {
-                if (player.steamid === inputs.steamId) {
-                  playerToFind = player;
-                }
+
+        if (inputs.onlyOnline) {
+          console.log('ONLY ONLINE')
+          sevenDays.getOnlinePlayers({
+            ip: server.ip,
+            port: server.webPort,
+            authName: server.authName,
+            authToken: server.authToken
+          }).exec({
+            error: function (err) {
+              resolve({
+                players: []
               });
-              if (_.isUndefined(playerToFind)) {
-                return exits.playerNotFound();
-              }
-              playerList.players = new Array(playerToFind);
+            },
+            success: function (playerList) {
+
+              console.log(playerList)
+              resolve(playerList);
             }
-            resolve(playerList);
-          }
-        });
+          });
+        } else {
+          console.log('ALL')
+          sevenDays.getPlayerList({
+            ip: server.ip,
+            port: server.webPort,
+            authName: server.authName,
+            authToken: server.authToken
+          }).exec({
+            error: function (err) {
+              resolve({
+                players: []
+              });
+            },
+            success: function (playerList) {
+              resolve(playerList);
+            }
+          });
+        }
+
+
       });
     }
 
