@@ -37,6 +37,10 @@ var customLogger = new winston.Logger({
   ]
 });
 
+// const { exec } = require('child_process');
+// exec(`"node_modules/frontail/bin/frontail" -n 20 -t dark --ui-highlight ./logs/devlog.log`);
+
+
 module.exports.log = {
   // Pass in our custom logger, and pass all log levels through.
   custom: customLogger,

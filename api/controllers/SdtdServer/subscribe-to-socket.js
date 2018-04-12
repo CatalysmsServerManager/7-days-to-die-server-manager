@@ -37,7 +37,6 @@ module.exports = {
    */
 
   fn: async function (inputs, exits) {
-    sails.log.debug(`API - SdtdServer:subscribeToSocket - subscribing to server ${inputs.serverId}`);
 
     if (!this.req.isSocket) {
       throw 'notASocket';

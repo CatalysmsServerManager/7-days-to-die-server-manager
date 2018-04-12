@@ -37,7 +37,6 @@ module.exports = {
    */
 
   fn: async function (inputs, exits) {
-    sails.log.debug(`API - SdtdServer:getPlayers - Loading player data!`);
     try {
       let server = await SdtdServer.findOne({
         id: inputs.serverId
@@ -48,6 +47,7 @@ module.exports = {
       sails.helpers.loadPlayerData(server.id)
         .switch({
           success: function(data) {
+            sails.log.debug(`API - SdtdServer:getPlayers - Loaded player data for server ${inputs.serverId}! - Found ${data.totalPlayers} players`);
             return exits.success(data);
           },
           error: function(error) {
