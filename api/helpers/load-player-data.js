@@ -51,6 +51,14 @@ module.exports = {
         playerList.totalUnfiltered = playerList.players.length;
       }
 
+      if (inputs.onlyOnline) {
+        playerList.players = playerList.players.filter(player => {
+          return player.online
+        })
+        playerList.total = playerList.players.length;
+        playerList.totalUnfiltered = playerList.players.length;
+      }
+
       if (playerList.players) {
         let playerListWithInventories = await loadPlayersInventory(playerList.players, server);
         let newPlayerList = await playerListWithInventories.map(await updatePlayerInfo);
@@ -113,13 +121,13 @@ module.exports = {
               server: inputs.serverId,
               entityId: newPlayer.entityid
             }, {
-              steamId: newPlayer.steamid,
-              server: inputs.serverId,
-              entityId: newPlayer.entityid,
-              lastOnline: newPlayer.lastonline,
-              name: newPlayer.name,
-              ip: newPlayer.ip,
-            });
+                steamId: newPlayer.steamid,
+                server: inputs.serverId,
+                entityId: newPlayer.entityid,
+                lastOnline: newPlayer.lastonline,
+                name: newPlayer.name,
+                ip: newPlayer.ip,
+              });
             if (newPlayer.online) {
               playerToSend = await Player.update({
                 steamId: foundOrCreatedPlayer.steamId,
@@ -164,42 +172,21 @@ module.exports = {
 
     async function getPlayerList(server) {
       return new Promise((resolve, reject) => {
-
-        if (inputs.onlyOnline) {
-          sevenDays.getOnlinePlayers({
-            ip: server.ip,
-            port: server.webPort,
-            authName: server.authName,
-            authToken: server.authToken
-          }).exec({
-            error: function (err) {
-              resolve({
-                players: []
-              });
-            },
-            success: function (playerList) {
-              resolve(playerList);
-            }
-          });
-        } else {
-          sevenDays.getPlayerList({
-            ip: server.ip,
-            port: server.webPort,
-            authName: server.authName,
-            authToken: server.authToken
-          }).exec({
-            error: function (err) {
-              resolve({
-                players: []
-              });
-            },
-            success: function (playerList) {
-              resolve(playerList);
-            }
-          });
-        }
-
-
+        sevenDays.getPlayerList({
+          ip: server.ip,
+          port: server.webPort,
+          authName: server.authName,
+          authToken: server.authToken
+        }).exec({
+          error: function (err) {
+            resolve({
+              players: []
+            });
+          },
+          success: function (playerList) {
+            resolve(playerList);
+          }
+        });
       });
     }
 
@@ -224,9 +211,9 @@ module.exports = {
               playerData.inventory = player.inventory;
               playerData.totalPlaytime = player.playtime;
               playerData.lastOnline = player.lastOnline,
-              Object.defineProperty(playerData, 'playtimeHHMMSS', {
-                value: hhmmss(player.playtime)
-              })
+                Object.defineProperty(playerData, 'playtimeHHMMSS', {
+                  value: hhmmss(player.playtime)
+                })
               playerData.banned = player.banned;
               playerData.server = player.server;
               playerData.name = player.name;
@@ -257,16 +244,16 @@ module.exports = {
               let updatedPlayer = await Player.update({
                 steamId: steamId
               }, {
-                avatarUrl: avatarUrl
-              });
+                  avatarUrl: avatarUrl
+                });
               resolve(avatarUrl);
             } else {
               let avatarUrl = 'https://i.imgur.com/NMvWd07.png';
               let updatedPlayer = await Player.update({
                 steamId: steamId
               }, {
-                avatarUrl: avatarUrl
-              });
+                  avatarUrl: avatarUrl
+                });
               resolve(avatarUrl);
             }
           } catch (error) {
@@ -277,8 +264,8 @@ module.exports = {
           let updatedPlayer = await Player.update({
             steamId: steamId
           }, {
-            avatarUrl: avatarUrl
-          });
+              avatarUrl: avatarUrl
+            });
           resolve(avatarUrl);
         });
       });
