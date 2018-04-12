@@ -8,6 +8,7 @@ class Toptime extends Commando.Command {
       aliases: ['toptime', 'time', 'timeplayed'],
       group: 'sdtd',
       memberName: 'toptime',
+      guildOnly: true,
       description: '',
       details: "Show which players have the most playtime on the server",
       args: [{

@@ -190,7 +190,9 @@
 
       function drawAdmins(admins) {
         admins.forEach(admin => {
-          let element = $('<a>').addClass('list-group-item').text(`${admin.username} \n${admin.steamId}`)
+          let element = $('<a>').addClass('list-group-item').text(`${admin.username}
+            Steam ID: ${admin.steamId}
+            Discord ID: ${admin.discordId ? admin.discordId : 'Not linked'}`)
           $("#input-settings-server-admin-list").append(element);
         })
       }
