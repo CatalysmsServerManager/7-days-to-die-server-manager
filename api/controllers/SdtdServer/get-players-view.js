@@ -39,7 +39,6 @@ module.exports = {
       let server = await SdtdServer.findOne({
         id: inputs.serverId
       });
-      await sails.helpers.loadPlayerData(inputs.serverId, undefined, false);
       let players = await Player.find({server: server.id})
 
       players.map(player => {

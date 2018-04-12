@@ -204,6 +204,7 @@ module.exports = {
               playerData.online = player.online;
               playerData.steamId = player.steamId;
               playerData.entityId = player.entityId;
+              playerData.ip = player.ip;
               playerData.location = new Object();
               playerData.location.x = player.positionX;
               playerData.location.y = player.positionY;

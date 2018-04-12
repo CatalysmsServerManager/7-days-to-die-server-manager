@@ -3,12 +3,15 @@
   <body>
 
     <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-12">
-          <h1>Player overview</h1>
-
-          <% include ./partials/backToDashboard %>
-
+      <h1>Player overview</h1>
+      <% include ./partials/backToDashboard %>
+        <div class="row">
+          <button id="reload-players-btn" type="button" class="btn btn-primary">Update player data</button>
+          <small>If you have a large server, this may take a while</small>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div id="loading-indicator"><i class="fa fa-cogs" aria-hidden="true"></i>Crunching the latest data. This page will reload when finished</div>
             <table id='players-overview' class="table display hover">
               <thead>
                 <tr>
@@ -27,15 +30,17 @@
                 </tr>
               </thead>
             </table>
+          </div>
         </div>
-      </div>
     </div>
   </body>
 
 
   <script>
     $(document).ready(function () {
-      $('#players-overview').DataTable({
+      $('#loading-indicator').hide();
+
+      let playerDataTable = $('#players-overview').DataTable({
         data: window.SAILS_LOCALS.players,
         dom: 'Bfrtip',
         fixedHeader: true,
@@ -96,6 +101,27 @@
 
         ]
       });
+
+      $('#reload-players-btn').click(e => {
+        e.preventDefault();
+        $('#players-overview').fadeOut();
+        $('#loading-indicator').fadeIn();
+
+
+        $.ajax({
+          url: '/api/sdtdserver/players',
+          data: {
+            serverId: window.SAILS_LOCALS.server.id,
+            onlyOnline: false
+          },
+          success: (data, status, xhr) => {
+            window.location.reload();
+          },
+          error: (xhr, status, error) => {
+            console.log(`Could not update players! error: ${error}`)
+          }
+        })
+      })
     });
 
   </script>
