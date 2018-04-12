@@ -11,6 +11,10 @@ module.exports = {
     serverId: {
       required: true,
       example: 4
+    },
+    onlyOnline: {
+      example : true,
+      description: 'Only loads online player data, defaults to true'
     }
 
   },
@@ -44,10 +48,9 @@ module.exports = {
       if (_.isUndefined(server)) {
         return exits.notFound();
       }
-      sails.helpers.loadPlayerData(server.id)
+      sails.helpers.loadPlayerData.with({serverId: inputs.serverId, onlyOnline: inputs.onlyOnline === false ? false : true})
         .switch({
           success: function(data) {
-            sails.log.debug(`API - SdtdServer:getPlayers - Loaded player data for server ${inputs.serverId}! - Found ${data.totalPlayers} players`);
             return exits.success(data);
           },
           error: function(error) {

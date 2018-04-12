@@ -39,9 +39,8 @@ module.exports = {
       let server = await SdtdServer.findOne({
         id: inputs.serverId
       });
-      let players = await Player.find({
-        server: server.id
-      });
+      await sails.helpers.loadPlayerData(inputs.serverId, undefined, false);
+      let players = await Player.find({server: server.id})
 
       players.map(player => {
         const hhmmss = require('@streammedev/hhmmss')

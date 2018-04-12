@@ -11,6 +11,10 @@ module.exports = {
     },
     steamId: {
       type: 'string'
+    },
+    onlyOnline: {
+      type: 'boolean',
+      description: 'Should we only load info about online players?'
     }
   },
   exits: {
@@ -37,6 +41,16 @@ module.exports = {
     try {
       let server = await SdtdServer.findOne(inputs.serverId);
       let playerList = await getPlayerList(server);
+
+      // If steam ID is given, filter the response. Allocs API currently doesn't support filtering at this stage
+      if (inputs.steamId) {
+        playerList.players = playerList.players.filter(player => {
+          return player.steamid == inputs.steamId
+        })
+        playerList.total = playerList.players.length;
+        playerList.totalUnfiltered = playerList.players.length;
+      }
+
       if (playerList.players) {
         let playerListWithInventories = await loadPlayersInventory(playerList.players, server);
         let newPlayerList = await playerListWithInventories.map(await updatePlayerInfo);
@@ -46,9 +60,11 @@ module.exports = {
         }
         let playerStats = await sails.helpers.sdtd.loadPlayerStats(inputs.serverId);
         let jsonToSend = await createJSON(newPlayerList);
+        sails.log.debug(`HELPER - loadPlayerData - Loaded player data for server ${inputs.serverId}! SteamId: ${inputs.steamId} - Found ${jsonToSend.totalPlayers} players`);
         exits.success(jsonToSend);
       } else {
         let jsonToSend = await createJSON(playerList);
+        sails.log.debug(`HELPER - loadPlayerData - Loaded player data for server ${inputs.serverId}! SteamId: ${inputs.steamId} - Found ${jsonToSend.totalPlayers} players`);
         exits.success(jsonToSend);
       }
 
@@ -100,6 +116,7 @@ module.exports = {
               steamId: newPlayer.steamid,
               server: inputs.serverId,
               entityId: newPlayer.entityid,
+              lastOnline: newPlayer.lastonline,
               name: newPlayer.name,
               ip: newPlayer.ip,
             });
@@ -114,6 +131,7 @@ module.exports = {
                 positionY: newPlayer.position.y,
                 positionZ: newPlayer.position.z,
                 playtime: newPlayer.totalplaytime,
+                lastOnline: newPlayer.lastonline,
                 inventory: newPlayer.inventory,
                 banned: newPlayer.banned,
               }).fetch();
@@ -127,6 +145,7 @@ module.exports = {
                 positionX: newPlayer.position.x,
                 positionY: newPlayer.position.y,
                 positionZ: newPlayer.position.z,
+                lastOnline: newPlayer.lastonline,
                 playtime: newPlayer.totalplaytime,
                 banned: newPlayer.banned,
               }).fetch();
@@ -145,34 +164,42 @@ module.exports = {
 
     async function getPlayerList(server) {
       return new Promise((resolve, reject) => {
-        sevenDays.getPlayerList({
-          ip: server.ip,
-          port: server.webPort,
-          authName: server.authName,
-          authToken: server.authToken
-        }).exec({
-          error: function (err) {
-            resolve({
-              players: []
-            });
-          },
-          success: function (playerList) {
-            // If a steam ID is provided, we filter the list to only 1 player
-            if (inputs.steamId) {
-              let playerToFind;
-              playerList.players.forEach(player => {
-                if (player.steamid === inputs.steamId) {
-                  playerToFind = player;
-                }
+
+        if (inputs.onlyOnline) {
+          sevenDays.getOnlinePlayers({
+            ip: server.ip,
+            port: server.webPort,
+            authName: server.authName,
+            authToken: server.authToken
+          }).exec({
+            error: function (err) {
+              resolve({
+                players: []
               });
-              if (_.isUndefined(playerToFind)) {
-                return exits.playerNotFound();
-              }
-              playerList.players = new Array(playerToFind);
+            },
+            success: function (playerList) {
+              resolve(playerList);
             }
-            resolve(playerList);
-          }
-        });
+          });
+        } else {
+          sevenDays.getPlayerList({
+            ip: server.ip,
+            port: server.webPort,
+            authName: server.authName,
+            authToken: server.authToken
+          }).exec({
+            error: function (err) {
+              resolve({
+                players: []
+              });
+            },
+            success: function (playerList) {
+              resolve(playerList);
+            }
+          });
+        }
+
+
       });
     }
 
@@ -196,6 +223,7 @@ module.exports = {
               playerData.location.z = player.positionZ;
               playerData.inventory = player.inventory;
               playerData.totalPlaytime = player.playtime;
+              playerData.lastOnline = player.lastOnline,
               Object.defineProperty(playerData, 'playtimeHHMMSS', {
                 value: hhmmss(player.playtime)
               })

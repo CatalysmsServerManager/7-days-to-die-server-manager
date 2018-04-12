@@ -33,6 +33,11 @@
               <li class="list-group-item">Playtime:
                 <%= player.playtimeHHMMSS %>
               </li>
+              <li class="list-group-item">Last online:
+                <% let lastOnlineDate = new Date(player.lastOnline) %>
+                <% let lastOnlineString = `${lastOnlineDate.toDateString()} ${lastOnlineDate.toTimeString()}` %>
+                <%= lastOnlineString %>
+              </li>
 
               <li class="list-group-item">Ban status:
                 <%= player.banned %>

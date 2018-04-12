@@ -165,7 +165,9 @@ module.exports = function sdtdLogs(sails) {
               notificationType: 'playerConnected',
               player: playerData.players[0]
             })
-            await Player.update({ server: server.id, steamId: connectedMsg.steamID }, {country: connectedMsg.country})
+            if (connectedMsg.country != null) {
+              await Player.update({ server: server.id, steamId: connectedMsg.steamID }, {country: connectedMsg.country})
+            }
 
           });
 
