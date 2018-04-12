@@ -37,6 +37,16 @@ module.exports = {
     try {
       let server = await SdtdServer.findOne(inputs.serverId);
       let playerList = await getPlayerList(server);
+
+      // If steam ID is given, filter the response. Allocs API currently doesn't support filtering at this stage
+      if (inputs.steamId) {
+        playerList.players = playerList.players.filter(player => {
+          return player.steamid == inputs.steamId
+        })
+        playerList.total = playerList.players.length;
+        playerList.totalUnfiltered = playerList.players.length;
+      }
+      
       if (playerList.players) {
         let playerListWithInventories = await loadPlayersInventory(playerList.players, server);
         let newPlayerList = await playerListWithInventories.map(await updatePlayerInfo);
