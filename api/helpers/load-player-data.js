@@ -60,9 +60,11 @@ module.exports = {
         }
         let playerStats = await sails.helpers.sdtd.loadPlayerStats(inputs.serverId);
         let jsonToSend = await createJSON(newPlayerList);
+        sails.log.debug(`HELPER - loadPlayerData - Loaded player data for server ${inputs.serverId}! SteamId: ${inputs.steamId} - Found ${jsonToSend.totalPlayers} players`);
         exits.success(jsonToSend);
       } else {
         let jsonToSend = await createJSON(playerList);
+        sails.log.debug(`HELPER - loadPlayerData - Loaded player data for server ${inputs.serverId}! SteamId: ${inputs.steamId} - Found ${jsonToSend.totalPlayers} players`);
         exits.success(jsonToSend);
       }
 
