@@ -18,6 +18,7 @@
                   <th>IP</th>
                   <th>Country</th>
                   <th>Playtime</th>
+                  <th>Last online</th>
                   <th>Level</th>
                   <th>Score</th>
                   <th>Deaths</th>
@@ -73,6 +74,9 @@
           render: function (data, type, row, meta) {
             return `${row.playtimeHHMMSS}`
           }
+        },
+        {
+          data: 'lastOnline',
         },
         {
           data: 'level'
