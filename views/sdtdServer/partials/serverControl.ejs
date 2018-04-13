@@ -15,7 +15,10 @@
       <% const ticketsLink = '/sdtdserver/' + server.id + '/tickets' %>
         <a href='<%= ticketsLink %>' class="btn btn-default btn-primary">
           <em class="glyphicon glyphicon-align-justify"></em>
-          <i class="fa fa-ticket" aria-hidden="true"></i> Tickets <span id="sdtd-server-<%= server.id %>-tickets-badge" class="badge badge-secondary"><i class="fa fa-cog" aria-hidden="true"></i></span>
+          <i class="fa fa-ticket" aria-hidden="true"></i> Tickets
+          <span id="sdtd-server-<%= server.id %>-tickets-badge" class="badge badge-secondary">
+            <i class="fa fa-cog" aria-hidden="true"></i>
+          </span>
         </a>
 
         <% const settingsLink = '/sdtdserver/' + server.id + '/settings' %>
@@ -26,30 +29,66 @@
 
           <% include ./restartServer %>
 
-            <% const deleteLink = '/sdtdserver/' + server.id + '/delete' %>
-              <a href='<%= deleteLink %>'>
-                <button id="delete-server-button" class="btn btn-default btn-danger" type="button">
-                  <em class="glyphicon glyphicon-align-justify"></em>
-                  <i class="fa fa-trash-o" aria-hidden="true"></i> Delete server
-                </button>
-              </a>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-server-button">
+              Delete
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="delete-server-button" tabindex="-1" role="dialog" aria-labelledby="delete-server-modal" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title" id="delete-server-modal">Delete server</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="container-fluid">
+                      Are you sure?
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <% const deleteLink = '/sdtdserver/' + server.id + '/delete' %>
+                      <a href='<%= deleteLink %>'>
+                        <button id="delete-server-button" class="btn btn-default btn-danger" type="button">
+                          <em class="glyphicon glyphicon-align-justify"></em>
+                          <i class="fa fa-trash-o" aria-hidden="true"></i> Delete server
+                        </button>
+                      </a>
+
+                      <button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <script>
+              $('#exampleModal').on('show.bs.modal', event => {
+                var button = $(event.relatedTarget);
+                var modal = $(this);
+                // Use above variables to manipulate the DOM
+
+              });
+            </script>
 </div>
 
 <script>
   $(document).ready(function () {
-          $.ajax({
-            url: `/api/sdtdticket/opentickets`,
-            data: {
-              serverId: <%= server.id %>
+    $.ajax({
+      url: `/api/sdtdticket/opentickets`,
+      data: {
+        serverId: <%= server.id %>
             },
-            success: (data, status, xhr) => {
-              let opentickets = data;
-              $('#sdtd-server-<%= server.id %>-tickets-badge').text(opentickets.length)
+      success: (data, status, xhr) => {
+        let opentickets = data;
+        $('#sdtd-server-<%= server.id %>-tickets-badge').text(opentickets.length)
 
-            },
-            error: (xhr, status, error) => {
-              console.log(error)
-            }
-          });
+      },
+      error: (xhr, status, error) => {
+        console.log(error)
+      }
+    });
   })
 </script>
