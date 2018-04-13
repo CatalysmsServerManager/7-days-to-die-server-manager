@@ -38,6 +38,7 @@
     "custom-tests": "npm run unit-service-tests && npm run feature-tests",
     "unit-service-tests": "./node_modules/.bin/nyc --reporter=html --report-dir=./test/output/coverage mocha test/lifecycle.test.js ./test/unit-service/*.test.js --reporter mochawesome --reporter-options reportDir=./test/output/mochawesome --exit",
     "feature-tests": "./node_modules/.bin/codeceptjs run -c ./test --steps",
+    "dev" : "nodemon",
     "debug": "node debug app.js"
   },
   "main": "app.js",
