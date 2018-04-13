@@ -19,56 +19,56 @@
                 <%= player.entityId %>
               </li>
               <% if (player.country) { %>
-              <li class="list-group-item">
-                <% let lowerCaseCountry = player.country.toLowerCase(); %>
-                <img src="../../images/flags/blank.gif" class="flag flag-<%= lowerCaseCountry %>" />
-                <%= player.country %>
-              </li>
-              <% } %>
-              <li class="list-group-item">Location:
-                <%= player.positionX %>
-                  <%= player.positionY %>
-                    <%= player.positionZ %>
-              </li>
-              <li class="list-group-item">Playtime:
-                <%= player.playtimeHHMMSS %>
-              </li>
-              <li class="list-group-item">Last online:
-                <% let lastOnlineDate = new Date(player.lastOnline) %>
-                <% let lastOnlineString = `${lastOnlineDate.toDateString()} ${lastOnlineDate.toTimeString()}` %>
-                <%= lastOnlineString %>
-              </li>
+                <li class="list-group-item">
+                  <% let lowerCaseCountry = player.country.toLowerCase(); %>
+                    <img src="../../images/flags/blank.gif" class="flag flag-<%= lowerCaseCountry %>" />
+                    <%= player.country %>
+                </li>
+                <% } %>
+                  <li class="list-group-item">Location:
+                    <%= player.positionX %>
+                      <%= player.positionY %>
+                        <%= player.positionZ %>
+                  </li>
+                  <li class="list-group-item">Playtime:
+                    <%= player.playtimeHHMMSS %>
+                  </li>
+                  <li class="list-group-item">Last online:
+                    <% let lastOnlineDate = new Date(player.lastOnline) %>
+                      <% let lastOnlineString = `${lastOnlineDate.toDateString()} ${lastOnlineDate.toTimeString()}` %>
+                        <%= lastOnlineString %>
+                  </li>
 
-              <li class="list-group-item">Ban status:
-                <%= player.banned %>
-              </li>
-              <li class="list-group-item">Level:
-                <%= player.level %>
-              </li>
-              <li class="list-group-item">Teleport locations:
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Location</th>
-                    </tr>
-                  </thead>
-                  <tbody id='player-teleport-locations'>
-                  </tbody>
-                </table>
-              </li>
-              <li class="list-group-item">Zombie kills:
-                <%= player.zombieKills %>
-              </li>
-              <li class="list-group-item">Player kills:
-                <%= player.playerKills %>
-              </li>
-              <li class="list-group-item">Score:
-                <%= player.score %>
-              </li>
-              <li class="list-group-item">Server:
-                <%= server.name %>
-              </li>
+                  <li class="list-group-item">Ban status:
+                    <%= player.banned %>
+                  </li>
+                  <li class="list-group-item">Level:
+                    <%= player.level %>
+                  </li>
+                  <li class="list-group-item">Teleport locations:
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Location</th>
+                        </tr>
+                      </thead>
+                      <tbody id='player-teleport-locations'>
+                      </tbody>
+                    </table>
+                  </li>
+                  <li class="list-group-item">Zombie kills:
+                    <%= player.zombieKills %>
+                  </li>
+                  <li class="list-group-item">Player kills:
+                    <%= player.playerKills %>
+                  </li>
+                  <li class="list-group-item">Score:
+                    <%= player.score %>
+                  </li>
+                  <li class="list-group-item">Server:
+                    <%= server.name %>
+                  </li>
             </ul>
           </div>
 
@@ -83,10 +83,7 @@
                       <%- include("./partials/kickPlayerButton", {player: player}) %>
                         <%- include("./partials/teleportPlayerButton", {player: player}) %>
                           <% } %>
-
-                            <% if (player.lastOnline == '') { %>
-                              <%- include("./partials/giveItemButton", {player: player}) %>
-                                <% } %>
+                            <%- include("./partials/giveItemButton", {player: player}) %>
 
 
             </div>
