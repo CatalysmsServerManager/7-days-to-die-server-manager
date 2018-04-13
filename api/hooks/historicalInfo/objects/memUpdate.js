@@ -34,6 +34,7 @@ async function saveInfoToDatabase(server, memUpdate) {
         memUpdate.heap = memUpdate.heap.replace('MB', '');
         memUpdate.rss = memUpdate.rss.replace('MB', '');
         await HistoricalInfo.create({
+            type: 'memUpdate',
             server: server.id,
             fps: memUpdate.fps,
             heap: memUpdate.heap,
@@ -57,7 +58,8 @@ async function clearOldInfo(server, config) {
         borderDate.setDate(borderDate.getDate() - daysToKeepData);
         let epochTimeToDeleteFrom = borderDate.valueOf();
         await HistoricalInfo.destroy({
-            createdAt: { '<': epochTimeToDeleteFrom }
+            createdAt: { '<': epochTimeToDeleteFrom },
+            type: 'memUpdate'
         })
     } catch (error) {
         sails.log.error(`HOOKS - HistoricalInfo:memUpdate - Error deleting data -${error}`)

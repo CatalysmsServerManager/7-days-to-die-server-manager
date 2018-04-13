@@ -9,6 +9,12 @@ module.exports = {
 
   attributes: {
 
+    // Type of info (memUpdate, inventory, location)
+    type: {
+      type: 'string',
+      required: true
+    },
+
     fps: {
       type: 'number'
     },
