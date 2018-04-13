@@ -59,12 +59,15 @@ module.exports = {
         }
       })
 
+      await HistoricalInfo.destroy({
+        server: server.id
+      })
       await SdtdConfig.destroy({
         server: server.id
       });
       await Player.destroy({
         server: server.id
-      })
+      });
       await SdtdServer.destroy({
         id: server.id
       });
