@@ -53,9 +53,8 @@ async function saveInfoToDatabase(server, memUpdate) {
 async function clearOldInfo(server, config) {
     try {
         let daysToKeepData = config.daysToKeepData
-        let secondsToKeepData = daysToKeepData * 24 * 60;
         let borderDate = new Date();
-        borderDate.setSeconds(borderDate.getSeconds() - secondsToKeepData);
+        borderDate.setDate(borderDate.getDate() - daysToKeepData);
         let epochTimeToDeleteFrom = borderDate.valueOf();
         await HistoricalInfo.destroy({
             createdAt: { '<': epochTimeToDeleteFrom }
