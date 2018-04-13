@@ -134,7 +134,12 @@ module.exports = {
     config: {
       collection: 'SdtdConfig',
       via: 'server'
-    }
+    },
+
+    historicalInfo: {
+      collection: 'historicalinfo',
+      via: 'server'
+    },
   },
 
 };

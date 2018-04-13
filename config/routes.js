@@ -85,6 +85,7 @@ module.exports.routes = {
   'get /sdtdserver/:serverId/settings': 'SdtdServerController.settings',
   'get /sdtdserver/:serverId/info': 'SdtdServerController.server-info-view',
   'get /sdtdserver/:serverId/tickets': 'SdtdTicket.server-tickets-view',
+  'get /sdtdserver/:serverId/analytics': 'SdtdServerController/historicalData.view-analytics',
   
   'get /player/:playerId/profile': 'PlayerController.profile',
 
@@ -111,6 +112,10 @@ module.exports.routes = {
   'get /api/sdtdserver/findwriteablechannelsinguild' : 'SdtdServerController/discordBot.find-writeable-channels-in-guild',
   'get /api/sdtdserver/onlinestatus': 'SdtdServerController.is-online',
   'get /api/sdtdserver/fps': 'SdtdServerController.get-fps',
+
+  // Historical data
+
+  'get /api/sdtdserver/data/memupdate': 'SdtdServerController/historicalData.get-mem-update',
 
   // Tickets
   

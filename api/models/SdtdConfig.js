@@ -55,7 +55,7 @@ module.exports = {
       }
     },
 
-    enabledCallAdmin : {
+    enabledCallAdmin: {
       type: 'boolean',
       defaultsTo: false
     },
@@ -93,9 +93,9 @@ module.exports = {
      * @description A specific discord channel to use for this server
      */
 
-     discordCommandsChannelId: {
+    discordCommandsChannelId: {
       type: 'string'
-     },
+    },
 
 
     /**
@@ -118,11 +118,11 @@ module.exports = {
       type: 'string'
     },
 
-        /**
-     * @memberof SdtdServer
-     * @var {string} chatChannelRichMessages
-     * @description Whether to use rich messages for (dis)connect messages
-     */
+    /**
+ * @memberof SdtdServer
+ * @var {string} chatChannelRichMessages
+ * @description Whether to use rich messages for (dis)connect messages
+ */
 
     chatChannelRichMessages: {
       type: 'boolean',
@@ -168,6 +168,23 @@ module.exports = {
      */
 
     loggingEnabled: {
+      type: 'boolean',
+      defaultsTo: true
+    },
+
+    //  _    _ _     _             _           _   _        __      
+    // | |  | (_)   | |           (_)         | | (_)      / _|     
+    // | |__| |_ ___| |_ ___  _ __ _  ___ __ _| |  _ _ __ | |_ ___  
+    // |  __  | / __| __/ _ \| '__| |/ __/ _` | | | | '_ \|  _/ _ \ 
+    // | |  | | \__ \ || (_) | |  | | (_| (_| | | | | | | | || (_) |
+    // |_|  |_|_|___/\__\___/|_|  |_|\___\__,_|_| |_|_| |_|_| \___/ 
+
+    daysToKeepData: {
+      type: 'number',
+      defaultsTo: 1
+    },
+
+    memUpdateInfoEnabled: {
       type: 'boolean',
       defaultsTo: true
     },
@@ -261,7 +278,7 @@ module.exports = {
 
     server: {
       required: true,
-  //    unique: true,
+      //    unique: true,
       model: 'sdtdserver',
     },
 

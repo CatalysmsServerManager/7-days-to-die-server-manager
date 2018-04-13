@@ -1,0 +1,8 @@
+<%- exposeLocalsToBrowser() %>
+
+<div class="row">
+    <h1><%= server.name %> analytics</h1>
+</div>
+
+
+<%- include('./partials/historicalData/chart-memUpdate.ejs', {server: server}) %>
