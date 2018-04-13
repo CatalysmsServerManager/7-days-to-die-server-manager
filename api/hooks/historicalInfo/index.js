@@ -33,18 +33,28 @@ module.exports = function historicalInfo(sails) {
 
         },
 
+        getStatus: function (server, type) {
+            switch (type) {
+                case 'memUpdate':
+                    return memUpdateMap.has(String(server.id))
+                    break;
 
-        getStatus: function (serverId) {
-            serverId = String(serverId);
-            let status = historicalInfoMap.get(serverId);
-            return status;
+                default:
+                    throw new Error('Unknown updateObject type')
+                    break;
+            }
         }
+
     };
+
+
+
+
 
     function getMap(server, type) {
         switch (type) {
             case 'memUpdate':
-                memUpdateMap.get(String(server.id), updateObject)
+                return memUpdateMap.get(String(server.id), type)
                 break;
 
             default:
@@ -56,7 +66,7 @@ module.exports = function historicalInfo(sails) {
     function setMap(server, updateObject) {
         switch (updateObject.type) {
             case 'memUpdate':
-                memUpdateMap.set(String(server.id), updateObject);
+                return memUpdateMap.set(String(server.id), updateObject);
                 break;
 
             default:
@@ -68,7 +78,7 @@ module.exports = function historicalInfo(sails) {
     function deleteMap(serverId, updateObject) {
         switch (updateObject.type) {
             case 'memUpdate':
-                memUpdateMap.delete(String(server.id), updateObject);
+                return memUpdateMap.delete(String(server.id), updateObject);
                 break;
 
             default:
