@@ -112,6 +112,10 @@ module.exports.routes = {
   'get /api/sdtdserver/onlinestatus': 'SdtdServerController.is-online',
   'get /api/sdtdserver/fps': 'SdtdServerController.get-fps',
 
+  // Historical data
+
+  'get /api/sdtdserver/data/memupdate': 'SdtdServerController/historicalData.get-mem-update',
+
   // Tickets
   
   'post /api/sdtdTicket/updateTicketStatus': 'SdtdTicket.update-ticket-status',
