@@ -10,6 +10,7 @@ async function checkIfAdmin(discordUserId, sdtdServerId) {
     try {
         const sdtdServer = await SdtdServer.findOne({id: sdtdServerId}).populate('admins').populate('owner');
         let isAdmin = false;
+        let client = sails.hooks.discordbot.getClient();
         sdtdServer.admins.forEach(admin => {
             if (admin.discordId == discordUserId) {
                 isAdmin = true
@@ -18,6 +19,11 @@ async function checkIfAdmin(discordUserId, sdtdServerId) {
         if (sdtdServer.owner.discordId == discordUserId) {
             isAdmin = true
         }
+
+        if (client.isOwner(discordUserId)) {
+            isAdmin = true
+        }
+        
         return isAdmin
     } catch (error) {
         sails.log.error(`HOOK - discordBot:checkIfAdmin - ${error}`)
