@@ -5,33 +5,27 @@ module.exports = function historicalInfo(sails) {
     let historicalInfoMap = new Map();
 
     return {
-        /**
-         * @name initialize
-         * @memberof module:7dtdLoggingHook
-         * @description Called on app launch, loads all servers which have logging enabled and creates logging objects for these
-         * @method
-         * @private
-         */
         initialize: function (cb) {
             sails.on('hook:orm:loaded', async function () {
                 sails.on('hook:sdtdlogs:loaded', async function() {
-                    
+                    console.log('historical info loaded')
+                    return cb()
                 })
 
             });
         },
 
-        start: async function (serverID) {
+        start: async function (serverId) {
         },
 
-        stop: async function (serverID) {
+        stop: async function (serverId) {
 
         },
 
 
         getStatus: function (serverId) {
             serverId = String(serverId);
-            let status = historicalInfoMap.has(serverId);
+            let status = historicalInfoMap.get(serverId);
             return status;
         }
     };
