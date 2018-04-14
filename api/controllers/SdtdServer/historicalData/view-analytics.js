@@ -27,7 +27,7 @@ module.exports = {
                 id: inputs.serverId
             });
 
-            sails.log.debug('VIEW - SdtdServer:analytics-view - serving analytics view');
+            sails.log.info(`VIEW - SdtdServer:analytics-view - serving analytics view for server ${server.name}`);
             exits.success({
                 server: server
             });

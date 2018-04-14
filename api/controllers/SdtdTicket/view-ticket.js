@@ -41,7 +41,6 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     try {
-      sails.log.debug(`API - SdtdTicket:viewTicket - Loading ticket view for ticket ${inputs.ticketId}`);
 
       let ticket = await SdtdTicket.findOne(inputs.ticketId).populate('comments');
       let server = await SdtdServer.findOne(ticket.server);
@@ -59,6 +58,7 @@ module.exports = {
       })
 
       Promise.all(promises).then((comments) => {
+        sails.log.info(`API - SdtdTicket:viewTicket - - Success, loaded ticket "${ticket.title}" for server ${server.name}`);
         return exits.success({
           server: server,
           ticket: ticket,

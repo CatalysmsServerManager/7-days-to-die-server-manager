@@ -23,7 +23,7 @@ const winston = require('winston');
 customLogger = new winston.Logger({
   transports: [
     new winston.transports.File({
-      level: 'debug',
+      level: 'info',
       timestamp: true,
       humanReadableUnhandledException: true,
       filename: './logs/prod.log',

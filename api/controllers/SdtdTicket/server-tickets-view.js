@@ -41,7 +41,6 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     try {
-      sails.log.debug(`API - SdtdServer:tickets-view - Loading tickets view for server ${inputs.serverId}`);
 
       let server = await SdtdServer.findOne({
         id: inputs.serverId
@@ -54,7 +53,7 @@ module.exports = {
         return exits.notFound();
       }
 
-      sails.log.debug(`API - SdtdServer:tickets-view - Success, loaded ${tickets.length} tickets`);
+      sails.log.info(`API - SdtdServer:tickets-view - Success, loaded ${tickets.length} tickets for server ${server.name}`);
       return exits.success({
         server: server,
         tickets: tickets

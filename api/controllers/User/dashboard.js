@@ -46,7 +46,7 @@ module.exports = {
           ownedServersWithInfo.push(sdtdServerInfo)
         }
       }
-
+      sails.log.info(`VIEW - User:dashboard - User ${user.username} is on dashboard, ${ownedServersWithInfo.length} servers`);
       return exits.success({
         user: user,
         ownedServers: ownedServersWithInfo

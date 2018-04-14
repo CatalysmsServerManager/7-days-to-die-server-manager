@@ -62,7 +62,6 @@ module.exports = {
    */
 
   fn: async function (inputs, exits) {
-    sails.log.debug(`HELPER - createTicket - Creating a ticket for server ${inputs.serverId} by player ${inputs.playerId}`);
 
     try {
       let sdtdServer = await SdtdServer.findOne({
@@ -87,6 +86,7 @@ module.exports = {
 
       sails.hooks.discordbot.sendNotification(inputs.serverId, notificationMsg);
 
+      sails.log.info(`HELPER - createTicket - Created a ticket for server ${sdtdServer.name} by player ${player.name} titled "${ticket.title}"`);
       return exits.success(ticket);
 
     } catch (error) {

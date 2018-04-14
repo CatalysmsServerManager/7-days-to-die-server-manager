@@ -33,12 +33,13 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    sails.log.debug(`VIEW - SdtdServer:settings - Showing settings for ${inputs.serverId}`);
+
 
     try {
       let server = await SdtdServer.findOne(inputs.serverId);
       let serverConfig = await SdtdConfig.findOne({server: server.id});
       let user = await User.findOne(this.req.session.userId)
+      sails.log.info(`VIEW - SdtdServer:settings - Showing settings for ${server.name} to user ${user.username}`);
       return exits.success({
         server: server,
         config: serverConfig,

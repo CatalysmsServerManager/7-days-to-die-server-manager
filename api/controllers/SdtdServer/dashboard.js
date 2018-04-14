@@ -31,8 +31,6 @@ module.exports = {
    */
 
   fn: async function (inputs, exits) {
-    sails.log.debug(`VIEW - SdtdServer:dashboard - Showing dashboard for ${inputs.serverId}`);
-
     try {
       let sdtdServer = await SdtdServer.findOne(inputs.serverId);
       sdtdServerInfo = await sails.helpers.loadSdtdserverInfo(inputs.serverId)
@@ -53,6 +51,7 @@ module.exports = {
         .tolerate('connectionRefused', error => {
           return undefined
         })
+        sails.log.info(`VIEW - SdtdServer:dashboard - Showing dashboard for ${sdtdServer.name}`);
       return exits.success({
         server: sdtdServer,
         players: players

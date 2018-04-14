@@ -35,7 +35,6 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     try {
-      sails.log.debug('VIEW - SdtdServer:players - serving players view');
       let server = await SdtdServer.findOne({
         id: inputs.serverId
       });
@@ -46,7 +45,9 @@ module.exports = {
         let newPlaytime = hhmmss(player.playtime);
         player.playtimeHHMMSS = newPlaytime;
         return player;
-      })
+      });
+
+      sails.log.info(`VIEW - SdtdServer:players - Showing players for ${server.name} - ${players.length} players`);
 
       exits.success({
         players: players,

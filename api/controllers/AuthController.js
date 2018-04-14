@@ -33,7 +33,7 @@ module.exports = {
           sails.log.error(`Steam auth error - ${err}`);
           return res.serverError(err);
         };
-        sails.log.debug(`User with id ${user.id} successfully logged in`);
+        sails.log.info(`User ${user.username} successfully logged in`);
         req.session.userId = user.id;
         try {
           let players = await Player.find({
