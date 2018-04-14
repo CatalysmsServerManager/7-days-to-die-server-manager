@@ -168,17 +168,12 @@
             </a>
           </li>
 
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
-              aria-expanded="false">
-              7 Days to die
-            </a>
-            <div class="dropdown-menu" id="sdtd-servers-owned" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="/sdtdserver/addserver">Add a server</a>
-              <div class="dropdown-divider"></div>
-              <i class="fa fa-cog dropdown-item" id="loading-servers" aria-hidden="true"> Loading</i>
-            </div>
-          </li>
+
+          <li class="nav-item">
+              <a class="nav-link" href="/sdtdserver/addserver">
+                Add a server
+              </a>
+            </li>
 
           <li class="nav-item">
             <a class="nav-link" href="/user/<%= req.session.userId %>/profile">
@@ -226,12 +221,5 @@
 
 </body>
 
-
-<script>
-  <%  if (!_.isUndefined( req.session.userId)) {%>
-  loadSdtdServers(<%= req.session.userId %>)
-  <% } %>
-
-</script>
 
 </html>
