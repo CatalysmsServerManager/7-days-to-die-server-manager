@@ -1,3 +1,24 @@
+<div>
+    <table class="table table-striped table-responsive">
+        <thead id="analytics-memupdate-table" class="thead-default">
+            <tr>
+                <th></th>
+                <th>Average</th>
+                <th>Maximum</th>
+                <th>Minimum</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td scope="row"></td>
+                <td></td>
+                <td></td>
+            </tr>
+
+        </tbody>
+    </table>
+</div>
+
 <div class="row">
 
     <div class="col-12">
@@ -87,7 +108,7 @@
                             return dataPoint.rss
                         }),
                     }
-
+                    drawStats(dataPoints)
 
                     var ctx = $('#analytics-memUpdate-chart')
                     var lineChartData = {
@@ -156,6 +177,34 @@
 
 
 
+        }
+
+        function drawStats(data) {
+            const minimum = array => Math.min(...array);
+            const maximum = array => Math.max(...array);
+            const average = array => array.reduce((a, b) => a + b, 0) / array.length;
+            let tableElement = $("#analytics-memupdate-table tr:last");
+
+            //             <tr>
+            //     <td scope="row"></td>
+            //     <td></td>
+            //     <td></td>
+            //     <td></td>
+            // </tr>
+
+            for (const dataPoint in data) {
+                if (data.hasOwnProperty(dataPoint)) {
+                    console.log(dataPoint)
+                    const dataArray = data[dataPoint];
+
+                    tableElement.after(`            <tr>
+                <td scope="row">${dataPoint}</td>
+                <td>${Math.round(average(dataArray))}</td>
+                <td>${maximum(dataArray)}</td>
+                <td>${minimum(dataArray)}</td>
+            </tr>`)
+                }
+            }
         }
 
         // AXIS ONE BUTTONS
