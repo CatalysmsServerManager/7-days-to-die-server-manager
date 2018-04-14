@@ -56,7 +56,7 @@ async function clearOldInfo(server, config) {
         let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({ serverId: server.id });
         let hoursToKeepData = sails.config.custom.donorConfig[donatorRole].memUpdateKeepDataHours
         let borderDate = new Date();
-        borderDate.setHours(borderDate.getHours() - hoursToKeepData);
+        borderDate.setHours(-1 * hoursToKeepData);
         await HistoricalInfo.destroy({
             createdAt: { '<': borderDate.valueOf() },
             type: 'memUpdate',
