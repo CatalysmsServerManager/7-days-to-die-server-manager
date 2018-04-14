@@ -28,21 +28,21 @@
       </ol>
       <div class="carousel-inner" role="listbox">
         <div class="carousel-item active">
-          <img src="../../images/meta/feature-discord.png" alt="First slide">
+          <img id='img-feature-discord' src="../../images/meta/feature-discord-blurred.png" alt="First slide">
           <div class="carousel-caption d-none d-md-block feature-text">
             <h3>Discord integration</h3>
             <p>CSMM connects your server to Discord via a chatbridge and notifies you when certain events occur. </p>
           </div>
         </div>
         <div class="carousel-item">
-          <img src="../../images/meta/feature-dashboard.png" alt="Second slide">
+          <img id='img-feature-dashboard' src="../../images/meta/feature-dashboard-blurred.png" alt="Second slide">
           <div class="carousel-caption d-none d-md-block feature-text">
             <h3>Powerful web interface</h3>
             <p></p>
           </div>
         </div>
         <div class="carousel-item">
-          <img src="../../images/meta/feature-playerOverview.png" alt="Third slide">
+          <img id='img-feature-playerOverview' src="../../images/meta/feature-playerOverview-blurred.png" alt="Third slide">
           <div class="carousel-caption d-none d-md-block feature-text">
             <h3>Player statistics</h3>
             <p></p>
@@ -83,3 +83,44 @@
     font-size: 200%;
   }
 </style>
+
+<script>
+  $(document).ready(e => {
+
+    let discordHover = true;
+    let dashboardHover = true;
+    let playerOverviewHover = true;
+
+    $('#img-feature-discord').hover(e => {
+      let element = $('#img-feature-discord')
+      discordHover = discordHover ? false : true;
+      if (discordHover) {
+        element.attr('src', "../../images/meta/feature-discord-blurred.png")        
+      } else {
+        element.attr('src', "../../images/meta/feature-discord.png")  
+      }
+    })
+    
+    $('#img-feature-dashboard').hover(e => {
+      let element = $('#img-feature-dashboard')
+      discordHover = discordHover ? false : true;
+      if (discordHover) {
+        element.attr('src', "../../images/meta/feature-dashboard-blurred.png")        
+      } else {
+        element.attr('src', "../../images/meta/feature-dashboard.png")  
+      }
+    })
+    
+    $('#img-feature-playerOverview').hover(e => {
+      let element = $('#img-feature-playerOverview')
+      discordHover = discordHover ? false : true;
+      if (discordHover) {
+        element.attr('src', "../../images/meta/feature-playerOverview-blurred.png")        
+      } else {
+        element.attr('src', "../../images/meta/feature-playerOverview.png")  
+      }
+    })
+
+
+  })
+</script>
