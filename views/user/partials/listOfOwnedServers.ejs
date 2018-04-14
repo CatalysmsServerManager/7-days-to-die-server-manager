@@ -4,26 +4,13 @@
 
 
     <table class="table table-hover table-responsive">
-      <thead class="thead-inverse">
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Online players</th>
-          <th>FPS</th>
-          <th>Dashboard</th>
-          <th>Settings</th>
-          <th>Tickets</th>
-          <th>Players</th>
-        </tr>
-      </thead>
+
       <tbody>
 
         <% ownedServers.forEach(server => { %>
 
           <tr>
-            <td scope="row">
-              <%= server.id %>
-            </td>
+
             <td>
               <%= server.name %>
             </td>
@@ -59,6 +46,10 @@
                 <td>
                     <% const playersLink = '/sdtdserver/' + server.id + '/players' %>
                   <a name="" id="" class="btn btn-primary btn-sm" href="<%= playersLink %>" role="button">Players</a>
+                </td>
+                <td>
+                    <% const analytics = '/sdtdserver/' + server.id + '/analytics' %>
+                  <a name="" id="" class="btn btn-primary btn-sm" href="<%= analytics %>" role="button">Analytics</a>
                 </td>
           </tr>
           <% }) %>
@@ -119,7 +110,7 @@
 
       let serverId = server.id;
       $.get('/api/sdtdserver/fps', { serverId: serverId }, response => {
-        $(`#server-${server.id}-fps`).text(`${response}`)
+        $(`#server-${server.id}-fps`).text(`${response} FPS`)
       })
 
     }
@@ -135,7 +126,7 @@
           let onlinePlayers = data.players.filter(player => {
             return player.online
           })
-          $(`#server-${server.id}-players`).text(`${onlinePlayers.length}`)
+          $(`#server-${server.id}-players`).text(`${onlinePlayers.length} online`)
         },
         error: (xhr, status, error) => {
           console.log(`Could not update online players! error: ${error}`)

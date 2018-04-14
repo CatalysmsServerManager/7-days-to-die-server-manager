@@ -1,6 +1,27 @@
 <div class="row">
 
-    <div class="col-12">
+    <div class="col-4">
+        <table id="analytics-memupdate-table" class="table table-striped table-responsive">
+            <thead  class="thead-default">
+                <tr>
+                    <th></th>
+                    <th>Average</th>
+                    <th>Max</th>
+                    <th>Min</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td scope="row"></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-8">
         <canvas id="analytics-memUpdate-chart"></canvas>
     </div>
 
@@ -87,7 +108,7 @@
                             return dataPoint.rss
                         }),
                     }
-
+                    drawStats(dataPoints)
 
                     var ctx = $('#analytics-memUpdate-chart')
                     var lineChartData = {
@@ -111,6 +132,10 @@
                             yAxisID: 'y-axis-2'
                         }]
                     };
+
+                    if (window.analyticsLine != undefined) {
+                        window.analyticsLine.destroy();
+                    }
 
                     window.analyticsLine = Chart.Line(ctx, {
                         data: lineChartData,
@@ -152,6 +177,27 @@
 
 
 
+        }
+
+        function drawStats(data) {
+            const minimum = array => Math.min(...array);
+            const maximum = array => Math.max(...array);
+            const average = array => array.reduce((a, b) => a + b, 0) / array.length;
+            $("#analytics-memupdate-table tbody").empty();
+            let tableElement = $("#analytics-memupdate-table tbody");
+
+            for (const dataPoint in data) {
+                if (data.hasOwnProperty(dataPoint)) {
+                    const dataArray = data[dataPoint];
+
+                    $("#analytics-memupdate-table tbody").append(`            <tr>
+                <td scope="row">${dataPoint}</td>
+                <td>${Math.round(average(dataArray))}</td>
+                <td>${maximum(dataArray)}</td>
+                <td>${minimum(dataArray)}</td>
+            </tr>`)
+                }
+            }
         }
 
         // AXIS ONE BUTTONS
