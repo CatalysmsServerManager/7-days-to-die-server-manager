@@ -53,12 +53,13 @@ async function saveInfoToDatabase(server, memUpdate) {
 
 async function clearOldInfo(server, config) {
     try {
-        let daysToKeepData = config.daysToKeepData
+        let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({ serverId: server.id });
+
+        let hoursToKeepData = sails.config.custom.donorConfig[donatorRole].memUpdateKeepDataHours
         let borderDate = new Date();
-        borderDate.setDate(borderDate.getDate() - daysToKeepData);
-        let epochTimeToDeleteFrom = borderDate.valueOf();
+        borderDate.setHours(borderDate.getHours() - hoursToKeepData);
         await HistoricalInfo.destroy({
-            createdAt: { '<': epochTimeToDeleteFrom },
+            createdAt: { '<': borderDate.valueOf() },
             type: 'memUpdate'
         })
     } catch (error) {
