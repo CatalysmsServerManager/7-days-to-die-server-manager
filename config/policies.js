@@ -48,7 +48,7 @@ module.exports.policies = {
 
   sdtdServerController: {
     '*': 'isServerOwner',
-    'add-server': ['isLoggedIn', 'isBetaTester'],
+    'add-server': 'isLoggedIn',
   },
 
   playerController: {
