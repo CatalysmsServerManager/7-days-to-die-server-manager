@@ -110,7 +110,7 @@
 
       let serverId = server.id;
       $.get('/api/sdtdserver/fps', { serverId: serverId }, response => {
-        $(`#server-${server.id}-fps`).text(`${response}`)
+        $(`#server-${server.id}-fps`).text(`${response} FPS`)
       })
 
     }
@@ -126,7 +126,7 @@
           let onlinePlayers = data.players.filter(player => {
             return player.online
           })
-          $(`#server-${server.id}-players`).text(`${onlinePlayers.length}`)
+          $(`#server-${server.id}-players`).text(`${onlinePlayers.length} online`)
         },
         error: (xhr, status, error) => {
           console.log(`Could not update online players! error: ${error}`)
