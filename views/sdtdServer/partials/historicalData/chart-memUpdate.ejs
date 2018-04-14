@@ -112,6 +112,10 @@
                         }]
                     };
 
+                    if (window.analyticsLine != undefined) {
+                        window.analyticsLine.destroy();
+                    }
+
                     window.analyticsLine = Chart.Line(ctx, {
                         data: lineChartData,
                         options: {
