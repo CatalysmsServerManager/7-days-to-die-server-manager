@@ -51,7 +51,7 @@ module.exports.custom = {
     contributor: {
       memUpdateKeepDataHours: 120,
       maxTeleports: 25,
-      maxServers: 5,
+      maxServers: 4,
     },
     sponsor: {
       memUpdateKeepDataHours: 168,
