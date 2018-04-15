@@ -75,18 +75,26 @@ class CommandHandler {
         let args = splitString.splice(1, splitString.length);
 
         if (this.commands.has(commandName)) {
-          let player = await Player.find({ name: chatMessage.playerName, server: this.config.server }).populate('server');
-          player = player[0];
-          let server = player.server;
+          let player = await Player.find({ name: chatMessage.playerName, server: this.config.server });
+          let playerInfo = await sails.helpers.loadPlayerData.with({serverId: this.config.server, steamId: player[0].steamId})
+          player = playerInfo.players[0]
+
+          let server = await SdtdServer.findOne(player.server).populate('players');
+          let config = await SdtdConfig.findOne({server: server.id});
+          server.config = config;
 
           let commandToRun = this.commands.get(commandName);
+
+          let args = chatMessage.messageText.split(' ');
+          args.splice(0, 1)
 
           // Function to easily reply to players in a command
           chatMessage.reply = async message => await sendReplyToPlayer(server, player, message);
 
-          return commandToRun.run(chatMessage, player.id, args);
+          sails.log.info(`HOOK SdtdCommands - command ${commandName} ran by player ${player.name} on server ${server.name}`)
+          return commandToRun.run(chatMessage, player, server, args);
         }
-        sails.log.debug(`HOOK SdtdCommands:commandListener - Unknown command user by ${chatMessage.playerName} on server ${this.config.server.name}`);
+        sails.log.debug(`HOOK SdtdCommands:commandListener - Unknown command used by ${chatMessage.playerName} on server ${this.config.server.name}`);
       }
     } catch (error) {
       sails.log.error(`HOOK SdtdCommands:commandListener - ${error}`);
