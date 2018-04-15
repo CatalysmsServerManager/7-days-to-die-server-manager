@@ -49,13 +49,21 @@ module.exports = {
       description: 'Cant connect to the server',
       responseType: 'badRequest',
       statusCode: 400
+    },
+
+    maxServers: {
+      description: "User has added max amount of servers already",
+      responseType: 'badRequest',
+      statusCode: 400
     }
 
   },
 
   fn: async function (inputs, exits) {
 
-    let userProfile = await User.findOne(this.req.session.userId);
+    let userProfile = await User.findOne(this.req.session.userId).populate('servers');
+    let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({ userId: userProfile.id });
+    let maxServers = sails.config.custom.donorConfig[donatorRole].maxServers;
 
     let sdtdServer = {
       ip: inputs.serverIp,
@@ -66,8 +74,16 @@ module.exports = {
       owner: userProfile.id
     }
 
+    if (userProfile.servers) {
+      if (userProfile.servers.length >= maxServers) {
+        return exits.maxServers("maxServers")
+      }
+      
+    }
+
     let serverCheck = await checkServerResponse(sdtdServer);
     let existsCheck = await checkIfServerExists(sdtdServer);
+
 
     if (!serverCheck) {
       return exits.cantConnect("cantConnect");
@@ -76,6 +92,7 @@ module.exports = {
     if (existsCheck) {
       return exits.serverExists("serverExists");
     }
+
 
     let addedServer = await addServerToDb(sdtdServer);
 
