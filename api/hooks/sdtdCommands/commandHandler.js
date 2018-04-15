@@ -1,3 +1,5 @@
+const sevenDays = require('machinepack-7daystodiewebapi');
+
 /**
      * @memberof module:SdtdCommandsHook
      * @name commandHandler
@@ -73,14 +75,18 @@ class CommandHandler {
         let args = splitString.splice(1, splitString.length);
 
         if (this.commands.has(commandName)) {
-          let player = await Player.find({ name: chatMessage.playerName, server: this.config.server });
+          let player = await Player.find({ name: chatMessage.playerName, server: this.config.server }).populate('server');
           player = player[0];
+          let server = player.server;
 
           let commandToRun = this.commands.get(commandName);
 
+          // Function to easily reply to players in a command
+          chatMessage.reply = async message => await sendReplyToPlayer(server, player, message);
+
           return commandToRun.run(chatMessage, player.id, args);
         }
-        sails.log.debug(`HOOK SdtdCommands:commandListener - Unknown command user by ${chatMessage.playerName} on server ${this.config.server}`);
+        sails.log.debug(`HOOK SdtdCommands:commandListener - Unknown command user by ${chatMessage.playerName} on server ${this.config.server.name}`);
       }
     } catch (error) {
       sails.log.error(`HOOK SdtdCommands:commandListener - ${error}`);
@@ -92,3 +98,25 @@ class CommandHandler {
 }
 
 module.exports = CommandHandler;
+
+
+async function sendReplyToPlayer(server, player, message) {
+  return new Promise((resolve, reject) => {
+    return sevenDays.sendMessage({
+      ip: server.ip,
+      port: server.webPort,
+      authName: server.authName,
+      authToken: server.authToken,
+      message: `${message}`,
+      playerId: player.steamId
+    }).exec({
+      error: (error) => {
+        sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
+        reject(error)
+      },
+      success: (result) => {
+        resolve(result)
+      }
+    });
+  })
+}
