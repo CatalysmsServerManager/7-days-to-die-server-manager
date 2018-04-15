@@ -36,22 +36,27 @@ module.exports.custom = {
     free: {
       memUpdateKeepDataHours: 12,
       maxTeleports: 3,
+      maxServers: 2,
     },
     patron: {
       memUpdateKeepDataHours: 12,
       maxTeleports: 3,
+      maxServers: 2,
     },
     donator: {
       memUpdateKeepDataHours: 72,
       maxTeleports: 10,
+      maxServers: 3,
     },
     contributor: {
       memUpdateKeepDataHours: 120,
       maxTeleports: 25,
+      maxServers: 4,
     },
     sponsor: {
       memUpdateKeepDataHours: 168,
       maxTeleports: 100,
+      maxServers: 5,
     }
   },
 };

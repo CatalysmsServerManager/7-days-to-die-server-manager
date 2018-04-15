@@ -1,54 +1,55 @@
 <body>
   <%- exposeLocalsToBrowser() %>
 
-  <div class="row">
-    <div class="col-12">
-      <h1>Add a server</h1>
-      <p>Check the documentation if you don't know what to fill in. If you are lost or keep getting errors, swing by the discord server for some help! :)</p>
+    <div class="row">
+      <div class="col-12">
+        <h1>Add a server</h1>
+        <p>Check the documentation if you don't know what to fill in. If you are lost or keep getting errors, swing by the discord
+          server for some help! :)</p>
+      </div>
     </div>
-  </div>
 
-  <div class="row">
-    <div class="col-8">
-      <form id="addServer">
-        <div class="form-group">
-          <label for="servername">Name</label>
-          <input type="text" class="form-control" id="servername" aria-describedby="server-name-help" placeholder="World's best server!!">
-          <small id="server-name-help" class="form-text text-muted">Give your server a memorable name</small>
-        </div>
-        <div class="form-group">
-          <label for="serverip">Server IP</label>
-          <input type="text" class="form-control" id="serverip" placeholder="Server IP address">
-          <small>Provide a valid IPv4/6 adress or a
-            <a href="https://en.wikipedia.org/wiki/Fully_qualified_domain_name">FQDN</a>
-          </small>
-        </div>
-        <div class="form-group">
-          <label for="webport">Web API port</label>
-          <input type="number" class="form-control" id="webport" aria-describedby="webportHelp" placeholder="ex. 8084">
-          <small id="webportHelp" class="form-text text-muted">Port added by Allocs fixes</small>
-        </div>
-        <div class="form-group">
-          <label for="authName">Authorization name</label>
-          <input type="text" class="form-control" id="authName" placeholder="ex. csmm">
-          <small class="form-text text-muted">Set this with telnet command</small>
-        </div>
-        <div class="form-group">
-          <label for="authToken">Authorization token</label>
-          <input type="text" class="form-control" id="authToken" placeholder="ex. super-secret-token">
-          <small class="form-text text-muted">Set this with telnet command</small>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
+    <div class="row">
+      <div class="col-8">
+        <form id="addServer">
+          <div class="form-group">
+            <label for="servername">Name</label>
+            <input type="text" class="form-control" id="servername" aria-describedby="server-name-help" placeholder="World's best server!!">
+            <small id="server-name-help" class="form-text text-muted">Give your server a memorable name</small>
+          </div>
+          <div class="form-group">
+            <label for="serverip">Server IP</label>
+            <input type="text" class="form-control" id="serverip" placeholder="Server IP address">
+            <small>Provide a valid IPv4/6 adress or a
+              <a href="https://en.wikipedia.org/wiki/Fully_qualified_domain_name">FQDN</a>
+            </small>
+          </div>
+          <div class="form-group">
+            <label for="webport">Web API port</label>
+            <input type="number" class="form-control" id="webport" aria-describedby="webportHelp" placeholder="ex. 8084">
+            <small id="webportHelp" class="form-text text-muted">Port added by Allocs fixes</small>
+          </div>
+          <div class="form-group">
+            <label for="authName">Authorization name</label>
+            <input type="text" class="form-control" id="authName" placeholder="ex. csmm">
+            <small class="form-text text-muted">Set this with telnet command</small>
+          </div>
+          <div class="form-group">
+            <label for="authToken">Authorization token</label>
+            <input type="text" class="form-control" id="authToken" placeholder="ex. super-secret-token">
+            <small class="form-text text-muted">Set this with telnet command</small>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+      <div class="col-4">
+        <div id="errorMessage"></div>
+      </div>
     </div>
-    <div class="col-4">
-      <div id="errorMessage"></div>
-    </div>
-  </div>
 
-    
 
-    
+
+
 
 </body>
 
@@ -107,6 +108,10 @@
         }
         if (xhr.responseJSON == "serverExists") {
           $('#errorMessage').text(`A server with that IP and webport is already in the system.`)
+        }
+
+        if (xhr.responseJSON == "maxServers") {
+          $('#errorMessage').text(`You have reached the maximum amount of servers you can have registered on CSMM. Consider deleting an old server (or donating :D)`)
         }
 
         $('#errorMessage').prepend("Error: <br>")
