@@ -40,7 +40,14 @@ module.exports = {
     },
 
     country: {
-      type: 'string'
+      type: 'string',
+      allowNull: true
+    },
+
+
+    currency: {
+      type: 'number',
+      defaultsTo: 0
     },
 
     /**
