@@ -55,13 +55,19 @@ async function clearOldInfo(server, config) {
     try {
         let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({ serverId: server.id });
         let hoursToKeepData = sails.config.custom.donorConfig[donatorRole].memUpdateKeepDataHours
-        let borderDate = new Date();
-        borderDate.setHours(-1 * hoursToKeepData);
-        await HistoricalInfo.destroy({
+        let milisecondsToKeepData = hoursToKeepData * 3600000;
+        let dateNow = Date.now();
+        let borderDate = new Date(dateNow.valueOf() - milisecondsToKeepData);
+
+        let deletedRecords = await HistoricalInfo.destroy({
             createdAt: { '<': borderDate.valueOf() },
             type: 'memUpdate',
             server: server.id
-        });
+        }).fetch();
+        
+        if (deletedRecords.length > 0) {
+            sails.log.debug(`HOOKS - HistoricalInfo:memUpdate - Deleted ${deletedRecords.length} records for server ${server.name} - kept data for ${hoursToKeepData} hours.`)
+        }
     } catch (error) {
         sails.log.error(`HOOKS - HistoricalInfo:memUpdate - Error deleting data -${error}`)
     }
