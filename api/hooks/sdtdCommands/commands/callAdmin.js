@@ -9,81 +9,25 @@ class callAdmin extends SdtdCommand {
     this.serverId = serverId;
   }
 
-  async run(chatMessage, playerId, args) {
-    sails.log.debug(`HOOK - SdtdCommands:callAdmin - Player ${playerId} ran callAdmin command`);
+  async run(chatMessage, player, server, args) {
 
     try {
 
-      let server = await SdtdServer.findOne({
-        id: this.serverId
-      }).populate('config');
-      let player = await Player.findOne({
-        id: playerId
-      });
-
-      if (!server.config[0].enabledCallAdmin) {
-        return sevenDays.sendMessage({
-          ip: server.ip,
-          port: server.webPort,
-          authName: server.authName,
-          authToken: server.authToken,
-          message: `This command is disabled! Ask your server admin to enable this.`,
-          playerId: player.steamId
-        }).exec({
-          error: (error) => {
-            sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
-          },
-          success: (result) => {
-            return;
-          }
-        });
+      if (!server.config.enabledCallAdmin) {
+        return chatMessage.reply('This command is disabled! Ask your server admin to enable this.');
       }
 
       if (args == '') {
-        return sevenDays.sendMessage({
-          ip: server.ip,
-          port: server.webPort,
-          authName: server.authName,
-          authToken: server.authToken,
-          message: `You must tell us what you're having trouble with!`,
-          playerId: player.steamId
-        }).exec({
-          error: (error) => {
-            sails.log.error(`HOOK - SdtdCommands:callAdmin - Failed to respond to player`);
-          },
-          success: (result) => {
-            return;
-          }
-        });
+        return chatMessage.reply(`You must tell us what you're having trouble with!`);
       }
 
       let ticket = await sails.helpers.sdtd.createTicket(
-        this.serverId,
-        playerId,
+        server.id,
+        player.id,
         args.join(' ')
       );
 
-      sevenDays.sendMessage({
-        ip: server.ip,
-        port: server.webPort,
-        authName: server.authName,
-        authToken: server.authToken,
-        message: `Your ticket has been created, check the website to follow up!`,
-        playerId: player.steamId
-      }).exec({
-        error: (error) => {
-          sails.log.error(`HOOK - SdtdCommands:callAdmin - Failed to respond to player`);
-        },
-        success: (result) => {
-          sails.hooks.discordnotifications.sendNotification({
-            serverId: ticket.server,
-            notificationType: 'ticket',
-            ticketNotificationType: 'New ticket',
-            ticket: ticket
-          })
-          return ticket;
-        }
-      });
+      return chatMessage.reply(`Your ticket has been created, check the website to follow up!`);
 
     } catch (error) {
       sails.log.error(`HOOK - SdtdCommands:callAdmin - ${error}`);
