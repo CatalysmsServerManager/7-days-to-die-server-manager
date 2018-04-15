@@ -98,7 +98,7 @@ module.exports = {
 
     if (addedServer) {
       await sails.hooks.historicalinfo.start(addedServer.id, 'memUpdate');
-      sails.log.info(`${userProfile.username} added a new server - ${addedServer.name}`)
+      sails.log.warn(`${userProfile.username} added a new server - ${addedServer.name}`)
       return exits.success(addedServer);
     }
   }

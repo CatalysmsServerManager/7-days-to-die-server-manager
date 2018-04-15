@@ -35,16 +35,16 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    sails.log.debug(`VIEW - SdtdServer:delete - Deleting server ${inputs.serverId}`);
-
+    
     try {
       let server = await SdtdServer.findOne(inputs.serverId);
       if (_.isUndefined(server)) {
         return exits.notFound();
       }
-
+      
       await sails.hooks.sdtdlogs.stop(server.id);
-
+      sails.log.warn(`VIEW - SdtdServer:delete - Deleting server ${server.name}`);
+      
       sevenDays.executeCommand({
         ip: server.ip,
         port: server.webPort,
