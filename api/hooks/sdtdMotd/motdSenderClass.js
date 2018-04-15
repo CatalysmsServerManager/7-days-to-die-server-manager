@@ -106,7 +106,7 @@ class MotdSender {
           sails.log.error(`HOOKS - sdtdMotd:MotdSender:sendMotd - Tried to send message to unknown player ${serverId}`);
         },
         error: (error) => {
-          sails.log.error(`HOOKS - sdtdMotd:MotdSender:sendMotd - Unknown server id ${serverId}`);
+          sails.log.debug(`HOOKS - sdtdMotd:MotdSender:sendMotd - Error when sending motd to ${serverId}`);
         }
       });
 
