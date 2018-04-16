@@ -90,8 +90,14 @@ class CommandHandler {
 
           // Function to easily reply to players in a command
           chatMessage.reply = async message => await sendReplyToPlayer(server, player, message);
-
+          
           sails.log.info(`HOOK SdtdCommands - command ran by player ${player.name} on server ${server.name} - ${chatMessage.messageText}`)
+          
+          if (_.isUndefined(player)) {
+            sails.log.warn(`Could not load playerdata for this message: ${JSON.stringify(chatMessage)}`)
+            return chatMessage.reply(`Error! Could not load player data. - Please report this on the dev server`)
+          }
+
           return commandToRun.run(chatMessage, player, server, args);
         }
         sails.log.debug(`HOOK SdtdCommands:commandListener - Unknown command used by ${chatMessage.playerName} on server ${this.config.server.name}`);
