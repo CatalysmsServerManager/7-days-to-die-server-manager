@@ -1,5 +1,4 @@
 <%- exposeLocalsToBrowser() %>
-
     <div class="row">
         <h1>Economy overview for
             <%= server.name %>
@@ -118,7 +117,18 @@
     <h2>Economy logs</h2>
 
     <div class="row">
+        <table id='economy-historicalInfo-table' class="table display hover">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Message</th>
+                    <th>Amount</th>
+                    <th>Player</th>
+                </tr>
+            </thead>
 
+        </table>
     </div>
 
     <script>
@@ -319,7 +329,47 @@
                         alert(error)
                     }
                 })
+            })
 
+            //             <th>Date</th>
+            // <th>Time</th>
+            // <th>Message</th>
+            // <th>Amount</th>
+            // <th>Player</th>
+
+
+            let historicalInfoTable = $('#economy-historicalInfo-table').DataTable({
+                data: window.SAILS_LOCALS.historicalInfo,
+                dom: 'Bfrtip',
+                fixedHeader: true,
+                responsive: true,
+                buttons: [
+                    'copy', 'excel', 'pdf', 'print'
+                ],
+                columns: [{
+                    data: "createdAt",
+                    render: function (data, type, row, meta) {
+                        let date = new Date(data)
+                        return `${date.toDateString()}`
+                    }
+                },
+                {
+                    data: 'createdAt',
+                    render: function (data, type, row, meta) {
+                        let date = new Date(data)
+                        return `${date.toTimeString()}`
+                    }
+                },
+                {
+                    data: 'message'
+                },
+                {
+                    data: 'amount'
+                },
+                {
+                    data: 'player'
+                },
+                ]
             })
 
 

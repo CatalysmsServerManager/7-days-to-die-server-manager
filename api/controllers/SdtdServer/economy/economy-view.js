@@ -26,11 +26,16 @@ module.exports = {
 
         try {
             let server = await SdtdServer.findOne(inputs.serverId);
-            let config = await SdtdConfig.findOne({server: server.id});
+            let config = await SdtdConfig.findOne({ server: server.id });
+            let historicalInfo = await HistoricalInfo.find({
+                server: server.id,
+                type: 'economy'
+            })
             sails.log.info(`VIEW - SdtdServer:economy - Showing economy overview for ${server.name}`);
             return exits.success({
                 server: server,
-                config: config
+                config: config,
+                historicalInfo: historicalInfo
             });
         } catch (error) {
             sails.log.error(`VIEW - SdtdServer:economy - ${error}`);
