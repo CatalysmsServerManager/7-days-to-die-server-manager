@@ -39,7 +39,7 @@ class Player extends Commando.Command {
     }
 
     let playerInfo = await sails.helpers.loadPlayerData.with({serverId: sdtdServer.id, steamId: foundPlayer.steamId});
-    foundPlayer = foundPlayer[0]
+    foundPlayer = await sails.models.player.findOne(foundPlayer[0].id);
     let lastOnlineDate = new Date(foundPlayer.lastOnline);
     let embed = new this.client.customEmbed()
 
