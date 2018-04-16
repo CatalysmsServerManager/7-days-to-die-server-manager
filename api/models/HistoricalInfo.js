@@ -66,7 +66,7 @@ module.exports = {
 
     economyAction: {
       type: 'string',
-      isIn: ['give', 'deduct']
+      isIn: ['give', 'deduct', 'config']
     },
 
 

@@ -28,6 +28,12 @@ module.exports = {
 
         try {
             await SdtdConfig.update({server: inputs.serverId}, {currencyName: inputs.newCurrencyName});
+            await HistoricalInfo.create({
+                type: 'economy',
+                economyAction: 'config',
+                server: inputs.serverId,
+                message: `Changed currency name to ${inputs.newCurrencyName}`
+            });
             return exits.success();
         } catch (error) {
             sails.log.error(`API - Sdtdserver:set-currency-name - ${error}`);

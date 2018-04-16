@@ -36,6 +36,12 @@ module.exports = {
 
             updateObject[inputs.costTypeToSet] = inputs.newCost;
             await SdtdConfig.update({server: inputs.serverId}, updateObject);
+            await HistoricalInfo.create({
+                type: 'economy',
+                economyAction: 'config',
+                server: inputs.serverId,
+                message: `set ${inputs.costTypeToSet} to ${inputs.newCost}`
+            });
             return exits.success();
         } catch (error) {
             sails.log.error(`API - Sdtdserver:set-cost - ${error}`);

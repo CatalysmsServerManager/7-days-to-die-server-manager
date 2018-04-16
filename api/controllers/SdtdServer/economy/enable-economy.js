@@ -21,6 +21,12 @@ module.exports = {
 
         try {
             await SdtdConfig.update({server: inputs.serverId}, {economyEnabled: true});
+            await HistoricalInfo.create({
+                type: 'economy',
+                economyAction: 'config',
+                server: inputs.serverId,
+                message: `**** Enabled economy ****`
+            });
             return exits.success();
         } catch (error) {
             sails.log.error(`API - Sdtdserver:enable-economy - ${error}`);
