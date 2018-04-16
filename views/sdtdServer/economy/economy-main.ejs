@@ -371,7 +371,14 @@
                     data: 'economyAction'
                 },
                 {
-                    data: 'player'
+                    data: 'player',
+                    render: function (data, type, row, meta) {
+                        if (data) {
+                            return `${data.name}`
+                        } else {
+                            return ''
+                        }
+                    }
                 },
                 ]
             })

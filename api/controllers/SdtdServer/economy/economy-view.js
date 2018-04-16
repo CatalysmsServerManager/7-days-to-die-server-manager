@@ -30,7 +30,7 @@ module.exports = {
             let historicalInfo = await HistoricalInfo.find({
                 server: server.id,
                 type: 'economy'
-            })
+            }).populate('player');
             sails.log.info(`VIEW - SdtdServer:economy - Showing economy overview for ${server.name}`);
             return exits.success({
                 server: server,

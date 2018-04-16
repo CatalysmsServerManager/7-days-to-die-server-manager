@@ -18,8 +18,6 @@ class PlaytimeEarner {
         } catch (error) {
             sails.log.error(error)
         }
-
-
     }
 
     async stop() {
@@ -27,8 +25,6 @@ class PlaytimeEarner {
         clearInterval(this.interval);
 
     }
-
-
 }
 
 
