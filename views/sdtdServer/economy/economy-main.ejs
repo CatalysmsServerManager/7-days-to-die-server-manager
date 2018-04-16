@@ -64,6 +64,38 @@
                     </div>
                 </div>
 
+                <!-- Button trigger modal -->
+                <button type="button" class="btn list-group-item list-group-item-action bg-primary" data-toggle="modal" data-target="#economy-setCurrencyName-modal">
+                    Set currency name
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="economy-setCurrencyName-modal" tabindex="-1" role="dialog" aria-labelledby="economy-setCurrencyName-modal-title"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-sm" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="economy-setCurrencyName-modal-title">Set currency name</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="economy-setCurrencyName-input">Name</label>
+                                    <input type="text" class="form-control" name="economy-setCurrencyName-input" id="economy-setCurrencyName-input" aria-describedby="economy-setCurrencyName-input-help"
+                                        placeholder="<%= config.currencyName %>">
+                                    <small id="economy-setCurrencyName-input-help" class="form-text text-muted">Eg. ZCash, credits, bucks, dollars, ...</small>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button id="economy-setCurrencyName-save-btn" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -191,6 +223,9 @@
 
             $('#economy-costToTeleport-btn').click(e => {
                 let newCost = $('#economy-setPrices-costToTeleport').val();
+                if (!newCost) {
+                    return
+                }
                 $.ajax({
                     url: '/api/sdtdserver/economy/cost',
                     method: 'POST',
@@ -213,6 +248,9 @@
 
             $('#economy-costToSetTeleport-btn').click(e => {
                 let newCost = $('#economy-setPrices-costToSetTeleport').val();
+                if (!newCost) {
+                    return
+                }
                 $.ajax({
                     url: '/api/sdtdserver/economy/cost',
                     method: 'POST',
@@ -234,7 +272,54 @@
             })
 
             $('#economy-costToMakeTeleportPublic-btn').click(e => {
-                console.log('clicked')
+                let newCost = $('#economy-setPrices-costToMakeTeleportPublic').val();
+                if (!newCost) {
+                    return
+                }
+                $.ajax({
+                    url: '/api/sdtdserver/economy/cost',
+                    method: 'POST',
+                    data: {
+                        _csrf: window.SAILS_LOCALS._csrf,
+                        serverId: window.SAILS_LOCALS.server.id,
+                        costTypeToSet: 'costToMakeTeleportPublic',
+                        newCost: newCost
+                    },
+                    success: (data, status, xhr) => {
+                        $('#economy-costToMakeTeleportPublic-btn').addClass('bg-success').removeClass('bg-danger');
+                    },
+                    error: (xhr, status, error) => {
+                        console.log(error)
+                        $('#economy-costToMakeTeleportPublic-btn').addClass('bg-danger').removeClass('bg-success');
+                    }
+                })
+            })
+
+
+            $('#economy-setCurrencyName-save-btn').click(e => {
+                let newName = $('#economy-setCurrencyName-input').val();
+
+                if (!newName) {
+                    return
+                }
+
+                $.ajax({
+                    url: '/api/sdtdserver/economy/currencyname',
+                    method: 'POST',
+                    data: {
+                        _csrf: window.SAILS_LOCALS._csrf,
+                        serverId: window.SAILS_LOCALS.server.id,
+                        newCurrencyName: newName
+                    },
+                    success: (data, status, xhr) => {
+
+                    },
+                    error: (xhr, status, error) => {
+                        console.log(error)
+                        alert(error)
+                    }
+                })
+
             })
 
 
