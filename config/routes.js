@@ -113,6 +113,14 @@ module.exports.routes = {
   'get /api/sdtdserver/onlinestatus': 'SdtdServerController.is-online',
   'get /api/sdtdserver/fps': 'SdtdServerController.get-fps',
 
+  // Economy
+
+  'post /api/sdtdserver/economy' : 'SdtdServerController/economy.enable-economy',
+  'delete /api/sdtdserver/economy' : 'SdtdServerController/economy.disable-economy',
+
+  'post /api/sdtdserver/economy/module' : 'SdtdServerController/economy.enable-economy-module',
+  'delete /api/sdtdserver/economy/module' : 'SdtdServerController/economy.disable-economy-module',
+
   // Historical data
 
   'get /api/sdtdserver/data/memupdate': 'SdtdServerController/historicalData.get-mem-update',
