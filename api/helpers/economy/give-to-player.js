@@ -18,7 +18,12 @@ module.exports = {
         amountToGive: {
             type: 'number',
             required: true
-        }
+        },
+
+        message: {
+            type: 'string',
+            maxLength: 500
+        },
 
     },
 
@@ -34,7 +39,15 @@ module.exports = {
             let playerToGiveTo = await Player.findOne(inputs.playerId);
             let currentBalance = playerToGiveTo.currency;
             let newBalance = currentBalance + inputs.amountToGive;
-            await Player.update({id: playerToGiveTo.id}, {currency: newBalance});
+            await Player.update({ id: playerToGiveTo.id }, { currency: newBalance });
+            await HistoricalInfo.create({
+                server: playerToGiveTo.server,
+                type: 'economy',
+                message: inputs.message ? inputs.message : `Gave currency to player`,
+                player: inputs.playerId,
+                amount: inputs.amountToGive,
+                economyAction: 'give'
+            })
         } catch (error) {
             sails.log.error(`HELPER economy:give-to-player - ${error}`);
             return exits.error(error);

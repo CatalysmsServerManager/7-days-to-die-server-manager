@@ -12,8 +12,15 @@ module.exports = {
     // Type of info (memUpdate, inventory, location)
     type: {
       type: 'string',
-      required: true
+      required: true,
+      isIn: ['memUpdate', 'economy']
     },
+
+    message: {
+      type: 'string'
+    },
+
+    // memUpdate info
 
     fps: {
       type: 'number'
@@ -51,6 +58,19 @@ module.exports = {
       type: 'number'
     },
 
+    // Economy info
+
+    amount: {
+      type: 'number'
+    },
+
+    economyAction: {
+      type: 'string',
+      isIn: ['give', 'deduct']
+    },
+
+
+
 
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
@@ -59,6 +79,10 @@ module.exports = {
     server: {
       model: 'sdtdserver',
       required: true
+    },
+
+    player: {
+      model: 'player'
     },
 
   },
