@@ -34,6 +34,21 @@ module.exports = {
       defaultsTo: false
     },
 
+    costToTeleport: {
+      type: 'number',
+      defaultsTo: 1
+    },
+
+    costToSetTeleport: {
+      type: 'number',
+      defaultsTo: 15
+    },
+
+    costToMakeTeleportPublic: {
+      type: 'number',
+      defaultsTo: 25
+    },
+
     //   _____                                          _
     //  / ____|                                        | |
     // | |     ___  _ __ ___  _ __ ___   __ _ _ __   __| |___

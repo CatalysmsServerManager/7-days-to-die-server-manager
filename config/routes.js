@@ -122,6 +122,8 @@ module.exports.routes = {
   'post /api/sdtdserver/economy/module' : 'SdtdServerController/economy.enable-economy-module',
   'delete /api/sdtdserver/economy/module' : 'SdtdServerController/economy.disable-economy-module',
 
+  'post /api/sdtdserver/economy/cost' : 'SdtdServerController/economy.set-cost',
+
   // Historical data
 
   'get /api/sdtdserver/data/memupdate': 'SdtdServerController/historicalData.get-mem-update',

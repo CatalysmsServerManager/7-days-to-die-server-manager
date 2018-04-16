@@ -72,7 +72,6 @@ async function startPlaytimeEarner(serverId) {
         await SdtdConfig.update({server: serverId}, {playtimeEarnerEnabled: true});
 
         if (getMap(serverId, 'playtimeEarner')) {
-            console.log(`ALREADY ENABLED`)
             return
         }
 
@@ -95,11 +94,10 @@ async function stopPlaytimeEarner(serverId) {
         await SdtdConfig.update({server: serverId}, {playtimeEarnerEnabled: false});
 
         if (!getMap(serverId, 'playtimeEarner')) {
-            console.log(`ALREADY DISABLED`)
             return
         }
 
-        let playtimeEarnerObject = await getMap(serverId);
+        let playtimeEarnerObject = await getMap(serverId, 'playtimeEarner');
         playtimeEarnerObject.stop();
         deleteMap(serverId, playtimeEarnerObject);
     } catch (error) {
@@ -109,7 +107,6 @@ async function stopPlaytimeEarner(serverId) {
 
 
 function getMap(server, type) {
-    console.log(type)
     switch (type) {
         case 'playtimeEarner':
             return playtimeEarnerMap.get(String(server.id ? server.id : server))
