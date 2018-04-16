@@ -49,6 +49,9 @@ module.exports.policies = {
   sdtdServerController: {
     '*': 'isServerOwner',
     'add-server': 'isLoggedIn',
+    'economy/enable-economy' : ['isPatron', 'isServerOwner'],
+    'economy/disable-economy' : ['isPatron', 'isServerOwner'],
+    'economy/economy-view' : ['isPatron', 'isServerOwner'],
   },
 
   playerController: {
