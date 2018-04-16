@@ -9,16 +9,7 @@ class listTele extends SdtdCommand {
         this.serverId = serverId;
     }
 
-    async run(chatMessage, playerId) {
-        let args = chatMessage.messageText.split(' ');
-        args.splice(0, 1)
-
-        let server = await SdtdServer.findOne({
-            id: this.serverId
-        }).populate('config').populate('players');
-        let player = await Player.findOne({
-            id: playerId
-        });
+    async run(chatMessage, player, server, args) {
 
         let playerTeleports = await loadTeleports()
 
@@ -32,65 +23,22 @@ class listTele extends SdtdCommand {
                 playerTeleports = _.uniq(playerTeleports, 'id');
                 return playerTeleports;
             } else {
-                playerTeleports = await PlayerTeleport.find({ player: playerId });
+                playerTeleports = await PlayerTeleport.find({ player: player.id });
                 return playerTeleports;
             }
-
         }
 
 
-        if (!server.config[0].enabledPlayerTeleports) {
-            return sevenDays.sendMessage({
-                ip: server.ip,
-                port: server.webPort,
-                authName: server.authName,
-                authToken: server.authToken,
-                message: `This command is disabled! Ask your server admin to enable this.`,
-                playerId: player.steamId
-            }).exec({
-                error: (error) => {
-                    sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
-                },
-                success: (result) => {
-                    return;
-                }
-            });
+        if (!server.config.enabledPlayerTeleports) {
+            return chatMessage.reply(`This command is disabled! Ask your server admin to enable this.`)
         }
 
         if (args.length > 1) {
-            return sevenDays.sendMessage({
-                ip: server.ip,
-                port: server.webPort,
-                authName: server.authName,
-                authToken: server.authToken,
-                message: `Too many arguments! You can only provide a 'public' argumant.`,
-                playerId: player.steamId
-            }).exec({
-                error: (error) => {
-                    sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
-                },
-                success: (result) => {
-                    return;
-                }
-            });
+            return chatMessage.reply(`Too many arguments! You can only provide a 'public' argumant.`)
         }
 
         if (playerTeleports.length == 0) {
-            return sevenDays.sendMessage({
-                ip: server.ip,
-                port: server.webPort,
-                authName: server.authName,
-                authToken: server.authToken,
-                message: `Found no teleport location for you!`,
-                playerId: player.steamId
-            }).exec({
-                error: (error) => {
-                    sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
-                },
-                success: (result) => {
-                    return;
-                }
-            });
+            return chatMessage.reply(`Found no teleport location for you!`)
         }
 
         let stringToSend = new String(`Found ${playerTeleports.length} ${playerTeleports.length > 1 ? 'teleports' : 'teleport'}: `);
@@ -98,24 +46,7 @@ class listTele extends SdtdCommand {
             stringToSend += `${teleport.public ? 'PUBLIC' : 'PRIVATE'}- ${teleport.name} at ${teleport.x},${teleport.y},${teleport.z}`;
         })
 
-        return sevenDays.sendMessage({
-            ip: server.ip,
-            port: server.webPort,
-            authName: server.authName,
-            authToken: server.authToken,
-            message: stringToSend,
-            playerId: player.steamId
-        }).exec({
-            error: (error) => {
-                sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
-            },
-            success: (result) => {
-                return;
-            }
-        });
-
-
-
+        return chatMessage.reply(stringToSend)
     }
 }
 

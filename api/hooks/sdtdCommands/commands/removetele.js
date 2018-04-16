@@ -9,115 +9,34 @@ class removeTele extends SdtdCommand {
         this.serverId = serverId;
     }
 
-    async run(chatMessage, playerId) {
+    async run(chatMessage, player, server, args) {
+        let playerTeleports = await PlayerTeleport.find({ player: player.id });
 
-        let server = await SdtdServer.findOne({
-            id: this.serverId
-        }).populate('config');
-        let player = await Player.findOne({
-            id: playerId
-        });
-        let playerTeleports = await PlayerTeleport.find({ player: playerId });
-
-        let args = chatMessage.messageText.split(' ');
-        args.splice(0, 1)
-
-
-        if (!server.config[0].enabledPlayerTeleports) {
-            return sevenDays.sendMessage({
-                ip: server.ip,
-                port: server.webPort,
-                authName: server.authName,
-                authToken: server.authToken,
-                message: `This command is disabled! Ask your server admin to enable this.`,
-                playerId: player.steamId
-            }).exec({
-                error: (error) => {
-                    sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
-                },
-                success: (result) => {
-                    return;
-                }
-            });
+        if (!server.config.enabledPlayerTeleports) {
+            return chatMessage.reply(`This command is disabled! Ask your server admin to enable this.`)
         }
 
         if (args.length == 0) {
-            return sevenDays.sendMessage({
-                ip: server.ip,
-                port: server.webPort,
-                authName: server.authName,
-                authToken: server.authToken,
-                message: `Please specify what teleport location you want to remove.`,
-                playerId: player.steamId
-            }).exec({
-                error: (error) => {
-                    sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
-                },
-                success: (result) => {
-                    return;
-                }
-            });
+            return chatMessage.reply(`Please specify what teleport location you want to remove.`)
         }
 
         if (args.length > 1) {
-            return sevenDays.sendMessage({
-                ip: server.ip,
-                port: server.webPort,
-                authName: server.authName,
-                authToken: server.authToken,
-                message: `Too many arguments! Just provide a name please.`,
-                playerId: player.steamId
-            }).exec({
-                error: (error) => {
-                    sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
-                },
-                success: (result) => {
-                    return;
-                }
-            });
+            return chatMessage.reply(`Too many arguments! Just provide a name please.`)
         }
-        
+
         let teleportFound = false
         playerTeleports.forEach(teleport => {
             if (teleport.name == args[0]) {
                 teleportFound = teleport
             }
         })
-        
+
         if (!teleportFound) {
-            return sevenDays.sendMessage({
-                ip: server.ip,
-                port: server.webPort,
-                authName: server.authName,
-                authToken: server.authToken,
-                message: `Error: Did not find a teleport with that name!`,
-                playerId: player.steamId
-            }).exec({
-                error: (error) => {
-                    sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
-                },
-                success: (result) => {
-                    return;
-                }
-            });
+            return chatMessage.reply(`Error: Did not find a teleport with that name!`)
         }
 
         await PlayerTeleport.destroy(teleportFound);
-        return sevenDays.sendMessage({
-            ip: server.ip,
-            port: server.webPort,
-            authName: server.authName,
-            authToken: server.authToken,
-            message: `Your teleport ${teleportFound.name} was deleted!`,
-            playerId: player.steamId
-        }).exec({
-            error: (error) => {
-                sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
-            },
-            success: (result) => {
-                return;
-            }
-        });
+        return chatMessage.reply(`Your teleport ${teleportFound.name} was deleted!`)
 
     }
 }

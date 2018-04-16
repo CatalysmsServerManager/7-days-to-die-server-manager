@@ -1,3 +1,5 @@
+const sevenDays = require('machinepack-7daystodiewebapi');
+
 /**
      * @memberof module:SdtdCommandsHook
      * @name commandHandler
@@ -74,13 +76,31 @@ class CommandHandler {
 
         if (this.commands.has(commandName)) {
           let player = await Player.find({ name: chatMessage.playerName, server: this.config.server });
-          player = player[0];
+          let playerInfo = await sails.helpers.loadPlayerData.with({serverId: this.config.server, steamId: player[0].steamId})
+          player = playerInfo.players[0]
+
+          let server = await SdtdServer.findOne(player.server).populate('players');
+          let config = await SdtdConfig.findOne({server: server.id});
+          server.config = config;
 
           let commandToRun = this.commands.get(commandName);
 
-          return commandToRun.run(chatMessage, player.id, args);
+          let args = chatMessage.messageText.split(' ');
+          args.splice(0, 1)
+
+          // Function to easily reply to players in a command
+          chatMessage.reply = async message => await sendReplyToPlayer(server, player, message);
+          
+          sails.log.info(`HOOK SdtdCommands - command ran by player ${player.name} on server ${server.name} - ${chatMessage.messageText}`)
+          
+          if (_.isUndefined(player)) {
+            sails.log.warn(`Could not load playerdata for this message: ${JSON.stringify(chatMessage)}`)
+            return chatMessage.reply(`Error! Could not load player data. - Please report this on the dev server`)
+          }
+
+          return commandToRun.run(chatMessage, player, server, args);
         }
-        sails.log.debug(`HOOK SdtdCommands:commandListener - Unknown command user by ${chatMessage.playerName} on server ${this.config.server}`);
+        sails.log.debug(`HOOK SdtdCommands:commandListener - Unknown command used by ${chatMessage.playerName} on server ${this.config.server.name}`);
       }
     } catch (error) {
       sails.log.error(`HOOK SdtdCommands:commandListener - ${error}`);
@@ -92,3 +112,25 @@ class CommandHandler {
 }
 
 module.exports = CommandHandler;
+
+
+async function sendReplyToPlayer(server, player, message) {
+  return new Promise((resolve, reject) => {
+    return sevenDays.sendMessage({
+      ip: server.ip,
+      port: server.webPort,
+      authName: server.authName,
+      authToken: server.authToken,
+      message: `${message}`,
+      playerId: player.steamId
+    }).exec({
+      error: (error) => {
+        sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
+        reject(error)
+      },
+      success: (result) => {
+        resolve(result)
+      }
+    });
+  })
+}

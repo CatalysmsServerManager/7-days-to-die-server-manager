@@ -9,97 +9,31 @@ class telePrivate extends SdtdCommand {
         this.serverId = serverId;
     }
 
-    async run(chatMessage, playerId) {
+    async run(chatMessage, player, server, args) {
 
-        let server = await SdtdServer.findOne({
-            id: this.serverId
-        }).populate('config');
-        let player = await Player.findOne({
-            id: playerId
-        });
-        let playerTeleports = await PlayerTeleport.find({ player: playerId });
+        let playerTeleports = await PlayerTeleport.find({ player: player.id });
 
-        let args = chatMessage.messageText.split(' ');
-        args.splice(0, 1)
-
-
-        if (!server.config[0].enabledPlayerTeleports) {
-            return sevenDays.sendMessage({
-                ip: server.ip,
-                port: server.webPort,
-                authName: server.authName,
-                authToken: server.authToken,
-                message: `This command is disabled! Ask your server admin to enable this.`,
-                playerId: player.steamId
-            }).exec({
-                error: (error) => {
-                    sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
-                },
-                success: (result) => {
-                    return;
-                }
-            });
+        if (!server.config.enabledPlayerTeleports) {
+            return chatMessage.reply('Command disabled - ask your server owner to enable this!');
         }
 
         if (playerTeleports.length == 0) {
-            return sevenDays.sendMessage({
-                ip: server.ip,
-                port: server.webPort,
-                authName: server.authName,
-                authToken: server.authToken,
-                message: `Found no teleport location for you!`,
-                playerId: player.steamId
-            }).exec({
-                error: (error) => {
-                    sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
-                },
-                success: (result) => {
-                    return;
-                }
-            });
+            return chatMessage.reply(`Found no teleport location for you!`)
         }
 
         let teleportFound = false
         playerTeleports.forEach(teleport => {
-          if (teleport.name == args[0]) {
-            teleportFound = teleport
-          }
+            if (teleport.name == args[0]) {
+                teleportFound = teleport
+            }
         })
 
         if (!teleportFound) {
-            return sevenDays.sendMessage({
-              ip: server.ip,
-              port: server.webPort,
-              authName: server.authName,
-              authToken: server.authToken,
-              message: `No teleport with that name found`,
-              playerId: player.steamId
-            }).exec({
-              error: (error) => {
-                sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
-              },
-              success: (result) => {
-                return;
-              }
-            });
-          }
+            return chatMessage.reply(`No teleport with that name found`)
+        }
 
-          await PlayerTeleport.update({id: teleportFound.id}, {public: false});
-          return sevenDays.sendMessage({
-            ip: server.ip,
-            port: server.webPort,
-            authName: server.authName,
-            authToken: server.authToken,
-            message: `Your teleport ${teleportFound.name} has been set as private.`,
-            playerId: player.steamId
-          }).exec({
-            error: (error) => {
-              sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
-            },
-            success: (result) => {
-              return;
-            }
-          });
+        await PlayerTeleport.update({ id: teleportFound.id }, { public: false });
+        return chatMessage.reply(`Your teleport ${teleportFound.name} has been set as private.`)
 
 
 
