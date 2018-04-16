@@ -123,6 +123,7 @@ module.exports.routes = {
   'delete /api/sdtdserver/economy/module' : 'SdtdServerController/economy.disable-economy-module',
 
   'post /api/sdtdserver/economy/cost' : 'SdtdServerController/economy.set-cost',
+  'post /api/sdtdserver/economy/currencyname' : 'SdtdServerController/economy.set-currency-name',
 
   // Historical data
 
