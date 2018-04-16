@@ -8,14 +8,27 @@ class setTele extends SdtdCommand {
       name: 'settele',
     });
     this.serverId = serverId;
+    this.name = 'settele'
   }
 
   async run(chatMessage, player, server, args) {
 
     let playerTeleports = await PlayerTeleport.find({ player: player.id });
     let publicTeleports = await PlayerTeleport.find({ public: true });
-
-
+    
+    if (server.config.economyEnabled && server.config.costToSetTeleport) {
+      let notEnoughMoney = false
+      await sails.helpers.economy.deductFromPlayer.with({
+        playerId: player.id,
+        amountToDeduct: server.config.costToSetTeleport,
+        message: `COMMAND - ${this.name}`
+      }).tolerate('notEnoughCurrency', totalNeeded => {
+        notEnoughMoney = true;
+      })
+      if (notEnoughMoney) {
+        return chatMessage.reply(`You do not have enough money to do that! This action costs ${server.config.costToSetTeleport} ${server.config.currencyName}`)
+      }
+    }
 
 
     if (!server.config.enabledPlayerTeleports) {
