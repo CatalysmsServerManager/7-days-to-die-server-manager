@@ -31,6 +31,9 @@ module.exports = {
     exits: {
         success: {
             outputFriendlyName: 'Success',
+        },
+        notEnoughCurrency: {
+            description: 'Player did not have enough currency in balance to deduct this amount'
         }
     },
 
@@ -39,6 +42,11 @@ module.exports = {
             let playerToDeductFrom = await Player.findOne(inputs.playerId);
             let currentBalance = playerToDeductFrom.currency;
             let newBalance = currentBalance - inputs.amountToDeduct;
+
+            if (newBalance < 0) {
+                return exits.notEnoughCurrency(Math.abs(newBalance));
+            }
+
             await Player.update({id: playerToDeductFrom.id}, {currency: newBalance});
             await HistoricalInfo.create({
                 server: playerToDeductFrom.server,
