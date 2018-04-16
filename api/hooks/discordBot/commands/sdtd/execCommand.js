@@ -32,7 +32,7 @@ class ExecCommand extends Commando.Command {
 
         if (!sdtdServer) {
             let errorEmbed = new client.errorEmbed(`Could not find a server to execute this command for! Make sure to add your server via the website and configure a channel to execute commands in.`)
-            return msg.channel.send(errorEmbed)
+            return msg.reply(errorEmbed)
         }
 
         let isAdmin = await checkIfAdmin(msg.author.id, sdtdServer.id);
