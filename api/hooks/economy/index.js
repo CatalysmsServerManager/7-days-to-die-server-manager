@@ -69,6 +69,13 @@ module.exports = function economy(sails) {
 
 async function startPlaytimeEarner(serverId) {
     try {
+        await SdtdConfig.update({server: serverId}, {playtimeEarnerEnabled: true});
+
+        if (getMap(serverId, 'playtimeEarner')) {
+            console.log(`ALREADY ENABLED`)
+            return
+        }
+
         const server = await SdtdServer.findOne(serverId).populate('config');
         const config = server.config[0];
         let loggingObject = await sails.hooks.sdtdlogs.getLoggingObject(server.id);
@@ -85,6 +92,13 @@ async function startPlaytimeEarner(serverId) {
 
 async function stopPlaytimeEarner(serverId) {
     try {
+        await SdtdConfig.update({server: serverId}, {playtimeEarnerEnabled: false});
+
+        if (!getMap(serverId, 'playtimeEarner')) {
+            console.log(`ALREADY DISABLED`)
+            return
+        }
+
         let playtimeEarnerObject = await getMap(serverId);
         playtimeEarnerObject.stop();
         deleteMap(serverId, playtimeEarnerObject);
@@ -95,6 +109,7 @@ async function stopPlaytimeEarner(serverId) {
 
 
 function getMap(server, type) {
+    console.log(type)
     switch (type) {
         case 'playtimeEarner':
             return playtimeEarnerMap.get(String(server.id ? server.id : server))

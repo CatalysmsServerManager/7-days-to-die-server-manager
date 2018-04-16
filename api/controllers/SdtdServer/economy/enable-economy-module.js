@@ -26,7 +26,7 @@ module.exports = {
     fn: async function (inputs, exits) {
 
         try {
-            await sails.hooks.economy.start(inputs.serverId, moduleType)
+            await sails.hooks.economy.start(inputs.serverId, inputs.moduleType)
             return exits.success();
         } catch (error) {
             sails.log.error(`API - Sdtdserver:enable-economy - ${error}`);

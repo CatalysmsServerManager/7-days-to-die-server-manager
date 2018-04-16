@@ -29,6 +29,11 @@ module.exports = {
       defaultsTo: 'dolla billz'
     },
 
+    playtimeEarnerEnabled: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
     //   _____                                          _
     //  / ____|                                        | |
     // | |     ___  _ __ ___  _ __ ___   __ _ _ __   __| |___
