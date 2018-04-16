@@ -39,7 +39,7 @@ async function loadOnlinePlayersAndAwardMoney() {
     try {
         let onlinePlayers = await sails.helpers.loadPlayerData.with({ serverId: this.server.id, onlyOnline: true});
         onlinePlayers.players.forEach(async player => {
-            await sails.helpers.economy.giveToPlayer.with({playerId: player.id, amountToGive: 1})
+            await sails.helpers.economy.giveToPlayer.with({playerId: player.id, amountToGive: 1, message: `playtimeEarner - awarding player cash for playing on the server`})
         })
     } catch (error) {
         sails.log.error(error)
