@@ -33,10 +33,10 @@ class Lookup extends Commando.Command {
     }
 
     let foundPlayer = await sails.models.player.find({
+        server: sdtdServer.id,
         name: {
             'contains' : args.playername
         },
-        server: sdtdServer.id
     })
 
     if (foundPlayer.length == 0) {

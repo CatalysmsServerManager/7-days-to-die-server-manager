@@ -24,10 +24,10 @@ class Player extends Commando.Command {
       return msg.channel.send(`Could not determine what server to work with! Make sure your settings are correct.`)
     }
     let foundPlayer = await sails.models.player.find({
+        server: sdtdServer.id,
         name: {
             'contains' : args.playername
         },
-        server: sdtdServer.id
     })
 
     if (foundPlayer.length == 0) {
