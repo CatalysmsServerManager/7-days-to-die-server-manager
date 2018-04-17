@@ -45,25 +45,33 @@ class tele extends SdtdCommand {
       return chatMessage.reply(`You need to wait ${secondsToWait} seconds to teleport again!`)
     }
 
-    sevenDays.teleportPlayer({
-      ip: server.ip,
-      port: server.webPort,
-      authName: server.authName,
-      authToken: server.authToken,
-      playerId: player.steamId,
-      coordinates: `${teleportFound.x} ${teleportFound.y} ${teleportFound.z}`
-    }).exec({
-      success: async (response) => {
-        chatMessage.reply(`Woosh! Welcome to ${teleportFound.name}`);
-        await Player.update({ id: player.id }, { lastTeleportTime: new Date() })
-        await PlayerTeleport.update({ id: teleportFound.id }, { timesUsed: teleportFound.timesUsed + 1 });
-        return;
-      },
-      error: (error) => {
-        sails.log.error(`Hook - sdtdCommands:teleport - ${error}`);
-        return exits.error(error);
-      }
-    });
+    if (server.config.playerTeleportDelay) {
+      chatMessage.reply(`You will be teleported in ${server.config.playerTeleportDelay} seconds`);
+    }
+
+    setTimeout(function () {
+      sevenDays.teleportPlayer({
+        ip: server.ip,
+        port: server.webPort,
+        authName: server.authName,
+        authToken: server.authToken,
+        playerId: player.steamId,
+        coordinates: `${teleportFound.x} ${teleportFound.y} ${teleportFound.z}`
+      }).exec({
+        success: async (response) => {
+          chatMessage.reply(`Woosh! Welcome to ${teleportFound.name}`);
+          await Player.update({ id: player.id }, { lastTeleportTime: new Date() })
+          await PlayerTeleport.update({ id: teleportFound.id }, { timesUsed: teleportFound.timesUsed + 1 });
+          return;
+        },
+        error: (error) => {
+          sails.log.error(`Hook - sdtdCommands:teleport - ${error}`);
+          return exits.error(error);
+        }
+      });
+    }, server.config.playerTeleportDelay * 1000)
+
+
 
   }
 }

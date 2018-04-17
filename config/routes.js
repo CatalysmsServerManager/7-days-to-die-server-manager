@@ -186,6 +186,8 @@ module.exports.routes = {
   'post /api/sdtdserver/commands/playerteleports/timeout' : "SdtdServerController/commands.set-teleport-timeout",
   'get /api/sdtdserver/commands/playerteleports/timeout' : "SdtdServerController/commands.get-teleport-timeout",
 
+  'post /api/sdtdserver/commands/playerteleports/delay' : 'SdtdServerController/commands.set-teleport-delay',
+
   // MOTD
   'post /api/sdtdserver/togglemotd': 'SdtdServerController/motd.motd-toggle',
   'post /api/sdtdserver/reloadmotd': 'SdtdServerController/motd.motd-reload',

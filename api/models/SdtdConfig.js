@@ -109,9 +109,16 @@ module.exports = {
       defaultsTo: 3
     },
 
+    playerTeleportDelay: {
+      type: 'number',
+      defaultsTo: 15,
+      min: 0,
+    },
+
     playerTeleportTimeout: {
       type: 'number',
-      defaultsTo: 60
+      defaultsTo: 60,
+      min: 0
     },
 
     // _____  _                       _ 
