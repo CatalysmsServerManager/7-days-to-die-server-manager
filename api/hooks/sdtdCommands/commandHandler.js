@@ -75,7 +75,7 @@ class CommandHandler {
         let args = splitString.splice(1, splitString.length);
 
         if (this.commands.has(commandName)) {
-          let player = await Player.find({ name: chatMessage.playerName, server: this.config.server });
+          let player = await Player.find({ name: _.trim(chatMessage.playerName), server: this.config.server });
           let playerInfo = await sails.helpers.loadPlayerData.with({serverId: this.config.server, steamId: player[0].steamId})
           player = playerInfo.players[0]
 
@@ -92,11 +92,6 @@ class CommandHandler {
           chatMessage.reply = async message => await sendReplyToPlayer(server, player, message);
           
           sails.log.info(`HOOK SdtdCommands - command ran by player ${player.name} on server ${server.name} - ${chatMessage.messageText}`)
-          
-          if (_.isUndefined(player)) {
-            sails.log.warn(`Could not load playerdata for this message: ${JSON.stringify(chatMessage)}`)
-            return chatMessage.reply(`Error! Could not load player data. - Please report this on the dev server`)
-          }
 
           return commandToRun.run(chatMessage, player, server, args);
         }
