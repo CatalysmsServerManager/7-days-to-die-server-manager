@@ -118,8 +118,7 @@ module.exports = {
             }
             foundOrCreatedPlayer = await Player.findOrCreate({
               steamId: newPlayer.steamid,
-              server: inputs.serverId,
-              entityId: newPlayer.entityid
+              server: inputs.serverId
             }, {
                 steamId: newPlayer.steamid,
                 server: inputs.serverId,
