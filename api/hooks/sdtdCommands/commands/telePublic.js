@@ -7,6 +7,7 @@ class telePublic extends SdtdCommand {
             name: 'telepublic',
         });
         this.serverId = serverId;
+        this.name = 'telepublic'
     }
 
     async run(chatMessage, player, server, args) {
