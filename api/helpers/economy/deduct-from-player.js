@@ -56,6 +56,7 @@ module.exports = {
                 amount: inputs.amountToDeduct,
                 economyAction: 'deduct'
             })
+            return exits.success();
         } catch (error) {
             sails.log.error(`HELPER economy:deduct-from-player - ${error}`);
             return exits.error(error);
