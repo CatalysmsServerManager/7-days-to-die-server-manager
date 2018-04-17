@@ -61,7 +61,26 @@ module.exports = function economy(sails) {
                     throw new Error('Unknown updateObject type')
                     break;
             }
-        }
+        },
+
+        reload: async function(serverId, type) {
+            switch (type) {
+                case 'playtimeEarner':
+                    let config = await SdtdConfig.findOne(serverId);
+                    if (config.playtimeEarnerEnabled) {
+                        await stopPlaytimeEarner(serverId);
+                        return startPlaytimeEarner(serverId);
+                    } else {
+                        await startPlaytimeEarner(serverId);
+                        return stopPlaytimeEarner(serverId);
+                    }
+                    break;
+
+                default:
+                    throw new Error('Unknown updateObject type')
+                    break;
+            }
+        },
 
     };
 }

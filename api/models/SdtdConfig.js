@@ -26,12 +26,22 @@ module.exports = {
 
     currencyName: {
       type: 'string',
-      defaultsTo: 'dolla billz'
+      defaultsTo: 'dolla dolla billz'
     },
 
     playtimeEarnerEnabled: {
       type: 'boolean',
       defaultsTo: false
+    },
+
+    playtimeEarnerInterval: {
+      type: 'number',
+      defaultsTo: 5
+    },
+
+    playtimeEarnerAmount: {
+      type: 'number',
+      defaultsTo: 1
     },
 
     costToTeleport: {

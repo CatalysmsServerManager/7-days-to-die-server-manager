@@ -101,8 +101,7 @@
         <div class="col-4">
             <div class="list-group">
                 <button type="button" class="list-group-item bg-dark">Modules</button>
-                <button id="economy-button-enable-playtimeEarner" type="button" class="list-group-item list-group-item-action bg-success">Enable playtime earner</button>
-                <button id="economy-button-disable-playtimeEarner" type="button" class="list-group-item list-group-item-action bg-warning">Disable playtime earner</button>
+                <%- include('./module-playtimeEarner') %>
                 <button type="button" class="list-group-item list-group-item-action">Module 2</button>
                 <button type="button" class="list-group-item list-group-item-action">Module 3</button>
                 <button type="button" class="list-group-item list-group-item-action">Module 4</button>
@@ -115,6 +114,9 @@
 
         </div>
     </div>
+
+
+    
 
 
 
@@ -147,12 +149,6 @@
                 $('#economy-button-disable').hide();
             }
 
-            if (window.SAILS_LOCALS.config.playtimeEarnerEnabled) {
-                $('#economy-button-enable-playtimeEarner').hide();
-
-            } else {
-                $('#economy-button-disable-playtimeEarner').hide();
-            }
 
             $("#economy-button-enable").click(e => {
                 e.preventDefault();
@@ -191,49 +187,6 @@
                     }
                 })
             })
-
-
-            $('#economy-button-enable-playtimeEarner').click(e => {
-                e.preventDefault();
-                $.ajax({
-                    url: '/api/sdtdserver/economy/module',
-                    method: 'POST',
-                    data: {
-                        _csrf: window.SAILS_LOCALS._csrf,
-                        serverId: window.SAILS_LOCALS.server.id,
-                        moduleType: 'playtimeEarner'
-                    },
-                    success: (data, status, xhr) => {
-                        $('#economy-button-enable-playtimeEarner').fadeOut();
-                        $('#economy-button-disable-playtimeEarner').fadeIn();
-                    },
-                    error: (xhr, status, error) => {
-                        console.log(error)
-                    }
-                })
-            })
-
-            $('#economy-button-disable-playtimeEarner').click(e => {
-                e.preventDefault();
-                $.ajax({
-                    url: '/api/sdtdserver/economy/module',
-                    method: 'DELETE',
-                    data: {
-                        _csrf: window.SAILS_LOCALS._csrf,
-                        serverId: window.SAILS_LOCALS.server.id,
-                        moduleType: 'playtimeEarner'
-                    },
-                    success: (data, status, xhr) => {
-                        $('#economy-button-enable-playtimeEarner').fadeIn();
-                        $('#economy-button-disable-playtimeEarner').fadeOut();
-                        console.log(data)
-                    },
-                    error: (xhr, status, error) => {
-                        console.log(error)
-                    }
-                })
-            })
-
 
 
             $('#economy-costToTeleport-btn').click(e => {
