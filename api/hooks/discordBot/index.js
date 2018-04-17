@@ -53,7 +53,7 @@ module.exports = function discordBot(sails) {
           });
 
           client.on('commandRun', (command, promise, message) => {
-            sails.log.info(`Command ${command.name} ran by ${message.author.username} on ${message.guild.name} - ${message.content}`);
+            sails.log.info(`Command ${command.name} ran by ${message.author.username} on ${message.guild ? message.guild.name : 'DM'} - ${message.content}`);
           });
 
 
