@@ -81,19 +81,20 @@ module.exports.routes = {
   'get /sdtdserver/:serverId/console': 'SdtdServerController.console',
   'get /sdtdserver/:serverId/chat': 'SdtdServerController.chat',
   'get /sdtdserver/:serverId/players': 'SdtdServerController.get-players-view',
-  'get /sdtdserver/:serverId/delete' : 'SdtdServerController.delete-server',
+  'get /sdtdserver/:serverId/delete': 'SdtdServerController.delete-server',
   'get /sdtdserver/:serverId/settings': 'SdtdServerController.settings',
   'get /sdtdserver/:serverId/info': 'SdtdServerController.server-info-view',
   'get /sdtdserver/:serverId/tickets': 'SdtdTicket.server-tickets-view',
   'get /sdtdserver/:serverId/analytics': 'SdtdServerController/historicalData.view-analytics',
-  
+  'get /sdtdserver/:serverId/economy': 'SdtdServerController/economy.economy-view',
+
   'get /player/:playerId/profile': 'PlayerController.profile',
 
   'get /user/:userId/tickets': 'SdtdTicket.user-tickets-view',
   'get /user/:userId/profile': 'User.profile',
   'get /user/:userId/dashboard': 'User.dashboard',
 
-  
+
   'get /sdtdticket/:ticketId': 'SdtdTicket.view-ticket',
 
 
@@ -109,32 +110,46 @@ module.exports.routes = {
   'get /api/sdtdserver/players': 'SdtdServerController.get-players',
   'get /api/sdtdserver/info': 'SdtdServerController.load-server-info',
   'get /api/sdtdserver/availableItems': 'SdtdServerController.available-items',
-  'get /api/sdtdserver/findwriteablechannelsinguild' : 'SdtdServerController/discordBot.find-writeable-channels-in-guild',
+  'get /api/sdtdserver/findwriteablechannelsinguild': 'SdtdServerController/discordBot.find-writeable-channels-in-guild',
   'get /api/sdtdserver/onlinestatus': 'SdtdServerController.is-online',
   'get /api/sdtdserver/fps': 'SdtdServerController.get-fps',
+
+  // Economy
+
+  'post /api/sdtdserver/economy': 'SdtdServerController/economy.enable-economy',
+  'delete /api/sdtdserver/economy': 'SdtdServerController/economy.disable-economy',
+
+  'post /api/sdtdserver/economy/module': 'SdtdServerController/economy.enable-economy-module',
+  'delete /api/sdtdserver/economy/module': 'SdtdServerController/economy.disable-economy-module',
+
+  'post /api/sdtdserver/economy/cost': 'SdtdServerController/economy.set-cost',
+  'post /api/sdtdserver/economy/currencyname': 'SdtdServerController/economy.set-currency-name',
+
+  'post /api/sdtdserver/economy/module/playtimeearner/amount': 'SdtdServerController/economy.set-playtime-earner-amount',
+  'post /api/sdtdserver/economy/module/playtimeearner/interval': 'SdtdServerController/economy.set-playtime-earner-interval',
 
   // Historical data
 
   'get /api/sdtdserver/data/memupdate': 'SdtdServerController/historicalData.get-mem-update',
 
   // Tickets
-  
+
   'post /api/sdtdTicket/updateTicketStatus': 'SdtdTicket.update-ticket-status',
-  'post /api/sdtdTicket/editTicket' : 'SdtdTicket.edit-ticket',
-  'get /api/sdtdticket/opentickets' : 'SdtdTicketController.open-tickets',
-  'post /api/sdtdticket/comment' : 'sdtdTicketController.add-comment',
-  'delete /api/sdtdticket/comment' : 'sdtdTicketController.remove-comment',
-  'put /api/sdtdticket/comment' : 'sdtdTicketController.edit-comment',
-  
+  'post /api/sdtdTicket/editTicket': 'SdtdTicket.edit-ticket',
+  'get /api/sdtdticket/opentickets': 'SdtdTicketController.open-tickets',
+  'post /api/sdtdticket/comment': 'sdtdTicketController.add-comment',
+  'delete /api/sdtdticket/comment': 'sdtdTicketController.remove-comment',
+  'put /api/sdtdticket/comment': 'sdtdTicketController.edit-comment',
+
   'post /api/sdtdserver/addserver': 'SdtdServerController/add-server',
   'post /api/sdtdserver/restartServer': 'SdtdServerController/restart-server',
-  
+
   'get /api/sdtdserver/admins': 'SdtdServerController.get-admins',
   'post /api/sdtdserver/admin': 'SdtdServerController.add-admin',
   'delete /api/sdtdserver/admin': 'SdtdServerController.remove-admin',
 
   // Sdtd settings
-  
+
   'post /api/sdtdserver/updateConnectionInfo': 'SdtdServerController.update-connection-info',
   'post /api/sdtdserver/toggleLogging': 'SdtdServerController.logging-toggle',
 
@@ -143,22 +158,22 @@ module.exports.routes = {
   'post /api/sdtdserver/reloadCountryBan': 'SdtdServerController/countryBan.country-ban-reload',
 
   'get /api/sdtdserver/countryban/country': 'SdtdServerController/countryBan.get-banned-countries',
-  'post /api/sdtdserver/countryban/country':'SdtdServerController/countryBan.add-country',
+  'post /api/sdtdserver/countryban/country': 'SdtdServerController/countryBan.add-country',
   'delete /api/sdtdserver/countryban/country': 'SdtdServerController/countryBan.remove-country',
 
   'get /api/sdtdserver/countryban/whitelist': 'SdtdServerController/countryBan.get-whitelist',
-  'post /api/sdtdserver/countryban/whitelist':'SdtdServerController/countryBan.add-to-whitelist',
+  'post /api/sdtdserver/countryban/whitelist': 'SdtdServerController/countryBan.add-to-whitelist',
   'delete /api/sdtdserver/countryban/whitelist': 'SdtdServerController/countryBan.remove-from-whitelist',
 
   // Commands
   'post /api/sdtdserver/commands/reload': 'SdtdServerController/commands.commands-reload',
 
-  'post /api/sdtdserver/commands': "SdtdServerController/commands.enable-commands",  
-  'get /api/sdtdserver/commands': "SdtdServerController/commands.get-commands-status",  
-  'delete /api/sdtdserver/commands': "SdtdServerController/commands.disable-commands",  
+  'post /api/sdtdserver/commands': "SdtdServerController/commands.enable-commands",
+  'get /api/sdtdserver/commands': "SdtdServerController/commands.get-commands-status",
+  'delete /api/sdtdserver/commands': "SdtdServerController/commands.disable-commands",
 
-  'post /api/sdtdserver/commands/prefix': "SdtdServerController/commands.set-prefix",  
-  'get /api/sdtdserver/commands/prefix': "SdtdServerController/commands.get-prefix",  
+  'post /api/sdtdserver/commands/prefix': "SdtdServerController/commands.set-prefix",
+  'get /api/sdtdserver/commands/prefix': "SdtdServerController/commands.get-prefix",
 
   'post /api/sdtdserver/commands/calladmin': "SdtdServerController/commands.enable-calladmin",
   'delete /api/sdtdserver/commands/calladmin': "SdtdServerController/commands.disable-calladmin",
@@ -168,11 +183,13 @@ module.exports.routes = {
   'delete /api/sdtdserver/commands/playerteleports': "SdtdServerController/commands.disable-player-teleports",
   'get /api/sdtdserver/commands/playerteleports': "SdtdServerController/commands.get-player-teleports",
 
-  'post /api/sdtdserver/commands/playerteleports/maxlocations' : "SdtdServerController/commands.set-max-teleport-locations",
-  'get /api/sdtdserver/commands/playerteleports/maxlocations' : "SdtdServerController/commands.get-max-teleport-locations",
+  'post /api/sdtdserver/commands/playerteleports/maxlocations': "SdtdServerController/commands.set-max-teleport-locations",
+  'get /api/sdtdserver/commands/playerteleports/maxlocations': "SdtdServerController/commands.get-max-teleport-locations",
 
-  'post /api/sdtdserver/commands/playerteleports/timeout' : "SdtdServerController/commands.set-teleport-timeout",
-  'get /api/sdtdserver/commands/playerteleports/timeout' : "SdtdServerController/commands.get-teleport-timeout",
+  'post /api/sdtdserver/commands/playerteleports/timeout': "SdtdServerController/commands.set-teleport-timeout",
+  'get /api/sdtdserver/commands/playerteleports/timeout': "SdtdServerController/commands.get-teleport-timeout",
+
+  'post /api/sdtdserver/commands/playerteleports/delay': 'SdtdServerController/commands.set-teleport-delay',
 
   // MOTD
   'post /api/sdtdserver/togglemotd': 'SdtdServerController/motd.motd-toggle',
@@ -183,13 +200,13 @@ module.exports.routes = {
   'post /api/sdtdserver/setchatchannel': 'SdtdServerController/discordBot.set-chat-channel',
   'post /api/sdtdserver/setnotificationchannel': 'SdtdServerController/discordBot.set-notification-channel',
   'post /api/sdtdserver/setcommandschannel': 'SdtdServerController/discordBot.set-commands-channel',
-  'post /api/sdtdserver/discord/prefix' : 'SdtdServerController/discordBot.set-prefix',
+  'post /api/sdtdserver/discord/prefix': 'SdtdServerController/discordBot.set-prefix',
 
 
   // PLAYER
 
   'get /api/player/kick': "Player.kick",
-  'get /api/player/teleports' : 'Player.get-teleports',
+  'get /api/player/teleports': 'Player.get-teleports',
 
   'post /api/player/ban': "Player.ban",
   "post /api/player/unban": "Player.unban",

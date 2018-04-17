@@ -14,12 +14,10 @@ class PlaytimeEarner {
         try {
             sails.log.debug(`Started playtime earner for server ${this.server.name}`);
 
-            this.interval = setInterval(this.intervalFunc, 300000)
+            this.interval = setInterval(this.intervalFunc, this.config.playtimeEarnerInterval * 60000)
         } catch (error) {
             sails.log.error(error)
         }
-
-
     }
 
     async stop() {
@@ -27,8 +25,6 @@ class PlaytimeEarner {
         clearInterval(this.interval);
 
     }
-
-
 }
 
 
@@ -39,7 +35,7 @@ async function loadOnlinePlayersAndAwardMoney() {
     try {
         let onlinePlayers = await sails.helpers.loadPlayerData.with({ serverId: this.server.id, onlyOnline: true});
         onlinePlayers.players.forEach(async player => {
-            await sails.helpers.economy.giveToPlayer.with({playerId: player.id, amountToGive: 1})
+            await sails.helpers.economy.giveToPlayer.with({playerId: player.id, amountToGive: this.config.playtimeEarnerAmount, message: `playtimeEarner - awarding player cash for playing on the server`})
         })
     } catch (error) {
         sails.log.error(error)

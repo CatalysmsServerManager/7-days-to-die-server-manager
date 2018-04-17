@@ -7,10 +7,26 @@ class tele extends SdtdCommand {
       name: 'tele',
     });
     this.serverId = serverId;
+    this.name = "tele";
   }
 
   async run(chatMessage, player, server, args) {
     let publicTeleports = new Array();
+
+    if (server.config.economyEnabled && server.config.costToTeleport) {
+      let notEnoughMoney = false
+      let result = await sails.helpers.economy.deductFromPlayer.with({
+        playerId: player.id,
+        amountToDeduct: server.config.costToTeleport,
+        message: `COMMAND - ${this.name}`
+      }).tolerate('notEnoughCurrency', totalNeeded => {
+        notEnoughMoney = true;
+      })
+      if (notEnoughMoney) {
+        return chatMessage.reply(`You do not have enough money to do that! This action costs ${server.config.costToTeleport} ${server.config.currencyName}`)
+      }
+    }
+
 
     for (const player of server.players) {
       let publicTelesByPlayer = await PlayerTeleport.find({ player: player.id, public: true });
@@ -45,25 +61,33 @@ class tele extends SdtdCommand {
       return chatMessage.reply(`You need to wait ${secondsToWait} seconds to teleport again!`)
     }
 
-    sevenDays.teleportPlayer({
-      ip: server.ip,
-      port: server.webPort,
-      authName: server.authName,
-      authToken: server.authToken,
-      playerId: player.steamId,
-      coordinates: `${teleportFound.x} ${teleportFound.y} ${teleportFound.z}`
-    }).exec({
-      success: async (response) => {
-        chatMessage.reply(`Woosh! Welcome to ${teleportFound.name}`);
-        await Player.update({ id: player.id }, { lastTeleportTime: new Date() })
-        await PlayerTeleport.update({ id: teleportFound.id }, { timesUsed: teleportFound.timesUsed + 1 });
-        return;
-      },
-      error: (error) => {
-        sails.log.error(`Hook - sdtdCommands:teleport - ${error}`);
-        return exits.error(error);
-      }
-    });
+    if (server.config.playerTeleportDelay) {
+      chatMessage.reply(`You will be teleported in ${server.config.playerTeleportDelay} seconds`);
+    }
+
+    setTimeout(function () {
+      sevenDays.teleportPlayer({
+        ip: server.ip,
+        port: server.webPort,
+        authName: server.authName,
+        authToken: server.authToken,
+        playerId: player.steamId,
+        coordinates: `${teleportFound.x} ${teleportFound.y} ${teleportFound.z}`
+      }).exec({
+        success: async (response) => {
+          chatMessage.reply(`Woosh! Welcome to ${teleportFound.name}`);
+          await Player.update({ id: player.id }, { lastTeleportTime: new Date() })
+          await PlayerTeleport.update({ id: teleportFound.id }, { timesUsed: teleportFound.timesUsed + 1 });
+          return;
+        },
+        error: (error) => {
+          sails.log.error(`Hook - sdtdCommands:teleport - ${error}`);
+          return exits.error(error);
+        }
+      });
+    }, server.config.playerTeleportDelay * 1000)
+
+
 
   }
 }

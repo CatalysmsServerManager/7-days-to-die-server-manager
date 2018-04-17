@@ -1,0 +1,204 @@
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#economy-module-playtimeEarner-modal">
+    Playtime earner
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="economy-module-playtimeEarner-modal" tabindex="-1" role="dialog" aria-labelledby="economy-module-playtimeEarner-modal-title"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="economy-module-playtimeEarner-modal-title">Playtime earner module</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="economy-module-playtimeEarner-config-enabled" id="economy-module-playtimeEarner-config-enabled"> Enabled
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="economy-module-playtimeEarner-config-interval">Interval</label>
+                        <input type="number" class="form-control" name="economy-module-playtimeEarner-config-interval" id="economy-module-playtimeEarner-config-interval"
+                            aria-describedby="economy-module-playtimeEarner-config-interval-help" placeholder="<%= config.playtimeEarnerInterval %>">
+                        <small id="economy-module-playtimeEarner-config-interval-help" class="form-text text-muted">Your players will earn currency every x minutes</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="economy-module-playtimeEarner-config-amount">Amount</label>
+                        <input type="number" class="form-control" name="economy-module-playtimeEarner-config-amount" id="economy-module-playtimeEarner-config-amount"
+                            aria-describedby="economy-module-playtimeEarner-config-amount-help" placeholder="<%= config.playtimeEarnerAmount %>">
+                        <small id="economy-module-playtimeEarner-config-amount-help" class="form-text text-muted">How much currency your players get per interval</small>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="economy-module-playtimeEarner-save" type="button" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+
+        if (window.SAILS_LOCALS.config.playtimeEarnerEnabled) {
+            $('#economy-module-playtimeEarner-config-enabled').prop('checked', true)
+        }
+
+        $('#economy-module-playtimeEarner-save').click(e => {
+            e.preventDefault();
+
+            $('#economy-module-playtimeEarner-config-interval').removeClass('bg-success bg-danger')
+            $('#economy-module-playtimeEarner-config-amount').removeClass('bg-success bg-danger')
+
+
+            if ($('#economy-module-playtimeEarner-config-enabled').prop('checked') != window.SAILS_LOCALS.config.playtimeEarnerEnabled) {
+                let newStatus = $('#economy-module-playtimeEarner-config-enabled').prop('checked')
+                updatePlaytimeEarnerStatus(newStatus)
+            }
+
+            let newInterval = $('#economy-module-playtimeEarner-config-interval').val();
+            let newAmount = $('#economy-module-playtimeEarner-config-amount').val();
+
+            if (newInterval != '') {
+                updatePlaytimeEarnerInterval(newInterval)
+            }
+
+            if (newAmount != '') {
+                updatePlaytimeEarnerAmount(newAmount)
+            }
+
+        })
+
+        function updatePlaytimeEarnerStatus(newStatus) {
+
+
+            if (newStatus) {
+                $.ajax({
+                    url: '/api/sdtdserver/economy/module',
+                    method: 'POST',
+                    data: {
+                        _csrf: window.SAILS_LOCALS._csrf,
+                        serverId: window.SAILS_LOCALS.server.id,
+                        moduleType: 'playtimeEarner'
+                    },
+                    success: (data, status, xhr) => {
+                        $('#economy-module-playtimeEarner-config-enabled').addClass('bg-success').removeClass('bg-danger');
+                    },
+                    error: (xhr, status, error) => {
+                        console.log(error)
+                        alert('Something went wrong while enabling playtimeEarner')
+                    }
+                })
+            } else {
+                $.ajax({
+                    url: '/api/sdtdserver/economy/module',
+                    method: 'DELETE',
+                    data: {
+                        _csrf: window.SAILS_LOCALS._csrf,
+                        serverId: window.SAILS_LOCALS.server.id,
+                        moduleType: 'playtimeEarner'
+                    },
+                    success: (data, status, xhr) => {
+                        $('#economy-module-playtimeEarner-config-enabled').addClass('bg-success').removeClass('bg-danger');
+                    },
+                    error: (xhr, status, error) => {
+                        console.log(error)
+                        alert('Something went wrong while disabling playtimeEarner')
+                    }
+                })
+            }
+
+
+
+        }
+
+        function updatePlaytimeEarnerInterval(newInterval) {
+
+            if (!validator.isInt(newInterval)) {
+                return $('#economy-module-playtimeEarner-config-interval').addClass('bg-danger').removeClass('bg-success');
+            }
+
+            $.ajax({
+                url: '/api/sdtdserver/economy/module/playtimeearner/interval',
+                method: 'POST',
+                data: {
+                    _csrf: window.SAILS_LOCALS._csrf,
+                    serverId: window.SAILS_LOCALS.server.id,
+                    interval: newInterval
+                },
+                success: (data, status, xhr) => {
+                    $('#economy-module-playtimeEarner-config-interval').addClass('bg-success').removeClass('bg-danger');
+                },
+                error: (xhr, status, error) => {
+                    console.log(error)
+                    alert('Something went wrong while setting a new interval')
+                }
+            })
+        }
+
+
+
+
+
+        function updatePlaytimeEarnerAmount(newAmount) {
+
+            if (!validator.isInt(newAmount)) {
+                return $('#economy-module-playtimeEarner-config-amount').addClass('bg-danger').removeClass('bg-success');
+            }
+
+            $.ajax({
+                url: '/api/sdtdserver/economy/module/playtimeearner/amount',
+                method: 'POST',
+                data: {
+                    _csrf: window.SAILS_LOCALS._csrf,
+                    serverId: window.SAILS_LOCALS.server.id,
+                    amount: newAmount
+                },
+                success: (data, status, xhr) => {
+                    $('#economy-module-playtimeEarner-config-amount').addClass('bg-success').removeClass('bg-danger');
+                },
+                error: (xhr, status, error) => {
+                    console.log(error)
+                    alert('Something went wrong while setting a new amount')
+                }
+            })
+
+        }
+    })
+
+
+
+
+            //     $('#economy-button-enable-playtimeEarner').click(e => {
+            //     e.preventDefault();
+
+
+            // $('#economy-button-disable-playtimeEarner').click(e => {
+            //     e.preventDefault();
+            //     $.ajax({
+            //         url: '/api/sdtdserver/economy/module',
+            //         method: 'DELETE',
+            //         data: {
+            //             _csrf: window.SAILS_LOCALS._csrf,
+            //             serverId: window.SAILS_LOCALS.server.id,
+            //             moduleType: 'playtimeEarner'
+            //         },
+            //         success: (data, status, xhr) => {
+            //             $('#economy-button-enable-playtimeEarner').fadeIn();
+            //             $('#economy-button-disable-playtimeEarner').fadeOut();
+            //             console.log(data)
+            //         },
+            //         error: (xhr, status, error) => {
+            //             console.log(error)
+            //         }
+            //     })
+            // })
+
+</script>

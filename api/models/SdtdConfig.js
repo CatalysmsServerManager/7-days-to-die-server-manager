@@ -26,7 +26,37 @@ module.exports = {
 
     currencyName: {
       type: 'string',
-      defaultsTo: 'dolla billz'
+      defaultsTo: 'dolla dolla billz'
+    },
+
+    playtimeEarnerEnabled: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
+    playtimeEarnerInterval: {
+      type: 'number',
+      defaultsTo: 5
+    },
+
+    playtimeEarnerAmount: {
+      type: 'number',
+      defaultsTo: 1
+    },
+
+    costToTeleport: {
+      type: 'number',
+      defaultsTo: 1
+    },
+
+    costToSetTeleport: {
+      type: 'number',
+      defaultsTo: 15
+    },
+
+    costToMakeTeleportPublic: {
+      type: 'number',
+      defaultsTo: 25
     },
 
     //   _____                                          _
@@ -89,9 +119,16 @@ module.exports = {
       defaultsTo: 3
     },
 
+    playerTeleportDelay: {
+      type: 'number',
+      defaultsTo: 15,
+      min: 0,
+    },
+
     playerTeleportTimeout: {
       type: 'number',
-      defaultsTo: 60
+      defaultsTo: 60,
+      min: 0
     },
 
     // _____  _                       _ 

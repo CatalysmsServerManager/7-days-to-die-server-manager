@@ -61,7 +61,26 @@ module.exports = function economy(sails) {
                     throw new Error('Unknown updateObject type')
                     break;
             }
-        }
+        },
+
+        reload: async function(serverId, type) {
+            switch (type) {
+                case 'playtimeEarner':
+                    let config = await SdtdConfig.findOne(serverId);
+                    if (config.playtimeEarnerEnabled) {
+                        await stopPlaytimeEarner(serverId);
+                        return startPlaytimeEarner(serverId);
+                    } else {
+                        await startPlaytimeEarner(serverId);
+                        return stopPlaytimeEarner(serverId);
+                    }
+                    break;
+
+                default:
+                    throw new Error('Unknown updateObject type')
+                    break;
+            }
+        },
 
     };
 }
@@ -69,6 +88,12 @@ module.exports = function economy(sails) {
 
 async function startPlaytimeEarner(serverId) {
     try {
+        await SdtdConfig.update({server: serverId}, {playtimeEarnerEnabled: true});
+
+        if (getMap(serverId, 'playtimeEarner')) {
+            return
+        }
+
         const server = await SdtdServer.findOne(serverId).populate('config');
         const config = server.config[0];
         let loggingObject = await sails.hooks.sdtdlogs.getLoggingObject(server.id);
@@ -85,7 +110,13 @@ async function startPlaytimeEarner(serverId) {
 
 async function stopPlaytimeEarner(serverId) {
     try {
-        let playtimeEarnerObject = await getMap(serverId);
+        await SdtdConfig.update({server: serverId}, {playtimeEarnerEnabled: false});
+
+        if (!getMap(serverId, 'playtimeEarner')) {
+            return
+        }
+
+        let playtimeEarnerObject = await getMap(serverId, 'playtimeEarner');
         playtimeEarnerObject.stop();
         deleteMap(serverId, playtimeEarnerObject);
     } catch (error) {
