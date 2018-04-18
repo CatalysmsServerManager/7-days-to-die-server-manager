@@ -1,0 +1,69 @@
+<!-- Button trigger modal -->
+<li class="list-group-item">
+    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#custom-command-<%= command.id %>-modal">
+        <%= command.name %>
+    </button>
+</li>
+<!-- Modal -->
+<div class="modal fade" id="custom-command-<%= command.id %>-modal" tabindex="-1" role="dialog" aria-labelledby="custom-command-<%= command.id %>-modal-title"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="custom-command-<%= command.id %>-modal-title">
+                    <%= command.name %>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <label for="custom-command-<%= command.id %>-modal-edit-name">Name</label>
+                    <input type="text" class="form-control" name="custom-command-<%= command.id %>-modal-edit-name" id="custom-command-<%= command.id %>-modal-edit-name"
+                        aria-describedby="custom-command-<%= command.id %>-modal-edit-name-help" value="<%= command.name %>">
+                    <small id="custom-command-<%= command.id %>-modal-edit-name-help" class="form-text text-muted">What your players will type to execute the command
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="custom-command-<%= command.id %>-modal-edit-commands">Command(s) to execute</label>
+                    <input type="text" class="form-control" name="custom-command-<%= command.id %>-modal-edit-commands" id="custom-command-<%= command.id %>-modal-edit-commands"
+                        aria-describedby="custom-command-<%= command.id %>-modal-edit-commands-help" value="<%= command.commandsToExecute %>">
+                    <small id="custom-command-<%= command.id %>-modal-edit-commands-help" class="form-text text-muted"> Example: "sayplayer ${entityId} Boo!" </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="custom-command-<%= command.id %>-modal-edit-commands">Cost to execute</label>
+                    <input type="text" class="form-control" name="custom-command-<%= command.id %>-modal-edit-commands" id="custom-command-<%= command.id %>-modal-edit-commands"
+                        aria-describedby="custom-command-<%= command.id %>-modal-edit-commands-help" value="<%= command.costToExecute %>">
+                    <small id="custom-command-<%= command.id %>-modal-edit-commands-help" class="form-text text-muted"> How much players have to pay to execute the command </small>
+                </div>
+
+
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="checkbox" class="form-check-input" name="custom-command-<%= command.id %>-modal-edit-enabled" id="custom-command-<%= command.id %>-modal-edit-enabled"
+                            value=""> Enabled
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="custom-command-<%= command.id %>-modal-edit-save" type="button" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    $(document).ready(function() {
+        $('#custom-command-<%= command.id %>-modal-edit').click(e => {
+            
+        })
+    })
+
+</script>
