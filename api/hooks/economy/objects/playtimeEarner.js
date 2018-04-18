@@ -47,18 +47,16 @@ async function loadOnlinePlayersAndAwardMoney() {
 async function cleanOldLogs(serverId) {
     try {
         let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({ serverId: serverId });
-        console.log(donatorRole)
         let hoursToKeepData = sails.config.custom.donorConfig[donatorRole].economyKeepDataHours
         let milisecondsToKeepData = hoursToKeepData * 3600000;
         let dateNow = Date.now();
         let borderDate = new Date(dateNow.valueOf() - milisecondsToKeepData);
    
-        let deletedRecords = await HistoricalInfo.destroy({
+        await HistoricalInfo.destroy({
             server: serverId,
             type: 'economy',
             createdAt: { '<': borderDate.valueOf() },
-        }).fetch()
-        console.log(`deleted ${deletedRecords.length} records`)
+        })
     } catch (error) {
         sails.log.error(error)
     }
