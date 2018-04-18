@@ -103,7 +103,7 @@ class CommandHandler {
         let customCommandFound = false
 
         customCommands.forEach(command => {
-          customCommandFound = new CustomCommand(server.id);
+          customCommandFound = new CustomCommand(server.id, command);
         })
         if (customCommandFound) {
           return customCommandFound.run(chatMessage, player, server, args);
