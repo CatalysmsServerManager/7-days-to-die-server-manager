@@ -103,7 +103,7 @@ class ExecCommand extends Commando.Command {
                     }
 
                 } else {
-                    successEmbed.addField(':outbox_tray: Output', `${response.result}`)
+                    successEmbed.addField(':outbox_tray: Output', `${response.result ? response.result : "No output data"}`)
                     return msg.channel.send(successEmbed)
                 }
 
