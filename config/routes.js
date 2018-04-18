@@ -181,6 +181,8 @@ module.exports.routes = {
   'post /api/sdtdserver/commands/custom/commandstoexecute' : 'CustomCommandController/update-commands-to-execute',
   'post /api/sdtdserver/commands/custom/cost' : 'CustomCommandController/update-cost',
   'post /api/sdtdserver/commands/custom/enabled' : 'CustomCommandController/update-enabled',
+  'post /api/sdtdserver/commands/custom/delay' : 'CustomCommandController/update-delay',
+  'post /api/sdtdserver/commands/custom/timeout' : 'CustomCommandController/update-timeout',
 
   'post /api/sdtdserver/commands/calladmin': "SdtdServerController/commands.enable-calladmin",
   'delete /api/sdtdserver/commands/calladmin': "SdtdServerController/commands.disable-calladmin",

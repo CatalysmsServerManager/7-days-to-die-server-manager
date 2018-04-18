@@ -34,6 +34,16 @@ module.exports = {
           type: 'boolean',
           defaultsTo: true
       },
+
+      delay: {
+          type: 'number',
+          defaultsTo: 0
+      },
+
+      timeout: {
+          type: 'number',
+          defaultsTo: 0
+      },
   
   
       //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
