@@ -9,13 +9,13 @@
     <% const chatLink = '/sdtdserver/' + server.id + '/chat' %>
       <a href='<%= chatLink %>' class="btn btn-default btn-primary">
         <em class="glyphicon glyphicon-align-justify"></em>
-        <i class="fa fa-comments-o" aria-hidden="true"></i> Chat
+        <i class="far fa-comments"></i> Chat
       </a>
 
       <% const ticketsLink = '/sdtdserver/' + server.id + '/tickets' %>
         <a href='<%= ticketsLink %>' class="btn btn-default btn-primary">
           <em class="glyphicon glyphicon-align-justify"></em>
-          <i class="fa fa-ticket" aria-hidden="true"></i> Tickets
+          <i class="fas fa-question"></i> Tickets
           <span id="sdtd-server-<%= server.id %>-tickets-badge" class="badge badge-secondary">
             <i class="fa fa-cog" aria-hidden="true"></i>
           </span>
@@ -31,7 +31,7 @@
 
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-server-button">
-              Delete
+                <i class="fas fa-trash-alt"></i> Delete
             </button>
 
             <!-- Modal -->
@@ -54,7 +54,7 @@
                       <a href='<%= deleteLink %>'>
                         <button id="delete-server-button" class="btn btn-default btn-danger" type="button">
                           <em class="glyphicon glyphicon-align-justify"></em>
-                          <i class="fa fa-trash-o" aria-hidden="true"></i> Delete server
+                           Delete server
                         </button>
                       </a>
 

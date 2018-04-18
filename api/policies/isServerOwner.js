@@ -1,16 +1,17 @@
 module.exports = async function isServerOwner(req, res, next) {
 
-  if (_.isUndefined(req.param('serverId')) && _.isUndefined(req.query.serverId)) {
-    return res.badRequest('No server ID given');
-  }
-
-  if (_.isUndefined(req.session.userId)) {
-    return res.redirect('/auth/steam');
-  }
-
   try {
     var serverId = req.param('serverId') || req.query.serverId;
     var isOwner = false;
+
+    if (_.isUndefined(serverId)) {
+      return res.badRequest('No server ID given');
+    }
+  
+    if (_.isUndefined(req.session.userId)) {
+      return res.redirect('/auth/steam');
+    }
+
     let server = await SdtdServer.findOne({
       id: serverId
     }).populate('admins');

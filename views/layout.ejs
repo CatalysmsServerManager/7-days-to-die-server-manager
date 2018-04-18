@@ -134,15 +134,16 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
   <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.16/b-1.5.1/b-html5-1.5.1/b-print-1.5.1/fc-3.2.4/fh-3.1.3/r-2.2.1/datatables.min.js"></script>
- 
+
   <!-- Chart.js -->
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
 
   <!-- Font awesome 5 -->
-  <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
-  
+  <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+"
+    crossorigin="anonymous"></script>
 
-  
+
+
 </head>
 
 <body>
@@ -157,7 +158,8 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <a class="nav-link" href="/">Home
+          <a class="nav-link" href="/">
+            <i class="fas fa-home"></i> Home
           </a>
         </li>
 
@@ -167,27 +169,27 @@
 
           <li class="nav-item">
             <a id="user-dashboard-link" class="nav-link" href="/user/<%= req.session.userId %>/dashboard">
-              Server overview
+              <i class="fas fa-list-ul"></i> Server overview
             </a>
           </li>
 
 
           <li class="nav-item">
-              <a class="nav-link" href="/sdtdserver/addserver">
-                Add a server
-              </a>
-            </li>
+            <a class="nav-link" href="/sdtdserver/addserver">
+              <i class="fas fa-plus"></i> Add a server
+            </a>
+          </li>
 
           <li class="nav-item">
             <a class="nav-link" href="/user/<%= req.session.userId %>/profile">
-              Your profile
+              <i class="fas fa-user-circle"></i> Your profile
             </a>
           </li>
           <li class="nav-item">
             <img id="steam-avatar" src="">
           </li>
           <a class="nav-link" id="logout-button" href="/auth/logout">
-            Logout
+            <i class="fas fa-sign-out-alt"></i> Logout
           </a>
           <% } else { %>
             <a class="nav-item" id="steam-login-button" href="/auth/steam">
@@ -197,12 +199,12 @@
 
               <li class="nav-item">
                 <a class="nav-link" href="http://csmm.readthedocs.io">
-                  Documentation
+                  <i class="fas fa-life-ring"></i> Documentation
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="/donate">
-                  Donate
+                  <i class="fas fa-donate"></i> Donate
                 </a>
               </li>
       </ul>
