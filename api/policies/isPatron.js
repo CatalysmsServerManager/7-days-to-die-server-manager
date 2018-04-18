@@ -7,7 +7,7 @@ module.exports = async function isPatron(req, res, next) {
         let donatorStatus = await sails.helpers.meta.checkDonatorStatus.with({ userId: req.session.userId });
         if (donatorStatus === 'free') {
             sails.log.warn(`POLICY - isPatron - ${req.session.userId} tried to access a patron-only route!`);
-            return res.badRequest();
+            return res.badRequest("You must donate to access this feature.");
         } else {
             return next();
         }

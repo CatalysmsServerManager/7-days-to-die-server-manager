@@ -16,7 +16,7 @@ module.exports = function isLoggedInUser(req, res, next) {
 
     }
   } else {
-    return res.badRequest('Not logged in');
+    return res.redirect('/auth/steam');
   }
 
 };
