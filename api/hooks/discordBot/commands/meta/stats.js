@@ -30,7 +30,7 @@ MOTD handlers: ${statsInfo.sdtdMotds}
 Ingame command handlers: ${statsInfo.sdtdMotds}`)
 .addField(`Players have teleported ${statsInfo.amountOfTimesTeleported} times`, `There are ${statsInfo.amountOfTeleports} teleport locations`)
 .addField(`Players have executed ${statsInfo.amountOfCustomCommandsExecuted} custom commands`, `There are ${statsInfo.amountOfCustomCommands} custom commands registered`)
-.addField(`Players' average wealth is ${statsInfo.currencyAvg}`,`${statsInfo.currencyTotal} units of currency in circulation`)
+.addField(`Players' average wealth is ${Math.round(statsInfo.currencyAvg)}`,`${Math.round(statsInfo.currencyTotal)} units of currency in circulation`)
 
 
     msg.channel.send(embed)
