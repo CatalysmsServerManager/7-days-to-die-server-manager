@@ -27,7 +27,11 @@ module.exports = {
         success: {},
         badCommand: {
             responseType: 'badRequest'
-        }
+        },
+
+        badName: {
+            responseType: 'badRequest'
+        },
 
     },
 
@@ -56,6 +60,16 @@ module.exports = {
             if (badCommandFlag) {
                 return exits.badCommand('Invalid command! Make you provide valid, existing commands')
             }
+
+            let commandsWithSameName = await CustomCommand.find({
+                name: inputs.commandName,
+                server: inputs.serverId
+            })
+
+            if (commandsWithSameName.length > 0) {
+                return exits.badName('Invalid name! Please choose another one.')
+            }
+
 
             let createdCommand = await CustomCommand.create({
                 name: inputs.commandName,

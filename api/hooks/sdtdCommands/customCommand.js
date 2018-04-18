@@ -11,9 +11,26 @@ class CustomCommand extends SdtdCommand {
     }
 
     async run(chatMessage, player, server, args, options) {
-        console.log(options)
 
+        // Check if the player has exceeded the configured timeout
+        if (this.options.timeout) {
+            let dateNow = Date.now();
+            let timeoutInMs = this.options.timeout * 1000
+            let borderDate = new Date(dateNow.valueOf() - timeoutInMs);
+            let foundUses = await PlayerUsedCommand.find({
+                command: options.id,
+                player: player.id,
+                createdAt: {
+                    '>': borderDate.valueOf()
+                }
+            });
 
+            if (foundUses.length > 0) {
+                return chatMessage.reply(`You need to wait longer before executing this command.`)
+            }
+        }
+
+        // Deduct money if configured
         if (server.config.economyEnabled && this.options.costToExecute) {
             let notEnoughMoney = false
             let result = await sails.helpers.economy.deductFromPlayer.with({
@@ -28,16 +45,21 @@ class CustomCommand extends SdtdCommand {
             }
         }
 
+        // If delayed, let the player know the command is about to be executed
         if (this.options.delay) {
             chatMessage.reply(`The command will be executed in ${this.options.delay} seconds`)
         }
+
+        // Create a record of the player executing the command
+        await PlayerUsedCommand.create({
+            command: options.id,
+            player: player.id
+        });
 
         let delayInMs = this.options.delay * 1000
         setTimeout(function () {
             runCustomCommand(chatMessage, player, server, args, options)
         }, delayInMs)
-
-
 
         async function runCustomCommand(chatMessage, player, server, args, options) {
             try {
@@ -53,9 +75,6 @@ class CustomCommand extends SdtdCommand {
                 sails.log.error(`Custom command error - ${error}`)
             }
         }
-
-
-
     }
 }
 

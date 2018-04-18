@@ -20,6 +20,11 @@ module.exports = {
             required: true
         },
 
+        serverId: {
+            type: 'number',
+            required: true
+        },
+
     },
 
 
@@ -31,6 +36,17 @@ module.exports = {
     fn: async function (inputs, exits) {
 
         try {
+
+            let commandsWithSameName = await CustomCommand.find({
+                name: inputs.newName,
+                server: inputs.serverId
+            })
+
+            if (commandsWithSameName.length > 0) {
+                return exits.badName('Invalid name! Please choose another one.')
+            }
+
+
             await CustomCommand.update({
                 id: inputs.commandId,
             }, {
