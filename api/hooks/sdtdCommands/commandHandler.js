@@ -100,11 +100,14 @@ class CommandHandler {
           name: commandName
         });
 
-        customCommands.forEach(command => {
-          let commandClass = new CustomCommand(this.serverId);
-          commandClass.run(chatMessage, player, server, args);
-        })
+        let customCommandFound = false
 
+        customCommands.forEach(command => {
+          customCommandFound = new CustomCommand(server.id);
+        })
+        if (customCommandFound) {
+          return customCommandFound.run(chatMessage, player, server, args);
+        }
 
         sails.log.debug(`HOOK SdtdCommands:commandListener - Unknown command used by ${chatMessage.playerName} on server ${this.config.server.name}`);
       }

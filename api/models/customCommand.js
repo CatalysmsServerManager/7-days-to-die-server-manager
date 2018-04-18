@@ -16,12 +16,13 @@ module.exports = {
           required: true
       },
 
-      // Separated by ","
+      // Separated by ";"
 
       aliases: {
           type: 'string',
-          required: true
       },
+
+      // Separated by ";"
 
       commandsToExecute: {
           type: 'string',
