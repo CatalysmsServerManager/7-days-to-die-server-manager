@@ -37,10 +37,10 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="custom-command-<%= command.id %>-modal-edit-commands">Cost to execute</label>
-                        <input type="text" class="form-control" name="custom-command-<%= command.id %>-modal-edit-commands" id="custom-command-<%= command.id %>-modal-edit-commands"
-                            aria-describedby="custom-command-<%= command.id %>-modal-edit-commands-help" value="<%= command.costToExecute %>">
-                        <small id="custom-command-<%= command.id %>-modal-edit-commands-help" class="form-text text-muted"> How much players have to pay to execute the command </small>
+                        <label for="custom-command-<%= command.id %>-modal-edit-cost">Cost to execute</label>
+                        <input type="text" class="form-control" name="custom-command-<%= command.id %>-modal-edit-cost" id="custom-command-<%= command.id %>-modal-edit-cost"
+                            aria-describedby="custom-command-<%= command.id %>-modal-edit-cost-help" value="<%= command.costToExecute %>">
+                        <small id="custom-command-<%= command.id %>-modal-edit-cost-help" class="form-text text-muted"> How much players have to pay to execute the command </small>
                     </div>
 
 
@@ -52,6 +52,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <p id="custom-command-<%= command.id %>-modal-edit-status"></p>
+                    <button id="custom-command-<%= command.id %>-modal-edit-delete" type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button id="custom-command-<%= command.id %>-modal-edit-save" type="button" class="btn btn-primary">Save</button>
                 </div>
@@ -63,18 +65,127 @@
     <script>
 
         $(document).ready(function () {
-            let currentConfig = <%- JSON.stringify(command) %>;
-            console.log(currentConfig)
+            let currentConfig = <%- JSON.stringify(command) %>
             if (currentConfig.enabled) {
                 $('#custom-command-<%= command.id %>-modal-edit-enabled').prop('checked', true);
             }
 
+            $('#custom-command-<%= command.id %>-modal-edit-delete').click(e => {
+                $.ajax({
+                        url: '/api/sdtdserver/commands/custom',
+                        method: 'DELETE',
+                        data: {
+                            _csrf: window.SAILS_LOCALS._csrf,
+                            commandId: currentConfig.id,
+                            serverId: window.SAILS_LOCALS.server.id
+                        },
+                        success: (data, status, xhr) => {
+                            location.reload()
+                        },
+                        error: (xhr, status, error) => {
+                            errored = true;
+                            console.log(xhr)
+                            $('#custom-command-<%= command.id %>-modal-edit-status').text(`${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
+                        }
+                    })
+            })
 
-            $('#custom-command-<%= command.id %>-modal-edit').click(e => {
+
+            $('#custom-command-<%= command.id %>-modal-edit-save').click(e => {
                 let newName = $('#custom-command-<%= command.id %>-modal-edit-name').val();
                 let newCommandsToExecute = $('#custom-command-<%= command.id %>-modal-edit-commands').val();
-                let newCost = $('#custom-command-<%= command.id %>-modal-edit-commands').val();
+                let newCost = $('#custom-command-<%= command.id %>-modal-edit-cost').val();
                 let newEnabled = $('#custom-command-<%= command.id %>-modal-edit-enabled').prop('checked');
+
+                $('#custom-command-<%= command.id %>-modal-edit-status').html(`<i class="fas fa-sync"></i> Saving`)
+                let errored = false;
+
+                if (newName != currentConfig.name) {
+                    $.ajax({
+                        url: '/api/sdtdserver/commands/custom/name',
+                        method: 'POST',
+                        data: {
+                            _csrf: window.SAILS_LOCALS._csrf,
+                            commandId: currentConfig.id,
+                            newName: newName,
+                            serverId: window.SAILS_LOCALS.server.id
+                        },
+                        success: (data, status, xhr) => {
+                            console.log(data)
+                        },
+                        error: (xhr, status, error) => {
+                            errored = true;
+                            console.log(xhr)
+                            $('#custom-command-<%= command.id %>-modal-edit-status').text(`${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
+                        }
+                    })
+                }
+
+                if (parseInt(newCost, 10) != currentConfig.costToExecute) {
+                    $.ajax({
+                        url: '/api/sdtdserver/commands/custom/cost',
+                        method: 'POST',
+                        data: {
+                            _csrf: window.SAILS_LOCALS._csrf,
+                            commandId: currentConfig.id,
+                            newCost: parseInt(newCost, 10),
+                            serverId: window.SAILS_LOCALS.server.id
+                        },
+                        success: (data, status, xhr) => {
+
+                        },
+                        error: (xhr, status, error) => {
+                            errored = true;
+                            console.log(xhr)
+                            $('#custom-command-<%= command.id %>-modal-edit-status').text(`${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
+                        }
+                    })
+                }
+
+                if (newEnabled != currentConfig.enabled) {
+                    $.ajax({
+                        url: '/api/sdtdserver/commands/custom/enabled',
+                        method: 'POST',
+                        data: {
+                            _csrf: window.SAILS_LOCALS._csrf,
+                            commandId: currentConfig.id,
+                            newEnabled: newEnabled,
+                            serverId: window.SAILS_LOCALS.server.id
+                        },
+                        success: (data, status, xhr) => {
+                        },
+                        error: (xhr, status, error) => {
+                            errored = true;
+                            console.log(xhr)
+                            $('#custom-command-<%= command.id %>-modal-edit-status').text(`${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
+                        }
+                    })
+                }
+
+                if (newCommandsToExecute != currentConfig.commandsToExecute) {
+                    $.ajax({
+                        url: '/api/sdtdserver/commands/custom/commandsToExecute',
+                        method: 'POST',
+                        data: {
+                            _csrf: window.SAILS_LOCALS._csrf,
+                            commandId: currentConfig.id,
+                            newCommandsToExecute: newCommandsToExecute,
+                            serverId: window.SAILS_LOCALS.server.id
+                        },
+                        success: (data, status, xhr) => {
+                        },
+                        error: (xhr, status, error) => {
+                            errored = true;
+                            console.log(xhr)
+                            $('#custom-command-<%= command.id %>-modal-edit-status').text(`${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
+                        }
+                    })
+                }
+
+                if (!errored) {
+                    return $('#custom-command-<%= command.id %>-modal-edit-status').text('Saved!')
+                }
+
 
 
 

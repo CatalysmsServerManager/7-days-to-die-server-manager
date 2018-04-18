@@ -1,7 +1,7 @@
 module.exports = {
 
 
-    friendlyName: 'Update commands to execute',
+    friendlyName: 'Delete command',
 
 
     description: '',
@@ -12,15 +12,6 @@ module.exports = {
             type: 'number',
             required: true
         },
-
-
-        newCommandsToExecute: {
-            type: 'string',
-            minLength: 1,
-            required: true
-        },
-
-
     },
 
 
@@ -32,15 +23,14 @@ module.exports = {
     fn: async function (inputs, exits) {
 
         try {
-            await CustomCommand.update({
+            await CustomCommand.destroy({
                 id: inputs.commandId,
-            }, {
-                commandsToExecute: inputs.newCommandsToExecute
             })
             return exits.success();
 
         } catch (error) {
             sails.log.error(error)
+            return exits.error();
         }
 
     }

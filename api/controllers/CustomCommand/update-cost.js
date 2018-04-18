@@ -31,8 +31,7 @@ module.exports = {
         try {
             await CustomCommand.update({
                 id: inputs.commandId,
-                costToExecute: inputs.newCost
-            })
+            }, { costToExecute: inputs.newCost })
             return exits.success();
 
         } catch (error) {
@@ -43,3 +42,4 @@ module.exports = {
 
 
 };
+

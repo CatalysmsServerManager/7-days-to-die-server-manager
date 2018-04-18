@@ -30,8 +30,9 @@ module.exports = {
         try {
             await CustomCommand.update({
                 id: inputs.commandId,
-                enabled: inputs.newEnabled
-            })
+            }, {
+                    enabled: inputs.newEnabled
+                })
             return exits.success();
 
         } catch (error) {

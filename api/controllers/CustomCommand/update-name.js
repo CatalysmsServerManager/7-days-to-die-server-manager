@@ -33,6 +33,7 @@ module.exports = {
         try {
             await CustomCommand.update({
                 id: inputs.commandId,
+            }, {
                 name: inputs.newName
             })
             return exits.success();

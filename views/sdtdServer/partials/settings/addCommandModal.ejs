@@ -75,7 +75,7 @@
                     commandsToExecute: commandsToExecute
                 },
                 success: data => {
-                    console.log(data)
+                    location.reload()
                 },
                 error: e => {
                     return statusElement.text(e.responseText)
