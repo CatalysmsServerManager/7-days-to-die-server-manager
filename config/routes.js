@@ -175,6 +175,8 @@ module.exports.routes = {
   'post /api/sdtdserver/commands/prefix': "SdtdServerController/commands.set-prefix",
   'get /api/sdtdserver/commands/prefix': "SdtdServerController/commands.get-prefix",
 
+  'post /api/sdtdserver/commands/custom' : 'CustomCommandController/create-command',
+
   'post /api/sdtdserver/commands/calladmin': "SdtdServerController/commands.enable-calladmin",
   'delete /api/sdtdserver/commands/calladmin': "SdtdServerController/commands.disable-calladmin",
   'get /api/sdtdserver/commands/calladmin': "SdtdServerController/commands.get-calladmin",
