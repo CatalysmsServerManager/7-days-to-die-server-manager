@@ -1,4 +1,5 @@
 const sevenDays = require('machinepack-7daystodiewebapi');
+const CustomCommand = require('./customCommand.js');
 
 /**
      * @memberof module:SdtdCommandsHook
@@ -68,33 +69,43 @@ class CommandHandler {
 
     try {
       if (chatMessage.messageText.startsWith(this.config.commandPrefix)) {
+        // Cut out the prefix
         let trimmedMsg = chatMessage.messageText.slice(this.config.commandPrefix.length, chatMessage.messageText.length);
-        let splitString = trimmedMsg.split(' ');
 
+        let splitString = trimmedMsg.split(' ');
         let commandName = splitString[0];
         let args = splitString.splice(1, splitString.length);
 
+        let player = await Player.find({ name: _.trim(chatMessage.playerName), server: this.config.server });
+        let playerInfo = await sails.helpers.loadPlayerData.with({ serverId: this.config.server, steamId: player[0].steamId })
+        player = playerInfo.players[0]
+        let server = await SdtdServer.findOne(player.server).populate('players');
+        let config = await SdtdConfig.findOne({ server: server.id });
+        server.config = config;
+
+        // Function to easily reply to players in a command
+        chatMessage.reply = async message => await sendReplyToPlayer(server, player, message);
+
+        // If the commandName is a recognized CSMM command, we run it.
         if (this.commands.has(commandName)) {
-          let player = await Player.find({ name: _.trim(chatMessage.playerName), server: this.config.server });
-          let playerInfo = await sails.helpers.loadPlayerData.with({serverId: this.config.server, steamId: player[0].steamId})
-          player = playerInfo.players[0]
-
-          let server = await SdtdServer.findOne(player.server).populate('players');
-          let config = await SdtdConfig.findOne({server: server.id});
-          server.config = config;
-
           let commandToRun = this.commands.get(commandName);
-
-          let args = chatMessage.messageText.split(' ');
-          args.splice(0, 1)
-
-          // Function to easily reply to players in a command
-          chatMessage.reply = async message => await sendReplyToPlayer(server, player, message);
-          
           sails.log.info(`HOOK SdtdCommands - command ran by player ${player.name} on server ${server.name} - ${chatMessage.messageText}`)
-
           return commandToRun.run(chatMessage, player, server, args);
         }
+
+        // Else we try to find a custom command that matches the commandName
+        let customCommands = await sails.models.customcommand.find({
+          server: this.serverId,
+          enabled: true,
+          name: commandName
+        });
+
+        customCommands.forEach(command => {
+          let commandClass = new CustomCommand(this.serverId);
+          commandClass.run(chatMessage, player, server, args);
+        })
+
+
         sails.log.debug(`HOOK SdtdCommands:commandListener - Unknown command used by ${chatMessage.playerName} on server ${this.config.server.name}`);
       }
     } catch (error) {
