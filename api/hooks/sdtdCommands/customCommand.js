@@ -10,26 +10,50 @@ class CustomCommand extends SdtdCommand {
         this.options = command
     }
 
-    async run(chatMessage, player, server, args) {
-        console.log(this.options)
+    async run(chatMessage, player, server, args, options) {
+        console.log(options)
 
 
-        if (this.options.costToExecute) {
-            console.log("TODO: HANDLE CUSTOM COMMAND COST")
-        }
-
-        try {
-            let commandsToExecute = this.options.commandsToExecute.split(';');
-            for (const command of commandsToExecute) {
-                let commandInfoFilledIn = command.replace('${entityId}', player.entityId)
-                await executeCommand(server, commandInfoFilledIn)
+        if (server.config.economyEnabled && this.options.costToExecute) {
+            let notEnoughMoney = false
+            let result = await sails.helpers.economy.deductFromPlayer.with({
+                playerId: player.id,
+                amountToDeduct: this.options.costToExecute,
+                message: `COMMAND - ${this.options.name}`
+            }).tolerate('notEnoughCurrency', totalNeeded => {
+                notEnoughMoney = true;
+            })
+            if (notEnoughMoney) {
+                return chatMessage.reply(`You do not have enough money to do that! ${this.options.name} costs ${this.options.costToExecute} ${server.config.currencyName}`)
             }
-            sails.log.info(`HOOK SdtdCommands - custom command ran by player ${player.name} on server ${server.name} - ${chatMessage.messageText}`)
-
-
-        } catch (error) {
-            sails.log.error(`Custom command error - ${error}`)
         }
+
+        if (this.options.delay) {
+            chatMessage.reply(`The command will be executed in ${this.options.delay} seconds`)
+        }
+
+        let delayInMs = this.options.delay * 1000
+        setTimeout(function () {
+            runCustomCommand(chatMessage, player, server, args, options)
+        }, delayInMs)
+
+
+
+        async function runCustomCommand(chatMessage, player, server, args, options) {
+            try {
+                let commandsToExecute = options.commandsToExecute.split(';');
+                for (const command of commandsToExecute) {
+                    let commandInfoFilledIn = command.replace('${entityId}', player.entityId)
+                    await executeCommand(server, _.trim(commandInfoFilledIn))
+                }
+                sails.log.info(`HOOK SdtdCommands - custom command ran by player ${player.name} on server ${server.name} - ${chatMessage.messageText}`)
+
+
+            } catch (error) {
+                sails.log.error(`Custom command error - ${error}`)
+            }
+        }
+
 
 
     }
@@ -48,7 +72,6 @@ function executeCommand(server, command) {
             command: command
         }).exec({
             success: (response) => {
-                console.log(response)
                 resolve(response);
             },
             unknownCommand: (error) => {
