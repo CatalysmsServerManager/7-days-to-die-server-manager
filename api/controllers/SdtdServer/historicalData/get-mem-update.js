@@ -21,8 +21,11 @@ module.exports = {
     fn: async function (inputs, exits) {
         try {
             let dataToSend = await HistoricalInfo.find({
-                server: inputs.serverId,
-                type: 'memUpdate'
+                where: {
+                    server: inputs.serverId,
+                    type: 'memUpdate'
+                },
+                limit: 5000
             })
             return exits.success(dataToSend);
         } catch (error) {
