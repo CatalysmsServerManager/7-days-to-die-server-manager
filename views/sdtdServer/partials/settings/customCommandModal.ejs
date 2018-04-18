@@ -1,0 +1,89 @@
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#settings-commands-custom-modal">
+    Add custom command
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="settings-commands-custom-modal" tabindex="-1" role="dialog" aria-labelledby="settings-commands-custom-modal-title"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="settings-commands-custom-modal-title">Custom command</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+
+                    <div class="form-group">
+                        <label for="settings-commands-custom-add-name">Name</label>
+                        <input type="text" class="form-control" name="settings-commands-custom-add-name" id="settings-commands-custom-add-name" aria-describedby="settings-commands-custom-add-name-help"
+                            placeholder="">
+                        <small id="settings-commands-custom-add-name-help" class="form-text text-muted">What your players will type to execute the command
+                        </small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="settings-commands-custom-add-commands">Command(s) to execute</label>
+                        <input type="text" class="form-control" name="settings-commands-custom-add-commands" id="settings-commands-custom-add-commands"
+                            aria-describedby="settings-commands-custom-add-commands-help" placeholder="">
+                        <small id="settings-commands-custom-add-commands-help" class="form-text text-muted">The console commands to execute when a player runs the custom command. Seperate multiple commands
+                            with ";". In the command, you have access to the players entity ID by typing "${entityId}". Example:
+                            "pm ${entityId} Boo!" </small>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <p id="settings-commands-custom-add-status"></p>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="settings-commands-custom-add-commands-save" type="button" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    $(document).ready(function () {
+
+        $('#settings-commands-custom-add-commands-save').click(e => {
+            let commandNameElement = $('#settings-commands-custom-add-name');
+            let commandsToExecuteElement = $('#settings-commands-custom-add-commands');
+            let statusElement = $('#settings-commands-custom-add-status')
+            let commandName = commandNameElement.val();
+            let commandsToExecute = commandsToExecuteElement.val();
+
+
+            if (commandName == "") {
+                return statusElement.text('You must provide a name for the command')
+            }
+
+            if (commandsToExecute == "") {
+                return statusElement.text('You must provide atleast one command to execute')
+            }
+
+            $.ajax({
+                url: '/api/sdtdserver/commands/custom',
+                method: 'POST',
+                data: {
+                    _csrf: window.SAILS_LOCALS._csrf,
+                    serverId: window.SAILS_LOCALS.server.id,
+                    commandName: commandName,
+                    commandsToExecute: commandsToExecute
+                },
+                success: data => {
+                    console.log(data)
+                },
+                error: e => {
+                    return statusElement.text(e.responseText)
+
+                }
+            })
+        })
+
+    })
+
+</script>
