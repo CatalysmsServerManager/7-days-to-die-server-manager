@@ -22,8 +22,6 @@ module.exports = function economy(sails) {
 
                 return cb();
             });
-
-
         },
 
         start: async function (serverId, type) {

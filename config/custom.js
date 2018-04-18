@@ -37,26 +37,31 @@ module.exports.custom = {
       memUpdateKeepDataHours: 12,
       maxTeleports: 3,
       maxServers: 2,
+      economyKeepDataHours: 12,
     },
     patron: {
       memUpdateKeepDataHours: 12,
       maxTeleports: 3,
       maxServers: 2,
+      economyKeepDataHours: 12,
     },
     donator: {
       memUpdateKeepDataHours: 72,
       maxTeleports: 10,
       maxServers: 3,
+      economyKeepDataHours: 72,
     },
     contributor: {
       memUpdateKeepDataHours: 120,
       maxTeleports: 25,
       maxServers: 4,
+      economyKeepDataHours: 120,
     },
     sponsor: {
       memUpdateKeepDataHours: 168,
       maxTeleports: 100,
       maxServers: 5,
+      economyKeepDataHours: 168,
     }
   },
 };
