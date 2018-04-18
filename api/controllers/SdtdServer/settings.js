@@ -37,13 +37,17 @@ module.exports = {
 
     try {
       let server = await SdtdServer.findOne(inputs.serverId);
-      let serverConfig = await SdtdConfig.findOne({server: server.id});
-      let user = await User.findOne(this.req.session.userId)
+      let serverConfig = await SdtdConfig.findOne({ server: server.id });
+      let user = await User.findOne(this.req.session.userId);
+      let customCommands = await CustomCommand.find({
+        server: server.id,
+      })
       sails.log.info(`VIEW - SdtdServer:settings - Showing settings for ${server.name} to user ${user.username}`);
       return exits.success({
         server: server,
         config: serverConfig,
-        user: user
+        user: user,
+        customCommands: customCommands
       });
     } catch (error) {
       sails.log.error(`VIEW - SdtdServer:settings - ${error}`);

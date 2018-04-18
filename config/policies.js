@@ -54,6 +54,10 @@ module.exports.policies = {
     'economy/economy-view' : ['isPatron', 'isServerOwner'],
   },
 
+  customCommandController: {
+    '*': 'isServerOwner',
+  },
+
   playerController: {
     '*': ['isLoggedIn', 'isPlayerOwner']
   },
