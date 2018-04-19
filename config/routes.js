@@ -113,6 +113,7 @@ module.exports.routes = {
   'get /api/sdtdserver/findwriteablechannelsinguild': 'SdtdServerController/discordBot.find-writeable-channels-in-guild',
   'get /api/sdtdserver/onlinestatus': 'SdtdServerController.is-online',
   'get /api/sdtdserver/fps': 'SdtdServerController.get-fps',
+  'get /api/sdtdserver/allowedCommands' : 'CustomCommandController.get-allowed-commands',
 
   // Economy
 
