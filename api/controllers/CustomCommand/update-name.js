@@ -29,7 +29,11 @@ module.exports = {
 
 
     exits: {
-        success: {}
+        success: {},
+
+        badName: {
+            responseType: 'badRequest'
+        },
     },
 
 
@@ -44,6 +48,10 @@ module.exports = {
 
             if (commandsWithSameName.length > 0) {
                 return exits.badName('Invalid name! Please choose another one.')
+            }
+
+            if (inputs.commandName.includes(' ')) {
+                return exits.badName('Name cannot have spaces');
             }
 
 

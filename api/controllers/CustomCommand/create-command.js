@@ -19,7 +19,8 @@ module.exports = {
 
         commandName: {
             type: 'string',
-            required: true
+            required: true,
+            maxLength: 25
         }
     },
 
@@ -41,6 +42,10 @@ module.exports = {
         try {
             let server = await SdtdServer.findOne(inputs.serverId);
             let allowedCommands = await getAllowedCommands(server);
+
+            if (inputs.commandName.includes(' ')) {
+                return exits.badName('Name cannot have spaces');
+            }
 
             let commandsToExecute = inputs.commandsToExecute.split(';');
 
