@@ -61,6 +61,14 @@
                 return statusElement.text('You must provide a name for the command')
             }
 
+            if (commandName.includes(' ')) {
+                return statusElement.text('Name cannot have spaces')
+            }
+
+            if (commandName.length > 25) {
+                return statusElement.text('Please use less than 25 characters for name')
+            }
+
             if (commandsToExecute == "") {
                 return statusElement.text('You must provide atleast one command to execute')
             }
