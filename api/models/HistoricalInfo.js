@@ -17,51 +17,62 @@ module.exports = {
     },
 
     message: {
-      type: 'string'
+      type: 'string',
+      allowNull: true
     },
 
     // memUpdate info
 
     fps: {
-      type: 'number'
+      type: 'number',
+      allowNull: true
     },
 
     heap: {
-      type: 'number'
+      type: 'number',
+      allowNull: true
     },
 
     chunks: {
-      type: 'number'
+      type: 'number',
+      allowNull: true
     },
 
     zombies: {
-      type: 'number'
+      type: 'number',
+      allowNull: true
     },
 
     entities: {
-      type: 'number'
+      type: 'number',
+      allowNull: true
     },
 
     players: {
-      type: 'number'
+      type: 'number',
+      allowNull: true
     },
 
     items: {
-      type: 'number'
+      type: 'number',
+      allowNull: true
     },
 
     rss: {
-      type: 'number'
+      type: 'number',
+      allowNull: true
     },
 
     uptime: {
-      type: 'number'
+      type: 'number',
+      allowNull: true
     },
 
     // Economy info
 
     amount: {
-      type: 'number'
+      type: 'number',
+      allowNull: true
     },
 
     economyAction: {
