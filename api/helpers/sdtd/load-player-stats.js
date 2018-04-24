@@ -101,10 +101,9 @@ module.exports = {
 
 
                 if (inputs.steamId) {
-                    let filteredRepsonse = response.filter(playerStats => {
+                    response = response.filter(playerStats => {
                         return playerStats.steamId === inputs.steamId
-                    })
-                response = filteredResponse
+                    })[0]
                 }
 
                 exits.success(response);

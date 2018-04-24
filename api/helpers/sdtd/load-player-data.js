@@ -55,9 +55,15 @@ module.exports = {
 
             for (const player of playerList.players) {
                 let playerProfile = await findOrCreatePlayer(player, inputs.serverId);
-                let playerInventory = await loadPlayerInventory(playerProfile.steamId, server);
-                let playerStats = await loadPlayerStats(playerProfile.steamId, server);
-                let steamInfo = await loadPlayerSteamInfo(player.steamId)
+                let steamAvatar = await loadSteamAvatar(player.steamid);
+                let playerInventory
+                let playerStats
+
+                if (player.online) {
+                    playerInventory = await loadPlayerInventory(player.steamid, server);
+                    playerStats = await loadPlayerStats(player.steamid, server);
+
+                }
 
                 if (!_.isUndefined(playerInventory)) {
                     _.omit(playerInventory, 'playername');
@@ -69,6 +75,11 @@ module.exports = {
                 if (!_.isUndefined(playerStats)) {
                     _.omit(playerStats, 'steamId');
                     playerProfile = await Player.update({ id: playerProfile.id }, playerStats).fetch();
+                }
+
+
+                if (!_.isUndefined(steamAvatar)) {
+                    playerProfile = await Player.update({id: playerProfile.id}, {avatarUrl: steamAvatar}).fetch()
                 }
 
                 playersToSend.push(playerProfile[0]);
@@ -154,8 +165,30 @@ async function loadPlayerStats(steamId, server) {
     }
 }
 
-function loadPlayerSteamInfo(steamId) {
-    console.log('TODO: LOAD STEAM INFO')
+function loadSteamAvatar(steamId) {
+    let request = require('request-promise-native');
+    return new Promise((resolve, reject) => {
+        request({
+            uri: 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002',
+            qs: {
+                steamids: steamId,
+                key: process.env.API_KEY_STEAM,
+            },
+            json: true
+        }).then(async (response) => {
+            let avatar = undefined
+            if (response.response.players[0].avatar) {
+                avatar = response.response.players[0].avatar
+            } 
+            if (response.response.players[0].avatarfull) {
+                avatar = response.response.players[0].avatarfull
+            } 
+            resolve(avatar)
+        }).catch(async (error) => {
+            console.log(error)
+            resolve()
+        });
+    });
 }
 
 

@@ -77,8 +77,8 @@ class CommandHandler {
         let args = splitString.splice(1, splitString.length);
 
         let player = await Player.find({ name: _.trim(chatMessage.playerName), server: this.config.server });
-        let playerInfo = await sails.helpers.loadPlayerData.with({ serverId: this.config.server, steamId: player[0].steamId })
-        player = playerInfo.players[0]
+        let playerInfo = await sails.helpers.sdtd.loadPlayerData.with({ serverId: this.config.server, steamId: player[0].steamId })
+        player = playerInfo[0]
         let server = await SdtdServer.findOne(player.server).populate('players');
         let config = await SdtdConfig.findOne({ server: server.id });
         server.config = config;
