@@ -34,6 +34,12 @@ module.exports = {
             responseType: 'badRequest'
         },
 
+        maxCommands: {
+            description: "User has added max amount of commands already",
+            responseType: 'badRequest',
+            statusCode: 400
+          }
+
     },
 
 
@@ -41,7 +47,15 @@ module.exports = {
 
         try {
             let server = await SdtdServer.findOne(inputs.serverId);
+            let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({ serverId: server.id });
             let allowedCommands = await getAllowedCommands(server);
+            let amountOfExistingCommands = await CustomCommand.count({server: server.id});
+            let maxCustomCommands = sails.config.custom.donorConfig[donatorRole].maxCustomCommands;
+
+            if (amountOfExistingCommands >= maxCustomCommands) {
+                return exits.maxCommands('You have set the maximum amount of commands for this server already. Consider deleting some, or donating :)');
+            }
+
 
             if (inputs.commandName.includes(' ')) {
                 return exits.badName('Name cannot have spaces');
