@@ -129,8 +129,8 @@ module.exports.routes = {
   'post /api/sdtdserver/economy/module/playtimeearner/amount': 'SdtdServerController/economy.set-playtime-earner-amount',
   'post /api/sdtdserver/economy/module/playtimeearner/interval': 'SdtdServerController/economy.set-playtime-earner-interval',
 
-  'post /api/sdtdserver/economy/module/playtimeearner/amount': 'SdtdServerController/economy.set-discord-text-earner-amount',
-  'post /api/sdtdserver/economy/module/playtimeearner/timeout': 'SdtdServerController/economy.set-discord-text-earner-timeout',
+  'post /api/sdtdserver/economy/module/discordtextearner/amount': 'SdtdServerController/economy.set-discord-text-earner-amount',
+  'post /api/sdtdserver/economy/module/discordtextearner/timeout': 'SdtdServerController/economy.set-discord-text-earner-timeout',
 
   // Historical data
 

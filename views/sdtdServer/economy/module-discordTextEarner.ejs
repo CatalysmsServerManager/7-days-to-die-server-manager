@@ -1,0 +1,139 @@
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#economy-module-discordTextEarner-modal">
+    Discord text earner
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="economy-module-discordTextEarner-modal" tabindex="-1" role="dialog" aria-labelledby="economy-module-discordTextEarner-modal-title"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="economy-module-discordTextEarner-modal-title">Discord text earner module</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="economy-module-discordTextEarner-config-enabled" id="economy-module-discordTextEarner-config-enabled"> Enabled
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="economy-module-discordTextEarner-config-amount">Amount</label>
+                        <input type="number" class="form-control" name="economy-module-discordTextEarner-config-amount" id="economy-module-discordTextEarner-config-amount"
+                            aria-describedby="economy-module-discordTextEarner-config-amount-help" placeholder="<%= config.discordTextEarnerAmountPerMessage %>">
+                        <small id="economy-module-discordTextEarner-config-amount-help" class="form-text text-muted">How much currency your players get per message.</small>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="economy-module-discordTextEarner-save" type="button" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+
+        if (window.SAILS_LOCALS.config.discordTextEarnerEnabled) {
+            $('#economy-module-discordTextEarner-config-enabled').prop('checked', true)
+        }
+
+        $('#economy-module-discordTextEarner-save').click(e => {
+            e.preventDefault();
+
+            $('#economy-module-discordTextEarner-config-amount').removeClass('bg-success bg-danger')
+
+
+            if ($('#economy-module-discordTextEarner-config-enabled').prop('checked') != window.SAILS_LOCALS.config.discordTextEarnerEnabled) {
+                let newStatus = $('#economy-module-discordTextEarner-config-enabled').prop('checked')
+                updateDiscordTextEarnerStatus(newStatus)
+            }
+
+            let newAmount = $('#economy-module-discordTextEarner-config-amount').val();
+
+            if (newAmount != '') {
+                updateDiscordTextEarnerAmount(newAmount)
+            }
+
+        })
+
+        function updateDiscordTextEarnerStatus(newStatus) {
+
+
+            if (newStatus) {
+                $.ajax({
+                    url: '/api/sdtdserver/economy/module',
+                    method: 'POST',
+                    data: {
+                        _csrf: window.SAILS_LOCALS._csrf,
+                        serverId: window.SAILS_LOCALS.server.id,
+                        moduleType: 'discordTextEarner'
+                    },
+                    success: (data, status, xhr) => {
+                        $('#economy-module-discordTextEarner-config-enabled').addClass('bg-success').removeClass('bg-danger');
+                    },
+                    error: (xhr, status, error) => {
+                        console.log(error)
+                        alert('Something went wrong while enabling discordTextEarner')
+                    }
+                })
+            } else {
+                $.ajax({
+                    url: '/api/sdtdserver/economy/module',
+                    method: 'DELETE',
+                    data: {
+                        _csrf: window.SAILS_LOCALS._csrf,
+                        serverId: window.SAILS_LOCALS.server.id,
+                        moduleType: 'discordTextEarner'
+                    },
+                    success: (data, status, xhr) => {
+                        $('#economy-module-discordTextEarner-config-enabled').addClass('bg-success').removeClass('bg-danger');
+                    },
+                    error: (xhr, status, error) => {
+                        console.log(error)
+                        alert('Something went wrong while disabling discordTextEarner')
+                    }
+                })
+            }
+        }
+
+
+
+        function updateDiscordTextEarnerAmount(newAmount) {
+
+            if (!validator.isDecimal(newAmount)) {
+                return alert('Amount must be a decimal')
+
+            }
+
+            $.ajax({
+                url: '/api/sdtdserver/economy/module/discordtextearner/amount',
+                method: 'POST',
+                data: {
+                    _csrf: window.SAILS_LOCALS._csrf,
+                    serverId: window.SAILS_LOCALS.server.id,
+                    amount: newAmount
+                },
+                success: (data, status, xhr) => {
+                    $('#economy-module-discordtextearner-config-amount').addClass('bg-success').removeClass('bg-danger');
+                },
+                error: (xhr, status, error) => {
+                    console.log(error)
+                    alert('Something went wrong while setting a new amount')
+                }
+            })
+
+        }
+    })
+
+
+
+</script>
