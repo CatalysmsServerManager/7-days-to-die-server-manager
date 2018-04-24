@@ -77,28 +77,28 @@ module.exports = {
                     playtime: player.totalplaytime,
                     banned: player.banned
                 }).fetch()
-
                 if (!_.isUndefined(playerInventory)) {
                     playerInventory = _.omit(playerInventory, 'playername');
-                    playerProfile = await Player.update({ id: playerProfile.id }, {
+                    playerProfile = await Player.update({ id: playerProfile[0].id }, {
                         inventory: playerInventory
                     }).fetch()
                 }
 
                 if (!_.isUndefined(playerStats)) {
                     playerStats = _.omit(playerStats, 'steamId');
-                    playerProfile = await Player.update({ id: playerProfile.id }, playerStats).fetch();
+                    playerProfile = await Player.update({ id: playerProfile[0].id }, playerStats).fetch();
+
                 }
 
 
                 if (!_.isUndefined(steamAvatar)) {
-                    playerProfile = await Player.update({id: playerProfile.id}, {avatarUrl: steamAvatar}).fetch()
+                    playerProfile = await Player.update({id: playerProfile[0].id}, {avatarUrl: steamAvatar}).fetch()
+
                 }
 
                 if (player.online) {
                     playerProfile[0].online = true
                 }
-
                 sails.log.debug(`Loaded a player - ${playerProfile[0].id}`)
                 playersToSend.push(playerProfile[0]);
             }
