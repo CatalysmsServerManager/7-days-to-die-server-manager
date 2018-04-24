@@ -406,7 +406,7 @@ module.exports = function sdtdCountryBan(sails) {
   async function handleCountryBan(connectedMessage) {
     let country = connectedMessage.country;
     let steamId = connectedMessage.steamID;
-    let serverIp = this.serverIp;
+    let serverIp = this.ip;
     let serverWebPort = this.port;
     try {
       let server = await SdtdServer.find({
@@ -414,11 +414,11 @@ module.exports = function sdtdCountryBan(sails) {
         webPort: serverWebPort
       }).limit(1);
       server = server[0]
-
+      
+      sails.log.debug(`HOOK:countryBan - Player from ${country} connected to server ${server.name}, checking if needs to be kicked`, connectedMessage);
       let config = await SdtdConfig.find({
         server: server.id
       });
-      sails.log.debug(`HOOK:countryBan - Player from ${country} connected to server ${server.id}, checking if needs to be kicked`);
 
       let countryBanConfig = config[0].countryBanConfig;
       if (countryBanConfig.bannedCountries.includes(country) && !countryBanConfig.whiteListedSteamIds.includes(steamId)) {
@@ -434,7 +434,11 @@ module.exports = function sdtdCountryBan(sails) {
             sails.log.warn(`HOOK:countryBan - Failed to kick player from server ${server.id} - ${error}`);
           },
           success: async () => {
+<<<<<<< Updated upstream
             sails.log.debug(`HOOK:countryBan - Kicked player ${connectedMessage.playerName} from server ${server.id}`);
+=======
+            sails.log.info(`HOOK:countryBan - Kicked player ${connectedMessage.playerName} from ${country} server ${server.name}`);
+>>>>>>> Stashed changes
             await sails.hooks.discordnotifications.sendNotification({
               serverId: server.id,
               notificationType: 'countrybanKick',
