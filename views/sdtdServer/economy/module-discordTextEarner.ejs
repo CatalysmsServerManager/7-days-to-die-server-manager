@@ -28,6 +28,14 @@
                             aria-describedby="economy-module-discordTextEarner-config-amount-help" placeholder="<%= config.discordTextEarnerAmountPerMessage %>">
                         <small id="economy-module-discordTextEarner-config-amount-help" class="form-text text-muted">How much currency your players get per message.</small>
                     </div>
+
+                    <div class="form-group">
+                        <label for="economy-module-discordTextEarner-config-timeout">Timeout</label>
+                        <input type="number" class="form-control" name="economy-module-discordTextEarner-config-timeout" id="economy-module-discordTextEarner-config-timeout"
+                            aria-describedby="economy-module-discordTextEarner-config-timeout-help" placeholder="<%= config.discordTextEarnerTimeout %>">
+                        <small id="economy-module-discordTextEarner-config-timeout-help" class="form-text text-muted">How many seconds minimum between messages to earn currency.</small>
+                    </div>
+
                 </div>
             </div>
             <div class="modal-footer">
@@ -58,9 +66,14 @@
             }
 
             let newAmount = $('#economy-module-discordTextEarner-config-amount').val();
+            let newTimeout = $('#economy-module-discordTextEarner-config-timeout').val();
 
             if (newAmount != '') {
                 updateDiscordTextEarnerAmount(newAmount)
+            }
+
+            if (newTimeout != '') {
+                updateDiscordTextEarnerTimeout(newTimeout)
             }
 
         })
@@ -132,6 +145,35 @@
             })
 
         }
+
+        function updateDiscordTextEarnerTimeout(newTimeout) {
+
+            if (!validator.isDecimal(newTimeout)) {
+                return alert('Timeout must be a decimal')
+
+            }
+
+            $.ajax({
+                url: '/api/sdtdserver/economy/module/discordtextearner/timeout',
+                method: 'POST',
+                data: {
+                    _csrf: window.SAILS_LOCALS._csrf,
+                    serverId: window.SAILS_LOCALS.server.id,
+                    timeout: newTimeout
+                },
+                success: (data, status, xhr) => {
+                    $('#economy-module-discordtextearner-config-timeout').addClass('bg-success').removeClass('bg-danger');
+                },
+                error: (xhr, status, error) => {
+                    console.log(error)
+                    alert('Something went wrong while setting a new timeout')
+                }
+            })
+
+        }
+
+
+
     })
 
 

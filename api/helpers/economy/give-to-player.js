@@ -48,6 +48,7 @@ module.exports = {
                 amount: inputs.amountToGive,
                 economyAction: 'give'
             })
+            return exits.success();
         } catch (error) {
             sails.log.error(`HELPER economy:give-to-player - ${error}`);
             return exits.error(error);

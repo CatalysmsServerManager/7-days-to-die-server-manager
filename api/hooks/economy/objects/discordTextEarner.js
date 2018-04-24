@@ -5,6 +5,7 @@ class DiscordTextEarner {
         this.config = config
         this.type = 'discordTextEarner'
         this.messageHandler = handleMessage.bind(this);
+        this.userTimeoutMap = new Map();
     }
 
     async start() {
@@ -34,13 +35,26 @@ async function handleMessage(message) {
         return
     }
 
-    let playersToReward = await Player.find({ user: userWithDiscordId.id, server: this.server.id }).limit(1);
+    if (this.userTimeoutMap.has(userWithDiscordId[0].id)) {
+        return
+    }
+
+    let playersToReward = await Player.find({ user: userWithDiscordId[0].id, server: this.server.id }).limit(1);
 
     if (playersToReward.length === 0) {
         return
     }
 
     await sails.helpers.economy.giveToPlayer.with({ playerId: playersToReward[0].id, amountToGive: this.config.discordTextEarnerAmountPerMessage, message: `discordTextEarner - awarding player for sending a message in discord` });
+
+    if (this.config.discordTextEarnerTimeout) {
+        this.userTimeoutMap.set(userWithDiscordId[0].id, true);
+        const deleteUserFromMap = () => {
+            this.userTimeoutMap.delete(userWithDiscordId[0].id);
+        }
+        setTimeout(deleteUserFromMap, this.config.discordTextEarnerTimeout * 1000)
+    }
+
 }
 
 
