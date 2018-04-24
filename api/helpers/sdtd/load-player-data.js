@@ -70,6 +70,7 @@ module.exports = {
                     lastOnline: player.lastonline,
                     name: player.name,
                     ip: player.ip,
+                    entityId: player.entityid,
                     positionX: player.position.x,
                     positionY: player.position.y,
                     positionZ: player.position.z,
@@ -141,7 +142,7 @@ async function findOrCreatePlayer(player, serverId) {
             server: serverId,
             entityId: player.entityid,
             lastOnline: player.lastonline,
-            name: player.name,
+            name: player.name ? player.name : "Unknown",
             ip: player.ip,
         });
         return foundOrCreatedPlayer;

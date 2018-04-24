@@ -57,7 +57,7 @@ class tele extends SdtdCommand {
     let currentTime = new Date();
     let lastTeleportTime = new Date(player.lastTeleportTime)
     if (((currentTime - lastTeleportTime) / 1000) < server.config.playerTeleportTimeout) {
-      let secondsToWait = Math.floor(server.config[0].playerTeleportTimeout - ((currentTime - lastTeleportTime) / 1000));
+      let secondsToWait = Math.floor(server.config.playerTeleportTimeout - ((currentTime - lastTeleportTime) / 1000));
       return chatMessage.reply(`You need to wait ${secondsToWait} seconds to teleport again!`)
     }
 

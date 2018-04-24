@@ -168,7 +168,7 @@
           serverId: server.id
         },
         success: (data, status, xhr) => {
-          let onlinePlayers = data.players.filter(player => {
+          let onlinePlayers = data.filter(player => {
             return player.online
           })
           $(`#server-${server.id}-players`).text(`${onlinePlayers.length} online`)
