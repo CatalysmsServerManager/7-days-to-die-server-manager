@@ -23,7 +23,8 @@ const winston = require('winston');
 customLogger = new winston.Logger({
   transports: [
     new winston.transports.File({
-      level: 'info',
+      level: 'debug',
+      name: 'infolog',
       timestamp: true,
       humanReadableUnhandledException: true,
       filename: './logs/prod.log',
@@ -32,13 +33,28 @@ customLogger = new winston.Logger({
       maxFiles: 3,
       json: false,
       colorize: true
+    }),
+    new winston.transports.File({
+      level: 'debug',
+      name: 'debuglog',
+      timestamp: true,
+      humanReadableUnhandledException: true,
+      filename: './logs/debug.log',
+      tailable: true,
+      maxsize: 1000,
+      maxFiles: 5,
+      json: false,
+      colorize: true
     })
   ]
 })
 
 
+
+
 const { exec } = require('child_process');
 exec(`"/home/i107/7-Days-To-Die-Server-Manager/node_modules/frontail/bin/frontail" -h ${process.env.CSMM_IP} -p 2010 -n 20 -t dark --ui-highlight -U ${process.env.LOG_USER} -P ${process.env.LOG_PW} /home/i107/7-Days-To-Die-Server-Manager/logs/prod.log`);
+exec(`"/home/i107/7-Days-To-Die-Server-Manager/node_modules/frontail/bin/frontail" -h ${process.env.CSMM_IP} -p 2011 -n 20 --ui-highlight -U ${process.env.LOG_USER} -P ${process.env.LOG_PW} /home/i107/7-Days-To-Die-Server-Manager/logs/debug.log`);
 
 
 
