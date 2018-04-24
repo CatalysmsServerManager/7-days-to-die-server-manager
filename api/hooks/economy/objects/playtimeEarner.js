@@ -33,8 +33,8 @@ module.exports = PlaytimeEarner
 
 async function loadOnlinePlayersAndAwardMoney() {
     try {
-        let onlinePlayers = await sails.helpers.loadPlayerData.with({ serverId: this.server.id, onlyOnline: true});
-        onlinePlayers.players.forEach(async player => {
+        let onlinePlayers = await sails.helpers.sdtd.loadPlayerData.with({ serverId: this.server.id, onlyOnline: true});
+        onlinePlayers.forEach(async player => {
             await sails.helpers.economy.giveToPlayer.with({playerId: player.id, amountToGive: this.config.playtimeEarnerAmount, message: `playtimeEarner - awarding player cash for playing on the server`})
         })
         await cleanOldLogs(this.server.id)
@@ -46,8 +46,8 @@ async function loadOnlinePlayersAndAwardMoney() {
 
 async function cleanOldLogs(serverId) {
     try {
-        let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({ serverId: serverId });
-        let hoursToKeepData = sails.config.custom.donorConfig[donatorRole].economyKeepDataHours
+        // Playtime logs are not THAT useful and can ramp up fast. Keeping only 2 hours
+        let hoursToKeepData = 2;
         let milisecondsToKeepData = hoursToKeepData * 3600000;
         let dateNow = Date.now();
         let borderDate = new Date(dateNow.valueOf() - milisecondsToKeepData);

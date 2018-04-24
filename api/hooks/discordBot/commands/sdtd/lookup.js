@@ -47,8 +47,8 @@ class Lookup extends Commando.Command {
         return msg.channel.send(`Found ${foundPlayer.length} players! Narrow your search please`);
     }
 
-    let playerInfo = await sails.helpers.loadPlayerData.with({serverId: sdtdServer.id, steamId: foundPlayer.steamId});
-    foundPlayer = await sails.models.player.findOne(foundPlayer[0].id);
+    let playerInfo = await sails.helpers.sdtd.loadPlayerData.with({serverId: sdtdServer.id, steamId: foundPlayer.steamId});
+    foundPlayer = playerInfo[0];
     let lastOnlineDate = new Date(foundPlayer.lastOnline);
     let embed = new this.client.customEmbed()
 
