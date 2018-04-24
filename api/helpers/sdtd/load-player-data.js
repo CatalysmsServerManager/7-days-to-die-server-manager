@@ -56,24 +56,36 @@ module.exports = {
             for (const player of playerList.players) {
                 let playerProfile = await findOrCreatePlayer(player, inputs.serverId);
                 let steamAvatar = await loadSteamAvatar(player.steamid);
+                
+                // Inventory & stats data is only available when a player is online, so we only load it then.
                 let playerInventory
                 let playerStats
-
                 if (player.online) {
                     playerInventory = await loadPlayerInventory(player.steamid, server);
                     playerStats = await loadPlayerStats(player.steamid, server);
-
                 }
 
+                // Update some basic info
+                playerProfile = await Player.update({ id: playerProfile.id }, {
+                    lastOnline: player.lastonline,
+                    name: player.name,
+                    ip: player.ip,
+                    positionX: player.position.x,
+                    positionY: player.position.y,
+                    positionZ: player.position.z,
+                    playtime: player.totalplaytime,
+                    banned: player.banned
+                }).fetch()
+
                 if (!_.isUndefined(playerInventory)) {
-                    _.omit(playerInventory, 'playername');
+                    playerInventory = _.omit(playerInventory, 'playername');
                     playerProfile = await Player.update({ id: playerProfile.id }, {
                         inventory: playerInventory
                     }).fetch()
                 }
 
                 if (!_.isUndefined(playerStats)) {
-                    _.omit(playerStats, 'steamId');
+                    playerStats = _.omit(playerStats, 'steamId');
                     playerProfile = await Player.update({ id: playerProfile.id }, playerStats).fetch();
                 }
 
