@@ -434,11 +434,7 @@ module.exports = function sdtdCountryBan(sails) {
             sails.log.warn(`HOOK:countryBan - Failed to kick player from server ${server.id} - ${error}`);
           },
           success: async () => {
-<<<<<<< Updated upstream
-            sails.log.debug(`HOOK:countryBan - Kicked player ${connectedMessage.playerName} from server ${server.id}`);
-=======
             sails.log.info(`HOOK:countryBan - Kicked player ${connectedMessage.playerName} from ${country} server ${server.name}`);
->>>>>>> Stashed changes
             await sails.hooks.discordnotifications.sendNotification({
               serverId: server.id,
               notificationType: 'countrybanKick',
