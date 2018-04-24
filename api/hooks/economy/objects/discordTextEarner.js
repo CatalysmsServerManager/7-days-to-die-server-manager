@@ -29,7 +29,7 @@ class DiscordTextEarner {
 
 async function handleMessage(message) {
     let discordUser = message.author;
-    let userWithDiscordId = await User.find({ discordId: discordUser.id }).limit(1);
+    let userWithDiscordId = await User.find({ discordId: discordUser.id }).limit(1).populate('players');
 
     if (userWithDiscordId.length === 0) {
         return
@@ -39,8 +39,11 @@ async function handleMessage(message) {
         return
     }
 
-    let playersToReward = await Player.find({ user: userWithDiscordId[0].id, server: this.server.id }).limit(1);
+    const playerFilter = player => {
+        return player.server === this.server.id
+    }
 
+    let playersToReward = userWithDiscordId[0].players.filter(playerFilter);
     if (playersToReward.length === 0) {
         return
     }
