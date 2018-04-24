@@ -63,13 +63,13 @@
   function updatePlayerList(players) {
     let playersHtml = new String();
     let amountOfOnlinePlayers = 0
-    for (let player of players.players) {
+    for (let player of players) {
       if (player.online) {
         amountOfOnlinePlayers++
         let playerIdHtml = `<th scope="row"> ${player.entityId} </th>`
         let playerNameHtml =
           `<td> <a href='/player/${player.id}/profile'> ${player.name}</a></td>`
-        let playerPlaytimeHtml = `<td> ${player.totalPlaytime} </td>`
+        let playerPlaytimeHtml = `<td> ${player.playtime} </td>`
         let playerRowHtml = `<tr>${playerIdHtml} ${playerNameHtml} ${playerPlaytimeHtml}</tr>`
         playersHtml += playerRowHtml
       }

@@ -54,7 +54,47 @@
                 </td>
                 <td>
                   <% const economy = '/sdtdserver/' + server.id + '/economy' %>
-                    <a name="" id="" class="btn btn-primary btn-sm" href="<%= economy %>" role="button"><i class="far fa-money-bill-alt"></i> Economy (beta)</a>
+                    <a name="" id="" class="btn btn-primary btn-sm" href="<%= economy %>" role="button">
+                      <i class="far fa-money-bill-alt"></i> Economy (beta)</a>
+                </td>
+
+                <td>
+
+                  <!-- Button trigger modal -->
+                  <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete-server-<%= server.id %>-button">
+                    <i class="fas fa-trash-alt"></i> Delete
+                  </button>
+                  <!-- Modal -->
+                  <div class="modal fade" id="delete-server-<%= server.id %>-button" tabindex="-1" role="dialog" aria-labelledby="delete-server-<%= server.id %>-modal"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h4 class="modal-title" id="delete-server-<%= server.id %>-modal">Delete server</h4>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="container-fluid">
+                            Are you sure?
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <% const deleteLink = '/sdtdserver/' + server.id + '/delete' %>
+                            <a href='<%= deleteLink %>'>
+                              <button id="delete-server-<%= server.id %>-button" class="btn btn-default btn-danger" type="button">
+                                <em class="glyphicon glyphicon-align-justify"></em>
+                                Delete server
+                              </button>
+                            </a>
+
+                            <button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                 </td>
           </tr>
           <% }) %>
@@ -128,7 +168,7 @@
           serverId: server.id
         },
         success: (data, status, xhr) => {
-          let onlinePlayers = data.players.filter(player => {
+          let onlinePlayers = data.filter(player => {
             return player.online
           })
           $(`#server-${server.id}-players`).text(`${onlinePlayers.length} online`)

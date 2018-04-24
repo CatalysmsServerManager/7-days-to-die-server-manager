@@ -159,11 +159,11 @@ module.exports = function sdtdLogs(sails) {
 
           eventEmitter.on('playerConnected', async function (connectedMsg) {
             sails.sockets.broadcast(server.id, 'playerConnected', connectedMsg);
-            let playerData = await sails.helpers.loadPlayerData(server.id, connectedMsg.steamID);
+            let playerData = await sails.helpers.sdtd.loadPlayerData(server.id, connectedMsg.steamID);
             await sails.hooks.discordnotifications.sendNotification({
               serverId: server.id,
               notificationType: 'playerConnected',
-              player: playerData.players[0]
+              player: playerData[0]
             })
             if (connectedMsg.country != null) {
               await Player.update({ server: server.id, steamId: connectedMsg.steamID }, {country: connectedMsg.country})
@@ -173,11 +173,11 @@ module.exports = function sdtdLogs(sails) {
 
           eventEmitter.on('playerDisconnected', async function (disconnectedMsg) {
             sails.sockets.broadcast(server.id, 'playerDisconnected', disconnectedMsg);
-            let playerData = await sails.helpers.loadPlayerData(server.id, disconnectedMsg.playerID);
+            let playerData = await sails.helpers.sdtd.loadPlayerData(server.id, disconnectedMsg.playerID);
             await sails.hooks.discordnotifications.sendNotification({
               serverId: server.id,
               notificationType: 'playerDisconnected',
-              player: playerData.players[0]
+              player: playerData[0]
             })
           });
 

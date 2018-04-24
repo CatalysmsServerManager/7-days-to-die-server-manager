@@ -69,13 +69,11 @@ class setTele extends SdtdCommand {
       return chatMessage.reply(`Only alphanumeric values are allowed for teleport names.`);
     }
 
-    let location = player.location
-
     let createdTeleport = await PlayerTeleport.create({
       name: args[0],
-      x: location.x,
-      y: location.y,
-      z: location.z,
+      x: player.positionX,
+      y: player.positionY,
+      z: player.positionZ,
       player: player.id
     }).fetch();
 

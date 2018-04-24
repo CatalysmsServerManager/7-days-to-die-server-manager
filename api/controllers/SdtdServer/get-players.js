@@ -48,7 +48,7 @@ module.exports = {
       if (_.isUndefined(server)) {
         return exits.notFound();
       }
-      sails.helpers.loadPlayerData.with({serverId: inputs.serverId, onlyOnline: inputs.onlyOnline === false ? false : true})
+      sails.helpers.sdtd.loadPlayerData.with({serverId: inputs.serverId, onlyOnline: inputs.onlyOnline === false ? false : true})
         .switch({
           success: function(data) {
             return exits.success(data);
