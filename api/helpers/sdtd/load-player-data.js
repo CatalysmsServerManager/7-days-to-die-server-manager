@@ -27,7 +27,7 @@ module.exports = {
     },
 
     fn: async function (inputs, exits) {
-        sails.log.verbose(`HELPER - loadPlayerData - Loading player data for server ${inputs.serverId} -- steamId: ${inputs.steamId}`);
+        sails.log.debug(`HELPER - loadPlayerData - Loading player data for server ${inputs.serverId} -- steamId: ${inputs.steamId}`);
 
         try {
             let server = await SdtdServer.findOne(inputs.serverId);
@@ -68,7 +68,7 @@ module.exports = {
                 // Update some basic info
                 playerProfile = await Player.update({ id: playerProfile.id }, {
                     lastOnline: player.lastonline,
-                    name: player.name,
+                    name: player.name ? player.name : "Unknown",
                     ip: player.ip,
                     entityId: player.entityid,
                     positionX: player.position.x,
@@ -99,6 +99,7 @@ module.exports = {
                     playerProfile[0].online = true
                 }
 
+                sails.log.debug(`Loaded a player - ${playerProfile[0].id}`)
                 playersToSend.push(playerProfile[0]);
             }
 
@@ -162,6 +163,7 @@ function loadPlayerInventory(steamId, server) {
             steamId: steamId
         }).exec({
             error: function (err) {
+                sails.log.error(`HELPER - loadPlayerData:loadPlayerInventory ${error}`);
                 resolve(undefined);
             },
             success: function (data) {
@@ -176,8 +178,8 @@ async function loadPlayerStats(steamId, server) {
         let playerStats = await sails.helpers.sdtd.loadPlayerStats(server.id, steamId);
         return playerStats
     } catch (error) {
-        return undefined
         sails.log.error(`HELPER - loadPlayerData:loadPlayerStats - ${error}`);
+        return undefined
 
     }
 }
@@ -202,7 +204,7 @@ function loadSteamAvatar(steamId) {
             } 
             resolve(avatar)
         }).catch(async (error) => {
-            console.log(error)
+            sails.log.error(`HELPER - loadPlayerData:loadSteamAvatar ${error}`);
             resolve()
         });
     });
