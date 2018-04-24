@@ -51,14 +51,31 @@ module.exports = {
                 playerList.totalUnfiltered = playerList.players.length;
             }
 
+            let playersToSend = new Array();
+
             for (const player of playerList.players) {
+                let playerProfile = await findOrCreatePlayer(player, inputs.serverId);
+                let playerInventory = await loadPlayerInventory(playerProfile.steamId, server);
+                let playerStats = await loadPlayerStats(playerProfile.steamId, server);
+                let steamInfo = await loadPlayerSteamInfo(player.steamId)
 
-                let player = await findOrCreatePlayer(player.steamid);
-                let playerInventory = await loadPlayerInventory(steamId, server);
-                let playerStats = await loadPlayerStats(steamId, server);
+                if (!_.isUndefined(playerInventory)) {
+                    _.omit(playerInventory, 'playername');
+                    playerProfile = await Player.update({ id: playerProfile.id }, {
+                        inventory: playerInventory
+                    }).fetch()
+                }
 
-                console.log('TODO: update DB record(s)')
+                if (!_.isUndefined(playerStats)) {
+                    _.omit(playerStats, 'steamId');
+                    playerProfile = await Player.update({ id: playerProfile.id }, playerStats).fetch();
+                }
+
+                playersToSend.push(playerProfile[0]);
             }
+
+            sails.log.debug(`HELPER - loadPlayerData - Loaded player data for server ${inputs.serverId}! SteamId: ${inputs.steamId} - Found ${playersToSend.length} players`);
+            return exits.success(playersToSend)
 
 
         } catch (error) {
@@ -69,11 +86,38 @@ module.exports = {
     },
 };
 
+async function getPlayerList(server) {
+    return new Promise((resolve, reject) => {
+        sevenDays.getPlayerList({
+            ip: server.ip,
+            port: server.webPort,
+            authName: server.authName,
+            authToken: server.authToken
+        }).exec({
+            error: function (err) {
+                resolve({
+                    players: []
+                });
+            },
+            success: function (playerList) {
+                resolve(playerList);
+            }
+        });
+    });
+}
 
-async function findOrCreatePlayer(steamId, serverId) {
+
+async function findOrCreatePlayer(player, serverId) {
     try {
-        let player = await Player.findOrCreate({ server: serverId, steamId: steamId });
-        return player;
+        let foundOrCreatedPlayer = await Player.findOrCreate({ server: serverId, steamId: player.steamid }, {
+            steamId: player.steamid,
+            server: serverId,
+            entityId: player.entityid,
+            lastOnline: player.lastonline,
+            name: player.name,
+            ip: player.ip,
+        });
+        return foundOrCreatedPlayer;
     } catch (error) {
         sails.log.error(`HELPER - loadPlayerData:findOrCreatePlayer ${error}`);
         return undefined;
@@ -87,14 +131,12 @@ function loadPlayerInventory(steamId, server) {
             port: server.webPort,
             authName: server.authName,
             authToken: server.authToken,
-            steamId: steamid
+            steamId: steamId
         }).exec({
             error: function (err) {
                 resolve(undefined);
             },
             success: function (data) {
-                console.log('Loaded player inventory')
-                console.log(data)
                 resolve(data)
             }
         });
@@ -102,10 +144,14 @@ function loadPlayerInventory(steamId, server) {
 }
 
 async function loadPlayerStats(steamId, server) {
-    let playerStats = await sails.helpers.sdtd.loadPlayerStats(inputs.serverId);
-    console.log('Loaded player stats')
-    console.log(playerStats)
-    return playerStats
+    try {
+        let playerStats = await sails.helpers.sdtd.loadPlayerStats(server.id, steamId);
+        return playerStats
+    } catch (error) {
+        return undefined
+        sails.log.error(`HELPER - loadPlayerData:loadPlayerStats - ${error}`);
+
+    }
 }
 
 function loadPlayerSteamInfo(steamId) {
