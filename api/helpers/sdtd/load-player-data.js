@@ -94,6 +94,10 @@ module.exports = {
                     playerProfile = await Player.update({id: playerProfile.id}, {avatarUrl: steamAvatar}).fetch()
                 }
 
+                if (player.online) {
+                    playerProfile[0].online = true
+                }
+
                 playersToSend.push(playerProfile[0]);
             }
 

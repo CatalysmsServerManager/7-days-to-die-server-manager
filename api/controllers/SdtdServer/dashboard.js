@@ -44,7 +44,7 @@ module.exports = {
       if (!_.isUndefined(sdtdServerInfo)) {
         sdtdServer = sdtdServerInfo;
       }
-      let players = await sails.helpers.loadPlayerData.with({serverId:inputs.serverId, onlyOnline: true})
+      let players = await sails.helpers.sdtd.loadPlayerData.with({serverId:inputs.serverId, onlyOnline: true})
         .tolerate('unauthorized', (error) => {
           sails.log.warn(`VIEW - SdtdServer:dashboard - unauthorized for server cannot load playerInfo ${inputs.serverId}`)
         })

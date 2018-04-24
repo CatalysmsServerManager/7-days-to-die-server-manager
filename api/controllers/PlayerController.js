@@ -20,12 +20,12 @@ async function getInventory(req, res) {
     return res.badRequest('No server ID given');
   }
   try {
-    let playerInfo = await sails.helpers.loadPlayerData.with({
+    let playerInfo = await sails.helpers.sdtd.loadPlayerData.with({
       serverId: serverId,
       steamId: steamId
     });
 
-    let player = playerInfo.players[0];
+    let player = playerInfo[0];
     let toSend = new Object();
     toSend.id = player.id;
     toSend.steamId = player.steamId;
@@ -59,12 +59,12 @@ async function getBanStatus(req, res) {
   }
 
   try {
-    let playerInfo = await sails.helpers.loadPlayerData.with({
+    let playerInfo = await sails.helpers.sdtd.loadPlayerData.with({
       serverId: serverId,
       steamId: steamId
     });
 
-    let player = playerInfo.players[0];
+    let player = playerInfo[0];
     let toSend = new Object();
     toSend.id = player.id;
     toSend.steamId = player.steamId;
@@ -98,12 +98,12 @@ async function getLocation(req, res) {
   }
 
   try {
-    let playerInfo = await sails.helpers.loadPlayerData.with({
+    let playerInfo = await sails.helpers.sdtd.loadPlayerData.with({
       serverId: serverId,
       steamId: steamId
     });
 
-    let player = playerInfo.players[0];
+    let player = playerInfo[0];
     let toSend = new Object();
     toSend.id = player.id;
     toSend.steamId = player.steamId;
