@@ -44,6 +44,26 @@ module.exports = {
       defaultsTo: 1
     },
 
+    discordTextEarnerEnabled : {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
+    discordTextEarnerAmountPerMessage: {
+      type: 'number',
+      defaultsTo: 0.25
+    },
+
+    // How much seconds have to be between messages for a player to get rewarded
+    discordTextEarnerTimeout: {
+      type: 'number',
+      defaultsTo: 3
+    },
+
+    discordTextEarnerIgnoredChannels: {
+      type: 'json',
+    },
+
     costToTeleport: {
       type: 'number',
       defaultsTo: 1

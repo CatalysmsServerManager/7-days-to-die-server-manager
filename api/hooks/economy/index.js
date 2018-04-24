@@ -2,6 +2,7 @@ var sevenDays = require('machinepack-7daystodiewebapi');
 const PlaytimeEarner = require('./objects/playtimeEarner');
 
 let playtimeEarnerMap = new Map();
+let discordTextEarnerMap = new Map();
 
 
 module.exports = function economy(sails) {
@@ -15,9 +16,13 @@ module.exports = function economy(sails) {
                 let economyEnabledServers = await SdtdConfig.find({
                     economyEnabled: true
                 });
+
                 sails.log.info(`HOOK: economy - Initializing ${economyEnabledServers.length} servers`);
                 for (let config of economyEnabledServers) {
-                    await startPlaytimeEarner(config.server)
+
+                    if (config.playtimeEarnerEnabled) {
+                        await startPlaytimeEarner(config.server);
+                    }
                 }
 
                 return cb();
@@ -119,6 +124,27 @@ async function stopPlaytimeEarner(serverId) {
         deleteMap(serverId, playtimeEarnerObject);
     } catch (error) {
         sails.log.error(`HOOK - economy - Error stopping playtimeEarner ${error}`)
+    }
+}
+
+async function startDiscordTextEarner(serverId) {
+    try {
+        await SdtdConfig.update({server: serverId}, {discordTextEarnerEnabled: true});
+
+        if (getMap(serverId, 'discordTextEarner')) {
+            return
+        }
+
+        const server = await SdtdServer.findOne(serverId).populate('config');
+        const config = server.config[0];
+
+        let discordTextEarnerObject = new DiscordTextEarner(server, config);
+        await discordTextEarnerObject.start();
+        setMap(server, discordTextEarnerObject);
+        return true
+    } catch (error) {
+        sails.log.error(`HOOK - economy - Error starting discordTextEarner ${error}`)
+        return false
     }
 }
 
