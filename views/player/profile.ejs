@@ -1,108 +1,162 @@
-</body>
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-md-4">
-      <% include ../sdtdServer/partials/backToDashboard %>
-        <h1>
-          <img alt="Bootstrap Image Preview" src="<%= player.avatarUrl %>" class="img-circle" />
-          <%= player.name %>
-        </h1>
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-4">
+        <% include ../sdtdServer/partials/backToDashboard %>
+          <h1>
+            <img alt="Bootstrap Image Preview" src="<%= player.avatarUrl %>" class="img-circle" />
+            <%= player.name %>
+          </h1>
 
-        <div class="row">
-          <div class="col-md-8">
+          <div class="row">
+            <div class="col-md-8">
 
-            <ul class="list-group">
-              <li class="list-group-item">Steam ID:
-                <%= player.steamId %>
-              </li>
-              <li class="list-group-item">Entity ID:
-                <%= player.entityId %>
-              </li>
-              <% if (player.country) { %>
-                <li class="list-group-item">
-                  <% let lowerCaseCountry = player.country.toLowerCase(); %>
-                    <img src="../../images/flags/blank.gif" class="flag flag-<%= lowerCaseCountry %>" />
-                    <%= player.country %>
+              <ul class="list-group">
+                <li class="list-group-item">Steam ID:
+                  <%= player.steamId %>
                 </li>
-                <% } %>
-                  <li class="list-group-item">Location:
-                    <%= player.positionX %>
-                      <%= player.positionY %>
-                        <%= player.positionZ %>
+                <li class="list-group-item">Entity ID:
+                  <%= player.entityId %>
+                </li>
+                <% if (player.country) { %>
+                  <li class="list-group-item">
+                    <% let lowerCaseCountry = player.country.toLowerCase(); %>
+                      <img src="../../images/flags/blank.gif" class="flag flag-<%= lowerCaseCountry %>" />
+                      <%= player.country %>
                   </li>
-                  <li class="list-group-item">Playtime:
-                    <%= player.playtimeHHMMSS %>
-                  </li>
-                  <li class="list-group-item">Last online:
-                    <% let lastOnlineDate = new Date(player.lastOnline) %>
-                      <% let lastOnlineString = `${lastOnlineDate.toDateString()} ${lastOnlineDate.toTimeString()}` %>
-                        <%= lastOnlineString %>
-                  </li>
+                  <% } %>
+                    <li class="list-group-item">Location:
+                      <%= player.positionX %>
+                        <%= player.positionY %>
+                          <%= player.positionZ %>
+                    </li>
+                    <li class="list-group-item">Playtime:
+                      <%= player.playtimeHHMMSS %>
+                    </li>
+                    <li class="list-group-item">Last online:
+                      <% let lastOnlineDate = new Date(player.lastOnline) %>
+                        <% let lastOnlineString = `${lastOnlineDate.toDateString()} ${lastOnlineDate.toTimeString()}` %>
+                          <%= lastOnlineString %>
+                    </li>
 
-                  <li class="list-group-item">Ban status:
-                    <%= player.banned %>
-                  </li>
-                  <li class="list-group-item">Level:
-                    <%= player.level %>
-                  </li>
-                  <li class="list-group-item">Teleport locations:
-                    <table class="table">
-                      <thead>
-                        <tr>
-                          <th>Name</th>
-                          <th>Location</th>
-                        </tr>
-                      </thead>
-                      <tbody id='player-teleport-locations'>
-                      </tbody>
-                    </table>
-                  </li>
-                  <li class="list-group-item">Zombie kills:
-                    <%= player.zombieKills %>
-                  </li>
-                  <li class="list-group-item">Player kills:
-                    <%= player.playerKills %>
-                  </li>
-                  <li class="list-group-item">Score:
-                    <%= player.score %>
-                  </li>
-                  <li class="list-group-item">Server:
-                    <%= server.name %>
-                  </li>
-            </ul>
-          </div>
-
-          <div class="col-md-4">
-            <div class="btn-group btn-group-vertical">
-
-              <% if (player.banned) { %>
-                <%- include("./partials/unbanPlayerButton", {player: player}) %>
-                  <% } else { %>
-
-                    <%- include("./partials/banPlayerButton", {player: player}) %>
-                      <%- include("./partials/kickPlayerButton", {player: player}) %>
-                        <%- include("./partials/teleportPlayerButton", {player: player}) %>
-                          <% } %>
-                            <%- include("./partials/giveItemButton", {player: player}) %>
-
-
+                    <li class="list-group-item">Ban status:
+                      <%= player.banned %>
+                    </li>
+                    <li class="list-group-item">Level:
+                      <%= player.level %>
+                    </li>
+                    <li class="list-group-item">Teleport locations:
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th>Name</th>
+                            <th>Location</th>
+                          </tr>
+                        </thead>
+                        <tbody id='player-teleport-locations'>
+                        </tbody>
+                      </table>
+                    </li>
+                    <li class="list-group-item">Zombie kills:
+                      <%= player.zombieKills %>
+                    </li>
+                    <li class="list-group-item">Player kills:
+                      <%= player.playerKills %>
+                    </li>
+                    <li class="list-group-item">Score:
+                      <%= player.score %>
+                    </li>
+                    <li class="list-group-item">Server:
+                      <%= server.name %>
+                    </li>
+              </ul>
             </div>
+
+            <div class="col-md-4">
+              <div class="btn-group btn-group-vertical">
+
+                <% if (player.banned) { %>
+                  <%- include("./partials/unbanPlayerButton", {player: player}) %>
+                    <% } else { %>
+
+                      <%- include("./partials/banPlayerButton", {player: player}) %>
+                        <%- include("./partials/kickPlayerButton", {player: player}) %>
+                          <%- include("./partials/teleportPlayerButton", {player: player}) %>
+                            <% } %>
+                              <%- include("./partials/giveItemButton", {player: player}) %>
+
+
+              </div>
+            </div>
+
           </div>
+      </div>
+      <div class="col-md-8">
+        <%- include('./partials/playerInventory', {player: player}) %>
+      </div>
+    </div>
 
-        </div>
+    <div class="row">
+      <h3>Logs</h3>
+      <table id='player-historicalInfo-table' class="table display hover">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Message</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+
+      </table>
     </div>
-    <div class="col-md-8">
-      <%- include('./partials/playerInventory', {player: player}) %>
-    </div>
+
+
   </div>
-
-
-</div>
 </body>
 
 <script>
 
   $(document).ready(function () {
+
+    let historicalInfo = window.SAILS_LOCALS.historicalInfo;
+
+
+    let historicalInfoTable = $('#player-historicalInfo-table').DataTable({
+      data: window.SAILS_LOCALS.historicalInfo,
+      dom: 'Bfrtip',
+      fixedHeader: true,
+      responsive: true,
+      buttons: [
+        'copy', 'excel', 'pdf', 'print'
+      ],
+      order: [[0, 'desc'],
+      [1, 'desc']],
+      columns: [{
+        data: "createdAt",
+        render: function (data, type, row, meta) {
+          let date = new Date(data)
+          return `${date.toDateString()}`
+        }
+      },
+      {
+        data: 'createdAt',
+        render: function (data, type, row, meta) {
+          let date = new Date(data)
+          return `${date.toTimeString()}`
+        }
+      },
+      {
+        data: 'message'
+      },
+      {
+        data: 'amount'
+      },
+      ]
+    })
+
+    console.log(historicalInfo)
+
     updateTeleportLocations()
     function updateTeleportLocations() {
       let playerId = window.SAILS_LOCALS.player.id;

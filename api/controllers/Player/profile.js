@@ -41,6 +41,10 @@ module.exports = {
     try {
       let player = await Player.findOne(inputs.playerId);
       let server = await SdtdServer.findOne(player.server);
+      let historicalInfo = await HistoricalInfo.find({
+        player: player.id,
+        server: server.id
+      })
       player = await sails.helpers.sdtd.loadPlayerData(server.id, player.steamId);
       player = player[0]
       const hhmmss = require('@streammedev/hhmmss')
@@ -50,7 +54,8 @@ module.exports = {
 
       return exits.success({
         player: player,
-        server: server
+        server: server,
+        historicalInfo: historicalInfo
       });
     } catch (error) {
       sails.log.error(`VIEW - Player:profile - ${error}`);
