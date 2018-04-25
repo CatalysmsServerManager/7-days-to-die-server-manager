@@ -3,130 +3,106 @@
   <div class="row">
     <% if (!player.inventory) { %>
       <p>No inventory data =(</p>
-      <% } else { %>
+      <% } %>
 
-        <h2> Bag </h2>
-        <table class="table table-striped  table-responsive">
-          <thead class="thead-default">
-            <tr>
-              <th>Icon</th>
-              <th>Name</th>
-              <th>Amount</th>
-              <th>Quality</th>
-            </tr>
-          </thead>
-          <tbody>
-
-            <% for (let invItem of player.inventory.bag) { %>
-              <% if(!_.isNull(invItem)) { %>
-
-                <tr>
-                  <td scope="row">
-                    <img src="../../images/sdtdicons/<%= invItem.name %>.png">
-                  </td>
-                  <td>
-                    <%= invItem.name %>
-                  </td>
-                  <td>
-                    <%= invItem.count %>
-                  </td>
-                  <% if (invItem.quality != -1) { %>
-                    <td>
-                      <%= invItem.quality %>
-                    </td>
-                    <% } %>
-                </tr>
-
-                <% } %>
-                  <% } %>
-
-          </tbody>
-        </table>
   </div>
 
 
   <div class="row">
-    <h2> Belt </h2>
-    <table class="table table-striped  table-responsive">
-      <thead class="thead-default">
+    NEW
+
+    <table id='player-inventory-table' class="table display hover">
+      <thead>
         <tr>
           <th>Icon</th>
           <th>Name</th>
           <th>Amount</th>
           <th>Quality</th>
+          <th>Slot</th>
         </tr>
       </thead>
-      <tbody>
 
-        <% for (let invItem of player.inventory.belt) { %>
-          <% if(!_.isNull(invItem)) { %>
-
-            <tr>
-              <td scope="row">
-                <img src="../../images/sdtdicons/<%= invItem.name %>.png">
-              </td>
-              <td>
-                <%= invItem.name %>
-              </td>
-              <td>
-                <%= invItem.count %>
-              </td>
-              <% if (invItem.quality != -1) { %>
-                <td>
-                  <%= invItem.quality %>
-                </td>
-                <% } %>
-            </tr>
-
-            <% } %>
-              <% } %>
-
-      </tbody>
-    </table>
-  </div>
-
-  <div class="row">
-    <h2> Equipment </h2>
-    <table class="table table-striped  table-responsive">
-      <thead class="thead-default">
-        <tr>
-          <th>Icon</th>
-          <th>Name</th>
-          <th>Amount</th>
-          <th>Quality</th>
-        </tr>
-      </thead>
-      <tbody>
-
-        <% for (let prop in player.inventory.equipment) { %>
-          <% if(!_.isNull(player.inventory.equipment[prop])) { %>
-            <% let invItem = player.inventory.equipment[prop] %>
-
-              <tr>
-                <td scope="row">
-                  <img src="../../images/sdtdicons/<%= invItem.name %>.png">
-                </td>
-                <td>
-                  <%= invItem.name %>
-                </td>
-                <td>
-                  <%= invItem.count %>
-                </td>
-                <% if (invItem.quality != -1) { %>
-                  <td>
-                    <%= invItem.quality %>
-                  </td>
-                  <% } %>
-              </tr>
-
-              <% } %>
-                <% } %>
-
-      </tbody>
     </table>
 
-    <% } %>
   </div>
-
-
 </div>
+
+
+<script>
+
+  $(document).ready(function () {
+
+    console.log(window.SAILS_LOCALS.player.inventory)
+
+    const prepareInvDataForDataTable = (inventoryData) => {
+      let inventoryDataArr = new Array();
+
+      if (inventoryData.bag) {
+        inventoryData.bag.forEach(item => {
+          if (!_.isNull(item)) {
+            item.slot = 'bag';
+            inventoryDataArr.push(item);
+          }
+        })
+      }
+
+      // if (inventoryData.equipment) {
+      //   inventoryData.equipment.forEach(item => {
+      //     if (!_.isNull(item)) {
+      //       item.slot = 'equipment';
+      //       inventoryDataArr.push(item);
+      //     }
+      //   })
+      // }
+
+      if (inventoryData.belt) {
+        inventoryData.belt.forEach(item => {
+          if (!_.isNull(item)) {
+            item.slot = 'belt';
+            inventoryDataArr.push(item);
+          }
+        })
+      }
+
+
+
+
+      console.log(inventoryDataArr)
+      return inventoryDataArr
+    }
+
+    let inventoryData = prepareInvDataForDataTable(window.SAILS_LOCALS.player.inventory)
+
+    let inventoryTable = $('#player-inventory-table').DataTable({
+      data: inventoryData,
+      dom: 'Bfrtip',
+      fixedHeader: true,
+      responsive: true,
+      buttons: [
+        'copy', 'excel', 'pdf', 'print'
+      ],
+      columns: [{
+        data: "icon",
+        render: function(data, type, row, meta) {
+          return `<img src="../../../images/sdtdicons/${data}.png" width="50%">`
+        }
+      },
+      {
+        data: 'name'
+      },
+      {
+        data: 'count'
+      },
+      {
+        data: 'quality'
+      },
+      {
+        data: 'slot'
+      }
+
+      ]
+    })
+
+  })
+
+</script>

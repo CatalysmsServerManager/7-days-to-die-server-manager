@@ -91,9 +91,12 @@
 
           </div>
       </div>
-      <div class="col-md-8">
-        <%- include('./partials/playerInventory', {player: player}) %>
-      </div>
+
+    </div>
+
+    <div class="row">
+      <h3>Inventory</h3>
+      <%- include('./partials/playerInventory', {player: player}) %>
     </div>
 
     <div class="row">
@@ -154,8 +157,6 @@
       },
       ]
     })
-
-    console.log(historicalInfo)
 
     updateTeleportLocations()
     function updateTeleportLocations() {
