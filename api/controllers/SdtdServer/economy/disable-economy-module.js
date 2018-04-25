@@ -13,7 +13,7 @@ module.exports = {
         moduleType: {
             type: 'string',
             required: true,
-            isIn: ['playtimeEarner']
+            isIn: ['playtimeEarner', 'discordTextEarner']
         }
     },
 

@@ -99,7 +99,7 @@ module.exports = {
                 if (player.online) {
                     playerProfile[0].online = true
                 }
-                sails.log.debug(`Loaded a player - ${playerProfile[0].id}`)
+                sails.log.verbose(`Loaded a player - ${playerProfile[0].id}`)
                 playersToSend.push(playerProfile[0]);
             }
 

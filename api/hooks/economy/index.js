@@ -1,7 +1,11 @@
 var sevenDays = require('machinepack-7daystodiewebapi');
 const PlaytimeEarner = require('./objects/playtimeEarner');
+const DiscordTextEarner = require('./objects/discordTextEarner');
+const DiscordMessageHandler = require('./objects/discordMessageHandler');
 
 let playtimeEarnerMap = new Map();
+let discordTextEarnerMap = new Map();
+let discordMessageEmitter;
 
 
 module.exports = function economy(sails) {
@@ -11,13 +15,23 @@ module.exports = function economy(sails) {
         initialize: function (cb) {
 
             sails.on('hook:discordbot:loaded', async function () {
-                
+
+                discordMessageEmitter = new DiscordMessageHandler()
+
                 let economyEnabledServers = await SdtdConfig.find({
                     economyEnabled: true
                 });
+
                 sails.log.info(`HOOK: economy - Initializing ${economyEnabledServers.length} servers`);
                 for (let config of economyEnabledServers) {
-                    await startPlaytimeEarner(config.server)
+
+                    if (config.playtimeEarnerEnabled) {
+                        await startPlaytimeEarner(config.server);
+                    }
+
+                    if (config.discordTextEarnerEnabled) {
+                        await startDiscordTextEarner(config.server);
+                    }
                 }
 
                 return cb();
@@ -29,6 +43,9 @@ module.exports = function economy(sails) {
             switch (type) {
                 case 'playtimeEarner':
                     return startPlaytimeEarner(serverId);
+                    break;
+                case 'discordTextEarner':
+                    return startDiscordTextEarner(serverId);
                     break;
 
                 default:
@@ -42,7 +59,9 @@ module.exports = function economy(sails) {
                 case 'playtimeEarner':
                     return stopPlaytimeEarner(serverId);
                     break;
-
+                case 'discordTextEarner':
+                    return stopDiscordTextEarner(serverId);
+                    break;
                 default:
                     throw new Error('Unknown updateObject type')
                     break;
@@ -54,6 +73,9 @@ module.exports = function economy(sails) {
                 case 'playtimeEarner':
                     return playtimeEarnerMap.has(String(server.id ? server.id : server))
                     break;
+                case 'discordTextEarner':
+                    return discordTextEarnerMap.has(String(server.id ? server.id : server))
+                    break;
 
                 default:
                     throw new Error('Unknown updateObject type')
@@ -61,16 +83,25 @@ module.exports = function economy(sails) {
             }
         },
 
-        reload: async function(serverId, type) {
+        reload: async function (serverId, type) {
+            let config = await SdtdConfig.findOne(serverId);
             switch (type) {
                 case 'playtimeEarner':
-                    let config = await SdtdConfig.findOne(serverId);
-                    if (config.playtimeEarnerEnabled) {
+                    if (config.discordTextEarnerEnabled) {
                         await stopPlaytimeEarner(serverId);
                         return startPlaytimeEarner(serverId);
                     } else {
                         await startPlaytimeEarner(serverId);
                         return stopPlaytimeEarner(serverId);
+                    }
+                    break;
+                case 'discordTextEarner':
+                    if (config.discordTextEarnerEnabled) {
+                        await stopDiscordTextEarner(serverId);
+                        return startDiscordTextEarner(serverId);
+                    } else {
+                        await startDiscordTextEarner(serverId);
+                        return stopDiscordTextEarner(serverId);
                     }
                     break;
 
@@ -86,7 +117,7 @@ module.exports = function economy(sails) {
 
 async function startPlaytimeEarner(serverId) {
     try {
-        await SdtdConfig.update({server: serverId}, {playtimeEarnerEnabled: true});
+        await SdtdConfig.update({ server: serverId }, { playtimeEarnerEnabled: true });
 
         if (getMap(serverId, 'playtimeEarner')) {
             return
@@ -108,7 +139,7 @@ async function startPlaytimeEarner(serverId) {
 
 async function stopPlaytimeEarner(serverId) {
     try {
-        await SdtdConfig.update({server: serverId}, {playtimeEarnerEnabled: false});
+        await SdtdConfig.update({ server: serverId }, { playtimeEarnerEnabled: false });
 
         if (!getMap(serverId, 'playtimeEarner')) {
             return
@@ -122,11 +153,52 @@ async function stopPlaytimeEarner(serverId) {
     }
 }
 
+async function startDiscordTextEarner(serverId) {
+    try {
+        await SdtdConfig.update({ server: serverId }, { discordTextEarnerEnabled: true });
+
+        if (getMap(serverId, 'discordTextEarner')) {
+            return
+        }
+
+        const server = await SdtdServer.findOne(serverId).populate('config');
+        const config = server.config[0];
+        const messageEmitter = discordMessageEmitter.getEmitter();
+
+        let discordTextEarnerObject = new DiscordTextEarner(server, config, messageEmitter);
+        await discordTextEarnerObject.start();
+        setMap(server, discordTextEarnerObject);
+        return true
+    } catch (error) {
+        sails.log.error(`HOOK - economy - Error starting discordTextEarner ${error}`)
+        return false
+    }
+}
+
+async function stopDiscordTextEarner(serverId) {
+    try {
+        await SdtdConfig.update({ server: serverId }, { discordTextEarnerEnabled: false });
+
+        if (!getMap(serverId, 'discordTextEarner')) {
+            return
+        }
+
+        let discordTextEarnerObject = await getMap(serverId, 'discordTextEarner');
+        discordTextEarnerObject.stop();
+        deleteMap(serverId, discordTextEarnerObject);
+    } catch (error) {
+        sails.log.error(`HOOK - economy - Error stopping discordTextEarner ${error}`)
+    }
+}
+
 
 function getMap(server, type) {
     switch (type) {
         case 'playtimeEarner':
             return playtimeEarnerMap.get(String(server.id ? server.id : server))
+            break;
+        case 'discordTextEarner':
+            return discordTextEarnerMap.get(String(server.id ? server.id : server))
             break;
 
         default:
@@ -140,7 +212,9 @@ function setMap(server, updateObject) {
         case 'playtimeEarner':
             return playtimeEarnerMap.set(String(server.id ? server.id : server), updateObject);
             break;
-
+        case 'discordTextEarner':
+            return discordTextEarnerMap.set(String(server.id ? server.id : server), updateObject);
+            break;
         default:
             throw new Error('Must set a known type in updateObject')
             break;
@@ -152,7 +226,9 @@ function deleteMap(server, updateObject) {
         case 'playtimeEarner':
             return playtimeEarnerMap.delete(String(server.id ? server.id : server), updateObject);
             break;
-
+        case 'discordTextEarner':
+            return discordTextEarnerMap.delete(String(server.id ? server.id : server), updateObject);
+            break;
         default:
             throw new Error('Must set a known type in updateObject')
             break;
