@@ -47,7 +47,7 @@ class Lookup extends Commando.Command {
         return msg.channel.send(`Found ${foundPlayer.length} players! Narrow your search please`);
     }
 
-    let playerInfo = await sails.helpers.sdtd.loadPlayerData.with({serverId: sdtdServer.id, steamId: foundPlayer.steamId});
+    let playerInfo = await sails.helpers.sdtd.loadPlayerData.with({serverId: sdtdServer.id, steamId: foundPlayer[0].steamId});
     foundPlayer = playerInfo[0];
     let lastOnlineDate = new Date(foundPlayer.lastOnline);
     let embed = new this.client.customEmbed()
@@ -55,10 +55,10 @@ class Lookup extends Commando.Command {
 
     embed.setTitle(`${foundPlayer.name} - profile`)
     .addField('🚫 Banned', foundPlayer.banned ? '✔️' : '✖️', true)
-    .addField('💰 Currency', foundPlayer.currency, true)
+    .addField('💰 Currency', foundPlayer.currency ? foundPlayer.currency : 0, true)
     .addField('⏲️ Last online', lastOnlineDate.toDateString(), true)
     .addField('🗺️ Location', `${foundPlayer.positionX} ${foundPlayer.positionY} ${foundPlayer.positionZ}`, true)
-    .addField('🖧 IP', foundPlayer.ip, true)
+    .addField('🖧 IP', foundPlayer.ip ? foundPlayer.ip : "Unknown", true)
     .addField('👤 Profile', `${process.env.CSMM_HOSTNAME}/player/${foundPlayer.id}/profile`)
 
 

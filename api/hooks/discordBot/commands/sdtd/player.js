@@ -38,7 +38,7 @@ class Player extends Commando.Command {
         return msg.channel.send(`Found ${foundPlayer.length} players! Narrow your search please`);
     }
 
-    let playerInfo = await sails.helpers.sdtd.loadPlayerData.with({serverId: sdtdServer.id, steamId: foundPlayer.steamId});
+    let playerInfo = await sails.helpers.sdtd.loadPlayerData.with({serverId: sdtdServer.id, steamId: foundPlayer[0].steamId});
     foundPlayer = playerInfo[0];
     let lastOnlineDate = new Date(foundPlayer.lastOnline);
     let embed = new this.client.customEmbed()
