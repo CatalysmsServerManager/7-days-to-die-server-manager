@@ -49,7 +49,8 @@ async function handleMessage(message) {
     }
 
     await sails.helpers.economy.giveToPlayer.with({ playerId: playersToReward[0].id, amountToGive: this.config.discordTextEarnerAmountPerMessage, message: `discordTextEarner - awarding player for sending a message in discord` });
-
+    await cleanOldLogs(this.server.id);
+    
     if (this.config.discordTextEarnerTimeout) {
         this.userTimeoutMap.set(userWithDiscordId[0].id, true);
         const deleteUserFromMap = () => {
@@ -58,6 +59,27 @@ async function handleMessage(message) {
         setTimeout(deleteUserFromMap, this.config.discordTextEarnerTimeout * 1000)
     }
 
+
+
+}
+
+async function cleanOldLogs(serverId) {
+    try {
+        // Discord text earner should not keep logs, it clogs up fast.
+        let hoursToKeepData = 1;
+        let milisecondsToKeepData = hoursToKeepData * 3600000;
+        let dateNow = Date.now();
+        let borderDate = new Date(dateNow.valueOf() - milisecondsToKeepData);
+   
+        await HistoricalInfo.destroy({
+            server: serverId,
+            type: 'economy',
+            createdAt: { '<': borderDate.valueOf() },
+            message: {'contains': 'discordTextEarner -'}
+        })
+    } catch (error) {
+        sails.log.error(error)
+    }
 }
 
 
