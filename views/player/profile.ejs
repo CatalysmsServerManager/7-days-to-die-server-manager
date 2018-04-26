@@ -1,103 +1,169 @@
 <body>
   <div class="container-fluid">
+
     <div class="row">
-      <div class="col-md-4">
+
+      <div class="col-md-10">
         <% include ../sdtdServer/partials/backToDashboard %>
           <h1>
-            <img alt="Bootstrap Image Preview" src="<%= player.avatarUrl %>" class="img-circle" />
+            <img alt="Bootstrap Image Preview" src="<%= player.avatarUrl %>" style='border-radius: 50%;' />
             <%= player.name %>
           </h1>
+      </div>
 
-          <div class="row">
-            <div class="col-md-8">
+      <div class="col-md-2">
+        <div class="btn-group btn-group-vertical">
 
-              <ul class="list-group">
-                <li class="list-group-item">Steam ID:
-                  <%= player.steamId %>
-                </li>
-                <li class="list-group-item">Entity ID:
-                  <%= player.entityId %>
-                </li>
-                <% if (player.country) { %>
-                  <li class="list-group-item">
-                    <% let lowerCaseCountry = player.country.toLowerCase(); %>
-                      <img src="../../images/flags/blank.gif" class="flag flag-<%= lowerCaseCountry %>" />
-                      <%= player.country %>
-                  </li>
-                  <% } %>
-                    <li class="list-group-item">Location:
-                      <%= player.positionX %>
-                        <%= player.positionY %>
-                          <%= player.positionZ %>
-                    </li>
-                    <li class="list-group-item">Playtime:
-                      <%= player.playtimeHHMMSS %>
-                    </li>
-                    <li class="list-group-item">Last online:
-                      <% let lastOnlineDate = new Date(player.lastOnline) %>
-                        <% let lastOnlineString = `${lastOnlineDate.toDateString()} ${lastOnlineDate.toTimeString()}` %>
-                          <%= lastOnlineString %>
-                    </li>
+          <% if (player.banned) { %>
+            <%- include("./partials/unbanPlayerButton", {player: player}) %>
+              <% } else { %>
 
-                    <li class="list-group-item">Ban status:
-                      <%= player.banned %>
-                    </li>
-                    <li class="list-group-item">Level:
-                      <%= player.level %>
-                    </li>
-                    <li class="list-group-item">Teleport locations:
-                      <table class="table">
-                        <thead>
-                          <tr>
-                            <th>Name</th>
-                            <th>Location</th>
-                          </tr>
-                        </thead>
-                        <tbody id='player-teleport-locations'>
-                        </tbody>
-                      </table>
-                    </li>
-                    <li class="list-group-item">Zombie kills:
-                      <%= player.zombieKills %>
-                    </li>
-                    <li class="list-group-item">Player kills:
-                      <%= player.playerKills %>
-                    </li>
-                    <li class="list-group-item">Score:
-                      <%= player.score %>
-                    </li>
-                    <li class="list-group-item">Server:
-                      <%= server.name %>
-                    </li>
-              </ul>
-            </div>
-
-            <div class="col-md-4">
-              <div class="btn-group btn-group-vertical">
-
-                <% if (player.banned) { %>
-                  <%- include("./partials/unbanPlayerButton", {player: player}) %>
-                    <% } else { %>
-
-                      <%- include("./partials/banPlayerButton", {player: player}) %>
-                        <%- include("./partials/kickPlayerButton", {player: player}) %>
-                          <%- include("./partials/teleportPlayerButton", {player: player}) %>
-                            <% } %>
-                              <%- include("./partials/giveItemButton", {player: player}) %>
+                <%- include("./partials/banPlayerButton", {player: player}) %>
+                  <%- include("./partials/kickPlayerButton", {player: player}) %>
+                    <%- include("./partials/teleportPlayerButton", {player: player}) %>
+                      <% } %>
+                        <%- include("./partials/giveItemButton", {player: player}) %>
 
 
-              </div>
-            </div>
-
-          </div>
+        </div>
       </div>
 
     </div>
+
+
+    <div class="row">
+      <table class="table">
+
+        <tbody>
+
+          <tr>
+            <td scope="row">Steam ID</td>
+            <td>
+              <%= player.steamId %>
+            </td>
+          </tr>
+
+          <tr>
+            <td scope="row">Entity ID</td>
+            <td>
+              <%= player.entityId %>
+            </td>
+          </tr>
+
+          <tr>
+            <td scope="row">IP</td>
+            <td>
+              <%= player.ip %>
+            </td>
+          </tr>
+
+          <tr>
+            <td scope="row">Country</td>
+            <td>
+              <% if (player.country) { %>
+                <% let lowerCaseCountry = player.country.toLowerCase(); %>
+                  <img src="../../images/flags/blank.gif" class="flag flag-<%= lowerCaseCountry %>" />
+                  <%= player.country %>
+                    <% } %>
+            </td>
+          </tr>
+
+          <tr>
+            <td scope="row">Location</td>
+            <td>
+              <%= player.positionX %>
+                <%= player.positionY %>
+                  <%= player.positionZ %>
+            </td>
+          </tr>
+
+          <tr>
+            <td scope="row">Playtime</td>
+            <td>
+              <%= player.playtimeHHMMSS %>
+            </td>
+          </tr>
+
+          <tr>
+            <td scope="row">Last online</td>
+            <td>
+              <% let lastOnlineDate = new Date(player.lastOnline) %>
+                <% let lastOnlineString = `${lastOnlineDate.toDateString()} ${lastOnlineDate.toTimeString()}` %>
+                  <%= lastOnlineString %>
+            </td>
+          </tr>
+
+          <tr>
+            <td scope="row">Ban status</td>
+            <td>
+              <%= player.banned %>
+            </td>
+          </tr>
+
+          <tr>
+            <td scope="row">Level</td>
+            <td>
+              <%= player.level %>
+            </td>
+          </tr>
+
+          <tr>
+            <td scope="row">Deaths</td>
+            <td>
+              <%= player.deaths %>
+            </td>
+          </tr>
+
+          <tr>
+            <td scope="row">Score</td>
+            <td>
+              <%= player.score %>
+            </td>
+          </tr>
+
+          <tr>
+            <td scope="row">Zombie kills</td>
+            <td>
+              <%= player.zombieKills %>
+            </td>
+          </tr>
+
+          <tr>
+            <td scope="row">Player kills</td>
+            <td>
+              <%= player.playerKills %>
+            </td>
+          </tr>
+
+          <tr>
+            <td scope="row">Teleports</td>
+            <td>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Location</th>
+                  </tr>
+                </thead>
+                <tbody id='player-teleport-locations'>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+
+
+        </tbody>
+      </table>
+    </div>
+
+    <hr>
 
     <div class="row">
       <h3>Inventory</h3>
       <%- include('./partials/playerInventory', {player: player}) %>
     </div>
+
+    <hr>
 
     <div class="row">
       <h3>Logs</h3>

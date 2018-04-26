@@ -1,29 +1,24 @@
 <div class="container-fluid">
 
   <div class="row">
+
     <% if (!player.inventory) { %>
       <p>No inventory data =(</p>
-      <% } %>
+      <% } else { %>
+        <table id='player-inventory-table' class="table display hover">
+          <thead>
+            <tr>
+              <th>Icon</th>
+              <th>Name</th>
+              <th>Amount</th>
+              <th>Quality</th>
+              <th>Slot</th>
+            </tr>
+          </thead>
 
-  </div>
+        </table>
 
-
-  <div class="row">
-    NEW
-
-    <table id='player-inventory-table' class="table display hover">
-      <thead>
-        <tr>
-          <th>Icon</th>
-          <th>Name</th>
-          <th>Amount</th>
-          <th>Quality</th>
-          <th>Slot</th>
-        </tr>
-      </thead>
-
-    </table>
-
+        <% } %>
   </div>
 </div>
 
@@ -31,8 +26,6 @@
 <script>
 
   $(document).ready(function () {
-
-    console.log(window.SAILS_LOCALS.player.inventory)
 
     const prepareInvDataForDataTable = (inventoryData) => {
       let inventoryDataArr = new Array();
@@ -46,14 +39,16 @@
         })
       }
 
-      // if (inventoryData.equipment) {
-      //   inventoryData.equipment.forEach(item => {
-      //     if (!_.isNull(item)) {
-      //       item.slot = 'equipment';
-      //       inventoryDataArr.push(item);
-      //     }
-      //   })
-      // }
+      for (const key in inventoryData.equipment) {
+        if (inventoryData.equipment.hasOwnProperty(key)) {
+          let element = inventoryData.equipment[key];
+          if (!_.isNull(element)) {
+            element.slot = key
+            inventoryDataArr.push(element)
+
+          }
+        }
+      }
 
       if (inventoryData.belt) {
         inventoryData.belt.forEach(item => {
@@ -64,10 +59,6 @@
         })
       }
 
-
-
-
-      console.log(inventoryDataArr)
       return inventoryDataArr
     }
 
@@ -83,8 +74,8 @@
       ],
       columns: [{
         data: "icon",
-        render: function(data, type, row, meta) {
-          return `<img src="../../../images/sdtdicons/${data}.png" width="50%">`
+        render: function (data, type, row, meta) {
+          return `<img src="../../../images/sdtdicons/${data}.png" width="50%" style='border-radius: 50%;'>`
         }
       },
       {

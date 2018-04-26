@@ -51,15 +51,20 @@
                   <% } else { %>
                     <%- include('./partials/openTicketButton', ticket) %>
                       <% } %>
+                        <!--
                         <button id="btn-toggle-inventory" class="btn btn-secondary" type="button">
                           Toggle inventory
                         </button>
+                      -->
                         <%- include('./partials/addCommentButton', ticket) %>
       </div>
     </div>
+
+    <!--
     <div id="player-inventory" class="col-md-4">
       <%- include('../player/partials/playerInventory', {player: ticket.playerInfo}) %>
     </div>
+  -->
 
   </div>
 
