@@ -14,7 +14,9 @@ class DiscordMessageHandler {
 
 
         client.on('message', message => {
-            emitterObj.emit(message.guild.id, message);
+            if (message.guild) {
+                emitterObj.emit(message.guild.id, message);
+            }
         })
 
         sails.log.debug(`Initialized discordMessageHandler`);
