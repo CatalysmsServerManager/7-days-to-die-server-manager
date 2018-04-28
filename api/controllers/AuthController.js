@@ -16,8 +16,7 @@ module.exports = {
   steamLogin: function (req, res, next) {
     req.redirectAfterLogin = req.originalUrl
     passport.authenticate('steam', {
-      failureRedirect: `${process.env.CSMM_HOSTNAME}`,
-      successRedirect: req.originalUrl
+      failureRedirect: `${process.env.CSMM_HOSTNAME}`
     })(req, res);
 
   },
