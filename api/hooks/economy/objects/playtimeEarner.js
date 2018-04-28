@@ -27,15 +27,11 @@ class PlaytimeEarner {
     }
 }
 
-
-module.exports = PlaytimeEarner
-
-
 async function loadOnlinePlayersAndAwardMoney() {
     try {
-        let onlinePlayers = await sails.helpers.sdtd.loadPlayerData.with({ serverId: this.server.id, onlyOnline: true});
+        let onlinePlayers = await sails.helpers.sdtd.loadPlayerData.with({ serverId: this.server.id, onlyOnline: true });
         onlinePlayers.forEach(async player => {
-            await sails.helpers.economy.giveToPlayer.with({playerId: player.id, amountToGive: this.config.playtimeEarnerAmount, message: `playtimeEarner - awarding player cash for playing on the server`})
+            await sails.helpers.economy.giveToPlayer.with({ playerId: player.id, amountToGive: this.config.playtimeEarnerAmount, message: `playtimeEarner - awarding player cash for playing on the server` })
         })
         await cleanOldLogs(this.server.id)
     } catch (error) {
@@ -46,18 +42,21 @@ async function loadOnlinePlayersAndAwardMoney() {
 
 async function cleanOldLogs(serverId) {
     try {
-        // Playtime logs are not THAT useful and can ramp up fast. Keeping only 2 hours
-        let hoursToKeepData = 2;
+        // Playtime logs are not THAT useful and can ramp up fast. Keeping only 1 hour
+        let hoursToKeepData = 1;
         let milisecondsToKeepData = hoursToKeepData * 3600000;
         let dateNow = Date.now();
         let borderDate = new Date(dateNow.valueOf() - milisecondsToKeepData);
-   
+
         await HistoricalInfo.destroy({
             server: serverId,
             type: 'economy',
             createdAt: { '<': borderDate.valueOf() },
+            message: { 'contains': 'playtimeEarner -' }
         })
     } catch (error) {
         sails.log.error(error)
     }
 }
+
+module.exports = PlaytimeEarner

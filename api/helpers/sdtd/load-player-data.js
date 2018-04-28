@@ -103,7 +103,9 @@ module.exports = {
                 playersToSend.push(playerProfile[0]);
             }
 
-            sails.log.debug(`HELPER - loadPlayerData - Loaded player data for server ${inputs.serverId}! SteamId: ${inputs.steamId} - Found ${playersToSend.length} players`);
+            sails.log.debug(`HELPER - loadPlayerData - Loaded player data for server ${inputs.serverId}! SteamId: ${inputs.steamId}`, playersToSend.map(player => {
+                return player.name
+            }));
             return exits.success(playersToSend)
 
 

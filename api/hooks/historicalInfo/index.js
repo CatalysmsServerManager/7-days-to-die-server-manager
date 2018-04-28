@@ -8,7 +8,7 @@ module.exports = function historicalInfo(sails) {
     return {
         initialize: function (cb) {
             sails.on('hook:orm:loaded', async function () {
-                sails.on('hook:sdtdlogs:loaded', async function () {
+                sails.on('hook:discordbot:loaded', async function () {
 
                     let memUpdateEnabledServers = await SdtdConfig.find({
                         memUpdateInfoEnabled: true

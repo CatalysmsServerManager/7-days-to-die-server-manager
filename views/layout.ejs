@@ -164,6 +164,7 @@
         </li>
 
         <% 
+        if (!_.isUndefined(req.session) ) {
       if (!_.isUndefined(req.session.userId)) {
         %>
 
@@ -196,17 +197,17 @@
               <img src="https://steamcommunity-a.akamaihd.net/public/images/signinthroughsteam/sits_01.png">
             </a>
             <% } %>
-
-              <li class="nav-item">
-                <a target="_blank" class="nav-link" href="http://csmm.readthedocs.io">
-                  <i class="fas fa-life-ring"></i> Documentation
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/donate">
-                  <i class="fas fa-donate"></i> Donate
-                </a>
-              </li>
+              <% } %>
+                <li class="nav-item">
+                  <a target="_blank" class="nav-link" href="http://csmm.readthedocs.io">
+                    <i class="fas fa-life-ring"></i> Documentation
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/donate">
+                    <i class="fas fa-donate"></i> Donate
+                  </a>
+                </li>
       </ul>
 
     </div>
