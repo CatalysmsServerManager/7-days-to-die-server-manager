@@ -42,11 +42,12 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     try {
-      sails.log.debug(`HELPER - loadSdtdserverInfo - Loading server info for server ${inputs.serverId}`);
+
       // Load serverinfo from DB first
       let server = await SdtdServer.findOne(inputs.serverId);
       server.stats = await loadStats(server);
       server.serverInfo = await loadServerInfo(server);
+      sails.log.debug(`HELPER - loadSdtdserverInfo - Loaded server info for server ${server.name}`);
       exits.success(server);
     } catch (error) {
       sails.log.warn(`HELPER - load-sdtdServer-info - Failed to load info ${error}`)

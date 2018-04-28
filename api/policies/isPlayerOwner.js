@@ -44,7 +44,7 @@ module.exports = async function isPlayerOwner(req, res, next) {
       sails.log.silly(`POLICY - isPlayerOwner - User ${user.id} is owner of the player, approving request`);
       return next();
     } else {
-      sails.log.warn(`POLICY - isPlayerOwner - User ${user.id} tried to access a player without being owner`);
+      sails.log.warn(`POLICY - isPlayerOwner - User ${user.id} tried to access a player without being owner ${req.originalUrl}`);
       return res.forbidden('You are not the player owner.');
     }
 

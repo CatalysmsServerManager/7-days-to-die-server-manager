@@ -11,7 +11,7 @@ module.exports = function isLoggedInUser(req, res, next) {
       return next();
 
     } else {
-      sails.log.warn(`POLICY - isLoggedInUser - User ${req.session.userId} tried to access a protected resource!`);
+      sails.log.warn(`POLICY - isLoggedInUser - User ${req.session.userId} tried to access a protected resource! ${req.originalUrl}`);
       return res.forbidden();
 
     }
