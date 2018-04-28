@@ -33,7 +33,7 @@ module.exports = function sdtdLogs(sails) {
             for (const config of enabledServers) {
               let server = config.server;
               let motdSender = new MotdSender(server.id, config);
-              motdInfoMap.set(server.id, motdSender);
+              motdInfoMap.set(String(server.id), motdSender);
             }
             sails.log.info(`HOOK: sdtdMotd - Initialized ${motdInfoMap.size} MOTD instances`);
             return cb();
@@ -53,9 +53,8 @@ module.exports = function sdtdLogs(sails) {
      */
 
     start: async function (serverId) {
-      serverId = String(serverId);
       try {
-        if (!motdInfoMap.has(serverId)) {
+        if (!motdInfoMap.has(String(serverId))) {
           sails.log.debug(`HOOKS - sdtdMotd:start - starting motd for server ${serverId}`);
 
           let config = await SdtdConfig.findOne({
@@ -68,7 +67,7 @@ module.exports = function sdtdLogs(sails) {
 
           let motdSender = new MotdSender(serverId, config);
 
-          return motdInfoMap.set(serverId, motdSender);
+          return motdInfoMap.set(String(serverId), motdSender);
         }
 
       } catch (error) {
@@ -90,9 +89,9 @@ module.exports = function sdtdLogs(sails) {
         if (motdInfoMap.has(String(serverId))) {
           sails.log.debug(`HOOKS - sdtdMotd:stop - stopping MOTD for server ${serverId}`);
 
-          let motdSender = motdInfoMap.get(serverId);
+          let motdSender = motdInfoMap.get(String(serverId));
           motdSender.stop();
-          return motdInfoMap.delete(serverId);
+          return motdInfoMap.delete(String(serverId));
         }
       } catch (error) {
         sails.log.error(`HOOKS - sdtdMotd:stop - ${error}`);
@@ -111,8 +110,7 @@ module.exports = function sdtdLogs(sails) {
      */
 
     getStatus: function (serverId) {
-      serverId = String(serverId);
-      return motdInfoMap.has(serverId);
+      return motdInfoMap.has(String(serverId));
     },
 
     getAmount: function() {
