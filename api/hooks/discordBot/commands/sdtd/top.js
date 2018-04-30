@@ -55,12 +55,15 @@ class Top extends Commando.Command {
             sort: `${fieldToSearchFor} DESC`,
         })
 
+        let positionIterator = 1;
+
         players.forEach(player => {
-            embed.addField(`${player.name}`, args.type === 'playtime' ? playtimeToDDHHMMSS(player.playtime) : player[fieldToSearchFor], true)
+            embed.addField(`${positionIterator}. ${player.name}`, args.type === 'playtime' ? ` ${playtimeToDDHHMMSS(player.playtime)}` : ` ${player[fieldToSearchFor]}`, true);
+            positionIterator++
         })
 
         embed.setTitle(`${sdtdServer.name} - Top ${args.amount} players by ${args.type}`)
-        .setColor('RANDOM')
+            .setColor('RANDOM')
 
         msg.channel.send(embed)
 

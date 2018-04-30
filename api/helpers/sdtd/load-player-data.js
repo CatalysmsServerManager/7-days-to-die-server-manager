@@ -164,7 +164,7 @@ function loadPlayerInventory(steamId, server) {
             steamId: steamId
         }).exec({
             error: function (err) {
-                sails.log.error(`HELPER - loadPlayerData:loadPlayerInventory ${error}`);
+                sails.log.error(`HELPER - loadPlayerData:loadPlayerInventory ${err}`);
                 resolve(undefined);
             },
             success: function (data) {
