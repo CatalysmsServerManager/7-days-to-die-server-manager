@@ -57,12 +57,40 @@ module.exports = function discordBot(sails) {
           });
 
 
-
           // Login
 
           client.login(sails.config.custom.botToken).then(() => {
             sails.log.info(`Discord bot logged in - ${client.guilds.size} guilds`);
             initializeGuildPrefixes();
+
+            client.setInterval(async function () {
+              let statsInfo = await sails.helpers.meta.loadSystemStatsAndInfo();
+              let randomNumber = Math.trunc(Math.random() * 3);
+
+              let presenceTextToSet = `$info | `
+
+              switch (randomNumber) {
+                case 0:
+                  presenceTextToSet += `Servers: ${statsInfo.servers}`
+                  break;
+                  case 1:
+                  presenceTextToSet += `Players: ${statsInfo.players}`
+                  break;
+                  case 2:
+                  presenceTextToSet += `Guilds: ${statsInfo.guilds}`
+                  break;
+                  case 3:
+                  presenceTextToSet += `Uptime: ${statsInfo.uptime}`
+                  break;
+              
+                default:
+                  break;
+              }
+
+              client.user.setPresence({activity: {
+                name: presenceTextToSet
+              }})
+            }, 60000)
             return cb();
           })
             .catch((err) => {
