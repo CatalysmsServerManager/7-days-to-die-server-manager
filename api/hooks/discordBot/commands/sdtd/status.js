@@ -11,19 +11,37 @@ class Status extends Commando.Command {
       memberName: 'status',
       description: '',
       details: "Show server status",
+      args: [{
+        key: 'server',
+        default: 0,
+        type: 'integer',
+        prompt: 'Please specify what server to run this commmand for!'
+      }]
     });
   }
 
   async run(msg, args) {
-    let sdtdServer = await findSdtdServer(msg);
+    let sdtdServers = await findSdtdServer(msg);
 
-    if (!sdtdServer) {
-      return msg.channel.send(`Could not determine what server to work with! Make sure your settings are correct.`)
+    if (sdtdServers.length === 0) {
+      return msg.channel.send(`Could not find a server to execute this command for. You can link this guild to your server in the server settings.`)
     }
+
+    let sdtdServer = sdtdServers[args.server];
 
     let serverInfo = await sails.helpers.loadSdtdserverInfo(sdtdServer.id);
     let playerInfo = await sails.helpers.sdtd.loadPlayerData.with({ serverId: sdtdServer.id, onlyOnline: true });
-    let fps = await sails.helpers.sdtd.loadFps(sdtdServer.id);
+    let fps 
+
+    try {
+      fps = await sails.helpers.sdtd.loadFps(sdtdServer.id);
+    } catch (error) {
+      fps = 'Cannot load FPS =('
+    }
+
+    if (!serverInfo.stats || !serverInfo.serverInfo) {
+      return msg.channel.send(`Could not load required data. Is the server offline?`)
+    }
 
     let onlinePlayersStringList = new String();
 
