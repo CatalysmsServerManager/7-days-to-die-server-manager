@@ -8,14 +8,15 @@ class ServerInfo extends Commando.Command {
             group: 'sdtd',
             memberName: 'serverinfo',
             guildOnly: true,
-            description: '',
             details: "Show info about the server",
             args: [{
                 key: 'server',
                 default: 1,
                 type: 'integer',
                 prompt: 'Please specify what server to run this commmand for!'
-            }]
+            }],
+            description: 'Shows detailed info about a server and it\'s settings',
+            examples: ["serverinfo"]
         });
     }
 

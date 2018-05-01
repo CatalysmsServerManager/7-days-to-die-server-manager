@@ -10,7 +10,6 @@ class Lookup extends Commando.Command {
             group: 'sdtd',
             guildOnly: true,
             memberName: 'lookup',
-            description: 'Lookup a player profile',
             args: [{
                 key: 'playername',
                 prompt: 'Please specify a player name to look for',
@@ -21,7 +20,10 @@ class Lookup extends Commando.Command {
                 default: 1,
                 type: 'integer',
                 prompt: 'Please specify what server to run this commmand for!'
-            }]
+            }],
+            description: 'Lookup a player profile',
+            details: 'This is an admin-only command as it shows IP, location info',
+            examples: ["lookup Cata", "lookup bill"]
         });
     }
 

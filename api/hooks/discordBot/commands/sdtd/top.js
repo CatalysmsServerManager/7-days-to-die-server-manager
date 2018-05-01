@@ -9,7 +9,6 @@ class Top extends Commando.Command {
             memberName: 'top',
             guildOnly: true,
             description: '',
-            details: "Show top 10 players in different categories",
             args: [{
                 key: 'type',
                 prompt: 'Please specify which top you want to see',
@@ -28,7 +27,10 @@ class Top extends Commando.Command {
                 default: 1,
                 type: 'integer',
                 prompt: 'Please specify what server to run this commmand for!'
-            }]
+            }],
+            details: "Show top 10 players in different categories",
+            details: "The type argument can be: 'currency', 'zombies', 'players', 'deaths', 'playtime', 'score' or 'level'",
+            examples: ["top playtime 5", "top currency 20", "top deaths"]
         });
     }
 

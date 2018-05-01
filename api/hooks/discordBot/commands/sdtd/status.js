@@ -9,8 +9,7 @@ class Status extends Commando.Command {
       group: 'sdtd',
       guildOnly: true,
       memberName: 'status',
-      description: '',
-      details: "Show server status",
+      description: 'Shows some basic info about a server',
       args: [{
         key: 'server',
         default: 1,

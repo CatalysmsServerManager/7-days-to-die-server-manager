@@ -8,7 +8,6 @@ class Player extends Commando.Command {
             group: 'sdtd',
             guildOnly: true,
             memberName: 'player',
-            description: 'Lookup a player profile',
             args: [{
                 key: 'playername',
                 prompt: 'Please specify a player name to look for',
@@ -19,7 +18,9 @@ class Player extends Commando.Command {
                 default: 1,
                 type: 'integer',
                 prompt: 'Please specify what server to run this commmand for!'
-            }]
+            }],
+            examples: ["player Cata", "player bill"],
+            description: 'Lookup a player profile',
         });
     }
 
