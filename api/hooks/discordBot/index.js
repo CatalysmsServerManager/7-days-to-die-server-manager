@@ -63,6 +63,8 @@ module.exports = function discordBot(sails) {
             sails.log.info(`Discord bot logged in - ${client.guilds.size} guilds`);
             initializeGuildPrefixes();
 
+
+            // Rotate presence with stats info
             client.setInterval(async function () {
               let statsInfo = await sails.helpers.meta.loadSystemStatsAndInfo();
               let randomNumber = Math.trunc(Math.random() * 3);
@@ -141,6 +143,7 @@ module.exports = function discordBot(sails) {
   };
 
 };
+
 
 
 async function initializeGuildPrefixes() {

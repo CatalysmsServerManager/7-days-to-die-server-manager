@@ -9,21 +9,42 @@ class Status extends Commando.Command {
       group: 'sdtd',
       guildOnly: true,
       memberName: 'status',
-      description: '',
-      details: "Show server status",
+      description: 'Shows some basic info about a server',
+      args: [{
+        key: 'server',
+        default: 1,
+        type: 'integer',
+        prompt: 'Please specify what server to run this commmand for!'
+      }]
     });
   }
 
   async run(msg, args) {
-    let sdtdServer = await findSdtdServer(msg);
+    let sdtdServers = await findSdtdServer(msg);
+
+    if (sdtdServers.length === 0) {
+      return msg.channel.send(`Could not find a server to execute this command for. You can link this guild to your server on the website.`);
+    }
+
+    let sdtdServer = sdtdServers[args.server - 1];
 
     if (!sdtdServer) {
-      return msg.channel.send(`Could not determine what server to work with! Make sure your settings are correct.`)
+      return msg.channel.send(`Did not find server ${args.server}! Check your config please.`)
     }
 
     let serverInfo = await sails.helpers.loadSdtdserverInfo(sdtdServer.id);
     let playerInfo = await sails.helpers.sdtd.loadPlayerData.with({ serverId: sdtdServer.id, onlyOnline: true });
-    let fps = await sails.helpers.sdtd.loadFps(sdtdServer.id);
+    let fps
+
+    try {
+      fps = await sails.helpers.sdtd.loadFps(sdtdServer.id);
+    } catch (error) {
+      fps = 'Cannot load FPS =('
+    }
+
+    if (!serverInfo.stats || !serverInfo.serverInfo) {
+      return msg.channel.send(`Could not load required data. Is the server offline?`)
+    }
 
     let onlinePlayersStringList = new String();
 

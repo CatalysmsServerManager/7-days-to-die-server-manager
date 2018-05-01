@@ -9,7 +9,6 @@ class Top extends Commando.Command {
             memberName: 'top',
             guildOnly: true,
             description: '',
-            details: "Show top 10 players in different categories",
             args: [{
                 key: 'type',
                 prompt: 'Please specify which top you want to see',
@@ -22,15 +21,30 @@ class Top extends Commando.Command {
                 default: 10,
                 max: 20,
                 min: 3
-            }]
+            },
+            {
+                key: 'server',
+                default: 1,
+                type: 'integer',
+                prompt: 'Please specify what server to run this commmand for!'
+            }],
+            details: "Show top 10 players in different categories",
+            details: "The type argument can be: 'currency', 'zombies', 'players', 'deaths', 'playtime', 'score' or 'level'",
+            examples: ["top playtime 5", "top currency 20", "top deaths"]
         });
     }
 
     async run(msg, args) {
-        let sdtdServer = await findSdtdServer(msg);
+        let sdtdServers = await findSdtdServer(msg);
+
+        if (!sdtdServers.length === 0) {
+            return msg.channel.send(`Could not find a server to execute this command for. You can link this guild to your server in the server settings.`);
+        }
+
+        let sdtdServer = sdtdServers[args.server - 1];
 
         if (!sdtdServer) {
-            return msg.channel.send(`Could not determine what server to work with! Make sure your settings are correct.`)
+          return msg.channel.send(`Did not find server ${args.server}! Check your config please.`)
         }
 
         let fieldToSearchFor = args.type

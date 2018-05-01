@@ -7,8 +7,7 @@ class Stats extends Commando.Command {
       group: 'meta',
       aliases: ['info'],
       memberName: 'stats',
-      description: '',
-      details: "Show system stats",
+      description: 'Show system stats and info',
     });
   }
 

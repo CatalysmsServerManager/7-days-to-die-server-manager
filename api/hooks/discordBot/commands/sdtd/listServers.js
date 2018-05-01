@@ -1,0 +1,43 @@
+const Commando = require('discord.js-commando');
+const findSdtdServer = require('../../util/findSdtdServer.js');
+
+class ListServers extends Commando.Command {
+    constructor(client) {
+        super(client, {
+            name: 'listservers',
+            group: 'sdtd',
+            memberName: 'listservers',
+            guildOnly: true,
+            description: '',
+            details: "Shows a list of servers configured to a guild"
+        });
+    }
+
+    async run(msg, args) {
+        let sdtdServers = await findSdtdServer(msg);
+
+        if (!sdtdServers.length === 0) {
+            return msg.channel.send(`Didn't find any server(s)! You can link this guild to your server on the website.`)
+        }
+        
+        let embed = new this.client.customEmbed();
+        
+        embed.setTitle(`Server list`)
+        .setColor('RANDOM')
+
+        let iterator = 1;
+        for (const server of sdtdServers) {
+            const serverInfo = await sails.helpers.loadSdtdserverInfo(server.id);
+            embed.addField(`${iterator}. ${serverInfo.serverInfo.GameName ? serverInfo.serverInfo.GameName : serverInfo.name}`, `${serverInfo.serverInfo.ServerDescription ? serverInfo.serverInfo.ServerDescription : 'No description'}`);
+            iterator++
+        }
+
+        msg.channel.send(embed)
+    }
+
+}
+
+
+module.exports = ListServers;
+
+
