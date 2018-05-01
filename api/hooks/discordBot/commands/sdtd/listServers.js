@@ -29,7 +29,7 @@ class ListServers extends Commando.Command {
         for (const server of sdtdServers) {
             const serverInfo = await sails.helpers.loadSdtdserverInfo(server.id);
             if (serverInfo.serverInfo) {
-                embed.addField(`${iterator}. ${serverInfo.serverInfo.GameName ? serverInfo.serverInfo.GameName : serverInfo.name}`, `${serverInfo.serverInfo.ServerDescription ? serverInfo.serverInfo.ServerDescription : 'No description'}`);
+                embed.addField(`${iterator}. ${serverInfo.serverInfo.GameHost ? serverInfo.serverInfo.GameHost : serverInfo.name}`, `${serverInfo.serverInfo.ServerDescription ? serverInfo.serverInfo.ServerDescription : 'No description'}`);
             } else {
                 embed.addField(`${iterator}. ${serverInfo.name}`, `${'🔴 Could not load server info.'}`);
             }
