@@ -84,19 +84,6 @@
           </li>
 
 
-          <!-- Commands channel select -->
-
-          <li class='list-group-item'>
-            <label for="input-settings-discord-commandschannel">Command channel</label>
-            <br>
-            <small>Designate a discord channel to use commands for this server </small>
-
-            <select class="form-control" id="input-settings-discord-commandschannel">
-            </select>
-            <button id="input-settings-discord-setcommandschannel-btn" type="button" class="btn btn-primary">Set commands channel</button>
-          </li>
-
-
 
           <!-- Notification channel select -->
 
@@ -200,10 +187,6 @@
     {
       select: $("#input-settings-discord-chatchannel"),
       option: 'chatChannel'
-    },
-    {
-      select: $("#input-settings-discord-commandschannel"),
-      option: 'commandsChannel'
     },
     {
       select: $("#discord-settings-notifications-countrybankick-select"),
@@ -388,31 +371,6 @@
         error: (xhr, status, error) => {
           alert(`Whoa can't set chat to that channel! error: ${error}`)
           $('#input-settings-discord-chatchannel').addClass("bg-danger").removeClass("bg-success");
-          console.log(error);
-        }
-      })
-    })
-
-    $("#input-settings-discord-setcommandschannel-btn").click(e => {
-      e.preventDefault();
-      let newCommandsChannelId = $('#input-settings-discord-commandschannel').val();
-      if (!newCommandsChannelId) {
-        return alert('Error! Make sure you have a guild set and are selecting a valid channel')
-      }
-      $.ajax({
-        url: '/api/sdtdserver/setcommandschannel',
-        type: 'POST',
-        data: {
-          channelId: newCommandsChannelId,
-          serverId: <%= server.id %>,
-          _csrf: window.SAILS_LOCALS._csrf
-        },
-        success: (data, status, xhr) => {
-          $('#input-settings-discord-commandschannel').addClass("bg-success").removeClass("bg-danger");
-        },
-        error: (xhr, status, error) => {
-          alert(`Whoa can't set commands to that channel! error: ${error}`)
-          $('#input-settings-discord-commandschannel').addClass("bg-danger").removeClass("bg-success");
           console.log(error);
         }
       })
