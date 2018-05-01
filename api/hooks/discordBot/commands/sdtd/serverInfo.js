@@ -10,14 +10,26 @@ class ServerInfo extends Commando.Command {
             guildOnly: true,
             description: '',
             details: "Show info about the server",
+            args: [{
+                key: 'server',
+                default: 1,
+                type: 'integer',
+                prompt: 'Please specify what server to run this commmand for!'
+            }]
         });
     }
 
     async run(msg, args) {
-        let sdtdServer = await findSdtdServer(msg);
+        let sdtdServers = await findSdtdServer(msg);
+
+        if (!sdtdServers.length === 0) {
+            return msg.channel.send(`Could not find a server to execute this command for. You can link this guild to your server in the server settings.`)
+        }
+
+        let sdtdServer = sdtdServers[args.server - 1];
 
         if (!sdtdServer) {
-            return msg.channel.send(`Could not determine what server to work with! Make sure your settings are correct.`)
+          return msg.channel.send(`Did not find server ${args.server}! Check your config please.`)
         }
 
         let serverInfo = await sails.helpers.loadSdtdserverInfo(sdtdServer.id);

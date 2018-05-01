@@ -19,6 +19,12 @@ class ExecCommand extends Commando.Command {
                 prompt: 'Specify a command please',
                 type: 'string',
                 required: true
+            },
+            {
+                key: 'server',
+                default: 1,
+                type: 'integer',
+                prompt: 'Please specify what server to run this commmand for!'
             }],
             memberName: 'execcommand',
             description: 'Executes a console command',
@@ -28,11 +34,16 @@ class ExecCommand extends Commando.Command {
     }
 
     async run(msg, args) {
-        let sdtdServer = await findSdtdServer(msg);
+        let sdtdServers = await findSdtdServer(msg);
+
+        if (!sdtdServers.length === 0) {
+            return msg.channel.send(`Could not find a server to execute this command for. You can link this guild to your server in the server settings.`)
+        }
+
+        let sdtdServer = sdtdServers[args.server - 1];
 
         if (!sdtdServer) {
-            let errorEmbed = new client.errorEmbed(`Could not find a server to execute this command for! Make sure to add your server via the website and configure a channel to execute commands in.`)
-            return msg.reply(errorEmbed)
+            return msg.channel.send(`Did not find server ${args.server}! Check your config please.`)
         }
 
         let isAdmin = await checkIfAdmin(msg.author.id, sdtdServer.id);

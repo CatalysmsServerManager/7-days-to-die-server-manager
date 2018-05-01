@@ -13,7 +13,7 @@ class Status extends Commando.Command {
       details: "Show server status",
       args: [{
         key: 'server',
-        default: 0,
+        default: 1,
         type: 'integer',
         prompt: 'Please specify what server to run this commmand for!'
       }]
@@ -27,11 +27,15 @@ class Status extends Commando.Command {
       return msg.channel.send(`Could not find a server to execute this command for. You can link this guild to your server in the server settings.`)
     }
 
-    let sdtdServer = sdtdServers[args.server];
+    let sdtdServer = sdtdServers[args.server - 1];
+
+    if (!sdtdServer) {
+      return msg.channel.send(`Did not find server ${args.server}! Check your config please.`)
+    }
 
     let serverInfo = await sails.helpers.loadSdtdserverInfo(sdtdServer.id);
     let playerInfo = await sails.helpers.sdtd.loadPlayerData.with({ serverId: sdtdServer.id, onlyOnline: true });
-    let fps 
+    let fps
 
     try {
       fps = await sails.helpers.sdtd.loadFps(sdtdServer.id);
