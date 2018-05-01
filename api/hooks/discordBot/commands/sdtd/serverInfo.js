@@ -77,13 +77,12 @@ class ServerInfo extends Commando.Command {
 
         let embed = new this.client.customEmbed();
 
-
         embed.setTitle(`${serverInfo.name} - info`)
-            .setDescription(serverInfo.serverInfo.ServerDescription)
+            .setDescription(serverInfo.serverInfo.ServerDescription ? serverInfo.serverInfo.ServerDescription : "No description available")
             .addField('Connect', `${serverInfo.serverInfo.IP}:${serverInfo.serverInfo.Port}`, true)
             .addField(`Gametime`, `${serverInfo.stats.gametime.days} days ${serverInfo.stats.gametime.hours} hours ${serverInfo.stats.gametime.minutes} minutes`, true)
             .addField('Website', `${serverInfo.serverInfo.ServerWebsiteURL ? serverInfo.serverInfo.ServerWebsiteURL : "No website configured"}`)
-            .addField('Version', serverInfo.serverInfo.Version)
+            .addField('Version', serverInfo.serverInfo.Version ? serverInfo.serverInfo.Version : "Unknown version")
             .addField('Settings', `
 ${serverInfo.serverInfo.IsPasswordProtected} Password 
 ${serverInfo.serverInfo.EACEnabled} EAC 
