@@ -24,7 +24,7 @@ class Status extends Commando.Command {
     let sdtdServers = await findSdtdServer(msg);
 
     if (sdtdServers.length === 0) {
-      return msg.channel.send(`Could not find a server to execute this command for. You can link this guild to your server in the server settings.`)
+      return msg.channel.send(`Could not find a server to execute this command for. You can link this guild to your server on the website.`);
     }
 
     let sdtdServer = sdtdServers[args.server - 1];

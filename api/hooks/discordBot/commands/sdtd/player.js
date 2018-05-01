@@ -26,8 +26,8 @@ class Player extends Commando.Command {
     async run(msg, args) {
         let sdtdServers = await findSdtdServer(msg);
 
-        if (!sdtdServers) {
-            return msg.channel.send(`Could not determine what server to work with! Make sure your settings are correct.`)
+        if (sdtdServers.length === 0) {
+            return msg.channel.send(`Could not find a server to execute this command for. You can link this guild to your server on the website.`);
         }
 
         let sdtdServer = sdtdServers[args.server - 1];
