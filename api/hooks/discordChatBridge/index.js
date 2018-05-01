@@ -117,7 +117,7 @@ module.exports = function SdtdDiscordChatBridge(sails) {
       }
 
       if (_.isUndefined(textChannel)) {
-        throw new Error(`Did not find textchannel corresponding to ID in config.`);
+        return
       }
 
       let oldChat = getChatBridge(serverId);
