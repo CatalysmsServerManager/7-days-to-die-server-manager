@@ -132,6 +132,10 @@ module.exports.routes = {
   'post /api/sdtdserver/economy/module/discordtextearner/amount': 'SdtdServerController/economy.set-discord-text-earner-amount',
   'post /api/sdtdserver/economy/module/discordtextearner/timeout': 'SdtdServerController/economy.set-discord-text-earner-timeout',
 
+  // Shop Listing
+
+  "get /api/shop/listing" : "ShopController.listing-add",
+
   // Historical data
 
   'get /api/sdtdserver/data/memupdate': 'SdtdServerController/historicalData.get-mem-update',
@@ -212,7 +216,6 @@ module.exports.routes = {
   'post /api/sdtdserver/setGuild': 'SdtdServerController/discordBot.set-discord-guild',
   'post /api/sdtdserver/setchatchannel': 'SdtdServerController/discordBot.set-chat-channel',
   'post /api/sdtdserver/setnotificationchannel': 'SdtdServerController/discordBot.set-notification-channel',
-  'post /api/sdtdserver/setcommandschannel': 'SdtdServerController/discordBot.set-commands-channel',
   'post /api/sdtdserver/discord/prefix': 'SdtdServerController/discordBot.set-prefix',
 
 
