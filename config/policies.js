@@ -51,6 +51,13 @@ module.exports.policies = {
     'add-server': 'isLoggedIn',
   },
 
+  ShopController: {
+    '*': ['isPatron', 'isLoggedIn'],
+    'listing-add': 'isServerOwner',
+    'listing-edit': 'isServerOwner',
+    'listing-delete': 'isServerOwner',
+  },
+
   customCommandController: {
     '*': 'isServerOwner',
   },
