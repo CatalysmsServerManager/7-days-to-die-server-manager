@@ -65,6 +65,10 @@ module.exports = {
                 player: player.id
             }).fetch();
 
+            await ShopListing.update({ id: inputs.listingId }, {
+                timesBought: listing.timesBought + 1
+            });
+
             return exits.success(itemClaim)
         } catch (error) {
             sails.log.error(error);
