@@ -134,6 +134,7 @@ module.exports.routes = {
 
   // Shop Listing
 
+  'get /api/shop/listing': 'ShopController.get-listings',
   "post /api/shop/listing" : "ShopController.listing-add",
   "delete /api/shop/listing" : "ShopController.listing-delete",
   "patch /api/shop/listing" : "ShopController.listing-edit",
