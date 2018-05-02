@@ -7,11 +7,21 @@
     </div>
 
     <div class="row">
+        <div class="col-4">
+                <h2>Items for sale</h2>
+        </div>
+        <div class="col-8">
+            Welcome, <%= player.name %>.
+            Your balance is: <%= player.currency %>.
+            </div>
+    </div>
+
+    <div class="row">
 
         <div class="col-12">
 
 
-            <h2>Items for sale</h2>
+
 
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#shop-add">
@@ -184,8 +194,6 @@
     <script>
 
         $(document).ready(function () {
-            console.log(window.SAILS_LOCALS.server)
-            console.log(window.SAILS_LOCALS.listings)
 
             $('#add-listing-btn').click(e => {
                 // If a user doesn't fill in a field, we change the value from an empty string to undefined
