@@ -69,6 +69,7 @@ module.exports = {
                 timesBought: listing.timesBought + 1
             });
 
+
             return exits.success(itemClaim)
         } catch (error) {
             sails.log.error(error);

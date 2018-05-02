@@ -27,6 +27,11 @@ module.exports = {
             required: true,
         },
 
+        claimed: {
+            type: 'boolean',
+            defaultsTo: false
+        }
+
 
     },
 

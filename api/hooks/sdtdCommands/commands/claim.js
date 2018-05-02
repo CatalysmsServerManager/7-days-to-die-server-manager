@@ -10,20 +10,27 @@ class Claim extends SdtdCommand {
     }
 
     async run(chatMessage, player, server, args) {
-        let itemsToClaim = await PlayerClaimItem.find({player: player.id});
+        let itemsToClaim = await PlayerClaimItem.find({ player: player.id, claimed: false });
 
         if (args[0] === 'list') {
 
+            chatMessage.reply(`There are ${itemsToClaim.length} items for you to claim`);
             itemsToClaim.forEach(item => {
                 chatMessage.reply(`${item.amount}x ${item.name} of quality ${item.quality}`);
             })
 
-            return chatMessage.reply(`There are ${itemsToClaim.length} items for you to claim`)
+            return 
         }
 
         if (itemsToClaim.length === 0) {
             return chatMessage.reply(`You have no items to claim!`);
         }
+
+        if (itemsToClaim.length > 10) {
+            chatMessage.reply('More than 10 items in queue, only the first 10 will be dropped.')
+            itemsToClaim = itemsToClaim.slice(0,10);
+        }
+
 
         itemsToClaim.forEach(item => {
             sevenDays.giveItem({
@@ -37,7 +44,7 @@ class Claim extends SdtdCommand {
                 quality: 1
             }).exec({
                 success: async data => {
-                    await PlayerClaimItem.destroy({id: item.id});
+                    await PlayerClaimItem.update({ id: item.id }, { claimed: true });
                     chatMessage.reply(`Dropped ${item.amount}x ${item.name} of quality ${item.quality} at your feet.`)
                 },
                 error: e => {
@@ -48,7 +55,7 @@ class Claim extends SdtdCommand {
         })
 
 
-        
+
     }
 }
 
