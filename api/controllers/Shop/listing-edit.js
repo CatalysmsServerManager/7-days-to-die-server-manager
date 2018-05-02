@@ -87,9 +87,6 @@ module.exports = {
             updateObject.quality = !_.isUndefined(inputs.quality) ? inputs.quality : originalListing.quality
             updateObject.price = !_.isUndefined(inputs.price) ? inputs.price : originalListing.price
 
-            console.log(updateObject)
-            console.log(inputs.quality ? true : false)
-
             if (updateObject.quality && updateObject.amount > 1) {
                 return exits.invalidItem('When setting quality, amount cannot be more than 1');
             }
