@@ -134,7 +134,8 @@ module.exports.routes = {
 
   // Shop Listing
 
-  "get /api/shop/listing" : "ShopController.listing-add",
+  "post /api/shop/listing" : "ShopController.listing-add",
+  "delete /api/shop/listing" : "ShopController.listing-delete",
 
   // Historical data
 
