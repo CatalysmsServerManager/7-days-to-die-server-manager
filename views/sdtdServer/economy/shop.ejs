@@ -26,7 +26,7 @@
             <% if (isAdmin) { %>
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#shop-add">
-                    Add
+                        <i class="fas fa-plus-circle"></i> Create a new listing
                 </button>
 
  
@@ -114,14 +114,14 @@
                                     </ul>
                                 </div>
                                 <div class="card-footer">
-                                    <button class="btn shop-buy btn-success" value="<%= listing.id %>">Buy</button>
+                                    <button class="btn shop-buy btn-success" value="<%= listing.id %>"><i class="far fa-money-bill-alt"></i> Buy</button>
 
                                     <% if (isAdmin) { %>
-                                    <button class="btn shop-delete btn-danger" value="<%= listing.id %>">Delete</button>
+                                    <button class="btn shop-delete btn-danger" value="<%= listing.id %>"><i class="fas fa-trash-alt"></i> Delete</button>
 
                                     <!-- Button trigger modal -->
                                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#shop-edit<%= listing.id %>">
-                                        Edit
+                                            <i class="fas fa-edit"></i> Edit
                                     </button>
 
                                     <!-- Modal -->
