@@ -139,6 +139,7 @@ module.exports.routes = {
   "post /api/shop/listing" : "ShopController.listing-add",
   "delete /api/shop/listing" : "ShopController.listing-delete",
   "patch /api/shop/listing" : "ShopController.listing-edit",
+  "post /api/shop/listing/buy" : "ShopController.listing-buy",
 
   // Historical data
 

@@ -8,12 +8,13 @@
 
     <div class="row">
         <div class="col-4">
-                <h2>Items for sale</h2>
+            <h2>Items for sale</h2>
         </div>
         <div class="col-8">
-            Welcome, <%= player.name %>.
-            Your balance is: <%= player.currency %>.
-            </div>
+            Welcome,
+            <%= player.name %>. Your balance is:
+                <%= player.currency %>.
+        </div>
     </div>
 
     <div class="row">
@@ -244,7 +245,29 @@
 
 
             $(".shop-buy").click(e => {
-                console.log(e.target.value)
+                let listingId = e.target.value;
+                let playerId = window.SAILS_LOCALS.player.id;
+
+                $.ajax({
+                    url: "/api/shop/listing/buy",
+                    method: "POST",
+                    data: {
+                        listingId: listingId,
+                        playerId: playerId,
+                        _csrf: window.SAILS_LOCALS._csrf,
+                    },
+                    success: (data, status, xhr) => {
+                        alert(`You have successfully bought ${data.amount}x ${data.name}`)
+                    },
+                    error: (xhr, status, error) => {
+                        if (xhr.responseText == "\"You do not have enough money to buy this!\"") {
+                            return alert(`You do not have enough money to buy this item`)
+                        }
+                        alert('Error something went wrong!')
+                        console.log(xhr)
+                    }
+                })
+
             })
 
             $(".shop-edit").click(e => {
