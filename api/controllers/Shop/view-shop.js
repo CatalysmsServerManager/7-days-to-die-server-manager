@@ -51,6 +51,8 @@ module.exports = {
                 return exits.notLoggedIn('Not a valid player profile. Make sure you have logged in to this server. If you think this message is a mistake, please report this issue.')
             }
 
+            let unclaimedItems = await PlayerClaimItem.find({player: player.id, claimed: false});
+
             let isAdmin = false;
 
             if (server.owner === user.id) {
@@ -70,7 +72,8 @@ module.exports = {
                 listings: listings,
                 player: player[0],
                 user: user,
-                isAdmin: isAdmin
+                isAdmin: isAdmin,
+                unclaimedItems: unclaimedItems,
             })
 
         } catch (error) {
