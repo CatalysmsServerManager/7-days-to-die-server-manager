@@ -310,6 +310,7 @@
                     method: "PATCH",
                     data: {
                         listingId: listingId,
+                        serverId: window.SAILS_LOCALS.server.id,
                         _csrf: window.SAILS_LOCALS._csrf,
                         name: name,
                         friendlyName: friendlyName,
