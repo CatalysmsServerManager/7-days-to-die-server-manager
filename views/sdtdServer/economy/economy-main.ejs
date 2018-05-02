@@ -12,12 +12,12 @@
 
         <div class="col-4">
             <div class="list-group">
-                <button id="economy-button-enable" type="button" class="list-group-item list-group-item-action bg-success">Enable economy</button>
-                <button id="economy-button-disable" type="button" class="list-group-item list-group-item-action bg-warning">Disable economy</button>
+                <button id="economy-button-enable" type="button" class="list-group-item list-group-item-action bg-success"><i class="fas fa-toggle-on"></i> Enable economy</button>
+                <button id="economy-button-disable" type="button" class="list-group-item list-group-item-action bg-warning"><i class="fas fa-toggle-off"></i>Disable economy</button>
 
                 <!-- Button trigger modal -->
                 <button type="button" class="btn list-group-item list-group-item-action bg-primary" data-toggle="modal" data-target="#economy-setPrices-modal">
-                    Set prices
+                        <i class="fas fa-hand-holding-usd"></i> Set prices 
                 </button>
 
                 <!-- Modal -->
@@ -26,7 +26,7 @@
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title" id="economy-setPrices-modal-title">Set prices</h4>
+                                <h4 class="modal-title" id="economy-setPrices-modal-title"> Set prices</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -65,7 +65,7 @@
 
                 <!-- Button trigger modal -->
                 <button type="button" class="btn list-group-item list-group-item-action bg-primary" data-toggle="modal" data-target="#economy-setCurrencyName-modal">
-                    Set currency name
+                        <i class="far fa-money-bill-alt"></i> Set currency name
                 </button>
 
                 <!-- Modal -->
@@ -74,7 +74,7 @@
                     <div class="modal-dialog modal-sm" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title" id="economy-setCurrencyName-modal-title">Set currency name</h4>
+                                <h4 class="modal-title" id="economy-setCurrencyName-modal-title"> </i> Set currency name</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -102,10 +102,14 @@
             <div class="list-group">
                 <button type="button" class="list-group-item bg-dark">Modules</button>
                 <%- include('./module-playtimeEarner') %>
-                <%- include('./module-discordTextEarner') %>
-                <button type="button" class="list-group-item list-group-item-action">Module 3</button>
-                <button type="button" class="list-group-item list-group-item-action">Module 4</button>
-                <button type="button" class="list-group-item list-group-item-action">Module 5</button>
+                    <%- include('./module-discordTextEarner') %>
+                        <% const shopLink = '/shop/' + server.id %>
+                            <a href='<%= shopLink %>' class="btn btn-lg btn-primary">
+                                <i class="fas fa-shopping-cart"></i> Shop
+                            </a>
+
+                            <button class="list-group-item list-group-item-action">Module 4</button>
+                            <button type="button" class="list-group-item list-group-item-action">Module 5</button>
             </div>
 
 
@@ -116,7 +120,7 @@
     </div>
 
 
-    
+
 
 
 
