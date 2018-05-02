@@ -44,7 +44,7 @@ module.exports = {
 
         quality: {
             type: 'number',
-            defaultsTo: 1,
+            defaultsTo: 0,
             min: 0
         },
 

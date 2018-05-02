@@ -61,28 +61,34 @@ module.exports = {
 
     fn: async function (inputs, exits) {
 
-        let validItemName = await sails.helpers.sdtd.validateItemName(inputs.serverId, inputs.name);
+        try {
+            let validItemName = await sails.helpers.sdtd.validateItemName(inputs.serverId, inputs.name);
 
-        if (!validItemName) {
-            return exits.invalidItem('You have provided an invalid item name.');
+            if (!validItemName) {
+                return exits.invalidItem('You have provided an invalid item name.');
+            }
+    
+            if (inputs.quality && inputs.amount > 1) {
+                return exits.invalidItem('When setting quality, amount cannot be more than 1');
+            }
+    
+            let createdListing = await ShopListing.create({
+                name: inputs.name,
+                friendlyName: inputs.friendlyName,
+                amount: inputs.amount,
+                quality: inputs.quality,
+                price: inputs.price,
+                server: inputs.serverId
+            }).fetch()
+    
+            return exits.success(createdListing);
+        } catch (error) {
+            sails.log.error(error);
+            return exits.error(error);
         }
 
-        if (inputs.quality && inputs.amount > 1) {
-            return exits.invalidItem('When setting quality, amount cannot be more than 1');
-        }
-
-        let createdListing = await ShopListing.create({
-            name: inputs.name,
-            friendlyName: inputs.friendlyName,
-            amount: inputs.amount,
-            quality: inputs.quality,
-            price: inputs.price,
-            server: inputs.serverId
-        }).fetch()
 
 
-
-        return exits.success(createdListing);
 
     }
 

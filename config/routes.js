@@ -87,6 +87,7 @@ module.exports.routes = {
   'get /sdtdserver/:serverId/tickets': 'SdtdTicket.server-tickets-view',
   'get /sdtdserver/:serverId/analytics': 'SdtdServerController/historicalData.view-analytics',
   'get /sdtdserver/:serverId/economy': 'SdtdServerController/economy.economy-view',
+  'get /shop' : "ShopController.view-shop",
 
   'get /player/:playerId/profile': 'PlayerController.profile',
 

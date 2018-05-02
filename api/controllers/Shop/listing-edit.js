@@ -32,6 +32,7 @@ module.exports = {
 
         quality: {
             type: 'number',
+            min: 0
         },
 
         price: {
@@ -69,25 +70,31 @@ module.exports = {
 
             // Check if the given name is known ingame
             if (!_.isUndefined(inputs.name)) {
-                let validItemName = await sails.helpers.sdtd.validateItemName(inputs.serverId, inputs.name);
+                let validItemName = await sails.helpers.sdtd.validateItemName(originalListing.server, inputs.name);
 
                 if (!validItemName) {
                     return exits.invalidItem('You have provided an invalid item name.');
                 }
             }
 
-            let updateObject = originalListing;
-            updateObject.friendlyName = inputs.friendlyName ? inputs.friendlyName : originalListing.friendlyName
-            updateObject.name = inputs.name ? inputs.name : originalListing.name
-            updateObject.amount = inputs.amount ? inputs.amount : originalListing.amount
-            updateObject.quality = inputs.quality ? inputs.quality : originalListing.quality
-            updateObject.price = inputs.price ? inputs.price : originalListing.price
+            let updateObject = _.omit(originalListing, "createdAt", "updatedAt", "createdBy", "server");
+
+
+
+            updateObject.friendlyName = !_.isUndefined(inputs.friendlyName) ? inputs.friendlyName : originalListing.friendlyName
+            updateObject.name = !_.isUndefined(inputs.name) ? inputs.name : originalListing.name
+            updateObject.amount = !_.isUndefined(inputs.amount) ? inputs.amount : originalListing.amount
+            updateObject.quality = !_.isUndefined(inputs.quality) ? inputs.quality : originalListing.quality
+            updateObject.price = !_.isUndefined(inputs.price) ? inputs.price : originalListing.price
+
+            console.log(updateObject)
+            console.log(inputs.quality ? true : false)
 
             if (updateObject.quality && updateObject.amount > 1) {
                 return exits.invalidItem('When setting quality, amount cannot be more than 1');
             }
 
-            let updatedListing = await ShopListing.update(updateObject).fetch()
+            let updatedListing = await ShopListing.update({id: inputs.listingId},updateObject).fetch()
 
             return exits.success(updatedListing);
         } catch (error) {
