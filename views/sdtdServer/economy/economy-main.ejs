@@ -327,7 +327,7 @@
                     data: 'player',
                     render: function (data, type, row, meta) {
                         if (data) {
-                            return `${data.name}`
+                            return `${_.escape(data.name)}`
                         } else {
                             return ''
                         }
