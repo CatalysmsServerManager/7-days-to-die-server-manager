@@ -1,0 +1,310 @@
+<%- exposeLocalsToBrowser() %>
+
+    <div class="row">
+        <h1>Shop -
+            <%= server.name %>
+        </h1>
+    </div>
+
+    <div class="row">
+
+        <div class="col-12">
+
+
+            <h2>Items for sale</h2>
+
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#shop-add">
+                Add
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="shop-add" tabindex="-1" role="dialog" aria-labelledby="shop-add-title" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="shop-add-title">Add a new listing
+                            </h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="form-group">
+                                <label for="add-name">Item name</label>
+                                <input type="text" class="form-control" name="add-name" id="add-name" aria-describedby="add-name-help">
+                                <small id="add-name-help" class="form-text text-muted">The name of the ingame item. Make sure this is spelled 100% correctly.</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="add-friendlyName">Item friendly name</label>
+                                <input type="text" class="form-control" name="add-friendlyName" id="add-friendlyName" aria-describedby="add-friendlyName-help">
+                                <small id="add-friendlyName-help" class="form-text text-muted">This will be shown large to your players and should be used to differentiate the listings</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="add-amount">Amount</label>
+                                <input type="text" class="form-control" name="add-amount" id="add-amount" aria-describedby="add-amount-help">
+                                <small id="add-amount-help" class="form-text text-muted">The amount of this item that will be given to the player when this listing is bought.
+                                </small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="add-quality">Quality</label>
+                                <input type="text" class="form-control" name="add-quality" id="add-quality" aria-describedby="add-quality-help">
+                                <small id="add-quality-help" class="form-text text-muted">Quality of the item. If amount is larger than one, you cannot set this.</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="add-price">Price</label>
+                                <input type="text" class="form-control" name="add-price" id="add-price" aria-describedby="add-price-help">
+                                <small id="add-price-help" class="form-text text-muted">How much players pay to buy this listing</small>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <div id="add-listing-status"></div>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button id="add-listing-btn" type="button" class="shop-edit btn btn-primary">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="card-columns">
+                <% listings.forEach(listing => { %>
+                    <div style="text-align: center" class="card">
+                        <img class="card-img-top" src="/images/sdtdIcons/<%= listing.name %>.png" alt="<%= listing.name %>" style="width: 25%">
+                        <div class="card-body">
+                            <h4 class="card-title">
+                                <%=  listing.friendlyName %>
+                            </h4>
+                            <p class="card-text">
+                                <%= listing.name %>
+                            </p>
+                            <ul>
+                                <li class="list-group-item">Amount:
+                                    <%= listing.amount %>
+                                </li>
+                                <% if (listing.quality) { %>
+                                    <li class="list-group-item">Quality:
+                                        <%= listing.quality %>
+                                    </li>
+                                    <% } %>
+                                        <li class="list-group-item">Price:
+                                            <%= listing.price %>
+                                        </li>
+                            </ul>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn shop-buy btn-success" value="<%= listing.id %>">Buy</button>
+                            <button class="btn shop-delete btn-danger" value="<%= listing.id %>">Delete</button>
+
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#shop-edit<%= listing.id %>">
+                                Edit
+                            </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="shop-edit<%= listing.id %>" tabindex="-1" role="dialog" aria-labelledby="shop-edit-<%= listing.id %>-title"
+                                aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="shop-edit-<%= listing.id %>-title">Edit
+                                                <%= listing.friendlyName %>
+                                            </h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+
+                                            <div class="form-group">
+                                                <label for="edit-<%= listing.id %>-name">Item name</label>
+                                                <input type="text" class="form-control" name="edit-<%= listing.id %>-name" id="edit-<%= listing.id %>-name" aria-describedby="edit-<%=listing.id%>-name-help"
+                                                    placeholder="<%= listing.name %>">
+                                                <small id="edit-<%=listing.id%>-name-help" class="form-text text-muted">The name of the ingame item. Make sure this is spelled 100% correctly.</small>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="edit-<%= listing.id %>-friendlyName">Item friendly name</label>
+                                                <input type="text" class="form-control" name="edit-<%= listing.id %>-friendlyName" id="edit-<%= listing.id %>-friendlyName"
+                                                    aria-describedby="edit-<%=listing.id%>-friendlyName-help" placeholder="<%= listing.friendlyName %>">
+                                                <small id="edit-<%=listing.id%>-friendlyName-help" class="form-text text-muted">This will be shown large to your players and should be used to differentiate
+                                                    the listings</small>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="edit-<%= listing.id %>-amount">Amount</label>
+                                                <input type="text" class="form-control" name="edit-<%= listing.id %>-amount" id="edit-<%= listing.id %>-amount" aria-describedby="edit-<%=listing.id%>-amount-help"
+                                                    placeholder="<%= listing.amount %>">
+                                                <small id="edit-<%=listing.id%>-amount-help" class="form-text text-muted">The amount of this item that will be given to the player when this listing
+                                                    is bought.
+                                                </small>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="edit-<%= listing.id %>-quality">Quality</label>
+                                                <input type="text" class="form-control" name="edit-<%= listing.id %>-quality" id="edit-<%= listing.id %>-quality" aria-describedby="edit-<%=listing.id%>-quality-help"
+                                                    placeholder="<%= listing.quality %>">
+                                                <small id="edit-<%=listing.id%>-quality-help" class="form-text text-muted">Quality of the item. If amount is larger than one, you cannot set this.</small>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="edit-<%= listing.id %>-price">Price</label>
+                                                <input type="text" class="form-control" name="edit-<%= listing.id %>-price" id="edit-<%= listing.id %>-price" aria-describedby="edit-<%=listing.id%>-price-help"
+                                                    placeholder="<%= listing.price %>">
+                                                <small id="edit-<%=listing.id%>-price-help" class="form-text text-muted">How much players pay to buy this listing</small>
+                                            </div>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div id="edit-<%= listing.id %>-status"></div>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="button" class="shop-edit btn btn-primary" value="<%= listing.id %>">Save</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% }) %>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+    <script>
+
+        $(document).ready(function () {
+            console.log(window.SAILS_LOCALS.server)
+            console.log(window.SAILS_LOCALS.listings)
+
+            $('#add-listing-btn').click(e => {
+                // If a user doesn't fill in a field, we change the value from an empty string to undefined
+                const emptyStringToUndefined = value => value.length === 0 ? undefined : value;
+
+                const tryParseInt = value => {
+                    let parsedInt = parseInt(value, 10);
+
+                    if (_.isFinite(parsedInt)) {
+                        value = parsedInt
+                    }
+                    return value
+                }
+
+
+                let name = emptyStringToUndefined($(`#add-name`).val());
+                let friendlyName = emptyStringToUndefined($(`#add-friendlyName`).val());
+                let amount = emptyStringToUndefined($(`#add-amount`).val());
+                let quality = emptyStringToUndefined($(`#add-quality`).val());
+                let price = emptyStringToUndefined($(`#add-price`).val());
+
+                if (!name && !amount && !price) {
+                    return $(`#add-listing-status`).text("Name amount and price are required values");
+                }
+
+
+                $.ajax({
+                    url: "/api/shop/listing",
+                    method: "POST",
+                    data: {
+                        serverId: window.SAILS_LOCALS.server.id,
+                        _csrf: window.SAILS_LOCALS._csrf,
+                        name: name,
+                        friendlyName: friendlyName,
+                        amount: amount,
+                        quality: quality,
+                        price: price
+                    },
+                    success: (data, status, xhr) => {
+                        location.reload();
+                    },
+                    error: (xhr, status, error) => {
+                        $(`#add-listing-status`).text(xhr.responseText)
+                        console.log(xhr)
+                    }
+                })
+            })
+
+
+            $(".shop-buy").click(e => {
+                console.log(e.target.value)
+            })
+
+            $(".shop-edit").click(e => {
+                let listingId = e.target.value
+
+                // If a user doesn't fill in a field, we change the value from an empty string to undefined
+                const emptyStringToUndefined = value => value.length === 0 ? undefined : value;
+
+                const tryParseInt = value => {
+                    let parsedInt = parseInt(value, 10);
+
+                    if (_.isFinite(parsedInt)) {
+                        value = parsedInt
+                    }
+                    return value
+                }
+
+
+                let name = emptyStringToUndefined($(`#edit-${listingId}-name`).val());
+                let friendlyName = emptyStringToUndefined($(`#edit-${listingId}-friendlyName`).val());
+                let amount = emptyStringToUndefined($(`#edit-${listingId}-amount`).val());
+                let quality = emptyStringToUndefined($(`#edit-${listingId}-quality`).val());
+                let price = emptyStringToUndefined($(`#edit-${listingId}-price`).val());
+
+                if (!name && !friendlyName && !amount && !quality && !price) {
+                    return $(`#edit-${listingId}-status`).text("You must change atleast one of the values!")
+                }
+
+                $.ajax({
+                    url: "/api/shop/listing",
+                    method: "PATCH",
+                    data: {
+                        listingId: listingId,
+                        _csrf: window.SAILS_LOCALS._csrf,
+                        name: name,
+                        friendlyName: friendlyName,
+                        amount: amount,
+                        quality: quality,
+                        price: price
+                    },
+                    success: (data, status, xhr) => {
+                        location.reload();
+                    },
+                    error: (xhr, status, error) => {
+                        $(`#edit-${listingId}-status`).text(xhr.responseText)
+                        console.log(xhr)
+                    }
+                })
+            })
+
+            $(".shop-delete").click(e => {
+                let listingId = e.target.value
+                $.ajax({
+                    url: "/api/shop/listing",
+                    method: "DELETE",
+                    data: {
+                        listingId: listingId,
+                        _csrf: window.SAILS_LOCALS._csrf,
+                    },
+                    success: (data, status, xhr) => {
+                        location.reload();
+                    },
+                    error: (xhr, status, error) => {
+                        console.log(xhr)
+                        alert("Something went wrong! Please report this to the dev server");
+                    }
+                })
+            })
+        })
+
+    </script>
