@@ -354,7 +354,7 @@ module.exports = {
      * this, just try deploying without setting it and see if it works.)       *
      *                                                                         *
      ***************************************************************************/
-  // port: 1338,
+   port: 80,
   // explicitHost: "54.36.0.1",
 
 
