@@ -14,7 +14,7 @@
                     <%= player.currency %>.</h2>
 
             <% if (unclaimedItems.length > 0) { %>
-                <div class="alert alert-warning">You have unclaimed items!</div>
+                <div class="alert alert-warning">You have unclaimed items! Use the claim command ingame to receive these.</div>
                 <table class="table">
                     <thead>
                         <tr>
@@ -130,7 +130,7 @@
                         <img class="card-img-top" src="/images/sdtdIcons/<%= listing.name %>.png" alt="<%= listing.name %>" style="width: 25%">
                         <div class="card-body">
                             <h4 class="card-title">
-                                <%=  listing.friendlyName %>
+                                <%=  listing.friendlyName ?  listing.friendlyName : listing.name%>
                             </h4>
                             <p class="card-text">
                                 Bought
@@ -305,7 +305,7 @@
                         _csrf: window.SAILS_LOCALS._csrf,
                     },
                     success: (data, status, xhr) => {
-                        alert(`You have successfully bought ${data.amount}x ${data.name}`)
+                        location.reload();
                     },
                     error: (xhr, status, error) => {
                         if (xhr.responseText == "\"You do not have enough money to buy this!\"") {
