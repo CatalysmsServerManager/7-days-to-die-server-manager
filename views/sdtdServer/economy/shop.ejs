@@ -152,7 +152,7 @@
                         </div>
                         <div class="card-footer">
                             <button class="btn shop-buy btn-success" value="<%= listing.id %>">
-                                <i class="far fa-money-bill-alt"></i> Buy</button>
+                                 Buy</button>
 
                             <% if (isAdmin) { %>
                                 <button class="btn shop-delete btn-danger" value="<%= listing.id %>">
@@ -293,7 +293,9 @@
 
 
             $(".shop-buy").click(e => {
+                console.log(e.target)
                 let listingId = e.target.value;
+                console.log(listingId)
                 let playerId = window.SAILS_LOCALS.player.id;
 
                 $.ajax({
