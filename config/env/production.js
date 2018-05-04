@@ -85,8 +85,8 @@ module.exports = {
          *                                                                          *
          ***************************************************************************/
     default: {
-      adapter: 'sails-disk',
-    //  url: process.env.DBSTRING
+      adapter: 'sails-mysql',
+      url: process.env.DBSTRING
     },
 
   },
@@ -304,13 +304,14 @@ module.exports = {
 
 
 
-  // log: {
-  //   // Pass in our custom logger, and pass all log levels through.
-  //   custom: customLogger,
+  log: {
+    // Pass in our custom logger, and pass all log levels through.
+    // custom: customLogger,
 
-  //   // Disable captain's log so it doesn't prefix or stringify our meta data.
-  //   inspect: false
-  // },
+    //  Disable captain's log so it doesn't prefix or stringify our meta data.
+    // inspect: false
+	level: "verbose"
+   },
 
 
 
@@ -339,7 +340,20 @@ module.exports = {
          * (https://sailsjs.com/config/http)                                        *
          *                                                                          *
          ***************************************************************************/
- //   trustProxy: true,
+    trustProxy: true,
+
+    express: {
+
+        serverOptions : {
+
+            key:  require('fs').readFileSync('/home/csmm/CSMM/config/ssl/privkey.pem'),
+
+            cert: require('fs').readFileSync('/home/csmm/CSMM/config/ssl/cert.pem'),
+
+        }
+
+    }
+
 
   },
 
@@ -353,9 +367,9 @@ module.exports = {
      * handled for you automatically.  If you are not sure if you need to set  *
      * this, just try deploying without setting it and see if it works.)       *
      *                                                                         *
-     ***************************************************************************/
-   port: 80,
-  // explicitHost: "54.36.0.1",
+     ****************************************************************************/
+   port: process.env.CSMM_PORT,
+   explicitHost: process.env.CSMM_IP,
 
 
   /**************************************************************************
@@ -377,11 +391,11 @@ module.exports = {
      **************************************************************************/
 
 
-  // ssl: {
-  //   ca: require('fs').readFileSync(require('path').resolve(__dirname,'./ssl/chain.pem')),
-  //   key: require('fs').readFileSync(require('path').resolve(__dirname,'./ssl/privkey.pem')),
-  //   cert: require('fs').readFileSync(require('path').resolve(__dirname,'./ssl/fullchain.pem'))
-  // },
+  ssl: {
+    ca: require('fs').readFileSync(require('path').resolve(__dirname,'/home/csmm/CSMM/config/ssl/chain.pem')),
+     key: require('fs').readFileSync(require('path').resolve(__dirname,'/home/csmm/CSMM/config/ssl/privkey.pem')),
+     cert: require('fs').readFileSync(require('path').resolve(__dirname,'/home/csmm/CSMM/config/ssl/cert.pem'))
+   },
 
 
 
