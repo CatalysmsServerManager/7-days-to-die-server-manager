@@ -47,11 +47,16 @@ module.exports = {
                 return exits.notLoggedIn("This server does not have economy enabled!")
             }
 
-            let user = await User.findOne(this.req.session.userId);
+            let user = await User.findOne(this.req.session.userId).populate('players');
+            let player = false
 
-            let player = await Player.find({ server: server.id, user: user.id }).limit(1)
+            for (const playerToCheck of user.players) {
+                if (playerToCheck.server === server.id) {
+                    player = playerToCheck
+                }
+            }
 
-            if (player.length === 0) {
+            if (!player) {
                 return exits.notLoggedIn('Not a valid player profile. Make sure you have logged in to this server. If you think this message is a mistake, please report this issue.')
             }
 
@@ -74,7 +79,7 @@ module.exports = {
             return exits.success({
                 server: server,
                 listings: listings,
-                player: player[0],
+                player: player,
                 user: user,
                 isAdmin: isAdmin,
                 unclaimedItems: unclaimedItems,
