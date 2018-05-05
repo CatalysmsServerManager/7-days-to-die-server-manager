@@ -31,6 +31,8 @@ module.exports.custom = {
   botEmbedLink: `${process.env.CSMM_HOSTNAME}`,
   botEmbedTitle: 'CSMM',
 
+  discordFeedbackChannel : "336823516383150080",
+
   donorConfig: {
     devDiscordServer: '336821518250147850',
     free: {
