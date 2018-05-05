@@ -43,6 +43,8 @@ function addNewLogLine(logLine) {
     return 
   }
 
+  logLine.msg = _.escape(logLine.msg)
+
   logLine.msg = logLine.msg.replace(/(\r\n|\n|\r)/gm, "<br />");
 
   if (logLine.msg.includes("error")) {
@@ -74,6 +76,7 @@ function addSavedMessagesToConsoleWindow(serverId) {
   let savedMessages = JSON.parse(window.localStorage.getItem(`consoleMessages-${serverId}`));
   if (savedMessages) {
     savedMessages.forEach(msg => {
+      msg = _.escape(msg)
       if (msg.includes("error")) {
         $('.console-window').append('<li class=\"log-line text-danger\">' + msg + '</li>');
       } else {

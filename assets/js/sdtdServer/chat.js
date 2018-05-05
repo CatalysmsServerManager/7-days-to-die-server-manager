@@ -45,18 +45,23 @@ class sdtdChat {
 }
 
 function addPlayerConnectedMessage(connectedMessage) {
+  connectedMessage.playerName = _.escape(connectedMessage.playerName)
   $('.chat-window').append(`<li class=\"chat-message\">${connectedMessage.playerName} connected </li>`);
   $('.chat-window').scrollTop($('.chat-window')[0].scrollHeight);
   addMessageToStorage(`${connectedMessage.playerName} connected`, this.serverId)
 }
 
 function addPlayerDisconnectedMessage(disconnectedMessage) {
+  disconnectedMessage.playerName = _.escape(disconnectedMessage.playerName)
   $('.chat-window').append(`<li class=\"chat-message\">${disconnectedMessage.playerName} left </li>`);
   $('.chat-window').scrollTop($('.chat-window')[0].scrollHeight);
   addMessageToStorage(`${disconnectedMessage.playerName} left`, this.serverId)
 }
 
 function addNewChatMessage(chatMessage) {
+
+  chatMessage.messageText = _.escape(chatMessage.messageText);
+  chatMessage.playerName = _.escape(chatMessage.playerName);
 
   if (chatMessage.playerName == 'Server') {
     $('.chat-window').append(`<li class=\"chat-message\">[${chatMessage.time}] ${chatMessage.messageText} </li>`);
@@ -90,6 +95,7 @@ function addSavedMessagesToChatWindow(serverId) {
   let savedMessages = JSON.parse(window.localStorage.getItem(`chatMessages-${serverId}`));
   if (savedMessages) {
     savedMessages.forEach(msg => {
+      msg = _.escape(msg)
       $('.chat-window').append(`<li class=\"chat-message\">${msg} </li>`);
     })
   }
