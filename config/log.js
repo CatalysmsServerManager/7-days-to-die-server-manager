@@ -18,7 +18,7 @@ const winston = require('winston');
 var customLogger = new winston.Logger({
   transports: [
     new winston.transports.Console({
-      level: 'silly',
+      level: 'debug',
       colorize: true,
       timestamp: true,
       humanReadableUnhandledException: true
@@ -36,6 +36,8 @@ var customLogger = new winston.Logger({
     })
   ]
 });
+
+
 
 // const { exec } = require('child_process');
 // exec(`"node_modules/frontail/bin/frontail" -n 20 -t dark --ui-highlight ./logs/devlog.log`);
