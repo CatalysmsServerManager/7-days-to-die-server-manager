@@ -309,9 +309,9 @@ module.exports = {
 
         serverOptions : {
 
-            key:  require('fs').readFileSync('/home/csmm/CSMM/config/ssl/privkey.pem'),
+            key:  require('fs').readFileSync('/home/csmm/ssl/privkey.pem'),
 
-            cert: require('fs').readFileSync('/home/csmm/CSMM/config/ssl/cert.pem'),
+            cert: require('fs').readFileSync('/home/csmm/ssl/cert.pem'),
 
         }
 
@@ -355,9 +355,9 @@ module.exports = {
 
 
   ssl: {
-    ca: require('fs').readFileSync(require('path').resolve(__dirname,'/home/csmm/CSMM/config/ssl/chain.pem')),
-     key: require('fs').readFileSync(require('path').resolve(__dirname,'/home/csmm/CSMM/config/ssl/privkey.pem')),
-     cert: require('fs').readFileSync(require('path').resolve(__dirname,'/home/csmm/CSMM/config/ssl/cert.pem'))
+    ca: require('fs').readFileSync(require('path').resolve(__dirname,'/home/csmm/ssl/chain.pem')),
+     key: require('fs').readFileSync(require('path').resolve(__dirname,'/home/csmm/ssl/privkey.pem')),
+     cert: require('fs').readFileSync(require('path').resolve(__dirname,'/home/csmm/ssl/cert.pem'))
    },
 
 
