@@ -56,6 +56,7 @@ module.exports.policies = {
     'listing-add': 'isServerOwner',
     'listing-edit': 'isServerOwner',
     'listing-delete': 'isServerOwner',
+    'listing-buy' : 'isLoggedIn',
   },
 
   customCommandController: {
