@@ -36,11 +36,15 @@ module.exports = {
     fn: async function (inputs, exits) {
 
         try {
-            let server = await SdtdServer.findOne(inputs.serverId).populate('admins');
+            let server = await SdtdServer.findOne(inputs.serverId).populate('admins').populate('config');
             let listings = await ShopListing.find({ server: inputs.serverId });
             
             if (_.isUndefined(this.req.session.userId)) {
                 return exits.notLoggedIn("You must be logged in to view a shop.")
+            }
+
+            if (!server.config[0].economyEnabled) {
+                return exits.notLoggedIn("This server does not have economy enabled!")
             }
 
             let user = await User.findOne(this.req.session.userId);
