@@ -49,9 +49,9 @@ module.exports = {
       await SdtdConfig.update({
         server: inputs.serverId
       }, {
-        chatChannelId: inputs.chatChannelId,
-        chatChannelRichMessages: inputs.richMessages
-      })
+          chatChannelId: inputs.chatChannelId,
+          chatChannelRichMessages: inputs.richMessages
+        })
 
       if (chatBridgeHook.getStatus(inputs.serverId)) {
         chatBridgeHook.stop(inputs.serverId);
@@ -59,6 +59,12 @@ module.exports = {
       } else {
         chatBridgeHook.start(inputs.serverId)
       }
+
+
+      let embed = new discordClient.customEmbed();
+      embed.setDescription(':white_check_mark: Initialized a chat bridge')
+        .addField(`Rich messages`, inputs.richMessages ? ':white_check_mark:' : ':x:')
+      chatChannel.send(embed);
 
       sails.log.debug(`API - SdtdServer:set-chat-channel - set chat channel ${inputs.chatChannelId} for server ${inputs.serverId}`);
       return exits.success();

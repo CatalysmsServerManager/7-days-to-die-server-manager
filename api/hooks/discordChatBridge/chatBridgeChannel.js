@@ -49,10 +49,7 @@ class ChatBridgeChannel {
         this.loggingObject.on('playerDeath', this.sendDeathMessageToDiscord);
 
         this.channel.client.on('message', this.sendMessageToGame);
-        let embed = new this.channel.client.customEmbed();
-        embed.setDescription(':white_check_mark: Initialized a chat bridge')
-          .addField(`Rich messages`, this.config.chatChannelRichMessages ? ':white_check_mark:' : ':x:')
-        this.channel.send(embed);
+
       } else {
         this.channel.send(new this.channel.client.errorEmbed(':x: Could not find a logging object for this server'));
       }
