@@ -67,7 +67,7 @@ module.exports = {
                 // Update some basic info
                 playerProfile = await Player.update({ id: playerProfile.id }, {
                     lastOnline: player.lastonline,
-                    name: player.name ? player.name : "Unknown",
+                    name: player.name ? _.escape(player.name) : "Unknown",
                     ip: player.ip,
                     entityId: player.entityid,
                     positionX: player.position.x,
@@ -144,7 +144,7 @@ async function findOrCreatePlayer(player, serverId) {
             server: serverId,
             entityId: player.entityid,
             lastOnline: player.lastonline,
-            name: player.name ? player.name : "Unknown",
+            name: player.name ? _.escape(player.name) : "Unknown",
             ip: player.ip,
         });
         return foundOrCreatedPlayer;

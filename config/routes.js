@@ -87,6 +87,7 @@ module.exports.routes = {
   'get /sdtdserver/:serverId/tickets': 'SdtdTicket.server-tickets-view',
   'get /sdtdserver/:serverId/analytics': 'SdtdServerController/historicalData.view-analytics',
   'get /sdtdserver/:serverId/economy': 'SdtdServerController/economy.economy-view',
+  'get /shop/:serverId' : "ShopController.view-shop",
 
   'get /player/:playerId/profile': 'PlayerController.profile',
 
@@ -131,6 +132,14 @@ module.exports.routes = {
 
   'post /api/sdtdserver/economy/module/discordtextearner/amount': 'SdtdServerController/economy.set-discord-text-earner-amount',
   'post /api/sdtdserver/economy/module/discordtextearner/timeout': 'SdtdServerController/economy.set-discord-text-earner-timeout',
+
+  // Shop Listing
+
+  'get /api/shop/listing': 'ShopController.get-listings',
+  "post /api/shop/listing" : "ShopController.listing-add",
+  "delete /api/shop/listing" : "ShopController.listing-delete",
+  "patch /api/shop/listing" : "ShopController.listing-edit",
+  "post /api/shop/listing/buy" : "ShopController.listing-buy",
 
   // Historical data
 
@@ -212,7 +221,6 @@ module.exports.routes = {
   'post /api/sdtdserver/setGuild': 'SdtdServerController/discordBot.set-discord-guild',
   'post /api/sdtdserver/setchatchannel': 'SdtdServerController/discordBot.set-chat-channel',
   'post /api/sdtdserver/setnotificationchannel': 'SdtdServerController/discordBot.set-notification-channel',
-  'post /api/sdtdserver/setcommandschannel': 'SdtdServerController/discordBot.set-commands-channel',
   'post /api/sdtdserver/discord/prefix': 'SdtdServerController/discordBot.set-prefix',
 
 
