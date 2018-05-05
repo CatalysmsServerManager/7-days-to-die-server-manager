@@ -57,7 +57,7 @@ module.exports = {
                 return exits.notEnoughCurrency("You do not have enough money to buy this!")
             }
 
-            await sails.helpers.economy.deductFromPlayer(player.id, listing.price);
+            await sails.helpers.economy.deductFromPlayer(player.id, listing.price, `SHOP - bought ${listing.amount}x ${listing.name}`);
             let itemClaim = await PlayerClaimItem.create({
                 name: listing.name,
                 amount: listing.amount,
