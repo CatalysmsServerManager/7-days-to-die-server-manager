@@ -65,11 +65,11 @@ async function clearOldInfo(server, config) {
             server: server.id
         }).fetch();
         
-        if (deletedRecords.length > 5) {
-            sails.log.info(`HOOKS - HistoricalInfo:memUpdate - Deleted ${deletedRecords.length} records for server ${server.name} - kept data for ${hoursToKeepData} hours.`)
+        if (deletedRecords.length > 50) {
+            sails.log.warn(`HOOKS - HistoricalInfo:memUpdate - Deleted ${deletedRecords.length} records for server ${server.name} - kept data for ${hoursToKeepData} hours.`)
         }
     } catch (error) {
-        sails.log.error(`HOOKS - HistoricalInfo:memUpdate - Error deleting data -${error}`)
+        sails.log.error(`HOOKS - HistoricalInfo:memUpdate - Error deleting data - ${error}`)
     }
 
 }
