@@ -69,7 +69,7 @@ class CustomCommand extends SdtdCommand {
                     commandInfoFilledIn = commandInfoFilledIn.replace('${steamId}', player.steamId)
                     await executeCommand(server, _.trim(commandInfoFilledIn))
                 }
-                sails.log.info(`HOOK SdtdCommands - custom command ran by player ${player.name} on server ${server.name} - ${chatMessage.messageText}`)
+                sails.log.debug(`HOOK SdtdCommands - custom command ran by player ${player.name} on server ${server.name} - ${chatMessage.messageText}`)
 
 
             } catch (error) {

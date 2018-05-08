@@ -2,10 +2,14 @@
 
   <div id="list-of-owned-servers" aria-multiselectable="true">
 
+    <% if (ownedServers.length === 0) { %>
+      <p>No servers added yet!</p>
+      <% } %>
 
     <table class="table table-hover table-responsive">
 
       <tbody>
+
 
         <% ownedServers.forEach(server => { %>
 
