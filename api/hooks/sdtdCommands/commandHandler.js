@@ -89,8 +89,15 @@ class CommandHandler {
         // If the commandName is a recognized CSMM command, we run it.
         if (this.commands.has(commandName)) {
           let commandToRun = this.commands.get(commandName);
-          sails.log.info(`HOOK SdtdCommands - command ran by player ${player.name} on server ${server.name} - ${chatMessage.messageText}`)
-          return commandToRun.run(chatMessage, player, server, args);
+          sails.log.debug(`HOOK SdtdCommands - command ran by player ${player.name} on server ${server.name} - ${chatMessage.messageText}`)
+          try {
+            await commandToRun.run(chatMessage, player, server, args);
+            return
+          } catch (error) {
+            sails.log.error(error)
+            chatMessage.reply(`An error occured! Please report this on the development server.`);
+            return
+          }
         }
 
         // Else we try to find a custom command that matches the commandName
@@ -112,7 +119,7 @@ class CommandHandler {
         sails.log.debug(`HOOK SdtdCommands:commandListener - Unknown command used by ${chatMessage.playerName} on server ${this.config.server.name}`);
       }
     } catch (error) {
-      sails.log.error(`HOOK SdtdCommands:commandListener - ${error}`);
+      sails.log.error(error);
     }
 
 
