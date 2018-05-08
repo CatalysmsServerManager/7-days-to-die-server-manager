@@ -14,9 +14,8 @@ module.exports = {
    * @description Authenticate a user via steam
    */
   steamLogin: function (req, res, next) {
-    req.redirectAfterLogin = req.originalUrl
     passport.authenticate('steam', {
-      failureRedirect: `${process.env.CSMM_HOSTNAME}`
+      failureRedirect: `${process.env.CSMM_HOSTNAME}`,
     })(req, res);
 
   },
@@ -44,7 +43,7 @@ module.exports = {
             return player.id;
           });
           await User.addToCollection(user.id, 'players').members(playerIds);
-          res.redirect(`/user/${user.id}/dashboard`);
+          res.redirect('/');
         } catch (error) {
           sails.log.error(`AuthController - Error updating user profile ${error}`);
         }
