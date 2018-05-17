@@ -147,7 +147,7 @@ class ChatBridgeChannel {
 
   sendMessageToGame(message) {
 
-    if (!message.author.bot && message.channel.id === this.channel.id && message.author.id != message.client.user.id && (!message.content.startsWith(message.client.commandPrefix))) {
+    if (!message.author.bot && message.channel.id === this.channel.id && message.author.id != message.client.user.id && (!message.content.startsWith(message.guild.commandPrefix))) {
       sevenDays.sendMessage({
         ip: this.sdtdServer.ip,
         port: this.sdtdServer.webPort,
