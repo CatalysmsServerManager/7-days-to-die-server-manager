@@ -107,11 +107,6 @@ module.exports = {
       via: 'admins'
     },
 
-    cronJobs: {
-      collection: 'CronJob',
-      via: 'creator'
-    }
-
   },
 
 };

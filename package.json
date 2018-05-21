@@ -7,6 +7,7 @@
   "dependencies": {
     "@streammedev/hhmmss": "^1.0.0",
     "async": "2.0.1",
+    "cron-parser": "^2.5.0",
     "discord.js": "git+https://github.com/hydrabolt/discord.js.git",
     "discord.js-commando": "git+https://github.com/Gawdl3y/discord.js-commando.git",
     "dotenv": "^4.0.0",

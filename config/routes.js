@@ -166,6 +166,10 @@ module.exports.routes = {
   'post /api/sdtdserver/updateConnectionInfo': 'SdtdServerController.update-connection-info',
   'post /api/sdtdserver/toggleLogging': 'SdtdServerController.logging-toggle',
 
+  // Cron
+
+  'post /api/sdtdserver/cron' : "cron-job.create",
+
   // Countryban
   'post /api/sdtdserver/toggleCountryBan': 'SdtdServerController/countryBan.country-ban-toggle',
   'post /api/sdtdserver/reloadCountryBan': 'SdtdServerController/countryBan.country-ban-reload',

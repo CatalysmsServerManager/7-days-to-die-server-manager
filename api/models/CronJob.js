@@ -51,13 +51,7 @@ module.exports = {
     server: {
       model: 'sdtdServer',
       required:  true
-    },
-
-    creator: {
-      model: 'user',
-      required: true
-    },
-
+    }
 
 
   },
