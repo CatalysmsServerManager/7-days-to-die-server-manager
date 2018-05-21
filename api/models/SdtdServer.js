@@ -140,6 +140,11 @@ module.exports = {
       collection: 'historicalinfo',
       via: 'server'
     },
+
+    cronJobs: {
+      collection: 'CronJob',
+      via: 'server'
+    }
   },
 
 };

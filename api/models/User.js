@@ -105,6 +105,11 @@ module.exports = {
     adminOf: {
       collection: 'sdtdServer',
       via: 'admins'
+    },
+
+    cronJobs: {
+      collection: 'CronJob',
+      via: 'creator'
     }
 
   },
