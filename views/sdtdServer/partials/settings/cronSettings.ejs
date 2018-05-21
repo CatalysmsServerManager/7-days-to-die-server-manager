@@ -1,0 +1,108 @@
+<div>
+    <div class="row">
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Command</th>
+                    <th>Temporal value</th>
+                    <th>Enabled</th>
+                    <th>Notifications</th>
+                    <th>Creator</th>
+                    <th>Times ran</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td scope="row"></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td scope="row"></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#add-new-cron-modal">
+            <i class="fas fa-plus"></i> New
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="add-new-cron-modal" tabindex="-1" role="dialog" aria-labelledby="add-new-cron-modal-title" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="add-new-cron-modal-title">Create new server automation rule</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+
+                            <div class="form-group">
+                                <label for="add-new-cron-command">Command</label>
+                                <input type="text" class="form-control" name="add-new-cron-command" id="add-new-cron-command" aria-describedby="add-new-cron-command-help"
+                                    placeholder="say 'Hello World'">
+                                <small id="add-new-cron-command-help" class="form-text text-muted">The command to execute every time this job runs.</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="add-new-cron-temporalValue">Temporal value</label>
+                                <input type="text" class="form-control" name="add-new-cron-temporalValue" id="add-new-cron-temporalValue" aria-describedby="add-new-cron-temporalValue-help"
+                                    placeholder="30 * * * *">
+                                <small id="add-new-cron-temporalValue-help" class="form-text text-muted">A temporal value in cron format. See the documentation for more info or use
+                                    <a href="http://www.cronmaker.com/"
+                                        target="_blank">Cron maker web tool</a>
+                                </small>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button id="add-new-cron-submit" type="button" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<script>
+    $(document).ready(() => {
+
+        $("#add-new-cron-submit").click((e) => {
+
+            let command = $("#add-new-cron-command").val();
+            let temporalValue = $('#add-new-cron-temporalValue').val();
+
+            $.ajax({
+                url: '/api/sdtdserver/cron',
+                method: 'POST',
+                data: {
+                    _csrf: window.SAILS_LOCALS._csrf,
+                    serverId: window.SAILS_LOCALS.server.id,
+                    command: command,
+                    temporalValue: temporalValue
+                },
+                error: e => {
+                    console.log(e);
+                },
+                success: (data, xhr) => {
+                    console.log(data)
+                }
+            })
+        })
+
+    })
+</script>
