@@ -71,7 +71,9 @@ module.exports = {
       server: inputs.serverId
     }).fetch();
 
-    sails.log.info(`Created a cron job`, createdJob)
+    await sails.hooks.cron.start(createdJob.id);
+
+    sails.log.info(`Created a cron job`, createdJob);
 
     return exits.success(createdJob);
 

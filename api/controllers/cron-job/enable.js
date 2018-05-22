@@ -29,6 +29,7 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     await CronJob.update({ id: inputs.jobId }, { enabled: true });
+    await sails.hooks.cron.start(inputs.jobId);
     sails.log.debug(`Enabled cron job ${inputs.jobId}`)
     return exits.success();
   }
