@@ -1,29 +1,19 @@
 <div>
     <div class="row">
 
-        <table class="table">
+        <table id="cronjob-list" class="table">
             <thead>
                 <tr>
                     <th>Command</th>
                     <th>Temporal value</th>
                     <th>Enabled</th>
                     <th>Notifications</th>
-                    <th>Creator</th>
                     <th>Times ran</th>
                     <th></th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td scope="row"></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td scope="row"></td>
-                    <td></td>
-                    <td></td>
-                </tr>
+            <tbody id="cronjob-list-body">
+
             </tbody>
         </table>
 
@@ -57,8 +47,7 @@
                                 <input type="text" class="form-control" name="add-new-cron-temporalValue" id="add-new-cron-temporalValue" aria-describedby="add-new-cron-temporalValue-help"
                                     placeholder="30 * * * *">
                                 <small id="add-new-cron-temporalValue-help" class="form-text text-muted">A temporal value in cron format. See the documentation for more info or use
-                                    <a href="https://crontab.guru/"
-                                        target="_blank">Cron maker web tool</a>
+                                    <a href="https://crontab.guru/" target="_blank">Cron maker web tool</a>
                                 </small>
                             </div>
 
@@ -81,6 +70,22 @@
 <script>
     $(document).ready(() => {
 
+        $.ajax({
+            url: '/api/sdtdserver/cron/list',
+            method: 'GET',
+            data: {
+                serverId: window.SAILS_LOCALS.server.id,
+            },
+            error: e => {
+                console.log(e);
+            },
+            success: (data, xhr) => {
+                data.forEach(job => {
+                    addNewJobToTable(job);
+                })
+            }
+        })
+
         $("#add-new-cron-submit").click((e) => {
 
             let command = $("#add-new-cron-command").val();
@@ -95,14 +100,40 @@
                     command: command,
                     temporalValue: temporalValue
                 },
-                error: e => {
-                    console.log(e);
+                error: (e, xhr) => {
+                    console.log(xhr);
                 },
-                success: (data, xhr) => {
-                    console.log(data)
+                success: (data, status, xhr) => {
+                    console.log(xhr)
+                    addNewJobToTable(data)
                 }
             })
         })
-
     })
+
+
+    function addNewJobToTable(cronJob) {
+        console.log(cronJob)
+        let tableElement = document.getElementById("cronjob-list");
+
+        let newRow = tableElement.insertRow();
+
+        let cellCommand = newRow.insertCell();
+        let cellTemporalValue = newRow.insertCell();
+        let cellEnabled = newRow.insertCell();
+        let cellNotifications = newRow.insertCell();
+        let cellTimesRan = newRow.insertCell();
+
+
+        $(cellCommand).text(cronJob.command);
+        $(cellTemporalValue).text(cronJob.temporalValue);
+        $(cellEnabled).text(cronJob.enabled);
+        $(cellNotifications).text(cronJob.notificationEnabled);
+        $(cellTimesRan).text(cronJob.timesRan);
+
+
+
+    }
+
 </script>
+

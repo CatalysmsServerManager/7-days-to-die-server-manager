@@ -44,6 +44,11 @@ module.exports = {
 
   exits: {
 
+    success: {
+      responseType: '',
+      statusCode: 200
+    }
+
   },
 
 
@@ -64,8 +69,7 @@ module.exports = {
       command: inputs.command,
       temporalValue: inputs.temporalValue,
       server: inputs.serverId
-    })
-
+    }).fetch();
     return exits.success(createdJob);
 
   }
