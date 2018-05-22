@@ -9,6 +9,15 @@ module.exports = {
 
   inputs: {
 
+    jobId: {
+      type: 'number',
+      required: true,
+      custom: async (valueToCheck) => {
+        let foundJob = await CronJob.findOne(valueToCheck);
+        return foundJob
+      }
+    }
+
   },
 
 
@@ -19,8 +28,9 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
+    await CronJob.update({ id: inputs.jobId }, { enabled: true });
+    sails.log.debug(`Enabled cron job ${inputs.jobId}`)
     return exits.success();
-
   }
 
 

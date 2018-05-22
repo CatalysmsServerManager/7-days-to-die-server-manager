@@ -10,6 +10,7 @@
                     <th>Notifications</th>
                     <th>Times ran</th>
                     <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody id="cronjob-list-body">
@@ -104,16 +105,22 @@
                     console.log(xhr);
                 },
                 success: (data, status, xhr) => {
-                    console.log(xhr)
                     addNewJobToTable(data)
                 }
             })
         })
+
+
+
     })
 
 
+    function deleteJobFromTable(rowElement) {
+        $(rowElement).hide();
+    }
+
+
     function addNewJobToTable(cronJob) {
-        console.log(cronJob)
         let tableElement = document.getElementById("cronjob-list");
 
         let newRow = tableElement.insertRow();
@@ -123,17 +130,79 @@
         let cellEnabled = newRow.insertCell();
         let cellNotifications = newRow.insertCell();
         let cellTimesRan = newRow.insertCell();
+        let cellDelete = newRow.insertCell();
+        let cellEdit = newRow.insertCell();
 
+        let enabledToggle = `<input id="cronjob-enabled-checkbox-${cronJob.id}" value="${cronJob.id}" type="checkbox" ${cronJob.enabled ? "checked" : ""} >`;
+        let notificationToggle = `<input value="${cronJob.id}" type="checkbox" ${cronJob.notificationEnabled ? "checked" : ""} >`;
+        let deleteButton = `<button type="button" class="btn btn-danger" value="${cronJob.id}">Delete</button>`;
 
         $(cellCommand).text(cronJob.command);
         $(cellTemporalValue).text(cronJob.temporalValue);
-        $(cellEnabled).text(cronJob.enabled);
-        $(cellNotifications).text(cronJob.notificationEnabled);
         $(cellTimesRan).text(cronJob.timesRan);
 
+        $(cellEnabled).html(enabledToggle);
+        $(cellNotifications).html(notificationToggle);
+        $(cellDelete).html(deleteButton);
 
+        $(cellEnabled).click(e => {
+            let checkboxElement = $(`#cronjob-enabled-checkbox-${cronJob.id}`);
+            let currentStatus = checkboxElement.prop('checked');
+
+            if (currentStatus) {
+                $.ajax({
+                    url: '/api/sdtdserver/cron/status',
+                    method: 'DELETE',
+                    data: {
+                        _csrf: window.SAILS_LOCALS._csrf,
+                        serverId: window.SAILS_LOCALS.server.id,
+                        jobId: cronJob.id,
+                    },
+                    error: (e, xhr) => {
+                        console.log(xhr);
+                    },
+                    success: (data, status, xhr) => {
+                    }
+                })
+            } else {
+                $.ajax({
+                    url: '/api/sdtdserver/cron/status',
+                    method: 'POST',
+                    data: {
+                        _csrf: window.SAILS_LOCALS._csrf,
+                        serverId: window.SAILS_LOCALS.server.id,
+                        jobId: cronJob.id,
+                    },
+                    error: (e, xhr) => {
+                        console.log(xhr);
+                    },
+                    success: (data, status, xhr) => {
+                    }
+                })
+            }
+
+        })
+
+        $(cellDelete).click(e => {
+            let cronIdToDelete = e.target.getAttribute('value');
+
+            $.ajax({
+                url: '/api/sdtdserver/cron',
+                method: 'DELETE',
+                data: {
+                    _csrf: window.SAILS_LOCALS._csrf,
+                    serverId: window.SAILS_LOCALS.server.id,
+                    jobId: cronIdToDelete,
+                },
+                error: (e, xhr) => {
+                    console.log(xhr);
+                },
+                success: (data, status, xhr) => {
+                    deleteJobFromTable(newRow)
+                }
+            })
+        })
 
     }
 
 </script>
-
