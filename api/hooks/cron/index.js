@@ -1,3 +1,5 @@
+const schedule = require('node-schedule')
+
 /**
  * cron hook
  *
@@ -6,7 +8,9 @@
  */
 
 module.exports = function defineCronHook(sails) {
-  
+
+  const scheduledJobs = new Map();
+
   return {
 
     /**
@@ -15,21 +19,55 @@ module.exports = function defineCronHook(sails) {
      * @param {Function} done
      */
     initialize: function (done) {
+      sails.on('hook:sdtdlogs:loaded', async () => {
 
-      sails.log.info('Initializing custom hook (`cron`)');
+        sails.log.info('Initializing custom hook (`cron`)');
 
-      // Be sure and call `done()` when finished!
-      // (Pass in Error as the first argument if something goes wrong to cause Sails
-      //  to stop loading other hooks and give up.)
-      return done();
+        let enabledJobs = await CronJob.find({ enabled: true });
+
+        for (const jobToStart of enabledJobs) {
+          await this.start(jobToStart.id);
+        }
+
+        // Be sure and call `done()` when finished!
+        // (Pass in Error as the first argument if something goes wrong to cause Sails
+        //  to stop loading other hooks and give up.)
+        return done();
+      })
 
     },
 
-    start: function(jobId) {
+    start: async function (jobId) {
+
+      let foundJob = await CronJob.findOne(jobId);
+
+      if (!foundJob) {
+        throw new Error(`Tried to start a job which doesn't exist`);
+      }
+
+      let functionToExecute = await sails.helpers.etc.parseCronJob(foundJob.id);
+
+      let scheduledJob = schedule.scheduleJob(foundJob.temporalValue, functionToExecute);
+      scheduledJobs.set(foundJob.id, scheduledJob);
+      sails.log.debug(`Started a cronjob`, foundJob);
+      return
 
     },
 
-    stop: function(jobId) {
+    stop: async function (jobId) {
+
+      let foundJob = await CronJob.findOne(jobId);
+
+
+      if (!foundJob) {
+        throw new Error(`Tried to stop a job which doesn't exist`);
+      }
+
+      let job = scheduledJobs.get(foundJob.id);
+      job.cancel();
+      scheduledJobs.delete(foundJob.id);
+      sails.log.debug(`Stopped a cronjob`, foundJob);
+      return
 
     },
 
