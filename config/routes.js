@@ -173,6 +173,7 @@ module.exports.routes = {
   'delete /api/sdtdserver/cron' : 'cron-job.delete',
   'post /api/sdtdserver/cron/status': 'cron-job.enable',
   'delete /api/sdtdserver/cron/status': 'cron-job.disable', 
+  'post /api/sdtdserver/cron/test': 'cron-job.test',
 
   // Countryban
   'post /api/sdtdserver/toggleCountryBan': 'SdtdServerController/countryBan.country-ban-toggle',

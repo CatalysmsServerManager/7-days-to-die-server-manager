@@ -6,8 +6,16 @@ module.exports = {
 
   description: 'Test cron job.',
 
-
   inputs: {
+
+    jobId: {
+      type: 'number',
+      required: true,
+      custom: async (valueToCheck) => {
+        let foundJob = await CronJob.findOne(valueToCheck);
+        return foundJob
+      }
+    }
 
   },
 
@@ -19,7 +27,11 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    return exits.success();
+    let functionToExecute = await sails.helpers.etc.parseCronJob(inputs.jobId);
+
+    let response = await functionToExecute();
+
+    return exits.success(response);
 
   }
 

@@ -131,11 +131,12 @@
         let cellNotifications = newRow.insertCell();
         let cellTimesRan = newRow.insertCell();
         let cellDelete = newRow.insertCell();
-        let cellEdit = newRow.insertCell();
+        let cellTest = newRow.insertCell();
 
         let enabledToggle = `<input id="cronjob-enabled-checkbox-${cronJob.id}" value="${cronJob.id}" type="checkbox" ${cronJob.enabled ? "checked" : ""} >`;
         let notificationToggle = `<input value="${cronJob.id}" type="checkbox" ${cronJob.notificationEnabled ? "checked" : ""} >`;
         let deleteButton = `<button type="button" class="btn btn-danger" value="${cronJob.id}">Delete</button>`;
+        let testButton = `<button type="button" class="btn btn-primary" value="${cronJob.id}">Test</button>`;
 
         $(cellCommand).text(cronJob.command);
         $(cellTemporalValue).text(cronJob.temporalValue);
@@ -144,6 +145,27 @@
         $(cellEnabled).html(enabledToggle);
         $(cellNotifications).html(notificationToggle);
         $(cellDelete).html(deleteButton);
+        $(cellTest).html(testButton);
+
+        $(cellTest).click(e => {
+            let cronIdToDelete = e.target.getAttribute('value');
+
+            $.ajax({
+                url: '/api/sdtdserver/cron/test',
+                method: 'POST',
+                data: {
+                    _csrf: window.SAILS_LOCALS._csrf,
+                    serverId: window.SAILS_LOCALS.server.id,
+                    jobId: cronIdToDelete,
+                },
+                error: (e, xhr) => {
+                    alert(e)
+                },
+                success: (data, status, xhr) => {
+                    alert(data)
+                }
+            })
+        })
 
         $(cellEnabled).click(e => {
             let checkboxElement = $(`#cronjob-enabled-checkbox-${cronJob.id}`);
