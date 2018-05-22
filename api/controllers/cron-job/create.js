@@ -70,6 +70,9 @@ module.exports = {
       temporalValue: inputs.temporalValue,
       server: inputs.serverId
     }).fetch();
+
+    sails.log.info(`Created a cron job`, createdJob)
+
     return exits.success(createdJob);
 
   }
