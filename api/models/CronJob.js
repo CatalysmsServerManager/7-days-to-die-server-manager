@@ -17,12 +17,7 @@ module.exports = {
       type: "string",
       required: true
     },
-
-    timesRan: {
-      type: 'number',
-      defaultsTo: 0
-    },
-
+    
     temporalValue: {
       type: 'string',
       required: true

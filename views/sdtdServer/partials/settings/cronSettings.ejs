@@ -8,7 +8,6 @@
                     <th>Temporal value</th>
                     <th>Enabled</th>
                     <th>Notifications</th>
-                    <th>Times ran</th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -129,7 +128,6 @@
         let cellTemporalValue = newRow.insertCell();
         let cellEnabled = newRow.insertCell();
         let cellNotifications = newRow.insertCell();
-        let cellTimesRan = newRow.insertCell();
         let cellDelete = newRow.insertCell();
         let cellTest = newRow.insertCell();
 
@@ -140,7 +138,6 @@
 
         $(cellCommand).text(cronJob.command);
         $(cellTemporalValue).text(cronJob.temporalValue);
-        $(cellTimesRan).text(cronJob.timesRan);
 
         $(cellEnabled).html(enabledToggle);
         $(cellNotifications).html(notificationToggle);
@@ -171,7 +168,7 @@
             let checkboxElement = $(`#cronjob-enabled-checkbox-${cronJob.id}`);
             let currentStatus = checkboxElement.prop('checked');
 
-            if (currentStatus) {
+            if (!currentStatus) {
                 $.ajax({
                     url: '/api/sdtdserver/cron/status',
                     method: 'DELETE',

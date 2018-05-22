@@ -43,7 +43,6 @@ module.exports = {
         command: foundJob.command
       }).exec({
         success: async (data) => {
-          await CronJob.update({id: foundJob.id}, {timesRan: foundJob.timesRan + 1});
           sails.log.debug(`Executed a cron job for server ${foundJob.server.name}`, foundJob);
           return data
         },
