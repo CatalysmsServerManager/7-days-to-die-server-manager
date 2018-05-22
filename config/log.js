@@ -15,27 +15,27 @@ require('dotenv').config();
 
 const winston = require('winston');
 
-var customLogger = new winston.Logger({
-  transports: [
-    new winston.transports.Console({
-      level: 'debug',
-      colorize: true,
-      timestamp: true,
-      humanReadableUnhandledException: true
-    }),
-    new winston.transports.File({
-      level: 'debug',
-      timestamp: true,
-      humanReadableUnhandledException: true,
-      filename: './logs/devlog.log',
-      tailable: true,
-      maxsize: 1000,
-      maxFiles: 3,
-      json: false,
-      colorize: true
-    })
-  ]
-});
+// var customLogger = new winston.Logger({
+//   transports: [
+//     new winston.transports.Console({
+//       level: 'debug',
+//       colorize: true,
+//       timestamp: true,
+//       humanReadableUnhandledException: true
+//     }),
+//     new winston.transports.File({
+//       level: 'debug',
+//       timestamp: true,
+//       humanReadableUnhandledException: true,
+//       filename: './logs/devlog.log',
+//       tailable: true,
+//       maxsize: 1000,
+//       maxFiles: 3,
+//       json: false,
+//       colorize: true
+//     })
+//   ]
+// });
 
 
 
@@ -45,8 +45,8 @@ var customLogger = new winston.Logger({
 
 module.exports.log = {
   // Pass in our custom logger, and pass all log levels through.
-  custom: customLogger,
+  // custom: customLogger,
 
   // Disable captain's log so it doesn't prefix or stringify our meta data.
-  inspect: false
+  // inspect: false
 };

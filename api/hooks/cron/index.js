@@ -48,22 +48,21 @@ module.exports = function defineCronHook(sails) {
       let functionToExecute = await sails.helpers.etc.parseCronJob(foundJob.id);
 
       let scheduledJob = schedule.scheduleJob(foundJob.temporalValue, functionToExecute);
+
       scheduledJobs.set(foundJob.id, scheduledJob);
       sails.log.debug(`Started a cronjob`, foundJob);
       return
-
     },
 
     stop: async function (jobId) {
 
       let foundJob = await CronJob.findOne(jobId);
+      let job = scheduledJobs.get(foundJob.id);
 
-
-      if (!foundJob) {
+      if (!foundJob || !job) {
         throw new Error(`Tried to stop a job which doesn't exist`);
       }
 
-      let job = scheduledJobs.get(foundJob.id);
       job.cancel();
       scheduledJobs.delete(foundJob.id);
       sails.log.debug(`Stopped a cronjob`, foundJob);
