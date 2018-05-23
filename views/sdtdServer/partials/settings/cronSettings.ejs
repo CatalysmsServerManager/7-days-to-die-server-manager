@@ -54,6 +54,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
+                        <div id="add-new-cron-status"></div>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button id="add-new-cron-submit" type="button" class="btn btn-primary">Submit</button>
                     </div>
@@ -90,7 +91,7 @@
 
             let command = $("#add-new-cron-command").val();
             let temporalValue = $('#add-new-cron-temporalValue').val();
-
+            $("#add-new-cron-status").text('');
             $.ajax({
                 url: '/api/sdtdserver/cron',
                 method: 'POST',
@@ -100,10 +101,34 @@
                     command: command,
                     temporalValue: temporalValue
                 },
-                error: (e, xhr) => {
-                    console.log(xhr);
+                error: (xhr, status, error) => {
+
+                    if (xhr.responseJSON) {
+                        if (xhr.responseJSON.problems) {
+                            xhr.responseJSON.problems.forEach(problem => {
+
+                                if (problem.includes("Value failed custom validation")) {
+                                    $("#add-new-cron-status").append("Make sure your temporal value is valid and has an interval of at least 5 minutes.")
+                                } else {
+                                    $("#add-new-cron-status").append(problem)
+                                }
+
+                            })
+                        }
+                    } else {
+
+                        if (xhr.responseText.includes('Invalid command')) {
+                            $("#add-new-cron-status").text("Invalid command")
+                        }
+
+                    }
+
+
+
+
                 },
                 success: (data, status, xhr) => {
+                    $("#add-new-cron-status").text('Success!')
                     addNewJobToTable(data)
                 }
             })

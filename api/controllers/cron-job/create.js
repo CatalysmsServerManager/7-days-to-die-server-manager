@@ -47,6 +47,10 @@ module.exports = {
     success: {
       responseType: '',
       statusCode: 200
+    },
+
+    badCommand: {
+      statusCode: 400
     }
 
   },
@@ -62,7 +66,7 @@ module.exports = {
     let commandIdx = allowedCommands.indexOf(splitCommand[0]);
 
     if (commandIdx === -1) {
-      return exits.error(new Error('Invalid command'));
+      return exits.badCommand(new Error('Invalid command'));
     }
 
     let createdJob = await CronJob.create({
