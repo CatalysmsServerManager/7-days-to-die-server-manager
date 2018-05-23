@@ -23,14 +23,20 @@
 <script>
   $(document).ready(e => {
     loadAndDrawFps();
-    setInterval(loadAndDrawFps, 300000)
-
   })
+
+
+
 
   function loadAndDrawFps() {
     let serverId = window.SAILS_LOCALS.server.id;
-    $.get('/api/sdtdserver/fps', {serverId: serverId}, response => {
-      $('#server-info-fps').text(`FPS: ${response}`)
+    $.get('/api/sdtdserver/fps', { serverId: serverId }, response => {
+      $('#server-info-fps').text(`FPS: ${response}`);
+
+      io.socket.on('memUpdate', memUpdate => {
+        $('#server-info-fps').text(`FPS: ${memUpdate.fps}`);
+      })
+
     })
   }
 

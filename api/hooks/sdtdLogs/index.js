@@ -202,6 +202,7 @@ module.exports = function sdtdLogs(sails) {
           });
 
           eventEmitter.on('memUpdate', function(memUpdate) {
+            console.log(memUpdate)
             sails.sockets.broadcast(server.id, 'memUpdate', memUpdate);
           })
           resolve(eventEmitter);
