@@ -50,7 +50,8 @@ module.exports = {
           if (foundJob.notificationEnabled) {
             await sails.hooks.discordnotifications.sendNotification({
               serverId: foundJob.server.id,
-              job: foundJob
+              job: foundJob,
+              notificationType: "cronjob"
             })
           }
 

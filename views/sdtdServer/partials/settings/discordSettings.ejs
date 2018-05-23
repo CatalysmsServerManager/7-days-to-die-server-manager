@@ -5,7 +5,8 @@
     <small class="text-muted">Control how the bot behaves in your server
     </small>
 
-    <a href='https://discordapp.com/api/oauth2/authorize?client_id=396968286853529600&permissions=52224&redirect_uri=https%3A%2F%2Fcsmm.catalysm.net%2Fauth%2Fdiscord%2Freturn&scope=bot' target="_blank">
+    <a href='https://discordapp.com/api/oauth2/authorize?client_id=396968286853529600&permissions=52224&redirect_uri=https%3A%2F%2Fcsmm.catalysm.net%2Fauth%2Fdiscord%2Freturn&scope=bot'
+      target="_blank">
       Add bot to your server
     </a>
 
@@ -151,6 +152,16 @@
             </div>
 
 
+            <div class="form-group">
+              <label for="discord-settings-notifications-cronjob-select">Automation jobs</label>
+              <small>Receive notifications when automated jobs run.</small>
+              <select class="form-control" name="discord-settings-notifications-cronjob-select" id="discord-settings-notifications-cronjob-select">
+                <option>Loading</option>
+              </select>
+              <button id="input-settings-discord-setnotification-cronjob-btn" type="button" class="btn btn-primary">Set automation notification</button>
+            </div>
+
+
           </li>
           <% } %>
 
@@ -196,6 +207,10 @@
       select: $("#discord-settings-notifications-ticket-select"),
       option: 'ticket'
     },
+    {
+      select: $("#discord-settings-notifications-cronjob-select"),
+      option: 'cronjob'
+    },
     ]
 
     // Load guilds the user can manage & add them to select
@@ -235,7 +250,7 @@
       e.preventDefault();
       let newPrefix = $('#input-settings-discord-prefix').val();
       let guildId = $('#input-settings-discord-guild').val();
-      if (!validator.isLength(newPrefix, {min:0, max: 3})) {
+      if (!validator.isLength(newPrefix, { min: 0, max: 3 })) {
         $('#input-settings-discord-prefix').addClass("bg-danger").removeClass("bg-success");
         return alert('Prefix is maximum 3 characters long');
       }
@@ -251,11 +266,11 @@
         },
         success: (data, status, xhr) => {
           $('#input-settings-discord-prefix').addClass("bg-success").removeClass("bg-danger");
-          },
-          error: (xhr, status, error) => {
-            $('#input-settings-discord-prefix').addClass("bg-danger").removeClass("bg-success");
-            console.log(error);
-          }
+        },
+        error: (xhr, status, error) => {
+          $('#input-settings-discord-prefix').addClass("bg-danger").removeClass("bg-success");
+          console.log(error);
+        }
       })
     })
 
@@ -560,6 +575,34 @@
         error: (xhr, status, error) => {
           alert(`Whoa can't set notifications to that channel! error: ${error}`)
           $('#discord-settings-notifications-ticket-select').addClass("bg-danger").removeClass(
+            "bg-success");
+          console.log(error);
+        }
+      })
+    })
+
+
+    $("#input-settings-discord-setnotification-cronjob-btn").click(e => {
+      let newNotificationChannelId = $('#discord-settings-notifications-cronjob-select').val();
+      if (!newNotificationChannelId) {
+        return alert('Error! Make sure you have a guild set and are selecting a valid channel')
+      }
+      $.ajax({
+        url: '/api/sdtdserver/setnotificationchannel',
+        type: 'POST',
+        data: {
+          notificationChannelId: newNotificationChannelId,
+          serverId: <%= server.id %>,
+          notificationType: 'cronjob',
+          _csrf: window.SAILS_LOCALS._csrf
+        },
+        success: (data, status, xhr) => {
+          $('#discord-settings-notifications-cronjob-select').addClass("bg-success").removeClass(
+            "bg-danger");
+        },
+        error: (xhr, status, error) => {
+          alert(`Whoa can't set notifications to that channel! error: ${error}`)
+          $('#discord-settings-notifications-cronjob-select').addClass("bg-danger").removeClass(
             "bg-success");
           console.log(error);
         }
