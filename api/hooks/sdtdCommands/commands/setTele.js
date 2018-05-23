@@ -18,7 +18,6 @@ class setTele extends SdtdCommand {
     let playersOnServer = await Player.find({ server: server.id });
     let publicTeleports = await PlayerTeleport.find({
       player: playersOnServer.map(player => player.id),
-      publicEnabled: true
     });
 
 
