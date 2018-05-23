@@ -121,11 +121,8 @@
                             $("#add-new-cron-status").text("Invalid command")
                         }
 
+                        $("#add-new-cron-status").text(xhr.responseText);
                     }
-
-
-
-
                 },
                 success: (data, status, xhr) => {
                     $("#add-new-cron-status").text('Success!')

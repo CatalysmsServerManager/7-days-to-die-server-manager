@@ -64,10 +64,10 @@ module.exports = {
             return exits.success('free')
         }
 
-        let patronRole = developerGuild.roles.find('name', 'Patron');
-        let donatorRole = developerGuild.roles.find('name', 'Donator');
-        let contributorRole = developerGuild.roles.find('name', 'Contributor');
-        let sponsorRole = developerGuild.roles.find('name', 'Sponsor');
+        let patronRole = await developerGuild.roles.get("410545564913238027");
+        let donatorRole = await developerGuild.roles.get("434462571978948608");
+        let contributorRole = await developerGuild.roles.get("434462681068470272");
+        let sponsorRole = await developerGuild.roles.get("434462786962325504");
 
         if (discordUser.roles.has(patronRole.id)) {
             return exits.success('patron')

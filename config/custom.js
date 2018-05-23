@@ -41,6 +41,7 @@ module.exports.custom = {
       maxServers: 2,
       maxCustomCommands: 3,
       economyKeepDataHours: 12,
+      maxCronJobs: 5,
     },
     patron: {
       memUpdateKeepDataHours: 12,
@@ -48,6 +49,7 @@ module.exports.custom = {
       maxServers: 2,
       maxCustomCommands: 5,
       economyKeepDataHours: 12,
+      maxCronJobs: 10,
     },
     donator: {
       memUpdateKeepDataHours: 72,
@@ -55,6 +57,7 @@ module.exports.custom = {
       maxServers: 3,
       maxCustomCommands: 10,
       economyKeepDataHours: 72,
+      maxCronJobs: 20,
     },
     contributor: {
       memUpdateKeepDataHours: 120,
@@ -62,6 +65,7 @@ module.exports.custom = {
       maxServers: 4,
       maxCustomCommands: 20,
       economyKeepDataHours: 120,
+      maxCronJobs: 50,
     },
     sponsor: {
       memUpdateKeepDataHours: 168,
@@ -69,6 +73,7 @@ module.exports.custom = {
       maxServers: 5,
       maxCustomCommands: 50,
       economyKeepDataHours: 168,
+      maxCronJobs: 100,
     }
   },
 };

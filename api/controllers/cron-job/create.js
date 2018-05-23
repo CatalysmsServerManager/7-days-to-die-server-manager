@@ -51,7 +51,11 @@ module.exports = {
 
     badCommand: {
       statusCode: 400
-    }
+    },
+
+    maxJobs: {
+      statusCode: 400
+    },
 
   },
 
@@ -60,6 +64,15 @@ module.exports = {
 
     let server = await SdtdServer.findOne(inputs.serverId);
     let allowedCommands = await sails.helpers.sdtd.getAllowedCommands(server);
+    let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({ serverId: server.id });
+
+    let maxCronJobs = sails.config.custom.donorConfig[donatorRole].maxCronJobs;
+    let serverCronJobs = await CronJob.find({server: server.id});
+
+    if (serverCronJobs.length >= maxCronJobs) {
+      return exits.maxJobs(`You have set the max number of jobs already. You have ${serverCronJobs.length} jobs and are allowed ${maxCronJobs}`)
+    }
+    
 
     let splitCommand = inputs.command.split(' ');
 
@@ -68,6 +81,8 @@ module.exports = {
     if (commandIdx === -1) {
       return exits.badCommand(new Error('Invalid command'));
     }
+
+
 
     let createdJob = await CronJob.create({
       command: inputs.command,
