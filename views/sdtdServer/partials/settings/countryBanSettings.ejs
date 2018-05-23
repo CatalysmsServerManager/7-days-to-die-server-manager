@@ -26,6 +26,15 @@
                   <a name="" id="" class="btn btn-primary" href="#" role="button">Set</a>
                 </li>
 
+                <li class="list-group-item">
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input type="checkbox" class="form-check-input" name="inputs-settings-countryBan-ban-checkbox" id="inputs-settings-countryBan-ban-checkbox">
+                      Ban on join
+                    </label>
+                  </div>
+                  </li>
+
                 <!-- country ban countries Button trigger modal -->
                 <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#input-settings-countryban-countries-modal">
                   Manage banned countries
@@ -133,6 +142,46 @@
     <script>
 
       $(document).ready(function () {
+
+        $("#inputs-settings-countryBan-ban-checkbox").prop('checked', window.SAILS_LOCALS.config.countryBanConfig.ban);
+
+        $("#inputs-settings-countryBan-ban-checkbox").click(e => {
+          
+          if ($(e.target).prop('checked')) {
+            $.ajax({
+                url: '/api/sdtdserver/countryban/ban',
+                method: "POST",
+                data: {
+                  serverId: window.SAILS_LOCALS.server.id,
+                  _csrf: window.SAILS_LOCALS._csrf,
+                },
+                success: (data, status, xhr) => {
+
+                },
+                error: (xhr, status, error) => {
+                  console.log(error)
+                  console.log(xhr)
+                }
+              })
+          } else {
+            $.ajax({
+                url: '/api/sdtdserver/countryban/ban',
+                method: 'DELETE',
+                data: {
+                  serverId: window.SAILS_LOCALS.server.id,
+                  _csrf: window.SAILS_LOCALS._csrf,
+                },
+                success: (data, status, xhr) => {
+
+                },
+                error: (xhr, status, error) => {
+                  console.log(error)
+                  console.log(xhr)
+                }
+              })
+          }
+          
+        })
 
         updateCountriesList();
         updateWhitelist();

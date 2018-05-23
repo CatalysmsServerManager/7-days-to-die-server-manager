@@ -185,6 +185,9 @@ module.exports.routes = {
   'post /api/sdtdserver/countryban/country': 'SdtdServerController/countryBan.add-country',
   'delete /api/sdtdserver/countryban/country': 'SdtdServerController/countryBan.remove-country',
 
+  'post /api/sdtdserver/countryban/ban' : "SdtdServerController/countryBan.enable-ban",
+  'delete /api/sdtdserver/countryban/ban' : "SdtdServerController/countryBan.disable-ban",
+
   'get /api/sdtdserver/countryban/whitelist': 'SdtdServerController/countryBan.get-whitelist',
   'post /api/sdtdserver/countryban/whitelist': 'SdtdServerController/countryBan.add-to-whitelist',
   'delete /api/sdtdserver/countryban/whitelist': 'SdtdServerController/countryBan.remove-from-whitelist',

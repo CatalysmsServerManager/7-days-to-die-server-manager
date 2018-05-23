@@ -285,6 +285,7 @@ module.exports = {
       type: 'json',
       defaultsTo: {
         enabled: false,
+        ban: false,
         bannedCountries: [],
         kickMessage: 'Your country has been blocked on this server.',
         allowNull: true,
