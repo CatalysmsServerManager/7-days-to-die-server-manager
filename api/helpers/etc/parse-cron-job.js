@@ -43,7 +43,17 @@ module.exports = {
         command: foundJob.command
       }).exec({
         success: async (data) => {
-          sails.log.debug(`Executed a cron job for server ${foundJob.server.name}`, foundJob);
+          sails.log.debug(`Executed a cron job for server ${foundJob.server.name}`, _.omit(foundJob, 'server'));
+
+          foundJob.response = data;
+
+          if (foundJob.notificationEnabled) {
+            await sails.hooks.discordnotifications.sendNotification({
+              serverId: foundJob.server.id,
+              job: foundJob
+            })
+          }
+
           return data
         },
         error: err => {

@@ -132,7 +132,7 @@
         let cellTest = newRow.insertCell();
 
         let enabledToggle = `<input id="cronjob-enabled-checkbox-${cronJob.id}" value="${cronJob.id}" type="checkbox" ${cronJob.enabled ? "checked" : ""} >`;
-        let notificationToggle = `<input value="${cronJob.id}" type="checkbox" ${cronJob.notificationEnabled ? "checked" : ""} >`;
+        let notificationToggle = `<input id="cronjob-notifications-enabled-checkbox-${cronJob.id}" value="${cronJob.id}" type="checkbox" ${cronJob.notificationEnabled ? "checked" : ""} >`;
         let deleteButton = `<button type="button" class="btn btn-danger" value="${cronJob.id}">Delete</button>`;
         let testButton = `<button type="button" class="btn btn-primary" value="${cronJob.id}">Test</button>`;
 
@@ -162,6 +162,43 @@
                     alert(data)
                 }
             })
+        })
+
+        $(cellNotifications).click(e => {
+            let checkboxElement = $(`#cronjob-notifications-enabled-checkbox-${cronJob.id}`);
+            let currentStatus = checkboxElement.prop('checked');
+
+            if (!currentStatus) {
+                $.ajax({
+                    url: '/api/sdtdserver/cron/notifications',
+                    method: 'DELETE',
+                    data: {
+                        _csrf: window.SAILS_LOCALS._csrf,
+                        serverId: window.SAILS_LOCALS.server.id,
+                        jobId: cronJob.id,
+                    },
+                    error: (e, xhr) => {
+                        console.log(xhr);
+                    },
+                    success: (data, status, xhr) => {
+                    }
+                })
+            } else {
+                $.ajax({
+                    url: '/api/sdtdserver/cron/notifications',
+                    method: 'POST',
+                    data: {
+                        _csrf: window.SAILS_LOCALS._csrf,
+                        serverId: window.SAILS_LOCALS.server.id,
+                        jobId: cronJob.id,
+                    },
+                    error: (e, xhr) => {
+                        console.log(xhr);
+                    },
+                    success: (data, status, xhr) => {
+                    }
+                })
+            }
         })
 
         $(cellEnabled).click(e => {
