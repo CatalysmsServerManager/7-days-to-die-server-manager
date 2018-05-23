@@ -14,8 +14,15 @@ class setTele extends SdtdCommand {
   async run(chatMessage, player, server, args) {
 
     let playerTeleports = await PlayerTeleport.find({ player: player.id });
-    let publicTeleports = await PlayerTeleport.find({ public: true });
-    
+
+    let playersOnServer = await Player.find({ server: server.id });
+    let publicTeleports = await PlayerTeleport.find({
+      player: playersOnServer.map(player => player.id),
+      publicEnabled: true
+    });
+
+
+
     if (server.config.economyEnabled && server.config.costToSetTeleport) {
       let notEnoughMoney = false
       await sails.helpers.economy.deductFromPlayer.with({

@@ -17,7 +17,7 @@ class listTele extends SdtdCommand {
             let playerTeleports = new Array();
             if (args[0] == 'public') {
                 for (const player of server.players) {
-                    let publicTelesByPlayer = await PlayerTeleport.find({ player: player.id, public: true });
+                    let publicTelesByPlayer = await PlayerTeleport.find({ player: player.id, publicEnabled: true });
                     playerTeleports = playerTeleports.concat(publicTelesByPlayer);
                 }
                 playerTeleports = _.uniq(playerTeleports, 'id');
@@ -43,7 +43,7 @@ class listTele extends SdtdCommand {
 
         let stringToSend = new String(`Found ${playerTeleports.length} ${playerTeleports.length > 1 ? 'teleports' : 'teleport'}: `);
         playerTeleports.forEach(teleport => {
-            stringToSend += `${teleport.public ? 'PUBLIC' : 'PRIVATE'}- ${teleport.name} at ${teleport.x},${teleport.y},${teleport.z}`;
+            stringToSend += `${teleport.publicEnabled ? 'PUBLIC' : 'PRIVATE'}- ${teleport.name} at ${teleport.x},${teleport.y},${teleport.z}`;
         })
 
         return chatMessage.reply(stringToSend)

@@ -26,9 +26,10 @@ module.exports = {
           required: true
       },
 
-      public: {
+      publicEnabled: {
           type: 'boolean',
-          defaultsTo: false
+          defaultsTo: false,
+          columnName: 'public'
       },
 
       timesUsed: {

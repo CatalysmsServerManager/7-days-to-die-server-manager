@@ -47,7 +47,7 @@ class telePublic extends SdtdCommand {
             return chatMessage.reply(`No teleport with that name found`)
         }
 
-        await PlayerTeleport.update({ id: teleportFound.id }, { public: true });
+        await PlayerTeleport.update({ id: teleportFound.id }, { publicEnabled: true });
         return chatMessage.reply(`Your teleport ${teleportFound.name} has been set as public.`)
 
 

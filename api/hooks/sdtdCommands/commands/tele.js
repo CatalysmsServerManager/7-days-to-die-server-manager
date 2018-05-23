@@ -27,11 +27,9 @@ class tele extends SdtdCommand {
       }
     }
 
+    let publicTelesByPlayer = await PlayerTeleport.find({ player: server.players.map(player => player.id), publicEnabled: true });
+    publicTeleports = publicTeleports.concat(publicTelesByPlayer);
 
-    for (const player of server.players) {
-      let publicTelesByPlayer = await PlayerTeleport.find({ player: player.id, public: true });
-      publicTeleports = publicTeleports.concat(publicTelesByPlayer);
-    }
 
     let playerTeleports = await PlayerTeleport.find({ player: player.id });
 

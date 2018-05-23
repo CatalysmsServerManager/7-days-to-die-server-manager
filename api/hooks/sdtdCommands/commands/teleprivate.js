@@ -32,7 +32,7 @@ class telePrivate extends SdtdCommand {
             return chatMessage.reply(`No teleport with that name found`)
         }
 
-        await PlayerTeleport.update({ id: teleportFound.id }, { public: false });
+        await PlayerTeleport.update({ id: teleportFound.id }, { publicEnabled: false });
         return chatMessage.reply(`Your teleport ${teleportFound.name} has been set as private.`)
 
 
