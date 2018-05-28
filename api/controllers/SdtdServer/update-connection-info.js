@@ -61,14 +61,13 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     try {
-      sails.log.debug(`API - SdtdServer:update-connection-info - Updating connection info for server ${inputs.serverId}`);
-
+      
       let server = await SdtdServer.findOne(inputs.serverId);
-
+      
       let ip = ('' == inputs.serverIp) ? server.ip : inputs.serverIp;
       let webPort = ('' == inputs.webPort) ? server.webPort : inputs.webPort;
       let serverName = ('' == inputs.serverName) ? server.name : inputs.serverName;
-
+      
       await SdtdServer.update({
         id: inputs.serverId
       }, {
@@ -76,11 +75,12 @@ module.exports = {
         webPort: webPort,
         name: serverName
       });
-
+      
       if (inputs.webPort || inputs.serverIp) {
-        sails.hooks.sdtdlogs.stop(inputs.serverId);
-        sails.hooks.sdtdlogs.start(inputs.serverId);
+        await sails.hooks.sdtdlogs.stop(inputs.serverId);
+        await sails.hooks.sdtdlogs.start(inputs.serverId);
       }
+      sails.log.info(`API - SdtdServer:update-connection-info - Updated connection info for server ${inputs.serverId}`, inputs);
       return exits.success();
     } catch (error) {
       sails.log.error(`API - SdtdServer:update-connection-info - ${error}`);
