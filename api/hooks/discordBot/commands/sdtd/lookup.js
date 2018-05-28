@@ -48,17 +48,23 @@ class Lookup extends Commando.Command {
 
         let foundPlayer = await sails.models.player.find({
             server: sdtdServer.id,
-            name: {
-                'contains': args.playername
-            },
-        })
+            or: [
+                {
+                    name: {
+                        'contains': args.playername
+                    },
+                },
+                { entityId: isNaN(parseInt(args.playername)) ? -1 : args.playername },
+                { steamId: args.playername },
+            ]
+        });
 
         if (foundPlayer.length == 0) {
-            return msg.channel.send(`Did not find any players with that name!`)
+            return msg.channel.send(`Did not find any players with that name/ID!`)
         }
 
         if (foundPlayer.length > 1) {
-            return msg.channel.send(`Found ${foundPlayer.length} players! Narrow your search please`);
+            return msg.channel.send(`Found ${foundPlayer.length} players! Narrow your search please. Consider using steam ID or entity ID instead of player name`);
         }
 
         let playerInfo = await sails.helpers.sdtd.loadPlayerData.with({ serverId: sdtdServer.id, steamId: foundPlayer[0].steamId });
