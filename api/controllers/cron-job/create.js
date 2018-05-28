@@ -66,6 +66,8 @@ module.exports = {
     let allowedCommands = await sails.helpers.sdtd.getAllowedCommands(server);
     let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({ serverId: server.id });
 
+    inputs.command = inputs.command.toLowerCase();
+
     let maxCronJobs = sails.config.custom.donorConfig[donatorRole].maxCronJobs;
     let serverCronJobs = await CronJob.find({server: server.id});
 
@@ -82,8 +84,7 @@ module.exports = {
       return exits.badCommand(new Error('Invalid command'));
     }
 
-
-
+    
     let createdJob = await CronJob.create({
       command: inputs.command,
       temporalValue: inputs.temporalValue,
