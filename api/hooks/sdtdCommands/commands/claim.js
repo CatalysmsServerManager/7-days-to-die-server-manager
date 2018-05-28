@@ -48,6 +48,7 @@ class Claim extends SdtdCommand {
                 Object.defineProperty(options, 'quality', {
                     value: item.quality,
                     writable: true,
+                    enumerable: true
                 });
             }
 
