@@ -41,7 +41,7 @@ class Claim extends SdtdCommand {
                 entityId: player.entityId,
                 amount: item.amount,
                 itemName: item.name,
-                quality: 1
+                quality: item.quality
             }).exec({
                 success: async data => {
                     await PlayerClaimItem.update({ id: item.id }, { claimed: true });
