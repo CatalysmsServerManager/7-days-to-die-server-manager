@@ -21,8 +21,9 @@
                 <%- include("./partials/banPlayerButton", {player: player}) %>
                   <%- include("./partials/kickPlayerButton", {player: player}) %>
                     <%- include("./partials/teleportPlayerButton", {player: player}) %>
+                    <%- include("./partials/giveItemButton", {player: player}) %>
+                    <%- include("./partials/setMoneyButton", {player: player}) %>
                       <% } %>
-                        <%- include("./partials/giveItemButton", {player: player}) %>
 
 
         </div>
@@ -134,6 +135,13 @@
               <%= player.playerKills %>
             </td>
           </tr>
+
+          <tr>
+              <td scope="row">CSMM currency balance</td>
+              <td>
+                <%= player.currency %>
+              </td>
+            </tr>
 
           <tr>
             <td scope="row">Teleports</td>

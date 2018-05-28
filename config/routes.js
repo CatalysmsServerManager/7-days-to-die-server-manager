@@ -133,6 +133,8 @@ module.exports.routes = {
   'post /api/sdtdserver/economy/module/discordtextearner/amount': 'SdtdServerController/economy.set-discord-text-earner-amount',
   'post /api/sdtdserver/economy/module/discordtextearner/timeout': 'SdtdServerController/economy.set-discord-text-earner-timeout',
 
+  'post /api/player/balance' : "PlayerController.set-balance",
+
   // Shop Listing
 
   'get /api/shop/listing': 'ShopController.get-listings',

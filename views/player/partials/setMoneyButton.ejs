@@ -1,0 +1,67 @@
+<%- exposeLocalsToBrowser() %>
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#player-setbalance-modal">
+        Set balance
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="player-setbalance-modal" tabindex="-1" role="dialog" aria-labelledby="player-setbalance-modal-title"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="player-setbalance-modal-title">Set balance</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+
+                        <div class="form-group">
+                            <label for="player-setbalance-modal-input">New balance</label>
+                            <input type="text" class="form-control" name="player-setbalance-modal-input" id="player-setbalance-modal-input" aria-describedby="player-setbalance-modal-input-help"
+                                placeholder="<%= player.currency %>">
+                            <small id="player-setbalance-modal-input-help" class="form-text text-muted">The amount of money the player will have</small>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="player-setbalance-modal-submit" type="button" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        $(document).ready(() => {
+
+            $('#player-setbalance-modal-submit').click((e) => {
+                newBalance = $('#player-setbalance-modal-input').val();
+                $.ajax({
+                    url: `/api/player/balance`,
+                    method: "POST",
+                    data: {
+                        playerId: <%= player.id %>,
+                        newBalance: newBalance,
+                        _csrf: window.SAILS_LOCALS._csrf,
+                    },
+                    success: (data, status, xhr) => {
+                        window.location.reload();
+                    },
+                    error: (xhr, status, error) => {
+                        console.log(xhr);
+                        alert('Error while setting balance!!');
+                    }
+                });
+            })
+
+        })
+
+
+
+    </script>
