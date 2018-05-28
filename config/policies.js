@@ -52,7 +52,7 @@ module.exports.policies = {
   },
 
   ShopController: {
-    '*': ['isPatron', 'isLoggedIn'],
+    '*': ['isLoggedIn'],
     'listing-add': 'isServerOwner',
     'listing-edit': 'isServerOwner',
     'listing-delete': 'isServerOwner',
