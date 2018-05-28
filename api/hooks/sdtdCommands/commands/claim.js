@@ -45,7 +45,10 @@ class Claim extends SdtdCommand {
             }
 
             if (item.quality !== 0) {
-                Object.defineProperty(options, 'quality', item.quality);
+                Object.defineProperty(options, 'quality', {
+                    value: item.quality,
+                    writable: true,
+                });
             }
 
 
