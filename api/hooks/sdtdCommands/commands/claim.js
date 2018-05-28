@@ -33,16 +33,23 @@ class Claim extends SdtdCommand {
 
 
         itemsToClaim.forEach(item => {
-            sevenDays.giveItem({
+
+            let options = {
                 ip: server.ip,
                 port: server.webPort,
                 authName: server.authName,
                 authToken: server.authToken,
                 entityId: player.entityId,
                 amount: item.amount,
-                itemName: item.name,
-                quality: item.quality
-            }).exec({
+                itemName: item.name
+            }
+
+            if (item.quality !== 0) {
+                Object.defineProperty(options, 'quality', item.quality);
+            }
+
+
+            sevenDays.giveItem(options).exec({
                 success: async data => {
                     await PlayerClaimItem.update({ id: item.id }, { claimed: true });
                     chatMessage.reply(`Dropped ${item.amount}x ${item.name} of quality ${item.quality} at your feet.`)
