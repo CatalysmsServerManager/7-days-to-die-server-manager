@@ -61,7 +61,6 @@ module.exports = {
                 let playerStats
                 if (player.online) {
                     playerInventory = await loadPlayerInventory(player.steamid, server);
-                    playerStats = await loadPlayerStats(player.steamid, server);
                 }
 
                 // Update some basic info
@@ -82,13 +81,6 @@ module.exports = {
                         inventory: playerInventory
                     }).fetch()
                 }
-
-                if (!_.isUndefined(playerStats)) {
-                    playerStats = _.omit(playerStats, 'steamId');
-                    playerProfile = await Player.update({ id: playerProfile[0].id }, playerStats).fetch();
-
-                }
-
 
                 if (!_.isUndefined(steamAvatar)) {
                     playerProfile = await Player.update({id: playerProfile[0].id}, {avatarUrl: steamAvatar}).fetch()
@@ -172,17 +164,6 @@ function loadPlayerInventory(steamId, server) {
             }
         });
     })
-}
-
-async function loadPlayerStats(steamId, server) {
-    try {
-        let playerStats = await sails.helpers.sdtd.loadPlayerStats(server.id, steamId);
-        return playerStats
-    } catch (error) {
-        sails.log.error(`HELPER - loadPlayerData:loadPlayerStats - ${error}`);
-        return undefined
-
-    }
 }
 
 function loadSteamAvatar(steamId) {
