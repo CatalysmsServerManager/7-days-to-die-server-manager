@@ -22,16 +22,14 @@ module.exports = function sdtdLogs(sails) {
      * @private
      */
     initialize: function (cb) {
-      sails.on('hook:orm:loaded', async function () {
+      sails.on('hook:orm:loaded', async () => {
 
         try {
           let enabledServers = await SdtdConfig.find({
             loggingEnabled: true
-          }).populate('server');
+          });
           for (let config of enabledServers) {
-            let server = config.server;
-            let loggingObj = await createLogObject(server.id);
-            loggingInfoMap.set(String(server.id), loggingObj);
+            this.start(config.server)
           }
           sails.log.info(`HOOK: Sdtdlogs - Initialized ${loggingInfoMap.size} logging instances`);
           return cb();
@@ -60,7 +58,9 @@ module.exports = function sdtdLogs(sails) {
               loggingEnabled: true
             });
           let loggingObj = await createLogObject(serverID);
-          return loggingInfoMap.set(serverID, loggingObj);
+          loggingInfoMap.set(serverID, loggingObj);
+          sails.hooks.playertracking.start(serverID);
+          return 
         } else {
           throw new Error(`Tried to start logging for a server that already had it enables`);
         }
@@ -148,7 +148,7 @@ module.exports = function sdtdLogs(sails) {
         error: function (error) {
           reject(error);
         },
-        success: function (eventEmitter) {
+        success: (eventEmitter) => {
           eventEmitter.on('logLine', function (logLine) {
             sails.sockets.broadcast(server.id, 'logLine', logLine);
           });
@@ -201,7 +201,8 @@ module.exports = function sdtdLogs(sails) {
             sails.sockets.broadcast(server.id, 'playerDeath', deathMessage);
           });
 
-          eventEmitter.on('memUpdate', function(memUpdate) {
+          eventEmitter.on('memUpdate', (memUpdate) => {
+            memUpdate.server = server.id;
             sails.sockets.broadcast(server.id, 'memUpdate', memUpdate);
           })
           resolve(eventEmitter);
