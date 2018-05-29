@@ -80,7 +80,6 @@ module.exports = function definePlayerTrackingHook(sails) {
         // Detect if player gained score
         if (player.score < playerStats.score && player.score !== 0) {
           let scoreGained = playerStats.score - player.score;
-          sails.log.debug(`Detected score gain! ${player.name} of server ${server.name} has achieved a total score of ${playerStats.score}. - Detected ${scoreGained} score points gained`);
           player.scoreGained = scoreGained;
           loggingObject.emit('score', player);
         }
