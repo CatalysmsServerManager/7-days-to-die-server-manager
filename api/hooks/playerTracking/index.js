@@ -33,7 +33,11 @@ module.exports = function definePlayerTrackingHook(sails) {
       loggingObject.on('memUpdate', async (memUpdate) => {
         let server = await SdtdServer.findOne(memUpdate.server).populate('config');
 
-        await basicTracking(server, loggingObject);
+        try {
+          await basicTracking(server, loggingObject);
+        } catch (error) {
+          sails.log.error(error)
+        }
 
       })
 
