@@ -31,7 +31,6 @@ module.exports = function definePlayerTrackingHook(sails) {
       }
 
       loggingObject.on('memUpdate', async (memUpdate) => {
-        sails.log.debug(`Memupdate received - getting tracking info for server`);
         let server = await SdtdServer.findOne(memUpdate.server).populate('config');
 
         await basicTracking(server, loggingObject);
@@ -48,7 +47,7 @@ module.exports = function definePlayerTrackingHook(sails) {
 
     for (const playerStats of stats) {
       if (playerStats.steamId) {
-        sails.log.debug(`Received stats - Performing basic tracking for a player`, playerStats)
+        sails.log.verbose(`Received stats - Performing basic tracking for a player`, playerStats)
         // Load the current player data
         let player = await Player.findOne({ server: server.id, steamId: playerStats.steamId });
         // Update with the new data
