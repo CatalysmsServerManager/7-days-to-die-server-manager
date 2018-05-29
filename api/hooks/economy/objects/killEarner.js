@@ -29,7 +29,7 @@ class KillEarner {
 
 async function handleKill(killEvent) {
     try {
-        
+
         if (killEvent.zombiesKilled) {
             for (let index = 0; index < killEvent.zombiesKilled; index++) {
                 let playerToReward = await Player.findOne({
@@ -60,6 +60,8 @@ async function handleKill(killEvent) {
             }
         }
 
+        cleanOldLogs(this.server.id);
+
     } catch (error) {
         sails.log.error(error);
     }
@@ -69,7 +71,21 @@ async function handleKill(killEvent) {
 
 
 async function cleanOldLogs(serverId) {
-
+    try {
+        let hoursToKeepData = 5*24;
+        let milisecondsToKeepData = hoursToKeepData * 3600000;
+        let dateNow = Date.now();
+        let borderDate = new Date(dateNow.valueOf() - milisecondsToKeepData);
+   
+        await HistoricalInfo.destroy({
+            server: serverId,
+            type: 'economy',
+            createdAt: { '<': borderDate.valueOf() },
+            message: {'contains': 'killEarner -'}
+        })
+    } catch (error) {
+        sails.log.error(error)
+    }
 }
 
 
