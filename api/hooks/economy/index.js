@@ -33,6 +33,10 @@ module.exports = function economy(sails) {
                     if (config.discordTextEarnerEnabled) {
                         await startDiscordTextEarner(config.server);
                     }
+
+                    if (config.killEarnerEnabled) {
+                        await startKillEarner(config.server);
+                    }
                 }
 
                 return cb();
@@ -47,6 +51,9 @@ module.exports = function economy(sails) {
                     break;
                 case 'discordTextEarner':
                     return startDiscordTextEarner(serverId);
+                    break;
+                case 'killEarner':
+                    return startKillEarner(serverId);
                     break;
 
                 default:
@@ -63,6 +70,9 @@ module.exports = function economy(sails) {
                 case 'discordTextEarner':
                     return stopDiscordTextEarner(serverId);
                     break;
+                case 'killEarner':
+                    return startKillEarner(serverId);
+                    break;
                 default:
                     throw new Error('Unknown updateObject type')
                     break;
@@ -76,6 +86,9 @@ module.exports = function economy(sails) {
                     break;
                 case 'discordTextEarner':
                     return discordTextEarnerMap.has(String(server.id ? server.id : server))
+                    break;
+                case 'killEarner':
+                    return killEarnerMap.has(String(server.id ? server.id : server))
                     break;
 
                 default:
@@ -103,6 +116,16 @@ module.exports = function economy(sails) {
                     } else {
                         await startDiscordTextEarner(serverId);
                         return stopDiscordTextEarner(serverId);
+                    }
+                    break;
+
+                case 'killEarner':
+                    if (config.killEarnerEnabled) {
+                        await stopKillEarner(serverId);
+                        return startKillEarner(serverId);
+                    } else {
+                        await startKillEarner(serverId);
+                        return stopKillEarner(serverId);
                     }
                     break;
 
