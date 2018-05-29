@@ -71,7 +71,7 @@ module.exports = function economy(sails) {
                     return stopDiscordTextEarner(serverId);
                     break;
                 case 'killEarner':
-                    return startKillEarner(serverId);
+                    return stopKillEarner(serverId);
                     break;
                 default:
                     throw new Error('Unknown updateObject type')
@@ -170,6 +170,7 @@ async function stopKillEarner(serverId) {
         let killEarnerObject = await getMap(serverId, 'killEarner');
         killEarnerObject.stop();
         deleteMap(serverId, killEarnerObject);
+        return true
     } catch (error) {
         sails.log.error(`HOOK - economy - Error stopping killEarner ${error}`)
     }
@@ -288,7 +289,7 @@ function setMap(server, updateObject) {
     }
 }
 
-function deleteMap(server) {
+function deleteMap(server, updateObject) {
     switch (updateObject.type) {
         case 'playtimeEarner':
             return playtimeEarnerMap.delete(String(server.id ? server.id : server));
