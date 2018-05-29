@@ -128,6 +128,7 @@ module.exports = function SdtdDiscordChatBridge(sails) {
 
       let chatBridge = new ChatBridgeChannel(textChannel, server);
       setChatBridge(serverId, chatBridge)
+      return
     } catch (error) {
       sails.log.error(`HOOK SdtdDiscordChatBridge:start - ${error}`);
       throw error;
