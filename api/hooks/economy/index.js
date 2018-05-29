@@ -1,12 +1,13 @@
 var sevenDays = require('machinepack-7daystodiewebapi');
 const PlaytimeEarner = require('./objects/playtimeEarner');
 const DiscordTextEarner = require('./objects/discordTextEarner');
+const KillEarner = require('./objects/killEarner');
 const DiscordMessageHandler = require('./objects/discordMessageHandler');
 
 let playtimeEarnerMap = new Map();
 let discordTextEarnerMap = new Map();
+let killEarnerMap = new Map();
 let discordMessageEmitter;
-
 
 module.exports = function economy(sails) {
 
@@ -114,6 +115,43 @@ module.exports = function economy(sails) {
     };
 }
 
+async function startKillEarner(serverId) {
+    try {
+        await SdtdConfig.update({ server: serverId }, { killEarnerEnabled: true });
+
+        if (getMap(serverId, 'killEarner')) {
+            return
+        }
+
+        const server = await SdtdServer.findOne(serverId).populate('config');
+        const config = server.config[0];
+        let loggingObject = await sails.hooks.sdtdlogs.getLoggingObject(server.id);
+        let killEarnerObject = new KillEarner(server, config, loggingObject);
+        await killEarnerObject.start();
+        setMap(server, killEarnerObject);
+        return true
+    } catch (error) {
+        sails.log.error(`HOOK - economy - Error starting killEarner ${error}`)
+        return false
+    }
+}
+
+async function stopKillEarner(serverId) {
+    try {
+        await SdtdConfig.update({ server: serverId }, { killEarnerEnabled: false });
+
+        if (!getMap(serverId, 'killEarner')) {
+            return
+        }
+
+        let killEarnerObject = await getMap(serverId, 'killEarner');
+        killEarnerObject.stop();
+        deleteMap(serverId, killEarnerObject);
+    } catch (error) {
+        sails.log.error(`HOOK - economy - Error stopping killEarner ${error}`)
+    }
+}
+
 
 async function startPlaytimeEarner(serverId) {
     try {
@@ -200,6 +238,9 @@ function getMap(server, type) {
         case 'discordTextEarner':
             return discordTextEarnerMap.get(String(server.id ? server.id : server))
             break;
+        case 'killEarner':
+            return killEarnerMap.get(String(server.id ? server.id : server))
+            break;
 
         default:
             throw new Error('Unknown updateObject type')
@@ -215,19 +256,25 @@ function setMap(server, updateObject) {
         case 'discordTextEarner':
             return discordTextEarnerMap.set(String(server.id ? server.id : server), updateObject);
             break;
+        case 'killEarner':
+            return killEarnerMap.set(String(server.id ? server.id : server), updateObject);
+            break;
         default:
             throw new Error('Must set a known type in updateObject')
             break;
     }
 }
 
-function deleteMap(server, updateObject) {
+function deleteMap(server) {
     switch (updateObject.type) {
         case 'playtimeEarner':
-            return playtimeEarnerMap.delete(String(server.id ? server.id : server), updateObject);
+            return playtimeEarnerMap.delete(String(server.id ? server.id : server));
             break;
         case 'discordTextEarner':
-            return discordTextEarnerMap.delete(String(server.id ? server.id : server), updateObject);
+            return discordTextEarnerMap.delete(String(server.id ? server.id : server));
+            break;
+        case 'killEarner':
+            return discordTextEarnerMap.delete(String(server.id ? server.id : server));
             break;
         default:
             throw new Error('Must set a known type in updateObject')
