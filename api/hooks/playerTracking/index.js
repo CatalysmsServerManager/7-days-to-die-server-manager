@@ -54,7 +54,7 @@ module.exports = function definePlayerTrackingHook(sails) {
         await Player.update(player.id, playerStats);
 
         // Detect if player killed any zombies
-        if (player.zombieKills < playerStats.zombieKills) {
+        if (player.zombieKills < playerStats.zombieKills && player.zombieKills !== 0) {
           let zombiesKilled = playerStats.zombieKills - player.zombieKills;
           sails.log.debug(`Detected a zombie kill! ${player.name} of server ${server.name} has killed ${playerStats.zombieKills} zombies in total. - Detected ${zombiesKilled} kills`);
           player.zombiesKilled = zombiesKilled;
@@ -62,7 +62,7 @@ module.exports = function definePlayerTrackingHook(sails) {
         }
 
         // Detect if player killed any players
-        if (player.playerKills < playerStats.playerKills) {
+        if (player.playerKills < playerStats.playerKills && player.playerKills !== 0) {
           let playersKilled = playerStats.playerKills - player.playerKills;
           sails.log.debug(`Detected a player kill! ${player.name} of server ${server.name} has killed ${playerStats.playerKills} players in total. - Detected ${playersKilled} kills`);
           player.playersKilled = playersKilled;
@@ -70,7 +70,7 @@ module.exports = function definePlayerTrackingHook(sails) {
         }
 
         // Detect if player leveled up
-        if (player.level < playerStats.level) {
+        if (player.level < playerStats.level && player.level !== 0) {
           let levels = playerStats.level - player.level;
           sails.log.debug(`Detected a level up! ${player.name} of server ${server.name} has leveled up to ${playerStats.level}. - Detected ${levels} levels`);
           player.levels = levels;
@@ -78,7 +78,7 @@ module.exports = function definePlayerTrackingHook(sails) {
         }
 
         // Detect if player gained score
-        if (player.score < playerStats.score) {
+        if (player.score < playerStats.score && player.score !== 0) {
           let scoreGained = playerStats.score - player.score;
           sails.log.debug(`Detected score gain! ${player.name} of server ${server.name} has achieved a total score of ${playerStats.score}. - Detected ${scoreGained} score points gained`);
           player.scoreGained = scoreGained;
@@ -87,7 +87,7 @@ module.exports = function definePlayerTrackingHook(sails) {
       }
     }
 
-    return 
+    return
   }
 
 };
