@@ -1,0 +1,184 @@
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#economy-module-killEarner-modal">
+    <i class="fas fa-skull"></i> Kill Earner
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="economy-module-killEarner-modal" tabindex="-1" role="dialog" aria-labelledby="economy-module-killEarner-modal-title"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="economy-module-killEarner-modal-title">Kill earner module</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="economy-module-killEarner-config-enabled" id="economy-module-killEarner-config-enabled"> Enabled
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="economy-module-killearner-config-playerKill">Player kill reward</label>
+                        <input type="number" class="form-control" name="economy-module-killearner-config-playerKill" id="economy-module-killearner-config-playerKill"
+                            aria-describedby="economy-module-killearner-config-playerKill-help" placeholder="<%= config.playerKillReward %>">
+                        <small id="economy-module-killearner-config-playerKill-help" class="form-text text-muted">How much currency your players get per player they kill.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="economy-module-killearner-config-zombieKill">Zombie kill reward</label>
+                        <input type="number" class="form-control" name="economy-module-killearner-config-zombieKill" id="economy-module-killearner-config-zombieKill"
+                            aria-describedby="economy-module-killearner-config-zombieKill-help" placeholder="<%= config.zombieKillReward %>">
+                        <small id="economy-module-killearner-config-zombieKill-help" class="form-text text-muted">How much currency your players get per zombie they kill.</small>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="economy-module-config-killearner-save" type="button" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+
+        if (window.SAILS_LOCALS.config.killEarnerEnabled) {
+            $('#economy-module-killEarner-config-enabled').prop('checked', true)
+        }
+
+        $('#economy-module-config-killearner-save').click(e => {
+            e.preventDefault();
+
+            $('#economy-module-killearner-config-playerKill').removeClass('bg-success bg-danger')
+            $('#economy-module-killearner-config-zombieKill').removeClass('bg-success bg-danger')
+
+            if ($('#economy-module-killEarner-config-enabled').prop('checked') != window.SAILS_LOCALS.config.killEarnerEnabled) {
+                let newStatus = $('#economy-module-killEarner-config-enabled').prop('checked')
+                updateKillEarnerStatus(newStatus)
+            }
+
+            let newPlayerKills = $('#economy-module-killearner-config-playerKill').val();
+            let newZombieKills = $('#economy-module-killearner-config-zombieKill').val();
+
+            if (newPlayerKills != '') {
+                updateKillEarnerPlayerKills(newPlayerKills)
+            }
+
+            if (newZombieKills != '') {
+                updateKillEarnerZombieKills(newZombieKills)
+            }
+
+        })
+
+        function updateKillEarnerStatus(newStatus) {
+
+
+            if (newStatus) {
+                $.ajax({
+                    url: '/api/sdtdserver/economy/module',
+                    method: 'POST',
+                    data: {
+                        _csrf: window.SAILS_LOCALS._csrf,
+                        serverId: window.SAILS_LOCALS.server.id,
+                        moduleType: 'killEarner'
+                    },
+                    success: (data, status, xhr) => {
+                        $('#economy-module-killEarner-config-enabled').addClass('bg-success').removeClass('bg-danger');
+                    },
+                    error: (xhr, status, error) => {
+                        console.log(xhr)
+                        alert('Something went wrong while enabling killEarner')
+                    }
+                })
+            } else {
+                $.ajax({
+                    url: '/api/sdtdserver/economy/module',
+                    method: 'DELETE',
+                    data: {
+                        _csrf: window.SAILS_LOCALS._csrf,
+                        serverId: window.SAILS_LOCALS.server.id,
+                        moduleType: 'killEarner'
+                    },
+                    success: (data, status, xhr) => {
+                        $('#economy-module-killEarner-config-enabled').addClass('bg-success').removeClass('bg-danger');
+                    },
+                    error: (xhr, status, error) => {
+                        console.log(error)
+                        alert('Something went wrong while disabling killEarner')
+                    }
+                })
+            }
+        }
+
+
+
+        function updateKillEarnerPlayerKills(newPlayerKills) {
+
+            if (!validator.isDecimal(newPlayerKills)) {
+                return alert('Amount must be a decimal')
+
+            }
+
+            $.ajax({
+                url: '/api/sdtdserver/economy/module/killearner/playerkill',
+                method: 'POST',
+                data: {
+                    _csrf: window.SAILS_LOCALS._csrf,
+                    serverId: window.SAILS_LOCALS.server.id,
+                    amount: newPlayerKills
+                },
+                success: (data, status, xhr) => {
+                    $('#economy-module-killearner-config-playerKill').addClass('bg-success').removeClass('bg-danger');
+                },
+                error: (xhr, status, error) => {
+                    console.log(error)
+                    alert('Something went wrong while setting a new amount')
+                }
+            })
+
+        }
+
+        function updateKillEarnerZombieKills(newZombieKills) {
+
+            if (!validator.isDecimal(newZombieKills)) {
+                return alert('Amount must be a decimal')
+
+            }
+
+            $.ajax({
+                url: '/api/sdtdserver/economy/module/killearner/zombiekill',
+                method: 'POST',
+                data: {
+                    _csrf: window.SAILS_LOCALS._csrf,
+                    serverId: window.SAILS_LOCALS.server.id,
+                    amount: newZombieKills
+                },
+                success: (data, status, xhr) => {
+                    $('#economy-module-killearner-config-zombieKill').addClass('bg-success').removeClass('bg-danger');
+                },
+                error: (xhr, status, error) => {
+                    console.log(error)
+                    alert('Something went wrong while setting a new amount')
+                }
+            })
+
+        }
+
+
+
+
+
+    })
+
+
+
+</script>

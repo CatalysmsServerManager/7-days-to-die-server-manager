@@ -15,6 +15,11 @@
                 <button id="economy-button-enable" type="button" class="list-group-item list-group-item-action bg-success"><i class="fas fa-toggle-on"></i> Enable economy</button>
                 <button id="economy-button-disable" type="button" class="list-group-item list-group-item-action bg-warning"><i class="fas fa-toggle-off"></i>Disable economy</button>
 
+                <% const shopLink = '/shop/' + server.id %>
+                <a href='<%= shopLink %>' class="btn list-group-item list-group-item-action bg-primary">
+                    <i class="fas fa-shopping-cart"></i> Shop
+                </a>
+
                 <!-- Button trigger modal -->
                 <button type="button" class="btn list-group-item list-group-item-action bg-primary" data-toggle="modal" data-target="#economy-setPrices-modal">
                         <i class="fas fa-hand-holding-usd"></i> Set prices 
@@ -100,16 +105,11 @@
 
         <div class="col-4">
             <div class="list-group">
-                <button type="button" class="list-group-item bg-dark">Modules</button>
+                <button type="button" class="list-group-item bg-dark text-white">Modules</button>
                 <%- include('./module-playtimeEarner') %>
                     <%- include('./module-discordTextEarner') %>
-                        <% const shopLink = '/shop/' + server.id %>
-                            <a href='<%= shopLink %>' class="btn btn-lg btn-primary">
-                                <i class="fas fa-shopping-cart"></i> Shop
-                            </a>
+                    <%- include('./module-killEarner') %>
 
-                            <button class="list-group-item list-group-item-action">Module 4</button>
-                            <button type="button" class="list-group-item list-group-item-action">Module 5</button>
             </div>
 
 
