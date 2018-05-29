@@ -69,7 +69,7 @@ module.exports = {
                 timesBought: listing.timesBought + 1
             });
 
-
+            sails.log.info(`${player.name} has purchased a listing from shop.`, listing);
             return exits.success(itemClaim)
         } catch (error) {
             sails.log.error(error);

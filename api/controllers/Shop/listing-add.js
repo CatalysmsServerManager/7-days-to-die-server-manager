@@ -81,6 +81,7 @@ module.exports = {
                 server: inputs.serverId
             }).fetch()
     
+            sails.log.info(`Created a new listing for server ${inputs.serverId}`, createdListing);
             return exits.success(createdListing);
         } catch (error) {
             sails.log.error(error);
