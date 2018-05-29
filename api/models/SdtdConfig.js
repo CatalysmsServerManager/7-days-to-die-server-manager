@@ -29,6 +29,23 @@ module.exports = {
       defaultsTo: 'dolla dolla billz'
     },
 
+    killEarnerEnabled: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
+    zombieKillReward: {
+      type: 'number',
+      min: 0,
+      defaultsTo: 1
+    },
+
+    playerKillReward: {
+      type: 'number',
+      min: 0,
+      defaultsTo: 20
+    },
+
     playtimeEarnerEnabled: {
       type: 'boolean',
       defaultsTo: false
