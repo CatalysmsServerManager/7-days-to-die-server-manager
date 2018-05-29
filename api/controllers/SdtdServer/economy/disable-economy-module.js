@@ -13,7 +13,7 @@ module.exports = {
         moduleType: {
             type: 'string',
             required: true,
-            isIn: ['playtimeEarner', 'discordTextEarner']
+            isIn: ['playtimeEarner', 'discordTextEarner', 'killEarner']
         }
     },
 
@@ -33,6 +33,7 @@ module.exports = {
                 server: inputs.serverId,
                 message: `Disabled module ${inputs.moduleType}`
             });
+            sails.log.info(`Disabled a ${inputs.moduleType} module for server ${inputs.serverId}`);
             return exits.success();
         } catch (error) {
             sails.log.error(`API - Sdtdserver:disable-economy - ${error}`);
