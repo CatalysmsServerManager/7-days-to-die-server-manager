@@ -13,10 +13,18 @@ module.exports = {
   /**
    * @description Authenticate a user via steam
    */
-  steamLogin: function (req, res, next) {
-    passport.authenticate('steam', {
-      failureRedirect: `${process.env.CSMM_HOSTNAME}`,
-    })(req, res);
+  steamLogin: function (req, res) {
+
+    try {
+      passport.authenticate('steam', {
+        failureRedirect: `${process.env.CSMM_HOSTNAME}`,
+      })(req, res);
+    } catch (error) {
+      sails.log.warn(`!!! - STEAM AUTH ERROR - !!!!`)
+      sails.log.error(error)
+      res.send(`Steam authentication error. This should never occur! Please report this on the dev server`, req)
+    }
+
 
   },
 
@@ -25,54 +33,72 @@ module.exports = {
    */
 
   steamReturn: function (req, res) {
-    passport.authenticate('steam', {
+
+
+    try {
+      passport.authenticate('steam', {
         failureRedirect: '/login',
       },
-      async function (err, user) {
-        if (err) {
-          sails.log.error(`Steam auth error - ${err}`);
-          return res.serverError(err);
-        };
-        sails.log.info(`User ${user.username} successfully logged in`);
-        req.session.userId = user.id;
-        try {
-          let players = await Player.find({
-            steamId: user.steamId
-          });
-          let playerIds = players.map((player) => {
-            return player.id;
-          });
-          await User.addToCollection(user.id, 'players').members(playerIds);
-          res.redirect(`/user/${user.id}/dashboard`);
-        } catch (error) {
-          sails.log.error(`AuthController - Error updating user profile ${error}`);
-        }
-      })(req, res);
+        async function (err, user) {
+          if (err) {
+            sails.log.error(`Steam auth error - ${err}`);
+            return res.serverError(err);
+          };
+          sails.log.info(`User ${user.username} successfully logged in`);
+          req.session.userId = user.id;
+          try {
+            let players = await Player.find({
+              steamId: user.steamId
+            });
+            let playerIds = players.map((player) => {
+              return player.id;
+            });
+            await User.addToCollection(user.id, 'players').members(playerIds);
+            res.redirect(`/user/${user.id}/dashboard`);
+          } catch (error) {
+            sails.log.error(`AuthController - Error updating user profile ${error}`);
+          }
+        })(req, res);
+    } catch (error) {
+      sails.log.warn(`!!! - STEAM AUTH ERROR - !!!!`)
+      sails.log.error(error)
+      res.send(`Steam authentication error. This should never occur! Please report this on the dev server`, req)
+    }
+
+
   },
 
   discordReturn: function (req, res) {
-    passport.authenticate('discord', {
+
+    try {
+      passport.authenticate('discord', {
         failureRedirect: '/'
       },
-      async function (err, discordProfile) {
-        if (err) {
-          sails.log.error(`Discord auth error - ${err}`);
-          return res.serverError(err);
-        };
+        async function (err, discordProfile) {
+          if (err) {
+            sails.log.error(`Discord auth error - ${err}`);
+            return res.serverError(err);
+          };
 
-        try {
-          await User.update({
-            id: req.session.userId
-          }, {
-            discordId: discordProfile.id,
-          });
-          sails.log.debug(`User ${req.session.userId} updated discord info successfully`);
-          res.redirect('/');
-        } catch (error) {
-          sails.log.error(`AuthController:discordReturn - Error updating user profile ${error}`);
-        }
+          try {
+            await User.update({
+              id: req.session.userId
+            }, {
+                discordId: discordProfile.id,
+              });
+            sails.log.debug(`User ${req.session.userId} updated discord info successfully`);
+            res.redirect(`/user/${req.session.userId}/dashboard`);
+          } catch (error) {
+            sails.log.error(`AuthController:discordReturn - Error updating user profile ${error}`);
+          }
 
-      })(req, res);
+        })(req, res);
+    } catch (error) {
+      sails.log.error(error)
+      res.send(`Discord authentication error. This should never occur! Please report this on the dev server`)
+    }
+
+
   },
 
 
@@ -81,10 +107,15 @@ module.exports = {
    */
 
   discordLogin: function (req, res, next) {
-    sails.log.debug(`Logging in a user via discord`);
-    passport.authenticate('discord', {
-      failureRedirect: `${process.env.CSMM_HOSTNAME}`
-    })(req, res);
+    try {
+      passport.authenticate('discord', {
+        failureRedirect: `${process.env.CSMM_HOSTNAME}`
+      })(req, res);
+    } catch (error) {
+      sails.log.error(error)
+      res.send(`Discord authentication error. This should never occur! Please report this on the dev server`)
+    }
+
 
   },
 
