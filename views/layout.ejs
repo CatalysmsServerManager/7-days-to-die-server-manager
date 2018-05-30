@@ -4,8 +4,14 @@
 <head>
   <title>CSMM</title>
 
+
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="A 7 days to die server manager">
+  <meta name="author" content="Catalysm">
+
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+
 
   <!--
         Stylesheets and Preprocessors
@@ -39,6 +45,7 @@
   <link rel="stylesheet" href="/styles/flags/flags.css">
   <link rel="stylesheet" href="/styles/flags/flags.min.css">
   <link rel="stylesheet" href="/styles/importer.css">
+  <link rel="stylesheet" href="/styles/landing-page.css">
   <link rel="stylesheet" href="/styles/sdtd/chat.css">
   <link rel="stylesheet" href="/styles/sdtd/console.css">
   <link rel="stylesheet" href="/styles/sdtd/tickets.css">
@@ -138,7 +145,8 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
 
   <!-- Font awesome 5 -->
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+    crossorigin="anonymous">
 
 
 
@@ -211,17 +219,46 @@
     </div>
   </nav>
 
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-1">
+
+
+  <%- body %>
+
+
+
+    <!-- Footer -->
+    <footer class="footer bg-light">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6 h-100 text-center text-lg-left my-auto">
+            <ul class="list-inline mb-2">
+              <li class="list-inline-item">
+                <a class="white-text" href="/">
+                  <i class="fas fa-home"></i> Home</a>
+              </li>
+              <li class="list-inline-item">&sdot;</li>
+              <li class="list-inline-item">
+                <a class="white-text" href="https://discordapp.com/invite/kuDJG6e" target="_blank">
+                  <i class="fab fa-discord"></i> Support </a>
+              </li>
+              <li class="list-inline-item">&sdot;</li>
+              <li class="list-inline-item">
+                <a class="white-text" href="https://www.paypal.me/catalysmdev" target="_blank">
+                  <i class="fab fa-paypal"></i> Paypal </a>
+              </li>
+              <li class="list-inline-item">&sdot;</li>
+              <li class="list-inline-item">
+
+                <a class="white-text" href="https://www.patreon.com/catalysm" target="_blank">
+                  <i class="fab fa-patreon"></i> Patreon </a>
+              </li>
+            </ul>
+            <p class="text-muted small mb-4 mb-lg-0"> Made with
+              <i class="fas fa-heart"></i> and
+              <i class="fab fa-node-js"></i> by Catalysm | &copy; 2018. All Rights Reserved.</p>
+          </div>
+        </div>
       </div>
-      <div class="col-md-10">
-        <%- body %>
-      </div>
-      <div class="col-md-1">
-      </div>
-    </div>
-  </div>
+    </footer>
 
 </body>
 

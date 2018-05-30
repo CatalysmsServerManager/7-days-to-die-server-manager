@@ -1,126 +1,107 @@
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-12">
-      <div class="jumbotron jumbotron-fluid">
-        <h1 class="display-4">7 Days to die server manager</h1>
-        <p class="lead">Makes managing your server a piece of cake!</p>
-      </div>
+<body>
 
-    </div>
-  </div>
-
-  <div class="row">
-
-    <h2>Beta test</h2>
-  </div>
-
-  <div class="row">
-    <p> This application is currently in beta. It is highly recommended to join the
-      <a href="https://discordapp.com/invite/kuDJG6e">discord server</a> and follow updates</p>
-  </div>
-
-  <div class="row">
-    <div id="carousel-features" class="carousel slide" data-ride="carousel">
-      <ol class="carousel-indicators">
-        <li data-target="#carousel-features" data-slide-to="0" class="active"></li>
-        <li data-target="#carousel-features" data-slide-to="1"></li>
-        <li data-target="#carousel-features" data-slide-to="2"></li>
-      </ol>
-      <div class="carousel-inner" role="listbox">
-        <div class="carousel-item active">
-          <img id='img-feature-discord' src="../../images/meta/feature-discord-blurred.png" alt="First slide">
-          <div class="carousel-caption d-none d-md-block feature-text">
-            <h3>Discord integration</h3>
-            <p>CSMM connects your server to Discord via a chatbridge and notifies you when certain events occur. </p>
-          </div>
+  <!-- Masthead -->
+  <header class="masthead text-white text-center">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-9 mx-auto">
+          <h1 class="mb-5">Catalysms Server Monitor &amp; Manager</h1>
+          <h2>7 Days To Die server manager</h2>
         </div>
-        <div class="carousel-item">
-          <img id='img-feature-dashboard' src="../../images/meta/feature-dashboard-blurred.png" alt="Second slide">
-          <div class="carousel-caption d-none d-md-block feature-text">
-            <h3>Powerful web interface</h3>
-            <p></p>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <img id='img-feature-playerOverview' src="../../images/meta/feature-playerOverview-blurred.png" alt="Third slide">
-          <div class="carousel-caption d-none d-md-block feature-text">
-            <h3>Player statistics</h3>
-            <p></p>
-          </div>
+        <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+          <a href="/sdtdserver/addserver" class="btn btn-block btn-lg btn-primary">Get started</a>
         </div>
       </div>
-      <a class="carousel-control-prev" href="#carousel-features" role="button" data-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-      </a>
-      <a class="carousel-control-next" href="#carousel-features" role="button" data-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-      </a>
     </div>
-  </div>
+  </header>
 
-  <div class="row">
-    <div class="col-12" align='center'>
-      <h2> Our partners: </h2>
-      <br>
-      <a href="/sponsors/ldh">
-        <img src="../../images/meta/letsdohostinglogo.png" width="10%">
-        <br> Lets DO Hosting
-      </a>
+  <!-- Icons Grid -->
+  <section class="features-icons bg-light text-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+            <div class="features-icons-icon d-flex">
+              <i class="fas fa-cloud m-auto text-primary"></i>
+            </div>
+            <h3>Cloud hosted</h3>
+            <p class="lead mb-0">You don't need to get a new VPS or figure out how to install a new mod on your server. Fill in your connection
+              details and you're ready!</p>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+            <div class="features-icons-icon d-flex">
+              <i class="fas fa-cogs m-auto text-primary"></i>
+            </div>
+            <h3>Fully customizable</h3>
+            <p class="lead mb-0">Make your server manager do what you want it to!</p>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="features-icons-item mx-auto mb-0 mb-lg-3">
+            <div class="features-icons-icon d-flex">
+              <i class="far fa-money-bill-alt m-auto text-primary"></i>
+            </div>
+            <h3>Free</h3>
+            <p class="lead mb-0">CSMM costs you nothing! While donators have access to extended features, free users can expect a fully featured
+              server manager.</p>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
+  </section>
 
-</div>
+  <!-- Image Showcases -->
+  <section class="showcase">
+    <div class="container-fluid p-0">
+      <div class="row no-gutters">
 
-<style>
-  .feature-text {
-    -webkit-text-stroke: 1px black;
-    font-size: 200%;
-  }
-
-  h3 {
-    font-size: 200%;
-  }
-</style>
-
-<script>
-  $(document).ready(e => {
-
-    let discordHover = true;
-    let dashboardHover = true;
-    let playerOverviewHover = true;
-
-    $('#img-feature-discord').hover(e => {
-      let element = $('#img-feature-discord')
-      discordHover = discordHover ? false : true;
-      if (discordHover) {
-        element.attr('src', "../../images/meta/feature-discord-blurred.png")        
-      } else {
-        element.attr('src', "../../images/meta/feature-discord.png")  
-      }
-    })
-    
-    $('#img-feature-dashboard').hover(e => {
-      let element = $('#img-feature-dashboard')
-      discordHover = discordHover ? false : true;
-      if (discordHover) {
-        element.attr('src', "../../images/meta/feature-dashboard-blurred.png")        
-      } else {
-        element.attr('src', "../../images/meta/feature-dashboard.png")  
-      }
-    })
-    
-    $('#img-feature-playerOverview').hover(e => {
-      let element = $('#img-feature-playerOverview')
-      discordHover = discordHover ? false : true;
-      if (discordHover) {
-        element.attr('src', "../../images/meta/feature-playerOverview-blurred.png")        
-      } else {
-        element.attr('src', "../../images/meta/feature-playerOverview.png")  
-      }
-    })
+        <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('/images/meta/feature-discord.png');"></div>
+        <div class="col-lg-6 order-lg-1 my-auto showcase-text">
+          <h2>Discord integration</h2>
+          <p class="lead mb-0">Chat between Discord and your server via chatbridge. Execute commands on your server from Discord, let your players
+            view their stats without logging in. See the documentation for a full list!</p>
+        </div>
+      </div>
+      <div class="row no-gutters">
+        <div class="col-lg-6 text-white showcase-img" style="background-image: url('/images/meta/feature-dashboard.png');"></div>
+        <div class="col-lg-6 my-auto showcase-text">
+          <h2>Web interface</h2>
+          <p class="lead mb-0">All configuration is done via the website, no more messing with XMLs! Access the website anywhere, via PC, mobile,
+            tablet or any other device.</p>
+        </div>
+      </div>
+      <div class="row no-gutters">
+        <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('/images/meta/feature-ingame.png');"></div>
+        <div class="col-lg-6 order-lg-1 my-auto showcase-text">
+          <h2>Ingame features</h2>
+          <p class="lead mb-0">CSMM has many ingame features to enhance the experience of your players. Server automation enables you to execute
+            any command at any time interval. Player teleportation, call admin command and much more.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
 
-  })
-</script>
+  <!-- Call to Action -->
+  <section class="call-to-action text-white text-center">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-9 mx-auto">
+          <h2 class="mb-4">Ready to get started?</h2>
+        </div>
+        <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+          <a href="/sdtdserver/addserver" class="btn btn-block btn-lg btn-primary">Add your server!</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+</body>
+
+</html>
