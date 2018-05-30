@@ -23,7 +23,7 @@ module.exports = function sdtdLogs(sails) {
      * @private
      */
     initialize: function (cb) {
-      sails.on('hook:orm:loaded', async function () {
+
         sails.on('hook:sdtdlogs:loaded', async function () {
           try {
             let enabledServers = await SdtdConfig.find({
@@ -41,7 +41,7 @@ module.exports = function sdtdLogs(sails) {
             sails.log.error(`HOOKS - sdtdMotd:initialize - ${error}`);
           }
         });
-      });
+
     },
 
     /**

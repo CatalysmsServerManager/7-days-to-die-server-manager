@@ -29,7 +29,7 @@ module.exports = function sdtdLogs(sails) {
             loggingEnabled: true
           });
           for (let config of enabledServers) {
-            this.start(config.server)
+            await this.start(config.server)
           }
           sails.log.info(`HOOK: Sdtdlogs - Initialized ${loggingInfoMap.size} logging instances`);
           return cb();
