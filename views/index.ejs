@@ -13,6 +13,9 @@
           <a href="/sdtdserver/addserver" class="btn btn-block btn-lg btn-primary">Get started</a>
         </div>
       </div>
+      <div id="system-stats">
+
+      </div>
     </div>
   </header>
 
@@ -103,5 +106,21 @@
 
 
 </body>
+
+
+<script>
+
+  $(document).ready(() => {
+
+    $.get('/api/stats', (stats) => {
+
+      let statsString = `${stats.servers} servers - ${stats.players} players - ${stats.guilds} Discord guilds`;
+      $('#system-stats').text(statsString)
+
+    })
+
+  })
+
+</script>
 
 </html>

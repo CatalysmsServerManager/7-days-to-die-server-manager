@@ -104,6 +104,8 @@ module.exports.routes = {
   //  ╠═╣╠═╝║  ║╣ ║║║ ║║╠═╝║ ║║║║║ ║ ╚═╗
   //  ╩ ╩╩  ╩  ╚═╝╝╚╝═╩╝╩  ╚═╝╩╝╚╝ ╩ ╚═╝
 
+  'get /api/stats': 'etc.get-system-stats',
+
   // SDTDSERVER
 
   'get /api/sdtdserver/executeCommand': 'SdtdServerController.execute-command',
