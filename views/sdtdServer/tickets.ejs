@@ -7,7 +7,6 @@
       <table class="table">
         <thead>
           <tr>
-            <th>#</th>
             <th>Title</th>
             <th>Reporter</th>
             <th>Opened on</th>
@@ -19,11 +18,8 @@
               <tr>
                 <td scope="row">
                   <a href="/sdtdticket/<%= ticket.id %>">
-                    <%= ticket.id %>
+                    <%= ticket.title %>
                   </a>
-                </td>
-                <td>
-                  <%= ticket.title %>
                 </td>
                 <td>
                   <a href="/player/<%= ticket.player.id %>/profile">
@@ -32,7 +28,7 @@
                 </td>
                 <td>
                   <% let ticketCreatedDate = new Date(ticket.createdAt); %>
-                  <%= ticketCreatedDate.toDateString() %>
+                    <%= ticketCreatedDate.toDateString() %>
                 </td>
               </tr>
               <% } %>
@@ -52,7 +48,6 @@
       <table class="table">
         <thead>
           <tr>
-            <th>#</th>
             <th>Title</th>
             <th>Reporter</th>
             <th>Opened on</th>
@@ -64,11 +59,8 @@
               <tr>
                 <td scope="row">
                   <a href="/sdtdticket/<%= ticket.id %>">
-                    <%= ticket.id %>
+                    <%= ticket.title %>
                   </a>
-                </td>
-                <td>
-                  <%= ticket.title %>
                 </td>
                 <td>
                   <a href="/player/<%= ticket.player.id %>/profile">
@@ -76,9 +68,9 @@
                   </a>
                 </td>
                 <td>
-                    <% let ticketCreatedDate = new Date(ticket.createdAt); %>
+                  <% let ticketCreatedDate = new Date(ticket.createdAt); %>
                     <%= ticketCreatedDate.toDateString() %>
-                  </td>
+                </td>
               </tr>
               <% } %>
                 <% }) %>

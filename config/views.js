@@ -41,8 +41,9 @@ module.exports.views = {
      *                                                                          *
      ***************************************************************************/
 
-  layout: 'layouts/defaultLayout',
+  layout: 'layouts/applicationLayout',
 
   locals: {
+
   },
 };
