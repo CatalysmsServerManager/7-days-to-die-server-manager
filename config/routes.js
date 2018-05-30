@@ -73,9 +73,7 @@ module.exports.routes = {
      *                                                                          *
      ***************************************************************************/
 
-  'get /sdtdserver/addserver': {
-    view: 'sdtdServer/addserver'
-  },
+  'get /sdtdserver/addserver': "SdtdServerController.add-server-view",
 
   'get /sdtdserver/:serverId/dashboard': 'SdtdServerController.dashboard',
   'get /sdtdserver/:serverId/console': 'SdtdServerController.console',
