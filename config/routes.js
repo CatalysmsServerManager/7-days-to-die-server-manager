@@ -31,20 +31,18 @@ module.exports.routes = {
     }
   },
 
-  '/about': {
-    view: 'about'
-  },
-
-  '/changelog': {
-    view: 'meta/changeLog'
-  },
-
   '/donate': {
-    view: 'meta/donate'
+    view: 'meta/donate',
+    locals: {
+      layout: 'layouts/homepageLayout'
+    }
   },
 
   '/sponsors/ldh': {
-    view: 'meta/sponsors/letsdohosting'
+    view: 'meta/sponsors/letsdohosting',
+    locals: {
+      layout: 'layouts/homepageLayout'
+    }
   },
 
   '/auth/steam': {
@@ -88,7 +86,7 @@ module.exports.routes = {
   'get /sdtdserver/:serverId/tickets': 'SdtdTicket.server-tickets-view',
   'get /sdtdserver/:serverId/analytics': 'SdtdServerController/historicalData.view-analytics',
   'get /sdtdserver/:serverId/economy': 'SdtdServerController/economy.economy-view',
-  'get /shop/:serverId' : "ShopController.view-shop",
+  'get /shop/:serverId': "ShopController.view-shop",
 
   'get /player/:playerId/profile': 'PlayerController.profile',
 
@@ -117,7 +115,7 @@ module.exports.routes = {
   'get /api/sdtdserver/findwriteablechannelsinguild': 'SdtdServerController/discordBot.find-writeable-channels-in-guild',
   'get /api/sdtdserver/onlinestatus': 'SdtdServerController.is-online',
   'get /api/sdtdserver/fps': 'SdtdServerController.get-fps',
-  'get /api/sdtdserver/allowedCommands' : 'CustomCommandController.get-allowed-commands',
+  'get /api/sdtdserver/allowedCommands': 'CustomCommandController.get-allowed-commands',
 
   // Economy
 
@@ -139,15 +137,15 @@ module.exports.routes = {
   'post /api/sdtdserver/economy/module/killearner/playerkill': 'SdtdServerController/economy.set-kill-earner-playerkill',
   'post /api/sdtdserver/economy/module/killearner/zombiekill': 'SdtdServerController/economy.set-kill-earner-zombiekill',
 
-  'post /api/player/balance' : "PlayerController.set-balance",
+  'post /api/player/balance': "PlayerController.set-balance",
 
   // Shop Listing
 
   'get /api/shop/listing': 'ShopController.get-listings',
-  "post /api/shop/listing" : "ShopController.listing-add",
-  "delete /api/shop/listing" : "ShopController.listing-delete",
-  "patch /api/shop/listing" : "ShopController.listing-edit",
-  "post /api/shop/listing/buy" : "ShopController.listing-buy",
+  "post /api/shop/listing": "ShopController.listing-add",
+  "delete /api/shop/listing": "ShopController.listing-delete",
+  "patch /api/shop/listing": "ShopController.listing-edit",
+  "post /api/shop/listing/buy": "ShopController.listing-buy",
 
   // Historical data
 
@@ -176,11 +174,11 @@ module.exports.routes = {
 
   // Cron
 
-  'post /api/sdtdserver/cron' : "cron-job.create",
-  'get /api/sdtdserver/cron/list' : 'cron-job.list',
-  'delete /api/sdtdserver/cron' : 'cron-job.delete',
+  'post /api/sdtdserver/cron': "cron-job.create",
+  'get /api/sdtdserver/cron/list': 'cron-job.list',
+  'delete /api/sdtdserver/cron': 'cron-job.delete',
   'post /api/sdtdserver/cron/status': 'cron-job.enable',
-  'delete /api/sdtdserver/cron/status': 'cron-job.disable', 
+  'delete /api/sdtdserver/cron/status': 'cron-job.disable',
   'post /api/sdtdserver/cron/test': 'cron-job.test',
   'post /api/sdtdserver/cron/notifications': 'cron-job.enable-notifications',
   'delete /api/sdtdserver/cron/notifications': 'cron-job.disable-notifications',
@@ -193,8 +191,8 @@ module.exports.routes = {
   'post /api/sdtdserver/countryban/country': 'SdtdServerController/countryBan.add-country',
   'delete /api/sdtdserver/countryban/country': 'SdtdServerController/countryBan.remove-country',
 
-  'post /api/sdtdserver/countryban/ban' : "SdtdServerController/countryBan.enable-ban",
-  'delete /api/sdtdserver/countryban/ban' : "SdtdServerController/countryBan.disable-ban",
+  'post /api/sdtdserver/countryban/ban': "SdtdServerController/countryBan.enable-ban",
+  'delete /api/sdtdserver/countryban/ban': "SdtdServerController/countryBan.disable-ban",
 
   'get /api/sdtdserver/countryban/whitelist': 'SdtdServerController/countryBan.get-whitelist',
   'post /api/sdtdserver/countryban/whitelist': 'SdtdServerController/countryBan.add-to-whitelist',
@@ -210,14 +208,14 @@ module.exports.routes = {
   'post /api/sdtdserver/commands/prefix': "SdtdServerController/commands.set-prefix",
   'get /api/sdtdserver/commands/prefix': "SdtdServerController/commands.get-prefix",
 
-  'delete /api/sdtdserver/commands/custom' : 'CustomCommandController/delete-command',
-  'post /api/sdtdserver/commands/custom' : 'CustomCommandController/create-command',
-  'post /api/sdtdserver/commands/custom/name' : 'CustomCommandController/update-name',
-  'post /api/sdtdserver/commands/custom/commandstoexecute' : 'CustomCommandController/update-commands-to-execute',
-  'post /api/sdtdserver/commands/custom/cost' : 'CustomCommandController/update-cost',
-  'post /api/sdtdserver/commands/custom/enabled' : 'CustomCommandController/update-enabled',
-  'post /api/sdtdserver/commands/custom/delay' : 'CustomCommandController/update-delay',
-  'post /api/sdtdserver/commands/custom/timeout' : 'CustomCommandController/update-timeout',
+  'delete /api/sdtdserver/commands/custom': 'CustomCommandController/delete-command',
+  'post /api/sdtdserver/commands/custom': 'CustomCommandController/create-command',
+  'post /api/sdtdserver/commands/custom/name': 'CustomCommandController/update-name',
+  'post /api/sdtdserver/commands/custom/commandstoexecute': 'CustomCommandController/update-commands-to-execute',
+  'post /api/sdtdserver/commands/custom/cost': 'CustomCommandController/update-cost',
+  'post /api/sdtdserver/commands/custom/enabled': 'CustomCommandController/update-enabled',
+  'post /api/sdtdserver/commands/custom/delay': 'CustomCommandController/update-delay',
+  'post /api/sdtdserver/commands/custom/timeout': 'CustomCommandController/update-timeout',
 
   'post /api/sdtdserver/commands/calladmin': "SdtdServerController/commands.enable-calladmin",
   'delete /api/sdtdserver/commands/calladmin': "SdtdServerController/commands.disable-calladmin",
