@@ -35,16 +35,76 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    
+
     try {
       let server = await SdtdServer.findOne(inputs.serverId);
       if (_.isUndefined(server)) {
         return exits.notFound();
       }
-      
+
       await sails.hooks.sdtdlogs.stop(server.id);
       sails.log.warn(`VIEW - SdtdServer:delete - Deleting server ${server.name}`);
-      
+
+      await CronJob.destroy({
+        server: server.id
+      })
+
+      await CustomCommand.destroy({
+        server: server.id
+      });
+
+      await HistoricalInfo.destroy({
+        server: server.id
+      })
+
+      let ticketsToDestroy = await SdtdTicket.find({
+        server: server.id
+      })
+
+      await TicketComment.destroy({
+        ticket: ticketsToDestroy.map(ticket => ticket.id)
+      })
+
+      await SdtdTicket.destroy({
+        server: server.id
+      })
+
+      let playersToDestroy = await Player.find({
+        server: server.id
+      });
+
+      await PlayerClaimItem.destroy({
+        player: playersToDestroy.map(player => player.id)
+      })
+
+      await PlayerTeleport.destroy({
+        player: playersToDestroy.map(player => player.id)
+      })
+
+      await PlayerUsedCommand.destroy({
+        player: playersToDestroy.map(player => player.id)
+      });
+
+
+      await Player.destroy({
+        server: server.id
+      })
+
+      await ShopListing.destroy({
+        server: server.id
+      });
+
+      await TrackingInfo.destroy({
+        server: server.id
+      })
+
+      await SdtdConfig.destroy({
+        server: server.id
+      });
+      await SdtdServer.destroy({
+        id: server.id
+      });
+
       sevenDays.executeCommand({
         ip: server.ip,
         port: server.webPort,
@@ -58,19 +118,6 @@ module.exports = {
           sails.log.warn(`VIEW - SdtdServer:delete- Error while trying to delete token - ${error}`);
         }
       })
-
-      await HistoricalInfo.destroy({
-        server: server.id
-      })
-      await SdtdConfig.destroy({
-        server: server.id
-      });
-      await Player.destroy({
-        server: server.id
-      });
-      await SdtdServer.destroy({
-        id: server.id
-      });
 
       exits.success();
 
