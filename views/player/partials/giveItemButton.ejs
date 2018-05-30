@@ -69,7 +69,7 @@
           success: (data, status, xhr) => {
             let dataString = new String();
             data.forEach((item) => {
-              dataString += `${item} `
+              dataString += `${item} | `
             })
             $('#player-give-item-possible-items').html(dataString)
           },
