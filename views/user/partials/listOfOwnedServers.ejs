@@ -132,10 +132,13 @@
           }
         });
 
-        sendRequestAndUpdateFps(server)
-        io.socket.get('/sdtdserver/' + server.id + '/socket', function (response) {
+        sendRequestAndUpdateFps(server);
+        io.socket.get('/sdtdserver/' + server.id + '/socket', (response) => {
           sendRequestAndUpdatePlayers(server);
         });
+        io.socket.on('memUpdate', memUpdate => {
+          sendRequestAndUpdateFps(server);
+        })
 
         io.socket.on('playerConnected', (connectedMessage) => {
           sendRequestAndUpdatePlayers(server);
@@ -144,9 +147,8 @@
         io.socket.on('playerDisconnected', (disconnectedMessage) => {
           sendRequestAndUpdatePlayers(server);
         })
-
-
       })
+
     })
 
     function sendRequestAndUpdateFps(server) {
@@ -155,11 +157,6 @@
       $.get('/api/sdtdserver/fps', { serverId: serverId }, response => {
         $(`#server-${server.id}-fps`).text(`${response} FPS`)
       })
-
-
-        io.socket.on('memUpdate', memUpdate => {
-          $(`#server-${server.id}-fps`).text(`${memUpdate.fps} FPS`);
-        })
 
     }
 
