@@ -154,111 +154,13 @@
 
 <body>
 
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="/">CSMM</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-      aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="/">
-            <i class="fas fa-home"></i> Home
-          </a>
-        </li>
+    <%- include("../includes/header.ejs") %>
 
-        <% 
-        if (!_.isUndefined(req.session) ) {
-      if (!_.isUndefined(req.session.userId)) {
-        %>
+    <%- body %>
 
-          <li class="nav-item">
-            <a id="user-dashboard-link" class="nav-link" href="/user/<%= req.session.userId %>/dashboard">
-              <i class="fas fa-list-ul"></i> Server overview
-            </a>
-          </li>
+    <%- include("../includes/footer.ejs") %>
 
-
-          <li class="nav-item">
-            <a class="nav-link" href="/sdtdserver/addserver">
-              <i class="fas fa-plus"></i> Add a server
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="/user/<%= req.session.userId %>/profile">
-              <i class="fas fa-user-circle"></i> Your profile
-            </a>
-          </li>
-          <li class="nav-item">
-            <img id="steam-avatar" src="">
-          </li>
-          <a class="nav-link" id="logout-button" href="/auth/logout">
-            <i class="fas fa-sign-out-alt"></i> Logout
-          </a>
-          <% } else { %>
-            <a class="nav-item" id="steam-login-button" href="/auth/steam">
-              <img src="https://steamcommunity-a.akamaihd.net/public/images/signinthroughsteam/sits_01.png">
-            </a>
-            <% } %>
-              <% } %>
-                <li class="nav-item">
-                  <a target="_blank" class="nav-link" href="http://csmm.readthedocs.io">
-                    <i class="fas fa-life-ring"></i> Documentation
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/donate">
-                    <i class="fas fa-donate"></i> Donate
-                  </a>
-                </li>
-      </ul>
-
-    </div>
-  </nav>
-
-
-
-  <%- body %>
-
-
-
-    <!-- Footer -->
-    <footer class="footer bg-light">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-6 h-100 text-center text-lg-left my-auto">
-            <ul class="list-inline mb-2">
-              <li class="list-inline-item">
-                <a class="white-text" href="/">
-                  <i class="fas fa-home"></i> Home</a>
-              </li>
-              <li class="list-inline-item">&sdot;</li>
-              <li class="list-inline-item">
-                <a class="white-text" href="https://discordapp.com/invite/kuDJG6e" target="_blank">
-                  <i class="fab fa-discord"></i> Support </a>
-              </li>
-              <li class="list-inline-item">&sdot;</li>
-              <li class="list-inline-item">
-                <a class="white-text" href="https://www.paypal.me/catalysmdev" target="_blank">
-                  <i class="fab fa-paypal"></i> Paypal </a>
-              </li>
-              <li class="list-inline-item">&sdot;</li>
-              <li class="list-inline-item">
-
-                <a class="white-text" href="https://www.patreon.com/catalysm" target="_blank">
-                  <i class="fab fa-patreon"></i> Patreon </a>
-              </li>
-            </ul>
-            <p class="text-muted small mb-4 mb-lg-0"> Made with
-              <i class="fas fa-heart"></i> and
-              <i class="fab fa-node-js"></i> by Catalysm | &copy; 2018. All Rights Reserved.</p>
-          </div>
-        </div>
-      </div>
-    </footer>
 
 </body>
 

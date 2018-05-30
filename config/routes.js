@@ -25,7 +25,10 @@ module.exports.routes = {
      ***************************************************************************/
 
   '/': {
-    view: 'index'
+    view: 'index',
+    locals: {
+      layout: 'layouts/homepageLayout'
+    }
   },
 
   '/about': {
