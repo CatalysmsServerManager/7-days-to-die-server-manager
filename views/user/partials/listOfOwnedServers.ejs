@@ -3,7 +3,9 @@
   <div id="list-of-owned-servers" aria-multiselectable="true">
 
     <% if (ownedServers.length === 0) { %>
-      <p>No servers added yet!</p>
+      <div class="alert alert-warning" role="alert">
+        <strong>It seems like you are neither an owner or admin of any server! </strong>
+      </div>
       <% } %>
 
         <table class="table table-hover table-responsive">
@@ -37,30 +39,7 @@
                           <i class="fa fa-cog" aria-hidden="true"></i> Settings
                         </a>
                     </td>
-                    <td>
-                      <% const ticketsLink = '/sdtdserver/' + server.id + '/tickets' %>
-                        <a href='<%= ticketsLink %>' class="btn btn-sm btn-primary">
-                          <em class="glyphicon glyphicon-align-justify"></em>
-                          <i class="fas fa-question"></i> Tickets
-                          <span id="sdtd-server-<%= server.id %>-tickets-badge" class="badge badge-secondary">
-                          </span>
-                        </a>
-                    </td>
-                    <td>
-                      <% const playersLink = '/sdtdserver/' + server.id + '/players' %>
-                        <a name="" id="" class="btn btn-primary btn-sm" href="<%= playersLink %>" role="button">
-                          <i class="far fa-address-card"></i> Players</a>
-                    </td>
-                    <td>
-                      <% const analytics = '/sdtdserver/' + server.id + '/analytics' %>
-                        <a name="" id="" class="btn btn-primary btn-sm" href="<%= analytics %>" role="button">
-                          <i class="far fa-chart-bar"></i> Analytics</a>
-                    </td>
-                    <td>
-                      <% const economy = '/sdtdserver/' + server.id + '/economy' %>
-                        <a name="" id="" class="btn btn-primary btn-sm" href="<%= economy %>" role="button">
-                          <i class="far fa-money-bill-alt"></i> Economy (beta)</a>
-                    </td>
+
 
                     <td>
 
@@ -117,20 +96,6 @@
       let listOfServers = window.SAILS_LOCALS.ownedServers
 
       listOfServers.forEach(server => {
-        $.ajax({
-          url: `/api/sdtdticket/opentickets`,
-          data: {
-            serverId: server.id
-          },
-          success: (data, status, xhr) => {
-            let opentickets = data;
-            $(`#sdtd-server-${server.id}-tickets-badge`).text(opentickets.length)
-
-          },
-          error: (xhr, status, error) => {
-            console.log(error)
-          }
-        });
 
         sendRequestAndUpdateFps(server);
         io.socket.get('/sdtdserver/' + server.id + '/socket', (response) => {

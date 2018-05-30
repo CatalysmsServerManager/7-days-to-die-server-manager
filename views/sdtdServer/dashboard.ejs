@@ -1,106 +1,140 @@
 <%- exposeLocalsToBrowser() %>
 
-  <body>
     <div class="container-fluid">
-      <div class="row">
-        <div class="col-1">
-          <p id='server-online-status'></p>
-        </div>
-        <div class="col-11">
-          <h1>
-            <%= server.name %>
-          </h1>
-        </div>
-      </div>
-      <div class="row">
 
-        <div class="col-md-4">
+        <h1>
+            <%= server.name %> Dashboard</h1>
 
-          <div id="dashboard-title" class="page-header">
-            <% if(!_.isUndefined(server.stats) && !_.isUndefined(server.serverInfo)) { %>
-              <%- include('./partials/onlinePlayers', {server: server}) %>
-                <% } %>
-          </div>
-        </div>
-        <% if(!_.isUndefined(server.stats) && !_.isUndefined(server.serverInfo)) { %>
-          <div class="col-md-4">
-            <%- include('./partials/basicServerInfo', {server: server}) %>
-          </div>
-          <div class="col-md-4">
-            <%- include('./partials/serverControl', {server: server}) %>
-          </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6">
-          <%- include('./partials/chat/chatWindow', {server: server}) %>
-            <%- include('./partials/chat/chatControls', {server: server}) %>
+        <%- include('./partials/restartServer', {server: server}) %>
 
-        </div>
-        <div class="col-md-6">
-          <%- include('./partials/console/consoleWindow', {server: server}) %>
-            <%- include('./partials/console/consoleControls', {server: server}) %>
-        </div>
-
-      </div>
-      <% } else { %>
-        <h2> ERROR </h2>
-        <br>
-        <p> Could not connect to your server! </p>
-        <br>
-
-        <% const deleteLink = '/sdtdserver/' + server.id + '/delete' %>
-          <a href='<%= deleteLink %>'>
-            <button id="delete-server-button" class="btn btn-default btn-danger" type="button">
-              <em class="glyphicon glyphicon-align-justify"></em>
-              <i class="fa fa-trash-o" aria-hidden="true"></i> Delete server
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-lg btn-danger" data-toggle="modal" data-target="#delete-server-button">
+                <i class="fas fa-trash-alt"></i> Delete
             </button>
-          </a>
 
-          <% const settingsLink = '/sdtdserver/' + server.id + '/settings' %>
-            <a href='<%= settingsLink %>'>
-              <button id="settings-server-button" class="btn btn-default btn-primary" type="button">
-                <em class="glyphicon glyphicon-align-justify"></em>
-                <i class="fa fa-cog" aria-hidden="true"></i> Change settings
-              </button>
-            </a>
+            <!-- Modal -->
+            <div class="modal fade" id="delete-server-button" tabindex="-1" role="dialog" aria-labelledby="delete-server-modal" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="delete-server-modal">Delete server</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                Are you sure?
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <% const deleteLink = '/sdtdserver/' + server.id + '/delete' %>
+                                <a href='<%= deleteLink %>'>
+                                    <button id="delete-server-button" class="btn btn-default btn-danger" type="button">
+                                        <em class="glyphicon glyphicon-align-justify"></em>
+                                        Delete server
+                                    </button>
+                                </a>
+
+                                <button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
-            <% } %>
+            <% if(!_.isUndefined(server.stats) && !_.isUndefined(server.serverInfo)) { %>
+                <div class="row">
+
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-users"></i> Online players
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">
+
+                                <%- include('./partials/onlinePlayers', {server: server}) %>
+
+
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-info"></i> Server info
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">
+
+                                <%- include('./partials/basicServerInfo', {server: server}) %>
+
+                            </p>
+                        </div>
+                    </div>
+
+
+
+                </div>
+                <% } %>
+
+
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-comments"></i> Chat
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">
+
+                                <%- include('./partials/chat/chatWindow', {server: server}) %>
+                                    <%- include('./partials/chat/chatControls', {server: server}) %>
+
+                            </p>
+                        </div>
+                    </div>
+
+
+
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-terminal"></i> Console
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">
+                                <%- include('./partials/console/consoleWindow', {server: server}) %>
+                                    <%- include('./partials/console/consoleControls', {server: server}) %>
+                            </p>
+                        </div>
+                    </div>
+
+
+
     </div>
-  </body>
 
 
-  <script>
-
-    $(document).ready(function () {
-      getOnlineStatus();
-      setInterval(() => {
-        getOnlineStatus();
-      }, 60000)
+    <style>
+        .card {
+            margin: 1%
+        }
+    </style>
 
 
-      function getOnlineStatus() {
-        $.ajax({
-          url: '/api/sdtdserver/onlinestatus',
-          data: {
-            serverId: window.SAILS_LOCALS.server.id
-          },
-          success: serverOnline => {
-            if (serverOnline) {
-              $("#server-online-status").text("ONLINE").addClass("bg-success").removeClass(
-                "bg-danger");;
 
-            } else {
-              $("#server-online-status").text("OFFLINE").addClass("bg-danger").removeClass(
-                "bg-success");
-            }
-          },
-          error: error => {
-            console.log(error)
-          }
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: `/api/sdtdticket/opentickets`,
+                data: {
+                    serverId: <%= server.id %>
+                  },
+                success: (data, status, xhr) => {
+                    let opentickets = data;
+                    $('#sdtd-server-<%= server.id %>-tickets-badge').text(opentickets.length)
+
+                },
+                error: (xhr, status, error) => {
+                    console.log(error)
+                }
+            });
         })
-      }
-    })
-
-
-  </script>
+    </script>

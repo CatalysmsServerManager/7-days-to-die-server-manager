@@ -11,18 +11,29 @@
         <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
 
             <li class="nav-item">
+                <a class="nav-link" href="/sdtdserver/addserver">
+                    <i class="fas fa-plus"></i> Add a server
+                </a>
+            </li>
+
+            <li class="nav-item">
                 <a id="user-dashboard-link" class="nav-link" href="/user/<%= req.session.userId %>/dashboard">
                     <i class="fas fa-list-ul"></i> Server overview
                 </a>
             </li>
 
 
-            <li class="nav-item">
-                <a class="nav-link" href="/sdtdserver/addserver">
-                    <i class="fas fa-plus"></i> Add a server
-                </a>
-            </li>
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Menu Levels">
 
+                <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti" data-parent="#exampleAccordion">
+                    <i class="fas fa-server"></i>
+                    <span class="nav-link-text">Your servers</span>
+                </a>
+
+                <ul class="sidenav-second-level collapse" id="collapseMulti">
+
+                </ul>
+            </li>
 
         </ul>
 
@@ -43,7 +54,7 @@
 
             <a class="nav-link" id="logout-button" href="/auth/logout">
                 <i class="fas fa-sign-out-alt"></i> Logout
-              </a>
+            </a>
 
 
             <li class="nav-item">
@@ -60,3 +71,70 @@
 
 
 </nav>
+
+
+<script>
+    $(document).ready(() => {
+        let loggedInUserId = <%- req.session.userId %>;
+
+        $.ajax({
+            url: "/api/user/ownedservers",
+            data: {
+                userId: loggedInUserId
+            },
+            success: (data) => {
+                for (const server of data) {
+                    const dashboardLink = '/sdtdserver/' + server.id + '/dashboard'
+                    const settingsLink = '/sdtdserver/' + server.id + '/settings'
+                    const ticketsLink = '/sdtdserver/' + server.id + '/tickets'
+                    const economy = '/sdtdserver/' + server.id + '/economy'
+                    const analytics = '/sdtdserver/' + server.id + '/analytics'
+                    const playersLink = '/sdtdserver/' + server.id + '/players'
+
+                    let serverNavBarEntry = $('#collapseMulti').append(` <li>
+    <a class="nav-link-collapse collapsed" data-toggle="collapse" href="#server-${server.id}-nav">${server.name}</a>
+    <ul class="sidenav-third-level collapse" id="server-${server.id}-nav">
+        <li>
+                <a href='${dashboardLink}'>
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+        </li>
+        <li>
+
+                <a href='${settingsLink}'>
+                    <i class="fa fa-cog" aria-hidden="true"></i> Settings
+                </a>
+        </li>
+        <li>
+                <a href='${ticketsLink}'>
+                    <em class="glyphicon glyphicon-align-justify"></em>
+                    <i class="fas fa-question"></i> Support tickets
+                    </span>
+                </a>
+        </li>
+        <li>
+        
+                        <a href=" ${economy}" role="button">
+                          <i class="far fa-money-bill-alt"></i> Economy</a>
+        </li>
+        <li>
+                        <a href=" ${analytics}" role="button">
+                          <i class="far fa-chart-bar"></i> Analytics</a>
+        </li>
+        <li>
+                
+                        <a href=" ${playersLink}" role="button">
+                          <i class="far fa-address-card"></i> Players</a>
+        </li>
+    </ul>
+</li>
+                    `);
+                }
+            },
+            error: (xhr, status, error) => {
+                console.log(xhr)
+            }
+        })
+    })
+
+</script>
