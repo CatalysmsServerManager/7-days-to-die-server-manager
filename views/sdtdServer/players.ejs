@@ -5,13 +5,21 @@
     <div class="container-fluid">
       <h1>Player overview</h1>
       <% include ./partials/backToDashboard %>
-        <div class="row">
-          <button id="reload-players-btn" type="button" class="btn btn-primary">Update player data</button>
-          <small>If you have a large server, this may take a while</small>
+
+      <% if(players.length === 0) { %>
+      <div class="row">
+        <div class="col-12">
+          <div class="alert alert-warning" role="alert">
+            <strong>No players detected! CSMM will load player data continually. As players log in and out, execute commands, ... you will see their data pop up here</strong>
+          </div>
         </div>
+      </div>
+      <% } %>
+
+
         <div class="row">
           <div class="col-md-12">
-            <div id="loading-indicator"><i class="fa fa-cogs" aria-hidden="true"></i>Crunching the latest data. This page will reload when finished</div>
+
             <table id='players-overview' class="table display hover">
               <thead>
                 <tr>
@@ -106,26 +114,6 @@
         ]
       });
 
-      $('#reload-players-btn').click(e => {
-        e.preventDefault();
-        $('#players-overview').fadeOut();
-        $('#loading-indicator').fadeIn();
-
-
-        $.ajax({
-          url: '/api/sdtdserver/players',
-          data: {
-            serverId: window.SAILS_LOCALS.server.id,
-            onlyOnline: false
-          },
-          success: (data, status, xhr) => {
-            window.location.reload();
-          },
-          error: (xhr, status, error) => {
-            console.log(`Could not update players! error: ${error}`)
-          }
-        })
-      })
     });
 
   </script>
