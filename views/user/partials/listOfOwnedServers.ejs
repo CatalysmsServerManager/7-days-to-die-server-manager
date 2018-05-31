@@ -17,7 +17,7 @@
 
               <tr>
 
-                <td>
+                <td id="server-<%= server.id %>-name">
                   <%= server.name %>
                 </td>
                 <% let playersId = `server-${server.id}-players` %>
@@ -96,6 +96,14 @@
       let listOfServers = window.SAILS_LOCALS.ownedServers
 
       listOfServers.forEach(server => {
+
+        $.get('/api/sdtdserver/onlinestatus', { serverId: server.id }, onlineStatus => {
+
+          let elementToAdd = `<i class="fas fa-circle ${onlineStatus ? "text-success" : "text-danger"}"></i> `
+
+          $(`#server-${server.id}-name`).prepend(elementToAdd)
+        })
+
 
         sendRequestAndUpdateFps(server);
         io.socket.get('/sdtdserver/' + server.id + '/socket', (response) => {
