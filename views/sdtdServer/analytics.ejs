@@ -1,8 +1,81 @@
 <%- exposeLocalsToBrowser() %>
 
-<div class="row">
-    <h1><%= server.name %> analytics</h1>
-</div>
+    <div class="container-fluid">
+
+        <h1>
+            <%= server.name %> analytics</h1>
+
+        <button id="loadOlder-btn" type="button" class="btn btn-primary">Older</button>
+        <button id="loadNewer-btn" type="button" class="btn btn-secondary">Newer</button>
+        <button id="reload-btn" type="button" class="btn btn-warning">Reload</button>
 
 
-<%- include('./partials/historicalData/chart-memUpdate.ejs', {server: server}) %>
+        <div class="form-group">
+            <label for="charts-limit">Limit data</label>
+            <input type="number" class="form-control" name="charts-limit" id="charts-limit" aria-describedby="charts-limit-help" value="250">
+            <small id="charts-limit-help" class="form-text text-muted">This is the amount of data that will be drawn into the charts. If you want a more complete view, you can increase
+                this. Be aware that browsers are known to crash when handling loads of data</small>
+        </div>
+
+
+        <%- include('./partials/historicalData/chart-fps.ejs', {server: server}) %>
+        <%- include('./partials/historicalData/chart-players.ejs', {server: server}) %>
+
+
+    </div>
+
+
+
+    <!-- <%- include('./partials/historicalData/chart-memUpdate.ejs', {server: server}) %> -->
+
+
+    <script>
+
+        const minimum = array => Math.min(...array);
+        const maximum = array => Math.max(...array);
+        const average = array => array.reduce((a, b) => a + b, 0) / array.length;
+
+        $(document).ready(() => {
+
+            let skip = 0;
+            const skipStep = 250 // Amount of updates per day for a server running 24/7
+
+            let getLimit = () => {
+                let limit = $("#charts-limit").val();
+                return parseInt(limit)
+            }
+
+            const serverId = <%- server.id %>
+
+                updateCharts(skip, getLimit());
+
+            $('#reload-btn').click(e => {
+                let limit = getLimit();
+                updateCharts(skip, limit)
+            })
+
+            $('#loadOlder-btn').click(e => {
+                let limit = getLimit();
+                skip += parseInt(limit);
+                updateCharts(skip, limit)
+            })
+
+            $('#loadNewer-btn').click(e => {
+                let limit = getLimit();
+                skip -= limit;
+                if (skip < 0) {
+                    skip = 0
+                }
+                updateCharts(skip, limit)
+            })
+
+            function updateCharts(skip, limit) {
+                $.get('/api/sdtdserver/data/memupdate/', { serverId: serverId, skip: skip, limit: limit }, data => {
+                    drawFpsChart(data);
+                    drawPlayersChart(data);
+                })
+            }
+
+        })
+
+    </script>
