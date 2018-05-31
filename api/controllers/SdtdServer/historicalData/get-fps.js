@@ -1,20 +1,12 @@
 module.exports = {
 
 
-    friendlyName: 'Get memUpdate',
+    friendlyName: 'Get FPS',
 
     inputs: {
         serverId: {
             required: true,
             example: 4
-        },
-        skip: {
-            type: 'number',
-            min: 0
-        },
-        limit: {
-            type: 'number',
-            min: 1
         }
 
     },
@@ -27,10 +19,8 @@ module.exports = {
     },
 
     fn: async function (inputs, exits) {
-        let dateStarted = new Date();
 
-        let recordToSkip = inputs.skip ? inputs.skip : 0;
-        let limitRecords = inputs.limit ? inputs.limit : 500;
+        let dateStarted = new Date();
 
         try {
             let dataToSend = await HistoricalInfo.find({
@@ -38,13 +28,17 @@ module.exports = {
                     server: inputs.serverId,
                     type: 'memUpdate'
                 },
-                sort: 'createdAt DESC',
-                skip: recordToSkip,
-                limit: limitRecords
+                limit: 5000
             })
             let dateEnded = new Date();
-            sails.log.debug(`Retrieved all historical data - took ${dateEnded - dateStarted} ms`)
-            return exits.success(dataToSend);
+            sails.log.debug(`Retrieved FPS data - took ${dateEnded - dateStarted} ms`)
+            return exits.success(dataToSend.map(dataPoint => {
+                return {
+                    createdAt: dataPoint.createdAt,
+                    fps: dataPoint.fps
+                }
+            }));
+
         } catch (error) {
             return exits.success(0)
         }

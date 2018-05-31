@@ -150,6 +150,7 @@ module.exports.routes = {
   // Historical data
 
   'get /api/sdtdserver/data/memupdate': 'SdtdServerController/historicalData.get-mem-update',
+  'get /api/sdtdserver/data/fps': 'SdtdServerController/historicalData.get-fps',
 
   // Tickets
 
