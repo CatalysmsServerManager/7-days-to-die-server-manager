@@ -43,7 +43,7 @@ module.exports = {
                 limit: limitRecords
             })
             let dateEnded = new Date();
-            sails.log.debug(`Retrieved all historical data - took ${dateEnded - dateStarted} ms`)
+            sails.log.debug(`Retrieved ${dataToSend.length} records of historical data - took ${dateEnded - dateStarted} ms`)
             return exits.success(dataToSend);
         } catch (error) {
             return exits.success(0)
