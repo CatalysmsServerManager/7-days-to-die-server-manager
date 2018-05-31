@@ -28,9 +28,13 @@
 
     function drawFpsChart(data) {
         const fpsChartCanvas = $("#fps-chart");
-        fpsChartCanvas.empty();
+  
+        if (window.fpsChart) {
+                window.fpsChart.destroy()
+            }
+    
 
-        var fpsChart = new Chart(fpsChartCanvas, {
+        window.fpsChart = new Chart(fpsChartCanvas, {
             type: 'line',
             data: {
                 datasets: [

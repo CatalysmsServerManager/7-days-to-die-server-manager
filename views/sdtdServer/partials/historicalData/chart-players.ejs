@@ -27,10 +27,13 @@
     
     
         function drawPlayersChart(data) {
-            const fpsChartCanvas = $("#players-chart");
-            fpsChartCanvas.empty();
+            const playersChartCanvas = $("#players-chart");
+
+            if (window.playersChart) {
+                window.playersChart.destroy()
+            }
     
-            var fpsChart = new Chart(fpsChartCanvas, {
+           window.playersChart = new Chart(playersChartCanvas, {
                 type: 'line',
                 data: {
                     datasets: [
