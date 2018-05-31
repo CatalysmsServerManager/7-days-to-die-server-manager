@@ -99,8 +99,9 @@
                     const analytics = '/sdtdserver/' + server.id + '/analytics'
                     const playersLink = '/sdtdserver/' + server.id + '/players'
 
+
                     let serverNavBarEntry = $('#collapseMulti').append(` <li>
-    <a class="nav-link-collapse collapsed" data-toggle="collapse" href="#server-${server.id}-nav">${server.name}</a>
+    <a id="server-${server.id}-nav-title" class="nav-link-collapse collapsed" data-toggle="collapse" href="#server-${server.id}-nav">${server.name}</a>
     <ul class="sidenav-third-level collapse" id="server-${server.id}-nav">
         <li>
                 <a href='${dashboardLink}'>
@@ -137,6 +138,15 @@
     </ul>
 </li>
                     `);
+
+
+                    $.get('/api/sdtdserver/onlinestatus', { serverId: server.id }, onlineStatus => {
+
+                        let elementToAdd = `<i class="fas fa-circle ${onlineStatus ? "text-success" : "text-danger"}"></i> `
+
+                        $(`#server-${server.id}-nav-title`).prepend(elementToAdd)
+                    })
+
                 }
             },
             error: (xhr, status, error) => {

@@ -2,7 +2,7 @@
 
     <div class="container-fluid">
 
-        <h1>
+        <h1 id="server-name">
             <%= server.name %> Dashboard</h1>
 
         <%- include('./partials/restartServer', {server: server}) %>
@@ -122,6 +122,14 @@
 
     <script>
         $(document).ready(function () {
+
+            $.get('/api/sdtdserver/onlinestatus', { serverId: <%= server.id %> }, onlineStatus => {
+
+                let elementToAdd = `<i class="fas fa-circle ${onlineStatus ? "text-success" : "text-danger"}"></i> `
+
+                $(`#server-name`).prepend(elementToAdd)
+            })
+
             $.ajax({
                 url: `/api/sdtdticket/opentickets`,
                 data: {

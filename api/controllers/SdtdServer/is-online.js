@@ -1,3 +1,5 @@
+var sevenDays = require('machinepack-7daystodiewebapi');
+
 module.exports = {
 
     friendlyName: 'is online',
@@ -30,8 +32,35 @@ module.exports = {
      */
 
     fn: async function (inputs, exits) {
-        let status = await sails.helpers.sdtd.checkIfAvailable(inputs.serverId);
-        return exits.success(status);
+
+        let sdtdServer = await SdtdServer.findOne(inputs.serverId);
+
+        if (!sdtdServer) {
+            return exits.success(false)
+        }
+
+        let statsResponse = sevenDays.getStats({
+            ip: sdtdServer.ip,
+            port: sdtdServer.webPort,
+            authName: sdtdServer.authName,
+            authToken: sdtdServer.authToken
+        }).exec({
+            success: (response) => {
+                if (response.gametime) {
+                    return exits.success(true);
+                } else {
+                    return exits.success(false);
+                }
+            },
+            error: (error) => {
+                return exits.success(false);
+            },
+            connectionRefused: error => {
+                return exits.success(false);
+            }
+        });
+
+
 
     }
 };
