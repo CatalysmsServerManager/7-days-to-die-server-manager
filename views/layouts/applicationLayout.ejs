@@ -163,15 +163,16 @@
 
 <body>
 
-    <%- include("../includes/applicationNav.ejs") %>
+    <div class="container">
+        <%- include("../includes/applicationNav.ejs") %>
+    </div>
+    <div class="container" style="padding-top: 5%; padding-left: 10%">
 
-        <div class="container" style="padding-top: 5%">
+        <%- body %>
 
-            <%- body %>
+    </div>
 
-        </div>
-
-        <%- include("../includes/applicationFooter.ejs") %>
+    <%- include("../includes/applicationFooter.ejs") %>
 
 </body>
 

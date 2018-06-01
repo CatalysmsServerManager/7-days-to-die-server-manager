@@ -298,7 +298,7 @@ function deleteMap(server, updateObject) {
             return discordTextEarnerMap.delete(String(server.id ? server.id : server));
             break;
         case 'killEarner':
-            return discordTextEarnerMap.delete(String(server.id ? server.id : server));
+            return killEarnerMap.delete(String(server.id ? server.id : server));
             break;
         default:
             throw new Error('Must set a known type in updateObject')
