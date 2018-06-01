@@ -1,6 +1,6 @@
 <%- exposeLocalsToBrowser() %>
 
-  <div id="list-of-owned-servers" aria-multiselectable="true">
+  <div class='container' id="list-of-owned-servers" aria-multiselectable="true">
 
     <% if (ownedServers.length === 0) { %>
       <div class="alert alert-warning" role="alert">
@@ -8,83 +8,79 @@
       </div>
       <% } %>
 
-        <table class="table table-hover table-responsive">
+        <% ownedServers.forEach(server => { %>
 
-          <tbody>
-
-
-            <% ownedServers.forEach(server => { %>
-
-              <tr>
-
-                <td id="server-<%= server.id %>-name">
-                  <%= server.name %>
-                </td>
+          <div class="card">
+            <div id="server-<%= server.id %>-name" class="card-header">
+              <%= server.name %> 
+            </div>
+            <div class="card-body">
+              <h4 class="card-title">
                 <% let playersId = `server-${server.id}-players` %>
-                  <td id="<%=playersId %>"> Loading
-                  </td>
-                  <% let fpsId = `server-${server.id}-fps` %>
-                    <td id="<%= fpsId %>">Loading</td>
-                    <td>
-                      <% const dashboardLink = '/sdtdserver/' + server.id + '/dashboard' %>
-                        <a href='<%= dashboardLink %>' class="btn btn-sm btn-primary">
-                          <em class="glyphicon glyphicon-align-justify"></em>
-                          <i class="fas fa-tachometer-alt"></i> Dashboard
-                        </a>
-                    </td>
-                    <td>
-                      <% const settingsLink = '/sdtdserver/' + server.id + '/settings' %>
-                        <a href='<%= settingsLink %>' class="btn btn-sm btn-primary">
-                          <em class="glyphicon glyphicon-align-justify"></em>
-                          <i class="fa fa-cog" aria-hidden="true"></i> Settings
-                        </a>
-                    </td>
+                  <div id="<%=playersId %>"> Loading
+                  </div>
+              </h4>
+              <p class="card-text">
 
 
-                    <td>
+                <% const dashboardLink = '/sdtdserver/' + server.id + '/dashboard' %>
+                  <a href='<%= dashboardLink %>' class="btn btn-sm btn-primary">
+                    <em class="glyphicon glyphicon-align-justify"></em>
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                  </a>
 
-                      <!-- Button trigger modal -->
-                      <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete-server-<%= server.id %>-button">
-                        <i class="fas fa-trash-alt"></i> Delete
-                      </button>
-                      <!-- Modal -->
-                      <div class="modal fade" id="delete-server-<%= server.id %>-button" tabindex="-1" role="dialog" aria-labelledby="delete-server-<%= server.id %>-modal"
-                        aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h4 class="modal-title" id="delete-server-<%= server.id %>-modal">Delete server</h4>
-                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                              </button>
+
+                  <% const settingsLink = '/sdtdserver/' + server.id + '/settings' %>
+                    <a href='<%= settingsLink %>' class="btn btn-sm btn-primary">
+                      <em class="glyphicon glyphicon-align-justify"></em>
+                      <i class="fa fa-cog" aria-hidden="true"></i> Settings
+                    </a>
+
+
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete-server-<%= server.id %>-button">
+                      <i class="fas fa-trash-alt"></i> Delete
+                    </button>
+                    <!-- Modal -->
+                    <div class="modal fade" id="delete-server-<%= server.id %>-button" tabindex="-1" role="dialog" aria-labelledby="delete-server-<%= server.id %>-modal"
+                      aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h4 class="modal-title" id="delete-server-<%= server.id %>-modal">Delete server</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <div class="container-fluid">
+                              Are you sure?
                             </div>
-                            <div class="modal-body">
-                              <div class="container-fluid">
-                                Are you sure?
-                              </div>
-                            </div>
-                            <div class="modal-footer">
-                              <% const deleteLink = '/sdtdserver/' + server.id + '/delete' %>
-                                <a href='<%= deleteLink %>'>
-                                  <button id="delete-server-<%= server.id %>-button" class="btn btn-default btn-danger" type="button">
-                                    <em class="glyphicon glyphicon-align-justify"></em>
-                                    Delete server
-                                  </button>
-                                </a>
+                          </div>
+                          <div class="modal-footer">
+                            <% const deleteLink = '/sdtdserver/' + server.id + '/delete' %>
+                              <a href='<%= deleteLink %>'>
+                                <button id="delete-server-<%= server.id %>-button" class="btn btn-default btn-danger" type="button">
+                                  <em class="glyphicon glyphicon-align-justify"></em>
+                                  Delete server
+                                </button>
+                              </a>
 
-                                <button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
-                            </div>
+                              <button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
                           </div>
                         </div>
                       </div>
+                    </div>
 
-                    </td>
-              </tr>
-              <% }) %>
+              </p>
+            </div>
+            <div class="card-footer text-muted">
+                <% let fpsId = `server-${server.id}-fps` %>
+                <div id="<%= fpsId %>">Loading</div>
+            </div>
+          </div>
 
-
-          </tbody>
-        </table>
+          <% }) %>
 
 
 
