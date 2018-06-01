@@ -1,6 +1,6 @@
 <%- exposeLocalsToBrowser() %>
 
-    <div class="container-fluid">
+    <div class="container">
 
         <h1 id="server-name">
             <%= server.name %> Dashboard</h1>
@@ -106,8 +106,13 @@
                             </p>
                         </div>
                     </div>
+                    
 
+                    <h3>
+                        <i class="far fa-map"></i>
+                        </i> Map</h3>
 
+                    <%- include('./partials/map', {server: server}) %>
 
     </div>
 
