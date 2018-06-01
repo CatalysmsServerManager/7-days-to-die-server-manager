@@ -52,8 +52,47 @@
 
         tileLayer.addTo(mymap)
 
+        drawPlayerMarkers(mymap);
+        setInterval(() => {
+            drawPlayerMarkers(mymap);
+        }, 5000)
+
     })
 
+    let playerMarkerMap = new Map();
+
+    function drawPlayerMarkers(map) {
+
+        let server = window.SAILS_LOCALS.server;
+
+        $.get('/api/sdtdserver/players', { serverId: server.id }, data => {
+
+            for (const player of data) {
+
+                let playerLatLng = L.latLng(L.latLng(player.positionX, player.positionZ));
+                if (_.isUndefined(playerMarkerMap.get(player.id))) {
+
+                    let marker = L.marker(playerLatLng, {
+                        title: player.name,
+                        alt: player.name,
+                    });
+                    let popup = L.popup().setContent(`<a href="/player/${player.id}/profile">${player.name}</a>`);
+
+                    marker.bindPopup(popup)
+
+                    marker.addTo(map);
+
+                    playerMarkerMap.set(player.id, marker);
+                } else {
+                    let markerToUpdate = playerMarkerMap.get(player.id);
+
+                    markerToUpdate.setLatLng(playerLatLng);
+                    markerToUpdate.update()
+                }
+
+            }
+        })
+    }
 
     function GetSdtdTileLayer(mapinfo, initTime, isMiniMap) {
         if (typeof isMiniMap == 'undefined') isMiniMap = false;
