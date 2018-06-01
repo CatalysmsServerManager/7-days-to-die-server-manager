@@ -1,5 +1,11 @@
 <div class="container">
 
+    <div class="form-check">
+        <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" name="online-players-check" id="online-players-check" checked> Online players only
+        </label>
+    </div>
+
     <div id="sdtdMap">
 
 
@@ -10,6 +16,18 @@
 <script>
 
     $(document).ready(() => {
+
+        let map = initMap();
+
+        $("#online-players-check").click(e => {
+            drawPlayerMarkers(map)
+        })
+
+    })
+
+    let playerMarkerMap = new Map();
+
+    function initMap() {
 
         var mapinfo = {
             regionsize: 512,
@@ -57,15 +75,22 @@
             drawPlayerMarkers(mymap);
         }, 5000)
 
-    })
-
-    let playerMarkerMap = new Map();
+        return mymap
+    }
 
     function drawPlayerMarkers(map) {
 
         let server = window.SAILS_LOCALS.server;
 
-        $.get('/api/sdtdserver/players', { serverId: server.id }, data => {
+        let onlinePlayersCheck = $("#online-players-check").prop('checked');
+
+        $.get('/api/sdtdserver/players', { serverId: server.id, onlyOnline: onlinePlayersCheck }, data => {
+            playerMarkerMap.forEach(existingMarker => {
+                existingMarker.remove()
+            })
+
+            playerMarkerMap.clear();
+
 
             for (const player of data) {
 
@@ -80,16 +105,10 @@
 
                     marker.bindPopup(popup)
 
-                    marker.addTo(map);
+                    marker.addTo(map)
 
                     playerMarkerMap.set(player.id, marker);
-                } else {
-                    let markerToUpdate = playerMarkerMap.get(player.id);
-
-                    markerToUpdate.setLatLng(playerLatLng);
-                    markerToUpdate.update()
                 }
-
             }
         })
     }
