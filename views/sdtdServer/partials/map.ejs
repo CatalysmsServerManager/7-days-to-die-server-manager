@@ -1,11 +1,5 @@
 <div class="container">
 
-    <div class="form-check">
-        <label class="form-check-label">
-            <input type="checkbox" class="form-check-input" name="online-players-check" id="online-players-check" checked> Online players only
-        </label>
-    </div>
-
     <div id="sdtdMap">
 
 
@@ -19,9 +13,6 @@
 
         let map = initMap();
 
-        $("#online-players-check").click(e => {
-            drawPlayerMarkers(map)
-        })
 
     })
 
@@ -82,9 +73,7 @@
 
         let server = window.SAILS_LOCALS.server;
 
-        let onlinePlayersCheck = $("#online-players-check").prop('checked');
-
-        $.get('/api/sdtdserver/players', { serverId: server.id, onlyOnline: onlinePlayersCheck }, data => {
+        $.get('/api/sdtdserver/players', { serverId: server.id }, data => {
             playerMarkerMap.forEach(existingMarker => {
                 existingMarker.remove()
             })
