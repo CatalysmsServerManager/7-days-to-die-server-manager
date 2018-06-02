@@ -11,7 +11,16 @@
 
     $(document).ready(() => {
 
-        let map = initMap();
+        $.get("/api/sdtdserver/donatorstatus", {serverId: <%= server.id %>}, donatorStatus => {
+            console.log(donatorStatus)
+            if (donatorStatus !== "free") {
+                
+                let map = initMap();
+            } else {
+                $("#sdtdMap").text(`Map is currently in beta test. Donators have early access`)
+            }
+        })
+
 
 
     })

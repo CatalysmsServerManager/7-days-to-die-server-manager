@@ -116,6 +116,7 @@ module.exports.routes = {
   'get /api/sdtdserver/onlinestatus': 'SdtdServerController.is-online',
   'get /api/sdtdserver/fps': 'SdtdServerController.get-fps',
   'get /api/sdtdserver/allowedCommands': 'CustomCommandController.get-allowed-commands',
+  'get /api/sdtdserver/donatorStatus': 'SdtdServerController.check-donator',
 
   // Economy
 
