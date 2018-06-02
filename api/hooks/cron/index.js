@@ -60,7 +60,7 @@ module.exports = function defineCronHook(sails) {
       let job = scheduledJobs.get(foundJob.id);
 
       if (!foundJob || !job) {
-        throw new Error(`Tried to stop a job which doesn't exist`);
+        return
       }
 
       job.cancel();
