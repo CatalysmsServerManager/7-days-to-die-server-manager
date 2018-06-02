@@ -9,25 +9,13 @@
 
     <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
-            <!-- 
-            <li class="nav-item">
-                <a class="nav-link" href="/sdtdserver/addserver">
-                    <i class="fas fa-plus"></i> Add a server
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a id="user-dashboard-link" class="nav-link" href="/user/<%= req.session.userId %>/dashboard">
-                    <i class="fas fa-list-ul"></i> Server overview
-                </a>
-            </li> -->
 
             <li class="nav-item" data-toggle="tooltip" data-placement="right">
 
                 <a class="nav-link" href="/sdtdserver/addserver">
                     <i class="fas fa-plus"></i>
-                        <span class="nav-link-text">
-                     Add a server
+                    <span class="nav-link-text">
+                        Add a server
                     </span>
                 </a>
             </li>
@@ -70,20 +58,16 @@
         <ul class="navbar-nav ml-auto">
 
             <li class="nav-item">
+                <a target="_blank" class="nav-link" href="https://discordapp.com/invite/kuDJG6e">
+                    <i class="fab fa-discord"></i> Support </a>
+            </li>
+
+            <li class="nav-item">
                 <a target="_blank" class="nav-link" href="http://csmm.readthedocs.io">
                     <i class="fas fa-life-ring"></i> Documentation
                 </a>
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link" href="/user/<%= req.session.userId %>/profile">
-                    <i class="fas fa-user-circle"></i> Your profile
-                </a>
-            </li>
-
-            <a class="nav-link" id="logout-button" href="/auth/logout">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
 
 
             <li class="nav-item">
@@ -100,6 +84,17 @@
                 </a>
             </li>
 
+            <li class="nav-item">
+                    <a class="nav-link" href="/user/<%= req.session.userId %>/profile">
+                        <i class="fas fa-user-circle"></i> Your profile
+                    </a>
+                </li>
+    
+                <a class="nav-link" id="logout-button" href="/auth/logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+    
+
 
         </ul>
 
@@ -112,7 +107,7 @@
 
 <script>
     $(document).ready(() => {
-        let loggedInUserId = <%- req.session.userId %>;
+        let loggedInUserId = <% - req.session.userId %>;
 
         $.ajax({
             url: "/api/user/ownedservers",
