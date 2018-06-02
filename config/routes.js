@@ -38,6 +38,13 @@ module.exports.routes = {
     }
   },
 
+  '/privacy': {
+    view: 'meta/privacy',
+    locals: {
+      layout: 'layouts/homepageLayout'
+    }
+  },
+
   '/sponsors/ldh': {
     view: 'meta/sponsors/letsdohosting',
     locals: {
