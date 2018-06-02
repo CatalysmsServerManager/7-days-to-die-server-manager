@@ -9,7 +9,7 @@
 
     <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
-
+            <!-- 
             <li class="nav-item">
                 <a class="nav-link" href="/sdtdserver/addserver">
                     <i class="fas fa-plus"></i> Add a server
@@ -20,8 +20,29 @@
                 <a id="user-dashboard-link" class="nav-link" href="/user/<%= req.session.userId %>/dashboard">
                     <i class="fas fa-list-ul"></i> Server overview
                 </a>
+            </li> -->
+
+            <li class="nav-item" data-toggle="tooltip" data-placement="right">
+
+                <a class="nav-link" href="/sdtdserver/addserver">
+                    <i class="fas fa-plus"></i>
+                        <span class="nav-link-text">
+                     Add a server
+                    </span>
+                </a>
             </li>
 
+            <li class="nav-item" data-toggle="tooltip" data-placement="right">
+
+                <a id="user-dashboard-link" class="nav-link" href="/user/<%= req.session.userId %>/dashboard">
+                    <i class="fas fa-list-ul"></i>
+                    <span class="nav-link-text">
+
+                        Server overview
+
+                    </span>
+                </a>
+            </li>
 
             <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Menu Levels">
 
@@ -35,6 +56,14 @@
                 </ul>
             </li>
 
+        </ul>
+
+        <ul class="navbar-nav sidenav-toggler">
+            <li class="nav-item">
+                <a class="nav-link text-center" id="sidenavToggler">
+                    <i class="fa fa-fw fa-angle-left"></i>
+                </a>
+            </li>
         </ul>
 
         <!-- Vertical Nav -->
