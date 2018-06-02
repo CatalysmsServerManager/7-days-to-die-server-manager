@@ -13,6 +13,7 @@
     "dotenv": "^4.0.0",
     "frontail": "^4.1.1",
     "grunt": "1.0.1",
+    "he": "^1.1.1",
     "lodash": "3.10.1",
     "lusca": "^1.5.2",
     "machinepack-7daystodiewebapi": "git+https://github.com/niekcandaele/machinepack-7Days-webapi.git",

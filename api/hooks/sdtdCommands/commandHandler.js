@@ -1,5 +1,6 @@
 const sevenDays = require('machinepack-7daystodiewebapi');
 const CustomCommand = require('./customCommand.js');
+const he = require('he');
 
 /**
      * @memberof module:SdtdCommandsHook
@@ -76,7 +77,7 @@ class CommandHandler {
         let commandName = splitString[0];
         let args = splitString.splice(1, splitString.length);
 
-        let player = await Player.find({ name: _.escape(_.trim(chatMessage.playerName)), server: this.config.server });
+        let player = await Player.find({ name: he.encode(_.trim(chatMessage.playerName)), server: this.config.server });
 
         if (player.length === 0 ) {
           sails.log.warn(`Did not find player data...`, chatMessage);

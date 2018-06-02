@@ -1,4 +1,5 @@
 var sevenDays = require('machinepack-7daystodiewebapi');
+var he = require('he');
 
 module.exports = {
     friendlyName: 'Load player data',
@@ -53,9 +54,10 @@ module.exports = {
             let playersToSend = new Array();
 
             for (const player of playerList.players) {
+
                 let playerProfile = await findOrCreatePlayer(player, inputs.serverId);
                 let steamAvatar = await loadSteamAvatar(player.steamid);
-                
+
                 // Inventory & stats data is only available when a player is online, so we only load it then.
                 let playerInventory
                 let playerStats
@@ -66,7 +68,7 @@ module.exports = {
                 // Update some basic info
                 playerProfile = await Player.update({ id: playerProfile.id }, {
                     lastOnline: player.lastonline,
-                    name: player.name ? _.escape(player.name) : "Unknown",
+                    name: player.name ? he.encode(player.name) : "Unknown",
                     ip: player.ip,
                     entityId: player.entityid,
                     positionX: player.position.x,
@@ -83,7 +85,7 @@ module.exports = {
                 }
 
                 if (!_.isUndefined(steamAvatar)) {
-                    playerProfile = await Player.update({id: playerProfile[0].id}, {avatarUrl: steamAvatar}).fetch()
+                    playerProfile = await Player.update({ id: playerProfile[0].id }, { avatarUrl: steamAvatar }).fetch()
 
                 }
 
@@ -94,9 +96,11 @@ module.exports = {
                 playersToSend.push(playerProfile[0]);
             }
 
-            sails.log.debug(`HELPER - loadPlayerData - Loaded player data for server ${inputs.serverId}! SteamId: ${inputs.steamId}`, playersToSend.map(player => {
-                return player.name
-            }));
+            if (playersToSend.length > 0) {
+                sails.log.debug(`HELPER - loadPlayerData - Loaded player data for server ${inputs.serverId}! SteamId: ${inputs.steamId}`, playersToSend.map(player => {
+                    return player.name
+                }));
+            }
             return exits.success(playersToSend)
 
 
@@ -136,7 +140,7 @@ async function findOrCreatePlayer(player, serverId) {
             server: serverId,
             entityId: player.entityid,
             lastOnline: player.lastonline,
-            name: player.name ? _.escape(player.name) : "Unknown",
+            name: player.name ? he.encode(player.name) : "Unknown",
             ip: player.ip,
         });
         return foundOrCreatedPlayer;
@@ -180,10 +184,10 @@ function loadSteamAvatar(steamId) {
             let avatar = undefined
             if (response.response.players[0].avatar) {
                 avatar = response.response.players[0].avatar
-            } 
+            }
             if (response.response.players[0].avatarfull) {
                 avatar = response.response.players[0].avatarfull
-            } 
+            }
             resolve(avatar)
         }).catch(async (error) => {
             sails.log.error(`HELPER - loadPlayerData:loadSteamAvatar ${error}`);
