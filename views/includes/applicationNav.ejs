@@ -107,7 +107,7 @@
 
 <script>
     $(document).ready(() => {
-        let loggedInUserId = <% - req.session.userId %>;
+        let loggedInUserId = <%- req.session.userId %>;
 
         $.ajax({
             url: "/api/user/ownedservers",
