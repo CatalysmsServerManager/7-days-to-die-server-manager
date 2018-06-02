@@ -1,5 +1,23 @@
 <div class="container">
 
+    <div class="form-check">
+        <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" name="map-teleports-check" id="map-teleports-check"> Teleport locations
+        </label>
+    </div>
+
+    <div class="form-check">
+        <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" name="map-players-check" id="map-players-check" checked> Players
+        </label>
+    </div>
+
+    <div class="form-check">
+        <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" name="map-players-online-check" id="map-players-online-check" checked> Only online players
+        </label>
+    </div>
+
     <div id="sdtdMap">
 
 
@@ -11,11 +29,38 @@
 
     $(document).ready(() => {
 
-        $.get("/api/sdtdserver/donatorstatus", {serverId: <%= server.id %>}, donatorStatus => {
-            console.log(donatorStatus)
+        $.get("/api/sdtdserver/donatorstatus", { serverId: <%= server.id %>}, donatorStatus => {
             if (donatorStatus !== "free") {
-                
+
                 let map = initMap();
+
+                $("#map-teleports-check").click(e => {
+                    let checkElement = $("#map-teleports-check");
+                    if (checkElement.prop('checked')) {
+                        drawTeleportMarkers(map)
+                    } else {
+                        deleteTeleportMarkers()
+                    }
+                })
+
+                $("#map-players-check").click(e => {
+                    let checkElement = $("#map-players-check");
+                    if (checkElement.prop('checked')) {
+                        drawPlayerMarkers(map)
+                    } else {
+                        deletePlayerMarkers()
+                    }
+                })
+
+                $("#map-players-online-check").click(e => {
+                    let checkElement = $("#map-players-online-check");
+                    if (checkElement.prop('checked')) {
+                        drawPlayerMarkers(map)
+                    } else {
+                        drawPlayerMarkers(map)
+                    }
+                })
+
             } else {
                 $("#sdtdMap").text(`Map is currently in beta test. Donators have early access`)
             }
@@ -24,8 +69,6 @@
 
 
     })
-
-    let playerMarkerMap = new Map();
 
     function initMap() {
 
@@ -71,18 +114,19 @@
         tileLayer.addTo(mymap)
 
         drawPlayerMarkers(mymap);
-        setInterval(() => {
-            drawPlayerMarkers(mymap);
-        }, 60000)
 
         return mymap
     }
+
+    let playerMarkerMap = new Map();
 
     function drawPlayerMarkers(map) {
 
         let server = window.SAILS_LOCALS.server;
 
-        $.get('/api/sdtdserver/players', { serverId: server.id }, data => {
+        let onlyOnline = $("#map-players-online-check").prop('checked');
+
+        $.get('/api/sdtdserver/players', { serverId: server.id, onlyOnline: onlyOnline }, data => {
             playerMarkerMap.forEach(existingMarker => {
                 existingMarker.remove()
             })
@@ -109,6 +153,60 @@
                 }
             }
         })
+    }
+
+    function deletePlayerMarkers() {
+        playerMarkerMap.forEach(existingMarker => {
+            existingMarker.remove()
+        })
+
+        playerMarkerMap.clear();
+    }
+
+    let teleportMarkersMap = new Map();
+
+    function drawTeleportMarkers(map) {
+        let server = window.SAILS_LOCALS.server;
+        $.get('/api/sdtdserver/playerteleports', { serverId: server.id }, data => {
+
+            teleportMarkersMap.forEach(existingMarker => {
+                existingMarker.remove()
+            })
+
+            teleportMarkersMap.clear();
+
+            for (const teleport of data) {
+
+                let teleportLatLng = L.latLng(L.latLng(teleport.x, teleport.z));
+                if (_.isUndefined(teleportMarkersMap.get(teleport.id))) {
+
+                    let marker = L.marker(teleportLatLng, {
+                        title: teleport.name,
+                        alt: teleport.name,
+                    });
+                    let popup = L.popup().setContent(`<strong>${teleport.name}</strong><br>
+                    Owner: ${teleport.player.name} <br>
+                    ${teleport.publicEnabled ? "Public" : "Private"} <br>
+                    Times used: ${teleport.timesUsed}`);
+
+                    marker.bindPopup(popup)
+
+                    marker.addTo(map)
+
+                    teleportMarkersMap.set(teleport.id, marker);
+                }
+            }
+        })
+    }
+
+
+    function deleteTeleportMarkers() {
+        teleportMarkersMap.forEach(existingMarker => {
+            existingMarker.remove()
+        })
+
+        teleportMarkersMap.clear();
+
     }
 
     function GetSdtdTileLayer(mapinfo, initTime, isMiniMap) {

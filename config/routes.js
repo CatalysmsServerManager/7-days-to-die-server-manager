@@ -242,6 +242,10 @@ module.exports.routes = {
 
   'post /api/sdtdserver/commands/playerteleports/delay': 'SdtdServerController/commands.set-teleport-delay',
 
+  // Player teleports 
+
+  'get /api/sdtdserver/playerteleports': "player-teleport.get-teleports",
+
   // MOTD
   'post /api/sdtdserver/togglemotd': 'SdtdServerController/motd.motd-toggle',
   'post /api/sdtdserver/reloadmotd': 'SdtdServerController/motd.motd-reload',
