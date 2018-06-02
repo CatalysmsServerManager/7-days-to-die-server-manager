@@ -29,20 +29,27 @@ passport.use(new SteamStrategy({
   realm: `${process.env.CSMM_HOSTNAME}`,
   apiKey: steamAPIkey
 }, async function (identifier, profile, done) {
-  let foundUser = await User.findOrCreate({
-    steamId: profile._json.steamid
-  }, {
-      steamId: profile._json.steamid,
-      username: profile._json.personaname
-    })
-  let updatedUser = await User.update({
-    id: foundUser.id
-  }, {
-      username: profile._json.personaname,
-      avatar: profile._json.avatarfull
-    }).fetch()
-  foundUser.steamProfile = profile;
-  return done(null, foundUser);
+  try {
+    let foundUser = await User.findOrCreate({
+      steamId: profile._json.steamid
+    }, {
+        steamId: profile._json.steamid,
+        username: profile._json.personaname
+      })
+    let updatedUser = await User.update({
+      id: foundUser.id
+    }, {
+        username: profile._json.personaname,
+        avatar: profile._json.avatarfull
+      }).fetch()
+    foundUser.steamProfile = profile;
+    return done(null, foundUser);
+  } catch (error) {
+    sails.log.warn(`Error during steam auth!`)
+    sails.log.error(error)
+    res.send(`Error during steam auth. This should never happen. Please contact someone on the dev server`)
+  }
+
 }));
 
 let discordScopes = ['identify', 'guilds'];

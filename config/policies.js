@@ -16,52 +16,24 @@
 
 module.exports.policies = {
 
-  /***************************************************************************
-   *                                                                          *
-   * Default policy for all controllers and actions (`true` allows public     *
-   * access)                                                                  *
-   *                                                                          *
-   ***************************************************************************/
-
-  //'*': 'isLoggedIn',
-
-  /***************************************************************************
-   *                                                                          *
-   * Here's an example of mapping some policies to run before a controller    *
-   * and its actions                                                          *
-   *                                                                          *
-   ***************************************************************************/
-  // UserController: {
-  //
-  //   // We might mandate that requests come from a logged-in user for
-  //   // most actions in this controller.
-  //   '*': 'isLoggedIn',
-  //
-  //   // But we'll let anyone access the 'login' and 'signup' actions
-  //   login: true,
-  //   signup: true,
-  //
-  //   // And we'll only let admins delete users.
-  //   destroy: 'isAdmin',
-  //
-  // },
+  // isLoggedIn gets included in most of these because it contains the redirect logic
 
   sdtdServerController: {
-    '*': 'isServerOwner',
+    '*': ["isLoggedIn",'isServerOwner'],
     'add-server': 'isLoggedIn',
     'add-server-view': 'isLoggedIn',
   },
 
   ShopController: {
     '*': ['isLoggedIn'],
-    'listing-add': 'isServerOwner',
-    'listing-edit': 'isServerOwner',
-    'listing-delete': 'isServerOwner',
+    'listing-add': ["isLoggedIn",'isServerOwner'],
+    'listing-edit': ["isLoggedIn",'isServerOwner'],
+    'listing-delete': ["isLoggedIn",'isServerOwner'],
     'listing-buy' : 'isLoggedIn',
   },
 
   customCommandController: {
-    '*': 'isServerOwner',
+    '*': ["isLoggedIn",'isServerOwner'],
   },
 
   playerController: {
@@ -70,8 +42,8 @@ module.exports.policies = {
 
   userController: {
     '*': 'isLoggedIn',
-    'profile': 'isLoggedInUser',
-    'dashboard': 'isLoggedInUser'
+    'profile': ['isLoggedIn','isLoggedInUser'],
+    'dashboard': ['isLoggedIn','isLoggedInUser']
   },
 
   authController: {
@@ -80,9 +52,9 @@ module.exports.policies = {
   },
 
   sdtdTicketController: {
-    'view-ticket': 'canSeeTicket',
+    'view-ticket': ["isLoggedIn", 'canSeeTicket'],
     'open-tickets': true,
-    'server-tickets-view': 'isServerOwner',
+    'server-tickets-view': ["isLoggedIn",'isServerOwner'],
   }
 
 };

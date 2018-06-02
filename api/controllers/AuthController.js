@@ -54,7 +54,13 @@ module.exports = {
               return player.id;
             });
             await User.addToCollection(user.id, 'players').members(playerIds);
-            res.redirect(`/user/${user.id}/dashboard`);
+
+            if (req.session.redirectTo) {
+              res.redirect(req.session.redirectTo);
+            } else {
+              res.redirect(`/user/${user.id}/dashboard`);
+            }
+
           } catch (error) {
             sails.log.error(`AuthController - Error updating user profile ${error}`);
           }
