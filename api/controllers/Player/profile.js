@@ -45,7 +45,7 @@ module.exports = {
         player: player.id,
         server: server.id
       })
-      player = await sails.helpers.sdtd.loadPlayerData(server.id, player.steamId);
+      player = await sails.helpers.sdtd.loadPlayerData(server.id, player.steamId, false, true);
       player = player[0]
       const hhmmss = require('@streammedev/hhmmss')
       Object.defineProperty(player, 'playtimeHHMMSS', {

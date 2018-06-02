@@ -15,6 +15,11 @@ module.exports = {
         onlyOnline: {
             type: 'boolean',
             description: 'Should we only load info about online players?'
+        },
+
+        steamAvatar: {
+            type: 'boolean',
+            description: 'Wheter or not to load steam avatars of the player(s). Defaults to false'
         }
     },
     exits: {
@@ -56,7 +61,6 @@ module.exports = {
             for (const player of playerList.players) {
 
                 let playerProfile = await findOrCreatePlayer(player, inputs.serverId);
-                let steamAvatar = await loadSteamAvatar(player.steamid);
 
                 // Inventory & stats data is only available when a player is online, so we only load it then.
                 let playerInventory
@@ -82,6 +86,12 @@ module.exports = {
                     playerProfile = await Player.update({ id: playerProfile[0].id }, {
                         inventory: playerInventory
                     }).fetch()
+                }
+
+                let steamAvatar
+                if (inputs.steamAvatar) {
+                    steamAvatar = await loadSteamAvatar(player.steamid);
+
                 }
 
                 if (!_.isUndefined(steamAvatar)) {
