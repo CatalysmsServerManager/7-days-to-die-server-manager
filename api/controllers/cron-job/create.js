@@ -24,7 +24,6 @@ module.exports = {
     },
 
     temporalValue: {
-      required: true,
       type: 'string',
       custom: function(valueToCheck) {
         const cronParser = require('cron-parser');
@@ -37,6 +36,18 @@ module.exports = {
         return (prevDate.valueOf() + 300000) < nextDate.valueOf()
 
       }
+    },
+
+    minutes: {
+      type: 'number',
+      min: 5,
+      max: 59
+    },
+
+    hours: {
+      type: 'number',
+      min: 1,
+      max: 24
     }
 
   },
@@ -57,10 +68,18 @@ module.exports = {
       statusCode: 400
     },
 
+    badInput: {
+      statusCode: 400
+    }
+
   },
 
 
   fn: async function (inputs, exits) {
+
+    if (!(inputs.temporalValue || inputs.minutes || inputs.hours)) {
+      return exits.badInput(`Invalid time input. You must specify at least one.`);
+    }    
 
     let server = await SdtdServer.findOne(inputs.serverId);
     let allowedCommands = await sails.helpers.sdtd.getAllowedCommands(server);
@@ -81,7 +100,17 @@ module.exports = {
     let commandIdx = allowedCommands.indexOf(splitCommand[0]);
 
     if (commandIdx === -1) {
-      return exits.badCommand(new Error('Invalid command'));
+      return exits.badInput(`You entered an invalid command`);
+    }
+
+
+    // Parse hours or minutes for users who can't read documentation ^_^
+    if (inputs.hours) {
+      inputs.temporalValue = `* */${inputs.hours} * * *`
+    }
+
+    if (inputs.minutes) {
+      inputs.temporalValue = `*/${inputs.minutes} * * * *`
     }
 
     

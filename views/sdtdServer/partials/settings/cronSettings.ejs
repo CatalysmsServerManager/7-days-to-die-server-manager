@@ -51,6 +51,27 @@
                                 </small>
                             </div>
 
+                            <em>Simple config</em>
+                            <small>For users who want less control over the job and just want to get it running easily. Note that
+                                your job will still use a temporal value in cron syntax</small>
+                            <br>
+                            <form class="form-inline">
+                                <div class="form-group">
+                                    <label for="add-new-cron-duration"> </label>
+                                    <input type="number" name="add-new-cron-duration" id="add-new-cron-duration" class="form-control" placeholder="10" aria-describedby="add-new-cron-duration-help">
+                                    <small id="add-new-cron-duration-help" class="text-muted">How many units of time between. If you select minutes this can be 5-59, if you select
+                                        hours this can be 1-24</small>
+                                </div>
+                            </form>
+
+                            <div class="form-group">
+                                <label for="add-new-cron-unit">Unit</label>
+                                <select class="form-control" name="add-new-cron-unit" id="add-new-cron-unit">
+                                    <option value="minutes">Minutes</option>
+                                    <option value="hours">Hours</option>
+                                </select>
+                            </div>
+
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -91,16 +112,40 @@
 
             let command = $("#add-new-cron-command").val();
             let temporalValue = $('#add-new-cron-temporalValue').val();
-            $("#add-new-cron-status").text('');
+            let statusDiv = $("#add-new-cron-status");
+            let unit = $("#add-new-cron-unit").val()
+            let duration = $("#add-new-cron-duration").val()
+
+            let requestData = {
+                _csrf: window.SAILS_LOCALS._csrf,
+                serverId: window.SAILS_LOCALS.server.id,
+                command: command,
+            }
+
+            if (temporalValue === "") {
+                if (duration === "") {
+                    return statusDiv.text(`You must specify a temporal value OR use the simple config`)
+                }
+
+                if (unit === 'minutes') {
+                    requestData.minutes = duration
+                }
+
+                if (unit === "hours") {
+                    requestData.hours = duration
+                }
+
+            } else {
+                requestData.temporalValue = temporalValue
+            }
+
+
+
+            statusDiv.text('');
             $.ajax({
                 url: '/api/sdtdserver/cron',
                 method: 'POST',
-                data: {
-                    _csrf: window.SAILS_LOCALS._csrf,
-                    serverId: window.SAILS_LOCALS.server.id,
-                    command: command,
-                    temporalValue: temporalValue
-                },
+                data: requestData,
                 error: (xhr, status, error) => {
 
                     if (xhr.responseJSON) {
@@ -108,9 +153,9 @@
                             xhr.responseJSON.problems.forEach(problem => {
 
                                 if (problem.includes("Value failed custom validation")) {
-                                    $("#add-new-cron-status").append("Make sure your temporal value is valid and has an interval of at least 5 minutes.")
+                                    statusDiv.append("Make sure your temporal value is valid and has an interval of at least 5 minutes.")
                                 } else {
-                                    $("#add-new-cron-status").append(problem)
+                                    statusDiv.append(problem)
                                 }
 
                             })
@@ -118,14 +163,14 @@
                     } else {
 
                         if (xhr.responseText.includes('Invalid command')) {
-                            $("#add-new-cron-status").text("Invalid command")
+                            statusDiv.text("Invalid command")
                         }
 
-                        $("#add-new-cron-status").text(xhr.responseText);
+                        statusDiv.text(xhr.responseText);
                     }
                 },
                 success: (data, status, xhr) => {
-                    $("#add-new-cron-status").text('Success!')
+                    statusDiv.text('Success!')
                     addNewJobToTable(data)
                 }
             })
