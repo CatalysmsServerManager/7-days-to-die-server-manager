@@ -1,6 +1,6 @@
 <%- exposeLocalsToBrowser() %>
 
-  <div class='container' id="list-of-owned-servers" aria-multiselectable="true">
+  <div id="list-of-owned-servers" aria-multiselectable="true">
 
     <% if (ownedServers.length === 0) { %>
       <div class="alert alert-warning" role="alert">
@@ -9,19 +9,21 @@
       <% } %>
 
         <% ownedServers.forEach(server => { %>
-
+          <% console.log(server) %>
           <div class="card">
             <div id="server-<%= server.id %>-name" class="card-header">
               <%= server.name %> 
             </div>
             <div class="card-body">
               <h4 class="card-title">
+
                 <% let playersId = `server-${server.id}-players` %>
                   <div id="<%=playersId %>"> Loading
                   </div>
               </h4>
               <p class="card-text">
 
+                <p><%= server.serverInfo.ServerDescription %></p>
 
                 <% const dashboardLink = '/sdtdserver/' + server.id + '/dashboard' %>
                   <a href='<%= dashboardLink %>' class="btn btn-sm btn-primary">
