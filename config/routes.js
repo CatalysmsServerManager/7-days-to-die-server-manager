@@ -87,6 +87,7 @@ module.exports.routes = {
   'get /sdtdserver/:serverId/console': 'SdtdServerController.console',
   'get /sdtdserver/:serverId/chat': 'SdtdServerController.chat',
   'get /sdtdserver/:serverId/players': 'SdtdServerController.get-players-view',
+  'get /sdtdserver/:serverId/tracker': 'SdtdServerController.view-tracking',
   'get /sdtdserver/:serverId/delete': 'SdtdServerController.delete-server',
   'get /sdtdserver/:serverId/settings': 'SdtdServerController.settings',
   'get /sdtdserver/:serverId/info': 'SdtdServerController.server-info-view',
