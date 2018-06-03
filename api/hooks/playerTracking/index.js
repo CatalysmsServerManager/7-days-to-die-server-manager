@@ -67,6 +67,15 @@ module.exports = function definePlayerTrackingHook(sails) {
               sails.log.error(error)
             }
           }
+
+          if (server.config[0].inventoryTracking) {
+
+            try {
+              await inventoryTracking(server, loggingObject, playerList, createdRecords, playerRecords);
+            } catch (error) {
+              sails.log.error(error)
+            }
+          }
         }
       })
 
@@ -127,10 +136,10 @@ module.exports = function definePlayerTrackingHook(sails) {
     for (const onlinePlayer of playerList) {
       let playerRecord = playerRecords.filter(player => onlinePlayer.steamid === player.steamId);
 
-      if (!_.isUndefined(playerRecord)) {
-        let trackingRecord = createdTrackingRecords.filter(record => record.player === playerRecord.id);
+      if (playerRecord.length === 1) {
+        let trackingRecord = createdTrackingRecords.filter(record => record.player === playerRecord[0].id);
 
-        if (!trackingRecord.length > 1) {
+        if (trackingRecord.length === 1) {
 
           await TrackingInfo.update(trackingRecord[0].id, {
             x: onlinePlayer.position.x,
@@ -143,6 +152,41 @@ module.exports = function definePlayerTrackingHook(sails) {
       }
 
     }
+  }
+
+
+  async function inventoryTracking(server, loggingObject, playerList, createdTrackingRecords, playerRecords) {
+    for (const onlinePlayer of playerList) {
+      let playerRecord = playerRecords.filter(player => onlinePlayer.steamid === player.steamId);
+      if (playerRecord.length === 1) {
+        let trackingRecord = createdTrackingRecords.filter(record => record.player === playerRecord[0].id);
+        if (trackingRecord.length === 1) {
+          let inventory = await getPlayerInventory(server, playerRecord[0].steamId);
+          let itemsInInventory = new Array();
+
+          inventory.bag = _.filter(inventory.bag, (value) => !_.isNull(value));
+          inventory.belt = _.filter(inventory.belt, (value) => !_.isNull(value));
+          inventory.equipment = _.filter(inventory.equipment, (value) => !_.isNull(value));
+
+          for (const inventoryItem of inventory.bag) {
+            itemsInInventory.push(inventoryItem)
+          }
+
+          for (const inventoryItem of inventory.belt) {
+            itemsInInventory.push(inventoryItem)
+          }
+
+          for (const inventoryItem of inventory.equipment) {
+            itemsInInventory.push(inventoryItem)
+          }
+
+          await TrackingInfo.update(trackingRecord[0].id, { inventory: itemsInInventory })
+        }
+
+      }
+
+    }
+
   }
 
 };
@@ -166,5 +210,24 @@ function getPlayerList(server) {
       }
     })
   })
+}
 
+function getPlayerInventory(server, steamId) {
+  return new Promise((resolve, reject) => {
+    sevenDays.getPlayerInventory({
+      ip: server.ip,
+      port: server.webPort,
+      authName: server.authName,
+      authToken: server.authToken,
+      steamId: steamId
+    }).exec({
+      success: (data) => {
+        resolve(data)
+      },
+      error: (error) => {
+        sails.log.warn(`Error getting player inventory for tracking - ${error}`);
+        resolve(undefined)
+      }
+    })
+  })
 }
