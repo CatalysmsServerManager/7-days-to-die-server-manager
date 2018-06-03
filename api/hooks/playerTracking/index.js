@@ -1,3 +1,5 @@
+const sevenDays = require('machinepack-7daystodiewebapi');
+
 /**
  * playerTracking hook
  *
@@ -39,6 +41,33 @@ module.exports = function definePlayerTrackingHook(sails) {
           sails.log.error(error)
         }
 
+        if (server.config[0].locationTracking || server.config[0].inventoryTracking) {
+          // If inventory OR location tracking is enabled, we prepare the tracking info beforehand to improve performance
+          let playerList = await getPlayerList(server);
+
+          let initialValues = new Array();
+          let playerRecords = new Array();
+
+          for (const onlinePlayer of playerList) {
+            let playerRecord = await Player.findOne({ server: server.id, steamId: onlinePlayer.steamid });
+            if (playerRecord) {
+              playerRecords.push(playerRecord)
+              initialValues.push({ server: server.id, player: playerRecord.id })
+            }
+          }
+
+          let createdRecords = await TrackingInfo.createEach(initialValues).fetch();
+
+
+          if (server.config[0].locationTracking) {
+
+            try {
+              await locationTracking(server, loggingObject, playerList, createdRecords, playerRecords);
+            } catch (error) {
+              sails.log.error(error)
+            }
+          }
+        }
       })
 
     },
@@ -93,4 +122,49 @@ module.exports = function definePlayerTrackingHook(sails) {
     return
   }
 
+  async function locationTracking(server, loggingObject, playerList, createdTrackingRecords, playerRecords) {
+
+    for (const onlinePlayer of playerList) {
+      let playerRecord = playerRecords.filter(player => onlinePlayer.steamid === player.steamId);
+
+      if (!_.isUndefined(playerRecord)) {
+        let trackingRecord = createdTrackingRecords.filter(record => record.player === playerRecord.id);
+
+        if (!trackingRecord.length > 1) {
+
+          await TrackingInfo.update(trackingRecord[0].id, {
+            x: onlinePlayer.position.x,
+            y: onlinePlayer.position.y,
+            z: onlinePlayer.position.z
+          })
+        }
+
+
+      }
+
+    }
+  }
+
 };
+
+
+function getPlayerList(server) {
+  return new Promise((resolve, reject) => {
+    sevenDays.getPlayerList({
+      ip: server.ip,
+      port: server.webPort,
+      authName: server.authName,
+      authToken: server.authToken
+    }).exec({
+      success: (data) => {
+        let playersToSend = data.players.filter(player => player.online)
+        resolve(playersToSend)
+      },
+      error: (error) => {
+        sails.log.warn(`Error getting playerlist for tracking - ${error}`);
+        resolve([])
+      }
+    })
+  })
+
+}
