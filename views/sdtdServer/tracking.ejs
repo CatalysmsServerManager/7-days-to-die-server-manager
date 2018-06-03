@@ -36,16 +36,34 @@
         </div>
         <hr>
 
+        <h2>Location</h2>
+        <div id="sdtdMap">
+
+
+        </div>
+
+        <hr>
+
+        <h2>Inventory</h2>
+
 
     </div>
+
+    <style>
+        #sdtdMap {
+            height: 75em;
+            width: 100%;
+        }
+    </style>
 
 
     <script>
 
         const server = window.SAILS_LOCALS.server;
+        let trackingMap 
         $(document).ready(() => {
 
-
+            trackingMap = new sdtdMap($("#sdtdMap"))
 
             $('#tracking-player-btn').click(e => {
 
@@ -72,7 +90,7 @@
             let playerId = $("#player-name-select").val();
 
             $.get('/api/sdtdserver/tracking', { serverId: server.id, playerId: playerId, beginDate: begin, endDate: end }, data => {
-                
+
                 if (data.length === 0) {
                     return alert('No data found for this player.')
                 }
@@ -88,6 +106,9 @@
                 $('input[name="datetimes"]').data('daterangepicker').setEndDate(newest);
 
                 $('#narrow-down').show();
+
+
+                trackingMap.drawPlayers(window.SAILS_LOCALS.players.filter(player => player.id === parseInt(playerId)), data);
             })
         }
 
