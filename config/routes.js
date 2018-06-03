@@ -160,6 +160,11 @@ module.exports.routes = {
   'get /api/sdtdserver/data/memupdate': 'SdtdServerController/historicalData.get-mem-update',
   'get /api/sdtdserver/data/fps': 'SdtdServerController/historicalData.get-fps',
 
+  // Tracking
+
+  'post /api/sdtdserver/tracking/inventory' : 'tracking-info.set-inventory-tracking',
+  'post /api/sdtdserver/tracking/location' : 'tracking-info.set-location-tracking',
+
   // Tickets
 
   'post /api/sdtdTicket/updateTicketStatus': 'SdtdTicket.update-ticket-status',
