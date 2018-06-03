@@ -22,6 +22,7 @@ module.exports.policies = {
     '*': ["isLoggedIn",'isServerOwner'],
     'add-server': 'isLoggedIn',
     'add-server-view': 'isLoggedIn',
+    'view-tracking': ["isLoggedIn", "isPatron", 'isServerOwner']
   },
 
   ShopController: {
