@@ -23,11 +23,11 @@
                 <h2>Tracking stats</h2>
                 <ul>
 
-                    <li>
-                        Loading total datapoints
+                    <li id="tracking-total">
+                       
                     </li>
-                    <li>
-                        Oldest datapoint
+                    <li id="tracking-oldest">
+                    
                     </li>
 
                 </ul>
@@ -50,6 +50,16 @@
             if (window.SAILS_LOCALS.config.locationTracking) {
                 $('#settings-tracking-location-check').prop('checked', true)
             }
+
+            $.get('/api/sdtdserver/tracking/stats', {serverId: window.SAILS_LOCALS.server.id}, data => {
+                if (data.amount) {
+                    $('#tracking-total').text(`${data.amount} datapoints stored`)
+                }
+                if (data.oldest) {
+                    let createdAt = new Date(data.oldest[0].createdAt);
+                    $('#tracking-oldest').text(`Oldest datapoint: ${createdAt.toLocaleDateString()} ${createdAt.toLocaleTimeString()}`)
+                }
+            })
 
             $('#settings-tracking-location-check').click(e => {
 

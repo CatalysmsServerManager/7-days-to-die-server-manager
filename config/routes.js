@@ -164,6 +164,7 @@ module.exports.routes = {
 
   'post /api/sdtdserver/tracking/inventory' : 'tracking-info.set-inventory-tracking',
   'post /api/sdtdserver/tracking/location' : 'tracking-info.set-location-tracking',
+  'get /api/sdtdserver/tracking/stats': 'tracking-info.get-tracking-stats',
 
   // Tickets
 
