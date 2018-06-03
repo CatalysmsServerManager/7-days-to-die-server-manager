@@ -21,7 +21,6 @@ class sdtdMap {
 
 
         for (const player of players) {
-            console.log(player)
             let playerLatLng = L.latLng(L.latLng(player.positionX, player.positionZ));
 
             let marker = L.marker(playerLatLng, {
