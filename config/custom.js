@@ -42,6 +42,7 @@ module.exports.custom = {
       maxCustomCommands: 3,
       economyKeepDataHours: 12,
       maxCronJobs: 5,
+      playerTrackerKeepDataHours: 6,
     },
     patron: {
       memUpdateKeepDataHours: 12,
@@ -50,6 +51,7 @@ module.exports.custom = {
       maxCustomCommands: 5,
       economyKeepDataHours: 12,
       maxCronJobs: 10,
+      playerTrackerKeepDataHours: 12,
     },
     donator: {
       memUpdateKeepDataHours: 72,
@@ -58,6 +60,7 @@ module.exports.custom = {
       maxCustomCommands: 10,
       economyKeepDataHours: 72,
       maxCronJobs: 20,
+      playerTrackerKeepDataHours: 24,
     },
     contributor: {
       memUpdateKeepDataHours: 120,
@@ -66,6 +69,7 @@ module.exports.custom = {
       maxCustomCommands: 20,
       economyKeepDataHours: 120,
       maxCronJobs: 50,
+      playerTrackerKeepDataHours: 72,
     },
     sponsor: {
       memUpdateKeepDataHours: 168,
@@ -74,6 +78,7 @@ module.exports.custom = {
       maxCustomCommands: 50,
       economyKeepDataHours: 168,
       maxCronJobs: 100,
+      playerTrackerKeepDataHours: 120,
     }
   },
 };

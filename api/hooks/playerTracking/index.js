@@ -77,6 +77,8 @@ module.exports = function definePlayerTrackingHook(sails) {
             }
           }
         }
+
+        await deleteOldData(server);
       })
 
     },
@@ -236,4 +238,23 @@ function getPlayerInventory(server, steamId) {
       }
     })
   })
+}
+
+async function deleteOldData(server) {
+  try {
+    let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({ serverId: server.id });
+    let hoursToKeepData = sails.config.custom.donorConfig[donatorRole].playerTrackerKeepDataHours
+    let milisecondsToKeepData = hoursToKeepData * 3600000;
+    let dateNow = Date.now();
+    let borderDate = new Date(dateNow.valueOf() - milisecondsToKeepData);
+
+    let deletedRecords = await TrackingInfo.destroy({
+        createdAt: { '<': borderDate.valueOf() },
+        server: server.id
+    }).fetch();
+    
+} catch (error) {
+    sails.log.error(error)
+}
+
 }
