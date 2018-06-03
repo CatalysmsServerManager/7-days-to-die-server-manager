@@ -1,44 +1,94 @@
 <%- exposeLocalsToBrowser() %>
 
-<div>
+    <div>
+        <h1>Player tracking</h1>
+        <input name="tracking-player-btn" id="tracking-player-btn" class="btn btn-primary btn-lg" type="button" value="Get data">
 
-    <div class="form-group">
-        <label for="player-name-select">Tracking player</label>
-        <select class="form-control" name="player-name-select" id="player-name-select">
+        <div class="form-group">
+            <label for="player-name-select">Tracking player</label>
+            <select class="form-control" name="player-name-select" id="player-name-select">
 
-            <% players.forEach(player => { %>
+                <% players.forEach(player => { %>
 
-                <option value="<%= player.id %>">
-                    <%= player.name %>
-                </option>
+                    <option value="<%= player.id %>">
+                        <%= player.name %>
+                    </option>
 
-                <% }) %>
+                    <% }) %>
 
-        </select>
+            </select>
+        </div>
+
+
+        <div id="narrow-down">
+
+            <label for="datepicker">Narrow down data</label>
+            <input type="text" name="datetimes" />
+
+        </div>
+
+        <hr>
+        <div>
+
+            <p id="loaded-data"></p>
+            <p id="daterange-data"></p>
+
+        </div>
+        <hr>
+
+
     </div>
-    <input name="tracking-player-btn" id="tracking-player-btn" class="btn btn-primary btn-lg" type="button" value="Get data">
 
 
-</div>
-
-
-<script>
-
-    $(document).ready(() => {
+    <script>
 
         const server = window.SAILS_LOCALS.server;
+        $(document).ready(() => {
 
 
-        $('#tracking-player-btn').click(e => {
-            let playerId = $("#player-name-select").val();
 
-            $.get('/api/sdtdserver/tracking', { serverId: server.id, playerId: playerId }, data => {
-                console.log(data)
+            $('#tracking-player-btn').click(e => {
+
+                getDataAndUpdate();
             })
 
+            $('#narrow-down').hide();
+
+            $('input[name="datetimes"]').daterangepicker({
+                timePicker: true,
+                startDate: moment().startOf('hour'),
+                endDate: Date.now(),
+            });
+
+            $('input[name="datetimes"]').on('apply.daterangepicker', function (ev, picker) {
+                getDataAndUpdate(picker.startDate.toDate().valueOf(), picker.endDate.toDate().valueOf());
+
+            });
 
         })
 
-    })
 
-</script>
+        function getDataAndUpdate(begin, end) {
+            let playerId = $("#player-name-select").val();
+
+            $.get('/api/sdtdserver/tracking', { serverId: server.id, playerId: playerId, beginDate: begin, endDate: end }, data => {
+                
+                if (data.length === 0) {
+                    return alert('No data found for this player.')
+                }
+
+                $("#loaded-data").text(`${data.length} datapoints loaded`);
+
+
+                let oldest = new Date(data[0].createdAt);
+                let newest = new Date(data[data.length - 1].createdAt);
+                $("#daterange-data").text(`Oldest: ${oldest.toLocaleDateString()} ${oldest.toLocaleTimeString()} Newest: ${newest.toLocaleDateString()} ${newest.toLocaleTimeString()}`);
+
+                $('input[name="datetimes"]').data('daterangepicker').setStartDate(oldest);
+                $('input[name="datetimes"]').data('daterangepicker').setEndDate(newest);
+
+                $('#narrow-down').show();
+            })
+        }
+
+    </script>
