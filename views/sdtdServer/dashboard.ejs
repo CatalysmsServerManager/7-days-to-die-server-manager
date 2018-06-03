@@ -2,6 +2,7 @@
 
     <div class="container">
 
+        <div class="row">
         <h1 id="server-name">
             <%= server.name %> Dashboard</h1>
 
@@ -41,40 +42,37 @@
                     </div>
                 </div>
             </div>
+        </div>
 
 
             <% if(!_.isUndefined(server.stats) && !_.isUndefined(server.serverInfo)) { %>
-                <div class="row">
-
-                    <div class="card">
-                        <div class="card-header">
-                            <i class="fas fa-users"></i> Online players
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text">
-
-                                <%- include('./partials/onlinePlayers', {server: server}) %>
 
 
-                            </p>
-                        </div>
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-users"></i> Online players
                     </div>
+                    <div class="card-body">
+                        <p class="card-text">
 
-                    <div class="card">
-                        <div class="card-header">
-                            <i class="fas fa-info"></i> Server info
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text">
+                            <%- include('./partials/onlinePlayers', {server: server}) %>
 
-                                <%- include('./partials/basicServerInfo', {server: server}) %>
 
-                            </p>
-                        </div>
+                        </p>
                     </div>
+                </div>
 
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-info"></i> Server info
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">
 
+                            <%- include('./partials/basicServerInfo', {server: server}) %>
 
+                        </p>
+                    </div>
                 </div>
                 <% } %>
 
@@ -106,7 +104,7 @@
                             </p>
                         </div>
                     </div>
-                    
+
 
                     <h3>
                         <i class="far fa-map"></i>
@@ -117,7 +115,7 @@
 
     </div>
 
-
+    </div>
     <style>
         .card {
             margin: 1%

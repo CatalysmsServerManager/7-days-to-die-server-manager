@@ -44,6 +44,26 @@
 
       </div>
 
+      <!-- Tracking settings -->
+
+      <div class="card">
+          <div class="card-header" id="settings-heading-trackerSettings">
+            <h5 class="mb-0">
+              <button class="btn btn-link" data-toggle="collapse" data-target="#settings-collapse-trackerSettings" aria-expanded="true"
+                aria-controls="settings-collapse-trackerSettings">
+                Player tracking
+              </button>
+            </h5>
+          </div>
+  
+          <div id="settings-collapse-trackerSettings" class="collapse" aria-labelledby="settings-heading-trackerSettings" data-parent="#accordion">
+            <div class="card-body">
+              <%- include('./partials/settings/playerTracking.ejs', {server: server, config: config, user: user}) %>
+            </div>
+          </div>
+  
+        </div>
+
       <!-- Cron settings -->
 
       <div class="card">

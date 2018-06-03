@@ -1,0 +1,76 @@
+<%- exposeLocalsToBrowser() %>
+
+    <!-- PLAYER TRACKING SETTINGS -->
+    <div class="container">
+
+        <div class="row">
+            <div class="col-6">
+                <p>Every 30 seconds, when players are online CSMM can save a snapshot of their profile. This information can
+                    later be consulted in order to find raiders/cheaters and return stolen items.</p>
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="checkbox" class="form-check-input" name="settings-tracking-location-check" id="settings-tracking-location-check"> Location tracking
+                    </label>
+                </div>
+
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="checkbox" class="form-check-input" name="settings-tracking-inventory-check" id="settings-tracking-inventory-check"> Inventory tracking
+                    </label>
+                </div>
+            </div>
+            <div class="col-6">
+                <h2>Tracking stats</h2>
+                <ul>
+
+                    <li>
+                        Loading total datapoints
+                    </li>
+                    <li>
+                        Oldest datapoint
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+
+
+
+    </div>
+
+    <script>
+        $(document).ready(function () {
+
+            if (window.SAILS_LOCALS.config.inventoryTracking) {
+                $('#settings-tracking-inventory-check').prop('checked', true)
+            }
+
+
+            if (window.SAILS_LOCALS.config.locationTracking) {
+                $('#settings-tracking-location-check').prop('checked', true)
+            }
+
+            $('#settings-tracking-location-check').click(e => {
+
+                $.post('/api/sdtdserver/tracking/location', {
+                    _csrf: window.SAILS_LOCALS._csrf,
+                    serverId: window.SAILS_LOCALS.server.id,
+                    newStatus: $('#settings-tracking-location-check').prop('checked')
+                })
+            })
+
+
+            $('#settings-tracking-inventory-check').click(e => {
+
+                $.post('/api/sdtdserver/tracking/inventory', {
+                    _csrf: window.SAILS_LOCALS._csrf,
+                    serverId: window.SAILS_LOCALS.server.id,
+                    newStatus: $('#settings-tracking-inventory-check').prop('checked')
+                })
+            })
+
+
+        })
+
+    </script>
