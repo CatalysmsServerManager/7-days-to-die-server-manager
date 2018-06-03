@@ -29,8 +29,7 @@
 
         <hr>
         <div>
-
-            <p id="loaded-data"></p>
+            <p id="loaded-data"> Click "Get data" to get started!</p>
             <p id="daterange-data"></p>
 
         </div>
@@ -80,6 +79,7 @@
             // Data control
 
             $('#tracking-player-btn').click(e => {
+                $("#loaded-data").html(`<i class="fas fa-spinner spin"></i>`)
 
                 getDataAndUpdate();
             })
@@ -93,6 +93,7 @@
             });
 
             $('input[name="datetimes"]').on('apply.daterangepicker', function (ev, picker) {
+                $("#loaded-data").html(`<i class="fas fa-spinner spin"></i>`)
                 getDataAndUpdate(picker.startDate.toDate().valueOf(), picker.endDate.toDate().valueOf());
 
             });

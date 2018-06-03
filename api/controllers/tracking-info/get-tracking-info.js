@@ -45,6 +45,8 @@ module.exports = {
 
     fn: async function (inputs, exits) {
 
+        let startDate = new Date();
+
         inputs.beginDate = inputs.beginDate ? inputs.beginDate : new Date(0).valueOf();
         inputs.endDate = inputs.endDate ? inputs.endDate : Date.now();
 
@@ -59,7 +61,9 @@ module.exports = {
             },
             sort: "createdAt ASC"
         });
-        sails.log.debug(`Loaded ${infoToSend.length} records of player tracking data for server ${inputs.serverId}`);
+
+        let endDate = new Date();
+        sails.log.debug(`Loaded ${infoToSend.length} records of player tracking data for server ${inputs.serverId} - Took ${endDate.valueOf() - startDate.valueOf()} ms`);
 
         return exits.success(infoToSend);
 
