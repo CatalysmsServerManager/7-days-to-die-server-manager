@@ -46,9 +46,15 @@
                 $("#map-players-check").click(e => {
                     let checkElement = $("#map-players-check");
                     if (checkElement.prop('checked')) {
-                        drawPlayerMarkers(map)
+                        drawPlayerMarkers(map);
+
+                        // Set only online checkbox enabled
+                        $("#map-players-online-check").removeAttr("disabled")
+
                     } else {
                         deletePlayerMarkers()
+
+                        $("#map-players-online-check").attr("disabled", true)
                     }
                 })
 
@@ -126,7 +132,7 @@
 
         let onlyOnline = $("#map-players-online-check").prop('checked');
 
-        $.get('/api/sdtdserver/players', { serverId: server.id, onlyOnline: onlyOnline }, data => {
+        $.get('/api/sdtdserver/players', { serverId: server.id, onlyOnline: onlyOnline, staticOnly: !onlyOnline }, data => {
             playerMarkerMap.forEach(existingMarker => {
                 existingMarker.remove()
             })

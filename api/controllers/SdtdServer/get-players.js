@@ -15,6 +15,10 @@ module.exports = {
     onlyOnline: {
       example : true,
       description: 'Only loads online player data, defaults to true'
+    },
+    staticOnly: {
+      type: 'boolean',
+      description: "Only get information in the database, don't try and update it. Defaults to false. This should be used when performance/speed is more important than newest information."
     }
 
   },
@@ -48,15 +52,24 @@ module.exports = {
       if (_.isUndefined(server)) {
         return exits.notFound();
       }
-      sails.helpers.sdtd.loadPlayerData.with({serverId: inputs.serverId, onlyOnline: inputs.onlyOnline === false ? false : true})
-        .switch({
-          success: function(data) {
-            return exits.success(data);
-          },
-          error: function(error) {
-            return exits.badRequest();
-          }
-        });
+
+      if (inputs.staticOnly) {
+
+        let players = await Player.find({server: server.id});
+        return exits.success(players)
+        
+      } else {
+        sails.helpers.sdtd.loadPlayerData.with({serverId: inputs.serverId, onlyOnline: inputs.onlyOnline === false ? false : true})
+          .switch({
+            success: function(data) {
+              return exits.success(data);
+            },
+            error: function(error) {
+              return exits.badRequest();
+            }
+          });
+      }
+
     } catch (error) {
       sails.log.error(`API - SdtdServer:getPlayers - ${error}`);
       return exits.error(error);
