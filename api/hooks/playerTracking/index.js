@@ -146,6 +146,12 @@ module.exports = function definePlayerTrackingHook(sails) {
             y: onlinePlayer.position.y,
             z: onlinePlayer.position.z
           })
+
+          await Player.update(trackingRecord[0].player, {
+            positionX: onlinePlayer.position.x,
+            positionY:  onlinePlayer.position.y,
+            positionZ:  onlinePlayer.position.z,
+          })
         }
 
 
