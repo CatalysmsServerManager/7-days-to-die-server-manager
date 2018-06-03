@@ -26,7 +26,7 @@ module.exports = {
     },
 
     inventory: {
-      type: 'ref',
+      type: 'json',
     },
 
 
