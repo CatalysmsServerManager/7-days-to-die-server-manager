@@ -192,13 +192,17 @@ function loadSteamAvatar(steamId) {
             json: true
         }).then(async (response) => {
             let avatar = undefined
-            if (response.response.players[0].avatar) {
-                avatar = response.response.players[0].avatar
+            if (response.response.players[0]) {
+                if (response.response.players[0].avatar) {
+                    avatar = response.response.players[0].avatar
+                }
+                if (response.response.players[0].avatarfull) {
+                    avatar = response.response.players[0].avatarfull
+                }
+                resolve(avatar)
+            } else {
+                resolve()
             }
-            if (response.response.players[0].avatarfull) {
-                avatar = response.response.players[0].avatarfull
-            }
-            resolve(avatar)
         }).catch(async (error) => {
             sails.log.error(`HELPER - loadPlayerData:loadSteamAvatar ${error}`);
             resolve()
