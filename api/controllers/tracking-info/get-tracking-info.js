@@ -63,7 +63,7 @@ module.exports = {
         });
 
         let endDate = new Date();
-        sails.log.debug(`Loaded ${infoToSend.length} records of player tracking data for server ${inputs.serverId} - Took ${endDate.valueOf() - startDate.valueOf()} ms`);
+        sails.log.info(`Loaded ${infoToSend.length} records of player tracking data for server ${inputs.serverId} - Took ${endDate.valueOf() - startDate.valueOf()} ms`);
 
         return exits.success(infoToSend);
 
