@@ -6,7 +6,8 @@
         <div class="row">
             <div class="col-lg-6">
                 <p>Every 30 seconds, when players are online CSMM can save a snapshot of their profile. This information can
-                    later be consulted in order to find raiders/cheaters and return stolen items. CSMM reads the data from your server, all processing of this data is done on CSMM's side.</p>
+                    later be consulted in order to find raiders/cheaters and return stolen items. CSMM reads the data from
+                    your server, all processing of this data is done on CSMM's side.</p>
                 <div class="form-check">
                     <label class="form-check-label">
                         <input type="checkbox" class="form-check-input" name="settings-tracking-location-check" id="settings-tracking-location-check"> Location tracking
@@ -18,16 +19,44 @@
                         <input type="checkbox" class="form-check-input" name="settings-tracking-inventory-check" id="settings-tracking-inventory-check"> Inventory tracking
                     </label>
                 </div>
+
+
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#settings-tracking-purge-btn">
+                    Purge data
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="settings-tracking-purge-btn" tabindex="-1" role="dialog" aria-labelledby="settings-tracking-purge-title"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="settings-tracking-purge-title">Purge all tracking data</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure? There is no going back!
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button id="settings-tracking-purge-confirm" type="button" class="btn btn-danger">Yes, delete ALL tracking data</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
             <div class="col-lg-6">
                 <h2>Tracking stats</h2>
                 <ul>
 
                     <li id="tracking-total">
-                       
+                        Nothing yet!
                     </li>
                     <li id="tracking-oldest">
-                    
                     </li>
 
                 </ul>
@@ -51,11 +80,11 @@
                 $('#settings-tracking-location-check').prop('checked', true)
             }
 
-            $.get('/api/sdtdserver/tracking/stats', {serverId: window.SAILS_LOCALS.server.id}, data => {
+            $.get('/api/sdtdserver/tracking/stats', { serverId: window.SAILS_LOCALS.server.id }, data => {
                 if (data.amount) {
                     $('#tracking-total').text(`${data.amount} datapoints stored`)
                 }
-                if (data.oldest) {
+                if (data.oldest[0]) {
                     let createdAt = new Date(data.oldest[0].createdAt);
                     $('#tracking-oldest').text(`Oldest datapoint: ${createdAt.toLocaleDateString()} ${createdAt.toLocaleTimeString()}`)
                 }
@@ -77,6 +106,15 @@
                     _csrf: window.SAILS_LOCALS._csrf,
                     serverId: window.SAILS_LOCALS.server.id,
                     newStatus: $('#settings-tracking-inventory-check').prop('checked')
+                })
+            })
+
+            $('#settings-tracking-purge-confirm').click(e => {
+                $.post('/api/sdtdserver/tracking/delete', {
+                    _csrf: window.SAILS_LOCALS._csrf,
+                    serverId: window.SAILS_LOCALS.server.id,
+                }, response => {
+                    location.reload();
                 })
             })
 
