@@ -2,6 +2,75 @@
 
     <div>
         <h1>Player tracking</h1>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#tracking-location-modal">
+            Location lookup
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="tracking-location-modal" tabindex="-1" role="dialog" aria-labelledby="tracking-location-modal-title"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="tracking-location-modal-title">Find by Location</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+
+                            <div class="form-group">
+                                <label for="tracking-location-modal-x">X</label>
+                                <input type="number" name="tracking-location-modal-x" id="tracking-location-modal-x" class="form-control" placeholder="0"
+                                    aria-describedby="tracking-location-modal-x-help">
+                                <small id="tracking-location-modal-x-help" class="text-muted">The X coordinate to search</small>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="tracking-location-modal-z">Z</label>
+                                <input type="number" name="tracking-location-modal-z" id="tracking-location-modal-z" class="form-control" placeholder="0"
+                                    aria-describedby="tracking-location-modal-z-help">
+                                <small id="tracking-location-modal-z-help" class="text-muted">The Z coordinate to search</small>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="tracking-location-modal-radius">Radius</label>
+                                <input type="number" name="tracking-location-modal-radius" id="tracking-location-modal-radius" class="form-control" placeholder="50"
+                                    aria-describedby="tracking-location-modal-radius-help">
+                                <small id="tracking-location-modal-radius-help" class="text-muted">The radius to search around the given coordinates.</small>
+                            </div>
+
+                            <hr>
+
+                            <table id="location-result-table">
+
+                                <thead>
+                                    <tr>
+                                        <th>Date/time</th>
+                                        <th>Player name</th>
+                                        <th>Location</th>
+                                        <th>Distance</th>
+                                        <th>Steam ID</th>
+                                    </tr>
+                                </thead>
+
+                            </table>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div id="location-result"></div>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button id="tracking-location-modal-get" type="button" class="btn btn-primary">Get</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <input name="tracking-player-btn" id="tracking-player-btn" class="btn btn-primary btn-lg" type="button" value="Get data">
 
         <div class="form-group">
@@ -20,9 +89,10 @@
 
 
             <div class="form-group">
-              <label for="tracking-steamID-lookup">Steam ID</label>
-              <input type="text" class="form-control" name="tracking-steamID-lookup" id="tracking-steamID-lookup" aria-describedby="tracking-steamID-lookup-help" placeholder="">
-              <small id="tracking-steamID-lookup-help" class="form-text text-muted">Fill in a steam ID, CSMM wil try to find a player associated with it.</small>
+                <label for="tracking-steamID-lookup">Steam ID</label>
+                <input type="text" class="form-control" name="tracking-steamID-lookup" id="tracking-steamID-lookup" aria-describedby="tracking-steamID-lookup-help"
+                    placeholder="">
+                <small id="tracking-steamID-lookup-help" class="form-text text-muted">Fill in a steam ID, CSMM wil try to find a player associated with it.</small>
             </div>
         </div>
 
@@ -58,6 +128,7 @@
             <thead>
                 <tr>
                     <th>Date/time</th>
+                    <th>Player name</th>
                     <th>Item name</th>
                     <th>Quality</th>
                     <th>Amount</th>
@@ -83,6 +154,8 @@
         const players = window.SAILS_LOCALS.players;
         let trackingMap
         let inventoryDataTable
+        let locationResultTable
+
         $(document).ready(() => {
 
             // Data control
@@ -99,10 +172,10 @@
                 if ($("#tracking-steamID-lookup").val() !== "") {
                     let steamId = $("#tracking-steamID-lookup").val();
                     let playerFound = players.filter(player => player.steamId === steamId);
-                    
+
                     if (playerFound.length === 1) {
-                        
-                    $("#player-name-select").val(playerFound[0].id);
+
+                        $("#player-name-select").val(playerFound[0].id);
                     }
 
                 }
@@ -124,6 +197,43 @@
 
             });
 
+            // Location lookup
+
+            locationDataTable = $("#location-result-table").DataTable({
+                dom: 'Bfrtip',
+                fixedHeader: true,
+                responsive: true,
+                buttons: [
+                    'copy', 'excel', 'pdf', 'print'
+                ],
+                columns: [{
+                    data: "createdAt",
+                    render: function (data, type, row, meta) {
+                        let date = new Date(data);
+                        return `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`;
+                    }
+                },
+                {
+                    data: 'playerName'
+                },
+                {
+                    data: 'location'
+                },
+                {
+                    data: 'distance'
+                },
+                {
+                    data: 'steamId'
+                },
+                ]
+            })
+
+            $("#tracking-location-modal-get").click(e => {
+
+                loadLocationDataAndShow();
+
+            })
+
             // Map
             trackingMap = new sdtdMap($("#sdtdMap"))
 
@@ -142,6 +252,9 @@
                         let date = new Date(data);
                         return `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`;
                     }
+                },
+                {
+                    data: 'playerName'
                 },
                 {
                     data: 'itemName'
@@ -181,30 +294,114 @@
 
                 $('#narrow-down').show();
 
-
-                trackingMap.drawPlayers(window.SAILS_LOCALS.players.filter(player => player.id === parseInt(playerId)), data);
-                refreshDataTable(data, inventoryDataTable)
+                locationDataTable.clear()
+                trackingMap.clear();
+                trackingMap.drawPlayers(players.filter(player => player.id === parseInt(playerId)), data);
+                refreshInventoryDataTable(data, inventoryDataTable)
             })
         }
 
-        function refreshDataTable(trackingInfo, dataTable) {
+        function loadLocationDataAndShow(begin, end) {
+            let elementX = $("#tracking-location-modal-x");
+            let elementZ = $("#tracking-location-modal-z");
+            let elementRadius = $("#tracking-location-modal-radius");
+            let resultElement = $("#location-result")
+
+            elementX.removeClass('bg-danger');
+            elementZ.removeClass('bg-danger');
+            elementRadius.removeClass('bg-danger');
+
+            let x = parseInt(elementX.val());
+            let z = parseInt(elementZ.val());
+            let radius = parseInt(elementRadius.val());
+
+            if (isNaN(x)) {
+                x = 0
+            }
+
+            if (isNaN(z)) {
+                z = 0
+            }
+
+            if (isNaN(radius)) {
+                radius = 50
+            }
+
+            $.get('/api/sdtdserver/tracking/location', {
+                serverId: server.id,
+                x: x,
+                z: z,
+                radius: radius,
+                beginDate: begin,
+                endDate: end
+            }, data => {
+
+                let resultElement = $("#location-result");
+                let playerIdsFound = _.uniqBy(data, "player");
+                let playersToDraw = players.filter(player => {
+                    let idx = _.findIndex(playerIdsFound, trackingInfoRecord => trackingInfoRecord.player === player.id);
+                    return idx !== -1
+                })
+                resultElement.text(`Found ${playerIdsFound.length} ${playerIdsFound.length === 1 ? "player" : "players"} in this location radius.`);
+
+                refreshLocationDataTable(data, locationDataTable, x, z);
+                refreshInventoryDataTable(data, inventoryDataTable)
+                trackingMap.clear();
+                trackingMap.drawPlayers(playersToDraw, data);
+                trackingMap.drawRectangle(x, z, radius)
+
+            })
+        }
+
+        function refreshInventoryDataTable(trackingInfo, dataTable) {
             dataTable.clear();
 
             let parsedDataForTable = new Array();
 
             for (const record of trackingInfo) {
+                let player = players.filter(player => record.player === player.id)
                 if (record.inventory) {
                     for (const inventoryItem of record.inventory) {
+
+
                         let parsedData = {
                             createdAt: record.createdAt,
                             itemName: inventoryItem.name,
                             amount: inventoryItem.count,
-                            quality: inventoryItem.quality
+                            quality: inventoryItem.quality,
+                            playerName: player[0].name
                         };
                         parsedDataForTable.push(parsedData);
 
                     }
                 }
+            }
+            dataTable.rows.add(parsedDataForTable);
+            dataTable.draw()
+
+        }
+
+        function refreshLocationDataTable(trackingInfo, dataTable, x, z) {
+            dataTable.clear();
+
+            let parsedDataForTable = new Array();
+
+            for (const record of trackingInfo) {
+
+                let player = players.filter(player => record.player === player.id)
+
+                let a = x - record.x;
+                let b = z - record.z;
+                let distance = Math.trunc(Math.sqrt(a * a + b * b))
+
+                let parsedData = {
+                    createdAt: record.createdAt,
+                    playerName: player[0].name,
+                    location: `${record.x} ${record.y} ${record.z}`,
+                    distance: distance,
+                    steamId: player[0].steamId
+                }
+                parsedDataForTable.push(parsedData);
             }
             dataTable.rows.add(parsedDataForTable);
             dataTable.draw()

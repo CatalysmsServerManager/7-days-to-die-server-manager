@@ -3,25 +3,59 @@ class sdtdMap {
         this.mapElement = mapElement;
         this.playerMarkerMap = new Map();
         this.server = server;
-        this.playerPath = undefined;
+        this.playerPathsMap = new Map();
+        this.circle = undefined;
+        this.rectangle = undefined
         this.map = this.initMap();
     }
 
-    drawPlayers(players, trackingInfo) {
-        let server = window.SAILS_LOCALS.server;
+    clear() {
+        if (this.circle) {
+            this.circle.remove();
+        }
+        if (this.rectangle) {
+            this.rectangle.remove();
+        }
 
         this.playerMarkerMap.forEach(existingMarker => {
             existingMarker.remove()
         })
 
-        this.playerMarkerMap.clear();
-        if (this.playerPath) {
-            this.playerPath.remove();
-        }
+        this.playerPathsMap.forEach(existingPath => {
+            existingPath.remove()
+        })
 
+        this.playerMarkerMap.clear();
+        this.playerPathsMap.clear()
+    }
+
+    deletePlayerMarkers() {
+        this.playerMarkerMap.forEach(existingMarker => {
+            existingMarker.remove()
+        })
+
+        playerMarkerMap.clear();
+    }
+
+    drawCircle(x, z, radius, extraOptions) {
+        this.circle = L.circle([x, z], { radius: radius });
+        this.circle.addTo(this.map);
+        return this.circle
+
+    }
+
+    // Radius a bit of a misnomer here 
+    drawRectangle(x, z, radius, extraOptions) {
+        this.rectangle = L.rectangle([[x - radius, z - radius], [x + radius, z + radius]]);
+        this.rectangle.addTo(this.map)
+        return this.rectangle
+    }
+
+
+    drawPlayers(players, trackingInfo) {
 
         for (const player of players) {
-            let playerLatLng = L.latLng(L.latLng(player.positionX, player.positionZ));
+            let playerLatLng = L.latLng(player.positionX, player.positionZ);
 
             let marker = L.marker(playerLatLng, {
                 title: player.name,
@@ -31,26 +65,57 @@ class sdtdMap {
 
             marker.bindPopup(popup)
 
-            marker.addTo(this.map)
-
             this.playerMarkerMap.set(player.id, marker);
 
         }
 
         if (trackingInfo) {
             if (trackingInfo.length > 0) {
-                var playerPath = new Array();
+
+                let playerPathArrays = new Map();
 
                 for (const record of trackingInfo) {
-                    if (record.x && record.z) {
-                        playerPath.push([record.x, record.z])
+                    if (!_.isUndefined(record.x) && !_.isUndefined(record.z)) {
+
+                        let currentSet = playerPathArrays.get(record.player);
+                        if (!currentSet) {
+                            currentSet = new Array();
+                        }
+                        currentSet.push([record.x, record.z])
+                        playerPathArrays.set(record.player, currentSet);
                     }
                 }
 
-                this.playerPath = L.polyline(playerPath, { color: 'red' }).addTo(this.map);
+                let colors = ['red', 'green', 'blue', 'yellow', 'orange', 'brown'];
+                let colorIterator = 0;
+
+                playerPathArrays.forEach((playerPath, playerId) => {
+
+                    if (!colors[colorIterator]) {
+                        colorIterator = 0;
+                    }
+
+                    let playerPathPoly = L.polyline(playerPath, { color: colors[colorIterator] });
+                    colorIterator++
+
+                    this.playerPathsMap.set(playerId, playerPathPoly);
+
+                    let playerMarker = this.playerMarkerMap.get(playerId);
+                    playerMarker.setLatLng(playerPath[playerPath.length - 1]);
+                });
+
+
 
             }
         }
+
+        this.playerMarkerMap.forEach(marker => {
+            marker.addTo(this.map)
+        })
+
+        this.playerPathsMap.forEach(path => {
+            path.addTo(this.map)
+        })
 
     }
 
@@ -97,8 +162,6 @@ class sdtdMap {
 
         tileLayer.addTo(mymap)
 
-        //drawPlayerMarkers(mymap);
-
         return mymap
     }
 
@@ -124,50 +187,6 @@ class sdtdMap {
 
         return tileLayer;
     }
-
-    drawPlayerMarkers(player, trackingInfo) {
-
-        let server = window.SAILS_LOCALS.server;
-
-        let onlyOnline = $("#map-players-online-check").prop('checked');
-
-        $.get('/api/sdtdserver/players', { serverId: server.id, onlyOnline: onlyOnline, staticOnly: !onlyOnline }, data => {
-            playerMarkerMap.forEach(existingMarker => {
-                existingMarker.remove()
-            })
-
-            playerMarkerMap.clear();
-
-
-            for (const player of data) {
-
-                let playerLatLng = L.latLng(L.latLng(player.positionX, player.positionZ));
-                if (_.isUndefined(playerMarkerMap.get(player.id))) {
-
-                    let marker = L.marker(playerLatLng, {
-                        title: player.name,
-                        alt: player.name,
-                    });
-                    let popup = L.popup().setContent(`<a href="/player/${player.id}/profile">${player.name}</a>`);
-
-                    marker.bindPopup(popup)
-
-                    marker.addTo(map)
-
-                    playerMarkerMap.set(player.id, marker);
-                }
-            }
-        })
-    }
-
-    deletePlayerMarkers() {
-        playerMarkerMap.forEach(existingMarker => {
-            existingMarker.remove()
-        })
-
-        playerMarkerMap.clear();
-    }
-
 
 }
 
