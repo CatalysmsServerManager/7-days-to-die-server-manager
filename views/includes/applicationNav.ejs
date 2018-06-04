@@ -85,15 +85,15 @@
             </li>
 
             <li class="nav-item">
-                    <a class="nav-link" href="/user/<%= req.session.userId %>/profile">
-                        <i class="fas fa-user-circle"></i> Your profile
-                    </a>
-                </li>
-    
-                <a class="nav-link" id="logout-button" href="/auth/logout">
-                    <i class="fas fa-sign-out-alt"></i> Logout
+                <a class="nav-link" href="/user/<%= req.session.userId %>/profile">
+                    <i class="fas fa-user-circle"></i> Your profile
                 </a>
-    
+            </li>
+
+            <a class="nav-link" id="logout-button" href="/auth/logout">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+
 
 
         </ul>
@@ -171,7 +171,7 @@
 
                     $.get('/api/sdtdserver/onlinestatus', { serverId: server.id }, onlineStatus => {
 
-                        let elementToAdd = `<i class="fas fa-circle ${onlineStatus ? "text-success" : "text-danger"}"></i> `
+                        let elementToAdd = `<i class="${onlineStatus ? "fas fa-check-circle text-success" : "fas fa-times-circle text-danger"}"></i> `
 
                         $(`#server-${server.id}-nav-title`).prepend(elementToAdd)
                     })
