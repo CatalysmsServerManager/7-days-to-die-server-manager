@@ -17,6 +17,13 @@
                     <% }) %>
 
             </select>
+
+
+            <div class="form-group">
+              <label for="tracking-steamID-lookup">Steam ID</label>
+              <input type="text" class="form-control" name="tracking-steamID-lookup" id="tracking-steamID-lookup" aria-describedby="tracking-steamID-lookup-help" placeholder="">
+              <small id="tracking-steamID-lookup-help" class="form-text text-muted">Fill in a steam ID, CSMM wil try to find a player associated with it.</small>
+            </div>
         </div>
 
 
@@ -29,6 +36,7 @@
 
         <hr>
         <div>
+            <p id="playerInfo"></p>
             <p id="loaded-data"> Click "Get data" to get started!</p>
             <p id="daterange-data"></p>
 
@@ -72,6 +80,7 @@
     <script>
 
         const server = window.SAILS_LOCALS.server;
+        const players = window.SAILS_LOCALS.players;
         let trackingMap
         let inventoryDataTable
         $(document).ready(() => {
@@ -79,7 +88,18 @@
             // Data control
 
             $('#tracking-player-btn').click(e => {
-                $("#loaded-data").html(`<i class="fas fa-spinner spin"></i>`)
+                $("#loaded-data").html(`<i class="fas fa-spinner fa-spin"></i>`);
+
+                if ($("#tracking-steamID-lookup").val() !== "") {
+                    let steamId = $("#tracking-steamID-lookup").val();
+                    let playerFound = players.filter(player => player.steamId === steamId);
+                    
+                    if (playerFound.length === 1) {
+                        
+                    $("#player-name-select").val(playerFound[0].id);
+                    }
+
+                }
 
                 getDataAndUpdate();
             })
@@ -93,7 +113,7 @@
             });
 
             $('input[name="datetimes"]').on('apply.daterangepicker', function (ev, picker) {
-                $("#loaded-data").html(`<i class="fas fa-spinner spin"></i>`)
+                $("#loaded-data").html(`<i class="fas fa-spinner fa-spin"></i>`)
                 getDataAndUpdate(picker.startDate.toDate().valueOf(), picker.endDate.toDate().valueOf());
 
             });
@@ -133,6 +153,8 @@
 
         function getDataAndUpdate(begin, end) {
             let playerId = $("#player-name-select").val();
+            let activePlayer = players.filter(player => player.id === parseInt(playerId));
+            $("#playerInfo").text("");
 
             $.get('/api/sdtdserver/tracking', { serverId: server.id, playerId: playerId, beginDate: begin, endDate: end }, data => {
 
@@ -140,6 +162,7 @@
                     return alert('No data found for this player.')
                 }
 
+                $("#playerInfo").text(`${activePlayer[0].name} - ${activePlayer[0].steamId}`)
                 $("#loaded-data").text(`${data.length} datapoints loaded`);
 
 
