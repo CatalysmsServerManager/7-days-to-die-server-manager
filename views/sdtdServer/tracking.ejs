@@ -71,7 +71,7 @@
             </div>
         </div>
 
-        <input name="tracking-player-btn" id="tracking-player-btn" class="btn btn-primary btn-lg" type="button" value="Get data">
+        <input name="tracking-player-btn" id="tracking-player-btn" class="btn btn-primary btn-lg" type="button" value="Get individual player data">
 
         <div class="form-group">
             <label for="player-name-select">Tracking player</label>
@@ -155,6 +155,8 @@
         let trackingMap
         let inventoryDataTable
         let locationResultTable
+        let dateTimePicker
+        let lastSearched
 
         $(document).ready(() => {
 
@@ -179,13 +181,13 @@
                     }
 
                 }
-
                 getDataAndUpdate();
+                lastSearched = 'player';
             })
 
             $('#narrow-down').hide();
 
-            $('input[name="datetimes"]').daterangepicker({
+            dateTimePicker = $('input[name="datetimes"]').daterangepicker({
                 timePicker: true,
                 startDate: moment().startOf('hour'),
                 endDate: Date.now(),
@@ -193,7 +195,15 @@
 
             $('input[name="datetimes"]').on('apply.daterangepicker', function (ev, picker) {
                 $("#loaded-data").html(`<i class="fas fa-spinner fa-spin"></i>`)
-                getDataAndUpdate(picker.startDate.toDate().valueOf(), picker.endDate.toDate().valueOf());
+
+                if (lastSearched === "player") {
+                    getDataAndUpdate(picker.startDate.toDate().valueOf(), picker.endDate.toDate().valueOf());
+                }
+
+                if (lastSearched === "location") {
+                    loadLocationDataAndShow(picker.startDate.toDate().valueOf(), picker.endDate.toDate().valueOf());
+                }
+
 
             });
 
@@ -233,9 +243,10 @@
                 $("#tracking-location-modal-title").html(`<i class="fas fa-spinner fa-spin"></i> Loading`);
                 locationDataTable.clear();
                 locationDataTable.draw();
+                $('#narrow-down').show();
 
                 loadLocationDataAndShow();
-
+                lastSearched = 'location';
             })
 
             // Map
