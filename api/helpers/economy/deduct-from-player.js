@@ -47,7 +47,7 @@ module.exports = {
                 return exits.notEnoughCurrency(Math.abs(newBalance));
             }
 
-            await Player.update({id: playerToDeductFrom.id}, {currency: newBalance});
+            await Player.update({ id: playerToDeductFrom.id }, { currency: newBalance });
             await HistoricalInfo.create({
                 server: playerToDeductFrom.server,
                 type: 'economy',
@@ -56,6 +56,7 @@ module.exports = {
                 amount: inputs.amountToDeduct,
                 economyAction: 'deduct'
             })
+            deleteOldData(playerToDeductFrom.server);
             return exits.success();
         } catch (error) {
             sails.log.error(`HELPER economy:deduct-from-player - ${error}`);
@@ -63,4 +64,23 @@ module.exports = {
         }
     }
 };
+
+async function deleteOldData(serverId) {
+    try {
+        let hoursToKeepData = 72
+        let milisecondsToKeepData = hoursToKeepData * 3600000;
+        let dateNow = Date.now();
+        let borderDate = new Date(dateNow.valueOf() - milisecondsToKeepData);
+
+        await HistoricalInfo.destroy({
+            createdAt: { '<': borderDate.valueOf() },
+            type: 'economy',
+            server: serverId
+        })
+
+    } catch (error) {
+        sails.log.error(error)
+    }
+
+}
 

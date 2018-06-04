@@ -151,8 +151,8 @@ module.exports = function definePlayerTrackingHook(sails) {
 
           await Player.update(trackingRecord[0].player, {
             positionX: onlinePlayer.position.x,
-            positionY:  onlinePlayer.position.y,
-            positionZ:  onlinePlayer.position.z,
+            positionY: onlinePlayer.position.y,
+            positionZ: onlinePlayer.position.z,
           })
         }
 
@@ -249,12 +249,12 @@ async function deleteOldData(server) {
     let borderDate = new Date(dateNow.valueOf() - milisecondsToKeepData);
 
     let deletedRecords = await TrackingInfo.destroy({
-        createdAt: { '<': borderDate.valueOf() },
-        server: server.id
+      createdAt: { '<': borderDate.valueOf() },
+      server: server.id
     }).fetch();
-    
-} catch (error) {
+
+  } catch (error) {
     sails.log.error(error)
-}
+  }
 
 }
