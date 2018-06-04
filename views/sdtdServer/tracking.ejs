@@ -87,6 +87,12 @@
 
             // Data control
 
+            $("#player-name-select").change(e => {
+                let newPlayerId = $("#player-name-select").val();
+                let newPlayer = players.filter(player => player.id === parseInt(newPlayerId));
+                $("#tracking-steamID-lookup").val(newPlayer[0].steamId)
+            })
+
             $('#tracking-player-btn').click(e => {
                 $("#loaded-data").html(`<i class="fas fa-spinner fa-spin"></i>`);
 
