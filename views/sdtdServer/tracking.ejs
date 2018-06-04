@@ -230,6 +230,10 @@
 
             $("#tracking-location-modal-get").click(e => {
 
+                $("#tracking-location-modal-title").html(`<i class="fas fa-spinner fa-spin"></i> Loading`);
+                locationDataTable.clear();
+                locationDataTable.draw();
+
                 loadLocationDataAndShow();
 
             })
@@ -305,7 +309,7 @@
             let elementX = $("#tracking-location-modal-x");
             let elementZ = $("#tracking-location-modal-z");
             let elementRadius = $("#tracking-location-modal-radius");
-            let resultElement = $("#location-result")
+            let resultElement = $("#tracking-location-modal-title")
 
             elementX.removeClass('bg-danger');
             elementZ.removeClass('bg-danger');
@@ -336,14 +340,25 @@
                 endDate: end
             }, data => {
 
-                let resultElement = $("#location-result");
+                if (data.length === 0) {
+                    return alert("No data found");
+                }
+
                 let playerIdsFound = _.uniqBy(data, "player");
                 let playersToDraw = players.filter(player => {
                     let idx = _.findIndex(playerIdsFound, trackingInfoRecord => trackingInfoRecord.player === player.id);
                     return idx !== -1
                 })
-                resultElement.text(`Found ${playerIdsFound.length} ${playerIdsFound.length === 1 ? "player" : "players"} in this location radius.`);
 
+                // Display result info
+                resultElement.text(`Found ${playerIdsFound.length} ${playerIdsFound.length === 1 ? "player" : "players"} in this location radius.`);
+                $("#playerInfo").text(`Found ${playerIdsFound.length} ${playerIdsFound.length === 1 ? "player" : "players"} in this location radius.`)
+                $("#loaded-data").text(`${data.length} datapoints loaded`);
+                let oldest = new Date(data[0].createdAt);
+                let newest = new Date(data[data.length - 1].createdAt);
+                $("#daterange-data").text(`Oldest: ${oldest.toLocaleDateString()} ${oldest.toLocaleTimeString()} Newest: ${newest.toLocaleDateString()} ${newest.toLocaleTimeString()}`);
+
+                // Draw all the things
                 refreshLocationDataTable(data, locationDataTable, x, z);
                 refreshInventoryDataTable(data, inventoryDataTable)
                 trackingMap.clear();
