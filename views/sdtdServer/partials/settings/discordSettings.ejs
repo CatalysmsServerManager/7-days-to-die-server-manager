@@ -1,160 +1,164 @@
 <!-- DISCORD SETTINGS -->
 
-<ul class="list-group">
 
-  <% if ('' === user.discordId) { %>
+<div class="container">
+  <p>Control how the bot behaves in your server. You can reload the channels by setting a discord guild</p>
 
-    <div class="alert alert-warning" role="alert">
-      <strong>You have not linked a discord ID yet. Please login to control discord settings</strong>}
-    </div>
+  <ul class="list-group">
 
-    <a href="/auth/discord">
-      <img src="../../images/discordIcon.png" width="50%">
-    </a>
+    <% if ('' === user.discordId) { %>
 
-    <%  } else { %>
+      <div class="alert alert-warning" role="alert">
+        <strong>You have not linked a discord ID yet. Please login to control discord settings</strong>}
+      </div>
 
-      <a class="btn btn-primary" href='https://discordapp.com/api/oauth2/authorize?client_id=396968286853529600&permissions=52224&redirect_uri=https%3A%2F%2Fcsmm.catalysm.net%2Fauth%2Fdiscord%2Freturn&scope=bot'
-        target="_blank" role="button">Add bot to your server</a>
+      <a href="/auth/discord">
+        <img src="../../images/discordIcon.png" width="50%">
+      </a>
 
+      <%  } else { %>
 
-      <!-- Server select -->
-
-      <li class='list-group-item'>
-        <label for="input-settings-discord-guild">Select discord guild to associate with this 7DTD server</label>
-        <div class="form-inline">
-          <select class="form-control" id="input-settings-discord-guild">
+        <a class="btn btn-primary" href='https://discordapp.com/api/oauth2/authorize?client_id=396968286853529600&permissions=52224&redirect_uri=https%3A%2F%2Fcsmm.catalysm.net%2Fauth%2Fdiscord%2Freturn&scope=bot'
+          target="_blank" role="button">Add bot to your server</a>
 
 
-          </select>
-          <button id="input-settings-discord-setguild-btn" type="button" class="btn btn-primary">Set guild</button>
-        </div>
-      </li>
+        <!-- Server select -->
 
-      <!-- Prefix select -->
+        <li class='list-group-item'>
+          <label for="input-settings-discord-guild">Select discord guild to associate with this 7DTD server</label>
+          <div class="form-inline">
+            <select class="form-control" id="input-settings-discord-guild">
 
-      <li class='list-group-item'>
-        <div class="form-inline">
-          <div class="form-group">
-            <label for="input-settings-discord-prefix">Prefix</label>
-            <input type="text" class="form-control" name="input-settings-discord-prefix" id="input-settings-discord-prefix" aria-describedby="discord-prefix-help"
-              placeholder="<%= config.discordPrefix %>">
-            <small id="discord-prefix-help" class="form-text text-muted"></small>
+
+            </select>
+            <button id="input-settings-discord-setguild-btn" type="button" class="btn btn-primary">Set guild</button>
           </div>
-          <button id="inputs-setting-discord-prefix-btn" type="button" class="btn btn-primary">Set prefix</button>
-        </div>
-      </li>
+        </li>
+
+        <!-- Prefix select -->
+
+        <li class='list-group-item'>
+          <div class="form-inline">
+            <div class="form-group">
+              <label for="input-settings-discord-prefix">Prefix</label>
+              <input type="text" class="form-control" name="input-settings-discord-prefix" id="input-settings-discord-prefix" aria-describedby="discord-prefix-help"
+                placeholder="<%= config.discordPrefix %>">
+              <small id="discord-prefix-help" class="form-text text-muted"></small>
+            </div>
+            <button id="inputs-setting-discord-prefix-btn" type="button" class="btn btn-primary">Set prefix</button>
+          </div>
+        </li>
 
 
 
-      <!-- Chat channel select -->
+        <!-- Chat channel select -->
 
-      <li class='list-group-item'>
-        <label for="input-settings-discord-chatchannel">Chat channel</label>
-        <br>
-        <small>Designate a discord channel to create a chat bridge to your server with
-          <br>Make sure the bot has permissions to send messages and embed links </small>
+        <li class='list-group-item'>
+          <label for="input-settings-discord-chatchannel">Chat channel</label>
+          <br>
+          <small>Designate a discord channel to create a chat bridge to your server with
+            <br>Make sure the bot has permissions to send messages and embed links </small>
 
-        <select class="form-control" id="input-settings-discord-chatchannel">
-        </select>
-        <div class="form-check">
-          <% if(config.chatChannelRichMessages) { %>
-            <input class="form-check-input" type="checkbox" value="" id="input-settings-discord-chatchannel-richmessages" checked>
-            <% } else { %>
-              <input class="form-check-input" type="checkbox" value="" id="input-settings-discord-chatchannel-richmessages">
-              <% } %>
-                <label class="form-check-label" for="input-settings-discord-chatchannel-richmessages">
-                  Rich messages
-                  <br>
-                  <small> Displays additional information on player (dis)connect </small>
-                </label>
-        </div>
-        <button id="input-settings-discord-setchatchannel-btn" type="button" class="btn btn-primary">Set chat channel</button>
-      </li>
-
-
-
-      <!-- Notification channel select -->
-
-      <li class='list-group-item'>
-        <label for="input-settings-discord-notificationChannel">Notifications</label>
-        <small>Designate a discord channel to receive CSMM notifications
-          <br>Make sure the bot has permissions to send messages and embed links </small>
-
-        <div class="form-group">
-          <label for="discord-settings-notifications-reboots-select">CSMM reboots</label>
-          <select class="form-control" name="discord-settings-notifications-reboots-select" id="discord-settings-notifications-reboots-select">
-            <option>Loading</option>
+          <select class="form-control" id="input-settings-discord-chatchannel">
           </select>
-          <button id="input-settings-discord-setnotification-systemboot-btn" type="button" class="btn btn-primary">Set reboot notification</button>
-        </div>
-
-        <div class="form-group">
-          <label for="discord-settings-notifications-playerconnect-select">Player connect</label>
-          <select class="form-control" name="discord-settings-notifications-playerconnect-select" id="discord-settings-notifications-playerconnect-select">
-            <option>Loading</option>
-          </select>
-          <button id="input-settings-discord-setnotification-playerConnected-btn" type="button" class="btn btn-primary">Set player connect notification</button>
-        </div>
-
-        <div class="form-group">
-          <label for="discord-settings-notifications-playerdisconnect-select">Player disconnect</label>
-          <select class="form-control" name="discord-settings-notifications-playerdisconnect-select" id="discord-settings-notifications-playerdisconnect-select">
-            <option>Loading</option>
-          </select>
-          <button id="input-settings-discord-setnotification-playerDisconnected-btn" type="button" class="btn btn-primary">Set player disconnect notification</button>
-        </div>
-
-        <div class="form-group">
-          <label for="discord-settings-notifications-connectionlost-select">Connection lost</label>
-          <select class="form-control" name="discord-settings-notifications-connectionlost-select" id="discord-settings-notifications-connectionlost-select">
-            <option>Loading</option>
-          </select>
-          <button id="input-settings-discord-setnotification-connectionLost-btn" type="button" class="btn btn-primary">Set CSMM disconnect notification</button>
-        </div>
-
-        <div class="form-group">
-          <label for="discord-settings-notifications-connected-select">(re)connected</label>
-          <select class="form-control" name="discord-settings-notifications-connected-select" id="discord-settings-notifications-connected-select">
-            <option>Loading</option>
-          </select>
-          <button id="input-settings-discord-setnotification-connected-btn" type="button" class="btn btn-primary">Set CSMM connected notification</button>
-        </div>
-
-        <div class="form-group">
-          <label for="discord-settings-notifications-countrybankick-select">Country ban kick</label>
-          <small>Psst, this only makes sense to enable if you have country ban enabled ;)</small>
-          <select class="form-control" name="discord-settings-notifications-countrybankick-select" id="discord-settings-notifications-countrybankick-select">
-            <option>Loading</option>
-          </select>
-          <button id="input-settings-discord-setnotification-countrybankick-btn" type="button" class="btn btn-primary">Set country ban kick notification</button>
-        </div>
-
-        <div class="form-group">
-          <label for="discord-settings-notifications-ticket-select">Tickets</label>
-          <small>Receive notifications for calladmin ticket updates</small>
-          <select class="form-control" name="discord-settings-notifications-ticket-select" id="discord-settings-notifications-ticket-select">
-            <option>Loading</option>
-          </select>
-          <button id="input-settings-discord-setnotification-ticket-btn" type="button" class="btn btn-primary">Set tickets notification</button>
-        </div>
+          <div class="form-check">
+            <% if(config.chatChannelRichMessages) { %>
+              <input class="form-check-input" type="checkbox" value="" id="input-settings-discord-chatchannel-richmessages" checked>
+              <% } else { %>
+                <input class="form-check-input" type="checkbox" value="" id="input-settings-discord-chatchannel-richmessages">
+                <% } %>
+                  <label class="form-check-label" for="input-settings-discord-chatchannel-richmessages">
+                    Rich messages
+                    <br>
+                    <small> Displays additional information on player (dis)connect </small>
+                  </label>
+          </div>
+          <button id="input-settings-discord-setchatchannel-btn" type="button" class="btn btn-primary">Set chat channel</button>
+        </li>
 
 
-        <div class="form-group">
-          <label for="discord-settings-notifications-cronjob-select">Automation jobs</label>
-          <small>Receive notifications when automated jobs run.</small>
-          <select class="form-control" name="discord-settings-notifications-cronjob-select" id="discord-settings-notifications-cronjob-select">
-            <option>Loading</option>
-          </select>
-          <button id="input-settings-discord-setnotification-cronjob-btn" type="button" class="btn btn-primary">Set automation notification</button>
-        </div>
+
+        <!-- Notification channel select -->
+
+        <li class='list-group-item'>
+          <label for="input-settings-discord-notificationChannel">Notifications</label>
+          <small>Designate a discord channel to receive CSMM notifications
+            <br>Make sure the bot has permissions to send messages and embed links </small>
+
+          <div class="form-group">
+            <label for="discord-settings-notifications-reboots-select">CSMM reboots</label>
+            <select class="form-control" name="discord-settings-notifications-reboots-select" id="discord-settings-notifications-reboots-select">
+              <option>Loading</option>
+            </select>
+            <button id="input-settings-discord-setnotification-systemboot-btn" type="button" class="btn btn-primary">Set reboot notification</button>
+          </div>
+
+          <div class="form-group">
+            <label for="discord-settings-notifications-playerconnect-select">Player connect</label>
+            <select class="form-control" name="discord-settings-notifications-playerconnect-select" id="discord-settings-notifications-playerconnect-select">
+              <option>Loading</option>
+            </select>
+            <button id="input-settings-discord-setnotification-playerConnected-btn" type="button" class="btn btn-primary">Set player connect notification</button>
+          </div>
+
+          <div class="form-group">
+            <label for="discord-settings-notifications-playerdisconnect-select">Player disconnect</label>
+            <select class="form-control" name="discord-settings-notifications-playerdisconnect-select" id="discord-settings-notifications-playerdisconnect-select">
+              <option>Loading</option>
+            </select>
+            <button id="input-settings-discord-setnotification-playerDisconnected-btn" type="button" class="btn btn-primary">Set player disconnect notification</button>
+          </div>
+
+          <div class="form-group">
+            <label for="discord-settings-notifications-connectionlost-select">Connection lost</label>
+            <select class="form-control" name="discord-settings-notifications-connectionlost-select" id="discord-settings-notifications-connectionlost-select">
+              <option>Loading</option>
+            </select>
+            <button id="input-settings-discord-setnotification-connectionLost-btn" type="button" class="btn btn-primary">Set CSMM disconnect notification</button>
+          </div>
+
+          <div class="form-group">
+            <label for="discord-settings-notifications-connected-select">(re)connected</label>
+            <select class="form-control" name="discord-settings-notifications-connected-select" id="discord-settings-notifications-connected-select">
+              <option>Loading</option>
+            </select>
+            <button id="input-settings-discord-setnotification-connected-btn" type="button" class="btn btn-primary">Set CSMM connected notification</button>
+          </div>
+
+          <div class="form-group">
+            <label for="discord-settings-notifications-countrybankick-select">Country ban kick</label>
+            <small>Psst, this only makes sense to enable if you have country ban enabled ;)</small>
+            <select class="form-control" name="discord-settings-notifications-countrybankick-select" id="discord-settings-notifications-countrybankick-select">
+              <option>Loading</option>
+            </select>
+            <button id="input-settings-discord-setnotification-countrybankick-btn" type="button" class="btn btn-primary">Set country ban kick notification</button>
+          </div>
+
+          <div class="form-group">
+            <label for="discord-settings-notifications-ticket-select">Tickets</label>
+            <small>Receive notifications for calladmin ticket updates</small>
+            <select class="form-control" name="discord-settings-notifications-ticket-select" id="discord-settings-notifications-ticket-select">
+              <option>Loading</option>
+            </select>
+            <button id="input-settings-discord-setnotification-ticket-btn" type="button" class="btn btn-primary">Set tickets notification</button>
+          </div>
 
 
-      </li>
-      <% } %>
+          <div class="form-group">
+            <label for="discord-settings-notifications-cronjob-select">Automation jobs</label>
+            <small>Receive notifications when automated jobs run.</small>
+            <select class="form-control" name="discord-settings-notifications-cronjob-select" id="discord-settings-notifications-cronjob-select">
+              <option>Loading</option>
+            </select>
+            <button id="input-settings-discord-setnotification-cronjob-btn" type="button" class="btn btn-primary">Set automation notification</button>
+          </div>
 
-</ul>
 
+        </li>
+        <% } %>
+
+  </ul>
+</div>
 
 <script>
   $(document).ready(function () {

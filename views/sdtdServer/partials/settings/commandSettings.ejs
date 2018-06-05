@@ -1,87 +1,92 @@
 <!-- COMMANDS SETTINGS -->
 
-<ul class="list-group">
+<div class="container">
+  <p>Control the ingame commands used by your players. To see a full list of commands, check the documentation. Not all commands
+    are listed here, they will get enabled automatically when their corresponding module is enabled. For example, enabling
+    economy will automatically enable the balance command </p>
 
-  <li class="list-group-item">
-    <label for="input-settings-commands-prefix">Command prefix</label>
+  <ul class="list-group">
 
-    <input type="text" class="form-control" id="input-settings-commands-prefix" placeholder="<%= config.commandPrefix %>">
-    <input name="input-settings-commands-prefix-set-btn" id="input-settings-commands-prefix-set-btn" class="btn btn-primary"
-      type="button" value="Set">
-  </li>
+    <li class="list-group-item">
+      <label for="input-settings-commands-prefix">Command prefix</label>
 
-  <li class="list-group-item">
-    <label for="input-settings-commands">Built in commands</label>
+      <input type="text" class="form-control" id="input-settings-commands-prefix" placeholder="<%= config.commandPrefix %>">
+      <input name="input-settings-commands-prefix-set-btn" id="input-settings-commands-prefix-set-btn" class="btn btn-primary"
+        type="button" value="Set">
+    </li>
 
-    <div class="form-check">
-      <label class="form-check-label">
-        <input type="checkbox" class="form-check-input" name="input-settings-commands-calladmin-checkbox" id="input-settings-commands-calladmin-checkbox"
-          value="callAdmin"> Call admin
-      </label>
-    </div>
-    <div class="form-check">
-      <label class="form-check-label">
-        <input type="checkbox" class="form-check-input" name="input-settings-commands-playerTeleports-checkbox" id="input-settings-commands-playerTeleports-checkbox"
-          value="playerTeleports"> Player teleports
-      </label>
-    </div>
-  </li>
+    <li class="list-group-item">
+      <label for="input-settings-commands">Built in commands</label>
 
-  <li class="list-group-item">
-    <label>Custom commands</label>
+      <div class="form-check">
+        <label class="form-check-label">
+          <input type="checkbox" class="form-check-input" name="input-settings-commands-calladmin-checkbox" id="input-settings-commands-calladmin-checkbox"
+            value="callAdmin"> Call admin
+        </label>
+      </div>
+      <div class="form-check">
+        <label class="form-check-label">
+          <input type="checkbox" class="form-check-input" name="input-settings-commands-playerTeleports-checkbox" id="input-settings-commands-playerTeleports-checkbox"
+            value="playerTeleports"> Player teleports
+        </label>
+      </div>
+    </li>
 
-    <% customCommands.forEach(command => { %>
+    <li class="list-group-item">
+      <label>Custom commands</label>
 
-      <%- include('./editCommandModal.ejs', { command: command}) %>
+      <% customCommands.forEach(command => { %>
 
-
-        <% }) %>
-
-  </li>
-
-
-  <%- include('./addCommandModal.ejs') %>
-
-    <%- include('../commandsHelpButton') %>
+        <%- include('./editCommandModal.ejs', { command: command}) %>
 
 
-      <li class="list-group-item">
-        <h4>Player teleport settings</h4>
+          <% }) %>
 
-        <div class="form-group">
-          <label for="">Max locations that players can set</label>
-          <input type="text" class="form-control" name="inputs-settings-commands-playerteleports-maxlocations" id="inputs-settings-commands-playerteleports-maxlocations"
-            placeholder="<%= config.maxPlayerTeleportLocations %>">
-          <input name="inputs-settings-playerteleports-maxlocations-btn" id="inputs-settings-playerteleports-maxlocations-btn" class="btn btn-primary"
-            type="button" value="Set">
-        </div>
+    </li>
 
-        <div class="form-group">
-          <label for="">Time (in seconds) that a player has to wait before teleporting again</label>
-          <input type="text" class="form-control" name="inputs-settings-commands-playerteleports-timeout" id="inputs-settings-commands-playerteleports-timeout"
-            placeholder="<%= config.playerTeleportTimeout %>">
-          <input name="inputs-settings-playerteleports-timeout-btn" id="inputs-settings-playerteleports-timeout-btn" class="btn btn-primary"
-            type="button" value="Set">
-        </div>
 
-        <div class="form-group">
-          <label for="">Time (in seconds) that a teleport will be delayed. This makes sure players cannot use tele to escape a dire situation.</label>
-          <input type="text" class="form-control" name="inputs-settings-commands-playerteleports-delay" id="inputs-settings-commands-playerteleports-delay"
-            placeholder="<%= config.playerTeleportDelay %>">
-          <input name="inputs-settings-playerteleports-delay-btn" id="inputs-settings-playerteleports-delay-btn" class="btn btn-primary"
-            type="button" value="Set">
-        </div>
-      </li>
+    <%- include('./addCommandModal.ejs') %>
 
-      <li id='settings-disable-commands-btn' class="btn btn-danger">
-        <i class="fa fa-power-off"></i> Disable
-      </li>
-      <li id='settings-enable-commands-btn' class="btn btn-success">
-        <i class="fa fa-power-off"></i> Enable
-      </li>
+      <%- include('../commandsHelpButton') %>
 
-</ul>
 
+        <li class="list-group-item">
+          <h4>Player teleport settings</h4>
+
+          <div class="form-group">
+            <label for="">Max locations that players can set</label>
+            <input type="text" class="form-control" name="inputs-settings-commands-playerteleports-maxlocations" id="inputs-settings-commands-playerteleports-maxlocations"
+              placeholder="<%= config.maxPlayerTeleportLocations %>">
+            <input name="inputs-settings-playerteleports-maxlocations-btn" id="inputs-settings-playerteleports-maxlocations-btn" class="btn btn-primary"
+              type="button" value="Set">
+          </div>
+
+          <div class="form-group">
+            <label for="">Time (in seconds) that a player has to wait before teleporting again</label>
+            <input type="text" class="form-control" name="inputs-settings-commands-playerteleports-timeout" id="inputs-settings-commands-playerteleports-timeout"
+              placeholder="<%= config.playerTeleportTimeout %>">
+            <input name="inputs-settings-playerteleports-timeout-btn" id="inputs-settings-playerteleports-timeout-btn" class="btn btn-primary"
+              type="button" value="Set">
+          </div>
+
+          <div class="form-group">
+            <label for="">Time (in seconds) that a teleport will be delayed. This makes sure players cannot use tele to escape a dire situation.</label>
+            <input type="text" class="form-control" name="inputs-settings-commands-playerteleports-delay" id="inputs-settings-commands-playerteleports-delay"
+              placeholder="<%= config.playerTeleportDelay %>">
+            <input name="inputs-settings-playerteleports-delay-btn" id="inputs-settings-playerteleports-delay-btn" class="btn btn-primary"
+              type="button" value="Set">
+          </div>
+        </li>
+
+        <li id='settings-disable-commands-btn' class="btn btn-danger">
+          <i class="fa fa-power-off"></i> Disable
+        </li>
+        <li id='settings-enable-commands-btn' class="btn btn-success">
+          <i class="fa fa-power-off"></i> Enable
+        </li>
+
+  </ul>
+</div>
 
 <script>
   $(document).ready(function () {

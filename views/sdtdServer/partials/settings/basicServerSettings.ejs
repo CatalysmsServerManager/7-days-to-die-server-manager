@@ -1,87 +1,87 @@
 <!-- BASIC SERVER SETTINGS -->
 
+<div class="container">
+  <ul class="list-group">
 
-<ul class="list-group">
+    <li class="list-group-item">
+      <label for="input-settings-server-servername">Server name</label>
+      <input type="text" class="form-control" id="input-settings-server-servername" placeholder="<%= server.name %>">
+    </li>
 
-  <li class="list-group-item">
-    <label for="input-settings-server-servername">Server name</label>
-    <input type="text" class="form-control" id="input-settings-server-servername" placeholder="<%= server.name %>">
-  </li>
+    <li class="list-group-item">
+      <label for="input-settings-server-ip">IP</label>
+      <input type="text" class="form-control" id="input-settings-server-ip" placeholder="<%= server.ip %>">
+    </li>
 
-  <li class="list-group-item">
-    <label for="input-settings-server-ip">IP</label>
-    <input type="text" class="form-control" id="input-settings-server-ip" placeholder="<%= server.ip %>">
-  </li>
+    <li class="list-group-item">
+      <label for="inputs-settings-server-webPort">Web port</label>
+      <input type="text" class="form-control" id="inputs-settings-server-webPort" placeholder="<%= server.webPort %>">
+    </li>
 
-  <li class="list-group-item">
-    <label for="inputs-settings-server-webPort">Web port</label>
-    <input type="text" class="form-control" id="inputs-settings-server-webPort" placeholder="<%= server.webPort %>">
-  </li>
+    <!-- Button trigger modal admins -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inputs-settings-server-admins-modal">
+      Add/remove admins
+    </button>
 
-  <!-- Button trigger modal admins -->
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inputs-settings-server-admins-modal">
-    Add/remove admins
-  </button>
+    <!-- Modal admins -->
+    <div class="modal fade" id="inputs-settings-server-admins-modal" tabindex="-1" role="dialog" aria-labelledby="inputs-settings-server-admins-modal-title"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="inputs-settings-server-admins-modal-title">Admin management</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
 
-  <!-- Modal admins -->
-  <div class="modal fade" id="inputs-settings-server-admins-modal" tabindex="-1" role="dialog" aria-labelledby="inputs-settings-server-admins-modal-title"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title" id="inputs-settings-server-admins-modal-title">Admin management</h4>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-
-            <div class="col-6">
-              <div class="form-group">
-                <label for="inputs-settings-server-admins-steamid">Add admin</label>
-                <input type="text" class="form-control" name="inputs-settings-server-admins-steamid" id="inputs-settings-server-admins-steamid"
-                  aria-describedby="inputs-settings-server-admins-helpid" placeholder="76561198028175941">
-                <small id="inputs-settings-server-admins-helpid" class="form-text text-muted">Fill in a steam ID - Make sure the other person has at least logged on once to CSMM</small>
-              </div>
-              <div class="card text-center">
-                <div class="card-body">
-                  <h4 class="card-title" id="inputs-settings-server-admins-founduser-name"></h4>
-                  <p class="card-text" id="inputs-settings-server-admins-founduser-info"></p>
-                  <button type="button" name="inputs-settings-server-admins-addadmin-btn" id="inputs-settings-server-admins-addadmin-btn" class="btn btn-success btn-lg btn-block">Add</button>
-                  <button type="button" name="inputs-settings-server-admins-removeadmin-btn" id="inputs-settings-server-admins-removeadmin-btn"
-                    class="btn btn-danger btn-lg btn-block">Remove</button>
+              <div class="col-6">
+                <div class="form-group">
+                  <label for="inputs-settings-server-admins-steamid">Add admin</label>
+                  <input type="text" class="form-control" name="inputs-settings-server-admins-steamid" id="inputs-settings-server-admins-steamid"
+                    aria-describedby="inputs-settings-server-admins-helpid" placeholder="76561198028175941">
+                  <small id="inputs-settings-server-admins-helpid" class="form-text text-muted">Fill in a steam ID - Make sure the other person has at least logged on once to CSMM</small>
+                </div>
+                <div class="card text-center">
+                  <div class="card-body">
+                    <h4 class="card-title" id="inputs-settings-server-admins-founduser-name"></h4>
+                    <p class="card-text" id="inputs-settings-server-admins-founduser-info"></p>
+                    <button type="button" name="inputs-settings-server-admins-addadmin-btn" id="inputs-settings-server-admins-addadmin-btn" class="btn btn-success btn-lg btn-block">Add</button>
+                    <button type="button" name="inputs-settings-server-admins-removeadmin-btn" id="inputs-settings-server-admins-removeadmin-btn"
+                      class="btn btn-danger btn-lg btn-block">Remove</button>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-6">
-              <h4>Current admins</h4>
-              <div class="list-group" id="input-settings-server-admin-list">
+              <div class="col-6">
+                <h4>Current admins</h4>
+                <div class="list-group" id="input-settings-server-admin-list">
 
 
+                </div>
               </div>
+
             </div>
 
           </div>
-
-        </div>
-        <div class="modal-footer">
-          <p>IMPORTANT! Giving someone admin permission here means this person can do everything with your server! Be very careful
-            who you give this to.</p>
+          <div class="modal-footer">
+            <p>IMPORTANT! Giving someone admin permission here means this person can do everything with your server! Be very
+              careful who you give this to.</p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <button id="input-settings-server-update" class="btn btn-primary btn-lg" type="button">
+    <button id="input-settings-server-update" class="btn btn-primary btn-lg" type="button">
       <em class="glyphicon glyphicon-align-right"></em>
       <i class="fas fa-sync-alt"></i> Apply changes
     </button>
 
-</ul>
+  </ul>
 
 
-
+</div>
 
 
 

@@ -1,352 +1,348 @@
 <% const countryList = [["A1", "Anonymous Proxy"],["A2", "Satellite Provider"],["O1", "Other Country"],["AD", "Andorra"],["AE", "United Arab Emirates"],["AF", "Afghanistan"],["AG", "Antigua and Barbuda"],["AI", "Anguilla"],["AL", "Albania"],["AM", "Armenia"],["AO", "Angola"],["AP", "Asia/Pacific Region"],["AQ", "Antarctica"],["AR", "Argentina"],["AS", "American Samoa"],["AT", "Austria"],["AU", "Australia"],["AW", "Aruba"],["AX", "Aland Islands"],["AZ", "Azerbaijan"],["BA", "Bosnia and Herzegovina"],["BB", "Barbados"],["BD", "Bangladesh"],["BE", "Belgium"],["BF", "Burkina Faso"],["BG", "Bulgaria"],["BH", "Bahrain"],["BI", "Burundi"],["BJ", "Benin"],["BL", "Saint Bartelemey"],["BM", "Bermuda"],["BN", "Brunei Darussalam"],["BO", "Bolivia"],["BQ", "Bonaire, Saint Eustatius and Saba"],["BR", "Brazil"],["BS", "Bahamas"],["BT", "Bhutan"],["BV", "Bouvet Island"],["BW", "Botswana"],["BY", "Belarus"],["BZ", "Belize"],["CA", "Canada"],["CC", "Cocos (Keeling) Islands"],["CD", "Congo, The Democratic Republic of the"],["CF", "Central African Republic"],["CG", "Congo"],["CH", "Switzerland"],["CI", "Cote d'Ivoire"],["CK", "Cook Islands"],["CL", "Chile"],["CM", "Cameroon"],["CN", "China"],["CO", "Colombia"],["CR", "Costa Rica"],["CU", "Cuba"],["CV", "Cape Verde"],["CW", "Curacao"],["CX", "Christmas Island"],["CY", "Cyprus"],["CZ", "Czech Republic"],["DE", "Germany"],["DJ", "Djibouti"],["DK", "Denmark"],["DM", "Dominica"],["DO", "Dominican Republic"],["DZ", "Algeria"],["EC", "Ecuador"],["EE", "Estonia"],["EG", "Egypt"],["EH", "Western Sahara"],["ER", "Eritrea"],["ES", "Spain"],["ET", "Ethiopia"],["EU", "Europe"],["FI", "Finland"],["FJ", "Fiji"],["FK", "Falkland Islands (Malvinas)"],["FM", "Micronesia, Federated States of"],["FO", "Faroe Islands"],["FR", "France"],["GA", "Gabon"],["GB", "United Kingdom"],["GD", "Grenada"],["GE", "Georgia"],["GF", "French Guiana"],["GG", "Guernsey"],["GH", "Ghana"],["GI", "Gibraltar"],["GL", "Greenland"],["GM", "Gambia"],["GN", "Guinea"],["GP", "Guadeloupe"],["GQ", "Equatorial Guinea"],["GR", "Greece"],["GS", "South Georgia and the South Sandwich Islands"],["GT", "Guatemala"],["GU", "Guam"],["GW", "Guinea-Bissau"],["GY", "Guyana"],["HK", "Hong Kong"],["HM", "Heard Island and McDonald Islands"],["HN", "Honduras"],["HR", "Croatia"],["HT", "Haiti"],["HU", "Hungary"],["ID", "Indonesia"],["IE", "Ireland"],["IL", "Israel"],["IM", "Isle of Man"],["IN", "India"],["IO", "British Indian Ocean Territory"],["IQ", "Iraq"],["IR", "Iran, Islamic Republic of"],["IS", "Iceland"],["IT", "Italy"],["JE", "Jersey"],["JM", "Jamaica"],["JO", "Jordan"],["JP", "Japan"],["KE", "Kenya"],["KG", "Kyrgyzstan"],["KH", "Cambodia"],["KI", "Kiribati"],["KM", "Comoros"],["KN", "Saint Kitts and Nevis"],["KP", "Korea, Democratic People's Republic of"],["KR", "Korea, Republic of"],["KW", "Kuwait"],["KY", "Cayman Islands"],["KZ", "Kazakhstan"],["LA", "Lao People's Democratic Republic"],["LB", "Lebanon"],["LC", "Saint Lucia"],["LI", "Liechtenstein"],["LK", "Sri Lanka"],["LR", "Liberia"],["LS", "Lesotho"],["LT", "Lithuania"],["LU", "Luxembourg"],["LV", "Latvia"],["LY", "Libyan Arab Jamahiriya"],["MA", "Morocco"],["MC", "Monaco"],["MD", "Moldova, Republic of"],["ME", "Montenegro"],["MF", "Saint Martin"],["MG", "Madagascar"],["MH", "Marshall Islands"],["MK", "Macedonia"],["ML", "Mali"],["MM", "Myanmar"],["MN", "Mongolia"],["MO", "Macao"],["MP", "Northern Mariana Islands"],["MQ", "Martinique"],["MR", "Mauritania"],["MS", "Montserrat"],["MT", "Malta"],["MU", "Mauritius"],["MV", "Maldives"],["MW", "Malawi"],["MX", "Mexico"],["MY", "Malaysia"],["MZ", "Mozambique"],["NA", "Namibia"],["NC", "New Caledonia"],["NE", "Niger"],["NF", "Norfolk Island"],["NG", "Nigeria"],["NI", "Nicaragua"],["NL", "Netherlands"],["NO", "Norway"],["NP", "Nepal"],["NR", "Nauru"],["NU", "Niue"],["NZ", "New Zealand"],["OM", "Oman"],["PA", "Panama"],["PE", "Peru"],["PF", "French Polynesia"],["PG", "Papua New Guinea"],["PH", "Philippines"],["PK", "Pakistan"],["PL", "Poland"],["PM", "Saint Pierre and Miquelon"],["PN", "Pitcairn"],["PR", "Puerto Rico"],["PS", "Palestinian Territory"],["PT", "Portugal"],["PW", "Palau"],["PY", "Paraguay"],["QA", "Qatar"],["RE", "Reunion"],["RO", "Romania"],["RS", "Serbia"],["RU", "Russian Federation"],["RW", "Rwanda"],["SA", "Saudi Arabia"],["SB", "Solomon Islands"],["SC", "Seychelles"],["SD", "Sudan"],["SE", "Sweden"],["SG", "Singapore"],["SH", "Saint Helena"],["SI", "Slovenia"],["SJ", "Svalbard and Jan Mayen"],["SK", "Slovakia"],["SL", "Sierra Leone"],["SM", "San Marino"],["SN", "Senegal"],["SO", "Somalia"],["SR", "Suriname"],["SS", "South Sudan"],["ST", "Sao Tome and Principe"],["SV", "El Salvador"],["SX", "Sint Maarten"],["SY", "Syrian Arab Republic"],["SZ", "Swaziland"],["TC", "Turks and Caicos Islands"],["TD", "Chad"],["TF", "French Southern Territories"],["TG", "Togo"],["TH", "Thailand"],["TJ", "Tajikistan"],["TK", "Tokelau"],["TL", "Timor-Leste"],["TM", "Turkmenistan"],["TN", "Tunisia"],["TO", "Tonga"],["TR", "Turkey"],["TT", "Trinidad and Tobago"],["TV", "Tuvalu"],["TW", "Taiwan"],["TZ", "Tanzania, United Republic of"],["UA", "Ukraine"],["UG", "Uganda"],["UM", "United States Minor Outlying Islands"],["US", "United States"],["UY", "Uruguay"],["UZ", "Uzbekistan"],["VA", "Holy See (Vatican City State)"],["VC", "Saint Vincent and the Grenadines"],["VE", "Venezuela"],["VG", "Virgin Islands, British"],["VI", "Virgin Islands, U.S."],["VN", "Vietnam"],["VU", "Vanuatu"],["WF", "Wallis and Futuna"],["WS", "Samoa"],["YE", "Yemen"],["YT", "Mayotte"],["ZA", "South Africa"],["ZM", "Zambia"],["ZW", "Zimbabwe"]] %>
   <%- exposeLocalsToBrowser() %>
 
-    <!-- COUNTRY BAN SETTINGS -->
-    <ul class="list-group">
-      <% if(!_.isNull(config.countryBanConfig) && config.countryBanConfig.enabled) {%>
-        <li class="list-group-item bg-success">Enabled
-        </li>
-        <% } else { %>
-          <li class="list-group-item bg-danger">Disabled
+    <div class="container">
+      <p>Automatically kick or ban players from certain countries when they join your server.</p>
+      <!-- COUNTRY BAN SETTINGS -->
+      <ul class="list-group">
+        <% if(!_.isNull(config.countryBanConfig) && config.countryBanConfig.enabled) {%>
+          <li class="list-group-item bg-success">Enabled
           </li>
-          <% } %>
-
-            <li class="list-group-item">
-              <label for="input-settings-countryBan-kickReason">Kick reason</label>
-
-              <input type="text" class="form-control" id="input-settings-countryBan-kickReason" placeholder="<%= config.countryBanConfig.kickMessage %>">
-              <a name="" id="" class="btn btn-primary" href="#" role="button">Set</a>
+          <% } else { %>
+            <li class="list-group-item bg-danger">Disabled
             </li>
+            <% } %>
 
-            <li class="list-group-item">
-              <div class="form-check">
-                <label class="form-check-label">
-                  <input type="checkbox" class="form-check-input" name="inputs-settings-countryBan-ban-checkbox" id="inputs-settings-countryBan-ban-checkbox"> Ban on join
-                </label>
-              </div>
-            </li>
+              <li class="list-group-item">
+                <label for="input-settings-countryBan-kickReason">Kick reason</label>
 
-            <!-- country ban countries Button trigger modal -->
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#input-settings-countryban-countries-modal">
-              Manage banned countries
-            </button>
+                <input type="text" class="form-control" id="input-settings-countryBan-kickReason" placeholder="<%= config.countryBanConfig.kickMessage %>">
+                <a name="" id="" class="btn btn-primary" href="#" role="button">Set</a>
+              </li>
 
-            <!-- country ban countries Modal -->
-            <div class="modal fade" id="input-settings-countryban-countries-modal" tabindex="-1" role="dialog" aria-labelledby="input-settings-countryban-countries-modal-title"
-              aria-hidden="true">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h4 class="modal-title" id="input-settings-countryban-countries-modal-title">Manage banned countries</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
+              <li class="list-group-item">
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input type="checkbox" class="form-check-input" name="inputs-settings-countryBan-ban-checkbox" id="inputs-settings-countryBan-ban-checkbox"> Ban on join
+                  </label>
+                </div>
+              </li>
+
+              <!-- country ban countries Button trigger modal -->
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#input-settings-countryban-countries-modal">
+                Manage banned countries
+              </button>
+
+              <!-- country ban countries Modal -->
+              <div class="modal fade" id="input-settings-countryban-countries-modal" tabindex="-1" role="dialog" aria-labelledby="input-settings-countryban-countries-modal-title"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title" id="input-settings-countryban-countries-modal-title">Manage banned countries</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="row">
+                        <div class="col-6">
+                          <div class="form-group">
+                            <label for="inputs-settings-countryban-country-input">Country</label>
+                            <input type="text" class="form-control" name="inputs-settings-countryban-country-input" id="inputs-settings-countryban-country-input"
+                              aria-describedby="inputs-settings-countryban-country-input-helpId" placeholder="BE">
+                            <small id="inputs-settings-countryban-country-input-helpId" class="form-text text-muted">Country to add/remove from banned list.
+                              <a target="_blank" href="http://www.nationsonline.org/oneworld/country_code_list.htm">This is a 2 character ISO code.</a>
+                            </small>
+                            <button type="button" name="inputs-settings-server-countryban-addcountry-btn" id="inputs-settings-server-countryban-addcountry-btn"
+                              class="btn btn-success btn-lg btn-block">Add</button>
+                            <button type="button" name="inputs-settings-server-countryban-removecountry-btn" id="inputs-settings-server-countryban-removecountry-btn"
+                              class="btn btn-danger btn-lg btn-block">Remove</button>
+                          </div>
+                        </div>
+
+                        <div class="col-6">
+                          <h4>Banned countries</h4>
+                          <div class="list-group" id="inputs-settings-countryban-bannedcountries-list">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div class="modal-body">
-                    <div class="row">
-                      <div class="col-6">
-                        <div class="form-group">
-                          <label for="inputs-settings-countryban-country-input">Country</label>
-                          <input type="text" class="form-control" name="inputs-settings-countryban-country-input" id="inputs-settings-countryban-country-input"
-                            aria-describedby="inputs-settings-countryban-country-input-helpId" placeholder="BE">
-                          <small id="inputs-settings-countryban-country-input-helpId" class="form-text text-muted">Country to add/remove from banned list.
-                            <a target="_blank" href="http://www.nationsonline.org/oneworld/country_code_list.htm">This is a 2 character ISO code.</a>
-                          </small>
-                          <button type="button" name="inputs-settings-server-countryban-addcountry-btn" id="inputs-settings-server-countryban-addcountry-btn"
+                </div>
+              </div>
+
+              <!-- Button trigger modal -->
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inputs-settings-countryban-whitelist-modal">
+                Manage whitelist
+              </button>
+
+              <!-- Modal -->
+              <div class="modal fade" id="inputs-settings-countryban-whitelist-modal" tabindex="-1" role="dialog" aria-labelledby="inputs-settings-countryban-whitelist-modal-title"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title" id="inputs-settings-countryban-whitelist-modal-title">Countryban whitelist</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="row">
+                        <div class="col-6">
+                          <div class="form-group">
+                            <label for="inputs-settings-countryban-whitelist-steamid">Steam ID</label>
+                            <input type="text" class="form-control" name="inputs-settings-countryban-whitelist-steamid" id="inputs-settings-countryban-whitelist-steamid"
+                              aria-describedby="inputs-settings-countryban-whitelist-steamid-help" placeholder="76561198028175941">
+                            <small id="inputs-settings-countryban-whitelist-steamid-help" class="form-text text-muted">Fill in a steam ID here</small>
+                          </div>
+                          <button type="button" name="inputs-settings-server-countryban-whitelist-add-btn" id="inputs-settings-server-countryban-whitelist-add-btn"
                             class="btn btn-success btn-lg btn-block">Add</button>
-                          <button type="button" name="inputs-settings-server-countryban-removecountry-btn" id="inputs-settings-server-countryban-removecountry-btn"
+                          <button type="button" name="inputs-settings-server-countryban-whitelist-remove-btn" id="inputs-settings-server-countryban-whitelist-remove-btn"
                             class="btn btn-danger btn-lg btn-block">Remove</button>
                         </div>
-                      </div>
+                        <div class="col-6">
+                          <h4>Whitelist</h4>
+                          <div id="inputs-settings-countryban-whitelist-list">
 
-                      <div class="col-6">
-                        <h4>Banned countries</h4>
-                        <div class="list-group" id="inputs-settings-countryban-bannedcountries-list">
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inputs-settings-countryban-whitelist-modal">
-              Manage whitelist
-            </button>
-
-            <!-- Modal -->
-            <div class="modal fade" id="inputs-settings-countryban-whitelist-modal" tabindex="-1" role="dialog" aria-labelledby="inputs-settings-countryban-whitelist-modal-title"
-              aria-hidden="true">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h4 class="modal-title" id="inputs-settings-countryban-whitelist-modal-title">Countryban whitelist</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    <div class="row">
-                      <div class="col-6">
-                        <div class="form-group">
-                          <label for="inputs-settings-countryban-whitelist-steamid">Steam ID</label>
-                          <input type="text" class="form-control" name="inputs-settings-countryban-whitelist-steamid" id="inputs-settings-countryban-whitelist-steamid"
-                            aria-describedby="inputs-settings-countryban-whitelist-steamid-help" placeholder="76561198028175941">
-                          <small id="inputs-settings-countryban-whitelist-steamid-help" class="form-text text-muted">Fill in a steam ID here</small>
-                        </div>
-                        <button type="button" name="inputs-settings-server-countryban-whitelist-add-btn" id="inputs-settings-server-countryban-whitelist-add-btn"
-                          class="btn btn-success btn-lg btn-block">Add</button>
-                        <button type="button" name="inputs-settings-server-countryban-whitelist-remove-btn" id="inputs-settings-server-countryban-whitelist-remove-btn"
-                          class="btn btn-danger btn-lg btn-block">Remove</button>
-                      </div>
-                      <div class="col-6">
-                        <h4>Whitelist</h4>
-                        <div id="inputs-settings-countryban-whitelist-list">
-
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <% if(config.countryBanConfig.enabled) {%>
-              <li id='settings-toggle-countryBan' class="btn btn-danger btn-lg">
-                <i class="fa fa-power-off"></i> Disable
-              </li>
-              <% } else { %>
-                <li id='settings-toggle-countryBan' class="btn btn-success btn-lg">
-                  <i class="fa fa-power-off"></i> Enable
+              <% if(config.countryBanConfig.enabled) {%>
+                <li id='settings-toggle-countryBan' class="btn btn-danger btn-lg">
+                  <i class="fa fa-power-off"></i> Disable
                 </li>
-                <% } %>
-    </ul>
+                <% } else { %>
+                  <li id='settings-toggle-countryBan' class="btn btn-success btn-lg">
+                    <i class="fa fa-power-off"></i> Enable
+                  </li>
+                  <% } %>
+      </ul>
+    </div>
 
+    <script>
 
+      $(document).ready(function () {
 
+        $("#inputs-settings-countryBan-ban-checkbox").prop('checked', window.SAILS_LOCALS.config.countryBanConfig.ban);
 
+        $("#inputs-settings-countryBan-ban-checkbox").click(e => {
 
+          if ($(e.target).prop('checked')) {
+            $.ajax({
+              url: '/api/sdtdserver/countryban/ban',
+              method: "POST",
+              data: {
+                serverId: window.SAILS_LOCALS.server.id,
+                _csrf: window.SAILS_LOCALS._csrf,
+              },
+              success: (data, status, xhr) => {
 
-
-
-          <script>
-
-            $(document).ready(function () {
-
-              $("#inputs-settings-countryBan-ban-checkbox").prop('checked', window.SAILS_LOCALS.config.countryBanConfig.ban);
-
-              $("#inputs-settings-countryBan-ban-checkbox").click(e => {
-
-                if ($(e.target).prop('checked')) {
-                  $.ajax({
-                    url: '/api/sdtdserver/countryban/ban',
-                    method: "POST",
-                    data: {
-                      serverId: window.SAILS_LOCALS.server.id,
-                      _csrf: window.SAILS_LOCALS._csrf,
-                    },
-                    success: (data, status, xhr) => {
-
-                    },
-                    error: (xhr, status, error) => {
-                      console.log(error)
-                      console.log(xhr)
-                    }
-                  })
-                } else {
-                  $.ajax({
-                    url: '/api/sdtdserver/countryban/ban',
-                    method: 'DELETE',
-                    data: {
-                      serverId: window.SAILS_LOCALS.server.id,
-                      _csrf: window.SAILS_LOCALS._csrf,
-                    },
-                    success: (data, status, xhr) => {
-
-                    },
-                    error: (xhr, status, error) => {
-                      console.log(error)
-                      console.log(xhr)
-                    }
-                  })
-                }
-
-              })
-
-              updateCountriesList();
-              updateWhitelist();
-
-              async function updateCountriesList() {
-                let bannedCountries = await loadBannedCountries();
-                drawBannedCountries(bannedCountries);
-
-                function drawBannedCountries(bannedCountries) {
-
-                  $("#inputs-settings-countryban-bannedcountries-list").empty();
-                  bannedCountries.forEach(country => {
-                    let element = $("<a>").addClass('list-group-item').text(country);
-                    $("#inputs-settings-countryban-bannedcountries-list").append(element);
-                  })
-
-                }
-
-                function loadBannedCountries() {
-                  return new Promise((resolve, reject) => {
-                    $.ajax({
-                      url: '/api/sdtdserver/countryban/country',
-                      data: {
-                        serverId: window.SAILS_LOCALS.server.id
-                      },
-                      success: (data, status, xhr) => {
-                        resolve(data)
-                      },
-                      error: (xhr, status, error) => {
-                        console.log(error)
-                        resolve([])
-                      }
-                    })
-                  })
-
-                }
+              },
+              error: (xhr, status, error) => {
+                console.log(error)
+                console.log(xhr)
               }
+            })
+          } else {
+            $.ajax({
+              url: '/api/sdtdserver/countryban/ban',
+              method: 'DELETE',
+              data: {
+                serverId: window.SAILS_LOCALS.server.id,
+                _csrf: window.SAILS_LOCALS._csrf,
+              },
+              success: (data, status, xhr) => {
 
-              $('#inputs-settings-server-countryban-addcountry-btn').click(event => {
-                event.preventDefault();
-                let countryToAdd = $('#inputs-settings-countryban-country-input').val();
-
-                $.ajax({
-                  url: '/api/sdtdserver/countryban/country',
-                  method: "POST",
-                  data: {
-                    _csrf: window.SAILS_LOCALS._csrf,
-                    serverId: window.SAILS_LOCALS.server.id,
-                    newCountry: countryToAdd
-                  },
-                  success: (data, status, xhr) => {
-                    updateCountriesList();
-                  },
-                  error: (xhr, status, error) => {
-                    console.log(error)
-                  }
-                })
-              })
-
-              $('#inputs-settings-server-countryban-removecountry-btn').click(event => {
-                event.preventDefault();
-                let countryToRemove = $('#inputs-settings-countryban-country-input').val();
-
-                $.ajax({
-                  url: '/api/sdtdserver/countryban/country',
-                  method: "DELETE",
-                  data: {
-                    _csrf: window.SAILS_LOCALS._csrf,
-                    serverId: window.SAILS_LOCALS.server.id,
-                    newCountry: countryToRemove
-                  },
-                  success: (data, status, xhr) => {
-                    updateCountriesList();
-                  },
-                  error: (xhr, status, error) => {
-                    console.log(error)
-                  }
-                })
-              })
-
-
-              $('#settings-toggle-countryBan').click((event) => {
-                event.preventDefault();
-                $.ajax({
-                  url: `/api/sdtdserver/togglecountryban`,
-                  type: "POST",
-                  data: {
-                    _csrf: window.SAILS_LOCALS._csrf,
-                    serverId: window.SAILS_LOCALS.server.id
-                  },
-                  success: (data, status, xhr) => {
-                    location.reload();
-                  },
-                  error: (xhr, status, error) => {
-                    alert('Something went wrong while trying to toggle country ban!');
-                  }
-                });
-              })
-
-              async function updateWhitelist() {
-                let currentWhitelist = await loadWhitelist();
-                drawWhitelist(currentWhitelist);
-
-                function drawWhitelist(currentWhitelist) {
-
-                  $("#inputs-settings-countryban-whitelist-list").empty();
-                  currentWhitelist.forEach(whitelistEntry => {
-                    let element = $("<a>").addClass('list-group-item').text(whitelistEntry);
-                    $("#inputs-settings-countryban-whitelist-list").append(element);
-                  })
-
-                }
-
-                function loadWhitelist() {
-                  return new Promise((resolve, reject) => {
-                    $.ajax({
-                      url: '/api/sdtdserver/countryban/whitelist',
-                      data: {
-                        serverId: window.SAILS_LOCALS.server.id
-                      },
-                      success: (data, status, xhr) => {
-                        resolve(data)
-                      },
-                      error: (xhr, status, error) => {
-                        console.log(error)
-                        resolve([]);
-                      }
-                    })
-                  })
-
-                }
+              },
+              error: (xhr, status, error) => {
+                console.log(error)
+                console.log(xhr)
               }
+            })
+          }
 
-              $('#inputs-settings-server-countryban-whitelist-add-btn').click(event => {
-                event.preventDefault();
-                let steamIdToAdd = $('#inputs-settings-countryban-whitelist-steamid').val();
+        })
 
-                $.ajax({
-                  url: '/api/sdtdserver/countryban/whitelist',
-                  method: "POST",
-                  data: {
-                    _csrf: window.SAILS_LOCALS._csrf,
-                    serverId: window.SAILS_LOCALS.server.id,
-                    newSteamId: steamIdToAdd
-                  },
-                  success: (data, status, xhr) => {
-                    updateWhitelist();
-                  },
-                  error: (xhr, status, error) => {
-                    console.log(error)
-                  }
-                })
-              })
+        updateCountriesList();
+        updateWhitelist();
 
-              $('#inputs-settings-server-countryban-whitelist-remove-btn').click(event => {
-                event.preventDefault();
-                let steamIdToRemove = $('#inputs-settings-countryban-whitelist-steamid').val();
+        async function updateCountriesList() {
+          let bannedCountries = await loadBannedCountries();
+          drawBannedCountries(bannedCountries);
 
-                $.ajax({
-                  url: '/api/sdtdserver/countryban/whitelist',
-                  method: "DELETE",
-                  data: {
-                    _csrf: window.SAILS_LOCALS._csrf,
-                    serverId: window.SAILS_LOCALS.server.id,
-                    newSteamId: steamIdToRemove
-                  },
-                  success: (data, status, xhr) => {
-                    updateWhitelist();
-                  },
-                  error: (xhr, status, error) => {
-                    console.log(error)
-                  }
-                })
-              })
+          function drawBannedCountries(bannedCountries) {
 
+            $("#inputs-settings-countryban-bannedcountries-list").empty();
+            bannedCountries.forEach(country => {
+              let element = $("<a>").addClass('list-group-item').text(country);
+              $("#inputs-settings-countryban-bannedcountries-list").append(element);
             })
 
-          </script>
+          }
+
+          function loadBannedCountries() {
+            return new Promise((resolve, reject) => {
+              $.ajax({
+                url: '/api/sdtdserver/countryban/country',
+                data: {
+                  serverId: window.SAILS_LOCALS.server.id
+                },
+                success: (data, status, xhr) => {
+                  resolve(data)
+                },
+                error: (xhr, status, error) => {
+                  console.log(error)
+                  resolve([])
+                }
+              })
+            })
+
+          }
+        }
+
+        $('#inputs-settings-server-countryban-addcountry-btn').click(event => {
+          event.preventDefault();
+          let countryToAdd = $('#inputs-settings-countryban-country-input').val();
+
+          $.ajax({
+            url: '/api/sdtdserver/countryban/country',
+            method: "POST",
+            data: {
+              _csrf: window.SAILS_LOCALS._csrf,
+              serverId: window.SAILS_LOCALS.server.id,
+              newCountry: countryToAdd
+            },
+            success: (data, status, xhr) => {
+              updateCountriesList();
+            },
+            error: (xhr, status, error) => {
+              console.log(error)
+            }
+          })
+        })
+
+        $('#inputs-settings-server-countryban-removecountry-btn').click(event => {
+          event.preventDefault();
+          let countryToRemove = $('#inputs-settings-countryban-country-input').val();
+
+          $.ajax({
+            url: '/api/sdtdserver/countryban/country',
+            method: "DELETE",
+            data: {
+              _csrf: window.SAILS_LOCALS._csrf,
+              serverId: window.SAILS_LOCALS.server.id,
+              newCountry: countryToRemove
+            },
+            success: (data, status, xhr) => {
+              updateCountriesList();
+            },
+            error: (xhr, status, error) => {
+              console.log(error)
+            }
+          })
+        })
+
+
+        $('#settings-toggle-countryBan').click((event) => {
+          event.preventDefault();
+          $.ajax({
+            url: `/api/sdtdserver/togglecountryban`,
+            type: "POST",
+            data: {
+              _csrf: window.SAILS_LOCALS._csrf,
+              serverId: window.SAILS_LOCALS.server.id
+            },
+            success: (data, status, xhr) => {
+              location.reload();
+            },
+            error: (xhr, status, error) => {
+              alert('Something went wrong while trying to toggle country ban!');
+            }
+          });
+        })
+
+        async function updateWhitelist() {
+          let currentWhitelist = await loadWhitelist();
+          drawWhitelist(currentWhitelist);
+
+          function drawWhitelist(currentWhitelist) {
+
+            $("#inputs-settings-countryban-whitelist-list").empty();
+            currentWhitelist.forEach(whitelistEntry => {
+              let element = $("<a>").addClass('list-group-item').text(whitelistEntry);
+              $("#inputs-settings-countryban-whitelist-list").append(element);
+            })
+
+          }
+
+          function loadWhitelist() {
+            return new Promise((resolve, reject) => {
+              $.ajax({
+                url: '/api/sdtdserver/countryban/whitelist',
+                data: {
+                  serverId: window.SAILS_LOCALS.server.id
+                },
+                success: (data, status, xhr) => {
+                  resolve(data)
+                },
+                error: (xhr, status, error) => {
+                  console.log(error)
+                  resolve([]);
+                }
+              })
+            })
+
+          }
+        }
+
+        $('#inputs-settings-server-countryban-whitelist-add-btn').click(event => {
+          event.preventDefault();
+          let steamIdToAdd = $('#inputs-settings-countryban-whitelist-steamid').val();
+
+          $.ajax({
+            url: '/api/sdtdserver/countryban/whitelist',
+            method: "POST",
+            data: {
+              _csrf: window.SAILS_LOCALS._csrf,
+              serverId: window.SAILS_LOCALS.server.id,
+              newSteamId: steamIdToAdd
+            },
+            success: (data, status, xhr) => {
+              updateWhitelist();
+            },
+            error: (xhr, status, error) => {
+              console.log(error)
+            }
+          })
+        })
+
+        $('#inputs-settings-server-countryban-whitelist-remove-btn').click(event => {
+          event.preventDefault();
+          let steamIdToRemove = $('#inputs-settings-countryban-whitelist-steamid').val();
+
+          $.ajax({
+            url: '/api/sdtdserver/countryban/whitelist',
+            method: "DELETE",
+            data: {
+              _csrf: window.SAILS_LOCALS._csrf,
+              serverId: window.SAILS_LOCALS.server.id,
+              newSteamId: steamIdToRemove
+            },
+            success: (data, status, xhr) => {
+              updateWhitelist();
+            },
+            error: (xhr, status, error) => {
+              console.log(error)
+            }
+          })
+        })
+
+      })
+
+    </script>
