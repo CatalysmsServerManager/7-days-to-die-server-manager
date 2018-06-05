@@ -15,149 +15,156 @@
             </ol>
         </nav>
         <h1>Player tracking</h1>
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#tracking-location-modal">
-            Location lookup
-        </button>
-
-        <!-- Modal -->
-        <div class="modal fade" id="tracking-location-modal" tabindex="-1" role="dialog" aria-labelledby="tracking-location-modal-title"
-            aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="tracking-location-modal-title">Find by Location</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="container-fluid">
-
-                            <div class="form-group">
-                                <label for="tracking-location-modal-x">X</label>
-                                <input type="number" name="tracking-location-modal-x" id="tracking-location-modal-x" class="form-control" placeholder="0"
-                                    aria-describedby="tracking-location-modal-x-help">
-                                <small id="tracking-location-modal-x-help" class="text-muted">The X coordinate to search</small>
-                            </div>
-
-
-                            <div class="form-group">
-                                <label for="tracking-location-modal-z">Z</label>
-                                <input type="number" name="tracking-location-modal-z" id="tracking-location-modal-z" class="form-control" placeholder="0"
-                                    aria-describedby="tracking-location-modal-z-help">
-                                <small id="tracking-location-modal-z-help" class="text-muted">The Z coordinate to search</small>
-                            </div>
-
-
-                            <div class="form-group">
-                                <label for="tracking-location-modal-radius">Size</label>
-                                <input type="number" name="tracking-location-modal-radius" id="tracking-location-modal-radius" class="form-control" placeholder="50"
-                                    aria-describedby="tracking-location-modal-radius-help">
-                                <small id="tracking-location-modal-radius-help" class="text-muted">The size of the area to search.</small>
-                            </div>
-
-                            <hr>
-
-                            <table id="location-result-table">
-
-                                <thead>
-                                    <tr>
-                                        <th>Date/time</th>
-                                        <th>Player name</th>
-                                        <th>Location</th>
-                                        <th>Distance</th>
-                                        <th>Steam ID</th>
-                                    </tr>
-                                </thead>
-
-                            </table>
-
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <div id="location-result"></div>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button id="tracking-location-modal-get" type="button" class="btn btn-primary">Get</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <input name="tracking-player-btn" id="tracking-player-btn" class="btn btn-primary btn-lg" type="button" value="Get individual player data">
-
-        <div class="form-group">
-            <label for="player-name-select">Tracking player</label>
-            <select class="form-control" name="player-name-select" id="player-name-select">
-
-                <% players.forEach(player => { %>
-
-                    <option value="<%= player.id %>">
-                        <%= player.name %>
-                    </option>
-
-                    <% }) %>
-
-            </select>
-
-
-            <div class="form-group">
-                <label for="tracking-steamID-lookup">Steam ID</label>
-                <input type="text" class="form-control" name="tracking-steamID-lookup" id="tracking-steamID-lookup" aria-describedby="tracking-steamID-lookup-help"
-                    placeholder="">
-                <small id="tracking-steamID-lookup-help" class="form-text text-muted">Fill in a steam ID, CSMM will try to find a player associated with it.</small>
-            </div>
-
-
-            <div class="form-group">
-                <label for="tracking-limit">Limit</label>
-                <input type="number" class="form-control" name="tracking-limit" id="tracking-limit" aria-describedby="tracking-limit-help"
-                    placeholder="5000">
-                <small id="tracking-limit-help" class="form-text text-muted">Limit how much datapoints CSMM will retrieve. Maximum is 5000</small>
-            </div>
-        </div>
-
-
-        <div id="narrow-down">
-
-            <label for="datepicker">Narrow down data</label>
-            <input type="text" name="datetimes" />
-
-        </div>
 
         <hr>
+
         <div>
             <p id="playerInfo"></p>
-            <p id="loaded-data"> Click "Get data" to get started!</p>
+            <p id="loaded-data"></p>
             <p id="daterange-data"></p>
 
         </div>
+
         <hr>
 
-        <h2>Location</h2>
-        <button id="tracking-draw-land-claims" type="button" class="btn btn-secondary">Draw land claims</button>
-        <div id="sdtdMap">
+        <div class="card-columns">
+            <div class="card">
+                <div class="card-header">
+                    Query
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
 
+                        <div class="form-group">
+                            <label for="tracking-location-modal-x">X</label>
+                            <input type="number" name="tracking-location-modal-x" id="tracking-location-modal-x" class="form-control" placeholder="0"
+                                aria-describedby="tracking-location-modal-x-help">
+                            <small id="tracking-location-modal-x-help" class="text-muted">The X coordinate to search</small>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="tracking-location-modal-z">Z</label>
+                            <input type="number" name="tracking-location-modal-z" id="tracking-location-modal-z" class="form-control" placeholder="0"
+                                aria-describedby="tracking-location-modal-z-help">
+                            <small id="tracking-location-modal-z-help" class="text-muted">The Z coordinate to search</small>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="tracking-location-modal-radius">Size</label>
+                            <input type="number" name="tracking-location-modal-radius" id="tracking-location-modal-radius" class="form-control" placeholder="50"
+                                aria-describedby="tracking-location-modal-radius-help">
+                            <small id="tracking-location-modal-radius-help" class="text-muted">The size of the area to search.</small>
+                        </div>
+
+                        <button id="tracking-location-modal-get" type="button" class="btn btn-primary">Get location data</button>
+
+                        <hr>
+
+                        <div class="form-group">
+                            <label for="player-name-select">Tracking player</label>
+                            <select class="form-control" name="player-name-select" id="player-name-select">
+
+                                <% players.forEach(player => { %>
+
+                                    <option value="<%= player.id %>">
+                                        <%= player.name %>
+                                    </option>
+
+                                    <% }) %>
+
+                            </select>
+
+
+                            <div class="form-group">
+                                <label for="tracking-steamID-lookup">Steam ID</label>
+                                <input type="text" class="form-control" name="tracking-steamID-lookup" id="tracking-steamID-lookup" aria-describedby="tracking-steamID-lookup-help"
+                                    placeholder="">
+                                <small id="tracking-steamID-lookup-help" class="form-text text-muted">Fill in a steam ID, CSMM will try to find a player associated with it.</small>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="tracking-limit">Limit</label>
+                                <input type="number" class="form-control" name="tracking-limit" id="tracking-limit" aria-describedby="tracking-limit-help"
+                                    placeholder="5000">
+                                <small id="tracking-limit-help" class="form-text text-muted">Limit how much datapoints CSMM will retrieve. Maximum is 5000</small>
+                            </div>
+                        </div>
+
+                        <input name="tracking-player-btn" id="tracking-player-btn" class="btn btn-primary btn-lg" type="button" value="Get individual player data">
+
+                        <hr>
+
+                        <div id="narrow-down">
+
+                            <label for="datepicker">Narrow down data</label>
+                            <input type="text" name="datetimes" />
+
+                        </div>
+                    </p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    Location data
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        <table id="location-result-table">
+
+                            <thead>
+                                <tr>
+                                    <th>Date/time</th>
+                                    <th>Player name</th>
+                                    <th>Location</th>
+                                    <th>Distance</th>
+                                    <th>Steam ID</th>
+                                </tr>
+                            </thead>
+
+                        </table>
+                    </p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    Inventory
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        <table id="inventoryTable" class="table table-striped table-bordered dataTable no-footer">
+
+                            <thead>
+                                <tr>
+                                    <th>Date/time</th>
+                                    <th>Player name</th>
+                                    <th>Item name</th>
+                                    <th>Quality</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+
+                        </table>
+                    </p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Location</h4>
+                    <p class="card-text">
+                        <button id="tracking-draw-land-claims" type="button" class="btn btn-secondary">Draw land claims</button>
+                        <div id="sdtdMap">
+                    </p>
+                    </div>
+                </div>
+            </div>
 
         </div>
-
-        <hr>
-
-        <h2>Inventory</h2>
-
-        <table id="inventoryTable" class="table table-striped table-bordered dataTable no-footer">
-
-            <thead>
-                <tr>
-                    <th>Date/time</th>
-                    <th>Player name</th>
-                    <th>Item name</th>
-                    <th>Quality</th>
-                    <th>Amount</th>
-                </tr>
-            </thead>
-
-        </table>
 
 
     </div>
@@ -181,6 +188,18 @@
         let lastSearched
 
         $(document).ready(() => {
+
+            $.get('/api/sdtdserver/tracking/stats', { serverId: window.SAILS_LOCALS.server.id }, data => {
+                console.log(data)
+                if (data.amount) {
+                    $('#loaded-data').text(`${data.amount} datapoints stored`)
+                }
+                if (data.oldest[0] && data.newest[0]) {
+                    let createdAtOld = new Date(data.oldest[0].createdAt);
+                    let createdAtNew = new Date(data.newest[0].createdAt);
+                    $('#daterange-data').text(`Oldest: ${createdAtOld.toLocaleDateString()} ${createdAtOld.toLocaleTimeString()} Newest: ${createdAtNew.toLocaleDateString()} ${createdAtNew.toLocaleTimeString()}`)
+                }
+            })
 
             // Data control
 
