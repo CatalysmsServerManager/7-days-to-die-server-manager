@@ -38,10 +38,10 @@
 
 
                             <div class="form-group">
-                                <label for="tracking-location-modal-radius">Radius</label>
+                                <label for="tracking-location-modal-radius">Size</label>
                                 <input type="number" name="tracking-location-modal-radius" id="tracking-location-modal-radius" class="form-control" placeholder="50"
                                     aria-describedby="tracking-location-modal-radius-help">
-                                <small id="tracking-location-modal-radius-help" class="text-muted">The radius to search around the given coordinates.</small>
+                                <small id="tracking-location-modal-radius-help" class="text-muted">The size of the area to search.</small>
                             </div>
 
                             <hr>
@@ -122,11 +122,7 @@
         <hr>
 
         <h2>Location</h2>
-        <div class="form-check">
-            <label class="form-check-label">
-                <input type="checkbox" class="form-check-input" name="tracking-draw-land-claim" id="tracking-draw-land-claims"> Draw land claims
-            </label>
-        </div>
+        <button id="tracking-draw-land-claims" type="button" class="btn btn-secondary">Draw land claims</button>
         <div id="sdtdMap">
 
 
@@ -265,25 +261,30 @@
             // Map
             trackingMap = new sdtdMap($("#sdtdMap"))
 
-            $("#tracking-draw-land-claims").prop('checked', false)
 
             $("#tracking-draw-land-claims").click(e => {
+                trackingMap.clear()
+                $.ajax({
+                    url: '/api/sdtdserver/tracking/landclaims',
+                    data: {
+                        serverId: server.id
+                    },
+                    success: data => {
 
-                if ($("#tracking-draw-land-claims").prop('checked') === true) {
-                    $.ajax({
-                        url: '/api/sdtdserver/tracking/landclaims',
-                        data: {
-                            serverId: server.id
-                        },
-                        success: data => {
-                            trackingMap.clear()
-                            trackingMap.drawLandClaims(data, players)
-                        },
-                        error: error => {
-                            console.log(error)
+                        let drawnElements = trackingMap.drawLandClaims(data, players);
+
+                        for (const popup of drawnElements.popups) {
+                            popup.setContent(`<strong>Claim by ${popup.player.name}</strong>
+                            <br>
+${popup.claim.x} ${popup.claim.y} ${popup.claim.z}`)
                         }
-                    });
-                }
+
+
+                    },
+                    error: error => {
+                        console.log(error)
+                    }
+                });
 
             })
 

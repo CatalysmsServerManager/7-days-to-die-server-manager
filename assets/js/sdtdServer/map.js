@@ -34,7 +34,7 @@ class sdtdMap {
 
     // Radius a bit of a misnomer here 
     drawRectangle(x, z, radius, extraOptions) {
-        let rectangle = L.rectangle([[x - radius, z - radius], [x + radius, z + radius]]);
+        let rectangle = L.rectangle([[x - radius, z - radius], [x + radius, z + radius]], extraOptions);
         rectangle.addTo(this.layerGroup)
         this.rectangles.push(rectangle)
         return rectangle
@@ -109,8 +109,17 @@ class sdtdMap {
     }
 
     drawLandClaims(landClaims, players) {
+
+        let markersToReturn = new Array();
+        let popupsToReturn = new Array();
+
         for (const claimOwner of landClaims.claimowners) {
             let playerThatOwnsClaim = players.filter(player => claimOwner.steamid === player.steamId);
+            let colors = ['red', 'green', 'blue', 'yellow', 'orange', 'brown'];
+            let colorIterator = 0;
+            if (!colors[colorIterator]) {
+                colorIterator = 0;
+            }
 
             for (const claimToDraw of claimOwner.claims) {
 
@@ -119,16 +128,31 @@ class sdtdMap {
                     alt: playerThatOwnsClaim[0].name,
                 });
                 let popup = L.popup().setContent(`Claim by ${playerThatOwnsClaim[0].name}`);
-    
+
                 marker.bindPopup(popup);
 
                 marker.addTo(this.layerGroup);
 
-                this.drawRectangle(claimToDraw.x, claimToDraw.z, landClaims.claimsize);
-                
+                marker.player = playerThatOwnsClaim[0];
+                marker.claim = claimToDraw;
+
+                popup.player = playerThatOwnsClaim[0];
+                popup.claim = claimToDraw;
+
+                markersToReturn.push(marker);
+                popupsToReturn.push(popup);
+
+
+
+                this.drawRectangle(claimToDraw.x, claimToDraw.z, landClaims.claimsize, { color: colors[colorIterator] });
             }
+            colorIterator++
         }
 
+        return {
+            markers: markersToReturn,
+            popups: popupsToReturn
+        }
     }
 
     initMap() {
