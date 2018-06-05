@@ -46,10 +46,12 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     try {
-
+      
+      inputs.quality = inputs.quality ? inputs.quality : Math.trunc(Math.random() * 600)
       sails.log.debug(`API - Player:give-item - giving ${inputs.amount} of ${inputs.itemName} to ${inputs.playerId} with quality: ${inputs.quality}`);
       let player = await Player.findOne(inputs.playerId).populate('server');
       let server = await SdtdServer.findOne(player.server.id);
+
 
       return sevenDays.giveItem({
         ip: server.ip,
