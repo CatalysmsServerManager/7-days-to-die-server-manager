@@ -2,211 +2,229 @@
 
   <div class="container-fluid">
 
-      <nav aria-label="breadcrumb">
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-              <a href="<%= '/user/' + req.session.userId + '/dashboard' %>"> Dashboard </a>
-            </li>
-            <li class="breadcrumb-item">
-              <a href="<%= '/sdtdserver/' + server.id + '/dashboard' %>">
-                <%= server.name %>
-              </a>
-            </li>
-            <li class="breadcrumb-item">
-                <a href="<%= '/sdtdserver/' + server.id + '/players' %>">
-                  Players
-                </a>
-              </li>
-            <li class="breadcrumb-item active" aria-current="page"><%= player.name %></li>
-          </ol>
-        </nav>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="<%= '/user/' + req.session.userId + '/dashboard' %>"> Dashboard </a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="<%= '/sdtdserver/' + server.id + '/dashboard' %>">
+            <%= server.name %>
+          </a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="<%= '/sdtdserver/' + server.id + '/players' %>">
+            Players
+          </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+          <%= player.name %>
+        </li>
+      </ol>
+    </nav>
 
-    <div class="row">
+    <div class="card-columns">
 
-      <div class="col-md-10">
-          <h1>
-            <img alt="Bootstrap Image Preview" src="<%= player.avatarUrl %>" style='border-radius: 50%;' />
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">
             <%= player.name %>
-          </h1>
+          </h4>
+          <p class="card-text">
+            <div class="row">
+              <img alt="player profile picture" src="<%= player.avatarUrl %>" style='border-radius: 50%;' />
+
+
+              <div class="btn-group btn-group-vertical">
+
+                <% if (player.banned) { %>
+                  <%- include("./partials/unbanPlayerButton", {player: player}) %>
+                    <% } else { %>
+
+                      <%- include("./partials/banPlayerButton", {player: player}) %>
+                        <%- include("./partials/kickPlayerButton", {player: player}) %>
+                          <%- include("./partials/teleportPlayerButton", {player: player}) %>
+                            <%- include("./partials/giveItemButton", {player: player}) %>
+                              <%- include("./partials/setMoneyButton", {player: player}) %>
+                                <% } %>
+              </div>
+
+            </div>
+          </p>
+        </div>
       </div>
 
-      <div class="col-md-2">
-        <div class="btn-group btn-group-vertical">
 
-          <% if (player.banned) { %>
-            <%- include("./partials/unbanPlayerButton", {player: player}) %>
-              <% } else { %>
+      <div class="card">
+        <div class="card-header">
+          Info
+        </div>
+        <div class="card-body">
 
-                <%- include("./partials/banPlayerButton", {player: player}) %>
-                  <%- include("./partials/kickPlayerButton", {player: player}) %>
-                    <%- include("./partials/teleportPlayerButton", {player: player}) %>
-                    <%- include("./partials/giveItemButton", {player: player}) %>
-                    <%- include("./partials/setMoneyButton", {player: player}) %>
-                      <% } %>
+          <p class="card-text">
+            <table class="table table-striped table-bordered dataTable no-footer">
+
+              <tbody>
+
+                <tr>
+                  <td scope="row">Steam ID</td>
+                  <td>
+                    <%= player.steamId %>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td scope="row">Entity ID</td>
+                  <td>
+                    <%= player.entityId %>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td scope="row">IP</td>
+                  <td>
+                    <%= player.ip %>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td scope="row">Country</td>
+                  <td>
+                    <% if (player.country) { %>
+                      <% let lowerCaseCountry = player.country.toLowerCase(); %>
+                        <img src="../../images/flags/blank.gif" class="flag flag-<%= lowerCaseCountry %>" />
+                        <%= player.country %>
+                          <% } %>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td scope="row">Location</td>
+                  <td>
+                    <%= player.positionX %>
+                      <%= player.positionY %>
+                        <%= player.positionZ %>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td scope="row">Playtime</td>
+                  <td>
+                    <%= player.playtimeHHMMSS %>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td scope="row">Last online</td>
+                  <td>
+                    <% let lastOnlineDate = new Date(player.lastOnline) %>
+                      <% let lastOnlineString = `${lastOnlineDate.toDateString()} ${lastOnlineDate.toTimeString()}` %>
+                        <%= lastOnlineString %>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td scope="row">Ban status</td>
+                  <td>
+                    <%= player.banned %>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td scope="row">Level</td>
+                  <td>
+                    <%= player.level %>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td scope="row">Deaths</td>
+                  <td>
+                    <%= player.deaths %>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td scope="row">Score</td>
+                  <td>
+                    <%= player.score %>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td scope="row">Zombie kills</td>
+                  <td>
+                    <%= player.zombieKills %>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td scope="row">Player kills</td>
+                  <td>
+                    <%= player.playerKills %>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td scope="row">CSMM currency balance</td>
+                  <td>
+                    <%= player.currency %>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td scope="row">Teleports</td>
+                  <td>
+                    <table class="table table-striped table-bordered dataTable no-footer">
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Location</th>
+                        </tr>
+                      </thead>
+                      <tbody id='player-teleport-locations'>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
 
 
+              </tbody>
+            </table>
+          </p>
+        </div>
+
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Inventory</h4>
+          <p class="card-text">
+            <%- include('./partials/playerInventory', {player: player}) %>
+          </p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Logs</h4>
+          <p class="card-text">
+            <table id='player-historicalInfo-table' class="table table-striped table-bordered dataTable no-footer">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Message</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+
+            </table>
+          </p>
         </div>
       </div>
 
     </div>
-
-
-    <div class="row">
-      <table class="table">
-
-        <tbody>
-
-          <tr>
-            <td scope="row">Steam ID</td>
-            <td>
-              <%= player.steamId %>
-            </td>
-          </tr>
-
-          <tr>
-            <td scope="row">Entity ID</td>
-            <td>
-              <%= player.entityId %>
-            </td>
-          </tr>
-
-          <tr>
-            <td scope="row">IP</td>
-            <td>
-              <%= player.ip %>
-            </td>
-          </tr>
-
-          <tr>
-            <td scope="row">Country</td>
-            <td>
-              <% if (player.country) { %>
-                <% let lowerCaseCountry = player.country.toLowerCase(); %>
-                  <img src="../../images/flags/blank.gif" class="flag flag-<%= lowerCaseCountry %>" />
-                  <%= player.country %>
-                    <% } %>
-            </td>
-          </tr>
-
-          <tr>
-            <td scope="row">Location</td>
-            <td>
-              <%= player.positionX %>
-                <%= player.positionY %>
-                  <%= player.positionZ %>
-            </td>
-          </tr>
-
-          <tr>
-            <td scope="row">Playtime</td>
-            <td>
-              <%= player.playtimeHHMMSS %>
-            </td>
-          </tr>
-
-          <tr>
-            <td scope="row">Last online</td>
-            <td>
-              <% let lastOnlineDate = new Date(player.lastOnline) %>
-                <% let lastOnlineString = `${lastOnlineDate.toDateString()} ${lastOnlineDate.toTimeString()}` %>
-                  <%= lastOnlineString %>
-            </td>
-          </tr>
-
-          <tr>
-            <td scope="row">Ban status</td>
-            <td>
-              <%= player.banned %>
-            </td>
-          </tr>
-
-          <tr>
-            <td scope="row">Level</td>
-            <td>
-              <%= player.level %>
-            </td>
-          </tr>
-
-          <tr>
-            <td scope="row">Deaths</td>
-            <td>
-              <%= player.deaths %>
-            </td>
-          </tr>
-
-          <tr>
-            <td scope="row">Score</td>
-            <td>
-              <%= player.score %>
-            </td>
-          </tr>
-
-          <tr>
-            <td scope="row">Zombie kills</td>
-            <td>
-              <%= player.zombieKills %>
-            </td>
-          </tr>
-
-          <tr>
-            <td scope="row">Player kills</td>
-            <td>
-              <%= player.playerKills %>
-            </td>
-          </tr>
-
-          <tr>
-              <td scope="row">CSMM currency balance</td>
-              <td>
-                <%= player.currency %>
-              </td>
-            </tr>
-
-          <tr>
-            <td scope="row">Teleports</td>
-            <td>
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Location</th>
-                  </tr>
-                </thead>
-                <tbody id='player-teleport-locations'>
-                </tbody>
-              </table>
-            </td>
-          </tr>
-
-
-        </tbody>
-      </table>
-    </div>
-
-    <hr>
-
-    <div class="row">
-      <h3>Inventory</h3>
-      <%- include('./partials/playerInventory', {player: player}) %>
-    </div>
-
-    <hr>
-
-    <div class="row">
-      <h3>Logs</h3>
-      <table id='player-historicalInfo-table' class="table display hover">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Message</th>
-            <th>Amount</th>
-          </tr>
-        </thead>
-
-      </table>
-    </div>
-
 
   </div>
 </body>
