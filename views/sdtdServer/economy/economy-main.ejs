@@ -7,118 +7,112 @@
 
     <h2>Settings</h2>
 
+    <div class="row">
+        <div class="col-md-6">
+            <div class="list-group">
+                <button id="economy-button-enable" type="button" class="list-group-item btn-lg bg-success">
+                    <i class="fas fa-toggle-on"></i> Enable economy</button>
+                <button id="economy-button-disable" type="button" class="list-group-item btn-lg bg-warning">
+                    <i class="fas fa-toggle-off"></i>Disable economy</button>
 
+                <% const shopLink = '/shop/' + server.id %>
 
+                    <a href='<%= shopLink %>' class="btn list-group-item btn-lg text-white bg-primary" role="button">
+                        <i class="fas fa-shopping-cart"></i> Shop</a>
 
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn list-group-item btn-lg text-white bg-primary" data-toggle="modal" data-target="#economy-setPrices-modal">
+                        <i class="fas fa-hand-holding-usd"></i> Set prices
+                    </button>
 
-    <div class="list-group">
-        <button id="economy-button-enable" type="button" class="list-group-item btn-lg bg-success">
-            <i class="fas fa-toggle-on"></i> Enable economy</button>
-        <button id="economy-button-disable" type="button" class="list-group-item btn-lg bg-warning">
-            <i class="fas fa-toggle-off"></i>Disable economy</button>
+                    <!-- Modal -->
+                    <div class="modal fade" id="economy-setPrices-modal" tabindex="-1" role="dialog" aria-labelledby="economy-setPrices-modal-title"
+                        aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title" id="economy-setPrices-modal-title"> Set prices</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
 
-        <% const shopLink = '/shop/' + server.id %>
+                                    <div class="form-group">
 
-            <a href='<%= shopLink %>' class="btn list-group-item btn-lg text-white bg-primary" role="button">
-                <i class="fas fa-shopping-cart"></i> Shop</a>
+                                        <label for="economy-setPrices-costToTeleport">Teleport</label>
+                                        <input type="text" name="economy-setPrices-costToTeleport" id="economy-setPrices-costToTeleport" class="form-control" placeholder="<%= config.costToTeleport %>"
+                                            aria-describedby="economy-costToTeleport-help">
+                                        <input name="economy-costToTeleport-btn" id="economy-costToTeleport-btn" class="btn btn-primary" type="button" value="Set">
+                                        <small id="economy-costToTeleport-help" class="text-muted">How much does a player have to pay to teleport</small>
+                                        <br>
+                                        <label for="economy-setPrices-costToSetTeleport">Set teleport</label>
+                                        <input type="text" name="economy-setPrices-costToSetTeleport" id="economy-setPrices-costToSetTeleport" class="form-control"
+                                            placeholder="<%= config.costToSetTeleport %>" aria-describedby="economy-costToSetTeleport-help">
+                                        <input name="economy-costToSetTeleport-btn" id="economy-costToSetTeleport-btn" class="btn btn-primary" type="button" value="Set">
+                                        <small id="economy-costToSetTeleport-help" class="text-muted">How much does a player have to pay to create a new teleport location</small>
+                                        <br>
+                                        <label for="economy-setPrices-costToMakeTeleportPublic">Teleport public</label>
+                                        <input type="text" name="economy-setPrices-costToMakeTeleportPublic" id="economy-setPrices-costToMakeTeleportPublic" class="form-control"
+                                            placeholder="<%= config.costToMakeTeleportPublic %>" aria-describedby="economy-costToMakeTeleportPublic-help">
+                                        <input name="economy-costToMakeTeleportPublic-btn" id="economy-costToMakeTeleportPublic-btn" class="btn btn-primary" type="button"
+                                            value="Set">
+                                        <small id="economy-costToMakeTeleportPublic-help" class="text-muted">How much does a player have to pay to make a teleport location public</small>
 
-            <!-- Button trigger modal -->
-            <button type="button" class="btn list-group-item btn-lg text-white bg-primary" data-toggle="modal" data-target="#economy-setPrices-modal">
-                <i class="fas fa-hand-holding-usd"></i> Set prices
-            </button>
-
-            <!-- Modal -->
-            <div class="modal fade" id="economy-setPrices-modal" tabindex="-1" role="dialog" aria-labelledby="economy-setPrices-modal-title"
-                aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="economy-setPrices-modal-title"> Set prices</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-
-                            <div class="form-group">
-
-                                <label for="economy-setPrices-costToTeleport">Teleport</label>
-                                <input type="text" name="economy-setPrices-costToTeleport" id="economy-setPrices-costToTeleport" class="form-control" placeholder="<%= config.costToTeleport %>"
-                                    aria-describedby="economy-costToTeleport-help">
-                                <input name="economy-costToTeleport-btn" id="economy-costToTeleport-btn" class="btn btn-primary" type="button" value="Set">
-                                <small id="economy-costToTeleport-help" class="text-muted">How much does a player have to pay to teleport</small>
-                                <br>
-                                <label for="economy-setPrices-costToSetTeleport">Set teleport</label>
-                                <input type="text" name="economy-setPrices-costToSetTeleport" id="economy-setPrices-costToSetTeleport" class="form-control"
-                                    placeholder="<%= config.costToSetTeleport %>" aria-describedby="economy-costToSetTeleport-help">
-                                <input name="economy-costToSetTeleport-btn" id="economy-costToSetTeleport-btn" class="btn btn-primary" type="button" value="Set">
-                                <small id="economy-costToSetTeleport-help" class="text-muted">How much does a player have to pay to create a new teleport location</small>
-                                <br>
-                                <label for="economy-setPrices-costToMakeTeleportPublic">Teleport public</label>
-                                <input type="text" name="economy-setPrices-costToMakeTeleportPublic" id="economy-setPrices-costToMakeTeleportPublic" class="form-control"
-                                    placeholder="<%= config.costToMakeTeleportPublic %>" aria-describedby="economy-costToMakeTeleportPublic-help">
-                                <input name="economy-costToMakeTeleportPublic-btn" id="economy-costToMakeTeleportPublic-btn" class="btn btn-primary" type="button"
-                                    value="Set">
-                                <small id="economy-costToMakeTeleportPublic-help" class="text-muted">How much does a player have to pay to make a teleport location public</small>
-
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- Button trigger modal -->
-            <button type="button" class="btn list-group-item btn-lg text-white bg-primary" data-toggle="modal" data-target="#economy-setCurrencyName-modal">
-                <i class="far fa-money-bill-alt"></i> Set currency name
-            </button>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn list-group-item btn-lg text-white bg-primary" data-toggle="modal" data-target="#economy-setCurrencyName-modal">
+                        <i class="far fa-money-bill-alt"></i> Set currency name
+                    </button>
 
-            <!-- Modal -->
-            <div class="modal fade" id="economy-setCurrencyName-modal" tabindex="-1" role="dialog" aria-labelledby="economy-setCurrencyName-modal-title"
-                aria-hidden="true">
-                <div class="modal-dialog modal-sm" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="economy-setCurrencyName-modal-title">
-                                </i> Set currency name</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label for="economy-setCurrencyName-input">Name</label>
-                                <input type="text" class="form-control" name="economy-setCurrencyName-input" id="economy-setCurrencyName-input" aria-describedby="economy-setCurrencyName-input-help"
-                                    placeholder="<%= config.currencyName %>">
-                                <small id="economy-setCurrencyName-input-help" class="form-text text-muted">Eg. ZCash, credits, bucks, dollars, ...</small>
+                    <!-- Modal -->
+                    <div class="modal fade" id="economy-setCurrencyName-modal" tabindex="-1" role="dialog" aria-labelledby="economy-setCurrencyName-modal-title"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-sm" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title" id="economy-setCurrencyName-modal-title">
+                                        </i> Set currency name</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="economy-setCurrencyName-input">Name</label>
+                                        <input type="text" class="form-control" name="economy-setCurrencyName-input" id="economy-setCurrencyName-input" aria-describedby="economy-setCurrencyName-input-help"
+                                            placeholder="<%= config.currencyName %>">
+                                        <small id="economy-setCurrencyName-input-help" class="form-text text-muted">Eg. ZCash, credits, bucks, dollars, ...</small>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button id="economy-setCurrencyName-save-btn" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
+                                </div>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button id="economy-setCurrencyName-save-btn" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
-                        </div>
                     </div>
-                </div>
+
             </div>
+        </div>
+        <div class="col-md-6">
+            <div class="list-group">
+                <button type="button" class="list-group-item bg-dark text-white">Modules</button>
+                <%- include('./module-playtimeEarner') %>
+                    <%- include('./module-discordTextEarner') %>
+                        <%- include('./module-killEarner') %>
 
+            </div>
+        </div>
     </div>
-
-
-    <div class="list-group">
-        <button type="button" class="list-group-item bg-dark text-white">Modules</button>
-        <%- include('./module-playtimeEarner') %>
-            <%- include('./module-discordTextEarner') %>
-                <%- include('./module-killEarner') %>
-
-    </div>
-
-
-
-
-
-
 
 
 
@@ -126,7 +120,6 @@
 
     <button id="delete-economy-logs" type="button" class="btn btn-danger">Delete economy logs</button>
 
-    <div class="row">
         <table id='economy-historicalInfo-table' class="table table-striped table-bordered dataTable no-footer">
             <thead>
                 <tr>
@@ -140,7 +133,7 @@
             </thead>
 
         </table>
-    </div>
+    
 
     <script>
 
