@@ -100,7 +100,7 @@
                 <label for="tracking-limit">Limit</label>
                 <input type="number" class="form-control" name="tracking-limit" id="tracking-limit" aria-describedby="tracking-limit-help"
                     placeholder="5000">
-                <small id="tracking-limit-help" class="form-text text-muted">Limit how much datapoints CSMM will retrieve.</small>
+                <small id="tracking-limit-help" class="form-text text-muted">Limit how much datapoints CSMM will retrieve. Maximum is 5000</small>
             </div>
         </div>
 
@@ -122,6 +122,11 @@
         <hr>
 
         <h2>Location</h2>
+        <div class="form-check">
+            <label class="form-check-label">
+                <input type="checkbox" class="form-check-input" name="tracking-draw-land-claim" id="tracking-draw-land-claims"> Draw land claims
+            </label>
+        </div>
         <div id="sdtdMap">
 
 
@@ -259,6 +264,31 @@
 
             // Map
             trackingMap = new sdtdMap($("#sdtdMap"))
+
+            $("#tracking-draw-land-claims").prop('checked', false)
+
+            $("#tracking-draw-land-claims").click(e => {
+
+                if ($("#tracking-draw-land-claims").prop('checked') === true) {
+                    $.ajax({
+                        url: '/api/sdtdserver/tracking/landclaims',
+                        data: {
+                            serverId: server.id
+                        },
+                        success: data => {
+                            trackingMap.clear()
+                            trackingMap.drawLandClaims(data, players)
+                        },
+                        error: error => {
+                            console.log(error)
+                        }
+                    });
+                }
+
+            })
+
+
+
 
             // Inventory
 

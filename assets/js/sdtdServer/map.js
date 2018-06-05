@@ -4,29 +4,16 @@ class sdtdMap {
         this.playerMarkerMap = new Map();
         this.server = server;
         this.playerPathsMap = new Map();
-        this.circle = undefined;
-        this.rectangle = undefined
+        this.circles = new Array();
+        this.rectangles = new Array()
+        this.layerGroup = L.layerGroup()
         this.map = this.initMap();
     }
 
     clear() {
-        if (this.circle) {
-            this.circle.remove();
-        }
-        if (this.rectangle) {
-            this.rectangle.remove();
-        }
 
-        this.playerMarkerMap.forEach(existingMarker => {
-            existingMarker.remove()
-        })
+        this.layerGroup.clearLayers();
 
-        this.playerPathsMap.forEach(existingPath => {
-            existingPath.remove()
-        })
-
-        this.playerMarkerMap.clear();
-        this.playerPathsMap.clear()
     }
 
     deletePlayerMarkers() {
@@ -38,17 +25,19 @@ class sdtdMap {
     }
 
     drawCircle(x, z, radius, extraOptions) {
-        this.circle = L.circle([x, z], { radius: radius });
-        this.circle.addTo(this.map);
-        return this.circle
+        circle = L.circle([x, z], { radius: radius });
+        circle.addTo(this.layerGroup);
+        this.circles.push(circle)
+        return circle
 
     }
 
     // Radius a bit of a misnomer here 
     drawRectangle(x, z, radius, extraOptions) {
-        this.rectangle = L.rectangle([[x - radius, z - radius], [x + radius, z + radius]]);
-        this.rectangle.addTo(this.map)
-        return this.rectangle
+        rectangle = L.rectangle([[x - radius, z - radius], [x + radius, z + radius]]);
+        rectangle.addTo(this.layerGroup)
+        this.rectangles.push(rectangle)
+        return rectangle
     }
 
 
@@ -110,12 +99,34 @@ class sdtdMap {
         }
 
         this.playerMarkerMap.forEach(marker => {
-            marker.addTo(this.map)
+            marker.addTo(this.layerGroup)
         })
 
         this.playerPathsMap.forEach(path => {
-            path.addTo(this.map)
+            path.addTo(this.layerGroup)
         })
+
+    }
+
+    drawLandClaims(landClaims, players) {
+        console.log(landClaims);
+        for (const claimOwner of landClaims.claimowners) {
+            let playerThatOwnsClaim = players.filter(player => claimOwner.steamid === player.steamId);
+
+            for (const claimToDraw of claimOwner.claims) {
+
+                let marker = L.marker([claimToDraw.x, claimToDraw.z], {
+                    title: playerThatOwnsClaim[0].name,
+                    alt: playerThatOwnsClaim[0].name,
+                });
+                let popup = L.popup().setContent(`Claim by ${playerThatOwnsClaim[0].name}`);
+    
+                marker.bindPopup(popup);
+
+                marker.addTo(this.layerGroup);
+                
+            }
+        }
 
     }
 
@@ -161,6 +172,7 @@ class sdtdMap {
         var tileLayer = this.GetSdtdTileLayer(mapinfo, initTime);
 
         tileLayer.addTo(mymap)
+        this.layerGroup.addTo(mymap)
 
         return mymap
     }
