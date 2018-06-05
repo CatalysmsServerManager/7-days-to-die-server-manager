@@ -25,7 +25,7 @@ class sdtdMap {
     }
 
     drawCircle(x, z, radius, extraOptions) {
-        circle = L.circle([x, z], { radius: radius });
+        let circle = L.circle([x, z], { radius: radius });
         circle.addTo(this.layerGroup);
         this.circles.push(circle)
         return circle
@@ -34,7 +34,7 @@ class sdtdMap {
 
     // Radius a bit of a misnomer here 
     drawRectangle(x, z, radius, extraOptions) {
-        rectangle = L.rectangle([[x - radius, z - radius], [x + radius, z + radius]]);
+        let rectangle = L.rectangle([[x - radius, z - radius], [x + radius, z + radius]]);
         rectangle.addTo(this.layerGroup)
         this.rectangles.push(rectangle)
         return rectangle
@@ -109,7 +109,6 @@ class sdtdMap {
     }
 
     drawLandClaims(landClaims, players) {
-        console.log(landClaims);
         for (const claimOwner of landClaims.claimowners) {
             let playerThatOwnsClaim = players.filter(player => claimOwner.steamid === player.steamId);
 
@@ -124,6 +123,8 @@ class sdtdMap {
                 marker.bindPopup(popup);
 
                 marker.addTo(this.layerGroup);
+
+                this.drawRectangle(claimToDraw.x, claimToDraw.z, landClaims.claimsize);
                 
             }
         }
