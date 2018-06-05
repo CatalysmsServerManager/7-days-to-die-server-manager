@@ -83,7 +83,7 @@
 
 
     <!--TEMPLATES-->
-    
+
     <!--TEMPLATES END-->
 
 
@@ -174,14 +174,17 @@
 
 <body>
 
+    <div class="container">
+        <%- include("../includes/applicationNav.ejs") %>
+    </div>
 
-    <%- include("../includes/applicationNav.ejs") %>
-
-        <div class="container" style="padding-top: 5%;">
+    <div class="content-wrapper">
+        <div class="container-fluid" style="margin: 3%;">
 
             <%- body %>
 
         </div>
+    </div>
 
 </body>
 

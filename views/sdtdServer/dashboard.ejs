@@ -1,8 +1,6 @@
 <%- exposeLocalsToBrowser() %>
 
-    <div class="container">
-
-        <div class="row">
+    <div class="row">
         <h1 id="server-name">
             <%= server.name %> Dashboard</h1>
 
@@ -42,12 +40,12 @@
                     </div>
                 </div>
             </div>
-        </div>
+    </div>
 
+    <% if(!_.isUndefined(server.stats) && !_.isUndefined(server.serverInfo)) { %>
+        <div class="row">
 
-            <% if(!_.isUndefined(server.stats) && !_.isUndefined(server.serverInfo)) { %>
-
-
+            <div class="col-xl-8">
                 <div class="card">
                     <div class="card-header">
                         <i class="fas fa-users"></i> Online players
@@ -61,7 +59,9 @@
                         </p>
                     </div>
                 </div>
+            </div>
 
+            <div class="col-xl-4">
                 <div class="card">
                     <div class="card-header">
                         <i class="fas fa-info"></i> Server info
@@ -74,9 +74,13 @@
                         </p>
                     </div>
                 </div>
-                <% } %>
+            </div>
 
+        </div>
+        <% } %>
 
+            <div class="row">
+                <div class="col-xl-6">
                     <div class="card">
                         <div class="card-header">
                             <i class="fas fa-comments"></i> Chat
@@ -90,9 +94,8 @@
                             </p>
                         </div>
                     </div>
-
-
-
+                </div>
+                <div class="col-xl-6">
                     <div class="card">
                         <div class="card-header">
                             <i class="fas fa-terminal"></i> Console
@@ -104,49 +107,56 @@
                             </p>
                         </div>
                     </div>
-
-
-                    <h3>
-                        <i class="far fa-map"></i>
-                        </i> Map</h3>
-
-
-                    <%- include('./partials/map', {server: server}) %>
-
-    </div>
-
-    </div>
-    <style>
-        .card {
-            margin: 1%
-        }
-    </style>
+                </div>
+            </div>
 
 
 
-    <script>
-        $(document).ready(function () {
 
-            $.get('/api/sdtdserver/onlinestatus', { serverId: <%= server.id %> }, onlineStatus => {
 
-                let elementToAdd = `<i class="fas fa-circle ${onlineStatus ? "text-success" : "text-danger"}"></i> `
 
-                $(`#server-name`).prepend(elementToAdd)
-            })
 
-            $.ajax({
-                url: `/api/sdtdticket/opentickets`,
-                data: {
-                    serverId: <%= server.id %>
-                  },
-                success: (data, status, xhr) => {
-                    let opentickets = data;
-                    $('#sdtd-server-<%= server.id %>-tickets-badge').text(opentickets.length)
 
-                },
-                error: (xhr, status, error) => {
-                    console.log(error)
-                }
-            });
-        })
-    </script>
+
+            <h3>
+                <i class="far fa-map"></i>
+                </i> Map</h3>
+
+
+            <%- include('./partials/map', {server: server}) %>
+
+
+
+                </div>
+                <style>
+                    .card {
+                        margin: 1%
+                    }
+                </style>
+
+
+
+                <script>
+                    $(document).ready(function () {
+
+                        $.get('/api/sdtdserver/onlinestatus', { serverId: <%= server.id %> }, onlineStatus => {
+
+                            let elementToAdd = `<i class="fas fa-circle ${onlineStatus ? "text-success" : "text-danger"}"></i> `
+
+                            $(`#server-name`).prepend(elementToAdd)
+                        })
+
+                        $.ajax({
+                            url: `/api/sdtdticket/opentickets`,
+                            data: { serverId: "<%= server.id %>" },
+                            success: (data, status, xhr) => {
+                                let opentickets = data;
+                                $('#sdtd-server-<%= server.id %>-tickets-badge').text(opentickets.length)
+
+                            },
+                            error: (xhr, status, error) => {
+                                console.log(error)
+                            }
+                        });
+                    })
+                </script>
