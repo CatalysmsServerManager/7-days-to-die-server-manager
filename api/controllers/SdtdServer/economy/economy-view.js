@@ -28,8 +28,12 @@ module.exports = {
             let server = await SdtdServer.findOne(inputs.serverId);
             let config = await SdtdConfig.findOne({ server: server.id });
             let historicalInfo = await HistoricalInfo.find({
-                server: server.id,
-                type: 'economy'
+                where: {
+                    server: server.id,
+                    type: 'economy',
+                },
+                limit: 1000,
+                sort: "createdAt DESC"
             }).populate('player');
             sails.log.info(`VIEW - SdtdServer:economy - Showing economy overview for ${server.name}`);
             return exits.success({

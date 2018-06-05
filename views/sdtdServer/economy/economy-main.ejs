@@ -19,7 +19,8 @@
 
         <% const shopLink = '/shop/' + server.id %>
 
-            <a href='<%= shopLink %>' class="btn list-group-item btn-lg text-white bg-primary" role="button"> <i class="fas fa-shopping-cart"></i> Shop</a>
+            <a href='<%= shopLink %>' class="btn list-group-item btn-lg text-white bg-primary" role="button">
+                <i class="fas fa-shopping-cart"></i> Shop</a>
 
             <!-- Button trigger modal -->
             <button type="button" class="btn list-group-item btn-lg text-white bg-primary" data-toggle="modal" data-target="#economy-setPrices-modal">
@@ -123,8 +124,10 @@
 
     <h2>Economy logs</h2>
 
+    <button id="delete-economy-logs" type="button" class="btn btn-danger">Delete economy logs</button>
+
     <div class="row">
-        <table id='economy-historicalInfo-table' class="table display hover">
+        <table id='economy-historicalInfo-table' class="table table-striped table-bordered dataTable no-footer">
             <thead>
                 <tr>
                     <th>Date</th>
@@ -290,7 +293,6 @@
                 })
             })
 
-
             let historicalInfoTable = $('#economy-historicalInfo-table').DataTable({
                 data: window.SAILS_LOCALS.historicalInfo,
                 dom: 'Bfrtip',
@@ -299,20 +301,12 @@
                 buttons: [
                     'copy', 'excel', 'pdf', 'print'
                 ],
-                order: [[0, 'desc'],
-                [1, 'desc']],
+                order: [[0, 'desc']],
                 columns: [{
                     data: "createdAt",
                     render: function (data, type, row, meta) {
                         let date = new Date(data)
-                        return `${date.toDateString()}`
-                    }
-                },
-                {
-                    data: 'createdAt',
-                    render: function (data, type, row, meta) {
-                        let date = new Date(data)
-                        return `${date.toTimeString()}`
+                        return `${date.toDateString()} ${date.toTimeString()}`
                     }
                 },
                 {
@@ -337,8 +331,18 @@
                 ]
             })
 
+            $('#delete-economy-logs').click(e => {
+                $.post('/api/sdtdserver/data/purge', {
+                    _csrf: window.SAILS_LOCALS._csrf,
+                    serverId: window.SAILS_LOCALS.server.id,
+                    type: 'economy'
+                }, data => {
+                    historicalInfoTable.clear();
+                    historicalInfoTable.draw();
+                })
+            })
+
 
         })
 
     </script>
-
