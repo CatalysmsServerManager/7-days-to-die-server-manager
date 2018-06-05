@@ -7,8 +7,8 @@
         <strong>It seems like you are neither an owner or admin of any server! </strong>
       </div>
       <% } %>
-
-        <% ownedServers.forEach(server => { %>
+        <div class="card-columns">
+          <% ownedServers.forEach(server => { %>
             <div class="card">
               <div id="server-<%= server.id %>-name" class="card-header">
                 <%= server.name %>
@@ -88,6 +88,7 @@
 
 
 
+        </div>
   </div>
 
   <script>

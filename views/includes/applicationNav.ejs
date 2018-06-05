@@ -10,28 +10,6 @@
     <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
 
-            <li class="nav-item" data-toggle="tooltip" data-placement="right">
-
-                <a class="nav-link" href="/sdtdserver/addserver">
-                    <i class="fas fa-plus"></i>
-                    <span class="nav-link-text">
-                        Add a server
-                    </span>
-                </a>
-            </li>
-
-            <li class="nav-item" data-toggle="tooltip" data-placement="right">
-
-                <a id="user-dashboard-link" class="nav-link" href="/user/<%= req.session.userId %>/dashboard">
-                    <i class="fas fa-list-ul"></i>
-                    <span class="nav-link-text">
-
-                        Server overview
-
-                    </span>
-                </a>
-            </li>
-
             <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Menu Levels">
 
                 <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti" data-parent="#exampleAccordion">
@@ -43,6 +21,28 @@
 
                 </ul>
             </li>
+
+            <li class="nav-item" data-toggle="tooltip" data-placement="right">
+
+                    <a class="nav-link" href="/sdtdserver/addserver">
+                        <i class="fas fa-plus"></i>
+                        <span class="nav-link-text">
+                            Add a server
+                        </span>
+                    </a>
+                </li>
+    
+                <li class="nav-item" data-toggle="tooltip" data-placement="right">
+    
+                    <a id="user-dashboard-link" class="nav-link" href="/user/<%= req.session.userId %>/dashboard">
+                        <i class="fas fa-list-ul"></i>
+                        <span class="nav-link-text">
+    
+                            Server overview
+    
+                        </span>
+                    </a>
+                </li>
 
         </ul>
 

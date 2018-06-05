@@ -1,162 +1,160 @@
 <%- exposeLocalsToBrowser() %>
+    <div class="card-columns">
+        <div class="row">
+            <h1 id="server-name">
+                <%= server.name %> Dashboard</h1>
 
-    <div class="row">
-        <h1 id="server-name">
-            <%= server.name %> Dashboard</h1>
+            <%- include('./partials/restartServer', {server: server}) %>
 
-        <%- include('./partials/restartServer', {server: server}) %>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-lg btn-danger" data-toggle="modal" data-target="#delete-server-button">
+                    <i class="fas fa-trash-alt"></i> Delete
+                </button>
 
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-lg btn-danger" data-toggle="modal" data-target="#delete-server-button">
-                <i class="fas fa-trash-alt"></i> Delete
-            </button>
+                <!-- Modal -->
+                <div class="modal fade" id="delete-server-button" tabindex="-1" role="dialog" aria-labelledby="delete-server-modal" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="delete-server-modal">Delete server</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="container-fluid">
+                                    Are you sure?
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <% const deleteLink = '/sdtdserver/' + server.id + '/delete' %>
+                                    <a href='<%= deleteLink %>'>
+                                        <button id="delete-server-button" class="btn btn-default btn-danger" type="button">
+                                            <em class="glyphicon glyphicon-align-justify"></em>
+                                            Delete server
+                                        </button>
+                                    </a>
 
-            <!-- Modal -->
-            <div class="modal fade" id="delete-server-button" tabindex="-1" role="dialog" aria-labelledby="delete-server-modal" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="delete-server-modal">Delete server</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="container-fluid">
-                                Are you sure?
+                                    <button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <% const deleteLink = '/sdtdserver/' + server.id + '/delete' %>
-                                <a href='<%= deleteLink %>'>
-                                    <button id="delete-server-button" class="btn btn-default btn-danger" type="button">
-                                        <em class="glyphicon glyphicon-align-justify"></em>
-                                        Delete server
-                                    </button>
-                                </a>
-
-                                <button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
-                        </div>
                     </div>
                 </div>
+        </div>
+
+        <% if(!_.isUndefined(server.stats) && !_.isUndefined(server.serverInfo)) { %>
+
+
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-users"></i> Online players
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+
+                        <%- include('./partials/onlinePlayers', {server: server}) %>
+
+
+                    </p>
+                </div>
             </div>
+
+
+
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-info"></i> Server info
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+
+                        <%- include('./partials/basicServerInfo', {server: server}) %>
+
+                    </p>
+                </div>
+            </div>
+
+
+
+            <% } %>
+
+
+
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-comments"></i> Chat
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">
+
+                            <%- include('./partials/chat/chatWindow', {server: server}) %>
+                                <%- include('./partials/chat/chatControls', {server: server}) %>
+
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-terminal"></i> Console
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            <%- include('./partials/console/consoleWindow', {server: server}) %>
+                                <%- include('./partials/console/consoleControls', {server: server}) %>
+                        </p>
+                    </div>
+                </div>
+
+
+
+
+
+
+
     </div>
 
-    <% if(!_.isUndefined(server.stats) && !_.isUndefined(server.serverInfo)) { %>
-        <div class="row">
-
-            <div class="col-xl-8">
-                <div class="card">
-                    <div class="card-header">
-                        <i class="fas fa-users"></i> Online players
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">
-
-                            <%- include('./partials/onlinePlayers', {server: server}) %>
 
 
-                        </p>
-                    </div>
-                </div>
-            </div>
+    <h3>
+        <i class="far fa-map"></i>
+        </i> Map</h3>
 
-            <div class="col-xl-4">
-                <div class="card">
-                    <div class="card-header">
-                        <i class="fas fa-info"></i> Server info
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">
 
-                            <%- include('./partials/basicServerInfo', {server: server}) %>
+    <%- include('./partials/map', {server: server}) %>
 
-                        </p>
-                    </div>
-                </div>
-            </div>
+
 
         </div>
-        <% } %>
-
-            <div class="row">
-                <div class="col-xl-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <i class="fas fa-comments"></i> Chat
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text">
-
-                                <%- include('./partials/chat/chatWindow', {server: server}) %>
-                                    <%- include('./partials/chat/chatControls', {server: server}) %>
-
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <i class="fas fa-terminal"></i> Console
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text">
-                                <%- include('./partials/console/consoleWindow', {server: server}) %>
-                                    <%- include('./partials/console/consoleControls', {server: server}) %>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <style>
+            .card {
+                margin: 1%
+            }
+        </style>
 
 
 
+        <script>
+            $(document).ready(function () {
 
 
 
+                $.get('/api/sdtdserver/onlinestatus', { serverId: <%= server.id %> }, onlineStatus => {
+                    let elementToAdd = `<i class="${onlineStatus ? "fas fa-check-circle text-success" : "fas fa-times-circle text-danger"}"></i> `
+                    $(`#server-name`).prepend(elementToAdd)
+                })
 
+                $.ajax({
+                    url: `/api/sdtdticket/opentickets`,
+                    data: { serverId: "<%= server.id %>" },
+                    success: (data, status, xhr) => {
+                        let opentickets = data;
+                        $('#sdtd-server-<%= server.id %>-tickets-badge').text(opentickets.length)
 
-
-            <h3>
-                <i class="far fa-map"></i>
-                </i> Map</h3>
-
-
-            <%- include('./partials/map', {server: server}) %>
-
-
-
-                </div>
-                <style>
-                    .card {
-                        margin: 1%
+                    },
+                    error: (xhr, status, error) => {
+                        console.log(error)
                     }
-                </style>
-
-
-
-                <script>
-                    $(document).ready(function () {
-
-                        $.get('/api/sdtdserver/onlinestatus', { serverId: <%= server.id %> }, onlineStatus => {
-
-                            let elementToAdd = `<i class="fas fa-circle ${onlineStatus ? "text-success" : "text-danger"}"></i> `
-
-                            $(`#server-name`).prepend(elementToAdd)
-                        })
-
-                        $.ajax({
-                            url: `/api/sdtdticket/opentickets`,
-                            data: { serverId: "<%= server.id %>" },
-                            success: (data, status, xhr) => {
-                                let opentickets = data;
-                                $('#sdtd-server-<%= server.id %>-tickets-badge').text(opentickets.length)
-
-                            },
-                            error: (xhr, status, error) => {
-                                console.log(error)
-                            }
-                        });
-                    })
-                </script>
+                });
+            })
+        </script>
