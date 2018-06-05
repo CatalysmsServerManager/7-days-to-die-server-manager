@@ -1,6 +1,19 @@
 <%- exposeLocalsToBrowser() %>
 
     <div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="<%= '/user/' + req.session.userId + '/dashboard' %>"> Dashboard </a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="<%= '/sdtdserver/' + server.id + '/dashboard' %>">
+                        <%= server.name %>
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Tracking</li>
+            </ol>
+        </nav>
         <h1>Player tracking</h1>
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#tracking-location-modal">
