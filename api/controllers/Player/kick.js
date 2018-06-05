@@ -38,7 +38,6 @@ module.exports = {
 
     try {
 
-      sails.log.debug(`API - Player:kick - Kicking player ${inputs.playerId}`);
       let player = await Player.findOne(inputs.playerId).populate('server');
       let server = await SdtdServer.findOne(player.server.id);
       return sevenDays.kickPlayer({
@@ -56,6 +55,7 @@ module.exports = {
           return exits.notFound('Cannot kick player, invalid ID given!');
         },
         success: function (response) {
+          sails.log.info(`API - Player:kick - Kicking player from server ${inputs.serverId}`, player);
           return exits.success(response);
         }
       });

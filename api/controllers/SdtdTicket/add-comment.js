@@ -26,7 +26,7 @@ module.exports = {
 
     fn: async function (inputs, exits) {
 
-        await TicketComment.create({
+        let createdComment = await TicketComment.create({
             commentText: inputs.commentText,
             ticket: inputs.ticketId,
             userThatPlacedTheComment: this.req.session.userId
@@ -39,6 +39,8 @@ module.exports = {
             ticketNotificationType: 'New comment',
             ticket: ticket
           })
+
+          sails.log.info(`New comment on ticket ${inputs.ticketId}`, createdComment)
         return exits.success();
 
     }

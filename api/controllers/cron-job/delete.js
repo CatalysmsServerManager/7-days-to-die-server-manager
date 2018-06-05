@@ -30,7 +30,7 @@ module.exports = {
     
     await sails.hooks.cron.stop(inputs.jobId);
     await CronJob.destroy({id: inputs.jobId});
-    sails.log.debug(`Deleted cron job ${inputs.jobId}`)
+    sails.log.info(`Deleted cron job ${inputs.jobId}`)
     return exits.success();
 
   }

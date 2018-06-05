@@ -35,6 +35,7 @@ module.exports = {
 
     fn: async function (inputs, exits) {
         await SdtdServer.removeFromCollection(inputs.serverId, 'admins').members(inputs.userId);
+        sails.log.info(`Removed admin for server ${inputs.serverId} - userId: ${inputs.userId}`)
         return exits.success();
     }
 };

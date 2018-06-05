@@ -58,7 +58,7 @@ module.exports = {
       })
 
       Promise.all(promises).then((comments) => {
-        sails.log.info(`API - SdtdTicket:viewTicket - - Success, loaded ticket "${ticket.title}" for server ${server.name}`);
+        sails.log.info(`API - SdtdTicket:viewTicket - - Success, loaded ticket "${ticket.title}" for server ${server.name}`, ticket);
         return exits.success({
           server: server,
           ticket: ticket,

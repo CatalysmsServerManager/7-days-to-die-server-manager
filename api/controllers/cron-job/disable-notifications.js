@@ -30,7 +30,7 @@ module.exports = {
 
 
     await CronJob.update({ id: inputs.jobId }, { notificationEnabled: false });
-    sails.log.debug(`Disabled notifications for job ${inputs.jobId}`);
+    sails.log.info(`Disabled notifications for job ${inputs.jobId}`);
 
     return exits.success();
 

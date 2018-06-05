@@ -96,6 +96,7 @@ module.exports = {
                 server: inputs.serverId
             })
 
+            sails.log.info(`Created a custom command`, createdCommand)
             return exits.success(createdCommand);
 
 

@@ -46,7 +46,7 @@ module.exports = {
 
     try {
 
-      sails.log.debug(`API - Player:ban - banning player ${inputs.playerId}`);
+
       let player = await Player.findOne(inputs.playerId).populate('server');
       let server = await SdtdServer.findOne(player.server.id);
       return sevenDays.banPlayer({
@@ -66,6 +66,7 @@ module.exports = {
           return exits.notFound('Cannot ban player, invalid ID given!');
         },
         success: function (response) {
+          sails.log.info(`API - Player:ban - banned player on server ${inputs.serverId}`, player);
           return exits.success(response);
         }
       });

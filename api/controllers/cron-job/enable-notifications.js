@@ -29,7 +29,7 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     await CronJob.update({ id: inputs.jobId }, { notificationEnabled: true });
-    sails.log.debug(`Enabled notifications for job ${inputs.jobId}`);
+    sails.log.info(`Enabled notifications for job ${inputs.jobId}`);
 
     return exits.success();
 
