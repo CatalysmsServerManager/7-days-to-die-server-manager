@@ -1,6 +1,5 @@
 <div class="container-fluid">
   <h1>Settings</h1>
-  <% include ./partials/backToDashboard %>
 
     <!-- Basic server settings -->
 
@@ -10,7 +9,7 @@
         <div class="card-header" id="settings-heading-basicServerSettings">
           <h5 class="mb-0">
             <button class="btn btn-link">
-              Basic server settings
+              <i class="fas fa-cogs fa-lg"></i> Basic server settings
             </button>
           </h5>
         </div>
@@ -29,7 +28,7 @@
         <div class="card-header" id="settings-heading-discordSettings">
           <h5 class="mb-0">
             <button class="btn btn-link">
-              Discord settings
+              <i class="fab fa-discord fa-lg"></i> Discord settings
             </button>
           </h5>
         </div>
@@ -39,32 +38,13 @@
         </div>
       </div>
 
-      <!-- Tracking settings -->
-
-      <div class="card">
-        <div class="card-header" id="settings-heading-trackerSettings">
-          <h5 class="mb-0">
-            <button class="btn btn-link">
-              Player tracking
-            </button>
-          </h5>
-        </div>
-
-        <div id="settings-collapse-trackerSettings">
-          <div class="card-body">
-            <%- include('./partials/settings/playerTracking.ejs', {server: server, config: config, user: user}) %>
-          </div>
-        </div>
-
-      </div>
-
       <!-- Cron settings -->
 
       <div class="card">
         <div class="card-header" id="settings-heading-cronSettings">
           <h5 class="mb-0">
             <button class="btn btn-link">
-              Server automation
+              <i class="fas fa-arrow-alt-circle-down fa-lg "></i> Server automation
             </button>
           </h5>
         </div>
@@ -78,13 +58,32 @@
 
       </div>
 
+      <!-- Tracking settings -->
+
+      <div class="card">
+        <div class="card-header" id="settings-heading-trackerSettings">
+          <h5 class="mb-0">
+            <button class="btn btn-link">
+              <i class="fas fa-search fa-lg  "></i> Player tracking
+            </button>
+          </h5>
+        </div>
+
+        <div id="settings-collapse-trackerSettings">
+          <div class="card-body">
+            <%- include('./partials/settings/playerTracking.ejs', {server: server, config: config, user: user}) %>
+          </div>
+        </div>
+
+      </div>
+
       <!-- Country ban settings -->
 
       <div class="card">
         <div class="card-header" id="settings-heading-countryBanSettings">
           <h5 class="mb-0">
             <button class="btn btn-link">
-              Country ban
+              <i class="fas fa-globe fa-lg  "></i> Country ban
             </button>
           </h5>
         </div>
@@ -104,7 +103,7 @@
         <div class="card-header" id="settings-heading-ingameCommandsSettings">
           <h5 class="mb-0">
             <button class="btn btn-link">
-              Ingame commands
+              <i class="fas fa-gamepad fa-lg"></i> Ingame commands
             </button>
           </h5>
         </div>
@@ -124,7 +123,7 @@
         <div class="card-header" id="settings-heading-motdSettings">
           <h5 class="mb-0">
             <button class="btn btn-link">
-              Message of the day
+                <i class="far fa-comment fa-lg"></i> Message of the day
             </button>
           </h5>
         </div>

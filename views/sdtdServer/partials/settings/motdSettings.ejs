@@ -1,63 +1,58 @@
 <%- exposeLocalsToBrowser() %>
 
   <!-- MOTD SETTINGS -->
-  <div class="row">
-    <div class="col-md-4">
-      <small class="text-muted">This message will be sent every x minutes to your server and/or to every player on connect
-      </small>
-    </div>
-    <div class="col-md-4">
-      <ul class="list-group">
-        <% if(config.motdEnabled) {%>
-          <li class="list-group-item bg-success">Enabled
-          </li>
-          <% } else { %>
-            <li class="list-group-item bg-danger">Disabled
-            </li>
-            <% } %>
-              <li class="list-group-item">
-                <label for="input-settings-motd-message">Message</label>
 
-                <input type="text" class="form-control" id="input-settings-motd-message" placeholder="<%= config.motdMessage %>">
-              </li>
-              <li class="list-group-item">
-                <label for="input-settings-motd-interval">Interval</label>
-                <br>
-                <small> In minutes. Set to 0 to disable </small>
-
-                <input type="text" class="form-control" id="input-settings-motd-interval" placeholder="<%= config.motdInterval %>">
-              </li>
-              <li class="list-group-item form-control">
-                <% if (config.motdOnJoinEnabled) { %>
-                  <input type="checkbox" value="" id="inputs-settings-motd-playerOnJoin" checked>
-                  <% } else { %>
-                    <input type="checkbox" value="" id="inputs-settings-motd-playerOnJoin">
-                    <% } %>
-                      <label for="inputs-settings-motd-playerOnJoin">
-                        Send message to players on connect
-                      </label>
-              </li>
-      </ul>
-    </div>
-    <div class="col-md-4">
-      <% if(config.motdEnabled) {%>
-        <li id='input-settings-motd-toggle' class="btn btn-danger">
-          <i class="fa fa-power-off"></i> Disable
+  <ul class="list-group">
+    <% if(config.motdEnabled) {%>
+      <li class="list-group-item bg-success">Enabled
+      </li>
+      <% } else { %>
+        <li class="list-group-item bg-danger">Disabled
         </li>
-        <% } else { %>
-          <li id='input-settings-motd-toggle' class="btn btn-success">
-            <i class="fa fa-power-off"></i> Enable
+        <% } %>
+          <li class="list-group-item">
+            <label for="input-settings-motd-message">Message</label>
+
+            <input type="text" class="form-control" id="input-settings-motd-message" placeholder="<%= config.motdMessage %>">
           </li>
-          <% } %>
+          <li class="list-group-item">
+            <label for="input-settings-motd-interval">Interval</label>
+            <br>
+            <small> In minutes. Set to 0 to disable </small>
 
-            <button id="settings-reload-motd" class="btn btn-default btn-primary" type="button">
-              <em class="glyphicon glyphicon-align-right"></em>
-              <i class="fas fa-sync-alt"></i> Apply changes
-            </button>
+            <input type="text" class="form-control" id="input-settings-motd-interval" placeholder="<%= config.motdInterval %>">
+          </li>
+          <li class="list-group-item form-control">
+            <% if (config.motdOnJoinEnabled) { %>
+              <input type="checkbox" value="" id="inputs-settings-motd-playerOnJoin" checked>
+              <% } else { %>
+                <input type="checkbox" value="" id="inputs-settings-motd-playerOnJoin">
+                <% } %>
+                  <label for="inputs-settings-motd-playerOnJoin">
+                    Send message to players on connect
+                  </label>
+          </li>
+          <% if(config.motdEnabled) {%>
+            <li id='input-settings-motd-toggle' class="btn btn-danger">
+              <i class="fa fa-power-off"></i> Disable
+            </li>
+            <% } else { %>
+              <li id='input-settings-motd-toggle' class="btn btn-success">
+                <i class="fa fa-power-off"></i> Enable
+              </li>
+              <% } %>
+
+                <button id="settings-reload-motd" class="btn btn-default btn-primary" type="button">
+                  <em class="glyphicon glyphicon-align-right"></em>
+                  <i class="fas fa-sync-alt"></i> Apply changes
+                </button>
+  </ul>
 
 
-    </div>
-  </div>
+
+
+
+
 
   <script>
     $(document).ready(function () {
