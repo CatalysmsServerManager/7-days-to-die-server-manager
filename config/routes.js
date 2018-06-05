@@ -172,6 +172,7 @@ module.exports.routes = {
   'get /api/sdtdserver/tracking/stats': 'tracking-info.get-tracking-stats',
   'get /api/sdtdserver/tracking' : 'tracking-info.get-tracking-info',
   'get /api/sdtdserver/tracking/location' : "tracking-info.get-tracking-info-by-location",
+  'get /api/sdtdserver/tracking/landClaims' : 'SdtdServerController.load-land-claims',
 
   // Tickets
 
