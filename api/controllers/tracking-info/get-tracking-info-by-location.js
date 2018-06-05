@@ -40,7 +40,14 @@ module.exports = {
         radius: {
             type: 'number',
             min: 1
+        },
+
+        limit: {
+            type: 'number',
+            min: 1,
+            max: 5000
         }
+
 
     },
 
@@ -58,6 +65,7 @@ module.exports = {
         inputs.x = inputs.x ? inputs.x : 0;
         inputs.z = inputs.z ? inputs.z : 0;
         inputs.radius = inputs.radius ? inputs.radius : 50;
+        inputs.limit = inputs.limit ? inputs.limit : 5000;
 
         let infoToSend = await TrackingInfo.find({
             where: {
@@ -75,7 +83,8 @@ module.exports = {
                     '<': inputs.endDate,
                 }
             },
-            sort: "createdAt ASC"
+            sort: "createdAt ASC",
+            limit: inputs.limit
         });
 
         let endDate = new Date();

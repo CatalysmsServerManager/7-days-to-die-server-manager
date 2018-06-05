@@ -34,6 +34,12 @@ module.exports = {
         endDate: {
             type: 'number',
             min: 0
+        },
+
+        limit: {
+            type: 'number',
+            min: 1,
+            max: 5000
         }
 
     },
@@ -49,6 +55,7 @@ module.exports = {
 
         inputs.beginDate = inputs.beginDate ? inputs.beginDate : new Date(0).valueOf();
         inputs.endDate = inputs.endDate ? inputs.endDate : Date.now();
+        inputs.limit = inputs.limit ? inputs.limit : 5000
 
         let infoToSend = await TrackingInfo.find({
             where: {
@@ -59,7 +66,9 @@ module.exports = {
                     '<': inputs.endDate,
                 }
             },
-            sort: "createdAt ASC"
+            sort: "createdAt ASC",
+            limit: inputs.limit
+
         });
 
         let endDate = new Date();

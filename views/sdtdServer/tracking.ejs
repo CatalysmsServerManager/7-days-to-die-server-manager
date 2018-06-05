@@ -92,7 +92,15 @@
                 <label for="tracking-steamID-lookup">Steam ID</label>
                 <input type="text" class="form-control" name="tracking-steamID-lookup" id="tracking-steamID-lookup" aria-describedby="tracking-steamID-lookup-help"
                     placeholder="">
-                <small id="tracking-steamID-lookup-help" class="form-text text-muted">Fill in a steam ID, CSMM wil try to find a player associated with it.</small>
+                <small id="tracking-steamID-lookup-help" class="form-text text-muted">Fill in a steam ID, CSMM will try to find a player associated with it.</small>
+            </div>
+
+
+            <div class="form-group">
+                <label for="tracking-limit">Limit</label>
+                <input type="number" class="form-control" name="tracking-limit" id="tracking-limit" aria-describedby="tracking-limit-help"
+                    placeholder="5000">
+                <small id="tracking-limit-help" class="form-text text-muted">Limit how much datapoints CSMM will retrieve.</small>
             </div>
         </div>
 
@@ -288,9 +296,17 @@
         function getDataAndUpdate(begin, end) {
             let playerId = $("#player-name-select").val();
             let activePlayer = players.filter(player => player.id === parseInt(playerId));
+            let limit = $("#tracking-limit").val();
+            limit = parseInt(limit);
             $("#playerInfo").text("");
 
-            $.get('/api/sdtdserver/tracking', { serverId: server.id, playerId: playerId, beginDate: begin, endDate: end }, data => {
+            $.get('/api/sdtdserver/tracking', {
+                serverId: server.id,
+                playerId: playerId,
+                beginDate: begin,
+                endDate: end,
+                limit: isNaN(limit) || limit > 5000 || limit < 0 ? 5000 : limit
+            }, data => {
 
                 if (data.length === 0) {
                     return alert('No data found for this player.')
@@ -329,6 +345,8 @@
             let x = parseInt(elementX.val());
             let z = parseInt(elementZ.val());
             let radius = parseInt(elementRadius.val());
+            let limit = $("#tracking-limit").val();
+            limit = parseInt(limit);
 
             if (isNaN(x)) {
                 x = 0
@@ -348,7 +366,8 @@
                 z: z,
                 radius: radius,
                 beginDate: begin,
-                endDate: end
+                endDate: end,
+                limit: isNaN(limit) || limit > 5000 || limit < 0 ? 5000 : limit
             }, data => {
 
                 if (data.length === 0) {
