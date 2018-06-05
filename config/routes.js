@@ -160,6 +160,7 @@ module.exports.routes = {
 
   'get /api/sdtdserver/data/memupdate': 'SdtdServerController/historicalData.get-mem-update',
   'get /api/sdtdserver/data/fps': 'SdtdServerController/historicalData.get-fps',
+  'post /api/sdtdserver/data/purge': 'SdtdServerController/historicalData.purge',
 
   // Tracking
 
