@@ -24,33 +24,33 @@ module.exports = function SdtdDiscordChatBridge(sails) {
      * @description Initializes the chatbridges(s)
      */
     initialize: async function (cb) {
-      sails.on('hook:orm:loaded', async function () {
-        sails.on('hook:discordbot:loaded', async function () {
-          try {
-            let enabledServers = await SdtdConfig.find({
-              or: [{
-                chatChannelId: {
-                  '!=': ''
-                }
-              }]
-            });
-
-            for (const serverConfig of enabledServers) {
-              try {
-                await start(serverConfig.server);
-              } catch (error) {
-                sails.log.error(`HOOK - DiscordChatBridge:initialize - Error for server ${serverConfig.server} - ${error}`)
+      sails.on('hook:sdtdlogs:loaded', async function () {
+        sails.log.info('Initializing custom hook (`discordChatbridge`)');
+        try {
+          let enabledServers = await SdtdConfig.find({
+            or: [{
+              chatChannelId: {
+                '!=': ''
               }
+            }]
+          });
+
+          for (const serverConfig of enabledServers) {
+            try {
+              await start(serverConfig.server);
+            } catch (error) {
+              sails.log.error(`HOOK - DiscordChatBridge:initialize - Error for server ${serverConfig.server} - ${error}`)
             }
-            sails.log.info(`HOOK SdtdDiscordChatBridge:initialize - Initialized ${chatBridgeInfoMap.size} chatbridge(s)`);
-
-
-          } catch (error) {
-            sails.log.error(`HOOK SdtdDiscordChatBridge:initialize - ${error}`);
           }
-          cb();
-        });
+          sails.log.info(`HOOK SdtdDiscordChatBridge:initialize - Initialized ${chatBridgeInfoMap.size} chatbridge(s)`);
+
+
+        } catch (error) {
+          sails.log.error(`HOOK SdtdDiscordChatBridge:initialize - ${error}`);
+        }
+        cb();
       });
+
     },
 
     /**
@@ -83,7 +83,7 @@ module.exports = function SdtdDiscordChatBridge(sails) {
       return chatBridgeInfoMap.has(String(serverId));
     },
 
-    getAmount: function() {
+    getAmount: function () {
       return chatBridgeInfoMap.size
     }
 

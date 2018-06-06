@@ -13,7 +13,7 @@ module.exports = function SdtdDiscordChatBridge(sails) {
 
   let discordNotificationInfoMap = new Map();
 
-  let loadedNotifications = loadNotifications();
+  let loadedNotifications
 
   return {
 
@@ -24,11 +24,11 @@ module.exports = function SdtdDiscordChatBridge(sails) {
      * @description Initializes the notifications
      */
     initialize: async function (cb) {
-      sails.on('hook:orm:loaded', async function () {
-        sails.on('hook:discordbot:loaded', async function () {
+
+        sails.on('hook:sdtdlogs:loaded', async function () {
 
           let configs = await SdtdConfig.find({})
-
+          loadedNotifications = loadNotifications();
           for (const serverConfig of configs) {
             await sendNotification({
               serverId: serverConfig.server,
@@ -39,7 +39,7 @@ module.exports = function SdtdDiscordChatBridge(sails) {
           cb()
         });
 
-      });
+     
     },
 
     sendNotification: sendNotification,

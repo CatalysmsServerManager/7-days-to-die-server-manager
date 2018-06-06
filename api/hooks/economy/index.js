@@ -15,7 +15,8 @@ module.exports = function economy(sails) {
     return {
         initialize: function (cb) {
 
-            sails.on('hook:discordbot:loaded', async function () {
+            sails.on('hook:sdtdlogs:loaded', async function () {
+                sails.log.info('Initializing custom hook (`economy`)');
 
                 discordMessageEmitter = new DiscordMessageHandler()
 

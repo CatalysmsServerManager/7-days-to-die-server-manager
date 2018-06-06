@@ -7,17 +7,16 @@ module.exports = function historicalInfo(sails) {
 
     return {
         initialize: function (cb) {
-            sails.on('hook:orm:loaded', async function () {
-                sails.on('hook:discordbot:loaded', async function () {
+            sails.on('hook:sdtdlogs:loaded', async function () {
+                sails.log.info('Initializing custom hook (`historicalInfo`)');
+                let memUpdateEnabledServers = await SdtdConfig.find({
+                    memUpdateInfoEnabled: true
+                }).populate('server');
+                for (let config of memUpdateEnabledServers) {
+                    await startMemUpdate(config.server);
+                }
+                return cb();
 
-                    let memUpdateEnabledServers = await SdtdConfig.find({
-                        memUpdateInfoEnabled: true
-                    }).populate('server');
-                    for (let config of memUpdateEnabledServers) {
-                        await startMemUpdate(config.server);
-                    }
-                    return cb();
-                })
 
             });
         },

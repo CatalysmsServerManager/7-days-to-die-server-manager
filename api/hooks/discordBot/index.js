@@ -24,7 +24,7 @@ module.exports = function discordBot(sails) {
      */
     initialize: function (cb) {
       sails.on('hook:orm:loaded', function () {
-        sails.on('hook:sdtdlogs:loaded', function () {
+        sails.log.info('Initializing custom hook (`discordBot`)');
           client = new Commando.Client({
             owner: sails.config.custom.botOwners,
             unknownCommandResponse: false
@@ -98,7 +98,7 @@ module.exports = function discordBot(sails) {
             .catch((err) => {
               sails.log.error(err);
             });
-        });
+ 
       });
     },
 

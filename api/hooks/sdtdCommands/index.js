@@ -28,8 +28,8 @@ module.exports = function sdtdCommands(sails) {
      * @description Initializes the ingame command listener(s)
      */
     initialize: async function (cb) {
-      sails.on('hook:orm:loaded', async function () {
         sails.on('hook:sdtdlogs:loaded', async function () {
+          sails.log.info('Initializing custom hook (`sdtdCommands`)');
           try {
             let enabledServers = await SdtdConfig.find({
               commandsEnabled: true
@@ -45,7 +45,7 @@ module.exports = function sdtdCommands(sails) {
           }
           cb();
         });
-      });
+  
     },
 
     /**

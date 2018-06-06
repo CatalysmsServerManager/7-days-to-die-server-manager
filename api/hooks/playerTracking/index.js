@@ -19,7 +19,7 @@ module.exports = function definePlayerTrackingHook(sails) {
     initialize: function (done) {
 
       sails.log.info('Initializing custom hook (`playerTracking`)');
-      return done();
+     return done();
 
     },
 

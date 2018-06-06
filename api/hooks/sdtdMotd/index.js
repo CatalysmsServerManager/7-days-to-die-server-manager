@@ -25,6 +25,7 @@ module.exports = function sdtdLogs(sails) {
     initialize: function (cb) {
 
         sails.on('hook:sdtdlogs:loaded', async function () {
+          sails.log.info('Initializing custom hook (`sdtdMotd`)');
           try {
             let enabledServers = await SdtdConfig.find({
               motdEnabled: true
