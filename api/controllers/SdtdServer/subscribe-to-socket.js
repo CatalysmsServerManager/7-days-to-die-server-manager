@@ -45,7 +45,7 @@ module.exports = {
     try {
       let server = await SdtdServer.findOne({id: inputs.serverId});
       if (_.isUndefined(server)) {
-        throw serverNotFound;
+        throw 'serverNotFound';
       }
       sails.sockets.join(this.req, inputs.serverId);
       sails.log.debug(`API - SdtdServer:subscribeToSocket - Successfully connected server ${inputs.serverId}`);
