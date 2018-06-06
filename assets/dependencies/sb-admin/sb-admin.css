@@ -122,9 +122,6 @@ body.fixed-nav {
   font-size: 10px;
 }
 
-#mainNav .navbar-collapse .navbar-nav > .nav-item.dropdown.show > .nav-link:after {
-  content: '\f107';
-}
 
 #mainNav .navbar-collapse .navbar-nav > .nav-item.dropdown .dropdown-menu > .dropdown-item > .dropdown-message {
   overflow: hidden;

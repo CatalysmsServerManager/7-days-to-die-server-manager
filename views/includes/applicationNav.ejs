@@ -57,6 +57,23 @@
         <!-- Vertical Nav -->
         <ul class="navbar-nav ml-auto">
 
+            <!-- Open tickets  -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle mr-lg-2" id="messagesDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="far fa-question-circle"></i>
+                    <span class="d-lg-none">Tickets
+                    </span>
+                    <span class="indicator text-primary d-none d-lg-block">
+                        <i id="open-tickets-alert" class="fa fa-fw fa-circle"></i>
+                    </span>
+                </a>
+                <div id="open-tickets" class="dropdown-menu" aria-labelledby="messagesDropdown">
+                    <h6 class="dropdown-header">Open tickets:</h6>
+                    <div class="dropdown-divider"></div>
+
+                </div>
+            </li>
+
             <li class="nav-item">
                 <a target="_blank" class="nav-link" href="https://discordapp.com/invite/EwyDdNA">
                     <i class="fab fa-discord fa-lg"></i> Support </a>
@@ -179,6 +196,29 @@
                     io.socket.get('/sdtdserver/' + server.id + '/socket', (response) => {
                         console.log(response)
                     });
+
+                    let openTicketsElement = $("#open-tickets");
+
+                    $("#open-tickets-alert").hide();
+
+                    $.get("/api/sdtdticket/opentickets", { serverId: server.id }, data => {
+                        console.log(data);
+
+                        if (data.length > 0) {
+                            $("#open-tickets-alert").show();
+                        }
+
+                        for (const ticket of data) {
+
+                            let playerName = `<a class="dropdown-item" href="/sdtdticket/${ticket.id}"> <strong>${ticket.playerInfo.name}</strong>`
+                            let updatedDate = new Date(ticket.updatedAt)
+                            let lastUpdated = `<span class="small float-right text-muted">${updatedDate.toLocaleDateString()} - ${updatedDate.toLocaleTimeString()}</span>`
+                            let ticketTitle = `<div class="dropdown-message"> ${ticket.title} </div> </a>`
+
+                            openTicketsElement.append('<div class="dropdown - divider"></div>' + playerName + lastUpdated + ticketTitle);
+                        }
+
+                    })
 
 
                 }
