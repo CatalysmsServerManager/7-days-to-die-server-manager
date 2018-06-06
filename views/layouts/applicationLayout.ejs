@@ -174,19 +174,39 @@
 
 <body>
 
-    <div class="container">
-        <%- include("../includes/applicationNav.ejs") %>
-    </div>
 
-    <div class="content-wrapper">
-        <div class="container-fluid" style="margin-top: 3%;">
+    <%- include("../includes/applicationNav.ejs") %>
 
-            <%- body %>
 
+
+
+        <div class="content-wrapper" style="margin-top: 3%;">
+            <div id="alert-socket-disconnect" class="alert alert-warning" role="alert">
+                <strong>Warning: lost connection. Please try refreshing this page or check your internet connection.</strong>
+            </div>
+            <div class="container-fluid">
+
+                <%- body %>
+
+            </div>
         </div>
-    </div>
 
 </body>
+
+<script>
+
+    $(document).ready(() => {
+
+        $("#alert-socket-disconnect").hide();
+
+        io.socket.on('disconnect', (err) => {
+            console.log(`Socket disconnected - ${err}`);
+            $("#alert-socket-disconnect").show();
+        });
+
+    })
+
+</script>
 
 
 </html>

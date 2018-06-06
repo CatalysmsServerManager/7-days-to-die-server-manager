@@ -24,25 +24,25 @@
 
             <li class="nav-item" data-toggle="tooltip" data-placement="right">
 
-                    <a class="nav-link" href="/sdtdserver/addserver">
-                        <i class="fas fa-plus"></i>
-                        <span class="nav-link-text">
-                            Add a server
-                        </span>
-                    </a>
-                </li>
-    
-                <li class="nav-item" data-toggle="tooltip" data-placement="right">
-    
-                    <a id="user-dashboard-link" class="nav-link" href="/user/<%= req.session.userId %>/dashboard">
-                        <i class="fas fa-list-ul"></i>
-                        <span class="nav-link-text">
-    
-                            Server overview
-    
-                        </span>
-                    </a>
-                </li>
+                <a class="nav-link" href="/sdtdserver/addserver">
+                    <i class="fas fa-plus"></i>
+                    <span class="nav-link-text">
+                        Add a server
+                    </span>
+                </a>
+            </li>
+
+            <li class="nav-item" data-toggle="tooltip" data-placement="right">
+
+                <a id="user-dashboard-link" class="nav-link" href="/user/<%= req.session.userId %>/dashboard">
+                    <i class="fas fa-list-ul"></i>
+                    <span class="nav-link-text">
+
+                        Server overview
+
+                    </span>
+                </a>
+            </li>
 
         </ul>
 
@@ -107,7 +107,7 @@
 
 <script>
     $(document).ready(() => {
-        let loggedInUserId = <%- req.session.userId %>;
+        let loggedInUserId = "<%- req.session.userId %>";
 
         $.ajax({
             url: "/api/user/ownedservers",
@@ -175,6 +175,11 @@
 
                         $(`#server-${server.id}-nav-title`).prepend(elementToAdd)
                     })
+
+                    io.socket.get('/sdtdserver/' + server.id + '/socket', (response) => {
+                        console.log(response)
+                    });
+
 
                 }
             },
