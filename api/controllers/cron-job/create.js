@@ -106,7 +106,7 @@ module.exports = {
 
     // Parse hours or minutes for users who can't read documentation ^_^
     if (inputs.hours) {
-      inputs.temporalValue = `* */${inputs.hours} * * *`
+      inputs.temporalValue = `0 */${inputs.hours} * * *`
     }
 
     if (inputs.minutes) {
