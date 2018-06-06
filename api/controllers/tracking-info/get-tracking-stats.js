@@ -45,8 +45,18 @@ module.exports = {
         let stats = {}
 
         stats.amount = await TrackingInfo.count({ server: inputs.serverId, player: inputs.playerId });
-        stats.oldest = await TrackingInfo.find({ sort: 'createdAt ASC', limit: 1 });
-        stats.newest = await TrackingInfo.find({ sort: 'createdAt DESC', limit: 1 });
+        stats.oldest = await TrackingInfo.find({
+            where: {
+                server: inputs.serverId,
+            },
+            sort: 'createdAt ASC', limit: 1
+        });
+        stats.newest = await TrackingInfo.find({
+            where: {
+                server: inputs.serverId,
+            },
+            sort: 'createdAt DESC', limit: 1
+        });
 
         return exits.success(stats);
 
