@@ -65,6 +65,7 @@ module.exports = {
     let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({ userId: userProfile.id });
     let maxServers = sails.config.custom.donorConfig[donatorRole].maxServers;
 
+    
     let sdtdServer = {
       ip: inputs.serverIp,
       webPort: inputs.webPort,
@@ -73,9 +74,12 @@ module.exports = {
       name: inputs.serverName,
       owner: userProfile.id
     }
+    
+ 
 
     if (userProfile.servers) {
       if (userProfile.servers.length >= maxServers) {
+        sails.log.info(`${userProfile.username} tried to add a new server - ${sdtdServer.name} - Max server limit (${maxServers}) reached! `);
         return exits.maxServers("maxServers")
       }
       
@@ -86,10 +90,12 @@ module.exports = {
 
 
     if (!serverCheck) {
+      sails.log.info(`${userProfile.username} tried to add a new server - ${sdtdServer.name} - but cannot connect - ${sdtdServer.ip}:${sdtdServer.webPort}`);
       return exits.cantConnect("cantConnect");
     }
 
     if (existsCheck) {
+      sails.log.info(`${userProfile.username} tried to add a new server - ${sdtdServer.name} - but it is duplicate`);
       return exits.serverExists("serverExists");
     }
 
@@ -100,6 +106,8 @@ module.exports = {
       await sails.hooks.historicalinfo.start(addedServer.id, 'memUpdate');
       sails.log.warn(`${userProfile.username} added a new server - ${addedServer.name}`)
       return exits.success(addedServer);
+    } else {
+      return exits.error()
     }
   }
 
