@@ -11,7 +11,8 @@ class sdtdMap {
     }
 
     clear() {
-
+        this.playerPathsMap.clear();
+        this.playerMarkerMap.clear()
         this.layerGroup.clearLayers();
 
     }
