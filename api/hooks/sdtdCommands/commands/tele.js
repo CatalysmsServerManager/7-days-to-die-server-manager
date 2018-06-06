@@ -79,8 +79,8 @@ class tele extends SdtdCommand {
           return;
         },
         error: (error) => {
-          sails.log.error(`Hook - sdtdCommands:teleport - ${error}`);
-          return exits.error(error);
+          sails.log.warn(`Hook - sdtdCommands:teleport - ${error}`);
+          sails.log.error(error)
         }
       });
     }, server.config.playerTeleportDelay * 1000)
