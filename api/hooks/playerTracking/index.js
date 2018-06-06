@@ -78,7 +78,8 @@ module.exports = function definePlayerTrackingHook(sails) {
           }
         }
 
-        await deleteOldData(server);
+        await deleteLocationData(server);
+        await deleteInventoryData(server);
       })
 
     },
@@ -240,10 +241,10 @@ function getPlayerInventory(server, steamId) {
   })
 }
 
-async function deleteOldData(server) {
+async function deleteLocationData(server) {
   try {
     let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({ serverId: server.id });
-    let hoursToKeepData = sails.config.custom.donorConfig[donatorRole].playerTrackerKeepDataHours
+    let hoursToKeepData = sails.config.custom.donorConfig[donatorRole].playerTrackerKeepLocationHours
     let milisecondsToKeepData = hoursToKeepData * 3600000;
     let dateNow = Date.now();
     let borderDate = new Date(dateNow.valueOf() - milisecondsToKeepData);
@@ -253,8 +254,37 @@ async function deleteOldData(server) {
       server: server.id
     }).fetch();
 
+    if (deletedRecords.length > 1440) {
+      sails.log.warn(`Deleted more than 12 hours of location data for server ${server.name} - ${deletedRecords.length} records destroyed`);
+    }
+
   } catch (error) {
     sails.log.error(error)
   }
 
+}
+
+
+async function deleteInventoryData(server) {
+  try {
+    let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({ serverId: server.id });
+    let hoursToKeepData = sails.config.custom.donorConfig[donatorRole].playerTrackerKeepInventoryHours
+    let milisecondsToKeepData = hoursToKeepData * 3600000;
+    let dateNow = Date.now();
+    let borderDate = new Date(dateNow.valueOf() - milisecondsToKeepData);
+
+    let updatedRecords = await TrackingInfo.update({
+      createdAt: { '<': borderDate.valueOf() },
+      server: server.id
+    }, {
+      inventory: []
+    }).fetch();
+
+    if (updatedRecords.length > 1440) {
+      sails.log.warn(`Deleted more than 12 hours of inventory data for server ${server.name} - ${updatedRecords.length} records destroyed`);
+    }
+
+  } catch (error) {
+    sails.log.error(error)
+  }
 }

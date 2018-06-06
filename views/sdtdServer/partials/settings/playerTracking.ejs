@@ -72,6 +72,12 @@
     <script>
         $(document).ready(function () {
 
+            $.get('/api/sdtdserver/donatorStatus', {serverId: window.SAILS_LOCALS.server.id}, data => {
+                if (data === "free") {
+                    $('#settings-tracking-inventory-check').parent().hide();
+                }
+            })
+
             if (window.SAILS_LOCALS.config.inventoryTracking) {
                 $('#settings-tracking-inventory-check').prop('checked', true)
             }

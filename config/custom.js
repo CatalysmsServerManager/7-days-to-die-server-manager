@@ -31,27 +31,29 @@ module.exports.custom = {
   botEmbedLink: `${process.env.CSMM_HOSTNAME}`,
   botEmbedTitle: 'CSMM',
 
-  discordFeedbackChannel : "336823516383150080",
+  discordFeedbackChannel: "336823516383150080",
 
   donorConfig: {
     devDiscordServer: '336821518250147850',
     free: {
       memUpdateKeepDataHours: 12,
       maxTeleports: 3,
-      maxServers: 2,
+      maxServers: 1,
       maxCustomCommands: 3,
       economyKeepDataHours: 12,
       maxCronJobs: 5,
-      playerTrackerKeepDataHours: 6,
+      playerTrackerKeepInventoryHours: 0,
+      playerTrackerKeepLocationHours: 24,
     },
     patron: {
-      memUpdateKeepDataHours: 12,
-      maxTeleports: 3,
+      memUpdateKeepDataHours: 24,
+      maxTeleports: 5,
       maxServers: 2,
       maxCustomCommands: 5,
-      economyKeepDataHours: 12,
+      economyKeepDataHours: 24,
       maxCronJobs: 10,
-      playerTrackerKeepDataHours: 12,
+      playerTrackerKeepInventoryHours: 12,
+      playerTrackerKeepLocationHours: 48,
     },
     donator: {
       memUpdateKeepDataHours: 72,
@@ -60,7 +62,8 @@ module.exports.custom = {
       maxCustomCommands: 10,
       economyKeepDataHours: 72,
       maxCronJobs: 20,
-      playerTrackerKeepDataHours: 24,
+      playerTrackerKeepInventoryHours: 24,
+      playerTrackerKeepLocationHours: 72,
     },
     contributor: {
       memUpdateKeepDataHours: 120,
@@ -69,7 +72,8 @@ module.exports.custom = {
       maxCustomCommands: 20,
       economyKeepDataHours: 120,
       maxCronJobs: 50,
-      playerTrackerKeepDataHours: 72,
+      playerTrackerKeepInventoryHours: 72,
+      playerTrackerKeepLocationHours: 120,
     },
     sponsor: {
       memUpdateKeepDataHours: 168,
@@ -78,7 +82,8 @@ module.exports.custom = {
       maxCustomCommands: 50,
       economyKeepDataHours: 168,
       maxCronJobs: 100,
-      playerTrackerKeepDataHours: 120,
+      playerTrackerKeepInventoryHours: 120,
+      playerTrackerKeepLocationHours: 168,
     }
   },
 };
