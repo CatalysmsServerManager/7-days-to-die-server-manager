@@ -55,7 +55,7 @@ module.exports = {
 
       sails.log.info(`API - SdtdServer:tickets-view - Success, loaded ${tickets.length} tickets for server ${server.name}`);
       return exits.success({
-        server: server,
+        server: _.omit(server, "authName", "authToken"),
         tickets: tickets
       });
 

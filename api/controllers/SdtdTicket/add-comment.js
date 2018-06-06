@@ -30,7 +30,7 @@ module.exports = {
             commentText: inputs.commentText,
             ticket: inputs.ticketId,
             userThatPlacedTheComment: this.req.session.userId
-        });
+        }).fetch();
         let ticket = await SdtdTicket.findOne(inputs.ticketId);
 
         await sails.hooks.discordnotifications.sendNotification({

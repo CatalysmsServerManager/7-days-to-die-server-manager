@@ -58,15 +58,15 @@ module.exports = {
       })
 
       Promise.all(promises).then((comments) => {
-        sails.log.info(`API - SdtdTicket:viewTicket - - Success, loaded ticket "${ticket.title}" for server ${server.name}`, ticket);
+        sails.log.info(`API - SdtdTicket:viewTicket - - Success, loaded ticket "${ticket.title}" for server ${server.name}`, _.omit(ticket, "playerInfo"));
         return exits.success({
-          server: server,
+          server: _.omit(server, "authName", "authToken"),
           ticket: ticket,
           comments: comments
         });
       }).catch(error => {
         return exits.success({
-          server: server,
+          server: _.omit(server, "authName", "authToken"),
           ticket: ticket,
           comments: []
         });
