@@ -280,10 +280,6 @@ async function deleteInventoryData(server) {
       inventory: []
     }).fetch();
 
-    if (updatedRecords.length > 1440) {
-      sails.log.warn(`Deleted more than 12 hours of inventory data for server ${server.name} - ${updatedRecords.length} records destroyed`);
-    }
-
   } catch (error) {
     sails.log.error(error)
   }
