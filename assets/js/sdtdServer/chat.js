@@ -14,9 +14,23 @@ class sdtdChat {
     io.socket.get('/sdtdserver/' + this.serverId + '/socket', function (response) {
       console.log('Subscribed to socket ' + response);
     });
-    io.socket.on('chatMessage', this.addNewChatMessage);
-    io.socket.on('playerConnected', this.addPlayerConnectedMessage)
-    io.socket.on('playerDisconnected', this.addPlayerDisconnectedMessage)
+
+    io.socket.on('chatMessage', (chatMessage) => {
+      if (chatMessage.server.id === this.serverId) {
+        addNewChatMessage(chatMessage);
+      }
+    });
+    io.socket.on('playerConnected', (connectedMessage) => {
+      if (connectedMessage.server.id === this.serverId) {
+        addPlayerConnectedMessage(connectedMessage)
+      }
+
+    })
+    io.socket.on('playerDisconnected', (disconnectedMessage) => {
+      if (disconnectedMessage.server.id === this.serverId) {
+        addPlayerDisconnectedMessage(disconnectedMessage)
+      }
+    })
     addSavedMessagesToChatWindow(this.serverId);
   }
 
@@ -59,7 +73,6 @@ function addPlayerDisconnectedMessage(disconnectedMessage) {
 }
 
 function addNewChatMessage(chatMessage) {
-
   chatMessage.messageText = _.escape(chatMessage.messageText);
   chatMessage.playerName = _.escape(chatMessage.playerName);
 

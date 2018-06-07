@@ -1,7 +1,6 @@
 class sdtdConsole {
   constructor(serverId) {
     this.serverId = serverId;
-    this.addNewLogLine = addNewLogLine.bind(this)
     this.start()
   }
 
@@ -15,7 +14,11 @@ class sdtdConsole {
 
   stop() {
     this.status = false;
-    io.socket.off('logLine', this.addNewLogLine);
+    io.socket.off('logLine', (logLine) => {
+      if (logLine.server.id === this.serverId) {
+        addNewLogLine(logLine);
+      }
+    });
   }
 
   executeCommand(command) {
