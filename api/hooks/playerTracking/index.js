@@ -277,7 +277,7 @@ async function deleteInventoryData(server) {
       createdAt: { '<': borderDate.valueOf() },
       server: server.id
     }, {
-      inventory: []
+      inventory: "[]"
     }).fetch();
 
   } catch (error) {
