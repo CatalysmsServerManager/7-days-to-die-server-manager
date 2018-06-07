@@ -623,72 +623,76 @@
                     let previousInventory
                     for (const dataPoint of dataPoints) {
 
-                        // Squash all inventory data into a map, so items in different slots are counted as one
-                        let combinedInventory = new Map();
+                        if (!_.isNull(dataPoint.inventory)) {
 
-                        for (const inventoryEntry of dataPoint.inventory) {
 
-                            let combinedEntry = combinedInventory.get(`${inventoryEntry.name}:${inventoryEntry.quality}`);
+                            // Squash all inventory data into a map, so items in different slots are counted as one
+                            let combinedInventory = new Map();
 
-                            if (_.isUndefined(combinedEntry)) {
-                                combinedEntry = inventoryEntry.count;
-                            } else {
-                                combinedEntry = combinedEntry + inventoryEntry.count;
+                            for (const inventoryEntry of dataPoint.inventory) {
+
+                                let combinedEntry = combinedInventory.get(`${inventoryEntry.name}:${inventoryEntry.quality}`);
+
+                                if (_.isUndefined(combinedEntry)) {
+                                    combinedEntry = inventoryEntry.count;
+                                } else {
+                                    combinedEntry = combinedEntry + inventoryEntry.count;
+                                }
+                                combinedInventory.set(`${inventoryEntry.name}:${inventoryEntry.quality}`, combinedEntry);
                             }
-                            combinedInventory.set(`${inventoryEntry.name}:${inventoryEntry.quality}`, combinedEntry);
-                        }
 
-                        // Detect changes
+                            // Detect changes
 
-                        if (!_.isUndefined(previousInventory)) {
-                            combinedInventory.forEach((currentCount, itemNameQuality) => {
-                                let itemInPreviousInventoryCount = previousInventory.get(itemNameQuality);
+                            if (!_.isUndefined(previousInventory)) {
+                                combinedInventory.forEach((currentCount, itemNameQuality) => {
+                                    let itemInPreviousInventoryCount = previousInventory.get(itemNameQuality);
 
-                                if (_.isUndefined(itemInPreviousInventoryCount)) {
-                                    itemInPreviousInventoryCount = 0
-                                }
-
-
-                                if (currentCount !== itemInPreviousInventoryCount) {
-
-                                    let splitNameQuality = itemNameQuality.split(':')
-
-                                    let changeTableEntry = {
-                                        createdAt: dataPoint.createdAt,
-                                        player: playerId,
-                                        itemName: splitNameQuality[0],
-                                        quality: splitNameQuality[1],
-                                        amount: currentCount - itemInPreviousInventoryCount,
-                                        location: `${dataPoint.x} ${dataPoint.y} ${dataPoint.z}`
+                                    if (_.isUndefined(itemInPreviousInventoryCount)) {
+                                        itemInPreviousInventoryCount = 0
                                     }
 
-                                    dataForTable.push(changeTableEntry);
 
-                                }
-                            })
+                                    if (currentCount !== itemInPreviousInventoryCount) {
 
-                            previousInventory.forEach((oldCount, itemNameQuality) => {
-                                if (!combinedInventory.has(itemNameQuality)) {
+                                        let splitNameQuality = itemNameQuality.split(':')
 
+                                        let changeTableEntry = {
+                                            createdAt: dataPoint.createdAt,
+                                            player: playerId,
+                                            itemName: splitNameQuality[0],
+                                            quality: splitNameQuality[1],
+                                            amount: currentCount - itemInPreviousInventoryCount,
+                                            location: `${dataPoint.x} ${dataPoint.y} ${dataPoint.z}`
+                                        }
 
-                                    let splitNameQuality = itemNameQuality.split(':')
+                                        dataForTable.push(changeTableEntry);
 
-                                    let changeTableEntry = {
-                                        createdAt: dataPoint.createdAt,
-                                        player: playerId,
-                                        itemName: splitNameQuality[0],
-                                        quality: splitNameQuality[1],
-                                        amount: - oldCount,
-                                        location: `${dataPoint.x} ${dataPoint.y} ${dataPoint.z}`
                                     }
+                                })
 
-                                    dataForTable.push(changeTableEntry);
+                                previousInventory.forEach((oldCount, itemNameQuality) => {
+                                    if (!combinedInventory.has(itemNameQuality)) {
 
-                                }
-                            })
+
+                                        let splitNameQuality = itemNameQuality.split(':')
+
+                                        let changeTableEntry = {
+                                            createdAt: dataPoint.createdAt,
+                                            player: playerId,
+                                            itemName: splitNameQuality[0],
+                                            quality: splitNameQuality[1],
+                                            amount: - oldCount,
+                                            location: `${dataPoint.x} ${dataPoint.y} ${dataPoint.z}`
+                                        }
+
+                                        dataForTable.push(changeTableEntry);
+
+                                    }
+                                })
+                            }
+
+                            previousInventory = combinedInventory
                         }
-
-                        previousInventory = combinedInventory
                     }
 
 
