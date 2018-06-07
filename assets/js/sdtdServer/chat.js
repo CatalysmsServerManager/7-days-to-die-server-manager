@@ -1,9 +1,6 @@
 class sdtdChat {
   constructor(serverId) {
     this.serverId = serverId;
-    this.addNewChatMessage = addNewChatMessage.bind(this);
-    this.addPlayerConnectedMessage = addPlayerConnectedMessage.bind(this)
-    this.addPlayerDisconnectedMessage = addPlayerDisconnectedMessage.bind(this)
     this.start();
   }
 
