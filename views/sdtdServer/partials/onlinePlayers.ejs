@@ -52,7 +52,7 @@
     $.ajax({
       url: '/api/sdtdserver/players',
       data: {
-        serverId: <%= server.id %>
+        serverId: "<%= server.id %>"
       },
       success: (data, status, xhr) => {
         updatePlayerList(data)
