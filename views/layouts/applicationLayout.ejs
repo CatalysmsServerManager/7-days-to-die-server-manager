@@ -83,7 +83,7 @@
 
 
     <!--TEMPLATES-->
-    
+
     <!--TEMPLATES END-->
 
 
@@ -201,7 +201,12 @@
 
         io.socket.on('disconnect', (err) => {
             console.log(`Socket disconnected - ${err}`);
-            $("#alert-socket-disconnect").show();
+            setTimeout(() => { $("#alert-socket-disconnect").show(); }, 10000)
+        });
+
+        io.socket.on('connect', (err) => {
+            setTimeout(() => { $("#alert-socket-disconnect").hide(); }, 10000)
+
         });
 
     })
