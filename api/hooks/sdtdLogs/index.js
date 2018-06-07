@@ -61,7 +61,7 @@ module.exports = function sdtdLogs(sails) {
           let loggingObj = await createLogObject(serverID);
           loggingInfoMap.set(serverID, loggingObj);
           sails.hooks.playertracking.start(serverID);
-          return 
+          return
         } else {
           throw new Error(`Tried to start logging for a server that already had it enables`);
         }
@@ -150,15 +150,20 @@ module.exports = function sdtdLogs(sails) {
           reject(error);
         },
         success: (eventEmitter) => {
+
           eventEmitter.on('logLine', function (logLine) {
+            logLine.server = _.omit(server, "authName", "authToken");
             sails.sockets.broadcast(server.id, 'logLine', logLine);
           });
 
           eventEmitter.on('chatMessage', function (chatMessage) {
+            chatMessage.server = _.omit(server, "authName", "authToken");;
             sails.sockets.broadcast(server.id, 'chatMessage', chatMessage);
+            sails.log.verbose(`Detected a chat message`, chatMessage);
           });
 
           eventEmitter.on('playerConnected', async function (connectedMsg) {
+            connectedMsg.server = _.omit(server, "authName", "authToken");;
             sails.sockets.broadcast(server.id, 'playerConnected', connectedMsg);
             let playerData = await sails.helpers.sdtd.loadPlayerData(server.id, connectedMsg.steamID);
             await sails.hooks.discordnotifications.sendNotification({
@@ -167,12 +172,13 @@ module.exports = function sdtdLogs(sails) {
               player: playerData[0]
             })
             if (connectedMsg.country != null) {
-              await Player.update({ server: server.id, steamId: connectedMsg.steamID }, {country: connectedMsg.country})
+              await Player.update({ server: server.id, steamId: connectedMsg.steamID }, { country: connectedMsg.country })
             }
-
+            sails.log.verbose(`Detected a player connected`, connectedMsg);
           });
 
           eventEmitter.on('playerDisconnected', async function (disconnectedMsg) {
+            disconnectedMsg.server = _.omit(server, "authName", "authToken");;
             sails.sockets.broadcast(server.id, 'playerDisconnected', disconnectedMsg);
             let playerData = await sails.helpers.sdtd.loadPlayerData(server.id, disconnectedMsg.playerID);
             await sails.hooks.discordnotifications.sendNotification({
@@ -180,30 +186,43 @@ module.exports = function sdtdLogs(sails) {
               notificationType: 'playerDisconnected',
               player: playerData[0]
             })
+            sails.log.verbose(`Detected a player disconnected`, disconnectedMsg);
           });
 
           eventEmitter.on('connectionLost', async function (eventMsg) {
+            if (eventMsg) {
+              eventMsg.server = _.omit(server, "authName", "authToken");;
+            }
+
             sails.sockets.broadcast(server.id, 'connectionLost', eventMsg);
             await sails.hooks.discordnotifications.sendNotification({
               serverId: server.id,
               notificationType: 'connectionLost'
             })
+            sails.log.debug(`Lost connection to server ${server.name}`);
           });
 
           eventEmitter.on('connected', async function (eventMsg) {
+            if (eventMsg) {
+              eventMsg.server = _.omit(server, "authName", "authToken");;
+            }
+
             sails.sockets.broadcast(server.id, 'connected', eventMsg);
             await sails.hooks.discordnotifications.sendNotification({
               serverId: server.id,
               notificationType: 'connected'
             })
+
+            sails.log.debug(`Connected to server ${server.name}`);
           });
 
           eventEmitter.on('playerDeath', function (deathMessage) {
+            deathMessage.server = _.omit(server, "authName", "authToken");;
             sails.sockets.broadcast(server.id, 'playerDeath', deathMessage);
           });
 
           eventEmitter.on('memUpdate', (memUpdate) => {
-            memUpdate.server = server.id;
+            memUpdate.server = _.omit(server, "authName", "authToken");;
             sails.sockets.broadcast(server.id, 'memUpdate', memUpdate);
           })
           resolve(eventEmitter);
