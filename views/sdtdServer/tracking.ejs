@@ -131,6 +131,9 @@
         <hr>
 
         <div class="card">
+            <div class="card-header">
+                Inventory changes
+            </div>
             <div class="card-body">
                 <p class="card-text">
 
@@ -656,6 +659,26 @@
                                         itemName: splitNameQuality[0],
                                         quality: splitNameQuality[1],
                                         amount: currentCount - itemInPreviousInventoryCount,
+                                        location: `${dataPoint.x} ${dataPoint.y} ${dataPoint.z}`
+                                    }
+
+                                    dataForTable.push(changeTableEntry);
+
+                                }
+                            })
+
+                            previousInventory.forEach((oldCount, itemNameQuality) => {
+                                if (!combinedInventory.has(itemNameQuality)) {
+
+
+                                    let splitNameQuality = itemNameQuality.split(':')
+
+                                    let changeTableEntry = {
+                                        createdAt: dataPoint.createdAt,
+                                        player: playerId,
+                                        itemName: splitNameQuality[0],
+                                        quality: splitNameQuality[1],
+                                        amount: - oldCount,
                                         location: `${dataPoint.x} ${dataPoint.y} ${dataPoint.z}`
                                     }
 
