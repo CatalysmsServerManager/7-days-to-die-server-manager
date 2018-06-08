@@ -114,6 +114,9 @@ module.exports.routes = {
 
   'get /api/stats': 'etc.get-system-stats',
 
+  'get /api/gbl/find' : 'gbl.search-steamid',
+  'post /api/gbl/load' : 'gbl.load-bans',
+
   // SDTDSERVER
 
   'get /api/sdtdserver/executeCommand': 'SdtdServerController.execute-command',

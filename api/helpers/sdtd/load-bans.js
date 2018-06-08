@@ -97,6 +97,7 @@ module.exports = {
                     sails.log.debug(`Detected unban of ${deletedRecords.length} player${deletedRecords.length === 1 ? "" : "s"} on server ${sdtdServer.name}`);
                 }
 
+                sails.log.info(`Updated a servers entries in GBL - ${sdtdServer.name} - ${updatedServerBansInDB.length} total bans`);
                 return exits.success(updatedServerBansInDB);
 
             },
