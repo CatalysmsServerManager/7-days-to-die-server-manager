@@ -67,6 +67,8 @@ module.exports.routes = {
     action: 'logout'
   },
 
+  '/gbl': "SdtdServerController.view-gbl",
+
   '/auth/discord': 'AuthController.discordLogin',
   '/auth/discord/return': 'AuthController.discordReturn',
 

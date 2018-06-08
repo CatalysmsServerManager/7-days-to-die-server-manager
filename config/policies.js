@@ -21,7 +21,8 @@ module.exports.policies = {
   sdtdServerController: {
     '*': ["isLoggedIn",'isServerOwner'],
     'add-server': 'isLoggedIn',
-    'add-server-view': 'isLoggedIn'
+    'add-server-view': 'isLoggedIn',
+    'view-gbl': 'isLoggedIn',
   },
 
   ShopController: {
