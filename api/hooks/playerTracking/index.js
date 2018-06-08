@@ -19,7 +19,7 @@ module.exports = function definePlayerTrackingHook(sails) {
     initialize: function (done) {
 
       sails.log.info('Initializing custom hook (`playerTracking`)');
-     return done();
+      return done();
 
     },
 
@@ -173,23 +173,27 @@ module.exports = function definePlayerTrackingHook(sails) {
           let inventory = await getPlayerInventory(server, playerRecord[0].steamId);
           let itemsInInventory = new Array();
 
-          inventory.bag = _.filter(inventory.bag, (value) => !_.isNull(value));
-          inventory.belt = _.filter(inventory.belt, (value) => !_.isNull(value));
-          inventory.equipment = _.filter(inventory.equipment, (value) => !_.isNull(value));
+          if (!_.isUndefined(inventory)) {
+            inventory.bag = _.filter(inventory.bag, (value) => !_.isNull(value));
+            inventory.belt = _.filter(inventory.belt, (value) => !_.isNull(value));
+            inventory.equipment = _.filter(inventory.equipment, (value) => !_.isNull(value));
 
-          for (const inventoryItem of inventory.bag) {
-            itemsInInventory.push(inventoryItem)
+            for (const inventoryItem of inventory.bag) {
+              itemsInInventory.push(inventoryItem)
+            }
+
+            for (const inventoryItem of inventory.belt) {
+              itemsInInventory.push(inventoryItem)
+            }
+
+            for (const inventoryItem of inventory.equipment) {
+              itemsInInventory.push(inventoryItem)
+            }
+
+            await TrackingInfo.update(trackingRecord[0].id, { inventory: itemsInInventory })
           }
 
-          for (const inventoryItem of inventory.belt) {
-            itemsInInventory.push(inventoryItem)
-          }
 
-          for (const inventoryItem of inventory.equipment) {
-            itemsInInventory.push(inventoryItem)
-          }
-
-          await TrackingInfo.update(trackingRecord[0].id, { inventory: itemsInInventory })
         }
 
       }
@@ -277,8 +281,8 @@ async function deleteInventoryData(server) {
       createdAt: { '<': borderDate.valueOf() },
       server: server.id
     }, {
-      inventory: null
-    }).fetch();
+        inventory: null
+      }).fetch();
 
   } catch (error) {
     sails.log.error(error)
