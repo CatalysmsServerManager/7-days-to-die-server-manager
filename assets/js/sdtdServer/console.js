@@ -8,16 +8,18 @@ class sdtdConsole {
     this.status = true;
     $(".console-window").empty();
     io.socket.get('/sdtdserver/' + this.serverId + '/socket', function (response) { });
-    io.socket.on('logLine', this.addNewLogLine);
+    io.socket.on('logLine', (logLine) => {
+      if (logLine.server.id === this.serverId) {
+        this.addNewLogLine(logLine)
+      }
+    });
     addSavedMessagesToConsoleWindow(this.serverId)
   }
 
   stop() {
     this.status = false;
     io.socket.off('logLine', (logLine) => {
-      if (logLine.server.id === this.serverId) {
-        addNewLogLine(logLine);
-      }
+
     });
   }
 
@@ -38,26 +40,27 @@ class sdtdConsole {
       });
     });
   }
+
+  addNewLogLine(logLine) {
+    if (logLine.msg.includes('WebCommandResult.SendLines():') || logLine.msg.includes('WebCommandResult_for_')) {
+      return
+    }
+    logLine.msg = _.escape(logLine.msg)
+
+    logLine.msg = logLine.msg.replace(/(\r\n|\n|\r)/gm, "<br />");
+
+    if (logLine.msg.includes("error")) {
+      $('.console-window').append('<li class=\"log-line text-danger\">' + logLine.msg + '</li>');
+    } else {
+      $('.console-window').append(`<li class=\"log-line\"> ${logLine.msg} </li>`);
+    }
+    updateConsoleStorage(logLine.msg, this.serverId);
+    $('.console-window').scrollTop($('.console-window')[0].scrollHeight);
+  }
+
 }
 
 
-function addNewLogLine(logLine) {
-  if(logLine.msg.includes('WebCommandResult.SendLines():') || logLine.msg.includes('WebCommandResult_for_')) {
-    return 
-  }
-
-  logLine.msg = _.escape(logLine.msg)
-
-  logLine.msg = logLine.msg.replace(/(\r\n|\n|\r)/gm, "<br />");
-
-  if (logLine.msg.includes("error")) {
-    $('.console-window').append('<li class=\"log-line text-danger\">' + logLine.msg + '</li>');
-  } else {
-    $('.console-window').append(`<li class=\"log-line\"> ${logLine.msg} </li>`);
-  }
-  updateConsoleStorage(logLine.msg, this.serverId);
-  $('.console-window').scrollTop($('.console-window')[0].scrollHeight);
-}
 
 
 function updateConsoleStorage(newMessage, serverId) {
