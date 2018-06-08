@@ -19,6 +19,10 @@
                     <small id="gbl-steamid-input-help" class="form-text text-muted">Steam ID of the player you want to search for</small>
                 </div>
 
+                <div id="loading-indicator">
+                    <i class="fas fa-spinner fa-spin"></i>
+                </div>
+
             </p>
         </div>
     </div>
@@ -31,4 +35,45 @@
 
 
 
+
 </div>
+
+
+<script>
+
+    $(document).ready(() => {
+
+        $("#loading-indicator").hide();
+
+        $("#gbl-steamid-input").keyup(() => {
+            $("#loading-indicator").show();
+            let steamId = $("#gbl-steamid-input").val();
+
+            $.get("/api/gbl/find", { steamId: steamId }, data => {
+                $("#gbl-ban-cards").empty();
+                for (const banEntry of data) {
+                    let bannedUntil = new Date(banEntry.bannedUntil)
+
+                    let cardHtml = `<div class="card">
+    <div class="card-header">
+        ${banEntry.server.name}     
+    </div>
+    <div class="card-body">
+        <h4 class="card-title">${_.escape(banEntry.reason.length === 0 ? "No reason given" : banEntry.reason)}</h4>
+        <p class="card-text">${_.escape(banEntry.note.length === 0 ? "No note given" : banEntry.note)}</p>
+    </div>
+    <div class="card-footer text-muted">
+        ${bannedUntil.toDateString()} - ${bannedUntil.toTimeString()}
+    </div>
+</div>
+`
+                    $("#gbl-ban-cards").append(cardHtml);
+                }
+                $("#loading-indicator").hide();
+            })
+
+        })
+
+    })
+
+</script>
