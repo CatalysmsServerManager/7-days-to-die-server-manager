@@ -52,10 +52,13 @@ module.exports = {
         value: hhmmss(player.playtime)
       })
 
+      let bans = await BanEntry.find({steamId: player.steamId});
+
       return exits.success({
         player: player,
         server: server,
-        historicalInfo: historicalInfo
+        historicalInfo: historicalInfo,
+        bans: bans
       });
     } catch (error) {
       sails.log.error(`VIEW - Player:profile - ${error}`);
