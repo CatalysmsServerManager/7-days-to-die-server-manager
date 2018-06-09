@@ -1,79 +1,173 @@
-<div class="text-center">
+<%- exposeLocalsToBrowser() %>
 
-    <h1>Global ban list</h1>
+    <div class="text-center">
 
-</div>
+        <h1>Global ban list</h1>
 
-<div class="container">
-
-    <div class="card text-center">
-        <img class="card-img-top" src="holder.js/100px180/" alt="">
-        <div class="card-body">
-            <h4 class="card-title">Search</h4>
-            <p class="card-text">
-
-                <div class="form-group">
-                    <label for="gbl-steamid-input">Steam ID</label>
-                    <input type="text" class="form-control" name="gbl-steamid-input" id="gbl-steamid-input" aria-describedby="gbl-steamid-input-help"
-                        placeholder="">
-                    <small id="gbl-steamid-input-help" class="form-text text-muted">Steam ID of the player you want to search for</small>
-                </div>
-
-                <div id="loading-indicator">
-                    <i class="fas fa-spinner fa-spin"></i>
-                </div>
-
-            </p>
-        </div>
     </div>
 
-</div>
+    <div class="container">
 
-<hr>
+        <div class="card text-center">
+            <img class="card-img-top" src="holder.js/100px180/" alt="">
+            <div class="card-body">
+                <h4 class="card-title">Search</h4>
+                <p class="card-text">
 
-<div id="gbl-ban-cards" class="card-columns">
+                    <div class="form-group">
+                        <label for="gbl-steamid-input">Steam ID</label>
+                        <input type="text" class="form-control" name="gbl-steamid-input" id="gbl-steamid-input" aria-describedby="gbl-steamid-input-help"
+                            placeholder="">
+                        <small id="gbl-steamid-input-help" class="form-text text-muted">Steam ID of the player you want to search for</small>
+                    </div>
+
+                    <div id="loading-indicator">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </div>
+
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <hr>
+
+    <div id="gbl-ban-cards" class="card-columns">
 
 
 
 
-</div>
+    </div>
 
 
-<script>
+    <script>
 
-    $(document).ready(() => {
+        $(document).ready(() => {
 
-        $("#loading-indicator").hide();
+            let loggedInUserId = "<%- req.session.userId %>";
+            let ownedServers = new Array();
 
-        $("#gbl-steamid-input").keyup(() => {
-            $("#loading-indicator").show();
-            let steamId = $("#gbl-steamid-input").val();
+            $.ajax({
+                url: "/api/user/ownedservers",
+                data: {
+                    userId: loggedInUserId
+                },
+                success: (data) => {
+                    ownedServers = data;
+                },
+                error: (err) => {
+                    console.log(err)
+                }
+            });
 
-            $.get("/api/gbl/find", { steamId: steamId }, data => {
-                $("#gbl-ban-cards").empty();
-                for (const banEntry of data) {
-                    let bannedUntil = new Date(banEntry.bannedUntil)
+            $("#loading-indicator").hide();
 
-                    let cardHtml = `<div class="card">
+            $("#gbl-steamid-input").keyup(() => {
+
+                if (ownedServers.length === 0) {
+                    $("#loading-indicator").hide();
+                    return
+                }
+
+                $("#loading-indicator").show();
+                let steamId = $("#gbl-steamid-input").val();
+
+                if (steamId === "") {
+                    $("#loading-indicator").hide();
+                    return
+                }
+
+                $.get("/api/gbl/find", { steamId: steamId }, banEntries => {
+
+                    $("#gbl-ban-cards").empty();
+                    drawBanCards(banEntries);
+
+                    $("#loading-indicator").hide();
+
+                    let ownedEntries = banEntries.filter(entry => {
+                        let ownedServerIds = ownedServers.map(server => server.id);
+                        ownedServerIds = ownedServerIds.filter(serverId => entry.server.id === serverId);
+                        return ownedServerIds.length
+                    })
+
+                    for (const ownedEntry of ownedEntries) {
+                        $(`#btn-set-note-${ownedEntry.id}`).removeClass('invisible');
+                    }
+
+
+                    $(".gbl-submit-note").click(e => {
+
+                        let banId = $(e.target).val();
+                        let banEntry = banEntries.filter(entry => entry.id === parseInt(banId));
+
+                        let note = $(`#gbl-set-note-${banId}-textarea`).val();
+
+                        $.post("/api/gbl/note", { banId: banId, note: note, _csrf: window.SAILS_LOCALS._csrf, serverId: banEntry[0].server.id }, data => {
+                            console.log(data)
+                        })
+                    })
+
+                })
+            })
+
+        })
+
+
+        function drawBanCards(data) {
+
+
+            for (const banEntry of data) {
+                let bannedUntil = new Date(banEntry.bannedUntil)
+
+                let cardHtml = `<div class="card">
     <div class="card-header">
         ${banEntry.server.name}     
     </div>
     <div class="card-body">
         <h4 class="card-title">${_.escape(banEntry.reason.length === 0 ? "No reason given" : banEntry.reason)}</h4>
-        <p class="card-text">${_.escape(banEntry.note.length === 0 ? "No note given" : banEntry.note)}</p>
+        <p class="card-text">
+                <button type="button" id="btn-set-note-${banEntry.id}" class="btn btn-primary btn-lg invisible" data-toggle="modal" data-target="#gbl-set-note-${banEntry.id}">
+        Set note
+    </button>
+
+
+    <div class="modal fade" id="gbl-set-note-${banEntry.id}" tabindex="-1" role="dialog" aria-labelledby="gbl-set-note-${banEntry.id}-title" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="gbl-set-note-${banEntry.id}-title">Set note</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="form-group">
+                            <textarea class="form-control" name="gbl-set-note-${banEntry.id}-textarea" id="gbl-set-note-${banEntry.id}-textarea" rows="5" value="${banEntry.note}"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary gbl-submit-note" value="${banEntry.id}">Set</button>
+                </div>
+            </div>
+        </div>
+    </div>
+            <br>
+            ${_.escape(banEntry.note.length === 0 ? "No note given" : banEntry.note)}
+        
+            </p>
     </div>
     <div class="card-footer text-muted">
         ${bannedUntil.toDateString()} - ${bannedUntil.toTimeString()}
     </div>
 </div>
 `
-                    $("#gbl-ban-cards").append(cardHtml);
-                }
-                $("#loading-indicator").hide();
-            })
+                $("#gbl-ban-cards").append(cardHtml);
+            }
 
-        })
+        }
 
-    })
-
-</script>
+    </script>

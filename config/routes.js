@@ -116,6 +116,7 @@ module.exports.routes = {
 
   'get /api/gbl/find' : 'gbl.search-steamid',
   'post /api/gbl/load' : 'gbl.load-bans',
+  'post /api/gbl/note' : 'gbl.set-note',
 
   // SDTDSERVER
 
