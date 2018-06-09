@@ -28,7 +28,7 @@ module.exports = {
 
     fn: async function (inputs, exits) {
 
-        let serverBans = await sails.helpers.sdtd.loadBans(server.id);
+        let serverBans = await sails.helpers.sdtd.loadBans(inputs.serverId);
 
         return exits.success(serverBans);
 
