@@ -26,15 +26,7 @@ module.exports = {
         let ownedServers = foundUser.servers.concat(foundUser.adminOf);
         ownedServers = _.uniqBy(ownedServers, "id");
 
-        for (const server of ownedServers) {
-          try {
-            await sails.helpers.sdtd.loadBans(server.id);
-          } catch (error) {
-            sails.log.warn(`Could not load bans for server ${server.id}`, error)
-          }
-        }
-
-        sails.log.info(`Showing global ban list to user ${foundUser.name}`);
+        sails.log.info(`Showing global ban list to user ${foundUser.username}`);
   
         exits.success();
 

@@ -24,8 +24,11 @@ module.exports = function defineGblHook(sails) {
         refreshBans();
 
         setInterval(async () => {
+
           refreshBans();
-        }, sixHours)
+
+
+        }, sixHours * 2)
 
         return done();
 
@@ -39,14 +42,23 @@ module.exports = function defineGblHook(sails) {
 
 
 async function refreshBans() {
+  let dateStarted = new Date();
+
   let sdtdServers = await SdtdServer.find({});
 
   for (const server of sdtdServers) {
-    try {
-      await sails.helpers.sdtd.loadBans(server.id);
-    } catch (error) {
-      sails.log.warn(`Error refreshing ban info for server ${server.name}`, error)
-    }
+    // We wait in between servers so the system has time to finish some other things. 
+    // This operation can be a bottleneck at times
+    setTimeout(async () => {
+      try {
+        await sails.helpers.sdtd.loadBans(server.id);
+      } catch (error) {
+        sails.log.warn(`Error refreshing ban info for server ${server.name}`, error)
+      }
+
+    }, 10000)
   }
-  sails.log.info(`Reloaded bans for ${sdtdServers.length} servers!`)
+
+  let dateEnded = new Date();
+  sails.log.info(`Reloaded bans for ${sdtdServers.length} servers! - Took ${dateEnded.valueOf() - dateStarted.valueOf()}`)
 }
