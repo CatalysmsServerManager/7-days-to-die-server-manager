@@ -34,6 +34,7 @@ module.exports = {
 
 
     fn: async function (inputs, exits) {
+        let dateStarted = new Date();
         let sdtdServer = await SdtdServer.findOne(inputs.serverId);
 
         sevenDays.executeCommand({
@@ -97,7 +98,9 @@ module.exports = {
                     sails.log.debug(`Detected unban of ${deletedRecords.length} player${deletedRecords.length === 1 ? "" : "s"} on server ${sdtdServer.name}`);
                 }
 
-                sails.log.info(`Updated a servers entries in GBL - ${sdtdServer.name} - ${updatedServerBansInDB.length} total bans`);
+
+                let dateEnded = new Date();
+                sails.log.info(`Updated a servers entries in GBL - ${sdtdServer.name} - ${updatedServerBansInDB.length} total bans - Took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`);
                 return exits.success(updatedServerBansInDB);
 
             },

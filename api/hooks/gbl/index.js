@@ -60,5 +60,5 @@ async function refreshBans() {
   }
 
   let dateEnded = new Date();
-  sails.log.info(`Reloaded bans for ${sdtdServers.length} servers! - Took ${dateEnded.valueOf() - dateStarted.valueOf()}`)
+  sails.log.info(`Reloaded bans for ${sdtdServers.length} servers! - Took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`)
 }
