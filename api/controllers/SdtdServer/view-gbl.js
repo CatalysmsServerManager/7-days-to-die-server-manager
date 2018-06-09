@@ -27,7 +27,11 @@ module.exports = {
         ownedServers = _.uniqBy(ownedServers, "id");
 
         for (const server of ownedServers) {
+          try {
             await sails.helpers.sdtd.loadBans(server.id);
+          } catch (error) {
+            sails.log.warn(`Could not load bans for server ${server.id}`, error)
+          }
         }
 
         sails.log.info(`Showing global ban list to user ${foundUser.name}`);

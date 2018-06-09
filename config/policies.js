@@ -25,6 +25,11 @@ module.exports.policies = {
     'view-gbl': 'isLoggedIn',
   },
 
+  gblController: {
+    '*' : 'isLoggedIn',
+    'set-note': ["isLoggedIn",'isServerOwner']
+  },
+
   ShopController: {
     '*': ['isLoggedIn'],
     'listing-add': ["isLoggedIn",'isServerOwner'],
