@@ -47,16 +47,14 @@ async function refreshBans() {
   let sdtdServers = await SdtdServer.find({});
 
   for (const server of sdtdServers) {
-    // We wait in between servers so the system has time to finish some other things. 
-    // This operation can be a bottleneck at times
-    setTimeout(async () => {
-      try {
-        await sails.helpers.sdtd.loadBans(server.id);
-      } catch (error) {
-        sails.log.warn(`Error refreshing ban info for server ${server.name}`, error)
-      }
 
-    }, 10000)
+    try {
+      await sails.helpers.sdtd.loadBans(server.id);
+    } catch (error) {
+      sails.log.warn(`Error refreshing ban info for server ${server.name}`, error)
+    }
+
+
   }
 
   let dateEnded = new Date();
