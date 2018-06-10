@@ -53,7 +53,7 @@ module.exports = {
           notificationChannel.send(`This channel has been selected to receive ${inputs.notificationType} notifications for ${server.name}`)
         }
 
-        sails.log.debug(`API - SdtdServer:set-notification-channel - set notification channel for ${inputs.notificationType} ${inputs.notificationChannelId} for server ${inputs.serverId}`);
+        sails.log.info(`API - SdtdServer:set-notification-channel - set notification channel for ${inputs.notificationType} ${inputs.notificationChannelId} for server ${inputs.serverId}`);
         return exits.success();
       } catch (error) {
         sails.log.error(`API - SdtdServer:set-notification-channel - ${error}`);
