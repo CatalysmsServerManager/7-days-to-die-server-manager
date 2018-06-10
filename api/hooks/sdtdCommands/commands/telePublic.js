@@ -14,19 +14,7 @@ class telePublic extends SdtdCommand {
 
         let playerTeleports = await PlayerTeleport.find({ player: player.id });
 
-        if (server.config.economyEnabled && server.config.costToMakeTeleportPublic) {
-            let notEnoughMoney = false
-            let result = await sails.helpers.economy.deductFromPlayer.with({
-              playerId: player.id,
-              amountToDeduct: server.config.costToMakeTeleportPublic,
-              message: `COMMAND - ${this.name}`
-            }).tolerate('notEnoughCurrency', totalNeeded => {
-              notEnoughMoney = true;
-            })
-            if (notEnoughMoney) {
-              return chatMessage.reply(`You do not have enough money to do that! This action costs ${server.config.costToMakeTeleportPublic} ${server.config.currencyName}`)
-            }
-          }
+
 
         if (!server.config.enabledPlayerTeleports) {
             return chatMessage.reply(`This command is disabled! Ask your server admin to enable this.`)
@@ -46,6 +34,20 @@ class telePublic extends SdtdCommand {
         if (!teleportFound) {
             return chatMessage.reply(`No teleport with that name found`)
         }
+
+        if (server.config.economyEnabled && server.config.costToMakeTeleportPublic) {
+            let notEnoughMoney = false
+            let result = await sails.helpers.economy.deductFromPlayer.with({
+              playerId: player.id,
+              amountToDeduct: server.config.costToMakeTeleportPublic,
+              message: `COMMAND - ${this.name}`
+            }).tolerate('notEnoughCurrency', totalNeeded => {
+              notEnoughMoney = true;
+            })
+            if (notEnoughMoney) {
+              return chatMessage.reply(`You do not have enough money to do that! This action costs ${server.config.costToMakeTeleportPublic} ${server.config.currencyName}`)
+            }
+          }
 
         await PlayerTeleport.update({ id: teleportFound.id }, { publicEnabled: true });
         return chatMessage.reply(`Your teleport ${teleportFound.name} has been set as public.`)

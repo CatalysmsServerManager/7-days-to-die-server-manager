@@ -21,22 +21,6 @@ class setTele extends SdtdCommand {
     });
 
 
-
-    if (server.config.economyEnabled && server.config.costToSetTeleport) {
-      let notEnoughMoney = false
-      await sails.helpers.economy.deductFromPlayer.with({
-        playerId: player.id,
-        amountToDeduct: server.config.costToSetTeleport,
-        message: `COMMAND - ${this.name}`
-      }).tolerate('notEnoughCurrency', totalNeeded => {
-        notEnoughMoney = true;
-      })
-      if (notEnoughMoney) {
-        return chatMessage.reply(`You do not have enough money to do that! This action costs ${server.config.costToSetTeleport} ${server.config.currencyName}`)
-      }
-    }
-
-
     if (!server.config.enabledPlayerTeleports) {
       return chatMessage.reply('Command disabled - ask your server owner to enable this!');
     }
@@ -73,6 +57,20 @@ class setTele extends SdtdCommand {
 
     if (!validator.isAlphanumeric(args[0])) {
       return chatMessage.reply(`Only alphanumeric values are allowed for teleport names.`);
+    }
+
+    if (server.config.economyEnabled && server.config.costToSetTeleport) {
+      let notEnoughMoney = false
+      await sails.helpers.economy.deductFromPlayer.with({
+        playerId: player.id,
+        amountToDeduct: server.config.costToSetTeleport,
+        message: `COMMAND - ${this.name}`
+      }).tolerate('notEnoughCurrency', totalNeeded => {
+        notEnoughMoney = true;
+      })
+      if (notEnoughMoney) {
+        return chatMessage.reply(`You do not have enough money to do that! This action costs ${server.config.costToSetTeleport} ${server.config.currencyName}`)
+      }
     }
 
     let createdTeleport = await PlayerTeleport.create({

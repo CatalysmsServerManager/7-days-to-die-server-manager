@@ -13,20 +13,6 @@ class tele extends SdtdCommand {
   async run(chatMessage, player, server, args) {
     let publicTeleports = new Array();
 
-    if (server.config.economyEnabled && server.config.costToTeleport) {
-      let notEnoughMoney = false
-      let result = await sails.helpers.economy.deductFromPlayer.with({
-        playerId: player.id,
-        amountToDeduct: server.config.costToTeleport,
-        message: `COMMAND - ${this.name}`
-      }).tolerate('notEnoughCurrency', totalNeeded => {
-        notEnoughMoney = true;
-      })
-      if (notEnoughMoney) {
-        return chatMessage.reply(`You do not have enough money to do that! This action costs ${server.config.costToTeleport} ${server.config.currencyName}`)
-      }
-    }
-
     let publicTelesByPlayer = await PlayerTeleport.find({ player: server.players.map(player => player.id), publicEnabled: true });
     publicTeleports = publicTeleports.concat(publicTelesByPlayer);
 
@@ -61,6 +47,20 @@ class tele extends SdtdCommand {
 
     if (server.config.playerTeleportDelay) {
       chatMessage.reply(`You will be teleported in ${server.config.playerTeleportDelay} seconds`);
+    }
+
+    if (server.config.economyEnabled && server.config.costToTeleport) {
+      let notEnoughMoney = false
+      let result = await sails.helpers.economy.deductFromPlayer.with({
+        playerId: player.id,
+        amountToDeduct: server.config.costToTeleport,
+        message: `COMMAND - ${this.name}`
+      }).tolerate('notEnoughCurrency', totalNeeded => {
+        notEnoughMoney = true;
+      })
+      if (notEnoughMoney) {
+        return chatMessage.reply(`You do not have enough money to do that! This action costs ${server.config.costToTeleport} ${server.config.currencyName}`)
+      }
     }
 
     setTimeout(function () {
