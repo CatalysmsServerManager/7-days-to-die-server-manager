@@ -21,16 +21,16 @@ module.exports = function defineGblHook(sails) {
 
         let sixHours = 21600000;
 
+        // done before we start loading bans so it doesn't block the hook loading
+        done();
+
         refreshBans();
 
         setInterval(async () => {
-
           refreshBans();
-
-
         }, sixHours * 2)
 
-        return done();
+        return
 
       })
 
@@ -50,10 +50,7 @@ async function refreshBans() {
 
     try {
 
-      setTimeout(async () => {
         await sails.helpers.sdtd.loadBans(server.id);
-
-      }, 60000)
 
     } catch (error) {
       sails.log.warn(`Error refreshing ban info for server ${server.name}`, error)
