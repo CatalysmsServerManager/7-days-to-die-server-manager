@@ -156,8 +156,8 @@ class ChatBridgeChannel {
         message: `[${message.author.username}]: ${message.cleanContent}`
       }).exec({
         error: (error) => {
-          sails.log.error(`HOOK discordBot:chatBridgeChannel ${error}`)
-          message.reply(new this.channel.client.errorEmbed(`:x: Could not send your message to the server! Something is wrong :eyes:`));
+          sails.log.error(`HOOK discordBot:chatBridgeChannel - sending discord message to game ${error}`);
+          message.react("⚠");
         },
         success: () => {
           return true;
