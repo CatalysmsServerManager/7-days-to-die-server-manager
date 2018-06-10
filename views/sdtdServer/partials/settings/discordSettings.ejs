@@ -70,9 +70,20 @@
                   <label class="form-check-label" for="input-settings-discord-chatchannel-richmessages">
                     Rich messages
                     <br>
-                    <small> Displays additional information on player (dis)connect </small>
+                    <small> Displays additional information on player (dis)connect. When disabled, chatbridge will only show a simple
+                      "playername connected" message. </small>
                   </label>
           </div>
+
+          <div class="form-group">
+            <label for="input-settings-discord-chatchannel-blockedPrefixes">Blocked prefixes</label>
+            <input type="text" class="form-control" name="input-settings-discord-chatchannel-blockedPrefixes" id="input-settings-discord-chatchannel-blockedPrefixes"
+              aria-describedby="input-settings-discord-chatchannel-blockedPrefixes-help" value="<%= config.chatChannelBlockedPrefixes %>">
+            <small id="input-settings-discord-chatchannel-blockedPrefixes-help" class="form-text text-muted">Specify prefixes here that should not show up in the chat bridge. This is useful to protect information from
+              leaking if you have a public chatbridge. Specify each prefix and seperate them with ','. So for example: /,!
+              </small>
+          </div>
+
           <button id="input-settings-discord-setchatchannel-btn" type="button" class="btn btn-primary">Set chat channel</button>
         </li>
 
@@ -363,6 +374,28 @@
       e.preventDefault();
       let newChatChannelId = $('#input-settings-discord-chatchannel').val();
       let newRichMessages
+      let blockedPrefixes = $("#input-settings-discord-chatchannel-blockedPrefixes").val();
+
+      if (blockedPrefixes !== "") {
+        $.ajax({
+        url: '/api/sdtdserver/discord/chatbridge/blockedprefixes',
+        type: 'POST',
+        data: {
+          blockedPrefixes: blockedPrefixes,
+          serverId: "<%= server.id %>",
+          _csrf: window.SAILS_LOCALS._csrf
+        },
+        success: (data, status, xhr) => {
+          
+        },
+        error: (xhr, status, error) => {
+          alert(`Error setting blocked prefixes. Please check the values you entered.`)
+          $('#input-settings-discord-chatchannel').addClass("bg-danger").removeClass("bg-success");
+          console.log(xhr);
+        }
+      })
+      }
+
       if ($('#input-settings-discord-chatchannel-richmessages').is(":checked")) {
         newRichMessages = true
       } else {
@@ -376,7 +409,7 @@
         type: 'POST',
         data: {
           chatChannelId: newChatChannelId,
-          serverId: <%= server.id %>,
+          serverId: "<%= server.id %>",
           richMessages: newRichMessages,
           _csrf: window.SAILS_LOCALS._csrf
         },
