@@ -17,15 +17,16 @@ class Ticket extends DiscordNotification {
             throw new Error('Implementation error! Must provide a ticket info.')
         }
 
-        let ticket = await SdtdTicket.findOne(event.ticket.id).populate('comments');
+        let ticket = await SdtdTicket.findOne(event.ticket.id).populate('comments').populate('player');
 
         embed.setTitle('Ticket notification')
             .addField('Type', event.ticketNotificationType, true)
+            .addField('Creator', ticket.player.name, true)
             .addField('Title', event.ticket.title)
             .addField('Link', `${process.env.CSMM_HOSTNAME}/sdtdticket/${event.ticket.id}`)
             .setColor("GREEN")
 
-        if (event.ticketNotificationType == "New comment") {
+        if (event.ticketNotificationType === "New comment") {
             let latestComment = ticket.comments[ticket.comments.length - 1]
             let latestCommentUser = await User.findOne(latestComment.userThatPlacedTheComment);
             embed.addField(`Latest comment: by ${latestCommentUser.username}`, `${ticket.comments[ticket.comments.length - 1].commentText}`)
