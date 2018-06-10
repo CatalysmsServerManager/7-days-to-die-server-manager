@@ -49,7 +49,12 @@ async function refreshBans() {
   for (const server of sdtdServers) {
 
     try {
-      await sails.helpers.sdtd.loadBans(server.id);
+
+      setTimeout(() => {
+        await sails.helpers.sdtd.loadBans(server.id);
+
+      }, 60000)
+
     } catch (error) {
       sails.log.warn(`Error refreshing ban info for server ${server.name}`, error)
     }
