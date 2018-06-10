@@ -77,6 +77,23 @@ class ChatBridgeChannel {
   }
 
   sendChatMessageToDiscord(chatMessage) {
+
+    let blockedPrefixes = this.config.chatChannelBlockedPrefixes;
+
+    let messageStartsWithABlockedPrefix = (message) => {
+      let found;
+      for (const prefix of blockedPrefixes) {
+        if (message.startsWith(prefix)) {
+          found = true
+        }
+      }
+      return found
+    }
+
+    if (messageStartsWithABlockedPrefix(chatMessage.messageText)) {
+      return
+    }
+
     if (chatMessage.playerName == 'Server') {
       this.channel.send(`\`${chatMessage.messageText}\``);
     } else {
