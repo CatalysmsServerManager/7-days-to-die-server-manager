@@ -273,6 +273,7 @@ module.exports.routes = {
   //Discord
   'post /api/sdtdserver/setGuild': 'SdtdServerController/discordBot.set-discord-guild',
   'post /api/sdtdserver/setchatchannel': 'SdtdServerController/discordBot.set-chat-channel',
+  'post /api/sdtdserver/discord/chatbridge/blockedprefixes': 'SdtdServerController/discordBot.set-chat-channel-blocked-prefixes',
   'post /api/sdtdserver/setnotificationchannel': 'SdtdServerController/discordBot.set-notification-channel',
   'post /api/sdtdserver/discord/prefix': 'SdtdServerController/discordBot.set-prefix',
 

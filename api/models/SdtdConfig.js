@@ -82,7 +82,7 @@ module.exports = {
       defaultsTo: 1
     },
 
-    discordTextEarnerEnabled : {
+    discordTextEarnerEnabled: {
       type: 'boolean',
       defaultsTo: false
     },
@@ -242,6 +242,17 @@ module.exports = {
     chatChannelRichMessages: {
       type: 'boolean',
       defaultsTo: true
+    },
+
+    /**
+* @memberof SdtdServer
+* @var {string} chatChannelBlockedPrefixes
+* @description Block messages starting with a certain prefix from chat bridge
+*/
+
+    chatChannelBlockedPrefixes: {
+      type: 'json',
+      defaultsTo: new Array("/", "!")
     },
 
     /**
