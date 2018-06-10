@@ -50,7 +50,7 @@ async function refreshBans() {
 
     try {
 
-      setTimeout(() => {
+      setTimeout(async () => {
         await sails.helpers.sdtd.loadBans(server.id);
 
       }, 60000)
