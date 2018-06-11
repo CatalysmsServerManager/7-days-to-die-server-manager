@@ -50,11 +50,16 @@ module.exports = {
             command: 'mem'
         }).exec({
             success: function (data) {
-                var tempData = data.result.split(" ");
-                var fpsIdx = tempData.findIndex(dataEntry => {
-                    return dataEntry == 'FPS:'
-                });
-                return exits.success(tempData[fpsIdx + 1])
+                try {
+                    var tempData = data.result.split(" ");
+                    var fpsIdx = tempData.findIndex(dataEntry => {
+                        return dataEntry == 'FPS:'
+                    });
+                    return exits.success(tempData[fpsIdx + 1])
+                } catch (error) {
+                    return exits.error(error)
+                }
+
             },
             error: err => {
                 return exits.error();
