@@ -28,7 +28,7 @@ module.exports = function definePlayerTrackingHook(sails) {
       let loggingObject = sails.hooks.sdtdlogs.getLoggingObject(serverId);
 
       if (_.isUndefined(loggingObject)) {
-        sails.log.warn(`Tried to start logging for a server without a loggingObject`, { server: serverId });
+        sails.log.warn(`Tried to start tracking for a server without a loggingObject`, { server: serverId });
         return
       }
 
@@ -79,7 +79,7 @@ module.exports = function definePlayerTrackingHook(sails) {
         }
 
         await deleteLocationData(server);
-        await deleteInventoryData(server);
+        //await deleteInventoryData(server);
       })
 
     },

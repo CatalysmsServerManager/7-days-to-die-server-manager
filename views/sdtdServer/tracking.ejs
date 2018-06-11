@@ -115,9 +115,15 @@
                     <div class="card-body">
                         <p class="card-text">
                             <button id="tracking-draw-land-claims" type="button" class="btn btn-secondary">Draw land claims</button>
+
                             <div id="sdtdMap">
+                            </div>
+
+
+                            <input id="slider" class="slider" type="text" />
+                            <br>
+                            <div id="slider-date"></div>
                         </p>
-                        </div>
                     </div>
 
 
@@ -212,6 +218,14 @@
                 height: 60em;
                 width: 100%;
             }
+
+            #tracker-slider .slider-selection {
+                background: #BABABA;
+            }
+
+            .slider.slider-horizontal {
+                width: 100%
+            }
         </style>
 
 
@@ -226,6 +240,8 @@
             let dateTimePicker
             let beginDate
             let endDate
+            let slider
+            let loadedData = new Array();
 
             $(document).ready(() => {
 
@@ -248,6 +264,54 @@
                             startDate: createdAtOld,
                             endDate: createdAtNew,
                         });
+
+                        slider = $("#slider").slider({
+                            min: beginDate.valueOf(),
+                            max: endDate.valueOf(),
+                            step: 30000,
+                            id: "tracker-slider",
+                            enabled: false
+                        });
+
+                        slider.on('change', (changeVal) => {
+
+                            var getClosestValues = function (array, x) {
+                                var lo = -1, hi = array.length;
+                                while (hi - lo > 1) {
+                                    var mid = Math.round((lo + hi) / 2);
+                                    if (array[mid].createdAt <= x) {
+                                        lo = mid;
+                                    } else {
+                                        hi = mid;
+                                    }
+                                }
+                                if (array[lo] == x) hi = lo;
+                                return [array[lo].createdAt, array[hi].createdAt];
+                            }
+
+                            let closestVals = getClosestValues(loadedData, changeVal.value.newValue);
+                            let tailingVals = getClosestValues(loadedData, closestVals[0] - 45000);
+
+                            let oldCreatedAt = closestVals[0];
+                            let currentCreatedAt = closestVals[1];
+
+                            let tailingOld = tailingVals[0];
+                            let tailingNew = tailingVals[1];
+
+                            let dataToDraw = loadedData.filter(dataPoint =>
+                                dataPoint.createdAt === currentCreatedAt ||
+                                dataPoint.createdAt === oldCreatedAt ||
+                                dataPoint.createdAt === tailingNew ||
+                                dataPoint.createdAt === tailingOld
+                            );
+
+                            let currentDate = new Date(currentCreatedAt);
+
+                            $("#slider-date").text(`${currentDate.toLocaleDateString()} - ${currentDate.toLocaleTimeString()}`)
+
+                            drawData(dataToDraw);
+
+                        })
                     }
                 })
 
@@ -478,10 +542,29 @@
             })
 
 
+            function drawData(data, x, z) {
+
+                trackingMap.clear();
+
+                let foundPlayers = _.uniqBy(data, 'player');
+                foundPlayers = foundPlayers.map(dataPoint => {
+                    return players.filter(player => dataPoint.player === player.id)[0]
+                })
+
+                $("#playerInfo").text(`Found ${foundPlayers.length} - ${foundPlayers.map(player => player.name + " - " + player.steamId).join(" ")}`)
+
+                trackingMap.drawPlayers(players.filter(player => foundPlayers.indexOf(player) !== -1), data);
+                refreshInventoryDataTable(data, inventoryDataTable)
+                refreshLocationDataTable(data, locationDataTable, x, z);
+                parseDataForChangesTable(data);
+            }
+
+
+
             function getDataAndUpdate(playerId, beginDate, endDate, x, z, size, limit) {
 
-                locationDataTable.clear()
                 trackingMap.clear();
+                $("#slider-date").text(" ")
 
                 if ($("#tracking-location-enabled").prop('checked') === false) {
                     x = undefined
@@ -503,36 +586,31 @@
                         limit: isNaN(limit) || limit > 5000 || limit < 0 ? 5000 : limit
                     },
                     success: (data, status, xhr) => {
+                        loadedData = data;
                         if (data.length === 0) {
                             return alert('No data found')
                         }
 
-                        let foundPlayers = _.uniqBy(data, 'player');
-                        foundPlayers = foundPlayers.map(dataPoint => {
-                            return players.filter(player => dataPoint.player === player.id)[0]
-                        })
-
-                        //TODO
-                        $("#playerInfo").text(`Found ${foundPlayers.length} - ${foundPlayers.map(player => player.name + " - " + player.steamId).join(" ")}`)
                         $("#loaded-data").text(`${data.length} datapoints loaded`);
-
 
                         let newest = new Date(data[0].createdAt);
                         let oldest = new Date(data[data.length - 1].createdAt);
                         $("#daterange-data").text(`Oldest: ${oldest.toLocaleDateString()} ${oldest.toLocaleTimeString()} Newest: ${newest.toLocaleDateString()} ${newest.toLocaleTimeString()}`);
 
-                        trackingMap.drawPlayers(players.filter(player => foundPlayers.indexOf(player) !== -1), data);
-                        refreshInventoryDataTable(data, inventoryDataTable)
-                        refreshLocationDataTable(data, locationDataTable, x, z);
-                        parseDataForChangesTable(data);
+                        slider.slider('setAttribute', 'min', oldest.valueOf());
+                        slider.slider('setAttribute', 'max', newest.valueOf());
+                        slider.slider('refresh')
+                        slider.slider('enable');
+
+
+                        drawData(data, x, z)
+
                     },
                     error: (xhr, status, error) => {
                         console.log(xhr)
 
                     }
                 })
-
-
             }
 
 
