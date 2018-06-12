@@ -105,7 +105,7 @@ module.exports = {
 
             },
             error: error => {
-                sails.log.warn(`Error loading bans for server ${sdtdServer.name} - Skipping...`, error);
+                sails.log.warn(`Error loading bans for server ${sdtdServer.name} because ${error} - Skipping...`);
                 return exits.success([])
             }
         })
