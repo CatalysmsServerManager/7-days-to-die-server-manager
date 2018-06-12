@@ -77,6 +77,10 @@ class CommandHandler {
         let commandName = splitString[0];
         let args = splitString.splice(1, splitString.length);
 
+        if (chatMessage.playerName === "Server") {
+          return
+        }
+
         let player = await Player.find({ name: he.encode(_.trim(chatMessage.playerName)), server: this.config.server });
 
         if (player.length === 0 ) {
