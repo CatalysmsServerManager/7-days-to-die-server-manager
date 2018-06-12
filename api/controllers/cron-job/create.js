@@ -12,9 +12,9 @@ module.exports = {
     serverId: {
       required: true,
       type: 'number',
-      custom: async function(valueToCheck) {
+      custom: async function (valueToCheck) {
         let foundServer = await SdtdServer.findOne(valueToCheck);
-        return foundServer 
+        return foundServer
       }
     },
 
@@ -25,7 +25,7 @@ module.exports = {
 
     temporalValue: {
       type: 'string',
-      custom: function(valueToCheck) {
+      custom: function (valueToCheck) {
         const cronParser = require('cron-parser');
 
         const interval = cronParser.parseExpression(valueToCheck);
@@ -79,25 +79,24 @@ module.exports = {
 
     if (!(inputs.temporalValue || inputs.minutes || inputs.hours)) {
       return exits.badInput(`Invalid time input. You must specify at least one.`);
-    }    
+    }
 
     let server = await SdtdServer.findOne(inputs.serverId);
     let allowedCommands = await sails.helpers.sdtd.getAllowedCommands(server);
     let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({ serverId: server.id });
 
-    inputs.command = inputs.command.toLowerCase();
-
     let maxCronJobs = sails.config.custom.donorConfig[donatorRole].maxCronJobs;
-    let serverCronJobs = await CronJob.find({server: server.id});
+    let serverCronJobs = await CronJob.find({ server: server.id });
 
     if (serverCronJobs.length >= maxCronJobs) {
       return exits.maxJobs(`You have set the max number of jobs already. You have ${serverCronJobs.length} jobs and are allowed ${maxCronJobs}`)
     }
-    
+
 
     let splitCommand = inputs.command.split(' ');
 
-    let commandIdx = allowedCommands.indexOf(splitCommand[0]);
+    splitCommand[0] = splitCommand[0].toLowerCase();
+    let commandIdx = allowedCommands.indexOf(splitCommand[0].trim());
 
     if (commandIdx === -1) {
       return exits.badInput(`You entered an invalid command`);
@@ -113,7 +112,7 @@ module.exports = {
       inputs.temporalValue = `*/${inputs.minutes} * * * *`
     }
 
-    
+
     let createdJob = await CronJob.create({
       command: inputs.command,
       temporalValue: inputs.temporalValue,
