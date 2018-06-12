@@ -51,7 +51,7 @@ module.exports = {
         .tolerate('connectionRefused', error => {
           return undefined
         })
-        sails.log.info(`VIEW - SdtdServer:dashboard - Showing dashboard for ${sdtdServer.name}`);
+        sails.log.info(`VIEW - SdtdServer:dashboard - Showing dashboard for ${sdtdServer.name} to user ${this.req.session.userId}`);
       return exits.success({
         server: sdtdServer,
         players: players

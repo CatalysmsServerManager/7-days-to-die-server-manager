@@ -41,7 +41,7 @@ module.exports = {
    */
 
   fn: async function (inputs, exits) {
-    sails.log.debug(`API - SdtdServer:executeCommand - Executing a command on server ${inputs.serverId}`);
+
 
     try {
       let sdtdServer = await SdtdServer.findOne(inputs.serverId);
@@ -61,6 +61,7 @@ module.exports = {
             date: new Date(),
             type: 'commandResponse'
           };
+          sails.log.info(`API - Executing a command on ${sdtdServer.name} by user ${this.req.session.userId} - ${inputs.command}`);
           return exits.success(logLine);
         },
         unknownCommand: (error) => {
