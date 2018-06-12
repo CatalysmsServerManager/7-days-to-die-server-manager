@@ -76,7 +76,7 @@ class sdtdMap {
                     }
                 }
 
-                let colors = ['red', 'green', 'blue', 'yellow', 'orange', 'brown'];
+                let colors = ['purple' ,'cyan', 'red', 'green', 'blue', 'yellow', 'orange', 'brown'];
                 let colorIterator = 0;
 
                 playerPathArrays.forEach((playerPath, playerId) => {
