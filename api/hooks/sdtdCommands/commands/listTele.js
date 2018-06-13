@@ -9,6 +9,10 @@ class listTele extends SdtdCommand {
         this.serverId = serverId;
     }
 
+    async isEnabled(chatMessage, player, server, args) {
+        return server.config.enabledPlayerTeleports
+      }
+
     async run(chatMessage, player, server, args) {
 
         let playerTeleports = await loadTeleports()
@@ -26,11 +30,6 @@ class listTele extends SdtdCommand {
                 playerTeleports = await PlayerTeleport.find({ player: player.id });
                 return playerTeleports;
             }
-        }
-
-
-        if (!server.config.enabledPlayerTeleports) {
-            return chatMessage.reply(`This command is disabled! Ask your server admin to enable this.`)
         }
 
         if (args.length > 1) {

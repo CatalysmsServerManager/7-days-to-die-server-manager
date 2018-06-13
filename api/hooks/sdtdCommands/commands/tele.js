@@ -10,6 +10,10 @@ class tele extends SdtdCommand {
     this.name = "tele";
   }
 
+  async isEnabled(chatMessage, player, server, args) {
+    return server.config.enabledPlayerTeleports
+  }
+
   async run(chatMessage, player, server, args) {
     let publicTeleports = new Array();
 
@@ -22,10 +26,6 @@ class tele extends SdtdCommand {
     let serverTeleportsFound = playerTeleports.concat(publicTeleports);
     // Remove duplicates
     serverTeleportsFound = _.uniq(serverTeleportsFound, 'id');
-
-    if (!server.config.enabledPlayerTeleports) {
-      return chatMessage.reply('Command disabled - ask your server owner to enable this!');
-    }
 
     let teleportFound = false
     serverTeleportsFound.forEach(teleport => {

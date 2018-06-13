@@ -9,6 +9,10 @@ class Claim extends SdtdCommand {
         this.serverId = serverId;
     }
 
+    async isEnabled(chatMessage, player, server, args) {
+        return true
+    }
+
     async run(chatMessage, player, server, args) {
         let itemsToClaim = await PlayerClaimItem.find({ player: player.id, claimed: false });
 
@@ -19,7 +23,7 @@ class Claim extends SdtdCommand {
                 chatMessage.reply(`${item.amount}x ${item.name} of quality ${item.quality}`);
             })
 
-            return 
+            return
         }
 
         if (itemsToClaim.length === 0) {
@@ -28,7 +32,7 @@ class Claim extends SdtdCommand {
 
         if (itemsToClaim.length > 10) {
             chatMessage.reply('More than 10 items in queue, only the first 10 will be dropped.')
-            itemsToClaim = itemsToClaim.slice(0,10);
+            itemsToClaim = itemsToClaim.slice(0, 10);
         }
 
 

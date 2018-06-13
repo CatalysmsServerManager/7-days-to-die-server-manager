@@ -9,13 +9,13 @@ class callAdmin extends SdtdCommand {
     this.serverId = serverId;
   }
 
+  async isEnabled(chatMessage, player, server, args) {
+    return server.config.enabledCallAdmin
+  }
+
   async run(chatMessage, player, server, args) {
 
     try {
-
-      if (!server.config.enabledCallAdmin) {
-        return chatMessage.reply('This command is disabled! Ask your server admin to enable this.');
-      }
 
       if (args == '') {
         return chatMessage.reply(`You must tell us what you're having trouble with!`);

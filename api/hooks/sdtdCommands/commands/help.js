@@ -9,6 +9,10 @@ class help extends SdtdCommand {
         this.serverId = serverId;
     }
 
+    async isEnabled(chatMessage, player, server, args) {
+        return true
+    }
+
     async run(chatMessage, player, server, args) {
         return chatMessage.reply('RTFM! :D - http://csmm.readthedocs.io')
     }

@@ -9,12 +9,12 @@ class Balance extends SdtdCommand {
         this.serverId = serverId;
     }
 
+    async isEnabled(chatMessage, player, server, args) {
+        return server.config.economyEnabled
+      }
+    
+
     async run(chatMessage, player, server, args) {
-
-
-        if (!server.config.economyEnabled) {
-            return chatMessage.reply(`This command is disabled! Ask your server admin to enable this.`)
-        }
 
         let playerBalance = await sails.helpers.economy.getPlayerBalance.with({playerId: player.id})
         return chatMessage.reply(`Your balance is currently ${playerBalance} ${server.config.currencyName}`);

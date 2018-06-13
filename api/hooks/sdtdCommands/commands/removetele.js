@@ -9,12 +9,12 @@ class removeTele extends SdtdCommand {
         this.serverId = serverId;
     }
 
+    async isEnabled(chatMessage, player, server, args) {
+        return server.config.enabledPlayerTeleports
+    }
+
     async run(chatMessage, player, server, args) {
         let playerTeleports = await PlayerTeleport.find({ player: player.id });
-
-        if (!server.config.enabledPlayerTeleports) {
-            return chatMessage.reply(`This command is disabled! Ask your server admin to enable this.`)
-        }
 
         if (args.length == 0) {
             return chatMessage.reply(`Please specify what teleport location you want to remove.`)
