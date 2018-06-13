@@ -16,6 +16,26 @@ class help extends SdtdCommand {
 
     async run(chatMessage, player, server, args) {
 
+        if (args[0]) {
+            let commandToGetHelp = await this.commandHandler.findCommandToExecute(args[0]);
+
+            if (commandToGetHelp) {
+
+                let commandEnabled = await commandToGetHelp.isEnabled(chatMessage, player, server, args);
+
+                if (!commandEnabled) {
+                    return await chatMessage.reply(`This command is not currently enabled! Ask a server admin to enable it.`)
+                }                
+
+                await chatMessage.reply(`${commandToGetHelp.name} - ${commandToGetHelp.description}`);
+                await chatMessage.reply(`${commandToGetHelp.extendedDescription}`)
+            } else {
+                await chatMessage.reply(`Unknown command! Use help without argument to see a full list`)
+            }
+            return
+        }
+
+
         await chatMessage.reply("Enabled commands:");
 
         let commandsArr = this.commandHandler.commands.values()
@@ -25,7 +45,7 @@ class help extends SdtdCommand {
             let commandEnabled = await command.isEnabled(chatMessage, player, server, args);
 
             if (commandEnabled) {
-                await chatMessage.reply(`${command.name} - ${command.description}\n`)
+                await chatMessage.reply(`${command.name} - ${command.description}`)
             }
         }
 
