@@ -6,12 +6,15 @@
      */
 
 class SdtdCommand {
-  constructor(serverId) {
+  constructor(serverId, options) {
     /**
          * @param {number} serverId
          * @name SdtdCommand#serverId
          */
     this.serverId;
+    this.name = options.name;
+    this.description = options.description;
+    this.aliases = new Array();
   }
 
 

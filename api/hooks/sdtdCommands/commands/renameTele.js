@@ -6,6 +6,7 @@ class renameTele extends SdtdCommand {
   constructor(serverId) {
     super(serverId, {
       name: 'renametele',
+      description: "Rename a teleport location"
     });
     this.serverId = serverId;
   }

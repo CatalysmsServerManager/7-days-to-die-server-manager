@@ -5,6 +5,7 @@ class help extends SdtdCommand {
     constructor(serverId) {
         super(serverId, {
             name: 'help',
+            description: "Get some help"
         });
         this.serverId = serverId;
     }
@@ -14,7 +15,21 @@ class help extends SdtdCommand {
     }
 
     async run(chatMessage, player, server, args) {
-        return chatMessage.reply('RTFM! :D - http://csmm.readthedocs.io')
+
+        await chatMessage.reply("Enabled commands:");
+
+        let commandsArr = this.commandHandler.commands.values()
+
+        for (const command of commandsArr) {
+
+            let commandEnabled = await command.isEnabled(chatMessage, player, server, args);
+
+            if (commandEnabled) {
+                await chatMessage.reply(`${command.name} - ${command.description}\n`)
+            }
+        }
+
+        return
     }
 }
 

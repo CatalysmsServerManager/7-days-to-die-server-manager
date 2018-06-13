@@ -51,9 +51,11 @@ class CommandHandler {
 
     const normalizedPath = require('path').join(__dirname, 'commands');
 
-    require('fs').readdirSync(normalizedPath).forEach(function (file) {
+    require('fs').readdirSync(normalizedPath).forEach((file) => {
       let command = require('./commands/' + file);
-      commands.set(command.name.toLowerCase(), new command(config.server));
+      let commandInst = new command(config.server);
+      commandInst.commandHandler = this;
+      commands.set(command.name.toLowerCase(), commandInst);
 
     });
 
@@ -99,7 +101,7 @@ class CommandHandler {
 
         if (commandToRun) {
           let commandIsEnabled = await commandToRun.isEnabled(chatMessage, player, server, args);
-          
+
           if (!commandIsEnabled) {
             return chatMessage.reply(`This command is disabled! Ask your server admin to enable it.`)
           }

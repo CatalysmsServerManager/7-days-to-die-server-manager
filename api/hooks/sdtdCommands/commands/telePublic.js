@@ -5,9 +5,9 @@ class telePublic extends SdtdCommand {
     constructor(serverId) {
         super(serverId, {
             name: 'telepublic',
+            description: "Make a teleport public"
         });
         this.serverId = serverId;
-        this.name = 'telepublic'
     }
 
     async isEnabled(chatMessage, player, server, args) {

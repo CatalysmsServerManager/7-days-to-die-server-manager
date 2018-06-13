@@ -5,6 +5,7 @@ class callAdmin extends SdtdCommand {
   constructor(serverId) {
     super(serverId, {
       name: 'calladmin',
+      description: "Make a support ticket"
     });
     this.serverId = serverId;
   }

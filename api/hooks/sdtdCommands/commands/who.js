@@ -7,6 +7,7 @@ class Who extends SdtdCommand {
     constructor(serverId) {
         super(serverId, {
             name: 'who',
+            description: "See who was in your area"
         });
         this.serverId = serverId;
     }

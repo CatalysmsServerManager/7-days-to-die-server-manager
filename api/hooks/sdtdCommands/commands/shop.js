@@ -4,7 +4,8 @@ const sevenDays = require('machinepack-7daystodiewebapi');
 class Shop extends SdtdCommand {
     constructor(serverId) {
         super(serverId, {
-            name: 'balance',
+            name: 'shop',
+            description: "Get a link to the shop"
         });
         this.serverId = serverId;
     }

@@ -6,6 +6,7 @@ class setTele extends SdtdCommand {
   constructor(serverId) {
     super(serverId, {
       name: 'settele',
+      description: "Create a teleport location"
     });
     this.serverId = serverId;
     this.name = 'settele'

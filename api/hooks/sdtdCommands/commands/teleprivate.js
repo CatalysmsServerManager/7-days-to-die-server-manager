@@ -5,6 +5,7 @@ class telePrivate extends SdtdCommand {
     constructor(serverId) {
         super(serverId, {
             name: 'teleprivate',
+            description: "Make a teleport private"
         });
         this.serverId = serverId;
     }

@@ -5,9 +5,9 @@ class tele extends SdtdCommand {
   constructor(serverId) {
     super(serverId, {
       name: 'tele',
+      description: 'Teleport to a set location.'
     });
     this.serverId = serverId;
-    this.name = "tele";
   }
 
   async isEnabled(chatMessage, player, server, args) {

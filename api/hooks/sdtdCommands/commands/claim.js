@@ -5,6 +5,7 @@ class Claim extends SdtdCommand {
     constructor(serverId) {
         super(serverId, {
             name: 'claim',
+            description: "Claim items you have bought in the shop"
         });
         this.serverId = serverId;
     }
