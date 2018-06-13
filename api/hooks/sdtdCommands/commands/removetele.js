@@ -5,7 +5,8 @@ class removeTele extends SdtdCommand {
     constructor(serverId) {
         super(serverId, {
             name: 'removetele',
-            description: "Remove a teleport location"
+            description: "Remove a teleport location",
+            extendedDescription: "Delete a teleport location from the system"
         });
         this.serverId = serverId;
     }

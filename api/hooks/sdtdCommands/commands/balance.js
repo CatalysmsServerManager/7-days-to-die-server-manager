@@ -5,7 +5,8 @@ class Balance extends SdtdCommand {
     constructor(serverId) {
         super(serverId, {
             name: 'balance',
-            description: "See your current balance"
+            description: "See your current balance",
+            extendedDescription: "How much money is in your bankaccount!"
         });
         this.serverId = serverId;
     }

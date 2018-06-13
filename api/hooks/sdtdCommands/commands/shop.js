@@ -5,7 +5,8 @@ class Shop extends SdtdCommand {
     constructor(serverId) {
         super(serverId, {
             name: 'shop',
-            description: "Get a link to the shop"
+            description: "Get a link to the shop",
+            extendedDescription: ""
         });
         this.serverId = serverId;
     }

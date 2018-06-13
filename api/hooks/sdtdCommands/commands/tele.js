@@ -5,7 +5,8 @@ class tele extends SdtdCommand {
   constructor(serverId) {
     super(serverId, {
       name: 'tele',
-      description: 'Teleport to a set location.'
+      description: 'Teleport to a set location.',
+      extendedDescription: "Provide the name of where you want to go"
     });
     this.serverId = serverId;
   }

@@ -14,6 +14,7 @@ class SdtdCommand {
     this.serverId;
     this.name = options.name;
     this.description = options.description;
+    this.extendedDescription = options.extendedDescription;
     this.aliases = new Array();
   }
 

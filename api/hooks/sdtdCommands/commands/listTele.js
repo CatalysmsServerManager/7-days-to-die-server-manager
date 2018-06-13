@@ -5,7 +5,8 @@ class listTele extends SdtdCommand {
     constructor(serverId) {
         super(serverId, {
             name: 'listtele',
-            description: "List teleport locations"
+            description: "List teleport locations",
+            extendedDescription: "Lists your teleport locations. By providing a 'public' argument, you will instead see a list of public teleports"
         });
         this.serverId = serverId;
     }
