@@ -83,61 +83,68 @@ class CommandHandler {
 
         let player = await Player.find({ name: he.encode(_.trim(chatMessage.playerName)), server: this.config.server });
 
-        if (player.length === 0 ) {
+        if (player.length === 0) {
           sails.log.warn(`Did not find player data...`, chatMessage);
         }
 
         let playerInfo = await sails.helpers.sdtd.loadPlayerData.with({ serverId: this.config.server, steamId: player[0].steamId })
         player = playerInfo[0]
         let server = await SdtdServer.findOne(player.server).populate('players');
-        let config = await SdtdConfig.findOne({ server: server.id });
-        server.config = config;
+        server.config = await SdtdConfig.findOne({ server: server.id });
 
         // Function to easily reply to players in a command
         chatMessage.reply = async message => await sendReplyToPlayer(server, player, message);
 
-        // If the commandName is a recognized CSMM command, we run it.
-        if (this.commands.has(commandName)) {
-          let commandToRun = this.commands.get(commandName);
-          sails.log.debug(`HOOK SdtdCommands - command ran by player ${player.name} on server ${server.name} - ${chatMessage.messageText}`)
+        let commandToRun = await this.findCommandToExecute(commandName);
+
+        if (commandToRun) {
           try {
-            await commandToRun.run(chatMessage, player, server, args);
+            await commandToRun.run(chatMessage, player, server, args, commandToRun.options);
+            sails.log.debug(`HOOK SdtdCommands - command ran by player ${player.name} on server ${server.name} - ${chatMessage.messageText}`)
             return
           } catch (error) {
             sails.log.error(error)
-            chatMessage.reply(`An error occured! Please report this on the development server.`);
+            chatMessage.reply(`An error occured! Please report this on the development server. ${error}`);
             return
           }
         }
 
-        // Else we try to find a custom command that matches the commandName
-        let customCommands = await sails.models.customcommand.find({
-          server: this.serverId,
-          enabled: true,
-          name: commandName
-        });
-
-        let customCommandFound = false
-
-        customCommands.forEach(command => {
-          customCommandFound = new CustomCommand(server.id, command);
-        })
-        if (customCommandFound) {
-          return customCommandFound.run(chatMessage, player, server, args, customCommandFound.options);
-        }
-
-        sails.log.debug(`HOOK SdtdCommands:commandListener - Unknown command used by ${chatMessage.playerName} on server ${this.config.server.name}`);
+        sails.log.debug(`HOOK SdtdCommands:commandListener - Unknown command used by ${chatMessage.playerName} on server ${server.name} - ${chatMessage.messageText}`);
       }
     } catch (error) {
       sails.log.error(error);
     }
 
+  }
 
+  async findCommandToExecute(commandName) {
+    if (this.commands.has(commandName)) {
+      let commandToRun = this.commands.get(commandName);
+      return commandToRun
+    }
 
+    let customCommands = await sails.models.customcommand.find({
+      server: this.serverId,
+      enabled: true,
+      name: commandName
+    });
+
+    let customCommandFound = false
+
+    customCommands.forEach(command => {
+      customCommandFound = new CustomCommand(this.serverId, command);
+    })
+
+    if (customCommandFound) {
+      return customCommandFound
+    }
+
+    return undefined
   }
 }
 
 module.exports = CommandHandler;
+
 
 
 async function sendReplyToPlayer(server, player, message) {
