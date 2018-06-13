@@ -15,6 +15,11 @@ class SdtdCommand {
   }
 
 
+  async isEnabled() {
+    throw new Error(`${this.constructor.name} does not have a isEnabled() method.`)
+  }
+
+
   async run(chatMessage, playerId) {
     throw new Error(`${this.constructor.name} doesn't have a run() method.`);
   }

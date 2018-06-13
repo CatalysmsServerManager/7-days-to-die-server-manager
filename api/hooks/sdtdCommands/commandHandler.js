@@ -98,6 +98,12 @@ class CommandHandler {
         let commandToRun = await this.findCommandToExecute(commandName);
 
         if (commandToRun) {
+          let commandIsEnabled = await commandToRun.isEnabled(chatMessage, player, server, args);
+          
+          if (!commandIsEnabled) {
+            return chatMessage.reply(`This command is disabled! Ask your server admin to enable it.`)
+          }
+
           try {
             await commandToRun.run(chatMessage, player, server, args, commandToRun.options);
             sails.log.debug(`HOOK SdtdCommands - command ran by player ${player.name} on server ${server.name} - ${chatMessage.messageText}`)
