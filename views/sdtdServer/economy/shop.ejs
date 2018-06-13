@@ -117,8 +117,51 @@
                     </div>
                 </div>
 
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#shop-import-modal">
+                    Import
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="shop-import-modal" tabindex="-1" role="dialog" aria-labelledby="shop-import-modal-title" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="shop-import-modal-title">Import</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="container-fluid">
+
+                                    <div class="alert alert-warning" role="alert">
+                                        This will delete the current listings you have. Make sure to include them in your import statement.
+                                    </div>
+
+                                    <div class="form-group">
+                                      <label for="shop-import-json">Shop JSON</label>
+                                      <textarea class="form-control" name="shop-import-json" id="shop-import-json" rows="10"></textarea>
+                                    </div>
+
+                                    <div id="import-problems" class="alert alert-warning invisible" role="alert">
+                                      
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button id="import-listings" type="button" class="btn btn-primary">Import</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <a name="export-listings" id="export-listings" class="btn btn-secondary" href="/api/shop/export" role="button">Export to file</a>
-                
+
+
+
                 <% } %>
         </div>
     </div>
@@ -156,7 +199,7 @@
                         </div>
                         <div class="card-footer">
                             <button class="btn shop-buy btn-success" value="<%= listing.id %>">
-                                 Buy</button>
+                                Buy</button>
 
                             <% if (isAdmin) { %>
                                 <button class="btn shop-delete btn-danger" value="<%= listing.id %>">
@@ -389,6 +432,34 @@
                     error: (xhr, status, error) => {
                         console.log(xhr)
                         alert("Something went wrong! Please report this to the dev server");
+                    }
+                })
+            })
+
+
+            $("#import-listings").click(e => {
+
+                let json = $("#shop-import-json").val();
+
+                $.ajax({
+                    url: "/api/shop/import",
+                    method: "POST",
+                    data: {
+                        file: json,
+                        serverId: window.SAILS_LOCALS.server.id,
+                        _csrf: window.SAILS_LOCALS._csrf,
+                    },
+                    success: (data, status, xhr) => {
+                        location.reload();
+                    },
+                    error: (xhr, status, error) => {
+                        $("#import-problems").removeClass('invisible');
+                        $("#import-problems").empty();
+                        if (_.isArray(xhr.responseJSON)) {
+                            $("#import-problems").text(xhr.responseJSON.join(" | "))
+                        } else {
+                            $("#import-problems").text(xhr.responseJSON)
+                        }
                     }
                 })
             })
