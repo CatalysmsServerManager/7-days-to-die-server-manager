@@ -9,7 +9,12 @@ module.exports = {
 
     inputs: {
         serverId: {
-            type: 'number'
+            type: 'number',
+            required: true,
+            custom: async (valueToCheck) => {
+                let foundServer = await SdtdServer.findOne(valueToCheck);
+                return foundServer
+            },
         }
 
     },
