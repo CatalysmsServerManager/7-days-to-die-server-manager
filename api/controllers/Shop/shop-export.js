@@ -36,7 +36,11 @@ module.exports = {
 
             this.res.attachment(`shop.json`);
 
-            let jsonExport = JSON.stringify(foundListings);
+
+            let jsonExport = JSON.stringify(foundListings.map(listing => {
+                listing = _.omit(listing, "createdAt", "updatedAt", "timesBought", 'createdBy', "id");
+                return listing
+            }));
 
             return exits.success(jsonExport);
         } catch (error) {
