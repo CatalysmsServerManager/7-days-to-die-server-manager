@@ -55,7 +55,7 @@ module.exports = {
                 problems.push(`${newListing.name} is not a valid item name`);
             }
 
-            if (!validator.isAlphanumeric(newListing.friendlyName)) {
+            if (newListing.friendlyName === "") {
                 problems.push(`${newListing.friendlyName} is not a valid friendly name for "${newListing.friendlyName}"`);
             }
 
