@@ -38,7 +38,7 @@ module.exports = {
 
 
             let jsonExport = JSON.stringify(foundListings.map(listing => {
-                listing = _.omit(listing, "createdAt", "updatedAt", "timesBought", 'createdBy', "id");
+                listing = _.omit(listing, "createdAt", "updatedAt", "timesBought", 'createdBy', "id", "server");
                 return listing
             }));
 
