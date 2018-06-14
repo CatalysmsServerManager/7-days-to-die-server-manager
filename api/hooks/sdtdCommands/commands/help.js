@@ -28,7 +28,8 @@ class help extends SdtdCommand {
                 }                
 
                 await chatMessage.reply(`${commandToGetHelp.name} - ${commandToGetHelp.description}`);
-                await chatMessage.reply(`${commandToGetHelp.extendedDescription}`)
+                await chatMessage.reply(`${commandToGetHelp.extendedDescription}`);
+                await chatMessage.reply(`Aliases: ${commandToGetHelp.aliases}`)
             } else {
                 await chatMessage.reply(`Unknown command! Use help without argument to see a full list`)
             }
@@ -48,6 +49,8 @@ class help extends SdtdCommand {
                 await chatMessage.reply(`${command.name} - ${command.description}`)
             }
         }
+
+        await chatMessage.reply(`For more info see: http://csmm.readthedocs.io/en/latest/pages/for-players.html`)
 
         return
     }
