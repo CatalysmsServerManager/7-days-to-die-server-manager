@@ -243,6 +243,9 @@ module.exports.routes = {
   'post /api/sdtdserver/commands/prefix': "SdtdServerController/commands.set-prefix",
   'get /api/sdtdserver/commands/prefix': "SdtdServerController/commands.get-prefix",
 
+  'get /api/sdtdserver/commands/export': 'CustomCommandController.command-export',
+  'post /api/sdtdserver/commands/import': "CustomCommandController.command-import",
+
   'delete /api/sdtdserver/commands/custom': 'CustomCommandController/delete-command',
   'post /api/sdtdserver/commands/custom': 'CustomCommandController/create-command',
   'post /api/sdtdserver/commands/custom/name': 'CustomCommandController/update-name',
