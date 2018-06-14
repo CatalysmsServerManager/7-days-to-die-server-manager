@@ -131,6 +131,19 @@ class CommandHandler {
       return commandToRun
     }
 
+    let aliasFound = false;
+
+    this.commands.forEach((command) => {
+      let idx = _.findIndex(command.aliases, (alias => commandName === alias));
+      if (idx !== -1) {
+        aliasFound = command
+      }
+    })
+
+    if (aliasFound) {
+      return aliasFound
+    }
+
     let customCommands = await sails.models.customcommand.find({
       server: this.serverId,
       enabled: true,
