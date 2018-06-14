@@ -1,11 +1,10 @@
 <% exposeLocalsToBrowser() %>
 
     <!-- Button trigger modal -->
-    <li class="list-group-item">
-        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#custom-command-<%= command.id %>-modal">
-            <%= command.name %>
-        </button>
-    </li>
+    <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#custom-command-<%= command.id %>-modal">
+        <%= command.name %>
+    </button>
+
     <!-- Modal -->
     <div class="modal fade" id="custom-command-<%= command.id %>-modal" tabindex="-1" role="dialog" aria-labelledby="custom-command-<%= command.id %>-modal-title"
         aria-hidden="true">
@@ -80,7 +79,7 @@
     <script>
 
         $(document).ready(function () {
-            let currentConfig = <%- JSON.stringify(command) %>
+            let currentConfig = <% - JSON.stringify(command) %>
             if (currentConfig.enabled) {
                 $('#custom-command-<%= command.id %>-modal-edit-enabled').prop('checked', true);
             }

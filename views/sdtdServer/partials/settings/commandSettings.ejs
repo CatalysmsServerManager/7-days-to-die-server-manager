@@ -1,95 +1,186 @@
 <!-- COMMANDS SETTINGS -->
 
 <div class="container">
+
+  <div id='settings-disable-commands-btn' class="btn btn-danger">
+    <i class="fa fa-power-off"></i> Disable
+  </div>
+  <div id='settings-enable-commands-btn' class="btn btn-success">
+    <i class="fa fa-power-off"></i> Enable
+  </div>
+
   <p>Control the ingame commands used by your players. To see a full list of commands, check the documentation. Not all commands
     are listed here, they will get enabled automatically when their corresponding module is enabled. For example, enabling
     economy will automatically enable the balance command </p>
 
-  <ul class="list-group">
 
-    <li class="list-group-item">
-      <label for="input-settings-commands-prefix">Command prefix</label>
+  <hr>
 
-      <input type="text" class="form-control" id="input-settings-commands-prefix" placeholder="<%= config.commandPrefix %>">
-      <input name="input-settings-commands-prefix-set-btn" id="input-settings-commands-prefix-set-btn" class="btn btn-primary"
+  <div class="form-group">
+    <label for="input-settings-commands-prefix">Command prefix</label>
+
+    <input type="text" class="form-control" id="input-settings-commands-prefix" value="<%= config.commandPrefix %>">
+
+    <input name="input-settings-commands-prefix-set-btn" id="input-settings-commands-prefix-set-btn" class="btn btn-primary"
+      type="button" value="Set">
+  </div>
+
+  <hr>
+
+  <h3>Built in commands</h3>
+
+
+
+  <div class="form-check">
+    <label class="form-check-label">
+      <input type="checkbox" class="form-check-input" name="input-settings-commands-calladmin-checkbox" id="input-settings-commands-calladmin-checkbox"
+        value="callAdmin"> Call admin
+    </label>
+    <p class="form-text text-muted">
+      Lets players create support tickets ingame. You can view these from the website.
+    </p>
+  </div>
+  <div class="form-check">
+    <label class="form-check-label">
+      <input type="checkbox" class="form-check-input" name="input-settings-commands-playerTeleports-checkbox" id="input-settings-commands-playerTeleports-checkbox"
+        value="playerTeleports"> Player teleports
+    </label>
+    <p class="form-text text-muted">
+      CSMM's teleport system. Includes a suite of commands to set, remove, make public/private teleports.
+    </p>
+  </div>
+
+  <div id="player-teleport-settings">
+    <hr>
+
+    <h4>Player teleport settings</h4>
+
+    <div class="form-group">
+      <label for="">Max locations that players can set</label>
+      <input type="text" class="form-control" name="inputs-settings-commands-playerteleports-maxlocations" id="inputs-settings-commands-playerteleports-maxlocations"
+        placeholder="<%= config.maxPlayerTeleportLocations %>">
+      <input name="inputs-settings-playerteleports-maxlocations-btn" id="inputs-settings-playerteleports-maxlocations-btn" class="btn btn-primary"
         type="button" value="Set">
-    </li>
+    </div>
 
-    <li class="list-group-item">
-      <label for="input-settings-commands">Built in commands</label>
+    <div class="form-group">
+      <label for="">Time (in seconds) that a player has to wait before teleporting again</label>
+      <input type="text" class="form-control" name="inputs-settings-commands-playerteleports-timeout" id="inputs-settings-commands-playerteleports-timeout"
+        placeholder="<%= config.playerTeleportTimeout %>">
+      <input name="inputs-settings-playerteleports-timeout-btn" id="inputs-settings-playerteleports-timeout-btn" class="btn btn-primary"
+        type="button" value="Set">
+    </div>
 
-      <div class="form-check">
-        <label class="form-check-label">
-          <input type="checkbox" class="form-check-input" name="input-settings-commands-calladmin-checkbox" id="input-settings-commands-calladmin-checkbox"
-            value="callAdmin"> Call admin
-        </label>
-      </div>
-      <div class="form-check">
-        <label class="form-check-label">
-          <input type="checkbox" class="form-check-input" name="input-settings-commands-playerTeleports-checkbox" id="input-settings-commands-playerTeleports-checkbox"
-            value="playerTeleports"> Player teleports
-        </label>
-      </div>
-    </li>
+    <div class="form-group">
+      <label for="">Time (in seconds) that a teleport will be delayed. This makes sure players cannot use tele to escape a dire situation.</label>
+      <input type="text" class="form-control" name="inputs-settings-commands-playerteleports-delay" id="inputs-settings-commands-playerteleports-delay"
+        placeholder="<%= config.playerTeleportDelay %>">
+      <input name="inputs-settings-playerteleports-delay-btn" id="inputs-settings-playerteleports-delay-btn" class="btn btn-primary"
+        type="button" value="Set">
+    </div>
 
-    <li class="list-group-item">
-      <label>Custom commands</label>
-
-      <% customCommands.forEach(command => { %>
-
-        <%- include('./editCommandModal.ejs', { command: command}) %>
+  </div>
 
 
-          <% }) %>
+  <hr>
 
-    </li>
+  <h3>Custom commands</h3>
+
+  <% customCommands.forEach(command => { %>
+
+    <%- include('./editCommandModal.ejs', { command: command}) %>
 
 
-    <%- include('./addCommandModal.ejs') %>
+      <% }) %>
 
-      <%- include('../commandsHelpButton') %>
+        <hr>
+
+        <div class="btn-group" role="group" aria-label="">
+          <%- include('./addCommandModal.ejs') %>
+
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#custom-commands-import-modal">
+              Import
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="custom-commands-import-modal" tabindex="-1" role="dialog" aria-labelledby="custom-commands-import-modal-title"
+              aria-hidden="true">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title" id="custom-commands-import-modal-title">Import</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="container-fluid">
+
+                      <div class="alert alert-warning" role="alert">
+                        Importing custom commands is an advanced function. Check the documentation for more info
+                        <br> This will delete the current custom commands you have. Make sure to include them in your import
+                        statement.
+                      </div>
+
+                      <div class="form-group">
+                        <label for="custom-commands-import-json">Custom commands JSON</label>
+                        <textarea class="form-control" name="custom-commands-import-json" id="custom-commands-import-json" rows="10"></textarea>
+                      </div>
+
+                      <div id="custom-commands-import-problems" class="alert alert-warning invisible" role="alert">
+
+                      </div>
+
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="custom-commands-import-btn" type="button" class="btn btn-primary">Import</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <a name="export-customcommands" id="export-custom-commands" class="btn btn-secondary" href="/api/sdtdserver/commands/export?serverId=<%= server.id %>"
+              role="button">Export to file</a>
+
+            <%- include('../commandsHelpButton') %>
+        </div>
 
 
-        <li class="list-group-item">
-          <h4>Player teleport settings</h4>
 
-          <div class="form-group">
-            <label for="">Max locations that players can set</label>
-            <input type="text" class="form-control" name="inputs-settings-commands-playerteleports-maxlocations" id="inputs-settings-commands-playerteleports-maxlocations"
-              placeholder="<%= config.maxPlayerTeleportLocations %>">
-            <input name="inputs-settings-playerteleports-maxlocations-btn" id="inputs-settings-playerteleports-maxlocations-btn" class="btn btn-primary"
-              type="button" value="Set">
-          </div>
-
-          <div class="form-group">
-            <label for="">Time (in seconds) that a player has to wait before teleporting again</label>
-            <input type="text" class="form-control" name="inputs-settings-commands-playerteleports-timeout" id="inputs-settings-commands-playerteleports-timeout"
-              placeholder="<%= config.playerTeleportTimeout %>">
-            <input name="inputs-settings-playerteleports-timeout-btn" id="inputs-settings-playerteleports-timeout-btn" class="btn btn-primary"
-              type="button" value="Set">
-          </div>
-
-          <div class="form-group">
-            <label for="">Time (in seconds) that a teleport will be delayed. This makes sure players cannot use tele to escape a dire situation.</label>
-            <input type="text" class="form-control" name="inputs-settings-commands-playerteleports-delay" id="inputs-settings-commands-playerteleports-delay"
-              placeholder="<%= config.playerTeleportDelay %>">
-            <input name="inputs-settings-playerteleports-delay-btn" id="inputs-settings-playerteleports-delay-btn" class="btn btn-primary"
-              type="button" value="Set">
-          </div>
-        </li>
-
-        <li id='settings-disable-commands-btn' class="btn btn-danger">
-          <i class="fa fa-power-off"></i> Disable
-        </li>
-        <li id='settings-enable-commands-btn' class="btn btn-success">
-          <i class="fa fa-power-off"></i> Enable
-        </li>
-
-  </ul>
 </div>
 
 <script>
   $(document).ready(function () {
+
+    $("#custom-commands-import-btn").click(e => {
+
+      let json = $("#custom-commands-import-json").val();
+
+      $.ajax({
+        url: "/api/sdtdserver/commands/import",
+        method: "POST",
+        data: {
+          file: json,
+          serverId: window.SAILS_LOCALS.server.id,
+          _csrf: window.SAILS_LOCALS._csrf,
+        },
+        success: (data, status, xhr) => {
+          location.reload();
+        },
+        error: (xhr, status, error) => {
+          $("#custom-commands-import-problems").removeClass('invisible');
+          $("#custom-commands-import-problems").empty();
+          if (_.isArray(xhr.responseJSON)) {
+            $("#custom-commands-import-problems").text(xhr.responseJSON.join(" | "))
+          } else {
+            $("#custom-commands-import-problems").text(xhr.responseJSON)
+          }
+        }
+      })
+    })
 
     function updateCommandsStatus() {
       $.get('/api/sdtdserver/commands', { serverId: window.SAILS_LOCALS.server.id }, status => {
@@ -110,7 +201,9 @@
 
       $.get('/api/sdtdserver/commands/playerteleports', { serverId: window.SAILS_LOCALS.server.id }, status => {
         if (status) {
-          $('#input-settings-commands-playerTeleports-checkbox').prop('checked', true)
+          $('#input-settings-commands-playerTeleports-checkbox').prop('checked', true);
+        } else {
+          $("#player-teleport-settings").hide();
         }
       })
     }
@@ -192,6 +285,7 @@
             serverId: window.SAILS_LOCALS.server.id,
           },
           success: data => {
+            $("#player-teleport-settings").fadeOut();
           },
           error: e => {
             console.log(e);
@@ -209,6 +303,9 @@
           error: e => {
             console.log(e);
             alert('Error! ' + e)
+          },
+          success: data => {
+            $("#player-teleport-settings").fadeIn();
           }
         })
       }
