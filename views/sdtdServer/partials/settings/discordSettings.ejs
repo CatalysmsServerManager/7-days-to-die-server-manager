@@ -4,7 +4,6 @@
 <div class="container">
   <p>Control how the bot behaves in your server. You can reload the channels by setting a discord guild</p>
 
-  <hr>
 
   <% if ('' === user.discordId) { %>
 
@@ -38,7 +37,7 @@
         <div class="form-group">
           <button id="inputs-setting-discord-prefix-btn" type="button" class="btn btn-primary">Set prefix</button>
           <input type="text" class="form-control" name="input-settings-discord-prefix" id="input-settings-discord-prefix" aria-describedby="discord-prefix-help"
-            placeholder="<%= config.discordPrefix %>">
+            value="<%= config.discordPrefix %>">
           <small id="discord-prefix-help" class="form-text text-muted"></small>
         </div>
 
@@ -74,7 +73,7 @@
         <input type="text" class="form-control" name="input-settings-discord-chatchannel-blockedPrefixes" id="input-settings-discord-chatchannel-blockedPrefixes"
           aria-describedby="input-settings-discord-chatchannel-blockedPrefixes-help" value="<%= config.chatChannelBlockedPrefixes %>">
         <small id="input-settings-discord-chatchannel-blockedPrefixes-help" class="form-text text-muted">Specify prefixes here that should not show up in the chat bridge. This is useful to protect information from leaking
-          if you have a public chatbridge. Specify each prefix and seperate them with ','. So for example: /,!
+          if you have a public chatbridge. Type each prefix and seperate them with ','. So for example: /,!
         </small>
       </div>
 
@@ -86,7 +85,7 @@
       <p> CSMM can send notifications to Discord when certain events happen. </p>
 
       <!-- Button trigger modal -->
-      <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#settings-discord-notifications-modal">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#settings-discord-notifications-modal">
         Notifications
       </button>
 

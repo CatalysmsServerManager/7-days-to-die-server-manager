@@ -1,22 +1,21 @@
 <!-- BASIC SERVER SETTINGS -->
 
 <div class="container">
-  <ul class="list-group">
 
-    <li class="list-group-item">
+
+    
       <label for="input-settings-server-servername">Server name</label>
-      <input type="text" class="form-control" id="input-settings-server-servername" placeholder="<%= server.name %>">
-    </li>
+      <input type="text" class="form-control" id="input-settings-server-servername" value="<%= server.name %>">
 
-    <li class="list-group-item">
+    
       <label for="input-settings-server-ip">IP</label>
-      <input type="text" class="form-control" id="input-settings-server-ip" placeholder="<%= server.ip %>">
-    </li>
+      <input type="text" class="form-control" id="input-settings-server-ip" value="<%= server.ip %>">
 
-    <li class="list-group-item">
+    
       <label for="inputs-settings-server-webPort">Web port</label>
-      <input type="text" class="form-control" id="inputs-settings-server-webPort" placeholder="<%= server.webPort %>">
-    </li>
+      <input type="text" class="form-control" id="inputs-settings-server-webPort" value="<%= server.webPort %>">
+
+      <hr>
 
     <!-- Button trigger modal admins -->
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inputs-settings-server-admins-modal">
@@ -26,7 +25,7 @@
     <!-- Modal admins -->
     <div class="modal fade" id="inputs-settings-server-admins-modal" tabindex="-1" role="dialog" aria-labelledby="inputs-settings-server-admins-modal-title"
       aria-hidden="true">
-      <div class="modal-dialog" role="document">
+      <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h4 class="modal-title" id="inputs-settings-server-admins-modal-title">Admin management</h4>
@@ -73,7 +72,7 @@
       </div>
     </div>
 
-    <button id="input-settings-server-update" class="btn btn-primary btn-lg" type="button">
+    <button id="input-settings-server-update" class="btn btn-primary" type="button">
       <em class="glyphicon glyphicon-align-right"></em>
       <i class="fas fa-sync-alt"></i> Apply changes
     </button>
