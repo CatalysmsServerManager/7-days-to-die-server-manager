@@ -1,6 +1,7 @@
 <div>
     <div class="container">
-        <p>Set jobs to run at certain intervals. You can execute any command you want. This function can be used for automatic restarts, periodic messages, daily events, ...</p>
+        <p>Set jobs to run at certain intervals. You can execute any command you want. This function can be used for automatic
+            restarts, periodic messages, daily events, ...</p>
 
         <table id="cronjob-list" class="table">
             <thead>
@@ -18,8 +19,55 @@
             </tbody>
         </table>
 
+        <hr>
+
+        <a name="export-cronsjobs" id="export-cronsjobs" class="btn btn-secondary" href="/api/sdtdserver/cron/export?serverId=<%= server.id %>"
+            role="button">Export to file</a>
+
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#add-new-cron-modal">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cron-import-modal">
+            Import
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="cron-import-modal" tabindex="-1" role="dialog" aria-labelledby="cron-import-modal-title" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="cron-import-modal-title">Import</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+
+                            <div class="alert alert-warning" role="alert">
+                                Importing jobs is an advanced function. Check the documentation for more info
+                                <br> This will delete the current jobs you have. Make sure to include them in your import statement.
+                            </div>
+
+                            <div class="form-group">
+                                <label for="cron-import-json">Cron jobs JSON</label>
+                                <textarea class="form-control" name="cron-import-json" id="cron-import-json" rows="10"></textarea>
+                            </div>
+
+                            <div id="cron-import-problems" class="alert alert-warning invisible" role="alert">
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button id="cron-import-btn" type="button" class="btn btn-primary">Import</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary btn" data-toggle="modal" data-target="#add-new-cron-modal">
             <i class="fas fa-plus"></i> New
         </button>
 
@@ -107,6 +155,33 @@
                     addNewJobToTable(job);
                 })
             }
+        })
+
+        $("#cron-import-btn").click(e => {
+
+            let json = $("#cron-import-json").val();
+
+            $.ajax({
+                url: "/api/sdtdserver/cron/import",
+                method: "POST",
+                data: {
+                    file: json,
+                    serverId: window.SAILS_LOCALS.server.id,
+                    _csrf: window.SAILS_LOCALS._csrf,
+                },
+                success: (data, status, xhr) => {
+                    location.reload();
+                },
+                error: (xhr, status, error) => {
+                    $("#cron-import-problems").removeClass('invisible');
+                    $("#cron-import-problems").empty();
+                    if (_.isArray(xhr.responseJSON)) {
+                        $("#cron-import-problems").text(xhr.responseJSON.join(" | "))
+                    } else {
+                        $("#cron-import-problems").text(xhr.responseJSON)
+                    }
+                }
+            })
         })
 
         $("#add-new-cron-submit").click((e) => {
@@ -326,6 +401,8 @@
                 }
             })
         })
+
+
 
     }
 

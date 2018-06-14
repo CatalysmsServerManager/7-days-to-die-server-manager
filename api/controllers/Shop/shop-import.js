@@ -72,7 +72,7 @@ module.exports = {
             }
 
             if (newListing.quality && newListing.amount > 1) {
-                problems.push('When setting quality, amount cannot be more than 1 for "${newListing.friendlyName}"');
+                problems.push(`When setting quality, amount cannot be more than 1 for "${newListing.friendlyName}"`);
             }
 
         }
