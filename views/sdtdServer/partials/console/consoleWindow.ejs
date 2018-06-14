@@ -5,7 +5,8 @@
 
 <script>
   $(document).ready(function () {
-    let sdtdConsoleWindow = new sdtdConsole(<%= server.id %>)
+    let sdtdConsoleWindow = new sdtdConsole("<%= server.id %>")
+
     $('#console-pause').click((event) => {
       event.preventDefault();
       if (sdtdConsoleWindow.status) {

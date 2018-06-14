@@ -1,26 +1,28 @@
 class sdtdConsole {
   constructor(serverId) {
-    this.serverId = serverId;
-    this.start()
+    this.serverId = parseInt(serverId);
+    this.status = true
+    this.init()
   }
 
-  start() {
-    this.status = true;
+  init() {
     $(".console-window").empty();
-    io.socket.get('/sdtdserver/' + this.serverId + '/socket', function (response) { });
+
     io.socket.on('logLine', (logLine) => {
-      if (logLine.server.id === this.serverId) {
+      if (logLine.server.id === this.serverId && this.status) {
         addNewLogLine(logLine.msg)
       }
     });
     addSavedMessagesToConsoleWindow(this.serverId)
   }
 
+  start() {
+    this.status = true;
+
+  }
+
   stop() {
     this.status = false;
-    io.socket.off('logLine', (logLine) => {
-
-    });
   }
 
   executeCommand(command) {
