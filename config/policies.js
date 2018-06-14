@@ -36,6 +36,8 @@ module.exports.policies = {
     'listing-edit': ["isLoggedIn",'isServerOwner'],
     'listing-delete': ["isLoggedIn",'isServerOwner'],
     'listing-buy' : 'isLoggedIn',
+    'shop-export' : ["isLoggedIn",'isServerOwner'],
+    'shop-import' : ["isLoggedIn",'isServerOwner'],
   },
 
   customCommandController: {
