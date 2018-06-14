@@ -15,7 +15,7 @@ class Who extends SdtdCommand {
     }
 
     async isEnabled(chatMessage, player, server, args) {
-        return true
+        return server.config.locationTracking
     }
 
     async run(chatMessage, player, server, args) {

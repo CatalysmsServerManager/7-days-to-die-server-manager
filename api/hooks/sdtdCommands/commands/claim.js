@@ -13,7 +13,7 @@ class Claim extends SdtdCommand {
     }
 
     async isEnabled(chatMessage, player, server, args) {
-        return true
+        return server.config.economyEnabled
     }
 
     async run(chatMessage, player, server, args) {

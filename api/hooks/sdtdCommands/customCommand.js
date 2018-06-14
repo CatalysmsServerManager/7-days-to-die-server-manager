@@ -10,6 +10,10 @@ class CustomCommand extends SdtdCommand {
         this.options = command
     }
 
+    async isEnabled(chatMessage, player, server, args) {
+        return true
+    }
+
     async run(chatMessage, player, server, args, options) {
 
         // Check if the player has exceeded the configured timeout
