@@ -63,6 +63,10 @@ module.exports.policies = {
     'view-ticket': ["isLoggedIn", 'canSeeTicket'],
     'open-tickets': true,
     'server-tickets-view': ["isLoggedIn",'isServerOwner'],
-  }
+  },
+
+  "cron-job": {
+    "*" : ["isLoggedIn",'isServerOwner']
+  },
 
 };
