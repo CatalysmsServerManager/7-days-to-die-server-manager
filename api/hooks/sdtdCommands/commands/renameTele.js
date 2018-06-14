@@ -7,7 +7,8 @@ class renameTele extends SdtdCommand {
     super(serverId, {
       name: 'renametele',
       description: "Rename a teleport location",
-      extendedDescription: "Arguments: oldname newname"
+      extendedDescription: "Arguments: oldname newname",
+      aliases: ["telerename"]
     });
     this.serverId = serverId;
   }

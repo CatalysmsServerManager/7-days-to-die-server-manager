@@ -6,7 +6,8 @@ class telePublic extends SdtdCommand {
         super(serverId, {
             name: 'telepublic',
             description: "Make a teleport public",
-            extendedDescription: "Let everyone on the server teleport to a location"
+            extendedDescription: "Let everyone on the server teleport to a location",
+            aliases: ["telepub", "pubtele", "publictele"]
         });
         this.serverId = serverId;
     }

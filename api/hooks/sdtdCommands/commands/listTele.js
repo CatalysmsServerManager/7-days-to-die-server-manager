@@ -6,7 +6,8 @@ class listTele extends SdtdCommand {
         super(serverId, {
             name: 'listtele',
             description: "List teleport locations",
-            extendedDescription: "Lists your teleport locations. By providing a 'public' argument, you will instead see a list of public teleports"
+            extendedDescription: "Lists your teleport locations. By providing a 'public' argument, you will instead see a list of public teleports",
+            aliases: ["telelist", "teleslist", "listteles"]
         });
         this.serverId = serverId;
     }

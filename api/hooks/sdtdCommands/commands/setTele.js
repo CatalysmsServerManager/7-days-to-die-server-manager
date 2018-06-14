@@ -7,10 +7,10 @@ class setTele extends SdtdCommand {
     super(serverId, {
       name: 'settele',
       description: "Create a teleport location",
-      extendedDescription: "Creates a teleport location at your current position. Arguments: name"
+      extendedDescription: "Creates a teleport location at your current position. Arguments: name",
+      aliases: ["teleset", "telecreate"]
     });
     this.serverId = serverId;
-    this.name = 'settele'
   }
 
   async isEnabled(chatMessage, player, server, args) {

@@ -6,7 +6,8 @@ class Shop extends SdtdCommand {
         super(serverId, {
             name: 'shop',
             description: "Get a link to the shop",
-            extendedDescription: ""
+            extendedDescription: "",
+            aliases: ['store']
         });
         this.serverId = serverId;
     }

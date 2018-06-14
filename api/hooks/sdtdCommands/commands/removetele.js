@@ -6,7 +6,8 @@ class removeTele extends SdtdCommand {
         super(serverId, {
             name: 'removetele',
             description: "Remove a teleport location",
-            extendedDescription: "Delete a teleport location from the system"
+            extendedDescription: "Delete a teleport location from the system",
+            aliases: ["deltele", "teledelete", "deletetele", "teleremove"]
         });
         this.serverId = serverId;
     }

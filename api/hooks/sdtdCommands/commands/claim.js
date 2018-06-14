@@ -6,7 +6,8 @@ class Claim extends SdtdCommand {
         super(serverId, {
             name: 'claim',
             description: "Claim items you have bought in the shop",
-            extendedDescription: "This command will drop the items at your feet. Best to do this in a safe location! You can claim a maximum of 10 items at a time. If you provide the list argument you will instead see a list of items you can claim."
+            extendedDescription: "This command will drop the items at your feet. Best to do this in a safe location! You can claim a maximum of 10 items at a time. If you provide the list argument you will instead see a list of items you can claim.",
+            aliases: ["claimitems"],
         });
         this.serverId = serverId;
     }
