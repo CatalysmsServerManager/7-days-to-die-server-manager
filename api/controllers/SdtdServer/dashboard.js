@@ -36,22 +36,23 @@ module.exports = {
       sdtdServerInfo = await sails.helpers.loadSdtdserverInfo(inputs.serverId)
         .tolerate('unauthorized', (error) => {
           sails.log.warn(`VIEW - SdtdServer:dashboard - unauthorized for server cannot load serverInfo ${inputs.serverId}`)
+          return undefined
         })
         .tolerate('connectionRefused', error => {
-            return undefined
+          return undefined
         })
 
       if (!_.isUndefined(sdtdServerInfo)) {
         sdtdServer = sdtdServerInfo;
       }
-      let players = await sails.helpers.sdtd.loadPlayerData.with({serverId:inputs.serverId, onlyOnline: true})
+      let players = await sails.helpers.sdtd.loadPlayerData.with({ serverId: inputs.serverId, onlyOnline: true, inventory: false })
         .tolerate('unauthorized', (error) => {
           sails.log.warn(`VIEW - SdtdServer:dashboard - unauthorized for server cannot load playerInfo ${inputs.serverId}`)
         })
         .tolerate('connectionRefused', error => {
           return undefined
         })
-        sails.log.info(`VIEW - SdtdServer:dashboard - Showing dashboard for ${sdtdServer.name} to user ${this.req.session.userId}`);
+      sails.log.info(`VIEW - SdtdServer:dashboard - Showing dashboard for ${sdtdServer.name} to user ${this.req.session.userId}`);
       return exits.success({
         server: sdtdServer,
         players: players

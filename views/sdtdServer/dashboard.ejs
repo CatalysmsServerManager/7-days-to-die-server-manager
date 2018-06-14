@@ -89,83 +89,86 @@
 
                 <% } %>
 
-
-
-                    <div class="card">
-                        <div class="card-header">
-                            <i class="fas fa-comments"></i> Chat
-                        </div>
+                    <div class="card text-center">
+                        <img class="card-img-top" src="holder.js/100px180/" alt="">
                         <div class="card-body">
+                            <h4 class="card-title">
+                                <i class="far fa-map"></i>
+                                </i> Map</h4>
                             <p class="card-text">
-
-                                <%- include('./partials/chat/chatWindow', {server: server}) %>
-                                    <%- include('./partials/chat/chatControls', {server: server}) %>
-
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-header">
-                            <i class="fas fa-terminal"></i> Console
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text">
-                                <%- include('./partials/console/consoleWindow', {server: server}) %>
-                                    <%- include('./partials/console/consoleControls', {server: server}) %>
+                                <%- include('./partials/map', {server: server}) %>
                             </p>
                         </div>
                     </div>
 
 
 
+        </div>
+        <hr>
 
+        <div class="card-columns">
 
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-comments"></i> Chat
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+
+                        <%- include('./partials/chat/chatWindow', {server: server}) %>
+                            <%- include('./partials/chat/chatControls', {server: server}) %>
+
+                    </p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-terminal"></i> Console
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        <%- include('./partials/console/consoleWindow', {server: server}) %>
+                            <%- include('./partials/console/consoleControls', {server: server}) %>
+                    </p>
+                </div>
+            </div>
+
+        </div>
 
 
         </div>
 
 
-
-        <h3>
-            <i class="far fa-map"></i>
-            </i> Map</h3>
-
-
-        <%- include('./partials/map', {server: server}) %>
+        <style>
+            .card {
+                margin: 1%
+            }
+        </style>
 
 
 
-            </div>
-            <style>
-                .card {
-                    margin: 1%
-                }
-            </style>
+        <script>
+            $(document).ready(function () {
 
 
 
-            <script>
-                $(document).ready(function () {
-
-
-
-                    $.get('/api/sdtdserver/onlinestatus', { serverId: <%= server.id %> }, onlineStatus => {
-                        let elementToAdd = `<i class="${onlineStatus ? "fas fa-check-circle text-success" : "fas fa-times-circle text-danger"}"></i> `
-                        $(`#server-name`).prepend(elementToAdd)
-                    })
-
-                    $.ajax({
-                        url: `/api/sdtdticket/opentickets`,
-                        data: { serverId: "<%= server.id %>" },
-                        success: (data, status, xhr) => {
-                            let opentickets = data;
-                            $('#sdtd-server-<%= server.id %>-tickets-badge').text(opentickets.length)
-
-                        },
-                        error: (xhr, status, error) => {
-                            console.log(error)
-                        }
-                    });
+                $.get('/api/sdtdserver/onlinestatus', { serverId: <%= server.id %> }, onlineStatus => {
+                    let elementToAdd = `<i class="${onlineStatus ? "fas fa-check-circle text-success" : "fas fa-times-circle text-danger"}"></i> `
+                    $(`#server-name`).prepend(elementToAdd)
                 })
-            </script>
+
+                $.ajax({
+                    url: `/api/sdtdticket/opentickets`,
+                    data: { serverId: "<%= server.id %>" },
+                    success: (data, status, xhr) => {
+                        let opentickets = data;
+                        $('#sdtd-server-<%= server.id %>-tickets-badge').text(opentickets.length)
+
+                    },
+                    error: (xhr, status, error) => {
+                        console.log(error)
+                    }
+                });
+            })
+        </script>

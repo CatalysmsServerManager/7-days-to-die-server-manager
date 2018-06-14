@@ -20,6 +20,11 @@ module.exports = {
         steamAvatar: {
             type: 'boolean',
             description: 'Wheter or not to load steam avatars of the player(s). Defaults to false'
+        },
+
+        inventory: {
+            type: 'boolean',
+            description: 'Whether to load inventory data or not. Defaults to true'
         }
     },
     exits: {
@@ -37,6 +42,10 @@ module.exports = {
         try {
             let server = await SdtdServer.findOne(inputs.serverId);
             let playerList = await getPlayerList(server);
+
+            if (_.isUndefined(inputs.inventory)) {
+                inputs.inventory = true
+            }
 
             // If steam ID is given, filter the response. Allocs API currently doesn't support filtering at this stage
             if (inputs.steamId) {
@@ -65,7 +74,7 @@ module.exports = {
                 // Inventory & stats data is only available when a player is online, so we only load it then.
                 let playerInventory
                 let playerStats
-                if (player.online) {
+                if (player.online && inputs.inventory) {
                     playerInventory = await loadPlayerInventory(player.steamid, server);
                 }
 
