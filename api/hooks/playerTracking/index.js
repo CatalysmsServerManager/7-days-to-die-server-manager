@@ -89,7 +89,6 @@ module.exports = function definePlayerTrackingHook(sails) {
 
   async function basicTracking(server, loggingObject) {
     let stats = await sails.helpers.sdtd.loadPlayerStats(server.id);
-
     sails.log.verbose(`Received stats - Performing basic tracking for server ${server.name} - ${stats.length} players online`)
     for (const playerStats of stats) {
       if (playerStats.steamId) {
