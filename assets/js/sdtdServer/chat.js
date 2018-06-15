@@ -6,11 +6,6 @@ class sdtdChat {
 
 
   start() {
-    console.log('Starting chat for server with id ' + this.serverId);
-
-    io.socket.get('/sdtdserver/' + this.serverId + '/socket', function (response) {
-      console.log('Subscribed to socket ' + response);
-    });
 
     io.socket.on('chatMessage', (chatMessage) => {
       if (chatMessage.server.id === this.serverId) {
