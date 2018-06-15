@@ -33,6 +33,9 @@ module.exports = function definePlayerTrackingHook(sails) {
       }
 
       loggingObject.on('memUpdate', async (memUpdate) => {
+
+        let dateStarted = new Date();
+
         let server = await SdtdServer.findOne(memUpdate.server).populate('config');
 
         try {
@@ -80,6 +83,8 @@ module.exports = function definePlayerTrackingHook(sails) {
 
         await deleteLocationData(server);
         //await deleteInventoryData(server);
+        let dateEnded = new Date();
+        sails.log.verbose(`Received memUpdate - Performing tracking for server ${server.name} - took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`);
       })
 
     },
@@ -89,11 +94,13 @@ module.exports = function definePlayerTrackingHook(sails) {
 
   async function basicTracking(server, loggingObject) {
     let stats = await sails.helpers.sdtd.loadPlayerStats(server.id);
-    sails.log.verbose(`Received stats - Performing basic tracking for server ${server.name} - ${stats.length} players online`)
+
+    let players = await Player.find({server: server.id, steamid: stats.map(playerInfo => playerInfo.steamId)});
+
     for (const playerStats of stats) {
       if (playerStats.steamId) {
         // Load the current player data
-        let player = await Player.findOne({ server: server.id, steamId: playerStats.steamId });
+        let player = players.filter(playerInfo => playerInfo.steamId === playerStats.steamId)
         // Update with the new data
         await Player.update(player.id, playerStats);
 
@@ -148,15 +155,7 @@ module.exports = function definePlayerTrackingHook(sails) {
             y: onlinePlayer.position.y,
             z: onlinePlayer.position.z
           })
-
-          await Player.update(trackingRecord[0].player, {
-            positionX: onlinePlayer.position.x,
-            positionY: onlinePlayer.position.y,
-            positionZ: onlinePlayer.position.z,
-          })
         }
-
-
       }
 
     }
