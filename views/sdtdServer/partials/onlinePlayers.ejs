@@ -30,9 +30,7 @@
 <script>
   $(document).ready(function () {
 
-    io.socket.get('/sdtdserver/' + <%= server.id %> + '/socket', function (response) {
-      sendRequestAndUpdatePlayers();
-    });
+    sendRequestAndUpdatePlayers();
 
     io.socket.on('playerConnected', (connectedMessage) => {
       sendRequestAndUpdatePlayers();
