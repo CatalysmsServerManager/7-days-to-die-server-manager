@@ -52,7 +52,7 @@ module.exports = function definePlayerTrackingHook(sails) {
           let playerRecords = new Array();
 
           for (const onlinePlayer of playerList) {
-            let playerRecord = await Player.findOne({ server: server.id, steamId: onlinePlayer.steamid });
+            let playerRecord = await Player.findOne({ server: server.id, steamId: onlinePlayer.steamId });
             if (playerRecord) {
               playerRecords.push(playerRecord)
               initialValues.push({ server: server.id, player: playerRecord.id })
