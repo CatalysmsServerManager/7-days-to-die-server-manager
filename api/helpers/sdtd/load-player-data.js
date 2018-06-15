@@ -40,6 +40,7 @@ module.exports = {
     fn: async function (inputs, exits) {
 
         try {
+            let dateStarted = new Date();
             let server = await SdtdServer.findOne(inputs.serverId);
             let playerList = await getPlayerList(server);
 
@@ -116,9 +117,10 @@ module.exports = {
                 sails.log.verbose(`Loaded a player - ${playerProfile[0].id}`)
                 playersToSend.push(playerProfile[0]);
             }
+            let dateEnded = new Date();
 
             if (playersToSend.length > 0) {
-                sails.log.debug(`HELPER - loadPlayerData - Loaded player data for server ${inputs.serverId}! SteamId: ${inputs.steamId}`, playersToSend.map(player => {
+                sails.log.debug(`HELPER - loadPlayerData - Loaded player data for server ${inputs.serverId}! Took ${dateEnded.valueOf() - dateStarted.valueOf()} ms - SteamId: ${inputs.steamId}`, playersToSend.map(player => {
                     return player.name
                 }));
             }
