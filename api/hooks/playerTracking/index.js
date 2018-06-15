@@ -177,15 +177,15 @@ module.exports = function definePlayerTrackingHook(sails) {
             inventory.equipment = _.filter(inventory.equipment, (value) => !_.isNull(value));
 
             for (const inventoryItem of inventory.bag) {
-              itemsInInventory.push(inventoryItem)
+              itemsInInventory.push(_.omit(inventoryItem, "iconcolor", "qualitycolor", "icon"))
             }
 
             for (const inventoryItem of inventory.belt) {
-              itemsInInventory.push(inventoryItem)
+              itemsInInventory.push(_.omit(inventoryItem, "iconcolor", "qualitycolor", "icon"))
             }
 
             for (const inventoryItem of inventory.equipment) {
-              itemsInInventory.push(inventoryItem)
+              itemsInInventory.push(_.omit(inventoryItem, "iconcolor", "qualitycolor", "icon"))
             }
 
             await TrackingInfo.update(trackingRecord[0].id, { inventory: itemsInInventory })
