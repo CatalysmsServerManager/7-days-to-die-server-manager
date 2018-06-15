@@ -253,14 +253,10 @@ async function deleteLocationData(server) {
     let dateNow = Date.now();
     let borderDate = new Date(dateNow.valueOf() - milisecondsToKeepData);
 
-    let deletedRecords = await TrackingInfo.destroy({
+   await TrackingInfo.destroy({
       createdAt: { '<': borderDate.valueOf() },
       server: server.id
-    }).fetch();
-
-    if (deletedRecords.length > 1440) {
-      sails.log.warn(`Deleted more than 12 hours of location data for server ${server.name} - ${deletedRecords.length} records destroyed`);
-    }
+    })
 
   } catch (error) {
     sails.log.error(error)

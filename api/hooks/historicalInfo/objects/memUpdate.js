@@ -59,15 +59,12 @@ async function clearOldInfo(server, config) {
         let dateNow = Date.now();
         let borderDate = new Date(dateNow.valueOf() - milisecondsToKeepData);
 
-        let deletedRecords = await HistoricalInfo.destroy({
+        await HistoricalInfo.destroy({
             createdAt: { '<': borderDate.valueOf() },
             type: 'memUpdate',
             server: server.id
-        }).fetch();
+        })
         
-        if (deletedRecords.length > 50) {
-            sails.log.debug(`HOOKS - HistoricalInfo:memUpdate - Deleted ${deletedRecords.length} records for server ${server.name} - kept data for ${hoursToKeepData} hours.`)
-        }
     } catch (error) {
         sails.log.error(`HOOKS - HistoricalInfo:memUpdate - Error deleting data - ${error}`)
     }
