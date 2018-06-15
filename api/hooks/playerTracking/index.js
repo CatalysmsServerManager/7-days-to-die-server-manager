@@ -102,7 +102,7 @@ module.exports = function definePlayerTrackingHook(sails) {
         // Load the current player data
         let player = players.filter(playerInfo => playerInfo.steamId === playerStats.steamId)
         // Update with the new data
-        await Player.update(player.id, playerStats);
+        await Player.update(player[0].id, playerStats);
 
         // Detect if player killed any zombies
         if (player.zombieKills < playerStats.zombieKills && player.zombieKills !== 0) {
