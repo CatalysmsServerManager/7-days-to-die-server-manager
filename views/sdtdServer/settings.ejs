@@ -71,6 +71,27 @@
       </div>
 
     </div>
+
+        <!-- GBL settings -->
+
+        <div class="card">
+          <div class="card-header" id="settings-heading-gblSettings">
+            <h5 class="mb-0">
+              <button class="btn btn-link">
+                <i class="fas fa-ban"></i> Global ban list
+              </button>
+            </h5>
+          </div>
+    
+          <div id="settings-collapse-gblSettings">
+            <div class="card-body">
+    
+              <%- include('./partials/settings/gblSettings', {server: server, config: config}) %>
+            </div>
+          </div>
+    
+        </div>
+
     <!-- Country ban settings -->
 
     <div class="card">
