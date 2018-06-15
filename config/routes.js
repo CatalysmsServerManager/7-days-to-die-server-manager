@@ -114,9 +114,17 @@ module.exports.routes = {
 
   'get /api/stats': 'etc.get-system-stats',
 
+
+  // GBL
+  'get /api/gbl/total': 'gbl.get-total-bans',
   'get /api/gbl/find' : 'gbl.search-steamid',
   'post /api/gbl/load' : 'gbl.load-bans',
   'post /api/gbl/note' : 'gbl.set-note',
+
+  'post /api/sdtdserver/gbl/autoban' : 'gbl.set-autoban-status',
+  'post /api/sdtdserver/gbl/autoban/bans' : 'gbl.set-autoban-bans',
+  'post /api/sdtdserver/gbl/notification/bans' : 'gbl.set-notification-bans',
+
 
   // SDTDSERVER
 
