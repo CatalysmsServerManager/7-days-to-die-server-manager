@@ -277,6 +277,32 @@ module.exports = {
       },
     },
 
+
+  //   _____ ____  _      
+  //   / ____|  _ \| |     
+  //  | |  __| |_) | |     
+  //  | | |_ |  _ <| |     
+  //  | |__| | |_) | |____ 
+  //   \_____|____/|______|
+                 
+  // How many bans a player must have before triggering the discord notification
+  gblNotificationBans: {
+    type: 'number',
+    defaultsTo: 3
+  },
+
+  gblAutoBanEnabled: {
+    type: 'boolean',
+    defaultsTo: false
+  },
+
+  // How many bans a player must have before triggering the auto ban
+  gblAutoBanBans: {
+    type: 'number',
+    defaultsTo: 5
+  },
+                        
+
     //   _                       _
     //  | |                     (_)
     //  | |     ___   __ _  __ _ _ _ __   __ _
