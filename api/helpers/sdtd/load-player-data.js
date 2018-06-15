@@ -74,12 +74,17 @@ module.exports = {
                 // Inventory & stats data is only available when a player is online, so we only load it then.
                 let playerInventory
                 let playerStats
+                let steamAvatar
+
+                if (inputs.steamAvatar) {
+                    steamAvatar = await loadSteamAvatar(player.steamid);
+
+                }
                 if (player.online && inputs.inventory) {
                     playerInventory = await loadPlayerInventory(player.steamid, server);
                 }
 
-                // Update some basic info
-                playerProfile = await Player.update({ id: playerProfile.id }, {
+                let updateObj = {
                     lastOnline: player.lastonline,
                     name: player.name ? he.encode(player.name) : "Unknown",
                     ip: player.ip,
@@ -89,28 +94,25 @@ module.exports = {
                     positionZ: player.position.z,
                     playtime: player.totalplaytime,
                     banned: player.banned
-                }).fetch()
-                if (!_.isUndefined(playerInventory)) {
-                    playerInventory = _.omit(playerInventory, 'playername');
-                    playerProfile = await Player.update({ id: playerProfile[0].id }, {
-                        inventory: playerInventory
-                    }).fetch()
                 }
 
-                let steamAvatar
-                if (inputs.steamAvatar) {
-                    steamAvatar = await loadSteamAvatar(player.steamid);
-
+                if (!_.isUndefined(playerInventory)) {
+                    playerInventory = _.omit(playerInventory, 'playername');
+                    updateObj.inventory = playerInventory
                 }
 
                 if (!_.isUndefined(steamAvatar)) {
-                    playerProfile = await Player.update({ id: playerProfile[0].id }, { avatarUrl: steamAvatar }).fetch()
-
+                    updateObj.avatarUrl = steamAvatar
                 }
+
+                // Update the player record
+                playerProfile = await Player.update({ id: playerProfile.id }, updateObj).fetch();
+
 
                 if (player.online) {
                     playerProfile[0].online = true
                 }
+
                 sails.log.verbose(`Loaded a player - ${playerProfile[0].id}`)
                 playersToSend.push(playerProfile[0]);
             }
