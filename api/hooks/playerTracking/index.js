@@ -1,4 +1,6 @@
 const sevenDays = require('machinepack-7daystodiewebapi');
+const request = require('request-promise-native');
+const he = require('he');
 
 /**
  * playerTracking hook
@@ -84,7 +86,7 @@ module.exports = function definePlayerTrackingHook(sails) {
         await deleteLocationData(server);
         //await deleteInventoryData(server);
         let dateEnded = new Date();
-        sails.log.verbose(`Received memUpdate - Performing tracking for server ${server.name} - took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`);
+        sails.log.verbose(`Received memUpdate - Performed tracking for server ${server.name} - took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`);
       })
 
     },
@@ -95,7 +97,7 @@ module.exports = function definePlayerTrackingHook(sails) {
   async function basicTracking(server, loggingObject) {
     let stats = await sails.helpers.sdtd.loadPlayerStats(server.id);
 
-    let players = await Player.find({server: server.id, steamId: stats.map(playerInfo => playerInfo.steamId)});
+    let players = await Player.find({ server: server.id, steamId: stats.map(playerInfo => playerInfo.steamId) });
 
     for (const playerStats of stats) {
       if (playerStats.steamId) {
@@ -163,15 +165,19 @@ module.exports = function definePlayerTrackingHook(sails) {
 
 
   async function inventoryTracking(server, loggingObject, playerList, createdTrackingRecords, playerRecords) {
+    let inventories = await getPlayersInventory(server);
+
+
     for (const onlinePlayer of playerList) {
       let playerRecord = playerRecords.filter(player => onlinePlayer.steamid === player.steamId);
       if (playerRecord.length === 1) {
         let trackingRecord = createdTrackingRecords.filter(record => record.player === playerRecord[0].id);
         if (trackingRecord.length === 1) {
-          let inventory = await getPlayerInventory(server, playerRecord[0].steamId);
-          let itemsInInventory = new Array();
+          let inventory = inventories.filter(inventoryEntry => he.encode(inventoryEntry.playername) === he.encode(playerRecord[0].name))
+          if (inventory.length === 1) {
+            let itemsInInventory = new Array();
+            inventory = inventory[0]
 
-          if (!_.isUndefined(inventory)) {
             inventory.bag = _.filter(inventory.bag, (value) => !_.isNull(value));
             inventory.belt = _.filter(inventory.belt, (value) => !_.isNull(value));
             inventory.equipment = _.filter(inventory.equipment, (value) => !_.isNull(value));
@@ -189,8 +195,8 @@ module.exports = function definePlayerTrackingHook(sails) {
             }
 
             await TrackingInfo.update(trackingRecord[0].id, { inventory: itemsInInventory })
-          }
 
+          } 
 
         }
 
@@ -223,6 +229,39 @@ function getPlayerList(server) {
   })
 }
 
+function getPlayersInventory(server) {
+  return new Promise((resolve, reject) => {
+
+    request.get(`http://${server.ip}:${server.webPort}/api/getplayersinventory`, {
+      qs: {
+        adminuser: server.authName,
+        adminToken: server.authToken
+      },
+    }, (error, response) => {
+      if (error) {
+        resolve(new Array())
+      }
+      resolve(JSON.parse(response.body))
+    })
+
+    // sevenDays.getPlayerInventory({
+    //   ip: server.ip,
+    //   port: server.webPort,
+    //   authName: server.authName,
+    //   authToken: server.authToken,
+    //   steamId: steamId
+    // }).exec({
+    //   success: (data) => {
+    //     resolve(data)
+    //   },
+    //   error: (error) => {
+    //     sails.log.warn(`Error getting player inventory for tracking - ${error}`);
+    //     resolve(undefined)
+    //   }
+    // })
+  })
+}
+
 function getPlayerInventory(server, steamId) {
   return new Promise((resolve, reject) => {
     sevenDays.getPlayerInventory({
@@ -251,7 +290,7 @@ async function deleteLocationData(server) {
     let dateNow = Date.now();
     let borderDate = new Date(dateNow.valueOf() - milisecondsToKeepData);
 
-   await TrackingInfo.destroy({
+    await TrackingInfo.destroy({
       createdAt: { '<': borderDate.valueOf() },
       server: server.id
     })

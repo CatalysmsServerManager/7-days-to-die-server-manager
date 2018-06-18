@@ -72,7 +72,7 @@
     <script>
         $(document).ready(function () {
 
-            $.get('/api/sdtdserver/donatorStatus', {serverId: window.SAILS_LOCALS.server.id}, data => {
+            $.get('/api/sdtdserver/donatorStatus', { serverId: window.SAILS_LOCALS.server.id }, data => {
                 if (data === "free") {
                     $('#settings-tracking-inventory-check').parent().hide();
                 }
@@ -109,11 +109,20 @@
 
             $('#settings-tracking-inventory-check').click(e => {
 
-                $.post('/api/sdtdserver/tracking/inventory', {
-                    _csrf: window.SAILS_LOCALS._csrf,
-                    serverId: window.SAILS_LOCALS.server.id,
-                    newStatus: $('#settings-tracking-inventory-check').prop('checked')
+                $.ajax({
+                    url: '/api/sdtdserver/tracking/inventory',
+                    method: 'POST',
+                    data: {
+                        _csrf: window.SAILS_LOCALS._csrf,
+                        serverId: window.SAILS_LOCALS.server.id,
+                        newStatus: $('#settings-tracking-inventory-check').prop('checked')
+                    },
+                    error: (xhr, error) => {
+                        alert(xhr.responseText)
+                    }
                 })
+
+
             })
 
             $('#settings-tracking-purge-confirm').click(e => {
