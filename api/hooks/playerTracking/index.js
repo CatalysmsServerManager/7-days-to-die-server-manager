@@ -165,6 +165,7 @@ module.exports = function definePlayerTrackingHook(sails) {
 
 
   async function inventoryTracking(server, loggingObject, playerList, createdTrackingRecords, playerRecords) {
+    let dateStarted = new Date();
     let inventories = await getPlayersInventory(server);
 
 
@@ -204,6 +205,8 @@ module.exports = function definePlayerTrackingHook(sails) {
 
     }
 
+    let dateEnded = new Date();
+    sails.log.verbose(`Performed inventory tracking for ${server.name} - ${playerList.length} players, took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`)
   }
 
 };
