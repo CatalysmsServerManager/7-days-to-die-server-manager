@@ -15,11 +15,20 @@ class GblMaxBan extends DiscordNotification {
 
         let executionTime = new Date();
 
-        embed.setTitle(`A player with ${event.bans.length} bans on the GBL has connected`)
-        .setColor("RED")
-        .addField('Steam ID', `[${event.player.steamId}](https://steamidfinder.com/lookup/${event.player.steamId}/)`, true)
-        .setFooter(`${event.server.name}`)
-        .setURL(`${process.env.CSMM_HOSTNAME}/player/${event.player.id}/profile`)
+        if (event.banned) {
+            embed.setTitle(`A player with ${event.bans.length} bans on the GBL was auto-banned`)
+                .setColor("GREEN")
+        } else {
+            embed.setTitle(`A player with ${event.bans.length} bans on the GBL has connected`)
+                .setColor("ORANGE")
+        }
+
+        embed.addField('Steam ID', `[${event.player.steamId}](https://steamidfinder.com/lookup/${event.player.steamId}/)`, true)
+            .addField('Name', event.player.name)
+            .setFooter(`${event.server.name}`)
+            .setURL(`${process.env.CSMM_HOSTNAME}/player/${event.player.id}/profile`)
+
+
 
 
         return embed
