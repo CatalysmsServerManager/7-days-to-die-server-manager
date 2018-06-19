@@ -172,6 +172,15 @@
                 <button id="input-settings-discord-setnotification-cronjob-btn" type="button" class="btn btn-primary">Set automation notification</button>
               </div>
 
+              <div class="form-group">
+                <label for="discord-settings-notifications-gbl-select">Global ban list check</label>
+                <small>Receive notifications a player with more than the configured amount of bans on the GBL joins your server.</small>
+                <select class="form-control" name="discord-settings-notifications-gbl-select" id="discord-settings-notifications-gbl-select">
+                  <option>Loading</option>
+                </select>
+                <button id="input-settings-discord-setnotification-gbl-btn" type="button" class="btn btn-primary">Set GBL notification</button>
+              </div>
+
 
               </li>
             </div>
@@ -229,6 +238,10 @@
     {
       select: $("#discord-settings-notifications-cronjob-select"),
       option: 'cronjob'
+    },
+    {
+      select: $("#discord-settings-notifications-gbl-select"),
+      option: 'gblmaxban'
     },
     ]
 
@@ -654,6 +667,33 @@
         error: (xhr, status, error) => {
           alert(`Whoa can't set notifications to that channel! error: ${error}`)
           $('#discord-settings-notifications-cronjob-select').addClass("bg-danger").removeClass(
+            "bg-success");
+          console.log(error);
+        }
+      })
+    })
+
+    $("#input-settings-discord-setnotification-gbl-btn").click(e => {
+      let newNotificationChannelId = $("#discord-settings-notifications-gbl-select").val();
+      if (!newNotificationChannelId) {
+        return alert('Error! Make sure you have a guild set and are selecting a valid channel')
+      }
+      $.ajax({
+        url: '/api/sdtdserver/setnotificationchannel',
+        type: 'POST',
+        data: {
+          notificationChannelId: newNotificationChannelId,
+          serverId: <%= server.id %>,
+          notificationType: 'gblmaxban',
+          _csrf: window.SAILS_LOCALS._csrf
+        },
+        success: (data, status, xhr) => {
+          $("#discord-settings-notifications-gbl-select").addClass("bg-success").removeClass(
+            "bg-danger");
+        },
+        error: (xhr, status, error) => {
+          alert(`Whoa can't set notifications to that channel! error: ${error}`)
+          $("#discord-settings-notifications-gbl-select").addClass("bg-danger").removeClass(
             "bg-success");
           console.log(error);
         }
