@@ -109,7 +109,8 @@ module.exports = function definePlayerTrackingHook(sails) {
           playerKills : playerStats.playerkills,
           ip: playerStats.ip,
           deaths: playerStats.playerdeaths,
-          score: playerStats.score
+          score: playerStats.score,
+          level: Math.trunc(playerStats.level)
         }
         // Update with the new data
         player = player[0]
@@ -133,9 +134,9 @@ module.exports = function definePlayerTrackingHook(sails) {
         }
 
         // Detect if player leveled up
-        if (player.level < playerStats.level && player.level !== 0) {
-          let levels = playerStats.level - player.level;
-          sails.log.debug(`Detected a level up! ${player.name} of server ${server.name} has leveled up to ${playerStats.level}. - Detected ${levels} levels`);
+        if (player.level < Math.trunc(playerStats.level) && player.level !== 0) {
+          let levels = Math.trunc(playerStats.level) - player.level;
+          sails.log.debug(`Detected a level up! ${player.name} of server ${server.name} has leveled up to ${Math.trunc(playerStats.level)}. - Detected ${levels} levels`);
           player.levels = levels;
           loggingObject.emit('levelup', player);
         }
