@@ -1,5 +1,7 @@
 const sevenDays = require('machinepack-7daystodiewebapi');
 
+let detectedVersion
+
 module.exports = {
 
 
@@ -42,7 +44,7 @@ module.exports = {
             let server = await SdtdServer.findOne(inputs.serverId);
             let runningPatch = await checkIfRunningPrismaPatch(server);
             if (!runningPatch) {
-                return exits.notRunningPatch(`You must run the Allocs patch made by Prisma to enable inventory tracking again. See discord announcements!`)
+                return exits.notRunningPatch(`You must run the Allocs patch made by Prisma to enable inventory tracking again. See discord announcements! CSMM detected you are running ${detectedVersion}`)
             }
         }
         await SdtdConfig.update({ server: inputs.serverId }, { inventoryTracking: inputs.newStatus });
@@ -69,6 +71,7 @@ function checkIfRunningPrismaPatch(sdtdServer) {
                 let mapRenderingEntry = _.find(splitResult, (versionLine) => {
                     return versionLine.startsWith('Mod Allocs MapRendering and Webinterface:')
                 })
+                detectedVersion = mapRenderingEntry;
                 resolve(mapRenderingEntry.endsWith('25.1'))
             },
             unknownCommand: (error) => {
