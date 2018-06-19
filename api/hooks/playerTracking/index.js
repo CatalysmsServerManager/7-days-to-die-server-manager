@@ -40,20 +40,21 @@ module.exports = function definePlayerTrackingHook(sails) {
 
         let server = await SdtdServer.findOne(memUpdate.server).populate('config');
 
+        let onlinePlayers = await sails.helpers.sdtd.getOnlinePlayers(server.id);
+
         try {
-          await basicTracking(server, loggingObject);
+          await basicTracking(server, loggingObject, onlinePlayers);
         } catch (error) {
           sails.log.error(error)
         }
 
         if (server.config[0].locationTracking || server.config[0].inventoryTracking) {
           // If inventory OR location tracking is enabled, we prepare the tracking info beforehand to improve performance
-          let playerList = await getPlayerList(server);
 
           let initialValues = new Array();
           let playerRecords = new Array();
 
-          for (const onlinePlayer of playerList) {
+          for (const onlinePlayer of onlinePlayers) {
             let playerRecord = await Player.findOne({ server: server.id, steamId: onlinePlayer.steamid });
             if (playerRecord) {
               playerRecords.push(playerRecord)
@@ -67,7 +68,7 @@ module.exports = function definePlayerTrackingHook(sails) {
           if (server.config[0].locationTracking) {
 
             try {
-              await locationTracking(server, loggingObject, playerList, createdRecords, playerRecords);
+              await locationTracking(server, loggingObject, onlinePlayers, createdRecords, playerRecords);
             } catch (error) {
               sails.log.error(error)
             }
@@ -76,7 +77,7 @@ module.exports = function definePlayerTrackingHook(sails) {
           if (server.config[0].inventoryTracking) {
 
             try {
-              await inventoryTracking(server, loggingObject, playerList, createdRecords, playerRecords);
+              await inventoryTracking(server, loggingObject, onlinePlayers, createdRecords, playerRecords);
             } catch (error) {
               sails.log.error(error)
             }
@@ -94,30 +95,39 @@ module.exports = function definePlayerTrackingHook(sails) {
   };
 
 
-  async function basicTracking(server, loggingObject) {
-    let stats = await sails.helpers.sdtd.loadPlayerStats(server.id);
+  async function basicTracking(server, loggingObject, onlinePlayers) {
 
-    let players = await Player.find({ server: server.id, steamId: stats.map(playerInfo => playerInfo.steamId) });
+    let players = await Player.find({ server: server.id, steamId: onlinePlayers.map(playerInfo => playerInfo.steamid) });
 
-    for (const playerStats of stats) {
-      if (playerStats.steamId) {
+    for (const playerStats of onlinePlayers) {
+      if (playerStats.steamid) {
         // Load the current player data
-        let player = players.filter(playerInfo => playerInfo.steamId === playerStats.steamId)
+        let player = players.filter(playerInfo => playerInfo.steamId === playerStats.steamid);
+
+        let statsUpdate = {
+          zombieKills : playerStats.zombiekills,
+          playerKills : playerStats.playerkills,
+          ip: playerStats.ip,
+          deaths: playerStats.playerdeaths,
+          score: playerStats.score
+        }
         // Update with the new data
-        await Player.update(player[0].id, playerStats);
+        player = player[0]
+        await Player.update(player.id, statsUpdate);
+
 
         // Detect if player killed any zombies
-        if (player.zombieKills < playerStats.zombieKills && player.zombieKills !== 0) {
-          let zombiesKilled = playerStats.zombieKills - player.zombieKills;
-          sails.log.debug(`Detected a zombie kill! ${player.name} of server ${server.name} has killed ${playerStats.zombieKills} zombies in total. - Detected ${zombiesKilled} kills`);
+        if (player.zombieKills < playerStats.zombiekills && player.zombieKills !== 0) {
+          let zombiesKilled = playerStats.zombiekills - player.zombieKills;
+          sails.log.debug(`Detected a zombie kill! ${player.name} of server ${server.name} has killed ${playerStats.zombiekills} zombies in total. - Detected ${zombiesKilled} kills`);
           player.zombiesKilled = zombiesKilled;
           loggingObject.emit('zombieKill', player);
         }
 
         // Detect if player killed any players
-        if (player.playerKills < playerStats.playerKills && player.playerKills !== 0) {
-          let playersKilled = playerStats.playerKills - player.playerKills;
-          sails.log.debug(`Detected a player kill! ${player.name} of server ${server.name} has killed ${playerStats.playerKills} players in total. - Detected ${playersKilled} kills`);
+        if (player.playerKills < playerStats.playerkills && player.playerKills !== 0) {
+          let playersKilled = playerStats.playerkills - player.playerKills;
+          sails.log.debug(`Detected a player kill! ${player.name} of server ${server.name} has killed ${playerStats.playerkills} players in total. - Detected ${playersKilled} kills`);
           player.playersKilled = playersKilled;
           loggingObject.emit('playerKill', player);
         }
