@@ -32,7 +32,7 @@ module.exports = {
     exits: {
 
         notRunningPatch: {
-                responseType: 'badRequest'    
+            responseType: 'badRequest'
         }
 
     },
@@ -65,22 +65,22 @@ function checkIfRunningPrismaPatch(sdtdServer) {
             authName: sdtdServer.authName,
             authToken: sdtdServer.authToken,
             command: 'version'
-          }).exec({
+        }).exec({
             success: (response) => {
                 let splitResult = response.result.split('\n');
                 let mapRenderingEntry = _.find(splitResult, (versionLine) => {
                     return versionLine.startsWith('Mod Allocs MapRendering and Webinterface:')
                 })
                 detectedVersion = mapRenderingEntry;
-                resolve(mapRenderingEntry.endsWith('25.1'))
+                resolve(mapRenderingEntry.endsWith('25.1') || mapRenderingEntry.endsWith('25.1\r'))
             },
             unknownCommand: (error) => {
-              resolve(false);
+                resolve(false);
             },
             error: (error) => {
-              resolve(false);
+                resolve(false);
             }
-          });
+        });
 
     })
 }
