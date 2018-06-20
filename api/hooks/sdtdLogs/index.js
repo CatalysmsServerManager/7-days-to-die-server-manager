@@ -197,7 +197,8 @@ module.exports = function sdtdLogs(sails) {
             sails.sockets.broadcast(server.id, 'connectionLost', eventMsg);
             await sails.hooks.discordnotifications.sendNotification({
               serverId: server.id,
-              notificationType: 'connectionLost'
+              notificationType: 'connectionLost',
+              msg: eventMsg
             })
             sails.log.debug(`Lost connection to server ${server.name}`);
           });
