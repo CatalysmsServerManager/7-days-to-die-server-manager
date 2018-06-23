@@ -42,9 +42,9 @@ module.exports = {
 
         if (inputs.newStatus === true) {
             let server = await SdtdServer.findOne(inputs.serverId);
-            let runningPatch = await checkIfRunningPrismaPatch(server);
+            let runningPatch = await checkIfRunningAlloc26(server);
             if (!runningPatch) {
-                return exits.notRunningPatch(`You must run the Allocs patch made by Prisma to enable inventory tracking again. See discord announcements! CSMM detected you are running ${detectedVersion}`)
+                return exits.notRunningPatch(`You must run Allocs webmap version greater than (or equal) 26! CSMM detected you are running ${detectedVersion}`)
             }
         }
         await SdtdConfig.update({ server: inputs.serverId }, { inventoryTracking: inputs.newStatus });
@@ -57,7 +57,7 @@ module.exports = {
 };
 
 
-function checkIfRunningPrismaPatch(sdtdServer) {
+function checkIfRunningAlloc26(sdtdServer) {
     return new Promise((resolve, reject) => {
         sevenDays.executeCommand({
             ip: sdtdServer.ip,
@@ -72,7 +72,7 @@ function checkIfRunningPrismaPatch(sdtdServer) {
                     return versionLine.startsWith('Mod Allocs MapRendering and Webinterface:')
                 })
                 detectedVersion = mapRenderingEntry;
-                resolve(mapRenderingEntry.endsWith('25.1') || mapRenderingEntry.endsWith('25.1\r'))
+                resolve(mapRenderingEntry.endsWith('26') || mapRenderingEntry.endsWith('26\r'))
             },
             unknownCommand: (error) => {
                 resolve(false);

@@ -1,6 +1,7 @@
 const sevenDays = require('machinepack-7daystodiewebapi');
 const request = require('request-promise-native');
 const he = require('he');
+const SdtdApi = require('7daystodie-api-wrapper');
 
 /**
  * playerTracking hook
@@ -105,8 +106,8 @@ module.exports = function definePlayerTrackingHook(sails) {
         let player = players.filter(playerInfo => playerInfo.steamId === playerStats.steamid);
 
         let statsUpdate = {
-          zombieKills : playerStats.zombiekills,
-          playerKills : playerStats.playerkills,
+          zombieKills: playerStats.zombiekills,
+          playerKills: playerStats.playerkills,
           ip: playerStats.ip,
           deaths: playerStats.playerdeaths,
           score: playerStats.score,
@@ -177,7 +178,12 @@ module.exports = function definePlayerTrackingHook(sails) {
 
   async function inventoryTracking(server, loggingObject, playerList, createdTrackingRecords, playerRecords) {
     let dateStarted = new Date();
-    let inventories = await getPlayersInventory(server);
+    let inventories = await SdtdApi.getPlayerInventories({
+      ip: server.ip,
+      port: server.webPort,
+      adminUser: server.authName,
+      adminToken: server.authToken,
+    })
 
 
     for (const onlinePlayer of playerList) {
@@ -185,7 +191,7 @@ module.exports = function definePlayerTrackingHook(sails) {
       if (playerRecord.length === 1) {
         let trackingRecord = createdTrackingRecords.filter(record => record.player === playerRecord[0].id);
         if (trackingRecord.length === 1) {
-          let inventory = inventories.filter(inventoryEntry => he.encode(inventoryEntry.playername) === he.encode(playerRecord[0].name))
+          let inventory = inventories.filter(inventoryEntry => inventoryEntry.steamid === playerRecord[0].steamId)
           if (inventory.length === 1) {
             let itemsInInventory = new Array();
             inventory = inventory[0]
@@ -208,7 +214,7 @@ module.exports = function definePlayerTrackingHook(sails) {
 
             await TrackingInfo.update(trackingRecord[0].id, { inventory: itemsInInventory })
 
-          } 
+          }
 
         }
 
@@ -240,39 +246,6 @@ function getPlayerList(server) {
         resolve([])
       }
     })
-  })
-}
-
-function getPlayersInventory(server) {
-  return new Promise((resolve, reject) => {
-
-    request.get(`http://${server.ip}:${server.webPort}/api/getplayersinventory`, {
-      qs: {
-        adminuser: server.authName,
-        adminToken: server.authToken
-      },
-    }, (error, response) => {
-      if (error) {
-        resolve(new Array())
-      }
-      resolve(JSON.parse(response.body))
-    })
-
-    // sevenDays.getPlayerInventory({
-    //   ip: server.ip,
-    //   port: server.webPort,
-    //   authName: server.authName,
-    //   authToken: server.authToken,
-    //   steamId: steamId
-    // }).exec({
-    //   success: (data) => {
-    //     resolve(data)
-    //   },
-    //   error: (error) => {
-    //     sails.log.warn(`Error getting player inventory for tracking - ${error}`);
-    //     resolve(undefined)
-    //   }
-    // })
   })
 }
 
