@@ -84,12 +84,14 @@ passport.deserializeUser(function (steamId, done) {
 /* SENTRY CONFIG */
 
 const Raven = require('raven');
-Raven.config(process.env.SENTRY_DSN, {
-  autoBreadcrumbs: {
-    'console': true,
-  },
-  captureUnhandledRejections: true,
-}).install();
+  Raven.config(process.env.SENTRY_DSN, {
+    autoBreadcrumbs: {
+      'console': true,
+    },
+    captureUnhandledRejections: true,
+  }).install();
+
+
 
 module.exports.http = {
 
