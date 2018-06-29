@@ -148,7 +148,7 @@ class CommandHandler {
       server: this.serverId,
       enabled: true,
       name: commandName
-    });
+    }).populate('arguments');
 
     let customCommandFound = false
 
