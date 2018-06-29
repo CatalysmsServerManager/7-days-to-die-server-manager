@@ -137,7 +137,8 @@ function validateArg(argumentRecord, value) {
   switch (argumentRecord.type) {
     case 'number':
       let parsed = parseInt(value)
-      return !isNaN(parsed);
+      //return !isNaN(parsed);
+      return true
       break;
     case 'text':
       return true;

@@ -37,12 +37,17 @@ module.exports = {
 
             let foundCommands = await CustomCommand.find({
                 server: inputs.serverId
-            });
+            }).populate('arguments');
 
             this.res.attachment(`commands.json`);
 
             let jsonExport = JSON.stringify(foundCommands.map(command => {
                 command = _.omit(command, "createdAt", "updatedAt", "id", "server", "aliases");
+
+                command.arguments = command.arguments.map(arg => {
+                    arg = _.omit(arg, "createdAt", "updatedAt", "command", "id", "allowedValues");
+                    return arg
+                }) 
                 return command
             }));
 
