@@ -117,7 +117,7 @@ module.exports = function definePlayerTrackingHook(sails) {
         player = player[0]
 
         if (_.isUndefined(player)) {
-          return sails.log.warn(`Did not find a player with steam ID - ${playerStats.steamid}`, playerInfo);
+          return sails.log.warn(`Did not find a player with steam ID - ${playerStats.steamid}`, players);
         }
 
         await Player.update(player.id, statsUpdate);
