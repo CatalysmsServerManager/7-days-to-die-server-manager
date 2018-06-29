@@ -57,7 +57,7 @@ module.exports = {
             return exits.badName('An argument with this key already belongs to this command.')
         }
 
-        if (inputs.key === "steamId" || inputs.key === "entityId") {
+        if (inputs.key === "steamid" || inputs.key === "entityid") {
             return exits.badCommand('You cannot use reserved names for argument names.')
         }
 

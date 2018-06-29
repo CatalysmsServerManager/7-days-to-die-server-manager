@@ -52,7 +52,7 @@ module.exports = {
             where: {
                 key: inputs.key,
                 command: inputs.commandId,
-                id: { '!': inputs.argumentId }
+                id: { '!=': inputs.argumentId }
             }
         });
 
@@ -60,7 +60,7 @@ module.exports = {
             return exits.badName('An argument with this key already belongs to this command.')
         }
 
-        if (inputs.key === "steamId" || inputs.key === "entityId") {
+        if (inputs.key === "steamid" || inputs.key === "entityid") {
             return exits.badCommand('You cannot use reserved names for argument names.')
         }
 
@@ -75,7 +75,7 @@ module.exports = {
                 key: inputs.key,
                 type: inputs.type,
                 required: inputs.required,
-                default: inputs.default,
+                defaultValue: inputs.default,
                 command: inputs.commandId
             }
         );

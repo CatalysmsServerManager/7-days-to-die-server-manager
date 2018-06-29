@@ -70,41 +70,41 @@
           <% command.arguments.forEach(argument => { %>
 
             <div class="form-group">
-              <label for="command-<%= command.id %>-arg-name">Argument name</label>
-              <input type="text" class="form-control" name="command-<%= command.id %>-arg-name" id="command-<%= command.id %>-arg-name"
-                aria-describedby="command-<%= command.id %>-arg-name-help" value="<%= argument.key %>">
-              <small id="command-<%= command.id %>-arg-name-help" class="form-text text-muted"></small>
+              <label for="command-<%= argument.id %>-arg-name">Argument name</label>
+              <input type="text" class="form-control" name="command-<%= argument.id %>-arg-name" id="command-<%= argument.id %>-arg-name"
+                aria-describedby="command-<%= argument.id %>-arg-name-help" value="<%= argument.key %>">
+              <small id="command-<%= argument.id %>-arg-name-help" class="form-text text-muted"></small>
             </div>
 
 
             <div class="form-group">
-              <label for="command-<%= command.id %>-arg-type">Argument type</label>
-              <input type="text" class="form-control" name="command-<%= command.id %>-arg-type" id="command-<%= command.id %>-arg-type"
-                aria-describedby="command-<%= command.id %>-arg-type-help" value="<%= argument.type %>">
-              <small id="command-<%= command.id %>-arg-type-help" class="form-text text-muted">
+              <label for="command-<%= argument.id %>-arg-type">Argument type</label>
+              <input type="text" class="form-control" name="command-<%= argument.id %>-arg-type" id="command-<%= argument.id %>-arg-type"
+                aria-describedby="command-<%= argument.id %>-arg-type-help" value="<%= argument.type %>">
+              <small id="command-<%= argument.id %>-arg-type-help" class="form-text text-muted">
               </small>
             </div>
 
             <div class="form-check">
               <label class="form-check-label">
-                <input type="checkbox" class="form-check-input" name="command-<%= command.id %>-arg-required" id="command-<%= command.id %>-arg-required"
+                <input type="checkbox" class="form-check-input" name="command-<%= argument.id %>-arg-required" id="command-<%= argument.id %>-arg-required"
                   value="true" <% if (argument.required) { %> checked
                 <%  } %> > Required
               </label>
             </div>
 
             <div class="form-group">
-              <label for="command-<%= command.id %>-arg-default">Argument default</label>
-              <input default="text" class="form-control" name="command-<%= command.id %>-arg-default" id="command-<%= command.id %>-arg-default"
-                aria-describedby="command-<%= command.id %>-arg-default-help" value="<%= argument.defaultValue %>">
-              <small id="command-<%= command.id %>-arg-default-help" class="form-text text-muted">
+              <label for="command-<%= argument.id %>-arg-default">Argument default</label>
+              <input default="text" class="form-control" name="command-<%= argument.id %>-arg-default" id="command-<%= argument.id %>-arg-default"
+                aria-describedby="command-<%= argument.id %>-arg-default-help" value="<%= argument.defaultValue %>">
+              <small id="command-<%= argument.id %>-arg-default-help" class="form-text text-muted">
               </small>
             </div>
 
             <button type="button" class="btn btn-danger argument-delete" value="<%= argument.id %>">Delete
               <%= argument.key %>
             </button>
-            <button type="button" class="btn btn-secondary" value="<%= argument.id %>">Edit
+            <button type="button" class="btn btn-secondary argument-edit" value="<%= argument.id %>">Edit
               <%= argument.key %>
             </button>
 
@@ -117,7 +117,7 @@
                 <label for="command-<%= command.id %>-new-arg-name">Argument name</label>
                 <input type="text" class="form-control" name="command-<%= command.id %>-new-arg-name" id="command-<%= command.id %>-new-arg-name"
                   aria-describedby="command-<%= command.id %>-new-arg-name-help" placeholder="name">
-                <small id="command-<%= command.id %>-new-arg-name-help" class="form-text text-muted">This is the name you will use to insert the argument in your commands sequence.</small>
+                <small id="command-<%= command.id %>-new-arg-name-help" class="form-text text-muted">This is the name you will use to insert the argument in your commands sequence. Will be converted to lowercase.</small>
               </div>
 
 
@@ -356,6 +356,7 @@
             location.reload()
           },
           error: (xhr, status, error) => {
+            alert(JSON.stringify(xhr.responseJSON))
             console.log(xhr)
           }
         })
@@ -377,10 +378,46 @@
             location.reload()
           },
           error: (xhr, status, error) => {
+            alert(JSON.stringify(xhr.responseJSON))
             console.log(xhr)
           }
         })
-      })
+      });
+
+
+      $(".argument-edit").click(e => {
+
+        let argumentId = e.target.getAttribute('value');
+
+        let key = $(`#command-${argumentId}-arg-name`).val();
+        let type = $(`#command-${argumentId}-arg-type`).val();
+        let required = $(`#command-${argumentId}-arg-required`).prop('checked');
+        let defaultValue = $(`#command-${argumentId}-arg-default`).val();
+
+        console.log(key, type, required, defaultValue)
+
+        $.ajax({
+          url: '/api/sdtdserver/commands/custom/argument',
+          method: 'PATCH',
+          data: {
+            _csrf: window.SAILS_LOCALS._csrf,
+            argumentId: argumentId,
+            key: key,
+            type: type,
+            required: required,
+            default: defaultValue,
+            serverId: window.SAILS_LOCALS.server.id
+          },
+          success: (data, status, xhr) => {
+            location.reload()
+          },
+          error: (xhr, status, error) => {
+            alert(JSON.stringify(xhr.responseJSON))
+            console.log(xhr)
+          }
+        })
+
+      });
     })
 
   </script>
