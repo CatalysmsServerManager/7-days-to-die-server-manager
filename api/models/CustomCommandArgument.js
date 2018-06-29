@@ -22,7 +22,7 @@ module.exports = {
           defaultsTo: true
       },
 
-      default: {
+      defaultValue: {
           type: 'string'
       },
 

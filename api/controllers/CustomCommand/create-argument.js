@@ -69,7 +69,7 @@ module.exports = {
             key: inputs.key,
             type: inputs.type,
             required: inputs.required,
-            default: inputs.default,
+            defaultValue: inputs.default,
             command: inputs.commandId
         }).fetch();
 
