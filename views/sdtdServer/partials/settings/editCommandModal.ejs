@@ -100,7 +100,7 @@
             </small>
           </div>
 
-          <button type="button" class="btn btn-primary">Add argument</button>
+          <button id="command-<%= command.id %>-new-arg-btn" type="button" class="btn btn-primary">Add argument</button>
 
 
 
@@ -283,10 +283,15 @@
         if (!errored) {
           return $('#custom-command-<%= command.id %>-modal-edit-status').text('Saved!')
         }
+      })
 
 
+      $("#command-<%= command.id %>-new-arg-btn").click(e => {
 
-
+          let key = $("#command-<%= command.id %>-new-arg-name").val();
+          let type = $("#command-<%= command.id %>-new-arg-type").val();
+          let required = $("#command-<%= command.id %>-new-arg-required").prop('checked');
+          let defaultValue= $("#command-<%= command.id %>-new-arg-default").val();
 
       })
     })
