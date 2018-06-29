@@ -50,7 +50,7 @@ module.exports = {
                 return exits.badName('Invalid name! Please choose another one.')
             }
 
-            if (inputs.commandName.includes(' ')) {
+            if (inputs.newName.includes(' ')) {
                 return exits.badName('Name cannot have spaces');
             }
 

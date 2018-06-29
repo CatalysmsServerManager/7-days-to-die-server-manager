@@ -164,7 +164,9 @@
 
   <script>
     $(document).ready(function () {
-      let currentConfig = "<%= JSON.stringify(command) %>"
+      
+      let currentConfig = <%- JSON.stringify(command) %>;
+
       if (currentConfig.enabled) {
         $('#custom-command-<%= command.id %>-modal-edit-enabled').prop('checked', true);
       }
