@@ -8,7 +8,7 @@
   <!-- Modal -->
   <div class="modal fade" id="custom-command-<%= command.id %>-modal" tabindex="-1" role="dialog" aria-labelledby="custom-command-<%= command.id %>-modal-title"
     aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h4 class="modal-title" id="custom-command-<%= command.id %>-modal-title">
@@ -64,43 +64,90 @@
             </label>
           </div>
 
-          <hr> Add a command argument
+          <hr>
 
-          <div class="form-group">
-            <label for="command-<%= command.id %>-new-arg-name">Argument name</label>
-            <input type="text" class="form-control" name="command-<%= command.id %>-new-arg-name" id="command-<%= command.id %>-new-arg-name"
-              aria-describedby="command-<%= command.id %>-new-arg-name-help" placeholder="name">
-            <small id="command-<%= command.id %>-new-arg-name-help" class="form-text text-muted">This is the name you will use to insert the argument in your commands sequence.</small>
-          </div>
+          <strong>Configured arguments</strong>
+          <% command.arguments.forEach(argument => { %>
 
-
-          <div class="form-group">
-            <label for="command-<%= command.id %>-new-arg-type">Argument type</label>
-            <input type="text" class="form-control" name="command-<%= command.id %>-new-arg-type" id="command-<%= command.id %>-new-arg-type"
-              aria-describedby="command-<%= command.id %>-new-arg-type-help" placeholder="number">
-            <small id="command-<%= command.id %>-new-arg-type-help" class="form-text text-muted">Specify the type of this argument. This is used to validate the user's input. See the documentation for more
-              info
-            </small>
-          </div>
-
-          <div class="form-check">
-            <label class="form-check-label">
-              <input type="checkbox" class="form-check-input" name="command-<%= command.id %>-new-arg-required" id="command-<%= command.id %>-new-arg-required"
-                value="true" checked> Required
-            </label>
-          </div>
+            <div class="form-group">
+              <label for="command-<%= command.id %>-arg-name">Argument name</label>
+              <input type="text" class="form-control" name="command-<%= command.id %>-arg-name" id="command-<%= command.id %>-arg-name"
+                aria-describedby="command-<%= command.id %>-arg-name-help" value="<%= argument.key %>">
+              <small id="command-<%= command.id %>-arg-name-help" class="form-text text-muted"></small>
+            </div>
 
 
-          <div class="form-group">
-            <label for="command-<%= command.id %>-new-arg-default">Argument default</label>
-            <input default="text" class="form-control" name="command-<%= command.id %>-new-arg-default" id="command-<%= command.id %>-new-arg-default"
-              aria-describedby="command-<%= command.id %>-new-arg-default-help" placeholder="0">
-            <small id="command-<%= command.id %>-new-arg-default-help" class="form-text text-muted"> If the argument is not required, you must provide a default value. This will be used when a user does not specify
-              a value for this argment.
-            </small>
-          </div>
+            <div class="form-group">
+              <label for="command-<%= command.id %>-arg-type">Argument type</label>
+              <input type="text" class="form-control" name="command-<%= command.id %>-arg-type" id="command-<%= command.id %>-arg-type"
+                aria-describedby="command-<%= command.id %>-arg-type-help" value="<%= argument.type %>">
+              <small id="command-<%= command.id %>-arg-type-help" class="form-text text-muted">
+              </small>
+            </div>
 
-          <button id="command-<%= command.id %>-new-arg-btn" type="button" class="btn btn-primary">Add argument</button>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input type="checkbox" class="form-check-input" name="command-<%= command.id %>-arg-required" id="command-<%= command.id %>-arg-required"
+                  value="true" <% if (argument.required) { %> checked
+                <%  } %> > Required
+              </label>
+            </div>
+
+            <div class="form-group">
+              <label for="command-<%= command.id %>-arg-default">Argument default</label>
+              <input default="text" class="form-control" name="command-<%= command.id %>-arg-default" id="command-<%= command.id %>-arg-default"
+                aria-describedby="command-<%= command.id %>-arg-default-help" value="<%= argument.defaultValue %>">
+              <small id="command-<%= command.id %>-arg-default-help" class="form-text text-muted">
+              </small>
+            </div>
+
+            <button type="button" class="btn btn-danger argument-delete" value="<%= argument.id %>">Delete
+              <%= argument.key %>
+            </button>
+            <button type="button" class="btn btn-secondary" value="<%= argument.id %>">Edit
+              <%= argument.key %>
+            </button>
+
+            <% }) %>
+
+              <hr>
+              <strong>Add a command argument</strong>
+
+              <div class="form-group">
+                <label for="command-<%= command.id %>-new-arg-name">Argument name</label>
+                <input type="text" class="form-control" name="command-<%= command.id %>-new-arg-name" id="command-<%= command.id %>-new-arg-name"
+                  aria-describedby="command-<%= command.id %>-new-arg-name-help" placeholder="name">
+                <small id="command-<%= command.id %>-new-arg-name-help" class="form-text text-muted">This is the name you will use to insert the argument in your commands sequence.</small>
+              </div>
+
+
+              <div class="form-group">
+                <label for="command-<%= command.id %>-new-arg-type">Argument type</label>
+                <input type="text" class="form-control" name="command-<%= command.id %>-new-arg-type" id="command-<%= command.id %>-new-arg-type"
+                  aria-describedby="command-<%= command.id %>-new-arg-type-help" placeholder="number">
+                <small id="command-<%= command.id %>-new-arg-type-help" class="form-text text-muted">Specify the type of this argument. This is used to validate the user's input. See the documentation for more
+                  info
+                </small>
+              </div>
+
+              <div class="form-check">
+                <label class="form-check-label">
+                  <input type="checkbox" class="form-check-input" name="command-<%= command.id %>-new-arg-required" id="command-<%= command.id %>-new-arg-required"
+                    value="true" checked> Required
+                </label>
+              </div>
+
+
+              <div class="form-group">
+                <label for="command-<%= command.id %>-new-arg-default">Argument default</label>
+                <input default="text" class="form-control" name="command-<%= command.id %>-new-arg-default" id="command-<%= command.id %>-new-arg-default"
+                  aria-describedby="command-<%= command.id %>-new-arg-default-help" placeholder="0">
+                <small id="command-<%= command.id %>-new-arg-default-help" class="form-text text-muted"> If the argument is not required, you must provide a default value. This will be used when a user does not
+                  specify a value for this argment.
+                </small>
+              </div>
+
+              <button id="command-<%= command.id %>-new-arg-btn" type="button" class="btn btn-primary">Add argument</button>
 
 
 
@@ -313,6 +360,26 @@
           }
         })
 
+      });
+
+      $(".argument-delete").click(e => {
+        let argumentId = e.target.getAttribute('value');
+
+        $.ajax({
+          url: '/api/sdtdserver/commands/custom/argument',
+          method: 'DELETE',
+          data: {
+            _csrf: window.SAILS_LOCALS._csrf,
+            argumentId: argumentId,
+            serverId: window.SAILS_LOCALS.server.id
+          },
+          success: (data, status, xhr) => {
+            location.reload()
+          },
+          error: (xhr, status, error) => {
+            console.log(xhr)
+          }
+        })
       })
     })
 

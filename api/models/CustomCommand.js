@@ -59,6 +59,11 @@ module.exports = {
         model: 'sdtdServer',
         required: true
       },
+
+      arguments: {
+          collection: 'customCommandArgument',
+          via: 'command'
+      }
   
     },
   

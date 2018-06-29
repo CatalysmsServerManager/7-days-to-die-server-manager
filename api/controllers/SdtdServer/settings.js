@@ -41,7 +41,7 @@ module.exports = {
       let user = await User.findOne(this.req.session.userId);
       let customCommands = await CustomCommand.find({
         server: server.id,
-      })
+      }).populate('arguments');
       sails.log.info(`VIEW - SdtdServer:settings - Showing settings for ${server.name} to user ${user.username}`);
       return exits.success({
         server: server,
