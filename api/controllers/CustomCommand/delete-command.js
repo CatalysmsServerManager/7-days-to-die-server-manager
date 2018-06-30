@@ -1,40 +1,44 @@
 module.exports = {
 
 
-    friendlyName: 'Delete command',
+  friendlyName: 'Delete command',
 
 
-    description: '',
+  description: '',
 
 
-    inputs: {
-        commandId: {
-            type: 'number',
-            required: true
-        },
+  inputs: {
+    commandId: {
+      type: 'number',
+      required: true
     },
+  },
 
 
-    exits: {
-        success: {}
-    },
+  exits: {
+    success: {}
+  },
 
 
-    fn: async function (inputs, exits) {
+  fn: async function (inputs, exits) {
 
-        try {
-            await CustomCommand.destroy({
-                id: inputs.commandId,
-            })
-            return exits.success();
+    try {
 
-        } catch (error) {
-            sails.log.error(error)
-            return exits.error();
-        }
+      await CustomCommandArgument.destroy({
+        command: inputs.commandId
+      })
 
+      await CustomCommand.destroy({
+        id: inputs.commandId,
+      })
+      return exits.success();
+
+    } catch (error) {
+      sails.log.error(error)
+      return exits.error();
     }
+
+  }
 
 
 };
-

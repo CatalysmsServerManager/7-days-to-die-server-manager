@@ -104,7 +104,13 @@ module.exports = {
 
     if (problems.length === 0) {
 
-        await CustomCommandArgument.destroy({server: inputs.serverId})
+      let currentCommands = await CustomCommand.find({
+        server: inputs.serverId
+      });
+
+      await CustomCommandArgument.destroy({
+        command: currentCommands.map(cmd => cmd.id)
+      })
 
       await CustomCommand.destroy({
         server: inputs.serverId
