@@ -52,17 +52,27 @@ async function refreshBans() {
 
     try {
 
-      await sails.helpers.sdtd.loadBans(server.id);
-
       let loggingObj = sails.hooks.sdtdlogs.getLoggingObject(server.id);
 
       loggingObj.on('playerConnected', async (connectedMsg) => {
 
-        let foundBans = await BanEntry.find({ steamId: connectedMsg.steamID });
-        let config = await SdtdConfig.findOne({ server: connectedMsg.server.id });
+        let foundBans = await BanEntry.find({
+          where: {
+            steamId: connectedMsg.steamID,
+            server: {
+              '!=': connectedMsg.server.id
+            }
+          }
+        });
+        let config = await SdtdConfig.findOne({
+          server: connectedMsg.server.id
+        });
 
         if (foundBans.length >= config.gblNotificationBans && config.gblNotificationBans != 0) {
-          let player = await Player.findOne({ server: connectedMsg.server.id, steamId: connectedMsg.steamID });
+          let player = await Player.findOne({
+            server: connectedMsg.server.id,
+            steamId: connectedMsg.steamID
+          });
           await sails.hooks.discordnotifications.sendNotification({
             serverId: connectedMsg.server.id,
             notificationType: 'gblmaxban',
@@ -72,7 +82,10 @@ async function refreshBans() {
         }
 
         if (foundBans.length >= config.gblAutoBanBans && config.gblAutoBanEnabled) {
-          let player = await Player.findOne({ server: connectedMsg.server.id, steamId: connectedMsg.steamID });
+          let player = await Player.findOne({
+            server: connectedMsg.server.id,
+            steamId: connectedMsg.steamID
+          });
           sevenDays.banPlayer({
             ip: server.ip,
             port: server.webPort,
@@ -101,6 +114,9 @@ async function refreshBans() {
         }
 
       })
+
+      await sails.helpers.sdtd.loadBans(server.id);
+
 
     } catch (error) {
       sails.log.warn(`Error refreshing ban info for server ${server.name}`, error)
