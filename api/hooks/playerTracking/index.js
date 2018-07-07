@@ -31,7 +31,9 @@ module.exports = function definePlayerTrackingHook(sails) {
       let loggingObject = sails.hooks.sdtdlogs.getLoggingObject(serverId);
 
       if (_.isUndefined(loggingObject)) {
-        sails.log.warn(`Tried to start tracking for a server without a loggingObject`, { server: serverId });
+        sails.log.warn(`Tried to start tracking for a server without a loggingObject`, {
+          server: serverId
+        });
         return
       }
 
@@ -56,10 +58,16 @@ module.exports = function definePlayerTrackingHook(sails) {
           let playerRecords = new Array();
 
           for (const onlinePlayer of onlinePlayers) {
-            let playerRecord = await Player.findOne({ server: server.id, steamId: onlinePlayer.steamid });
+            let playerRecord = await Player.findOne({
+              server: server.id,
+              steamId: onlinePlayer.steamid
+            });
             if (playerRecord) {
               playerRecords.push(playerRecord)
-              initialValues.push({ server: server.id, player: playerRecord.id })
+              initialValues.push({
+                server: server.id,
+                player: playerRecord.id
+              })
             }
           }
 
@@ -98,7 +106,10 @@ module.exports = function definePlayerTrackingHook(sails) {
 
   async function basicTracking(server, loggingObject, onlinePlayers) {
 
-    let players = await Player.find({ server: server.id, steamId: onlinePlayers.map(playerInfo => playerInfo.steamid) });
+    let players = await Player.find({
+      server: server.id,
+      steamId: onlinePlayers.map(playerInfo => playerInfo.steamid)
+    });
 
     for (const playerStats of onlinePlayers) {
       if (playerStats.steamid) {
@@ -183,12 +194,22 @@ module.exports = function definePlayerTrackingHook(sails) {
 
   async function inventoryTracking(server, loggingObject, playerList, createdTrackingRecords, playerRecords) {
     let dateStarted = new Date();
-    let inventories = await SdtdApi.getPlayerInventories({
-      ip: server.ip,
-      port: server.webPort,
-      adminUser: server.authName,
-      adminToken: server.authToken,
-    })
+    try {
+      let inventories = await SdtdApi.getPlayerInventories({
+        ip: server.ip,
+        port: server.webPort,
+        adminUser: server.authName,
+        adminToken: server.authToken,
+      })
+    } catch (error) {
+
+      await SdtdConfig.update({
+        server: server.id
+      }, {
+        inventoryTracking: false
+      })
+      sails.log.warn(`${server.name} Errored during inventory tracking - ${error}. Disabled inventory tracking.`)
+    }
 
 
     for (const onlinePlayer of playerList) {
@@ -217,7 +238,9 @@ module.exports = function definePlayerTrackingHook(sails) {
               itemsInInventory.push(_.omit(inventoryItem, "iconcolor", "qualitycolor", "icon"))
             }
 
-            await TrackingInfo.update(trackingRecord[0].id, { inventory: itemsInInventory })
+            await TrackingInfo.update(trackingRecord[0].id, {
+              inventory: itemsInInventory
+            })
 
           }
 
@@ -276,14 +299,18 @@ function getPlayerInventory(server, steamId) {
 
 async function deleteLocationData(server) {
   try {
-    let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({ serverId: server.id });
+    let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({
+      serverId: server.id
+    });
     let hoursToKeepData = sails.config.custom.donorConfig[donatorRole].playerTrackerKeepLocationHours
     let milisecondsToKeepData = hoursToKeepData * 3600000;
     let dateNow = Date.now();
     let borderDate = new Date(dateNow.valueOf() - milisecondsToKeepData);
 
     await TrackingInfo.destroy({
-      createdAt: { '<': borderDate.valueOf() },
+      createdAt: {
+        '<': borderDate.valueOf()
+      },
       server: server.id
     })
 
@@ -296,18 +323,22 @@ async function deleteLocationData(server) {
 
 async function deleteInventoryData(server) {
   try {
-    let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({ serverId: server.id });
+    let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({
+      serverId: server.id
+    });
     let hoursToKeepData = sails.config.custom.donorConfig[donatorRole].playerTrackerKeepInventoryHours
     let milisecondsToKeepData = hoursToKeepData * 3600000;
     let dateNow = Date.now();
     let borderDate = new Date(dateNow.valueOf() - milisecondsToKeepData);
 
     let updatedRecords = await TrackingInfo.update({
-      createdAt: { '<': borderDate.valueOf() },
+      createdAt: {
+        '<': borderDate.valueOf()
+      },
       server: server.id
     }, {
-        inventory: null
-      }).fetch();
+      inventory: null
+    }).fetch();
 
   } catch (error) {
     sails.log.error(error)
