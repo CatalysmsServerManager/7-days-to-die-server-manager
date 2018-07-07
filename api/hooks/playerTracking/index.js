@@ -194,7 +194,7 @@ module.exports = function definePlayerTrackingHook(sails) {
 
   async function inventoryTracking(server, loggingObject, playerList, createdTrackingRecords, playerRecords) {
     let dateStarted = new Date();
-    let inventories
+    let inventories = new Array();
     try {
        inventories = await SdtdApi.getPlayerInventories({
         ip: server.ip,
