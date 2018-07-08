@@ -15,6 +15,11 @@ module.exports = {
           type: 'string',
           required: true
       },
+
+      enabled: {
+        type: 'boolean',
+        defaultsTo: true
+      },
  
       //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
       //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
