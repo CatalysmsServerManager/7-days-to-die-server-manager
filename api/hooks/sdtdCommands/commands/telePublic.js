@@ -19,7 +19,24 @@ class telePublic extends SdtdCommand {
     async run(chatMessage, player, server, args) {
 
         let playerTeleports = await PlayerTeleport.find({ player: player.id });
+        let playersOnServer = await Player.find({ server: server.id });
+        let publicTeleports = await PlayerTeleport.find({
+          player: playersOnServer.map(player => player.id),
+          publicEnabled: true
+        });
+    
+        let teleportsToCheckForName = publicTeleports;
 
+        let nameAlreadyInUse = false
+        teleportsToCheckForName.forEach(teleport => {
+          if (teleport.name == args[0]) {
+            nameAlreadyInUse = true
+          }
+        })
+    
+        if (nameAlreadyInUse) {
+          return chatMessage.reply(`That name is already in use! Pick another one please.`);
+        }
 
         if (playerTeleports.length == 0) {
             return chatMessage.reply(`Found no teleport location for you!`)
@@ -37,7 +54,7 @@ class telePublic extends SdtdCommand {
         }
 
         if (server.config.economyEnabled && server.config.costToMakeTeleportPublic) {
-            let notEnoughMoney = false
+            let notEnoughMoney = false;
             let result = await sails.helpers.economy.deductFromPlayer.with({
                 playerId: player.id,
                 amountToDeduct: server.config.costToMakeTeleportPublic,

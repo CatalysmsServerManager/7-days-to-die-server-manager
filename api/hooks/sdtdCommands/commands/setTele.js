@@ -24,6 +24,7 @@ class setTele extends SdtdCommand {
     let playersOnServer = await Player.find({ server: server.id });
     let publicTeleports = await PlayerTeleport.find({
       player: playersOnServer.map(player => player.id),
+      publicEnabled: true
     });
 
     if (args.length == 0) {
@@ -36,7 +37,6 @@ class setTele extends SdtdCommand {
 
     if (playerTeleports.length >= server.config.maxPlayerTeleportLocations) {
       return chatMessage.reply("You've set too many locations already, remove one before adding any more");
-
     }
 
 
