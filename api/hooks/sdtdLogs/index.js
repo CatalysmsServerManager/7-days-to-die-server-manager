@@ -61,9 +61,10 @@ module.exports = function sdtdLogs(sails) {
           let loggingObj = await createLogObject(serverID);
           loggingInfoMap.set(serverID, loggingObj);
           sails.hooks.playertracking.start(serverID);
+          sails.hooks.customdiscordnotification.start(serverID);
           return
         } else {
-          throw new Error(`Tried to start logging for a server that already had it enables`);
+          throw new Error(`Tried to start logging for a server that already had it enabled`);
         }
 
       } catch (error) {
