@@ -22,17 +22,20 @@ module.exports = function defineCronHook(sails) {
       sails.on('hook:sdtdlogs:loaded', async () => {
 
         sails.log.info('Initializing custom hook (`cron`)');
+        done();
 
         let enabledJobs = await CronJob.find({ enabled: true });
 
         for (const jobToStart of enabledJobs) {
-          await this.start(jobToStart.id);
+          try {
+            await this.start(jobToStart.id);
+          } catch (error) {
+            sails.log.error(`Error initializing cronjob ${jobToStart.id} - ${error}`)               
+          }
+        
         }
 
-        // Be sure and call `done()` when finished!
-        // (Pass in Error as the first argument if something goes wrong to cause Sails
-        //  to stop loading other hooks and give up.)
-        return done();
+        return 
       })
 
     },

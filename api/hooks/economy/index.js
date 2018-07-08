@@ -17,7 +17,8 @@ module.exports = function economy(sails) {
 
             sails.on('hook:sdtdlogs:loaded', async function () {
                 sails.log.info('Initializing custom hook (`economy`)');
-
+                cb();
+                
                 discordMessageEmitter = new DiscordMessageHandler()
 
                 let economyEnabledServers = await SdtdConfig.find({
@@ -40,7 +41,7 @@ module.exports = function economy(sails) {
                     }
                 }
 
-                return cb();
+                return 
             });
         },
 

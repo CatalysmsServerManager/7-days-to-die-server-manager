@@ -26,6 +26,7 @@ module.exports = function SdtdDiscordChatBridge(sails) {
     initialize: async function (cb) {
       sails.on('hook:sdtdlogs:loaded', async function () {
         sails.log.info('Initializing custom hook (`discordChatbridge`)');
+        cb();
         try {
           let enabledServers = await SdtdConfig.find({
             or: [{
@@ -48,7 +49,7 @@ module.exports = function SdtdDiscordChatBridge(sails) {
         } catch (error) {
           sails.log.error(`HOOK SdtdDiscordChatBridge:initialize - ${error}`);
         }
-        cb();
+        return 
       });
 
     },
