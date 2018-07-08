@@ -296,7 +296,14 @@ module.exports.routes = {
   'post /api/sdtdserver/discord/chatbridge/blockedprefixes': 'SdtdServerController/discordBot.set-chat-channel-blocked-prefixes',
   'post /api/sdtdserver/setnotificationchannel': 'SdtdServerController/discordBot.set-notification-channel',
   'post /api/sdtdserver/discord/prefix': 'SdtdServerController/discordBot.set-prefix',
+  'get /api/sdtdserver/discord/findChannel' : "SdtdServerController/discordBot.find-channel-by-id",
 
+  // Custom notifications
+
+  'post /api/sdtdserver/discord/customNotification' : "SdtdServerController/discordBot.set-custom-notification",
+  'delete /api/sdtdserver/discord/customNotification' : "SdtdServerController/discordBot.delete-custom-notification",
+  'patch /api/sdtdserver/discord/customNotification' : "SdtdServerController/discordBot.update-custom-notification",
+  'get /api/sdtdserver/discord/customNotification' : "SdtdServerController/discordBot.get-custom-notifications",
 
   // PLAYER
 
