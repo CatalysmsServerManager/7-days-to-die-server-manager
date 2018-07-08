@@ -8,7 +8,7 @@
   <% if ('' === user.discordId) { %>
 
     <div class="alert alert-warning" role="alert">
-      <strong>You have not linked a discord ID yet. Please login to control discord settings</strong>}
+      <strong>You have not linked a discord ID yet. Please login to control discord settings</strong>
     </div>
 
     <a href="/auth/discord">
@@ -192,6 +192,7 @@
         </div>
       </div>
 
+      <%- include('./customDiscordNotifications') %>
 
       <% } %>
 
@@ -357,7 +358,7 @@
         element.select.append($('<option>', {
           value: channel.id
         })
-          .text(channel.name));
+          .text("#" + channel.name));
       })
       element.select.val(idToLookFor);
     }

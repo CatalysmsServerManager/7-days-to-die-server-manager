@@ -48,7 +48,12 @@ module.exports = {
 
       let foundChannelsArray = Array.from(foundChannels.values());
 
-      exits.success(foundChannelsArray);
+      exits.success(foundChannelsArray.map(channel => {
+        return {
+          id: channel.id,
+          name: channel.name
+        }
+      }));
       sails.log.debug(`API - SdtdServer:find-writeable-channels-in-guild - Found ${foundChannelsArray.length} channels for guild ${inputs.guildId}!`);
     } catch (error) {
       sails.log.error(`API - SdtdServer:find-writeable-channels-in-guild - ${error}`);

@@ -1,0 +1,167 @@
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#custom-notifications-modal">
+  Custom notifications
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="custom-notifications-modal" tabindex="-1" role="dialog" aria-labelledby="custom-notifications-title-modal"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="custom-notifications-title-modal">Custom Discord notifications</h4>
+      </div>
+      <div class="modal-body">
+
+
+        <div class="form-group">
+          <label for="custom-notification-channel">Channel to send notification</label>
+          <select class="form-control" name="custom-notification-channel" id="custom-notification-channel">
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="custom-notification-stringToSearchFor">Text to search for</label>
+          <input type="text" class="form-control" name="custom-notification-stringToSearchFor" id="custom-notification-stringToSearchFor"
+            aria-describedby="custom-notification-stringToSearchFor-help" placeholder="">
+          <small id="custom-notification-stringToSearchFor-help" class="form-text text-muted">The piece of text that will trigger a notification</small>
+        </div>
+
+        <button id="custom-notification-create" type="button" class="btn btn-success">Add</button>
+
+        <table id="custom-notifications-table" class="table">
+          <thead>
+            <tr>
+              <th>Text to search for</th>
+              <th>Channel</th>
+              <th>Enabled</th>
+            </tr>
+          </thead>
+          <tbody>
+
+          </tbody>
+        </table>
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<script>
+  $(document).ready(e => {
+
+    drawNotificationsTable()
+
+    getWritableChannels(window.SAILS_LOCALS.config.discordGuildId).then(writeableChannels => {
+
+      let channelSelect = $("#custom-notification-channel");
+      fillSelectWithDiscordChannels(channelSelect, writeableChannels);
+    }).catch(e => {
+      console.log(`Error reading discord channels - ${e}`)
+    });
+
+    $("#custom-notification-create").click(e => {
+      e.preventDefault();
+
+      $.ajax({
+        url: `/api/sdtdserver/discord/customNotification`,
+        method: "POST",
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+          channelId: $("#custom-notification-channel").val(),
+          stringToSearchFor: $("#custom-notification-stringToSearchFor").val()
+        },
+        success: (data, status, xhr) => {
+          drawNotificationsTable()
+        },
+        error: (xhr, status, error) => {
+          console.log(xhr);
+          alert(`Something went wrong! ${error}`);
+        }
+      })
+    })
+
+    $(document).on('click', '.delete-custom-notification',e => {
+      $.ajax({
+        url: `/api/sdtdserver/discord/customNotification`,
+        method: 'DELETE',
+        data: {
+          serverId: window.SAILS_LOCALS.server.id,
+          _csrf: window.SAILS_LOCALS._csrf,
+          notificationId: $(e.target).val()
+        },
+        success: (data, status, xhr) => {
+          drawNotificationsTable()
+        },
+        error: (xhr, status, error) => {
+          console.log(error);
+
+        }
+      });
+    })
+
+  });
+
+  function drawNotificationsTable() {
+    $("#custom-notifications-table tbody tr").remove();
+    $.ajax({
+      url: `/api/sdtdserver/discord/customNotification`,
+      data: {
+        serverId: window.SAILS_LOCALS.server.id
+      },
+      success: (data, status, xhr) => {
+        for (const customNotif of data) {
+          $('#custom-notifications-table tbody').append(
+            `<tr><td>${customNotif.stringToSearchFor}</td><td>${customNotif.discordChannelId}</td><td>${customNotif.enabled}</td><td><button type="button" class="btn btn-danger delete-custom-notification" value="${customNotif.id}">Delete</button></td></tr>`
+          );
+        }
+      },
+      error: (xhr, status, error) => {
+        console.log(error);
+
+      }
+    });
+  }
+
+
+  async function getWritableChannels(guildId) {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `/api/sdtdserver/findwriteablechannelsinguild`,
+        data: {
+          guildId: guildId,
+          serverId: window.SAILS_LOCALS.server.id
+        },
+        success: (data, status, xhr) => {
+          let foundChannels = data;
+          resolve(foundChannels);
+        },
+        error: (xhr, status, error) => {
+          console.log(error);
+          reject(error)
+        }
+      })
+    })
+  }
+
+  function fillSelectWithDiscordChannels(element, channels) {
+    element.empty();
+
+    channels.forEach(channel => {
+      element.append($('<option>', {
+          value: channel.id
+        })
+        .text("#" + channel.name));
+    })
+
+  }
+
+</script>
