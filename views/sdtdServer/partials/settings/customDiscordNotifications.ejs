@@ -83,8 +83,12 @@
           drawNotificationsTable()
         },
         error: (xhr, status, error) => {
+          if (xhr.status === 400 && xhr.responseText) {
+            alert(xhr.responseText)
+          } else {
+            alert(`Something went wrong! ${error}`);
+          }
           console.log(xhr);
-          alert(`Something went wrong! ${error}`);
         }
       })
     })
