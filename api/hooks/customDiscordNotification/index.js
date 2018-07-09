@@ -40,7 +40,11 @@ module.exports = function defineCustomDiscordNotificationHook(sails) {
         });
 
         for (const notification of customNotifs) {
-          if (logLine.msg.includes(notification.stringToSearchFor) && notification.enabled) {
+
+          let logMessage = logLine.msg.toLowerCase();
+          let stringToSearchFor = notification.stringToSearchFor.toLowerCase();
+
+          if (logMessage.includes(stringToSearchFor) && notification.enabled) {
             sendNotification(logLine, server, notification)
           }
         }
