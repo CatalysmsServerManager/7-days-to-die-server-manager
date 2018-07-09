@@ -44,6 +44,7 @@ module.exports.custom = {
       maxCronJobs: 5,
       playerTrackerKeepInventoryHours: 0,
       playerTrackerKeepLocationHours: 24,
+      maxCustomNotifications: 3,
     },
     patron: {
       memUpdateKeepDataHours: 24,
@@ -54,6 +55,7 @@ module.exports.custom = {
       maxCronJobs: 10,
       playerTrackerKeepInventoryHours: 12,
       playerTrackerKeepLocationHours: 48,
+      maxCustomNotifications: 5,
     },
     donator: {
       memUpdateKeepDataHours: 72,
@@ -64,6 +66,7 @@ module.exports.custom = {
       maxCronJobs: 20,
       playerTrackerKeepInventoryHours: 24,
       playerTrackerKeepLocationHours: 72,
+      maxCustomNotifications: 10,
     },
     contributor: {
       memUpdateKeepDataHours: 120,
@@ -74,6 +77,7 @@ module.exports.custom = {
       maxCronJobs: 50,
       playerTrackerKeepInventoryHours: 72,
       playerTrackerKeepLocationHours: 120,
+      maxCustomNotifications: 25,
     },
     sponsor: {
       memUpdateKeepDataHours: 168,
@@ -84,6 +88,7 @@ module.exports.custom = {
       maxCronJobs: 100,
       playerTrackerKeepInventoryHours: 120,
       playerTrackerKeepLocationHours: 168,
+      maxCustomNotifications: 50,
     }
   },
 };
