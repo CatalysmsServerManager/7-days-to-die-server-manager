@@ -34,7 +34,7 @@ module.exports.routes = {
   '/donate': {
     view: 'meta/donate',
     locals: {
-      layout: 'layouts/homepageLayout'
+      layout: 'layouts/homepageLayoutNoFooter'
     }
   },
 
