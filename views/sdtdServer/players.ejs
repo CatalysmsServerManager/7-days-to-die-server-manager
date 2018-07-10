@@ -32,6 +32,11 @@
           </div>
           <% } %>
 
+            <br>
+
+            <button id="load-all-player-data-btn" type="button" class="btn btn-primary">Load ALL player data</button>
+
+            <br>
 
             <div class="row">
               <div class="col-md-12">
@@ -74,61 +79,86 @@
           'copy', 'excel', 'pdf', 'print'
         ],
         columns: [{
-          data: "name",
-          render: function (data, type, row, meta) {
-            return `<a href="/player/${row.id}/profile">${data}</a>`;
-          }
-        },
-        {
-          data: 'entityId'
-        },
-        {
-          data: 'steamId'
-        },
-        {
-          data: 'ip'
-        },
-        {
-          data: 'country',
-          render: function (data, type, row, meta) {
-            if (row.country) {
-              let flagImg = `<img src="../../images/flags/blank.gif" class="flag flag-${row.country.toLowerCase()}"/>`
-              return `${flagImg} ${row.country}`;
-            } else {
-              return `Unknown`
+            data: "name",
+            render: function (data, type, row, meta) {
+              return `<a href="/player/${row.id}/profile">${data}</a>`;
             }
+          },
+          {
+            data: 'entityId'
+          },
+          {
+            data: 'steamId'
+          },
+          {
+            data: 'ip'
+          },
+          {
+            data: 'country',
+            render: function (data, type, row, meta) {
+              if (row.country) {
+                let flagImg =
+                  `<img src="../../images/flags/blank.gif" class="flag flag-${row.country.toLowerCase()}"/>`
+                return `${flagImg} ${row.country}`;
+              } else {
+                return `Unknown`
+              }
+            }
+          },
+          {
+            data: 'playtime',
+            render: function (data, type, row, meta) {
+              return `${row.playtimeHHMMSS}`
+            }
+          },
+          {
+            data: 'lastOnline',
+          },
+          {
+            data: 'level'
+          },
+          {
+            data: 'currency'
+          },
+          {
+            data: 'score'
+          },
+          {
+            data: 'deaths'
+          },
+          {
+            data: 'playerKills'
+          },
+          {
+            data: 'zombieKills'
           }
-        },
-        {
-          data: 'playtime',
-          render: function (data, type, row, meta) {
-            return `${row.playtimeHHMMSS}`
-          }
-        },
-        {
-          data: 'lastOnline',
-        },
-        {
-          data: 'level'
-        },
-        {
-          data: 'currency'
-        },
-        {
-          data: 'score'
-        },
-        {
-          data: 'deaths'
-        },
-        {
-          data: 'playerKills'
-        },
-        {
-          data: 'zombieKills'
-        }
 
         ]
       });
+
+      $("#load-all-player-data-btn").click(e => {
+
+        $("#load-all-player-data-btn").hide();
+
+        $.ajax({
+          url: '/api/sdtdserver/players/all',
+          method: 'GET',
+          data: {
+            _csrf: window.SAILS_LOCALS._csrf,
+            serverId: window.SAILS_LOCALS.server.id,
+          },
+          success: (data, status, xhr) => {
+            location.reload();
+          },
+          error: (xhr, status, error) => {
+            console.log(xhr);
+            alert('Something went wrong while loading player data.')
+          }
+        })
+
+       $("#load-all-player-data-btn").show();
+
+      })
 
     });
 

@@ -132,6 +132,7 @@ module.exports.routes = {
   'get /api/sdtdserver/sendMessage': 'SdtdServerController.send-message',
   'get /api/sdtdserver/loadServerInfo': 'SdtdServerController.load-server-info',
   'get /api/sdtdserver/players': 'SdtdServerController.get-players',
+  'get /api/sdtdserver/players/all': 'SdtdServerController.load-all-players',
   'get /api/sdtdserver/info': 'SdtdServerController.load-server-info',
   'get /api/sdtdserver/availableItems': 'SdtdServerController.available-items',
   'get /api/sdtdserver/findwriteablechannelsinguild': 'SdtdServerController/discordBot.find-writeable-channels-in-guild',
