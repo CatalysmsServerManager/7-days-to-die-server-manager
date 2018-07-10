@@ -104,7 +104,8 @@ module.exports = {
 
     if (addedServer) {
       await sails.hooks.historicalinfo.start(addedServer.id, 'memUpdate');
-      sails.log.warn(`${userProfile.username} added a new server - ${addedServer.name}`)
+      sails.log.warn(`${userProfile.username} added a new server - ${addedServer.name}`);
+      await sails.helpers.sdtd.loadAllPlayerData(addedServer.id);
       return exits.success(addedServer);
     } else {
       return exits.error()
