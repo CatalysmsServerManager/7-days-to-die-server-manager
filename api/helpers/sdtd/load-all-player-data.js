@@ -53,7 +53,8 @@ module.exports = {
           positionZ: potentialNewPlayer.position.z,
           lastOnline: potentialNewPlayer.lastonline,
           playtime: potentialNewPlayer.totalplaytime,
-          banned: potentialNewPlayer.banned
+          banned: potentialNewPlayer.banned,
+          server: server.id
         }
         newPlayers.push(newPlayerData)
       }    
