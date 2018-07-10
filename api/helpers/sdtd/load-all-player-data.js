@@ -56,23 +56,7 @@ module.exports = {
           banned: potentialNewPlayer.banned
         }
         newPlayers.push(newPlayerData)
-      } else {
-        // Player already exists in DB, update the record.
-        await Player.update({
-          steamId: potentialNewPlayer.steamid,
-          server: server.id
-        }, {
-          ip: potentialNewPlayer.ip,
-          name: potentialNewPlayer.name,
-          positionX: potentialNewPlayer.position.x,
-          positionY: potentialNewPlayer.position.y,
-          positionZ: potentialNewPlayer.position.z,
-          lastOnline: potentialNewPlayer.lastonline,
-          playtime: potentialNewPlayer.totalplaytime,
-          banned: potentialNewPlayer.banned
-        });
-      }
-      
+      }    
 
     }
 
