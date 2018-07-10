@@ -47,7 +47,7 @@ module.exports = {
           steamId: potentialNewPlayer.steamid,
           entityId: potentialNewPlayer.entityid,
           ip: potentialNewPlayer.ip,
-          name: potentialNewPlayer.name,
+          name: potentialNewPlayer.name ? he.encode(potentialNewPlayer.name) : "Unknown",
           positionX: potentialNewPlayer.position.x,
           positionY: potentialNewPlayer.position.y,
           positionZ: potentialNewPlayer.position.z,
