@@ -64,7 +64,7 @@ module.exports = {
 
     let dateEnded = new Date();
 
-    sails.log.debug(`load-all-player-data - Created ${newPlayers.length} new records and updated ${apiResult.players.length - newPlayers.length} records for server ${server.name} - Took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`);
+    sails.log.debug(`load-all-player-data - Created ${newPlayers.length} new records out of ${apiResult.players.length} total players for server ${server.name} - Took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`);
 
     return exits.success(apiResult.players)
 
