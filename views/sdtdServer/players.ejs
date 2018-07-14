@@ -19,7 +19,6 @@
       </nav>
 
       <h1>Player overview</h1>
-      <% include ./partials/backToDashboard %>
 
         <% if(players.length === 0) { %>
           <div class="row">
@@ -33,6 +32,8 @@
           <% } %>
 
             <br>
+
+            <%- include('./partials/deletePlayersButton') %>
 
             <button id="load-all-player-data-btn" type="button" class="btn btn-primary">Load ALL player data</button>
 

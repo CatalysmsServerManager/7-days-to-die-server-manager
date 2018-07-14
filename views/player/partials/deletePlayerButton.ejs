@@ -1,0 +1,53 @@
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-player-profile-modal">
+  Delete profile
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="delete-player-profile-modal" tabindex="-1" role="dialog" aria-labelledby="delete-player-profile-modal-title"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="delete-player-profile-modal-title">Delete player profile</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          Are you sure? This will also delete any teleports or items to claim for this player. There is NO going back!
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button id="confirm-delete" type="button" class="btn btn-danger">Yes, delete this profile</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(() => {
+    $("#confirm-delete").click(e => {
+
+      $.ajax({
+        url: `/api/player`,
+        type: "DELETE",
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          playerId: <%= player.id %>,
+        },
+        success: (data, status, xhr) => {
+          alert('Deleted player');
+        },
+        error: (xhr, status, error) => {
+          console.log(xhr);
+          alert('Something went wrong while trying to Delete a player!');
+        }
+      });
+
+    })
+  })
+
+</script>
