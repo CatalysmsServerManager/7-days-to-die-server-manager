@@ -132,6 +132,7 @@ module.exports.routes = {
   'get /api/sdtdserver/sendMessage': 'SdtdServerController.send-message',
   'get /api/sdtdserver/loadServerInfo': 'SdtdServerController.load-server-info',
   'get /api/sdtdserver/players': 'SdtdServerController.get-players',
+  'get /api/sdtdserver/players/all': 'SdtdServerController.load-all-players',
   'get /api/sdtdserver/info': 'SdtdServerController.load-server-info',
   'get /api/sdtdserver/availableItems': 'SdtdServerController.available-items',
   'get /api/sdtdserver/findwriteablechannelsinguild': 'SdtdServerController/discordBot.find-writeable-channels-in-guild',
@@ -139,6 +140,8 @@ module.exports.routes = {
   'get /api/sdtdserver/fps': 'SdtdServerController.get-fps',
   'get /api/sdtdserver/allowedCommands': 'CustomCommandController.get-allowed-commands',
   'get /api/sdtdserver/donatorStatus': 'SdtdServerController.check-donator',
+
+  'delete /api/sdtdserver/players' : 'SdtdServerController.delete-players',
 
   // Economy
 
@@ -314,6 +317,8 @@ module.exports.routes = {
   "post /api/player/unban": "Player.unban",
   "post /api/player/giveitem": "player.give-item",
   "post /api/player/teleport": "player.teleport",
+
+  'delete /api/player' : 'player.delete',
 
   'get /api/user/info': 'User.get-user-info',
   'get /api/user/ownedServers': "User.get-owned-servers",

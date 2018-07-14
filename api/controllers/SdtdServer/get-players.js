@@ -24,9 +24,6 @@ module.exports = {
   },
 
   exits: {
-    notFound: {
-      description: 'Server with given ID was not found in the system'
-    },
     badRequest: {
       responseType: 'badRequest'
     },
