@@ -2,103 +2,102 @@ const Commando = require('discord.js-commando');
 const findSdtdServer = require('../../util/findSdtdServer.js');
 
 class ServerInfo extends Commando.Command {
-    constructor(client) {
-        super(client, {
-            name: 'serverinfo',
-            group: 'sdtd',
-            memberName: 'serverinfo',
-            guildOnly: true,
-            details: "Show info about the server",
-            args: [{
-                key: 'server',
-                default: 1,
-                type: 'integer',
-                prompt: 'Please specify what server to run this commmand for!'
-            }],
-            description: 'Shows detailed info about a server and it\'s settings',
-            examples: ["serverinfo"]
-        });
+  constructor(client) {
+    super(client, {
+      name: 'serverinfo',
+      group: 'sdtd',
+      memberName: 'serverinfo',
+      guildOnly: true,
+      details: "Show info about the server",
+      args: [{
+        key: 'server',
+        default: 1,
+        type: 'integer',
+        prompt: 'Please specify what server to run this commmand for!'
+      }],
+      description: 'Shows detailed info about a server and it\'s settings',
+      examples: ["serverinfo"]
+    });
+  }
+
+  async run(msg, args) {
+    let sdtdServers = await findSdtdServer(msg);
+
+    if (!sdtdServers.length === 0) {
+      return msg.channel.send(`Could not find a server to execute this command for. You can link this guild to your server on the website.`);
     }
 
-    async run(msg, args) {
-        let sdtdServers = await findSdtdServer(msg);
+    let sdtdServer = sdtdServers[args.server - 1];
 
-        if (!sdtdServers.length === 0) {
-            return msg.channel.send(`Could not find a server to execute this command for. You can link this guild to your server on the website.`);
+    if (!sdtdServer) {
+      return msg.channel.send(`Did not find server ${args.server}! Check your config please.`)
+    }
+
+    let serverInfo = await sails.helpers.loadSdtdserverInfo(sdtdServer.id);
+
+
+    if (!serverInfo || !serverInfo.serverInfo || !serverInfo.stats) {
+      return msg.channel.send(`Could not load server data. Make sure the server is online.`)
+    }
+
+    // Change data to a nice string
+    switch (serverInfo.serverInfo.PlayerKillingMode) {
+      case 0:
+        serverInfo.serverInfo.PlayerKillingMode = "PvE";
+        break;
+      case 1:
+        serverInfo.serverInfo.PlayerKillingMode = "Kill allies only";
+        break;
+      case 2:
+        serverInfo.serverInfo.PlayerKillingMode = "Kill strangers only";
+        break;
+      case 3:
+        serverInfo.serverInfo.PlayerKillingMode = "PvP";
+        break;
+
+    }
+
+    switch (serverInfo.serverInfo.DropOnDeath) {
+      case 0:
+        serverInfo.serverInfo.DropOnDeath = "Drop all";
+        break;
+      case 1:
+        serverInfo.serverInfo.DropOnDeath = "Belt";
+        break;
+      case 2:
+        serverInfo.serverInfo.DropOnDeath = "Backpack";
+        break;
+      case 3:
+        serverInfo.serverInfo.DropOnDeath = "Delete all";
+        break;
+    }
+
+    // Update boolean values to emoji
+
+    for (const key in serverInfo.serverInfo) {
+      if (serverInfo.serverInfo.hasOwnProperty(key)) {
+        const element = serverInfo.serverInfo[key];
+        if (typeof element === 'boolean' && element) {
+          serverInfo.serverInfo[key] = ':white_check_mark:'
         }
 
-        let sdtdServer = sdtdServers[args.server - 1];
-
-        if (!sdtdServer) {
-          return msg.channel.send(`Did not find server ${args.server}! Check your config please.`)
+        if (typeof element === 'boolean' && !element) {
+          serverInfo.serverInfo[key] = ':x:'
         }
-
-        let serverInfo = await sails.helpers.loadSdtdserverInfo(sdtdServer.id);
-
-
-        if (!serverInfo || !serverInfo.serverInfo || !serverInfo.stats) {
-            return msg.channel.send(`Could not load server data. Make sure the server is online.`)
-        }
-
-        // Change data to a nice string
-        switch (serverInfo.serverInfo.PlayerKillingMode) {
-            case 0:
-                serverInfo.serverInfo.PlayerKillingMode = "PvE";
-                break;
-            case 1:
-                serverInfo.serverInfo.PlayerKillingMode = "Kill allies only";
-                break;
-            case 2:
-                serverInfo.serverInfo.PlayerKillingMode = "Kill strangers only";
-                break;
-            case 3:
-                serverInfo.serverInfo.PlayerKillingMode = "PvP";
-                break;
-
-        }
-
-        switch (serverInfo.serverInfo.DropOnDeath) {
-            case 0:
-                serverInfo.serverInfo.DropOnDeath = "Drop all";
-                break;
-            case 1:
-                serverInfo.serverInfo.DropOnDeath = "Belt";
-                break;
-            case 2:
-                serverInfo.serverInfo.DropOnDeath = "Backpack";
-                break;
-            case 3:
-                serverInfo.serverInfo.DropOnDeath = "Delete all";
-                break;
-        }
-
-        // Update boolean values to emoji
-
-        for (const key in serverInfo.serverInfo) {
-            if (serverInfo.serverInfo.hasOwnProperty(key)) {
-                const element = serverInfo.serverInfo[key];
-                if (typeof element === 'boolean' && element) {
-                    serverInfo.serverInfo[key] = ':white_check_mark:'
-                }
-
-                if (typeof element === 'boolean' && !element) {
-                    serverInfo.serverInfo[key] = ':x:'
-                }
-            }
-        }
+      }
+    }
 
 
-        let embed = new this.client.customEmbed();
+    let embed = new this.client.customEmbed();
 
-        embed.setTitle(`${serverInfo.name} - info`)
-            .setDescription(serverInfo.serverInfo.ServerDescription ? serverInfo.serverInfo.ServerDescription : "No description available")
-            .addField('Connect', `${serverInfo.serverInfo.IP}:${serverInfo.serverInfo.Port}`, true)
-            .addField(`Gametime`, `${serverInfo.stats.gametime.days} days ${serverInfo.stats.gametime.hours} hours ${serverInfo.stats.gametime.minutes} minutes`, true)
-            .addField('Max players', serverInfo.serverInfo.MaxPlayers, true)
-            .addField('World', serverInfo.serverInfo.LevelName, true)
-            .addField('Website', `${serverInfo.serverInfo.ServerWebsiteURL ? serverInfo.serverInfo.ServerWebsiteURL : "No website configured"}`)
-            .addField('Version', serverInfo.serverInfo.Version ? serverInfo.serverInfo.Version : "Unknown version")
-            .addField('Settings', `
+    embed.setTitle(`${serverInfo.name} - info`)
+      .setDescription(serverInfo.serverInfo.ServerDescription ? serverInfo.serverInfo.ServerDescription : "No description available")
+      .addField('Connect', `${serverInfo.serverInfo.IP}:${serverInfo.serverInfo.Port}`, true)
+      .addField('Max players', serverInfo.serverInfo.MaxPlayers, true)
+      .addField('World', serverInfo.serverInfo.LevelName, true)
+      .addField('Website', `${serverInfo.serverInfo.ServerWebsiteURL ? serverInfo.serverInfo.ServerWebsiteURL : "No website configured"}`)
+      .addField('Version', serverInfo.serverInfo.Version ? serverInfo.serverInfo.Version : "Unknown version")
+      .addField('Settings', `
 ${serverInfo.serverInfo.IsPasswordProtected} Password 
 ${serverInfo.serverInfo.EACEnabled} EAC 
 
@@ -114,14 +113,12 @@ ${serverInfo.serverInfo.EACEnabled} EAC
 :small_orange_diamond: Air drop frequency: ${serverInfo.serverInfo.AirDropFrequency}  hours
 :small_orange_diamond: Loot respawns in ${serverInfo.serverInfo.LootRespawnDays} days
 `)
-            .setColor('RANDOM')
+      .setColor('RANDOM')
 
-        msg.channel.send(embed)
-    }
+    msg.channel.send(embed)
+  }
 
 }
 
 
 module.exports = ServerInfo;
-
-
