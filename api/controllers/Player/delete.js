@@ -8,11 +8,8 @@ module.exports = {
     playerId: {
       description: 'The ID of the player',
       type: 'number',
+      required: true
     },
-    serverId: {
-      description: 'Id of a server',
-      type: 'string'
-    }
   },
 
   exits: {
@@ -24,12 +21,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    if (_.isUndefined(inputs.playerId) && _.isUndefined(inputs.serverId)) {
-      return exits.badInput('You must provide a player ID OR a server ID');
-    }
-
     let playersToDestroy = await Player.find({
-      server: inputs.serverId,
       id: inputs.playerId
     });
 
