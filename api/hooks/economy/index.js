@@ -100,7 +100,7 @@ module.exports = function economy(sails) {
         },
 
         reload: async function (serverId, type) {
-            let config = await SdtdConfig.findOne(serverId);
+            let config = await SdtdConfig.findOne({server: serverId});
             switch (type) {
                 case 'playtimeEarner':
                     if (config.discordTextEarnerEnabled) {
