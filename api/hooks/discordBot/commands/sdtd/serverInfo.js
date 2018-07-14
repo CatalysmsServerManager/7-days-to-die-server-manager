@@ -110,7 +110,7 @@ ${serverInfo.serverInfo.EACEnabled} EAC
 :small_orange_diamond: Game difficulty:  ${serverInfo.serverInfo.GameDifficulty}
 :small_orange_diamond: Drop on death:  ${serverInfo.serverInfo.DropOnDeath}
 :small_orange_diamond: Player killing mode:  ${serverInfo.serverInfo.PlayerKillingMode}
-:small_orange_diamond: Air drop frequency: ${serverInfo.serverInfo.AirDropFrequency}  hours
+:small_orange_diamond: Air drop frequency: ${serverInfo.serverInfo.AirDropFrequency / 24} days
 :small_orange_diamond: Loot respawns in ${serverInfo.serverInfo.LootRespawnDays} days
 `)
       .setColor('RANDOM')
