@@ -316,6 +316,8 @@ module.exports.routes = {
   "post /api/player/giveitem": "player.give-item",
   "post /api/player/teleport": "player.teleport",
 
+  'delete /api/player' : 'player.delete',
+
   'get /api/user/info': 'User.get-user-info',
   'get /api/user/ownedServers': "User.get-owned-servers",
   'get /api/user/findguildsmanagedbyuser': "User.find-guilds-managed-by-user",
