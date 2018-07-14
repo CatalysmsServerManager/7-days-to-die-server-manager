@@ -1,0 +1,55 @@
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-player-profile-modal">
+  Delete player profiles
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="delete-player-profile-modal" tabindex="-1" role="dialog" aria-labelledby="delete-player-profile-modal-title"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="delete-player-profile-modal-title">Delete player profiles</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          Are you sure? This will delete ALL player data, there is NO going back!
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button id="confirm-delete" type="button" class="btn btn-danger">Yes, delete ALL player data.</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(() => {
+    $("#confirm-delete").click(e => {
+
+
+        // Add a playerId to get past policy ;)
+      $.ajax({
+        url: `/api/sdtdserver/players`,
+        type: "DELETE",
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: <%= server.id %>,
+        },
+        success: (data, status, xhr) => {
+          location.reload();
+        },
+        error: (xhr, status, error) => {
+          console.log(xhr);
+          alert('Something went wrong while trying to delete players!');
+        }
+      });
+
+    })
+  })
+
+</script>
