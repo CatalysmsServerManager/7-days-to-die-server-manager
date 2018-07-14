@@ -141,6 +141,8 @@ module.exports.routes = {
   'get /api/sdtdserver/allowedCommands': 'CustomCommandController.get-allowed-commands',
   'get /api/sdtdserver/donatorStatus': 'SdtdServerController.check-donator',
 
+  'delete /api/sdtdserver/players' : 'SdtdServerController.delete-players',
+
   // Economy
 
   'post /api/sdtdserver/economy': 'SdtdServerController/economy.enable-economy',
