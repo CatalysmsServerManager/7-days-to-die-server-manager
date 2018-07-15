@@ -6,6 +6,8 @@
   "keywords": [],
   "dependencies": {
     "7daystodie-api-wrapper": "^1.2.1",
+    "@sailshq/connect-redis": "^3.2.1",
+    "@sailshq/socket.io-redis": "^5.2.0",
     "@streammedev/hhmmss": "^1.0.0",
     "async": "2.6.1",
     "cron-parser": "^2.5.0",
