@@ -193,20 +193,10 @@ module.exports = {
          * > (For a full list, see https://sailsjs.com/plugins/sessions)            *
          *                                                                          *
          ***************************************************************************/
-    // adapter: 'connect-redis',
-    // url: 'redis://user:password@localhost:6379/dbname',
-    //--------------------------------------------------------------------------
-    // /\   OR, to avoid checking it in to version control, you might opt to
-    // ||   set sensitive credentials like this using an environment variable.
-    //
-    // For example:
-    // ```
-    // sails_session__url=redis://admin:myc00lpAssw2D@bigsquid.redistogo.com:9562/sessions
-    // ```
-    //
-    //--------------------------------------------------------------------------
-
-
+        adapter: "@sailshq/connect-redis",
+        host:'127.0.0.1',
+        port: '6379',
+        db: "1",
 
     /***************************************************************************
          *                                                                          *

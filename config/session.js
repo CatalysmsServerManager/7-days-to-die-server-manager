@@ -36,4 +36,9 @@ module.exports.session = {
   //   return !!req.path.match(req._sails.LOOKS_LIKE_ASSET_RX);
   // },
 
+  adapter: "@sailshq/connect-redis",
+  host:'127.0.0.1',
+  port: '6379',
+  db: "1"
+
 };
