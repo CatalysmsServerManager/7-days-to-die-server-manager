@@ -303,13 +303,13 @@ function getPlayerInventory(server, steamId) {
 }
 
 async function deleteLocationData(server) {
+  let dateNow = Date.now();
   try {
     let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({
       serverId: server.id
     });
     let hoursToKeepData = sails.config.custom.donorConfig[donatorRole].playerTrackerKeepLocationHours
     let milisecondsToKeepData = hoursToKeepData * 3600000;
-    let dateNow = Date.now();
     let borderDate = new Date(dateNow.valueOf() - milisecondsToKeepData);
 
     await TrackingInfo.destroy({
@@ -322,6 +322,10 @@ async function deleteLocationData(server) {
   } catch (error) {
     sails.log.error(error)
   }
+
+  let dateEnded = new Date();
+  sails.log.verbose(`Deleted location data for server ${server.name} - took ${dateEnded.valueOf() - dateNow.valueOf()} ms`);
+
 
 }
 
