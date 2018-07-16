@@ -124,7 +124,7 @@ module.exports = function definePlayerTrackingHook(sails) {
         player = player[0]
 
         if (_.isUndefined(player)) {
-          return 
+          return
         }
 
         await Player.update(player.id, statsUpdate);
@@ -304,6 +304,7 @@ function getPlayerInventory(server, steamId) {
 
 async function deleteLocationData(server) {
   let dateNow = Date.now();
+  let deleteResult
   try {
     let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({
       serverId: server.id
@@ -312,19 +313,16 @@ async function deleteLocationData(server) {
     let milisecondsToKeepData = hoursToKeepData * 3600000;
     let borderDate = new Date(dateNow.valueOf() - milisecondsToKeepData);
 
-    await TrackingInfo.destroy({
-      createdAt: {
-        '<': borderDate.valueOf()
-      },
-      server: server.id
-    })
+    const locationDeleteSQL = `DELETE FROM trackinginfo WHERE server = ${server.id} AND createdAt < ${borderDate.valueOf()};`
+
+    deleteResult = await sails.sendNativeQuery(locationDeleteSQL);
 
   } catch (error) {
     sails.log.error(error)
   }
 
   let dateEnded = new Date();
-  sails.log.verbose(`Deleted location data for server ${server.name} - took ${dateEnded.valueOf() - dateNow.valueOf()} ms`);
+  sails.log.verbose(`Deleted location data for server ${server.name} - deleted ${deleteResult.affectedRows} rows - took ${dateEnded.valueOf() - dateNow.valueOf()} ms`);
 
 
 }
