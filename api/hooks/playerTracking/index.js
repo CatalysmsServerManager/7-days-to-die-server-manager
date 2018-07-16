@@ -45,8 +45,23 @@ module.exports = function definePlayerTrackingHook(sails) {
 
         let onlinePlayers = await sails.helpers.sdtd.getOnlinePlayers(server.id);
 
+        let initialValues = new Array();
+
+        let playerRecords = await Player.find({
+          server: server.id,
+          steamId: onlinePlayers.map(playerInfo => playerInfo.steamid)
+        });
+
+        for (const playerRecord of playerRecords) {
+
+          initialValues.push({
+            server: server.id,
+            player: playerRecord.id
+          })
+        }
+
         try {
-          await basicTracking(server, loggingObject, onlinePlayers);
+          await basicTracking(server, loggingObject, onlinePlayers, playerRecords);
         } catch (error) {
           sails.log.error(error)
         }
@@ -54,22 +69,6 @@ module.exports = function definePlayerTrackingHook(sails) {
         if (server.config[0].locationTracking || server.config[0].inventoryTracking) {
           // If inventory OR location tracking is enabled, we prepare the tracking info beforehand to improve performance
 
-          let initialValues = new Array();
-          let playerRecords = new Array();
-
-          for (const onlinePlayer of onlinePlayers) {
-            let playerRecord = await Player.findOne({
-              server: server.id,
-              steamId: onlinePlayer.steamid
-            });
-            if (playerRecord) {
-              playerRecords.push(playerRecord)
-              initialValues.push({
-                server: server.id,
-                player: playerRecord.id
-              })
-            }
-          }
 
           let createdRecords = await TrackingInfo.createEach(initialValues).fetch();
 
@@ -96,7 +95,7 @@ module.exports = function definePlayerTrackingHook(sails) {
         await deleteLocationData(server);
         //await deleteInventoryData(server);
         let dateEnded = new Date();
-        sails.log.verbose(`Received memUpdate - Performed tracking for server ${server.name} - took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`);
+        sails.log.verbose(`Received memUpdate - Performed tracking for server ${server.name} - ${playerRecords.length} players online - took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`);
       })
 
     },
@@ -104,17 +103,14 @@ module.exports = function definePlayerTrackingHook(sails) {
   };
 
 
-  async function basicTracking(server, loggingObject, onlinePlayers) {
+  async function basicTracking(server, loggingObject, onlinePlayers, playerRecords) {
 
-    let players = await Player.find({
-      server: server.id,
-      steamId: onlinePlayers.map(playerInfo => playerInfo.steamid)
-    });
+    let dateStarted = new Date();
 
     for (const playerStats of onlinePlayers) {
       if (playerStats.steamid) {
         // Load the current player data
-        let player = players.filter(playerInfo => playerInfo.steamId === playerStats.steamid);
+        let player = playerRecords.filter(playerInfo => playerInfo.steamId === playerStats.steamid);
 
         let statsUpdate = {
           zombieKills: playerStats.zombiekills,
@@ -128,7 +124,7 @@ module.exports = function definePlayerTrackingHook(sails) {
         player = player[0]
 
         if (_.isUndefined(player)) {
-          return sails.log.warn(`Did not find a player with steam ID - ${playerStats.steamid}`, players.map(player => player.steamId));
+          return 
         }
 
         await Player.update(player.id, statsUpdate);
@@ -167,10 +163,15 @@ module.exports = function definePlayerTrackingHook(sails) {
       }
     }
 
+    let dateEnded = new Date();
+    sails.log.verbose(`Performed basicTracking for server ${server.name} - ${playerRecords.length} players online - took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`);
+
     return
   }
 
   async function locationTracking(server, loggingObject, playerList, createdTrackingRecords, playerRecords) {
+
+    let dateStarted = new Date();
 
     for (const onlinePlayer of playerList) {
       let playerRecord = playerRecords.filter(player => onlinePlayer.steamid === player.steamId);
@@ -189,6 +190,9 @@ module.exports = function definePlayerTrackingHook(sails) {
       }
 
     }
+
+    let dateEnded = new Date();
+    sails.log.verbose(`Performed locationTracking for server ${server.name} - ${playerRecords.length} players online - took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`);
   }
 
 
@@ -196,7 +200,7 @@ module.exports = function definePlayerTrackingHook(sails) {
     let dateStarted = new Date();
     let inventories = new Array();
     try {
-       inventories = await SdtdApi.getPlayerInventories({
+      inventories = await SdtdApi.getPlayerInventories({
         ip: server.ip,
         port: server.webPort,
         adminUser: server.authName,
