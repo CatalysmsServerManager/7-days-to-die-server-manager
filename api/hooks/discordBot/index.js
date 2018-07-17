@@ -56,6 +56,11 @@ module.exports = function discordBot(sails) {
             sails.log.info(`Command ${command.name} ran by ${message.author.username} on ${message.guild ? message.guild.name : 'DM'} - ${message.content}`);
           });
 
+          client.on('error', error => {
+            sails.log.warn('DISCORD ERROR!');
+            sails.log.error(error);
+          })
+
 
           // Login
 
