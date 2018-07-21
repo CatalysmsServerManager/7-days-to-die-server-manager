@@ -47,8 +47,8 @@ module.exports = {
     try {
 
 
-      let player = await Player.findOne(inputs.playerId).populate('server');
-      let server = await SdtdServer.findOne(player.server.id);
+      let player = await Player.findOne(inputs.playerId);
+      let server = await SdtdServer.findOne(player.server);
       return sevenDays.banPlayer({
         ip: server.ip,
         port: server.webPort,
