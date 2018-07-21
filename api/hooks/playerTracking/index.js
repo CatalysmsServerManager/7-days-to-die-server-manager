@@ -69,14 +69,10 @@ module.exports = function definePlayerTrackingHook(sails) {
         if (server.config[0].locationTracking || server.config[0].inventoryTracking) {
           // If inventory OR location tracking is enabled, we prepare the tracking info beforehand to improve performance
 
-
-          let createdRecords = await TrackingInfo.createEach(initialValues).fetch();
-
-
           if (server.config[0].locationTracking) {
 
             try {
-              await locationTracking(server, loggingObject, onlinePlayers, createdRecords, playerRecords);
+              initialValues = await locationTracking(server, loggingObject, onlinePlayers, initialValues, playerRecords);
             } catch (error) {
               sails.log.error(error)
             }
@@ -85,15 +81,16 @@ module.exports = function definePlayerTrackingHook(sails) {
           if (server.config[0].inventoryTracking) {
 
             try {
-              await inventoryTracking(server, loggingObject, onlinePlayers, createdRecords, playerRecords);
+              initialValues = await inventoryTracking(server, loggingObject, onlinePlayers, initialValues, playerRecords);
             } catch (error) {
               sails.log.error(error)
             }
           }
+          await TrackingInfo.createEach(initialValues);
         }
 
         await deleteLocationData(server);
-        //await deleteInventoryData(server);
+        await deleteInventoryData(server);
         let dateEnded = new Date();
         sails.log.verbose(`Received memUpdate - Performed tracking for server ${server.name} - ${playerRecords.length} players online - took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`);
       })
@@ -169,23 +166,23 @@ module.exports = function definePlayerTrackingHook(sails) {
     return
   }
 
-  async function locationTracking(server, loggingObject, playerList, createdTrackingRecords, playerRecords) {
+  async function locationTracking(server, loggingObject, playerList, playersArray, playerRecords) {
 
     let dateStarted = new Date();
 
     for (const onlinePlayer of playerList) {
       let playerRecord = playerRecords.filter(player => onlinePlayer.steamid === player.steamId);
-
       if (playerRecord.length === 1) {
-        let trackingRecord = createdTrackingRecords.filter(record => record.player === playerRecord[0].id);
+        let trackingRecord = playersArray.filter(record => record.player === playerRecord[0].id);
+        let trackingRecordIdx = playersArray.indexOf(trackingRecord[0]);
 
         if (trackingRecord.length === 1) {
+          trackingRecord[0].x = onlinePlayer.position.x
+          trackingRecord[0].y = onlinePlayer.position.y;
+          trackingRecord[0].z = onlinePlayer.position.z;
 
-          await TrackingInfo.update(trackingRecord[0].id, {
-            x: onlinePlayer.position.x,
-            y: onlinePlayer.position.y,
-            z: onlinePlayer.position.z
-          })
+          playersArray[trackingRecordIdx] = trackingRecord[0];
+
         }
       }
 
@@ -193,10 +190,11 @@ module.exports = function definePlayerTrackingHook(sails) {
 
     let dateEnded = new Date();
     sails.log.verbose(`Performed locationTracking for server ${server.name} - ${playerRecords.length} players online - took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`);
+    return playersArray;
   }
 
 
-  async function inventoryTracking(server, loggingObject, playerList, createdTrackingRecords, playerRecords) {
+  async function inventoryTracking(server, loggingObject, playerList, playersArray, playerRecords) {
     let dateStarted = new Date();
     let inventories = new Array();
     try {
@@ -220,7 +218,10 @@ module.exports = function definePlayerTrackingHook(sails) {
     for (const onlinePlayer of playerList) {
       let playerRecord = playerRecords.filter(player => onlinePlayer.steamid === player.steamId);
       if (playerRecord.length === 1) {
-        let trackingRecord = createdTrackingRecords.filter(record => record.player === playerRecord[0].id);
+
+        let trackingRecord = playersArray.filter(record => record.player === playerRecord[0].id);
+        let trackingRecordIdx = playersArray.indexOf(trackingRecord[0]);
+
         if (trackingRecord.length === 1) {
           let inventory = inventories.filter(inventoryEntry => inventoryEntry.steamid === playerRecord[0].steamId)
           if (inventory.length === 1) {
@@ -243,9 +244,9 @@ module.exports = function definePlayerTrackingHook(sails) {
               itemsInInventory.push(_.omit(inventoryItem, "iconcolor", "qualitycolor", "icon"))
             }
 
-            await TrackingInfo.update(trackingRecord[0].id, {
-              inventory: itemsInInventory
-            })
+            trackingRecord[0].inventory = itemsInInventory;
+            playersArray[trackingRecordIdx] = trackingRecord[0];
+
 
           }
 
@@ -256,7 +257,8 @@ module.exports = function definePlayerTrackingHook(sails) {
     }
 
     let dateEnded = new Date();
-    sails.log.verbose(`Performed inventory tracking for ${server.name} - ${playerList.length} players, took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`)
+    sails.log.verbose(`Performed inventory tracking for ${server.name} - ${playerList.length} players, took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`);
+    return playersArray
   }
 
 };
@@ -346,6 +348,9 @@ async function deleteInventoryData(server) {
     }, {
       inventory: null
     }).fetch();
+
+    let dateEnded = new Date();
+    sails.log.verbose(`Deleted inventory data for server ${server.name} - deleted ${updatedRecords.length} rows - took ${dateEnded.valueOf() - dateNow.valueOf()} ms`);
 
   } catch (error) {
     sails.log.error(error)
