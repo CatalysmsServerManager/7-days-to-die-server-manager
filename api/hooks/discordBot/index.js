@@ -58,7 +58,7 @@ module.exports = function discordBot(sails) {
 
           client.on('error', error => {
             sails.log.warn('DISCORD ERROR!');
-            sails.log.error(error);
+            sails.log.error(error.message);
           })
 
 
