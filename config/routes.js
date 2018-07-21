@@ -143,6 +143,10 @@ module.exports.routes = {
 
   'delete /api/sdtdserver/players' : 'SdtdServerController.delete-players',
 
+  // Ping kicker
+
+  'post /api/sdtdserver/pingkicker/status' : "SdtdServerController/pingKicker.set-pingKick-status",
+
   // Economy
 
   'post /api/sdtdserver/economy': 'SdtdServerController/economy.enable-economy',
