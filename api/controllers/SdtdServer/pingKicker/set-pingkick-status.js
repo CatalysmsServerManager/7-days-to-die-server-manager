@@ -1,7 +1,7 @@
 module.exports = {
 
 
-    friendlyName: 'set ping kicker message',
+    friendlyName: 'set ping kicker status',
 
 
     description: '',
@@ -12,9 +12,9 @@ module.exports = {
             required: true,
             type: 'string'
         },
-        message: {
+        status: {
             required: true,
-            type: 'string',
+            type: 'boolean',
         }
     },
 
@@ -30,9 +30,9 @@ module.exports = {
 
     fn: async function (inputs, exits) {
 
-        sails.log.info(`Setting message of pingKicker to ${inputs.message} for server ${inputs.serverId}`);
+        sails.log.info(`Setting status of pingKicker to ${inputs.status} for server ${inputs.serverId}`);
 
-        await SdtdConfig.update({server: inputs.serverId}, {pingKickMessage: inputs.message});
+        await SdtdConfig.update({server: inputs.serverId}, {pingKickEnabled: inputs.status});
 
         return exits.success();
 
