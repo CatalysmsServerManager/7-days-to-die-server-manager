@@ -428,6 +428,10 @@
         let amount = $(`#shop-buy-amount-${listingId}`).val();
         let playerId = window.SAILS_LOCALS.player.id;
 
+        if (amount < 1) {
+          return alert('You must buy at least one.')
+        }
+
         $.ajax({
           url: "/api/shop/listing/buy",
           method: "POST",
