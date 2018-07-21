@@ -147,6 +147,7 @@ module.exports.routes = {
 
   'post /api/sdtdserver/pingkicker/status' : "SdtdServerController/pingKicker.set-pingKick-status",
   'post /api/sdtdserver/pingkicker/message' : "SdtdServerController/pingKicker.set-pingKick-message",
+  'post /api/sdtdserver/pingkicker/maxping' : "SdtdServerController/pingKicker.set-pingKick-maxping",
 
   // Economy
 
