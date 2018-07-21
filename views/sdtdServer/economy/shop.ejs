@@ -209,6 +209,11 @@
               </ul>
             </div>
             <div class="card-footer">
+
+              <div class="form-group">
+                <input type="number" class="form-control" name="shop-buy-amount-<%= listing.id %>" id="shop-buy-amount-<%= listing.id %>" value="1">
+              </div>
+
               <button class="btn shop-buy btn-success" value="<%= listing.id %>">
                 Buy</button>
 
@@ -418,9 +423,9 @@
 
 
       $(".shop-buy").click(e => {
-        console.log(e.target)
+
         let listingId = e.target.value;
-        console.log(listingId)
+        let amount = $(`#shop-buy-amount-${listingId}`).val();
         let playerId = window.SAILS_LOCALS.player.id;
 
         $.ajax({
@@ -430,6 +435,7 @@
             listingId: listingId,
             playerId: playerId,
             _csrf: window.SAILS_LOCALS._csrf,
+            amount: amount
           },
           success: (data, status, xhr) => {
             location.reload();
