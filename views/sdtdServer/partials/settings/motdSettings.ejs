@@ -7,43 +7,24 @@
 
     <label for="input-settings-motd-message">Message</label>
 
-    <input type="text" class="form-control" id="input-settings-motd-message" placeholder="<%= config.motdMessage %>">
+    <input type="text" class="form-control" id="input-settings-motd-message" value="<%= config.motdMessage %>">
 
+    <hr>
 
-    <label for="input-settings-motd-interval">Interval</label>
-    <br>
-    <small> In minutes. Set to 0 to disable </small>
-
-    <input type="text" class="form-control" id="input-settings-motd-interval" placeholder="<%= config.motdInterval %>">
-
-
-
-    <% if (config.motdOnJoinEnabled) { %>
-      <input type="checkbox" value="" id="inputs-settings-motd-playerOnJoin" checked>
+    <% if(config.motdEnabled) {%>
+      <btn id='input-settings-motd-toggle' class="btn btn-danger">
+        <i class="fa fa-power-off"></i> Disable
+      </btn>
       <% } else { %>
-        <input type="checkbox" value="" id="inputs-settings-motd-playerOnJoin">
+        <btn id='input-settings-motd-toggle' class="btn btn-success">
+          <i class="fa fa-power-off"></i> Enable
+        </btn>
         <% } %>
 
-          <label for="inputs-settings-motd-playerOnJoin">
-            Send message to players on connect
-          </label>
-
-          <hr>
-
-          <% if(config.motdEnabled) {%>
-            <btn id='input-settings-motd-toggle' class="btn btn-danger">
-              <i class="fa fa-power-off"></i> Disable
-            </btn>
-            <% } else { %>
-              <btn id='input-settings-motd-toggle' class="btn btn-success">
-                <i class="fa fa-power-off"></i> Enable
-              </btn>
-              <% } %>
-
-                <button id="settings-reload-motd" class="btn btn-default btn-primary" type="button">
-                  <em class="glyphicon glyphicon-align-right"></em>
-                  <i class="fas fa-sync-alt"></i> Apply changes
-                </button>
+          <button id="settings-reload-motd" class="btn btn-default btn-primary" type="button">
+            <em class="glyphicon glyphicon-align-right"></em>
+            <i class="fas fa-sync-alt"></i> Apply changes
+          </button>
 
   </div>
 
@@ -74,22 +55,7 @@
 
         let newMessage = $('#input-settings-motd-message').val();
 
-        let newDelay = $('#input-settings-motd-interval').val();
-
-        if (newDelay != '' && newDelay != '0') {
-
-          if (isNaN(newDelay) || (10 > newDelay) || (2000 < newDelay) || !Number.isInteger(Number(newDelay))) {
-            return alert(`Interval must be an integer between 10 and 2000`)
-          }
-        }
-
         let newOnJoinEnabled
-
-        if ($('#inputs-settings-motd-playerOnJoin').is(":checked")) {
-          newOnJoinEnabled = true
-        } else {
-          newOnJoinEnabled = false
-        }
 
         $.ajax({
           url: `/api/sdtdserver/reloadmotd`,
@@ -98,7 +64,6 @@
             _csrf: window.SAILS_LOCALS._csrf,
             serverId: <%= server.id %>,
             newMessage: (newMessage == '') ? undefined : newMessage,
-            newDelay: (newDelay == '') ? undefined : newDelay,
             newStatusOnJoin: newOnJoinEnabled
           },
           success: (data, status, xhr) => {

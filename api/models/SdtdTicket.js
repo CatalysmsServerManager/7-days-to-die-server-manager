@@ -74,7 +74,7 @@ module.exports = {
 
     player: {
       model: 'player',
-      allowNull: true
+      //allowNull: true
     },
 
     comments: {

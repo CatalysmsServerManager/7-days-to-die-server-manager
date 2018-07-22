@@ -24,7 +24,7 @@ module.exports = function sdtdLogs(sails) {
      */
     initialize: function (cb) {
 
-        sails.on('hook:sdtdlogs:loaded', async function () {
+        sails.on('hook:sdtdlogs:loaded', async () => {
           sails.log.info('Initializing custom hook (`sdtdMotd`)');
           try {
             let enabledServers = await SdtdConfig.find({
@@ -32,10 +32,9 @@ module.exports = function sdtdLogs(sails) {
             }).populate('server');
 
             for (const config of enabledServers) {
-              let server = config.server;
-              let motdSender = new MotdSender(server.id, config);
-              motdInfoMap.set(String(server.id), motdSender);
+              await this.start(config.server.id);
             }
+
             sails.log.info(`HOOK: sdtdMotd - Initialized ${motdInfoMap.size} MOTD instances`);
             return cb();
           } catch (error) {
@@ -140,7 +139,6 @@ module.exports = function sdtdLogs(sails) {
           motdMessage: newMessage,
           motdEnabled: newStatus,
           motdOnJoinEnabled: newStatusOnJoin,
-          motdInterval: newDelay
         });
 
         this.stop(serverId);

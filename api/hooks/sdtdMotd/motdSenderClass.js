@@ -24,18 +24,11 @@ class MotdSender {
         throw new Error(`Invalid usage: MOTD is disabled for this server.`);
       }
 
-      if (this.config.motdInterval) {
-        this.motdInterval = setInterval(() => {
-          this.sendMotd(this.config.motdMessage, this.serverId);
-        }, this.config.motdInterval * 1000 * 60);
-      }
+      let loggingObj = sails.hooks.sdtdlogs.getLoggingObject(this.serverId);
+      this.onJoinListener = MotdSender.onJoinListener.bind(this);
 
-      if (this.config.motdOnJoinEnabled) {
-        let loggingObj = sails.hooks.sdtdlogs.getLoggingObject(this.serverId);
-        this.onJoinListener = MotdSender.onJoinListener.bind(this);
+      loggingObj.on('playerConnected', this.onJoinListener);
 
-        loggingObj.on('playerConnected', this.onJoinListener);
-      }
     } catch (error) {
       sails.log.error(`HOOK 7dtdMOTD:motdSenderClass:start - ${error}`);
       throw error;
@@ -51,10 +44,6 @@ class MotdSender {
       if (this.onJoinListener) {
         let loggingObj = sails.hooks.sdtdlogs.getLoggingObject(this.serverId);
         loggingObj.removeListener('playerConnected', this.onJoinListener);
-      }
-
-      if (this.motdInterval) {
-        clearInterval(this.motdInterval);
       }
 
     } catch (error) {
