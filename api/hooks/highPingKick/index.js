@@ -60,7 +60,7 @@ module.exports = function defineHighPingKickHook(sails) {
 
       let loggingObject = sails.hooks.sdtdlogs.getLoggingObject(serverId);
 
-      loggingObject.off('memUpdate', handlePingCheck);
+      loggingObject.removeListener('memUpdate', handlePingCheck);
     }
 
   };
