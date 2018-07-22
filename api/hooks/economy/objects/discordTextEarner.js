@@ -6,6 +6,9 @@ class DiscordTextEarner {
         this.type = 'discordTextEarner'
         this.messageHandler = handleMessage.bind(this);
         this.userTimeoutMap = new Map();
+        this.deleteInterval = setInterval(async () => {
+            await cleanOldLogs(this.server.id);
+        }, 300000)
     }
 
     async start() {
@@ -49,7 +52,7 @@ async function handleMessage(message) {
     }
 
     await sails.helpers.economy.giveToPlayer.with({ playerId: playersToReward[0].id, amountToGive: this.config.discordTextEarnerAmountPerMessage, message: `discordTextEarner - awarding player for sending a message in discord` });
-    await cleanOldLogs(this.server.id);
+
     
     if (this.config.discordTextEarnerTimeout) {
         this.userTimeoutMap.set(userWithDiscordId[0].id, true);
@@ -58,8 +61,6 @@ async function handleMessage(message) {
         }
         setTimeout(deleteUserFromMap, this.config.discordTextEarnerTimeout * 1000)
     }
-
-
 
 }
 
@@ -76,7 +77,9 @@ async function cleanOldLogs(serverId) {
             type: 'economy',
             createdAt: { '<': borderDate.valueOf() },
             message: {'contains': 'discordTextEarner -'}
-        })
+        });
+        let dateEnded = Date.now();
+        sails.log.verbose(`Deleted discord text earner logs for server ${serverId} - took ${dateEnded.valueOf() - dateNow.valueOf()} ms`)
     } catch (error) {
         sails.log.error(error)
     }
