@@ -76,6 +76,14 @@ async function handlePingCheck(memUpdate) {
     server: server.id
   });
 
+  let pingWhitelist
+
+  try {
+    pingWhitelist = JSON.parse(config.pingWhitelist);
+  } catch (error) {
+    return sails.log.error(`Error parsing ping whitelist entries for ${server.name}`);
+  }
+
   let onlinePlayers = await SdtdApi.getOnlinePlayers({
     ip: server.ip,
     port: server.webPort,
@@ -93,7 +101,9 @@ async function handlePingCheck(memUpdate) {
         server: server.id
       });
 
-      if (onlinePlayer.ping > config.maxPing) {
+      let whiteListIdx = pingWhitelist.indexOf(playerRecord.steamId);
+
+      if (onlinePlayer.ping > config.maxPing && whiteListIdx === -1) {
         failedChecksForServer++
         let currentFailedChecks = await getPlayerFails(playerRecord.id);
 
