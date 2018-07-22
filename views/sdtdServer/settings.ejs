@@ -28,7 +28,7 @@
         </h5>
       </div>
 
-      <div id="settings-collapse-basicServerSettings" class="collapse" >
+      <div id="settings-collapse-basicServerSettings" class="collapse">
         <div class="card-body">
           <%- include('./partials/settings/basicServerSettings', {server: server, config: config}) %>
         </div>
@@ -47,7 +47,7 @@
         </h5>
       </div>
 
-      <div id="settings-collapse-discordSettings"  class="collapse" >
+      <div id="settings-collapse-discordSettings" class="collapse">
         <%- include('./partials/settings/discordSettings', {server: server, config: config, user: user}) %>
       </div>
     </div>
@@ -63,7 +63,7 @@
         </h5>
       </div>
 
-      <div id="settings-collapse-cronSettings"  class="collapse" >
+      <div id="settings-collapse-cronSettings" class="collapse">
         <div class="card-body">
 
           <%- include('./partials/settings/cronSettings', {server: server, config: config}) %>
@@ -72,32 +72,51 @@
 
     </div>
 
-        <!-- GBL settings -->
+    <!-- GBL settings -->
 
-        <div class="card">
-          <div class="card-header" id="settings-heading-gblSettings">
-            <h5 class="mb-0">
-              <button class="btn btn-link" data-toggle="collapse" data-target="#settings-collapse-gblSettings">
-                <i class="fas fa-ban"></i> Global ban list
-              </button>
-            </h5>
-          </div>
-    
-          <div id="settings-collapse-gblSettings"  class="collapse">
-            <div class="card-body">
-    
-              <%- include('./partials/settings/gblSettings', {server: server, config: config}) %>
-            </div>
-          </div>
-    
+    <div class="card">
+      <div class="card-header" id="settings-heading-gblSettings">
+        <h5 class="mb-0">
+          <button class="btn btn-link" data-toggle="collapse" data-target="#settings-collapse-gblSettings">
+            <i class="fas fa-ban"></i> Global ban list
+          </button>
+        </h5>
+      </div>
+
+      <div id="settings-collapse-gblSettings" class="collapse">
+        <div class="card-body">
+
+          <%- include('./partials/settings/gblSettings', {server: server, config: config}) %>
         </div>
+      </div>
+
+    </div>
+
+    <!-- Max ping kicker settings -->
+
+    <div class="card">
+      <div class="card-header" id="settings-heading-pingKickerSettings">
+        <h5 class="mb-0">
+          <button class="btn btn-link" data-toggle="collapse" data-target="#settings-collapse-pingKickerSettings">
+              <i class="fas fa-wifi"></i> Max ping kick
+          </button>
+        </h5>
+      </div>
+
+      <div id="settings-collapse-pingKickerSettings" class="collapse">
+        <div class="card-body">
+          <%- include('./partials/settings/pingKickerSettings', {server: server, config: config}) %>
+        </div>
+      </div>
+
+    </div>
 
     <!-- Country ban settings -->
 
     <div class="card">
       <div class="card-header" id="settings-heading-countryBanSettings">
         <h5 class="mb-0">
-          <button class="btn btn-link"  data-toggle="collapse" data-target="#settings-collapse-countryBanSettings">
+          <button class="btn btn-link" data-toggle="collapse" data-target="#settings-collapse-countryBanSettings">
             <i class="fas fa-globe fa-lg  "></i> Country ban
           </button>
         </h5>
@@ -117,13 +136,13 @@
     <div class="card">
       <div class="card-header" id="settings-heading-trackerSettings">
         <h5 class="mb-0">
-          <button class="btn btn-link"  data-toggle="collapse" data-target="#settings-collapse-trackerSettings">
+          <button class="btn btn-link" data-toggle="collapse" data-target="#settings-collapse-trackerSettings">
             <i class="fas fa-search fa-lg  "></i> Player tracking
           </button>
         </h5>
       </div>
 
-      <div id="settings-collapse-trackerSettings"  class="collapse">
+      <div id="settings-collapse-trackerSettings" class="collapse">
         <div class="card-body">
           <%- include('./partials/settings/playerTracking.ejs', {server: server, config: config, user: user}) %>
         </div>
@@ -137,7 +156,7 @@
     <div class="card">
       <div class="card-header" id="settings-heading-ingameCommandsSettings">
         <h5 class="mb-0">
-          <button class="btn btn-link"  data-toggle="collapse" data-target="#settings-collapse-ingameCommandsSettings">
+          <button class="btn btn-link" data-toggle="collapse" data-target="#settings-collapse-ingameCommandsSettings">
             <i class="fas fa-gamepad fa-lg"></i> Ingame commands
           </button>
         </h5>
@@ -181,7 +200,7 @@
         </h5>
       </div>
 
-      <div id="settings-collapse-economySettings"  class="collapse">
+      <div id="settings-collapse-economySettings" class="collapse">
         <div class="card-body">
           <%- include('./partials/settings/economySettings', {server: server, config: config}) %>
 

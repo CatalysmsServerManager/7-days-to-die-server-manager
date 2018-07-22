@@ -1,0 +1,133 @@
+<%- exposeLocalsToBrowser() %>
+
+  <!-- Ping kicker SETTINGS -->
+  <div class="container">
+
+
+
+
+    <div class="form-check">
+      <label class="form-check-label">
+        <input type="checkbox" class="form-check-input" name="settings-maxPingKicker-enabled" id="settings-maxPingKicker-enabled"> Enabled
+      </label>
+    </div>
+
+
+
+    <div class="form-group">
+      <label for="settings-maxPingKicker-ping">Max ping</label>
+      <input type="number" class="form-control" name="settings-maxPingKicker-ping" id="settings-maxPingKicker-ping" aria-describedby="settings-maxPingKicker-ping-help"
+        value="<%= config.maxPing %>">
+      <small id="settings-maxPingKicker-ping-help" class="form-text text-muted">The maximum ping a player can have before failing the check.</small>
+    </div>
+
+    <button type="button" id="settings-maxPingKicker-ping-set" class="btn btn-primary">Set</button>
+
+    <div class="form-group">
+      <label for="settings-maxPingKicker-pingChecksToFail">Checks to fail</label>
+      <input type="number" class="form-control" name="settings-maxPingKicker-pingChecksToFail" id="settings-maxPingKicker-pingChecksToFail"
+        aria-describedby="settings-maxPingKicker-pingChecksToFail-help" value="<%= config.pingChecksToFail %>">
+      <small id="settings-maxPingKicker-pingChecksToFail-help" class="form-text text-muted">A player has to fail the check this amount of time before getting kicked. This makes sure a spike will not instantly
+        kick players.</small>
+    </div>
+
+    <button type="button" id="settings-maxPingKicker-pingChecksToFail-set" class="btn btn-primary">Set</button>
+
+    <div class="form-group">
+      <label for="settings-maxPingKicker-pingKickMessage">Kick message</label>
+      <input type="text" class="form-control" name="settings-maxPingKicker-pingKickMessage" id="settings-maxPingKicker-pingKickMessage"
+        aria-describedby="settings-maxPingKicker-pingKickMessage-help" value="<%= config.pingKickMessage %>">
+      <small id="settings-maxPingKicker-pingKickMessage-help" class="form-text text-muted">The message a player will see when he gets kicked.</small>
+    </div>
+
+    <button type="button" id="settings-maxPingKicker-pingKickMessage-set" class="btn btn-primary">Set</button>
+
+    <div class="form-group">
+      <label for="settings-maxPingKicker-whitelist">Whitelist</label>
+      <% let whiteListedIds = config.pingWhitelist.replace('[', '').replace(']', '')  %>
+        <textarea class="form-control" name="settings-maxPingKicker-whitelist" id="settings-maxPingKicker-whitelist" rows="5">
+          <%= whiteListedIds %>
+        </textarea>
+        <small id="settings-maxPingKicker-whitelist-help" class="form-text text-muted">List of steam IDs that will be immune to the ping kick. Separate them with ,.</small>
+    </div>
+
+    <button type="button" id="settings-maxPingKicker-whitelist-set" class="btn btn-primary">Set</button>
+
+
+  </div>
+
+  <script>
+    $(document).ready(function () {
+
+      if (window.SAILS_LOCALS.config.pingKickEnabled) {
+        $("#settings-maxPingKicker-enabled").prop('checked', true);
+      }
+
+      $("#settings-maxPingKicker-enabled").click(e => {
+        let newStatus = $("#settings-maxPingKicker-enabled").prop('checked');
+        $.post("/api/sdtdserver/pingkicker/status", {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+          status: newStatus
+        })
+      })
+
+
+      $("#settings-maxPingKicker-ping-set").click(e => {
+        $.post("/api/sdtdserver/pingkicker/maxping", {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+          maxPing: $("#settings-maxPingKicker-ping").val()
+        })
+      });
+
+
+      $("#settings-maxPingKicker-pingChecksToFail-set").click(e => {
+        $.post("/api/sdtdserver/pingkicker/checks", {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+          checksToFail: $("#settings-maxPingKicker-pingChecksToFail").val()
+        }).fail((xhr, status, error) => {
+          alert(`Something went wrong! - ${status}. See console for more info`)
+          console.log(xhr)
+        })
+      });
+
+      $("#settings-maxPingKicker-pingKickMessage-set").click(e => {
+        $.post('/api/sdtdserver/pingkicker/message', {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+          message: $('#settings-maxPingKicker-pingKickMessage').val()
+        })
+      })
+
+
+
+      $("#settings-maxPingKicker-whitelist-set").click(e => {
+
+          let steamIds = $('#settings-maxPingKicker-whitelist').val();
+
+          let array = steamIds.split(',');
+          let trimmedArray = [];
+
+          for (const steamId of array) {
+              trimmedArray.push(_.trim(steamId))
+          }
+
+
+        $.post('/api/sdtdserver/pingkicker/whitelist', {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+          whitelist: trimmedArray
+        }).fail((xhr, status, error) => {
+          alert(`Something went wrong! - ${status}. See console for more info`)
+          console.log(xhr)
+        })
+
+      })
+
+
+
+    })
+
+  </script>

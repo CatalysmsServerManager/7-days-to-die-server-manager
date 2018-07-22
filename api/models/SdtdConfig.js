@@ -418,6 +418,42 @@ module.exports = {
       defaultsTo: 20
     },
 
+/*   _____ _               _    _      _    
+    |  __ (_)             | |  (_)    | |   
+    | |__) | _ __   __ _  | | ___  ___| | __
+    |  ___/ | '_ \ / _` | | |/ / |/ __| |/ /
+    | |   | | | | | (_| | |   <| | (__|   < 
+    |_|   |_|_| |_|\__, | |_|\_\_|\___|_|\_\
+                    __/ |                   
+                   |___/                     */
+
+
+    pingKickEnabled: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
+    maxPing: {
+      type: 'number',
+      min: 1,
+      defaultsTo: 150
+    },
+    
+    pingChecksToFail: {
+      type: 'number',
+      min: 1,
+      defaultsTo: 3
+    },
+
+    pingKickMessage: {
+      type: 'string',
+      defaultsTo: "Your ping is too high! Please check your connection."
+    },
+
+    pingWhitelist: {
+      type: 'json',
+      defaultsTo: "[]"
+    },
 
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗

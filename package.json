@@ -34,6 +34,7 @@
     "sails-hook-orm": "^2.0.1",
     "sails-hook-sockets": "^1.5.3",
     "sails-mysql": "^1.0.0",
+    "sails-redis": "^1.0.0",
     "validator": "^10.4.0",
     "winston": "^2.4.3"
   },
