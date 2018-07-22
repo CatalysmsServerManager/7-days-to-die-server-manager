@@ -17,14 +17,16 @@ module.exports = function defineGblHook(sails) {
      * @param {Function} done
      */
     initialize: async function (done) {
-      sails.on('hook:sdtdlogs:loaded', async () => {
+
+      // done before we start loading bans so it doesn't block the hook loading
+      done();
+      
+      sails.on('lifted', async () => {
 
         sails.log.info('Initializing custom hook (`gbl`)');
 
         let sixHours = 21600000;
 
-        // done before we start loading bans so it doesn't block the hook loading
-        done();
 
         refreshBans();
 
