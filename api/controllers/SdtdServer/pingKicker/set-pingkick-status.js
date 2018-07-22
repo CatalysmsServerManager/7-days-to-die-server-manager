@@ -34,6 +34,12 @@ module.exports = {
 
         await SdtdConfig.update({server: inputs.serverId}, {pingKickEnabled: inputs.status});
 
+        if (inputs.status) {
+            await sails.hooks.highpingkick.start(inputs.serverId);
+        } else {
+            await sails.hooks.highpingkick.stop(inputs.serverId);
+        }
+
         return exits.success();
 
     }
