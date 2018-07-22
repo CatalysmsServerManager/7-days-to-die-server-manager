@@ -46,9 +46,24 @@ module.exports = {
         sdtdServer = sdtdServerInfo;
       }
 
+      let allocsVersion = await sails.helpers.sdtd.checkModVersion('Mod Allocs MapRendering and Webinterface', sdtdServer.id);
+      let cpmVersion = await sails.helpers.sdtd.checkModVersion('Mod CSMM Patrons', sdtdServer.id);
+
+      let allocsObj = {
+        supportedAllocs: sails.config.custom.currentAllocs,
+        installedAllocs: allocsVersion
+      }
+
+      let cpmObj = {
+        supportedCpm: sails.config.custom.currentCpm,
+        installedCpm: cpmVersion
+      }
+
       sails.log.info(`VIEW - SdtdServer:dashboard - Showing dashboard for ${sdtdServer.name} to user ${this.req.session.userId}`);
       return exits.success({
-        server: sdtdServer
+        server: sdtdServer,
+        allocsVersion: allocsObj,
+        cpmVersion: cpmObj
       });
     } catch (error) {
       sails.log.error(`VIEW - SdtdServer:dashboard - ${error}`);
