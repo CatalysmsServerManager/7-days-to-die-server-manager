@@ -44,8 +44,13 @@ module.exports = function defineCustomDiscordNotificationHook(sails) {
           let logMessage = logLine.msg.toLowerCase();
           let stringToSearchFor = notification.stringToSearchFor.toLowerCase();
 
-          if (logMessage.includes(stringToSearchFor) && notification.enabled) {
-            sendNotification(logLine, server, notification)
+          
+          if (logMessage.includes(stringToSearchFor) && notification.enabled ) {
+            if (notification.ignoreServerChat && (logMessage.startsWith("chat: 'server':") || logMessage.includes('webcommandresult_for_say')) ) {
+              
+            } else {
+              sendNotification(logLine, server, notification)
+            }
           }
         }
 

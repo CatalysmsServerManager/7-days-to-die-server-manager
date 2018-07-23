@@ -15,6 +15,11 @@ module.exports = {
           type: 'string',
       },
 
+      ignoreServerChat: {
+        required: true,
+        type: 'boolean'
+      },
+
       stringToSearchFor: {
           required: true,
           type: 'string'
@@ -46,7 +51,8 @@ module.exports = {
         await CustomDiscordNotification.create({
             stringToSearchFor: inputs.stringToSearchFor,
             discordChannelId: inputs.channelId,
-            server: inputs.serverId
+            server: inputs.serverId,
+            ignoreServerChat: inputs.ignoreServerChat
         });
 
         return exits.success();

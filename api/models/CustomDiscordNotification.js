@@ -20,6 +20,11 @@ module.exports = {
         type: 'boolean',
         defaultsTo: true
       },
+
+      ignoreServerChat: {
+        type: 'boolean',
+        defaultsTo: false
+      },
  
       //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
       //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
