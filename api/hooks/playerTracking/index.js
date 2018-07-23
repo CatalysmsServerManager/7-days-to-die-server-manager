@@ -88,25 +88,24 @@ module.exports = function definePlayerTrackingHook(sails) {
           }
           await TrackingInfo.createEach(initialValues);
 
-          let currentCycles = await getTrackingCyclesCompleted(server.id);
+        }
 
-          if (!currentCycles) {
-            currentCycles = 1
-          }
+        let currentCycles = await getTrackingCyclesCompleted(server.id);
 
-          if (currentCycles >= sails.config.custom.trackingCyclesBeforeDelete) {
-            await deleteLocationData(server);
-            await deleteInventoryData(server);
-            await setTrackingCyclesCompleted(server.id, 0)
-          } else {
-            await setTrackingCyclesCompleted(server.id, currentCycles + 1)
-          }
+        if (!currentCycles) {
+          currentCycles = 1
+        }
 
-
+        if (currentCycles >= sails.config.custom.trackingCyclesBeforeDelete) {
+          await deleteLocationData(server);
+          // await deleteInventoryData(server);
+          await setTrackingCyclesCompleted(server.id, 0)
+        } else {
+          await setTrackingCyclesCompleted(server.id, currentCycles + 1)
         }
 
         let dateEnded = new Date();
-        sails.log.verbose(`Received memUpdate - Performed tracking for server ${server.name} - ${playerRecords.length} players online - took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`);
+        sails.log.verbose(`Received memUpdate - Performed tracking for server ${server.name} - ${playerRecords.length} players online - ${currentCycles}/${sails.config.custom.trackingCyclesBeforeDelete} tracking cycles - took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`);
       })
 
     },
