@@ -20,6 +20,13 @@
           </select>
         </div>
 
+        <div class="form-check">
+          <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" name="custom-notification-ingoreServer" id="custom-notification-ingoreServer">
+            Ignore messages sent by server in game chat
+          </label>
+        </div>
+
         <div class="form-group">
           <label for="custom-notification-stringToSearchFor">Text to search for</label>
           <input type="text" class="form-control" name="custom-notification-stringToSearchFor" id="custom-notification-stringToSearchFor"
@@ -35,6 +42,7 @@
               <th>Text to search for</th>
               <th>Channel</th>
               <th>Enabled</th>
+              <th>Ignore server chat</th>
             </tr>
           </thead>
           <tbody>
@@ -77,7 +85,8 @@
           _csrf: window.SAILS_LOCALS._csrf,
           serverId: window.SAILS_LOCALS.server.id,
           channelId: $("#custom-notification-channel").val(),
-          stringToSearchFor: $("#custom-notification-stringToSearchFor").val()
+          stringToSearchFor: $("#custom-notification-stringToSearchFor").val(),
+          ignoreServerChat: $("#custom-notification-ingoreServer").prop('checked')
         },
         success: (data, status, xhr) => {
           drawNotificationsTable()
@@ -124,7 +133,7 @@
       success: (data, status, xhr) => {
         for (const customNotif of data) {
           $('#custom-notifications-table tbody').append(
-            `<tr><td>${customNotif.stringToSearchFor}</td><td>${customNotif.discordChannelId}</td><td>${customNotif.enabled}</td><td><button type="button" class="btn btn-danger delete-custom-notification" value="${customNotif.id}">Delete</button></td></tr>`
+            `<tr><td>${customNotif.stringToSearchFor}</td><td>${customNotif.discordChannelId}</td><td>${customNotif.enabled}</td><td>${customNotif.ignoreServerChat}</td><td><button type="button" class="btn btn-danger delete-custom-notification" value="${customNotif.id}">Delete</button></td></tr>`
           );
         }
       },
