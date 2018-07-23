@@ -33,9 +33,16 @@ module.exports.custom = {
 
   discordFeedbackChannel: "336823516383150080",
 
+
+  // MOD VERSIONS
   currentAllocs: "26",
   currentCpm: '5.16',
 
+  // TRACKING
+
+  trackingCyclesBeforeDelete: 10,
+
+  // DONORS
   donorConfig: {
     devDiscordServer: '336821518250147850',
     free: {

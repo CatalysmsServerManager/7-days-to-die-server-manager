@@ -87,10 +87,24 @@ module.exports = function definePlayerTrackingHook(sails) {
             }
           }
           await TrackingInfo.createEach(initialValues);
+
+          let currentCycles = await getTrackingCyclesCompleted(server.id);
+
+          if (!currentCycles) {
+            currentCycles = 1
+          }
+
+          if (currentCycles >= sails.config.custom.trackingCyclesBeforeDelete) {
+            await deleteLocationData(server);
+            await deleteInventoryData(server);
+            await setTrackingCyclesCompleted(server.id, 0)
+          } else {
+            await setTrackingCyclesCompleted(server.id, currentCycles + 1)
+          }
+
+
         }
 
-        await deleteLocationData(server);
-        await deleteInventoryData(server);
         let dateEnded = new Date();
         sails.log.verbose(`Received memUpdate - Performed tracking for server ${server.name} - ${playerRecords.length} players online - took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`);
       })
@@ -355,4 +369,38 @@ async function deleteInventoryData(server) {
   } catch (error) {
     sails.log.error(error)
   }
+}
+
+
+
+function getTrackingCyclesCompleted(serverId) {
+  return new Promise(async (resolve, reject) => {
+
+    sails.getDatastore('cache').leaseConnection(function during(redisConnection, proceed) {
+      redisConnection.get(`server:${serverId}:trackingCyclesCompleted`, (err, reply) => {
+        if (err) return proceed(err);
+
+        return proceed(undefined, reply)
+      })
+    }).exec((err, result) => {
+      if (err) return reject(err);
+      resolve(parseInt(result));
+    })
+  })
+}
+
+function setTrackingCyclesCompleted(serverId, cyclesCompleted) {
+  return new Promise(async (resolve, reject) => {
+
+    sails.getDatastore('cache').leaseConnection(function during(redisConnection, proceed) {
+      redisConnection.set(`server:${serverId}:trackingCyclesCompleted`, cyclesCompleted, (err, reply) => {
+        if (err) return proceed(err);
+
+        return proceed(undefined, reply)
+      })
+    }).exec((err, result) => {
+      if (err) return reject(err);
+      resolve(result)
+    })
+  })
 }
