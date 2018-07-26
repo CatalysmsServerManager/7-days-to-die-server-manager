@@ -44,6 +44,11 @@ module.exports = {
           type: 'number',
           defaultsTo: 0
       },
+
+      sendOutput: {
+          type: 'boolean',
+          defaultsTo: false
+      },
   
   
       //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗

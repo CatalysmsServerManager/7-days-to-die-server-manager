@@ -272,6 +272,7 @@ module.exports.routes = {
   'post /api/sdtdserver/commands/custom/cost': 'CustomCommandController/update-cost',
   'post /api/sdtdserver/commands/custom/enabled': 'CustomCommandController/update-enabled',
   'post /api/sdtdserver/commands/custom/delay': 'CustomCommandController/update-delay',
+  'post /api/sdtdserver/commands/custom/output': 'CustomCommandController/update-output',
   'post /api/sdtdserver/commands/custom/timeout': 'CustomCommandController/update-timeout',
   'post /api/sdtdserver/commands/custom/argument' : "CustomCommandController/create-argument",
   'delete /api/sdtdserver/commands/custom/argument' : "CustomCommandController/delete-argument",

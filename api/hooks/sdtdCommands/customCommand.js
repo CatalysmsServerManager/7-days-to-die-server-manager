@@ -89,7 +89,12 @@ class CustomCommand extends SdtdCommand {
         for (const command of commandsToExecute) {
           let commandInfoFilledIn = command.replace('${entityId}', player.entityId)
           commandInfoFilledIn = commandInfoFilledIn.replace('${steamId}', player.steamId)
-          await executeCommand(server, _.trim(commandInfoFilledIn))
+          let commandResult = await executeCommand(server, _.trim(commandInfoFilledIn));
+
+          if (options.sendOutput) {
+            await chatMessage.reply(commandResult.result);
+          }
+
         }
         sails.log.debug(`HOOK SdtdCommands - custom command ran by player ${player.name} on server ${server.name} - ${chatMessage.messageText}`)
 
