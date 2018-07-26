@@ -56,6 +56,12 @@
             <small id="custom-command-<%= command.id %>-modal-edit-timeout-help" class="form-text text-muted"> How many seconds do players have to wait before executing the command again </small>
           </div>
 
+          <div class="form-check">
+            <label class="form-check-label">
+              <input type="checkbox" class="form-check-input" name="custom-command-<%= command.id %>-modal-edit-output" id="custom-command-<%= command.id %>-modal-edit-output"> Send output to executing player
+            </label>
+          </div>
+
 
           <div class="form-check">
             <label class="form-check-label">
@@ -164,11 +170,15 @@
 
   <script>
     $(document).ready(function () {
-      
+
       let currentConfig = <%- JSON.stringify(command) %>;
 
       if (currentConfig.enabled) {
         $('#custom-command-<%= command.id %>-modal-edit-enabled').prop('checked', true);
+      }
+
+      if (currentConfig.sendOutput) {
+        $('#custom-command-<%= command.id %>-modal-edit-output').prop('checked', true);
       }
 
       $('#custom-command-<%= command.id %>-modal-edit-delete').click(e => {
@@ -200,6 +210,7 @@
         let newDelay = $('#custom-command-<%= command.id %>-modal-edit-delay').val();
         let newTimeout = $('#custom-command-<%= command.id %>-modal-edit-timeout').val();
         let newEnabled = $('#custom-command-<%= command.id %>-modal-edit-enabled').prop('checked');
+        let newOutput = $('#custom-command-<%= command.id %>-modal-edit-output').prop('checked');
 
 
         $('#custom-command-<%= command.id %>-modal-edit-status').html(`<i class="fas fa-sync"></i> Saving`)
@@ -257,6 +268,26 @@
               _csrf: window.SAILS_LOCALS._csrf,
               commandId: currentConfig.id,
               newEnabled: newEnabled,
+              serverId: window.SAILS_LOCALS.server.id
+            },
+            success: (data, status, xhr) => {},
+            error: (xhr, status, error) => {
+              errored = true;
+              console.log(xhr)
+              $('#custom-command-<%= command.id %>-modal-edit-status').text(
+                `${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
+            }
+          })
+        }
+
+        if (newOutput != currentConfig.sendOutput) {
+          $.ajax({
+            url: '/api/sdtdserver/commands/custom/output',
+            method: 'POST',
+            data: {
+              _csrf: window.SAILS_LOCALS._csrf,
+              commandId: currentConfig.id,
+              newOutput: newOutput,
               serverId: window.SAILS_LOCALS.server.id
             },
             success: (data, status, xhr) => {},
