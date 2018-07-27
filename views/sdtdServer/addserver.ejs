@@ -39,6 +39,13 @@
               <input type="text" class="form-control" id="authToken" placeholder="ex. super-secret-token">
               <small class="form-text text-muted">Set this with telnet command</small>
             </div>
+         
+            <div class="alert alert-warning" role="alert">
+              <strong>For better security please choose a strong token!</strong> <br>
+              Randomly generated string: 
+              <%= Math.random().toString(36).substr(2, 25); %>
+            </div>
+
             <button type="submit" class="btn btn-primary">Submit</button>
 
             <p>Check the documentation if you don't know what to fill in. If you are lost or keep getting errors, swing by the
@@ -49,6 +56,10 @@
       </div>
       <div id="errorMessage" class="card-footer"></div>
     </div>
+
+    <hr>
+
+    <%- include('../meta/sponsors/letsdohosting') %>
 
 
 </body>
