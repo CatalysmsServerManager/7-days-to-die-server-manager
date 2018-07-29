@@ -114,15 +114,15 @@ module.exports = {
                     playerProfile[0].online = true
                 }
 
-                sails.log.verbose(`Loaded a player - ${playerProfile[0].id}`)
+                sails.log.verbose(`Loaded a player - ${playerProfile[0].id} - ${playerProfile[0].name} - server: ${server.name}`)
                 playersToSend.push(playerProfile[0]);
             }
             let dateEnded = new Date();
 
             if (playersToSend.length > 0) {
-                sails.log.debug(`HELPER - loadPlayerData - Loaded player data for server ${inputs.serverId}! Took ${dateEnded.valueOf() - dateStarted.valueOf()} ms - SteamId: ${inputs.steamId}`, playersToSend.map(player => {
+                sails.log.debug(`HELPER - loadPlayerData - Loaded player data for ${server.name}! Took ${dateEnded.valueOf() - dateStarted.valueOf()} ms - SteamId: ${inputs.steamId}`, playersToSend.map(player => {
                     return player.name
-                }));
+                }), inputs);
             }
             return exits.success(playersToSend)
 
