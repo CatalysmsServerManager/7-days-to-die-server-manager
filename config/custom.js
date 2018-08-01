@@ -36,7 +36,7 @@ module.exports.custom = {
 
   // MOD VERSIONS
   currentAllocs: "26",
-  currentCpm: '5.2',
+  currentCpm: '5.21',
 
   // TRACKING
 
