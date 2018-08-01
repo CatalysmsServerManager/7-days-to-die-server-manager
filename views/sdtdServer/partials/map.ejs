@@ -1,22 +1,37 @@
 <div class="container">
 
-  <div class="form-check">
-    <label class="form-check-label">
-      <input type="checkbox" class="form-check-input" name="map-teleports-check" id="map-teleports-check"> Teleport locations
-    </label>
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="form-check">
+        <label class="form-check-label">
+          <input type="checkbox" class="form-check-input" name="map-teleports-check" id="map-teleports-check"> Teleport locations
+        </label>
+      </div>
+
+      <div class="form-check">
+        <label class="form-check-label">
+          <input type="checkbox" class="form-check-input" name="map-players-check" id="map-players-check" checked> Players
+        </label>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="form-check">
+        <label class="form-check-label">
+          <input type="checkbox" class="form-check-input" name="map-players-online-check" id="map-players-online-check" checked> Only online players
+        </label>
+      </div>
+
+      <div class="form-check">
+        <label class="form-check-label">
+          <input type="checkbox" class="form-check-input" name="map-reset-regions-check" id="map-reset-regions-check"> Show CPM reset regions
+        </label>
+      </div>
+    </div>
+
+
   </div>
 
-  <div class="form-check">
-    <label class="form-check-label">
-      <input type="checkbox" class="form-check-input" name="map-players-check" id="map-players-check" checked> Players
-    </label>
-  </div>
 
-  <div class="form-check">
-    <label class="form-check-label">
-      <input type="checkbox" class="form-check-input" name="map-players-online-check" id="map-players-online-check" checked> Only online players
-    </label>
-  </div>
 
   <div id="sdtdMap">
 
@@ -27,10 +42,21 @@
 </div>
 
 <script>
+  let server = window.SAILS_LOCALS.server;
   $(document).ready(() => {
 
 
+
     let map = initMap();
+
+    $("#map-reset-regions-check").click(e => {
+      let checkElement = $("#map-reset-regions-check");
+      if (checkElement.prop('checked')) {
+        drawResetRegions(map)
+      } else {
+        deleteResetRegions()
+      }
+    })
 
     $("#map-teleports-check").click(e => {
       let checkElement = $("#map-teleports-check");
@@ -119,7 +145,7 @@
 
   function drawPlayerMarkers(map) {
 
-    let server = window.SAILS_LOCALS.server;
+
 
     let onlyOnline = $("#map-players-online-check").prop('checked');
 
@@ -167,7 +193,7 @@
   let teleportMarkersMap = new Map();
 
   function drawTeleportMarkers(map) {
-    let server = window.SAILS_LOCALS.server;
+
     $.get('/api/sdtdserver/playerteleports', {
       serverId: server.id
     }, data => {
@@ -213,6 +239,52 @@
     teleportMarkersMap.clear();
 
   }
+
+  let resetRegionsMap = new Map();
+
+  function drawResetRegions(map) {
+
+    resetRegionsMap.forEach(existingMarker => {
+      existingMarker.remove()
+    })
+
+    resetRegionsMap.clear();
+
+    var polyColor = "#FF0000" //put any html color code in here to make the polygons suit your color needs
+    var polyTooltip = "This region is marked for reset. Do NOT build here!" //text that will be shown in tooltip if polygon is clicked
+    //inject polygons for regions marked for reset
+
+    $.get('/api/sdtdserver/resetregions', {
+      serverId: server.id
+    }, function (data) {
+      $.each(data, function (index, value) {
+        var polygon = L.polygon([
+          [value.E, value.S],
+          [value.W, value.S],
+          [value.W, value.N],
+          [value.E, value.N]
+        ]).addTo(map);
+        polygon.setStyle({
+          fillColor: polyColor,
+          color: polyColor
+        });
+
+        polygon.bindPopup(polyTooltip);
+        resetRegionsMap.set(JSON.stringify(value), polygon)
+      });
+    });
+  }
+
+  function deleteResetRegions() {
+
+    resetRegionsMap.forEach(existingMarker => {
+      existingMarker.remove()
+    })
+
+    resetRegionsMap.clear();
+
+  }
+
 
   function GetSdtdTileLayer(mapinfo, initTime, isMiniMap) {
     if (typeof isMiniMap == 'undefined') isMiniMap = false;
