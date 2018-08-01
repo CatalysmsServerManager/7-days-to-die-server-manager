@@ -141,6 +141,8 @@ module.exports.routes = {
   'get /api/sdtdserver/allowedCommands': 'CustomCommandController.get-allowed-commands',
   'get /api/sdtdserver/donatorStatus': 'SdtdServerController.check-donator',
 
+  'get /api/sdtdserver/resetRegions': 'SdtdServerController/resetRegions.get-reset-regions',
+
   'delete /api/sdtdserver/players' : 'SdtdServerController.delete-players',
 
   // Ping kicker
