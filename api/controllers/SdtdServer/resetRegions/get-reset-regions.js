@@ -38,6 +38,9 @@ module.exports = {
     try {
       regionData = await request.get(`http://${server.ip}:${server.webPort}/static/regionclaims.json`);
     } catch (error) {
+        if (error.statusCode === 404) {
+            return exits.notFound();
+        }
       sails.log.error(`Error getting reset region data - ${error}`);
       return exits.error(new Error(error))
     }

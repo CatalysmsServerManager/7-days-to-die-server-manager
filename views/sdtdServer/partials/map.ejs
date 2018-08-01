@@ -272,7 +272,11 @@
         polygon.bindPopup(polyTooltip);
         resetRegionsMap.set(JSON.stringify(value), polygon)
       });
-    });
+    }).fail((err) => {
+      if (err.status === 404) {
+        alert(`No data found! Make sure you have reset regions configured via CPM. If this is the case, please report this error on the dev server.`)
+      }
+    })
   }
 
   function deleteResetRegions() {
