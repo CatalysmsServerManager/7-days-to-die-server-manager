@@ -65,7 +65,8 @@
         <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('/images/meta/feature-tracking.png');"></div>
         <div class="col-lg-6 order-lg-1 my-auto showcase-text">
           <h2>Player tracking</h2>
-          <p class="lead mb-0">CSMM can keep track of where all your players have been. Get accurate location and inventory data, catching raiders/cheaters has never been easier. </p>
+          <p class="lead mb-0">CSMM can keep track of where all your players have been. Get accurate location and inventory data, catching raiders/cheaters
+            has never been easier. </p>
         </div>
       </div>
 
@@ -89,8 +90,35 @@
       </div>
 
     </div>
+
   </section>
 
+  <hr>
+
+
+  <section>
+
+    <div class="container-fluid p-0 text-center">
+
+      <h2> Feature list </h2>
+
+      <ul>
+        <li>Global ban list - get notified or act automatically when known cheaters/griefers join your server</li>
+        <li>Server automation - run any command in any time interval you want. Timed server messages, automatic world saving, ...</li>
+        <li>Discord notifications - built-in for common use cases. Ability to detect specific strings for your custom purposes</li>
+        <li>High ping kicker - Kick players with constant bad connection.</li>
+        <li>Country ban - automatically kick or ban players from certain countries from your server.</li>
+        <li>Player tracking - Track location and inventory of online players and view them on a map of your server.</li>
+        <li>Ingame commands - Playermade teleports, ingame support system, ... Custom commands to expose console commands to players in a controlled way</li>
+        <li>Economy system - Let players earn money by playing, killing zombies, typing on your Discord server. They can spend their cash in your servers shop, teleports and more.</li>
+        <li>Discord integration - Chat bridge (chat between Discord and the game), multiple commands to view player info or view server status.</li>
+        <li>Support ticket system - Let players create support requests ingame. Admins can view and comment on these via the website to provide quick support for players.</li>
+      </ul>
+
+
+    </div>
+
+  </section>
 
   <!-- Call to Action -->
   <section class="call-to-action text-white text-center">
@@ -112,7 +140,6 @@
 
 
 <script>
-
   $(document).ready(() => {
 
     $.get('/api/stats', (stats) => {
