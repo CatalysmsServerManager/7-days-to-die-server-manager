@@ -185,6 +185,9 @@
     $.get("/api/role", {
       serverId: window.SAILS_LOCALS.server.id,
     }, (rolesToDraw) => {
+
+      rolesToDraw = _.sortBy(rolesToDraw, ['level'])
+
       // build the table
       var content = '<table class="table">';
       content += '<thead><tr>';
