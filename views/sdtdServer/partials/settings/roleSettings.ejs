@@ -1,0 +1,225 @@
+<div class="container">
+
+  <div id="roles-table"></div>
+
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#add-role-modal">
+    Create role
+  </button>
+
+  <!-- Create role Modal -->
+  <div class="modal fade" id="add-role-modal" tabindex="-1" role="dialog" aria-labelledby="add-role-modal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="add-role-modal">Add a new role</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+          Basic info about the new role. More options are available once role is created.
+
+          <div class="form-group">
+            <label for="add-role-name">Name</label>
+            <input type="text" class="form-control" name="add-role-name" id="add-role-name" aria-describedby="add-role-name-help" placeholder="Donator">
+            <small id="add-role-name-help" class="form-text text-muted">The name of the new role</small>
+          </div>
+
+          <div class="form-group">
+            <label for="add-role-level">Level</label>
+            <input type="number" class="form-control" name="add-role-level" id="add-role-level" aria-describedby="add-role-level-help"
+              placeholder="2000">
+            <small id="add-role-level-help" class="form-text text-muted">The level of the new role. Defaults to 2000. Lower = more permissions</small>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button id="add-role-submit" type="button" class="btn btn-primary">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete modal -->
+  <div class="modal fade" id="delete-role-modal" tabindex="-1" role="dialog" aria-labelledby="delete-role-modal-title" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="delete-role-modal-title">Delete role</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Are you sure?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+          <button type="button" class="btn btn-danger delete-role">Yes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div class="modal fade" id="edit-role-modal" tabindex="-1" role="dialog" aria-labelledby="edit-role-modal-title" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="edit-role-modal-title">Edit a role</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+          <div class="form-group">
+            <label for="edit-role-name">Name</label>
+            <input type="text" class="form-control" name="edit-role-name" id="edit-role-name" aria-describedby="edit-role-name-help"
+              placeholder="">
+            <small id="edit-role-name-help" class="form-text text-muted">The name of the new role</small>
+          </div>
+
+          <div class="form-group">
+            <label for="edit-role-level">Level</label>
+            <input type="number" class="form-control" name="edit-role-level" id="edit-role-level" aria-describedby="edit-role-level-help"
+              placeholder="">
+            <small id="edit-role-level-help" class="form-text text-muted">The level of the new role. Defaults to 2000. Lower = more permissions</small>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary edit-role">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<script>
+  $(document).ready(e => {
+
+    drawRolesTable();
+
+    let activeRoleId = undefined;
+
+    $("#add-role-submit").click(e => {
+      let name = $("#add-role-name").val();
+      let level = $("#add-role-level").val();
+
+      $.post("/api/role", {
+        _csrf: window.SAILS_LOCALS._csrf,
+        serverId: window.SAILS_LOCALS.server.id,
+        name: name,
+        level: level
+      }, (data) => {
+        drawRolesTable();
+        $("#add-role-modal").modal('hide');
+      });
+    });
+
+    $('.delete-role').on('click', (e) => {
+      $.ajax({
+        url: "/api/role",
+        type: 'DELETE',
+        data: {
+          serverId: "<%= server.id %>",
+          _csrf: window.SAILS_LOCALS._csrf,
+          roleId: activeRoleId
+        },
+        success: (data, status, xhr) => {
+          drawRolesTable();
+          $("#delete-role-modal").modal('hide');
+        },
+        error: (xhr, status, error) => {
+          alert('Error deleting role, check browser console for more info.')
+          console.log(xhr);
+        }
+      })
+    });
+
+    $('.edit-role').on('click', (e) => {
+      let name = $("#edit-role-name").val() === '' ? undefined : $("#edit-role-name").val();
+      let level = $("#edit-role-level").val() === '' ? undefined : $("#edit-role-level").val();
+      $.ajax({
+        url: "/api/role",
+        type: 'PATCH',
+        data: {
+          serverId: "<%= server.id %>",
+          _csrf: window.SAILS_LOCALS._csrf,
+          roleId: activeRoleId,
+          name: name,
+          level: level
+        },
+        success: (data, status, xhr) => {
+          drawRolesTable();
+          $("#edit-role-modal").modal('hide');
+        },
+        error: (xhr, status, error) => {
+          alert('Error editing role, check browser console for more info.')
+          console.log(xhr);
+        }
+      })
+    });
+
+    $("#delete-role-modal").on('show.bs.modal', e => {
+      activeRoleId = $(e.relatedTarget).val();
+    });
+
+    $("#edit-role-modal").on('show.bs.modal', e => {
+      activeRoleId = $(e.relatedTarget).val();
+    });
+
+  });
+
+  function drawRolesTable() {
+
+    $("#roles-table").empty();
+
+    $.get("/api/role", {
+      serverId: window.SAILS_LOCALS.server.id,
+    }, (rolesToDraw) => {
+      // build the table
+      var content = '<table class="table">';
+      content += '<thead><tr>';
+      content += '<th>Name</th>';
+      content += '<th>Level</th>';
+      content += '<th></th>';
+      content += '<th"></th>';
+      content += '</tr></thead><tbody>';
+
+      $.each(rolesToDraw, function () {
+        let roleId = this.id
+        content += '<tr data-id="' + this.id + '">';
+        content += '<td>' + this.name + '</td>';
+        content += '<td>' + this.level + '</td>';
+
+        content +=
+          `<td>  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#edit-role-modal" value="${this.id}">
+    Edit
+  </button></td>`;
+
+        // Delete button
+        content +=
+          `<td>  
+  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-role-modal" value="${this.id}">
+    Delete
+  </button></td>`;
+        content += '</tr>';
+      });
+      content += '</tbody></table>';
+
+      $("#roles-table").append(content)
+    })
+
+
+
+  }
+
+</script>
