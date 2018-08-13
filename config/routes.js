@@ -151,6 +151,16 @@ module.exports.routes = {
   'post /api/sdtdserver/pingkicker/checks' : "SdtdServerController/pingKicker.set-pingKick-checks",
   'post /api/sdtdserver/pingkicker/whitelist' : "SdtdServerController/pingKicker.set-pingKick-whitelist",
 
+  // Roles
+
+  'get /api/role' : "roleController/get-role",
+  'delete /api/role' : "roleController/delete-role",
+  'post /api/role' : 'roleController/create-role',
+  'patch /api/role': "roleController/update-role",
+
+  'post /api/role/player' : "roleController/add-player",
+  'delete /api/role/player': "roleController/remove-player",
+  
   // Economy
 
   'post /api/sdtdserver/economy': 'SdtdServerController/economy.enable-economy',
