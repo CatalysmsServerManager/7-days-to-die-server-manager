@@ -245,6 +245,10 @@ module.exports = {
       via: 'player'
     },
 
+    role: {
+      model: 'role'
+    },
+
   },
 
 };
