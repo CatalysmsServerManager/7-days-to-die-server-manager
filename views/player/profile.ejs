@@ -27,29 +27,45 @@
 
       <div class="card">
         <div class="card-body">
-          <h4 class="card-title">
+          <h4 class="card-title text-center">
             <%= player.name %>
           </h4>
           <p class="card-text">
-            <div class="row">
-              <img alt="player profile picture" src="<%= player.avatarUrl %>" style='border-radius: 50%;' />
+            <div class="container">
 
+              <div class="row">
+                <div class="col-lg-6">
+                  <img alt="player profile picture" src="<%= player.avatarUrl %>" style='border-radius: 50%;' />
+                </div>
+                <div class="col-lg-3">
+                  <div class="btn-group btn-group-vertical">
 
-              <div class="btn-group btn-group-vertical">
+                    <% if (player.banned) { %>
+                      <%- include("./partials/unbanPlayerButton", {player: player}) %>
+                        <% } else { %>
 
-                <% if (player.banned) { %>
-                  <%- include("./partials/unbanPlayerButton", {player: player}) %>
-                    <% } else { %>
+                          <%- include("./partials/banPlayerButton", {player: player}) %>
+                            <%- include("./partials/kickPlayerButton", {player: player}) %>
+                              <%- include("./partials/teleportPlayerButton", {player: player}) %>
+                                <%- include("./partials/giveItemButton", {player: player}) %>
+                                  <% } %>
+                                    <%- include("./partials/setMoneyButton", {player: player}) %>
+                                      <%- include("./partials/deletePlayerButton", {player: player}) %>
+                  </div>
+                </div>
+                <div class="col-lg-3">
 
-                      <%- include("./partials/banPlayerButton", {player: player}) %>
-                        <%- include("./partials/kickPlayerButton", {player: player}) %>
-                          <%- include("./partials/teleportPlayerButton", {player: player}) %>
-                            <%- include("./partials/giveItemButton", {player: player}) %>
-                              <% } %>
-                                <%- include("./partials/setMoneyButton", {player: player}) %>
-                                  <%- include("./partials/deletePlayerButton", {player: player}) %>
+                  <div class="form-group">
+                    <label for="player-role-select">Role</label>
+                    <select class="form-control" name="player-role-select" id="player-role-select">
+
+                    </select>
+                  </div>
+
+                  <button type="button" id="set-role-btn" class="btn btn-primary">Set</button>
+
+                </div>
               </div>
-
             </div>
           </p>
         </div>
@@ -291,9 +307,11 @@
 <script>
   $(document).ready(function () {
 
+
+    drawRolesSelect();
+    updateTeleportLocations()
+
     let historicalInfo = window.SAILS_LOCALS.historicalInfo;
-
-
     let historicalInfoTable = $('#player-historicalInfo-table').DataTable({
       data: window.SAILS_LOCALS.historicalInfo,
       dom: 'Bfrtip',
@@ -329,7 +347,50 @@
       ]
     })
 
-    updateTeleportLocations()
+    $("#set-role-btn").click(e => {
+      let newRoleId = $("#player-role-select option:selected").val();
+
+      if (newRoleId === "None") {
+        $.ajax({
+          url: "/api/role/player",
+          type: 'DELETE',
+          data: {
+            serverId: window.SAILS_LOCALS.server.id,
+            _csrf: window.SAILS_LOCALS._csrf,
+            playerId: window.SAILS_LOCALS.player.id
+          },
+          success: (data, status, xhr) => {
+            window.location.reload();
+          },
+          error: (xhr, status, error) => {
+            alert('Error editing role, check browser console for more info.')
+            console.log(xhr);
+          }
+        })
+      } else {
+
+        $.ajax({
+          url: "/api/role/player",
+          type: 'POST',
+          data: {
+            serverId: window.SAILS_LOCALS.server.id,
+            _csrf: window.SAILS_LOCALS._csrf,
+            roleId: newRoleId,
+            playerId: window.SAILS_LOCALS.player.id
+          },
+          success: (data, status, xhr) => {
+            window.location.reload();
+          },
+          error: (xhr, status, error) => {
+            alert('Error editing role, check browser console for more info.')
+            console.log(xhr);
+          }
+        })
+
+      }
+
+    })
+
 
     function updateTeleportLocations() {
       let playerId = window.SAILS_LOCALS.player.id;
@@ -343,6 +404,35 @@
 
         })
       })
+    }
+
+    function drawRolesSelect() {
+
+      $.get('/api/role', {
+        serverId: window.SAILS_LOCALS.server.id
+      }, roles => {
+        $("#player-role-select").empty();
+        roles = _.sortBy(roles, ["level"]);
+        let playerHasRole = false;
+        for (const role of roles) {
+          let content
+          if (window.SAILS_LOCALS.player.role === role.id) {
+            content = `<option value="${role.id}" selected>${role.name}</option>`;
+            playerHasRole = true
+          } else {
+            content = `<option value="${role.id}">${role.name}</option>`;
+          }
+
+          $("#player-role-select").append(content);
+        }
+
+        if (!playerHasRole) {
+          $("#player-role-select").append("<option selected>None</option>");
+        } else {
+          $("#player-role-select").append("<option>None</option>");
+        }
+      })
+
     }
   })
 
