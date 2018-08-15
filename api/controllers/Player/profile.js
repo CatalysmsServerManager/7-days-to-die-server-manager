@@ -54,6 +54,8 @@ module.exports = {
 
       let bans = await BanEntry.find({steamId: player.steamId});
 
+      sails.log.info(`Loading player profile ${player.id} - ${player.name} for server ${server.name}`)
+
       return exits.success({
         player: player,
         server: server,

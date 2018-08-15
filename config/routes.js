@@ -153,6 +153,16 @@ module.exports.routes = {
   'post /api/sdtdserver/pingkicker/checks' : "SdtdServerController/pingKicker.set-pingKick-checks",
   'post /api/sdtdserver/pingkicker/whitelist' : "SdtdServerController/pingKicker.set-pingKick-whitelist",
 
+  // Roles
+
+  'get /api/role' : "roleController/get-role",
+  'delete /api/role' : "roleController/delete-role",
+  'post /api/role' : 'roleController/create-role',
+  'patch /api/role': "roleController/update-role",
+
+  'post /api/role/player' : "roleController/add-player",
+  'delete /api/role/player': "roleController/remove-player",
+  
   // Economy
 
   'post /api/sdtdserver/economy': 'SdtdServerController/economy.enable-economy',
@@ -274,6 +284,7 @@ module.exports.routes = {
   'post /api/sdtdserver/commands/custom/cost': 'CustomCommandController/update-cost',
   'post /api/sdtdserver/commands/custom/enabled': 'CustomCommandController/update-enabled',
   'post /api/sdtdserver/commands/custom/delay': 'CustomCommandController/update-delay',
+  'post /api/sdtdserver/commands/custom/level': 'CustomCommandController/update-level',
   'post /api/sdtdserver/commands/custom/output': 'CustomCommandController/update-output',
   'post /api/sdtdserver/commands/custom/timeout': 'CustomCommandController/update-timeout',
   'post /api/sdtdserver/commands/custom/argument' : "CustomCommandController/create-argument",

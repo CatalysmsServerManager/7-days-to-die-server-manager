@@ -30,6 +30,10 @@ module.exports.policies = {
     'set-note': ["isLoggedIn",'isServerOwner']
   },
 
+  roleController: {
+    '*': ["isLoggedIn",'isServerOwner'],
+  },
+
   ShopController: {
     '*': ['isLoggedIn'],
     'listing-add': ["isLoggedIn",'isServerOwner'],

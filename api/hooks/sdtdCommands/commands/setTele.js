@@ -20,6 +20,7 @@ class setTele extends SdtdCommand {
   async run(chatMessage, player, server, args) {
 
     let playerTeleports = await PlayerTeleport.find({ player: player.id });
+    let playerRole = await sails.helpers.sdtd.getPlayerRole(player.id);
 
     let playersOnServer = await Player.find({ server: server.id });
     let publicTeleports = await PlayerTeleport.find({
@@ -35,7 +36,7 @@ class setTele extends SdtdCommand {
       return chatMessage.reply('Too many arguments, please provide a name only.');
     }
 
-    if (playerTeleports.length >= server.config.maxPlayerTeleportLocations) {
+    if (playerTeleports.length >= server.config.maxPlayerTeleportLocations || playerTeleports.length >= playerRole.amountOfTeleports) {
       return chatMessage.reply("You've set too many locations already, remove one before adding any more");
     }
 

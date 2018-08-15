@@ -69,6 +69,7 @@ var jsFilesToInject = [
   // Bring in `.js` files for any other client-side JavaScript dependencies.
   // (e.g. Lodash, jQuery, React, bootstrap.js, Ember, Angular, etc.)
   'dependencies/jquery-3.2.1.js',
+  'dependencies/jquery-3.2.1.min.js',
   'dependencies/bootstrap/**/*.js',
   'dependencies/**/*.js',
 

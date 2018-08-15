@@ -27,12 +27,13 @@
 
                     <div class="form-group">
                         <label for="settings-commands-custom-add-commands">Command(s) to execute</label>
-                        <input type="text" class="form-control" name="settings-commands-custom-add-commands" id="settings-commands-custom-add-commands"
-                            aria-describedby="settings-commands-custom-add-commands-help" placeholder="">
+                        <textarea class="form-control" name="settings-commands-custom-add-commands" id="settings-commands-custom-add-commands"
+                        aria-describedby="settings-commands-custom-add-commands-help" placeholder="" rows="5"></textarea>
                         <small id="settings-commands-custom-add-commands-help" class="form-text text-muted">The console commands to execute when a player runs the custom command. Seperate multiple commands
                             with ";". In the command, you have access to the players entity ID by typing "${entityId}". Example:
                             "sayplayer ${entityId} Boo!" </small>
                     </div>
+
                 </div>
             </div>
             <div class="modal-footer">
