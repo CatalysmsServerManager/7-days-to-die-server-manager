@@ -1,5 +1,3 @@
-var sevenDays = require('machinepack-7daystodiewebapi');
-
 module.exports = {
 
 
@@ -36,6 +34,16 @@ module.exports = {
         let player = await Player.findOne(inputs.playerId);
 
         let foundRole;
+
+        let amountOfRoles = await Role.count({server: player.server});
+
+        if (amountOfRoles === 0) {
+            await Role.create({
+                    name: "Default role",
+                    level: 9999,
+                    server: player.server
+            })
+        }
 
         if (player.role) {
             foundRole = await Role.findOne(player.role);
