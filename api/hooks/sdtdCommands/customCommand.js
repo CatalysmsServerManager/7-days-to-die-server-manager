@@ -16,6 +16,11 @@ class CustomCommand extends SdtdCommand {
 
   async run(chatMessage, player, server, args, options) {
     let argumentIterator = 0;
+    let playerRole = await sails.helpers.sdtd.getPlayerRole(player.id);
+
+    if (playerRole.level > this.options.level) {
+      return chatMessage.reply(`You do not have the correct role to execute this command. Ask your server admin for elevated permissions.`)
+    }
 
     for (const argument of options.arguments) {
       let valueToFill = args[argumentIterator];
@@ -24,6 +29,8 @@ class CustomCommand extends SdtdCommand {
       if (!validArg) {
         return chatMessage.reply(`You provided an invalid value! '${valueToFill}' is not valid for ${argument.key}`)
       }
+
+      
 
       if (_.isUndefined(valueToFill) && !_.isUndefined(argument.defaultValue)) {
         valueToFill = argument.defaultValue
