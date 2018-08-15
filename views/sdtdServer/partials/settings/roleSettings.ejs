@@ -1,5 +1,11 @@
 <div class="container">
 
+  <div class="alert alert-warning" role="alert">
+    <strong>Warning: If a player is not assigned to a role, CSMM will default to the role with highest level (so lowest permissions).
+      Make sure there is an appropriate role configured with a high level number. For example, if you have only an 'Admin'
+      role, every player will default to that - not good!</strong>
+  </div>
+
   <div id="roles-table"></div>
 
   <!-- Button trigger modal -->
@@ -155,7 +161,8 @@
     $('.edit-role').on('click', (e) => {
       let name = $("#edit-role-name").val() === '' ? undefined : $("#edit-role-name").val();
       let level = $("#edit-role-level").val() === '' ? undefined : $("#edit-role-level").val();
-      let amountOfTeleports = $("#edit-role-teleports-amount").val() === "" ? undefined : $("#edit-role-teleports-amount").val();
+      let amountOfTeleports = $("#edit-role-teleports-amount").val() === "" ? undefined : $(
+        "#edit-role-teleports-amount").val();
 
       $.ajax({
         url: "/api/role",
