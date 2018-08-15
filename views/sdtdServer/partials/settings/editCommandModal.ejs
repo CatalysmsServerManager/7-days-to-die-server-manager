@@ -31,7 +31,9 @@
           <div class="form-group">
             <label for="custom-command-<%= command.id %>-modal-edit-commands">Command(s) to execute</label>
             <textarea class="form-control" class="form-control" name="custom-command-<%= command.id %>-modal-edit-commands" id="custom-command-<%= command.id %>-modal-edit-commands"
-              aria-describedby="custom-command-<%= command.id %>-modal-edit-commands-help" value="<%= command.commandsToExecute %>" rows="5"></textarea>
+              aria-describedby="custom-command-<%= command.id %>-modal-edit-commands-help" rows="5">
+              <%= command.commandsToExecute %>
+            </textarea>
             <small id="custom-command-<%= command.id %>-modal-edit-commands-help" class="form-text text-muted"> Example: "sayplayer ${entityId} Boo!" </small>
           </div>
 
@@ -56,12 +58,19 @@
             <small id="custom-command-<%= command.id %>-modal-edit-timeout-help" class="form-text text-muted"> How many seconds do players have to wait before executing the command again </small>
           </div>
 
+          <div class="form-group">
+            <label for="custom-command-<%= command.id %>-modal-edit-role-level">Role level needed for execution</label>
+            <input type="number" class="form-control" name="custom-command-<%= command.id %>-modal-edit-role-level" id="custom-command-<%= command.id %>-modal-edit-role-level"
+              aria-describedby="custom-command-<%= command.id %>-modal-edit-role-level-help" value="<%= command.level %>">
+            <small id="custom-command-<%= command.id %>-modal-edit-role-level-help" class="form-text text-muted">The minimum permission level required to execute this custom command. Note that this refers to CSMM roles, not
+              7dtd admin permission!</small>
+          </div>
+
           <div class="form-check">
             <label class="form-check-label">
               <input type="checkbox" class="form-check-input" name="custom-command-<%= command.id %>-modal-edit-output" id="custom-command-<%= command.id %>-modal-edit-output"> Send output to executing player
             </label>
           </div>
-
 
           <div class="form-check">
             <label class="form-check-label">
@@ -211,6 +220,7 @@
         let newTimeout = $('#custom-command-<%= command.id %>-modal-edit-timeout').val();
         let newEnabled = $('#custom-command-<%= command.id %>-modal-edit-enabled').prop('checked');
         let newOutput = $('#custom-command-<%= command.id %>-modal-edit-output').prop('checked');
+        let newLevel = $("#custom-command-<%= command.id %>-modal-edit-role-level").val();
 
 
         $('#custom-command-<%= command.id %>-modal-edit-status').html(`<i class="fas fa-sync"></i> Saving`)
@@ -224,6 +234,28 @@
               _csrf: window.SAILS_LOCALS._csrf,
               commandId: currentConfig.id,
               newName: newName,
+              serverId: window.SAILS_LOCALS.server.id
+            },
+            success: (data, status, xhr) => {
+              console.log(data)
+            },
+            error: (xhr, status, error) => {
+              errored = true;
+              console.log(xhr)
+              $('#custom-command-<%= command.id %>-modal-edit-status').text(
+                `${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
+            }
+          })
+        }
+
+        if (newLevel != currentConfig.level) {
+          $.ajax({
+            url: '/api/sdtdserver/commands/custom/level',
+            method: 'POST',
+            data: {
+              _csrf: window.SAILS_LOCALS._csrf,
+              commandId: currentConfig.id,
+              newLevel: newLevel,
               serverId: window.SAILS_LOCALS.server.id
             },
             success: (data, status, xhr) => {

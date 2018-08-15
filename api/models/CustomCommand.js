@@ -49,6 +49,12 @@ module.exports = {
           type: 'boolean',
           defaultsTo: false
       },
+
+      level : {
+          type: 'number',
+          min : 0,
+          defaultsTo: 9999
+      },
   
   
       //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
