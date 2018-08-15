@@ -26,6 +26,11 @@ module.exports = {
       type: 'number',
     },
 
+    amountOfTeleports: {
+      type: 'number',
+      min: 0,
+    },
+
   },
 
 
@@ -38,7 +43,8 @@ module.exports = {
 
     let updateObj = {
       name: inputs.name,
-      level: inputs.level
+      level: inputs.level,
+      amountOfTeleports: inputs.amountOfTeleports
     };
 
     let updatedRole = await Role.update({id: inputs.roleId}, updateObj).fetch();

@@ -90,6 +90,14 @@
             <small id="edit-role-level-help" class="form-text text-muted">The level of the new role. Defaults to 2000. Lower = more permissions</small>
           </div>
 
+          <div class="form-group">
+            <label for="edit-role-teleports-amount">Amount of teleports allowed</label>
+            <input type="number" class="form-control" name="edit-role-teleports-amount" id="edit-role-teleports-amount" aria-describedby="edit-role-teleports-amount-help"
+              placeholder="">
+            <small id="edit-role-teleports-amount-help" class="form-text text-muted">The amount of teleport locations players with this role can set. Note that the global max you configure in teleport
+              settings still applies!</small>
+          </div>
+
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -147,6 +155,8 @@
     $('.edit-role').on('click', (e) => {
       let name = $("#edit-role-name").val() === '' ? undefined : $("#edit-role-name").val();
       let level = $("#edit-role-level").val() === '' ? undefined : $("#edit-role-level").val();
+      let amountOfTeleports = $("#edit-role-teleports-amount").val() === "" ? undefined : $("#edit-role-teleports-amount").val();
+
       $.ajax({
         url: "/api/role",
         type: 'PATCH',
@@ -155,7 +165,8 @@
           _csrf: window.SAILS_LOCALS._csrf,
           roleId: activeRoleId,
           name: name,
-          level: level
+          level: level,
+          amountOfTeleports: amountOfTeleports
         },
         success: (data, status, xhr) => {
           drawRolesTable();
@@ -173,7 +184,13 @@
     });
 
     $("#edit-role-modal").on('show.bs.modal', e => {
+      currentRole = $(e.relatedTarget).data('role');
       activeRoleId = $(e.relatedTarget).val();
+
+      $("#edit-role-name").val(currentRole.name);
+      $("#edit-role-level").val(currentRole.level);
+      $("#edit-role-teleports-amount").val(currentRole.amountOfTeleports);
+
     });
 
   });
@@ -204,14 +221,14 @@
         content += '<td>' + this.level + '</td>';
 
         content +=
-          `<td>  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#edit-role-modal" value="${this.id}">
+          `<td>  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#edit-role-modal" data-role='${JSON.stringify(this)}' value="${this.id}">
     Edit
   </button></td>`;
 
         // Delete button
         content +=
           `<td>  
-  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-role-modal" value="${this.id}">
+  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-role-modal" data-role='${JSON.stringify(this)}' value="${this.id}">
     Delete
   </button></td>`;
         content += '</tr>';

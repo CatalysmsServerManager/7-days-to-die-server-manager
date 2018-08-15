@@ -23,6 +23,14 @@ module.exports = {
       defaultsTo: 2000
     },
 
+    amountOfTeleports: {
+      type: 'number', 
+    },
+
+    radiusAllowedToExplore: {
+      type: 'number'
+    },
+
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
