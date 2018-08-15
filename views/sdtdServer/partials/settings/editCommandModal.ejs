@@ -30,8 +30,8 @@
 
           <div class="form-group">
             <label for="custom-command-<%= command.id %>-modal-edit-commands">Command(s) to execute</label>
-            <input type="text" class="form-control" name="custom-command-<%= command.id %>-modal-edit-commands" id="custom-command-<%= command.id %>-modal-edit-commands"
-              aria-describedby="custom-command-<%= command.id %>-modal-edit-commands-help" value="<%= command.commandsToExecute %>">
+            <textarea class="form-control" class="form-control" name="custom-command-<%= command.id %>-modal-edit-commands" id="custom-command-<%= command.id %>-modal-edit-commands"
+              aria-describedby="custom-command-<%= command.id %>-modal-edit-commands-help" value="<%= command.commandsToExecute %>" rows="5"></textarea>
             <small id="custom-command-<%= command.id %>-modal-edit-commands-help" class="form-text text-muted"> Example: "sayplayer ${entityId} Boo!" </small>
           </div>
 
