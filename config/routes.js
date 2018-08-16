@@ -322,6 +322,7 @@ module.exports.routes = {
   'post /api/sdtdserver/setnotificationchannel': 'SdtdServerController/discordBot.set-notification-channel',
   'post /api/sdtdserver/discord/prefix': 'SdtdServerController/discordBot.set-prefix',
   'get /api/sdtdserver/discord/findChannel' : "SdtdServerController/discordBot.find-channel-by-id",
+  'get /api/sdtdserver/discord/roles': "SdtdServerController/discordBot.get-server-roles",
 
   // Custom notifications
 

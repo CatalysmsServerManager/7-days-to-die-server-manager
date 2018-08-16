@@ -97,6 +97,14 @@
           </div>
 
           <div class="form-group">
+            <label for="edit-role-discord-role">Discord role</label>
+            <select class="form-control" name="edit-role-discord-role" id="edit-role-discord-role">
+
+            </select>
+            <small id="edit-role-level-help" class="form-text text-muted">Link a Discord role to this CSMM role. CSMM will sync users' roles.</small>
+          </div>
+
+          <div class="form-group">
             <label for="edit-role-teleports-amount">Amount of teleports allowed</label>
             <input type="number" class="form-control" name="edit-role-teleports-amount" id="edit-role-teleports-amount" aria-describedby="edit-role-teleports-amount-help"
               placeholder="">
@@ -122,6 +130,7 @@
     drawRolesTable();
 
     let activeRoleId = undefined;
+    let currentRole = undefined;
 
     $("#add-role-submit").click(e => {
       let name = $("#add-role-name").val();
@@ -163,6 +172,7 @@
       let level = $("#edit-role-level").val() === '' ? undefined : $("#edit-role-level").val();
       let amountOfTeleports = $("#edit-role-teleports-amount").val() === "" ? undefined : $(
         "#edit-role-teleports-amount").val();
+        let discordRole = $("#edit-role-discord-role option:selected").val();
 
       $.ajax({
         url: "/api/role",
@@ -173,6 +183,7 @@
           roleId: activeRoleId,
           name: name,
           level: level,
+          discordRole: discordRole,
           amountOfTeleports: amountOfTeleports
         },
         success: (data, status, xhr) => {
@@ -194,6 +205,7 @@
       currentRole = $(e.relatedTarget).data('role');
       activeRoleId = $(e.relatedTarget).val();
 
+      drawDiscordRolesSelect(currentRole);
       $("#edit-role-name").val(currentRole.name);
       $("#edit-role-level").val(currentRole.level);
       $("#edit-role-teleports-amount").val(currentRole.amountOfTeleports);
@@ -201,6 +213,40 @@
     });
 
   });
+
+  function drawDiscordRolesSelect(currentRole) {
+
+    $.get('/api/sdtdserver/discord/roles', {
+      serverId: window.SAILS_LOCALS.server.id
+    }, roles => {
+
+      if (roles.length === 0) {
+        $("#edit-role-discord-role").parent().hide();
+      }
+      $("#edit-role-discord-role").empty();
+
+
+      let foundRole = false
+      for (const role of roles) {
+        let content
+        if (currentRole.discordRole === role.id) {
+          content = `<option value="${role.id}" selected>${role.name}</option>`;
+          foundRole = true
+        } else {
+          content = `<option value="${role.id}">${role.name}</option>`;
+        }
+
+        $("#edit-role-discord-role").append(content);
+      }
+
+      if (!foundRole) {
+        $("#edit-role-discord-role").append("<option selected>None</option>");
+      } else {
+        $("#edit-role-discord-role").append("<option>None</option>");
+      }
+    })
+
+  }
 
   function drawRolesTable() {
 
