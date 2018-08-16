@@ -15,7 +15,7 @@ class Who extends SdtdCommand {
     }
 
     async isEnabled(chatMessage, player, server, args) {
-        return server.config.locationTracking
+        return server.config.enabledWho && server.config.locationTracking
     }
 
     async run(chatMessage, player, server, args) {
@@ -48,6 +48,10 @@ class Who extends SdtdCommand {
             sort: "createdAt DESC"
         });
 
+        if (foundTrackingData.length === 0) {
+            return chatMessage.reply('No data found! Try again with a larger area.')
+        }
+
         let foundPlayers = foundTrackingData.map(dataPoint => dataPoint.player);
         let uniquePlayers = _.uniq(foundPlayers);
         let dateOldest = new Date(foundTrackingData[foundTrackingData.length - 1].createdAt);
@@ -60,7 +64,6 @@ class Who extends SdtdCommand {
             playersnames += he.decode(foundPlayer.name) + ", "
         }
 
-        sails.log.info(`${player.name} on ${server.name} found ${uniquePlayers.length} players in his location`);
         chatMessage.reply(`${uniquePlayers.length} player${uniquePlayers.length === 1 ? " has" : "s have"} been in a radius of ${size} blocks around your current location since ${dateOldest.toLocaleDateString()} ${dateOldest.toLocaleTimeString()}`);
         chatMessage.reply(playersnames);
 

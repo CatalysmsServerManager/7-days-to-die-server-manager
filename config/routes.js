@@ -295,6 +295,8 @@ module.exports.routes = {
   'delete /api/sdtdserver/commands/calladmin': "SdtdServerController/commands.disable-calladmin",
   'get /api/sdtdserver/commands/calladmin': "SdtdServerController/commands.get-calladmin",
 
+  'post /api/sdtdserver/commands/who': "SdtdServerController/commands.set-status-who",
+
   'post /api/sdtdserver/commands/playerteleports': "SdtdServerController/commands.enable-player-teleports",
   'delete /api/sdtdserver/commands/playerteleports': "SdtdServerController/commands.disable-player-teleports",
   'get /api/sdtdserver/commands/playerteleports': "SdtdServerController/commands.get-player-teleports",

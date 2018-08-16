@@ -173,6 +173,11 @@ module.exports = {
       defaultsTo: true
     },
 
+    enabledWho: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
     maxPlayerTeleportLocations: {
       type: 'number',
       defaultsTo: 3

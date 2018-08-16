@@ -50,6 +50,12 @@
     </p>
   </div>
 
+  <div class="form-check">
+    <label class="form-check-label">
+      <input type="checkbox" class="form-check-input" name="input-settings-commands-who-checkbox" id="input-settings-commands-who-checkbox"> Who - lets players check an area around them to see if other players have been there
+    </label>
+  </div>
+
   <div id="player-teleport-settings">
     <hr>
 
@@ -183,7 +189,12 @@
     })
 
     function updateCommandsStatus() {
-      $.get('/api/sdtdserver/commands', { serverId: window.SAILS_LOCALS.server.id }, status => {
+
+      $("#input-settings-commands-who-checkbox").prop('checked', <%= config.enabledWho %>);
+
+      $.get('/api/sdtdserver/commands', {
+        serverId: window.SAILS_LOCALS.server.id
+      }, status => {
         if (status) {
           $('#settings-enable-commands-btn').hide()
           $('#settings-disable-commands-btn').show()
@@ -193,13 +204,17 @@
         }
       })
 
-      $.get('/api/sdtdserver/commands/calladmin', { serverId: window.SAILS_LOCALS.server.id }, status => {
+      $.get('/api/sdtdserver/commands/calladmin', {
+        serverId: window.SAILS_LOCALS.server.id
+      }, status => {
         if (status) {
           $('#input-settings-commands-calladmin-checkbox').prop('checked', true)
         }
       })
 
-      $.get('/api/sdtdserver/commands/playerteleports', { serverId: window.SAILS_LOCALS.server.id }, status => {
+      $.get('/api/sdtdserver/commands/playerteleports', {
+        serverId: window.SAILS_LOCALS.server.id
+      }, status => {
         if (status) {
           $('#input-settings-commands-playerTeleports-checkbox').prop('checked', true);
         } else {
@@ -209,6 +224,27 @@
     }
 
     updateCommandsStatus()
+
+    $("#input-settings-commands-who-checkbox").click(e => {
+      let newStatus = $(e.target).prop('checked');
+
+      $.ajax({
+        url: '/api/sdtdserver/commands/who',
+        method: 'POST',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+          status: newStatus
+        },
+        success: (data, status, xhr) => {
+          
+        },
+        error: (xhr, status, error) => {
+          alert(`Error while setting status of who, check console for more details!`)
+          console.log(xhr)
+        }
+      })
+    })
 
     $('#settings-disable-commands-btn').click(e => {
       e.preventDefault();
@@ -321,8 +357,7 @@
             _csrf: window.SAILS_LOCALS._csrf,
             serverId: window.SAILS_LOCALS.server.id,
           },
-          success: data => {
-          },
+          success: data => {},
           error: e => {
             console.log(e);
             alert('Error! ' + e)
@@ -347,7 +382,9 @@
     $('#inputs-settings-playerteleports-maxlocations-btn').click(e => {
       e.preventDefault();
       let newMax = $('#inputs-settings-commands-playerteleports-maxlocations').val();
-      if (!validator.isInt(newMax, { min: 1 })) {
+      if (!validator.isInt(newMax, {
+          min: 1
+        })) {
         return alert('Please provide a valid value for max locations.')
       }
 
@@ -369,7 +406,9 @@
     $('#inputs-settings-playerteleports-timeout-btn').click(e => {
       e.preventDefault();
       let newTimeout = $('#inputs-settings-commands-playerteleports-timeout').val();
-      if (!validator.isInt(newTimeout, { min: 3 })) {
+      if (!validator.isInt(newTimeout, {
+          min: 3
+        })) {
         return alert('Please provide a valid value for timeout. (number larger than 3)')
       }
 
@@ -392,7 +431,9 @@
       e.preventDefault();
       let newDelay = $('#inputs-settings-commands-playerteleports-delay').val();
 
-      if (!validator.isInt(newDelay, { min: 0 })) {
+      if (!validator.isInt(newDelay, {
+          min: 0
+        })) {
         return alert('Please provide a valid value for delay. (number larger than 0)')
       }
 
