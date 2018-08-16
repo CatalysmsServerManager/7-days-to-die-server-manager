@@ -1,5 +1,6 @@
 const Commando = require('discord.js-commando');
 const path = require('path');
+const handleRoleUpdate = require('./roles/handleRoleUpdate.js');
 
 /**
  * @module DiscordBot
@@ -59,7 +60,17 @@ module.exports = function discordBot(sails) {
           client.on('error', error => {
             sails.log.warn('DISCORD ERROR!');
             sails.log.error(error.message);
-          })
+          });
+
+          client.on('guildMemberUpdate', (oldMember, newMember) => {
+
+            try {
+              handleRoleUpdate(oldMember, newMember)
+            } catch (error) {
+              sails.log.error(`Error handling role change`, error)
+            }
+
+          });
 
 
           // Login
