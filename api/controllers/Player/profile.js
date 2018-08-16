@@ -47,10 +47,14 @@ module.exports = {
       })
       player = await sails.helpers.sdtd.loadPlayerData(server.id, player.steamId, false, true);
       player = player[0]
-      const hhmmss = require('@streammedev/hhmmss')
-      Object.defineProperty(player, 'playtimeHHMMSS', {
-        value: hhmmss(player.playtime)
-      })
+      try {
+        const hhmmss = require('@streammedev/hhmmss')
+        Object.defineProperty(player, 'playtimeHHMMSS', {
+          value: hhmmss(player.playtime)
+        })
+      } catch (error) {
+        sails.log.error(`Error calculating player playtime`, player)
+      }
 
       let bans = await BanEntry.find({steamId: player.steamId});
 
