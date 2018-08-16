@@ -47,8 +47,9 @@ module.exports = {
             await Role.create({
                     name: "Default role",
                     level: 9999,
-                    server: player.server
-            })
+                    server: player.server,
+                    amountOfteleports: 5
+            });
         }
 
         if (player.role) {
