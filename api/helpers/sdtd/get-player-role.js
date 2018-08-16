@@ -33,6 +33,12 @@ module.exports = {
 
         let player = await Player.findOne(inputs.playerId);
 
+        try {
+            await sails.helpers.discord.setRoleFromDiscord(inputs.playerId);
+        } catch (error) {
+            sails.log.debug(`Couldn't update players roles via discord - ${error}`)
+        }
+
         let foundRole;
 
         let amountOfRoles = await Role.count({server: player.server});
@@ -58,6 +64,7 @@ module.exports = {
             foundRole = foundRole[0]
         }
 
+        sails.log.verbose(`Found role ${foundRole.name} for player ${player.name}`)
         return exits.success(foundRole);
 
     }
