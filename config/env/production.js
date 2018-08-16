@@ -48,7 +48,7 @@ customLogger = new winston.Logger({
       humanReadableUnhandledException: true,
       filename: './logs/debug.log',
       tailable: true,
-      maxsize: 1000,
+      maxsize: 10000,
       maxFiles: 5,
       json: false,
       colorize: true
