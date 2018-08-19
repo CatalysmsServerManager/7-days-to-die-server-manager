@@ -50,7 +50,7 @@ class help extends SdtdCommand {
             }
         }
 
-        await chatMessage.reply(`For more info see: http://csmm.readthedocs.io/en/latest/pages/for-players.html`)
+        await chatMessage.reply(`For more info see: https://confluence.catalysm.net/x/-wAR`)
 
         return
     }
