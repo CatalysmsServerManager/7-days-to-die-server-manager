@@ -24,6 +24,7 @@ module.exports = {
 
     level: {
       type: 'number',
+      min: 0
     },
 
     discordRole: {
@@ -34,6 +35,39 @@ module.exports = {
       type: 'number',
       min: 0,
     },
+
+    manageServer: {
+      type: 'boolean'
+    },
+
+    manageEconomy: {
+      type: 'boolean'
+    },
+
+    manageRoles: {
+      type: 'boolean',
+
+    },
+
+    useChat: {
+      type: 'boolean'
+    },
+
+    useCommands: {
+      type: 'boolean'
+    },
+
+    managePlayers: {
+      type: 'boolean'
+    },
+
+    useTracking: {
+      type: 'boolean'
+    },
+
+    viewDashboard: {
+      type: 'boolean'
+    }
 
   },
 
@@ -49,10 +83,20 @@ module.exports = {
       name: inputs.name,
       level: inputs.level,
       amountOfTeleports: inputs.amountOfTeleports,
-      discordRole: inputs.discordRole
+      discordRole: inputs.discordRole,
+      manageServer: inputs.manageServer,
+      manageEconomy: inputs.manageEconomy,
+      manageRoles: inputs.manageRoles,
+      useChat: inputs.useChat,
+      useCommands: inputs.useCommands,
+      managePlayers: inputs.managePlayers,
+      viewDashboard: inputs.viewDashboard,
+      useTracking: inputs.useTracking
     };
 
-    let updatedRole = await Role.update({id: inputs.roleId}, updateObj).fetch();
+    let updatedRole = await Role.update({
+      id: inputs.roleId
+    }, updateObj).fetch();
 
     sails.log.info(`Updated a role for server ${updatedRole[0].server}`, updatedRole[0])
 
