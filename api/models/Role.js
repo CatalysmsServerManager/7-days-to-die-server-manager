@@ -24,16 +24,59 @@ module.exports = {
     },
 
     amountOfTeleports: {
-      type: 'number', 
+      type: 'number',
     },
 
     radiusAllowedToExplore: {
-      type: 'number'
+      type: 'number',
+      defaultsTo: 1000000
     },
 
     discordRole: {
       type: 'string'
     },
+
+    manageServer: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
+    manageEconomy: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
+    managePlayers: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
+    viewDashboard: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
+    manageRoles: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
+    useTracking: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
+    useChat: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
+    useCommands: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
+
 
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
@@ -43,13 +86,12 @@ module.exports = {
       collection: 'player',
       via: 'role'
     },
-    
+
     server: {
       model: 'sdtdServer',
-      required:  true
+      required: true
     }
 
   },
 
 };
-
