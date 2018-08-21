@@ -72,7 +72,7 @@
 
   <!-- Edit Modal -->
   <div class="modal fade" id="edit-role-modal" tabindex="-1" role="dialog" aria-labelledby="edit-role-modal-title" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog  modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h4 class="modal-title" id="edit-role-modal-title">Edit a role</h4>
@@ -101,7 +101,8 @@
             <select class="form-control" name="edit-role-discord-role" id="edit-role-discord-role">
 
             </select>
-            <small id="edit-role-level-help" class="form-text text-muted">Link a Discord role to this CSMM role. CSMM will sync users' roles.</small>
+            <small id="edit-role-level-help" class="form-text text-muted">Link a Discord role to this CSMM role. CSMM will sync users' roles. For this to work, a player will need to link
+              his discord profile to his csmm profile!</small>
           </div>
 
           <div class="form-group">
@@ -110,6 +111,71 @@
               placeholder="">
             <small id="edit-role-teleports-amount-help" class="form-text text-muted">The amount of teleport locations players with this role can set. Note that the global max you configure in teleport
               settings still applies!</small>
+          </div>
+
+          <div class="form-check">
+            <label class="form-check-label">
+              <input type="checkbox" class="form-check-input" name="edit-role-manageServer" id="edit-role-manageServer" aria-describedby="edit-role-manageServer-help"
+                value="true"> Manage server
+            </label>
+            <small id="edit-role-manageServer-help" class="form-text text-muted">Allow a user to do anything to your server on CSMM. This is a very powerfull permission and you should be careful
+              who you give this to!</small>
+          </div>
+
+          <div class="form-check">
+            <label class="form-check-label">
+              <input type="checkbox" class="form-check-input" name="edit-role-manageEconomy" id="edit-role-manageEconomy" aria-describedby="edit-role-manageEconomy-help"
+                value="true"> Manage economy
+            </label>
+            <small id="edit-role-manageEconomy-help" class="form-text text-muted">Allow a user to manage economy settings and set players' currency</small>
+          </div>
+
+          <div class="form-check">
+            <label class="form-check-label">
+              <input type="checkbox" class="form-check-input" name="edit-role-manageRoles" id="edit-role-manageRoles" aria-describedby="edit-role-manageRoles-help"
+                value="true"> Manage roles
+            </label>
+            <small id="edit-role-manageRoles-help" class="form-text text-muted">Allow a user to edit roles for your server.</small>
+          </div>
+
+          <div class="form-check">
+            <label class="form-check-label">
+              <input type="checkbox" class="form-check-input" name="edit-role-managePlayers" id="edit-role-managePlayers" aria-describedby="edit-role-managePlayers-help"
+                value="true"> Manage players
+            </label>
+            <small id="edit-role-managePlayers-help" class="form-text text-muted">Allow a user to manage players. Includes giving items, deleting profiles, kicking and banning.</small>
+          </div>
+
+          <div class="form-check">
+            <label class="form-check-label">
+              <input type="checkbox" class="form-check-input" name="edit-role-viewDashboard" id="edit-role-viewDashboard" aria-describedby="edit-role-viewDashboard-help"
+                value="true"> View dashboard
+            </label>
+            <small id="edit-role-viewDashboard-help" class="form-text text-muted">Allow a user to view your servers dashboard on CSMM.</small>
+          </div>
+
+          <div class="form-check">
+            <label class="form-check-label">
+              <input type="checkbox" class="form-check-input" name="edit-role-useTracking" id="edit-role-useTracking" aria-describedby="edit-role-useTracking-help"
+                value="true"> Use tracking
+            </label>
+            <small id="edit-role-useTracking-help" class="form-text text-muted">Allow a user to use the location and inventory tracking page.</small>
+          </div>
+
+          <div class="form-check">
+            <label class="form-check-label">
+              <input type="checkbox" class="form-check-input" name="edit-role-useChat" id="edit-role-useChat" aria-describedby="edit-role-useChat-help"
+                value="true"> Use chat
+            </label>
+            <small id="edit-role-useChat-help" class="form-text text-muted">Allow a user to use the chatbox on your servers dashboard.</small>
+          </div>
+
+          <div class="form-check">
+            <label class="form-check-label">
+              <input type="checkbox" class="form-check-input" name="edit-role-useCommands" id="edit-role-useCommands" aria-describedby="edit-role-useCommands-help"
+                value="true"> Execute commands
+            </label>
+            <small id="edit-role-useCommands-help" class="form-text text-muted">Allow a user to use the command console on your servers dashboard.</small>
           </div>
 
         </div>
@@ -172,7 +238,16 @@
       let level = $("#edit-role-level").val() === '' ? undefined : $("#edit-role-level").val();
       let amountOfTeleports = $("#edit-role-teleports-amount").val() === "" ? undefined : $(
         "#edit-role-teleports-amount").val();
-        let discordRole = $("#edit-role-discord-role option:selected").val();
+      let discordRole = $("#edit-role-discord-role option:selected").val();
+
+      let manageServer = $("#edit-role-manageServer").prop('checked');
+      let manageEconomy = $("#edit-role-manageEconomy").prop('checked');
+      let manageRoles = $("#edit-role-manageRoles").prop('checked');
+      let useTracking = $("#edit-role-useTracking").prop('checked');
+      let useChat = $("#edit-role-useChat").prop('checked');
+      let useCommands = $("#edit-role-useCommands").prop('checked');
+      let managePlayers = $("#edit-role-managePlayers").prop('checked');
+      let viewDashboard = $("#edit-role-viewDashboard").prop('checked');
 
       $.ajax({
         url: "/api/role",
@@ -184,7 +259,15 @@
           name: name,
           level: level,
           discordRole: discordRole,
-          amountOfTeleports: amountOfTeleports
+          amountOfTeleports: amountOfTeleports,
+          manageServer: manageServer,
+          manageEconomy: manageEconomy,
+          manageRoles: manageRoles,
+          useTracking: useTracking,
+          useChat: useChat,
+          useCommands: useCommands,
+          managePlayers: managePlayers,
+          viewDashboard: viewDashboard
         },
         success: (data, status, xhr) => {
           drawRolesTable();
@@ -209,6 +292,15 @@
       $("#edit-role-name").val(currentRole.name);
       $("#edit-role-level").val(currentRole.level);
       $("#edit-role-teleports-amount").val(currentRole.amountOfTeleports);
+
+      $("#edit-role-manageServer").prop('checked', currentRole.manageServer);
+      $("#edit-role-manageEconomy").prop('checked', currentRole.manageEconomy);
+      $("#edit-role-manageRoles").prop('checked', currentRole.manageRoles);
+      $("#edit-role-useTracking").prop('checked', currentRole.useTracking);
+      $("#edit-role-useChat").prop('checked', currentRole.useChat);
+      $("#edit-role-useCommands").prop('checked', currentRole.useCommands);
+      $("#edit-role-managePlayers").prop('checked', currentRole.managePlayers);
+      $("#edit-role-viewDashboard").prop('checked', currentRole.viewDashboard);
 
     });
 
