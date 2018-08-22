@@ -20,6 +20,12 @@ module.exports = {
     notFound: {
       description: 'No server with the specified ID was found in the database.',
       responseType: 'notFound'
+    },
+
+    notAuthorized: {
+      description: 'user is not authorized to do this.',
+      responseType: 'view',
+      viewTemplatePath: 'meta/notauthorized'
     }
   },
 
@@ -31,8 +37,24 @@ module.exports = {
    */
 
   fn: async function (inputs, exits) {
+
+    let sdtdServer = await SdtdServer.findOne(inputs.serverId);
+
+    let permCheck = await sails.helpers.roles.checkPermission.with({
+      userId: this.req.session.userId,
+      serverId: inputs.serverId,
+      permission: 'viewDashboard'
+    });
+
+    if (!permCheck.hasPermission) {
+      return exits.notAuthorized({
+        role: permCheck.role,
+        requiredPerm: 'viewDashboard'
+      })
+    }
+
     try {
-      let sdtdServer = await SdtdServer.findOne(inputs.serverId);
+
       sdtdServerInfo = await sails.helpers.loadSdtdserverInfo(inputs.serverId)
         .tolerate('unauthorized', (error) => {
           sails.log.warn(`VIEW - SdtdServer:dashboard - unauthorized for server cannot load serverInfo ${inputs.serverId}`)
@@ -48,7 +70,7 @@ module.exports = {
 
       let allocsVersion = await sails.helpers.sdtd.checkModVersion('Mod Allocs MapRendering and Webinterface', sdtdServer.id);
       let cpmVersion = await sails.helpers.sdtd.checkModVersion('Mod CSMM Patrons', sdtdServer.id);
-     // let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({ serverId: sdtdServer.id });
+      // let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({ serverId: sdtdServer.id });
 
       let allocsObj = {
         supportedAllocs: sails.config.custom.currentAllocs,
@@ -65,7 +87,7 @@ module.exports = {
         server: sdtdServer,
         allocsVersion: allocsObj,
         cpmVersion: cpmObj,
-     //   donator: donatorRole
+        //   donator: donatorRole
       });
     } catch (error) {
       sails.log.error(`VIEW - SdtdServer:dashboard - ${error}`);

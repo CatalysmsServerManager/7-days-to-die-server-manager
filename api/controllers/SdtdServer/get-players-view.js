@@ -19,6 +19,12 @@ module.exports = {
     success: {
       responseType: 'view',
       viewTemplatePath: 'sdtdServer/players'
+    },
+
+    notAuthorized: {
+      description: 'user is not authorized to do this.',
+      responseType: 'view',
+      viewTemplatePath: 'meta/notauthorized'
     }
 
   },
@@ -34,10 +40,23 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
+    
+    let server = await SdtdServer.findOne(inputs.serverId);
+
+    let permCheck = await sails.helpers.roles.checkPermission.with({
+      userId: this.req.session.userId,
+      serverId: inputs.serverId,
+      permission: 'managePlayers'
+    });
+
+    if (!permCheck.hasPermission) {
+      return exits.notAuthorized({
+        role: permCheck.role,
+        requiredPerm: 'managePlayers'
+      })
+    }
+
     try {
-      let server = await SdtdServer.findOne({
-        id: inputs.serverId
-      });
       let players = await Player.find({server: server.id})
 
       players.map(player => {

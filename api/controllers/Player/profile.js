@@ -21,9 +21,11 @@ module.exports = {
       description: 'No player with the specified ID was found in the database.',
       responseType: 'notFound'
     },
-    forbidden: {
-      description: 'Someone who is not authorized tried to view this page',
-      responseType: 'forbidden'
+
+    notAuthorized: {
+      description: 'user is not authorized to do this.',
+      responseType: 'view',
+      viewTemplatePath: 'meta/notauthorized'
     }
   },
 
@@ -36,11 +38,24 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    sails.log.debug(`VIEW - Player:profile - Showing profile for ${inputs.playerId}`);
+    let player = await Player.findOne(inputs.playerId);
+    let server = await SdtdServer.findOne(player.server);
+
+    let permCheck = await sails.helpers.roles.checkPermission.with({
+      userId: this.req.session.userId,
+      serverId: server.id,
+      permission: 'managePlayers'
+    });
+
+    if (!permCheck.hasPermission) {
+      return exits.notAuthorized({
+        role: permCheck.role,
+        requiredPerm: 'managePlayers'
+      })
+    }
 
     try {
-      let player = await Player.findOne(inputs.playerId);
-      let server = await SdtdServer.findOne(player.server);
+
       let historicalInfo = await HistoricalInfo.find({
         player: player.id,
         server: server.id
