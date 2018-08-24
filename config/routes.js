@@ -112,7 +112,10 @@ module.exports.routes = {
   //  ╠═╣╠═╝║  ║╣ ║║║ ║║╠═╝║ ║║║║║ ║ ╚═╗
   //  ╩ ╩╩  ╩  ╚═╝╝╚╝═╩╝╩  ╚═╝╩╝╚╝ ╩ ╚═╝
 
-  'get /api/stats': 'etc.get-system-stats',
+  'get /api/stats': {
+    action: 'etc/get-system-stats',
+    cors: false
+  },
 
 
   // GBL
