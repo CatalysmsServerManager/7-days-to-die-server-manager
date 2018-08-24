@@ -167,6 +167,7 @@ module.exports = {
      *                                                                          *
      ***************************************************************************/
     cors: {
+      allRoutes: true,
       allowOrigins: [
         process.env.CSMM_HOSTNAME
       ]
