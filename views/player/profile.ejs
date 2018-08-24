@@ -382,7 +382,12 @@
             window.location.reload();
           },
           error: (xhr, status, error) => {
-            alert('Error editing role, check browser console for more info.')
+            if (xhr.responseJSON.error) {
+              window.SAILS_LOCALS.error = xhr.responseJSON.error
+            } else {
+              window.SAILS_LOCALS.error = undefined;
+            }
+            $("#error-modal").modal('show');
             console.log(xhr);
           }
         })
@@ -390,7 +395,6 @@
       }
 
     })
-
 
     function updateTeleportLocations() {
       let playerId = window.SAILS_LOCALS.player.id;

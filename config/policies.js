@@ -23,6 +23,8 @@ module.exports.policies = {
     'add-server': 'isLoggedIn',
     'add-server-view': 'isLoggedIn',
     'view-gbl': 'isLoggedIn',
+    'dashboard': ['isLoggedIn', 'roles/viewDashboard'],
+    'settings' : ['isLoggedIn', 'roles/manageServer'],
   },
 
   gblController: {
@@ -31,7 +33,9 @@ module.exports.policies = {
   },
 
   roleController: {
-    '*': ["isLoggedIn",'isServerOwner'],
+    '*': ["isLoggedIn",'roles/manageRoles'],
+    'add-player': ["isLoggedIn",'roles/manageRoles'],
+    'get-role': ["isLoggedIn"],
   },
 
   ShopController: {

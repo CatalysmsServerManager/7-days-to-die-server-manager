@@ -22,11 +22,6 @@ module.exports = {
       responseType: 'notFound'
     },
 
-    notAuthorized: {
-      description: 'user is not authorized to do this.',
-      responseType: 'view',
-      viewTemplatePath: 'meta/notauthorized'
-    }
   },
 
   /**
@@ -40,19 +35,6 @@ module.exports = {
 
     let player = await Player.findOne(inputs.playerId);
     let server = await SdtdServer.findOne(player.server);
-
-    let permCheck = await sails.helpers.roles.checkPermission.with({
-      userId: this.req.session.userId,
-      serverId: server.id,
-      permission: 'managePlayers'
-    });
-
-    if (!permCheck.hasPermission) {
-      return exits.notAuthorized({
-        role: permCheck.role,
-        requiredPerm: 'managePlayers'
-      })
-    }
 
     try {
 

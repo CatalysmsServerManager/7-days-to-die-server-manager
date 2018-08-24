@@ -1,160 +1,196 @@
 <!-- Navigation-->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
-    <a class="navbar-brand" href="/">CSMM</a>
-    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive"
-        aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+  <a class="navbar-brand" href="/">CSMM</a>
+  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+    aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
 
-    <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+  <div class="collapse navbar-collapse" id="navbarResponsive">
+    <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
 
-            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Menu Levels">
+      <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Menu Levels">
 
-                <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti" data-parent="#exampleAccordion">
-                    <i class="fas fa-server"></i>
-                    <span class="nav-link-text">Your servers</span>
-                </a>
+        <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti" data-parent="#exampleAccordion">
+          <i class="fas fa-server"></i>
+          <span class="nav-link-text">Your servers</span>
+        </a>
 
-                <ul class="sidenav-second-level collapse" id="collapseMulti">
-
-                </ul>
-            </li>
-
-            <li class="nav-item" data-toggle="tooltip" data-placement="right">
-
-                <a class="nav-link" href="/sdtdserver/addserver">
-                    <i class="fas fa-plus"></i>
-                    <span class="nav-link-text">
-                        Add a server
-                    </span>
-                </a>
-            </li>
-
-            <li class="nav-item" data-toggle="tooltip" data-placement="right">
-
-                <a id="user-dashboard-link" class="nav-link" href="/user/<%= req.session.userId %>/dashboard">
-                    <i class="fas fa-list-ul"></i>
-                    <span class="nav-link-text">
-
-                        Server overview
-
-                    </span>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="/gbl">
-                    <i class="fas fa-ban"></i>
-                    <span class="nav-link-text">
-
-                        Global ban list
-
-                    </span>
-                </a>
-            </li>
-
+        <ul class="sidenav-second-level collapse" id="collapseMulti">
 
         </ul>
+      </li>
 
-        <ul class="navbar-nav sidenav-toggler">
-            <li class="nav-item">
-                <a class="nav-link text-center" id="sidenavToggler">
-                    <i class="fa fa-fw fa-angle-left"></i>
-                </a>
-            </li>
-        </ul>
+      <li class="nav-item" data-toggle="tooltip" data-placement="right">
 
-        <!-- Vertical Nav -->
-        <ul class="navbar-nav ml-auto">
+        <a class="nav-link" href="/sdtdserver/addserver">
+          <i class="fas fa-plus"></i>
+          <span class="nav-link-text">
+            Add a server
+          </span>
+        </a>
+      </li>
 
-            <!-- Open tickets  -->
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle mr-lg-2" id="messagesDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="far fa-question-circle"></i>
-                    <span class="d-lg-none">Tickets
-                    </span>
-                    <span class="indicator text-primary d-none d-lg-block">
-                        <i id="open-tickets-alert" class="fa fa-fw fa-circle"></i>
-                    </span>
-                </a>
-                <div id="open-tickets" class="dropdown-menu" aria-labelledby="messagesDropdown">
-                    <h6 class="dropdown-header">Open tickets:</h6>
-                    <div class="dropdown-divider"></div>
+      <li class="nav-item" data-toggle="tooltip" data-placement="right">
 
-                </div>
-            </li>
+        <a id="user-dashboard-link" class="nav-link" href="/user/<%= req.session.userId %>/dashboard">
+          <i class="fas fa-list-ul"></i>
+          <span class="nav-link-text">
 
-            <li class="nav-item">
-                <a target="_blank" class="nav-link" href="https://discordapp.com/invite/EwyDdNA">
-                    <i class="fab fa-discord fa-lg"></i> Support </a>
-            </li>
+            Server overview
 
-            <li class="nav-item">
-                <a target="_blank" class="nav-link" href="http://csmm.readthedocs.io">
-                    <i class="fas fa-life-ring fa-lg"></i> Documentation
-                </a>
-            </li>
+          </span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="/gbl">
+          <i class="fas fa-ban"></i>
+          <span class="nav-link-text">
+
+            Global ban list
+
+          </span>
+        </a>
+      </li>
 
 
+    </ul>
 
-            <li class="nav-item">
-                <a class="nav-link" href="/donate">
-                    <i class="fas fa-donate fa-lg"></i> Donate
-                </a>
-            </li>
+    <ul class="navbar-nav sidenav-toggler">
+      <li class="nav-item">
+        <a class="nav-link text-center" id="sidenavToggler">
+          <i class="fa fa-fw fa-angle-left"></i>
+        </a>
+      </li>
+    </ul>
+
+    <!-- Vertical Nav -->
+    <ul class="navbar-nav ml-auto">
+
+      <!-- Open tickets  -->
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle mr-lg-2" id="messagesDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="far fa-question-circle"></i>
+          <span class="d-lg-none">Tickets
+          </span>
+          <span class="indicator text-primary d-none d-lg-block">
+            <i id="open-tickets-alert" class="fa fa-fw fa-circle"></i>
+          </span>
+        </a>
+        <div id="open-tickets" class="dropdown-menu" aria-labelledby="messagesDropdown">
+          <h6 class="dropdown-header">Open tickets:</h6>
+          <div class="dropdown-divider"></div>
+
+        </div>
+      </li>
+
+      <li class="nav-item">
+        <a target="_blank" class="nav-link" href="https://discordapp.com/invite/EwyDdNA">
+          <i class="fab fa-discord fa-lg"></i> Support </a>
+      </li>
+
+      <li class="nav-item">
+        <a target="_blank" class="nav-link" href="http://csmm.readthedocs.io">
+          <i class="fas fa-life-ring fa-lg"></i> Documentation
+        </a>
+      </li>
 
 
-            <li class="nav-item">
-                <a class="nav-link" href="/sponsors/ldh">
-                    <i class="fab fa-angellist fa-lg"></i>
-                    </i> Our friends
-                </a>
-            </li>
 
-            <li class="nav-item">
-                <a class="nav-link" href="/user/<%= req.session.userId %>/profile">
-                    <i class="fas fa-user-circle fa-lg"></i> Your profile
-                </a>
-            </li>
-
-            <a class="nav-link" id="logout-button" href="/auth/logout">
-                <i class="fas fa-sign-out-alt fa-lg"></i> Logout
-            </a>
+      <li class="nav-item">
+        <a class="nav-link" href="/donate">
+          <i class="fas fa-donate fa-lg"></i> Donate
+        </a>
+      </li>
 
 
+      <li class="nav-item">
+        <a class="nav-link" href="/sponsors/ldh">
+          <i class="fab fa-angellist fa-lg"></i>
+          </i> Our friends
+        </a>
+      </li>
 
-        </ul>
+      <li class="nav-item">
+        <a class="nav-link" href="/user/<%= req.session.userId %>/profile">
+          <i class="fas fa-user-circle fa-lg"></i> Your profile
+        </a>
+      </li>
 
-    </div>
+      <a class="nav-link" id="logout-button" href="/auth/logout">
+        <i class="fas fa-sign-out-alt fa-lg"></i> Logout
+      </a>
+
+
+
+    </ul>
+
+  </div>
 
 
 
 </nav>
 
 
+<div id="error-modal" class="modal fade">
+  <div class="modal-dialog modal-confirm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="icon-box">
+          <i class="fas fa-exclamation-circle"></i>
+        </div>
+        <h4 class="text-light">ERROR ! </h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      </div>
+      <div class="modal-body text-center">
+        <div class="container-fluid" id="error-modal-message">
+          Something went horribly wrong! Just kidding, it's probably not that bad but we cannot show any extra info here. There is
+          possibly more info in the console.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 <script>
-    $(document).ready(() => {
-        let loggedInUserId = "<%- req.session.userId %>";
+  $(document).ready(() => {
 
-        $.ajax({
-            url: "/api/user/ownedservers",
-            data: {
-                userId: loggedInUserId
-            },
-            success: (data) => {
-                for (const server of data) {
-                    const dashboardLink = '/sdtdserver/' + server.id + '/dashboard'
-                    const settingsLink = '/sdtdserver/' + server.id + '/settings'
-                    const ticketsLink = '/sdtdserver/' + server.id + '/tickets'
-                    const economy = '/sdtdserver/' + server.id + '/economy'
-                    const analytics = '/sdtdserver/' + server.id + '/analytics'
-                    const tracker = '/sdtdserver/' + server.id + '/tracker'
-                    const playersLink = '/sdtdserver/' + server.id + '/players'
+    $('#error-modal').on('show.bs.modal', event => {
+      var modal = $(this);
+      // Use above variables to manipulate the DOM
+
+      if (!_.isUndefined(window.SAILS_LOCALS.error)) {
+        $("#error-modal-message").text(window.SAILS_LOCALS.error)
+      }
 
 
-                    let serverNavBarEntry = $('#collapseMulti').append(` <li>
+    });
+
+
+    let loggedInUserId = "<%- req.session.userId %>";
+
+    $.ajax({
+      url: "/api/user/ownedservers",
+      data: {
+        userId: loggedInUserId
+      },
+      success: (data) => {
+        for (const server of data) {
+          const dashboardLink = '/sdtdserver/' + server.id + '/dashboard'
+          const settingsLink = '/sdtdserver/' + server.id + '/settings'
+          const ticketsLink = '/sdtdserver/' + server.id + '/tickets'
+          const economy = '/sdtdserver/' + server.id + '/economy'
+          const analytics = '/sdtdserver/' + server.id + '/analytics'
+          const tracker = '/sdtdserver/' + server.id + '/tracker'
+          const playersLink = '/sdtdserver/' + server.id + '/players'
+
+
+          let serverNavBarEntry = $('#collapseMulti').append(
+            ` <li>
     <a id="server-${server.id}-nav-title" class="nav-link-collapse collapsed" data-toggle="collapse" href="#server-${server.id}-nav">${server.name} <span class="badge badge-secondary fps-badge" value="${server.id}"></span></a>
     <ul class="sidenav-third-level collapse" id="server-${server.id}-nav">
         <li>
@@ -195,59 +231,69 @@
         </li>
     </ul>
 </li>
-                    `);
+                    `
+          );
 
 
-                    $.get('/api/sdtdserver/onlinestatus', { serverId: server.id }, onlineStatus => {
+          $.get('/api/sdtdserver/onlinestatus', {
+            serverId: server.id
+          }, onlineStatus => {
 
-                        let elementToAdd = `<i class="${onlineStatus ? "fas fa-check-circle text-success" : "fas fa-times-circle text-danger"}"></i> `
+            let elementToAdd =
+              `<i class="${onlineStatus ? "fas fa-check-circle text-success" : "fas fa-times-circle text-danger"}"></i> `
 
-                        $(`#server-${server.id}-nav-title`).prepend(elementToAdd)
-                    })
+            $(`#server-${server.id}-nav-title`).prepend(elementToAdd)
+          })
 
-                    $.get('/api/sdtdserver/fps', { serverId: server.id }, response => {
-                        let fpsCounter = $(`.fps-badge[value=${server.id}]`);
-                        fpsCounter.text(`${response} FPS`)
-                    })
+          $.get('/api/sdtdserver/fps', {
+            serverId: server.id
+          }, response => {
+            let fpsCounter = $(`.fps-badge[value=${server.id}]`);
+            fpsCounter.text(`${response} FPS`)
+          })
 
-                    io.socket.get('/sdtdserver/' + server.id + '/socket', (response) => {
-                    });
-
-
-                    io.socket.on('memUpdate', (memUpdate) => {
-                        let fpsCounter = $(`.fps-badge[value=${memUpdate.server.id}]`);
-                        fpsCounter.text(`${memUpdate.fps} FPS`)
-                    })
-
-                    let openTicketsElement = $("#open-tickets");
-
-                    $("#open-tickets-alert").hide();
-
-                    $.get("/api/sdtdticket/opentickets", { serverId: server.id }, data => {
-
-                        if (data.length > 0) {
-                            $("#open-tickets-alert").show();
-                        }
-
-                        for (const ticket of data) {
-
-                            let playerName = `<a class="dropdown-item" href="/sdtdticket/${ticket.id}"> <strong>${ticket.playerInfo.name}</strong>`
-                            let updatedDate = new Date(ticket.updatedAt)
-                            let lastUpdated = `<span class="small float-right text-muted">${updatedDate.toLocaleDateString()} - ${updatedDate.toLocaleTimeString()}</span>`
-                            let ticketTitle = `<div class="dropdown-message"> ${ticket.title} </div> </a>`
-
-                            openTicketsElement.append('<div class="dropdown - divider"></div>' + playerName + lastUpdated + ticketTitle);
-                        }
-
-                    })
+          io.socket.get('/sdtdserver/' + server.id + '/socket', (response) => {});
 
 
-                }
-            },
-            error: (xhr, status, error) => {
-                console.log(xhr)
+          io.socket.on('memUpdate', (memUpdate) => {
+            let fpsCounter = $(`.fps-badge[value=${memUpdate.server.id}]`);
+            fpsCounter.text(`${memUpdate.fps} FPS`)
+          })
+
+          let openTicketsElement = $("#open-tickets");
+
+          $("#open-tickets-alert").hide();
+
+          $.get("/api/sdtdticket/opentickets", {
+            serverId: server.id
+          }, data => {
+
+            if (data.length > 0) {
+              $("#open-tickets-alert").show();
             }
-        })
+
+            for (const ticket of data) {
+
+              let playerName =
+                `<a class="dropdown-item" href="/sdtdticket/${ticket.id}"> <strong>${ticket.playerInfo.name}</strong>`
+              let updatedDate = new Date(ticket.updatedAt)
+              let lastUpdated =
+                `<span class="small float-right text-muted">${updatedDate.toLocaleDateString()} - ${updatedDate.toLocaleTimeString()}</span>`
+              let ticketTitle = `<div class="dropdown-message"> ${ticket.title} </div> </a>`
+
+              openTicketsElement.append('<div class="dropdown - divider"></div>' + playerName +
+                lastUpdated + ticketTitle);
+            }
+
+          })
+
+
+        }
+      },
+      error: (xhr, status, error) => {
+        console.log(xhr)
+      }
     })
+  })
 
 </script>
