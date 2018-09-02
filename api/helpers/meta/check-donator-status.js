@@ -61,7 +61,7 @@ module.exports = {
         }
 
         if (_.isUndefined(discordUser)) {
-            return exits.success('free')
+            return exits.success('donator')
         }
 
         let patronRole = await developerGuild.roles.get("410545564913238027");
@@ -85,7 +85,8 @@ module.exports = {
             return exits.success('sponsor')
         }
 
-        return exits.success('free')
+        // Temporarily changed all free users to donator
+        return exits.success('donator')
 
     }
 
