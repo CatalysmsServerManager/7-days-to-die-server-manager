@@ -40,12 +40,12 @@ module.exports.policies = {
 
   ShopController: {
     '*': ['isLoggedIn'],
-    'listing-add': ["isLoggedIn",'isServerOwner'],
-    'listing-edit': ["isLoggedIn",'isServerOwner'],
-    'listing-delete': ["isLoggedIn",'isServerOwner'],
+    'listing-add': ["isLoggedIn",'roles/manageEconomy'],
+    'listing-edit': ["isLoggedIn",'roles/manageEconomy'],
+    'listing-delete': ["isLoggedIn",'roles/manageEconomy'],
     'listing-buy' : 'isLoggedIn',
-    'shop-export' : ["isLoggedIn",'isServerOwner'],
-    'shop-import' : ["isLoggedIn",'isServerOwner'],
+    'shop-export' : ["isLoggedIn",'roles/manageEconomy'],
+    'shop-import' : ["isLoggedIn",'roles/manageEconomy'],
   },
 
   customCommandController: {
@@ -53,7 +53,7 @@ module.exports.policies = {
   },
 
   playerController: {
-    '*': ['isLoggedIn', 'isPlayerOwner']
+    '*': ['isLoggedIn','roles/managePlayers']
   },
 
   userController: {
