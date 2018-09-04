@@ -14,7 +14,8 @@ module.exports = {
     },
 
     serverId: {
-      type: 'number'
+      type: 'number',
+      required: true
     },
 
     playerId: {
@@ -54,10 +55,11 @@ module.exports = {
       role = await sails.helpers.sdtd.getPlayerRole(inputs.playerId);
     }
 
+    // If we find no role for a player, we default to highest level role.
     if (_.isUndefined(role)) {
       let foundRole = await Role.find({
         where: {
-          server: player.server
+          server: inputs.serverId
         },
         sort: 'level DESC',
         limit: 1
@@ -69,6 +71,14 @@ module.exports = {
 
     if (role.manageServer) {
       hasPermission = true
+    }
+
+    if (!_.isUndefined(inputs.userId) && !hasPermission) {
+      let server = await SdtdServer.findOne(inputs.serverId);
+
+      if (server.owner === inputs.userId) {
+        hasPermission = true;
+      }
     }
 
     sails.log.debug(`Checked if ${inputs.playerId ? `player ${inputs.playerId}` : `user ${inputs.userId}`} has permission ${inputs.permission} - ${hasPermission}`)
