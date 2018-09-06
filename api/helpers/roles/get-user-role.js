@@ -58,9 +58,11 @@ module.exports = {
 
     let foundRole;
 
+
     let amountOfRoles = await Role.count({
-      server: foundPlayer.server
+      server: inputs.serverId
     });
+
 
     if (amountOfRoles === 0) {
       await Role.create({
