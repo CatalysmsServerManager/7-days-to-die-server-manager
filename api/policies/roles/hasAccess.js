@@ -18,10 +18,16 @@ module.exports = async function manageEconomy(req, res, next) {
   if (role.manageEconomy || role.managePlayers || role.manageRoles || role.manage || role.viewDashboard || role.useTracking || role.viewAnalytics || role.manageTickets) {
     next()
   } else {
-    return res.view('meta/notauthorized', {
-      role: role,
-      requiredPerm: 'any'
-    })
+    if (req.wantsJSON) {
+      return res.status(403).json({
+        error: `You do not have sufficient permissions! You need "any" permission. Your current role is ${role.name}.`
+      });
+    } else {
+      return res.view('meta/notauthorized', {
+        role: role,
+        requiredPerm: 'any'
+      })
+    }
   }
 
 
