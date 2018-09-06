@@ -72,6 +72,7 @@ module.exports = {
         allocsVersion: allocsObj,
         cpmVersion: cpmObj,
         userRole: userRole,
+        owner: sdtdServer.owner === parseInt(this.req.session.user.id) ? true : false
         //   donator: donatorRole
       });
     } catch (error) {
