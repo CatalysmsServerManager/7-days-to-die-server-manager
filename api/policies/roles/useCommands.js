@@ -19,11 +19,20 @@ module.exports = async function useCommands(req, res, next) {
     });
   
     if (!permCheck.hasPermission) {
-      sails.log.warn(`User ${user.username} tried to access dashboard without sufficient permissions (user is ${permCheck.role.name}).`)
-      return res.view('meta/notauthorized', {
-        role: permCheck.role,
-        requiredPerm: 'useCommands'
-      })
+      sails.log.warn(`User ${user.username} tried to access ${req.path} without sufficient permissions (user is ${permCheck.role.name}).`)
+  
+      if (req.wantsJSON) {
+        return res.status(403).json({
+          error: `You do not have sufficient permissions! You need "useCommands" permission. Your current role is ${permCheck.role.name}.`
+        });
+      } else {
+        return res.view('meta/notauthorized', {
+          role: permCheck.role,
+          requiredPerm: 'useCommands'
+        })
+      }
+  
+  
     }
   
     next();

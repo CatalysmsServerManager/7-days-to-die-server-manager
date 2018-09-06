@@ -19,11 +19,20 @@ module.exports = async function viewDashboard(req, res, next) {
   });
 
   if (!permCheck.hasPermission) {
-    sails.log.warn(`User ${user.username} tried to access dashboard without sufficient permissions (user is ${permCheck.role.name}).`)
-    return res.view('meta/notauthorized', {
-      role: permCheck.role,
-      requiredPerm: 'viewDashboard'
-    })
+    sails.log.warn(`User ${user.username} tried to access ${req.path} without sufficient permissions (user is ${permCheck.role.name}).`)
+
+    if (req.wantsJSON) {
+      return res.status(403).json({
+        error: `You do not have sufficient permissions! You need "viewDashboard" permission. Your current role is ${permCheck.role.name}.`
+      });
+    } else {
+      return res.view('meta/notauthorized', {
+        role: permCheck.role,
+        requiredPerm: 'viewDashboard'
+      })
+    }
+
+
   }
 
   next();

@@ -30,6 +30,9 @@ module.exports.policies = {
     'settings': ['isLoggedIn', 'roles/manageServer'],
     'economy/*': ['isLoggedIn', 'roles/manageEconomy'],
     'historicalData/*': ['isLoggedIn', 'roles/viewAnalytics'],
+    "view-tracking": ['isLoggedIn', 'roles/useTracking'],
+    "execute-command": ['isLoggedIn', 'roles/useCommands'],
+    "send-message": ['isLoggedIn', 'roles/useChat'],
   },
 
   gblController: {
@@ -54,7 +57,7 @@ module.exports.policies = {
   },
 
   customCommandController: {
-    '*': ["isLoggedIn", 'isServerOwner'],
+    '*': ["isLoggedIn", 'roles/manageServer'],
   },
 
   playerController: {
@@ -79,8 +82,12 @@ module.exports.policies = {
     'server-tickets-view': ["isLoggedIn", 'roles/manageTickets'],
   },
 
+  "tracking-info": {
+    "*": ["isLoggedIn", 'roles/useTracking'],
+  },
+
   "cron-job": {
-    "*": ["isLoggedIn", 'isServerOwner']
+    "*": ["isLoggedIn", 'roles/manageServer']
   },
 
 };
