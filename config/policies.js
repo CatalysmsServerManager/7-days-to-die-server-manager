@@ -19,7 +19,7 @@ module.exports.policies = {
   // isLoggedIn gets included in most of these because it contains the redirect logic
 
   sdtdServerController: {
-    '*': ["isLoggedIn", 'isServerOwner'],
+    '*': ["isLoggedIn", 'roles/manageServer'],
     'add-server': 'isLoggedIn',
     'add-server-view': 'isLoggedIn',
     'view-gbl': 'isLoggedIn',
@@ -38,7 +38,7 @@ module.exports.policies = {
 
   gblController: {
     '*': 'isLoggedIn',
-    'set-note': ["isLoggedIn", 'isServerOwner']
+    'set-note': ["isLoggedIn", 'roles/manageServer']
   },
 
   roleController: {
