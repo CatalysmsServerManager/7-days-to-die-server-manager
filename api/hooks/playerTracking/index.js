@@ -219,12 +219,7 @@ module.exports = function definePlayerTrackingHook(sails) {
       })
     } catch (error) {
 
-      await SdtdConfig.update({
-        server: server.id
-      }, {
-        inventoryTracking: false
-      })
-      sails.log.warn(`${server.name} Errored during inventory tracking - ${error}. Disabled inventory tracking.`)
+      sails.log.warn(`${server.name} Errored during inventory tracking - ${error}.`)
     }
 
 
