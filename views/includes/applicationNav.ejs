@@ -206,7 +206,7 @@
     <a id="server-${server.id}-nav-title" class="nav-link-collapse collapsed" data-toggle="collapse" href="#server-${server.id}-nav">${server.name} <span class="badge badge-secondary fps-badge" value="${server.id}"></span></a>
     <ul class="sidenav-third-level collapse" id="server-${server.id}-nav">`
 
-              if (server.role.viewDashboard || isOwner) {
+              if (server.role.viewDashboard || isOwner || server.role.manageServer) {
                 serverNavHTMLString +=
                   `<li>
                 <a href='${dashboardLink}'>
@@ -215,7 +215,7 @@
                    </li>`
               }
 
-              if (server.role.manageServer || isOwner) {
+              if (server.role.manageServer || isOwner || server.role.manageServer) {
                 serverNavHTMLString +=
                   `<li>
 <a href='${settingsLink}'>
@@ -224,7 +224,7 @@
 </li>`
               }
 
-              if (server.role.manageTickets || isOwner) {
+              if (server.role.manageTickets || isOwner || server.role.manageServer) {
                 serverNavHTMLString += `        <li>
                 <a href='${ticketsLink}'>
                     <em class="glyphicon glyphicon-align-justify"></em>
@@ -234,7 +234,7 @@
         </li>`
               }
 
-              if (server.role.manageEconomy || isOwner) {
+              if (server.role.manageEconomy || isOwner || server.role.manageServer) {
                 serverNavHTMLString += `        <li>
         
         <a href=" ${economy}" role="button">
@@ -242,21 +242,21 @@
 </li>`
               }
 
-              if (server.role.useTracking || isOwner) {
+              if (server.role.useTracking || isOwner || server.role.manageServer) {
                 serverNavHTMLString += `        <li>
                         <a href=" ${tracker}" role="button">
                                 <i class="fas fa-search"></i> Player tracker</a>
         </li>`
               }
 
-              if (server.role.viewAnalytics || isOwner) {
+              if (server.role.viewAnalytics || isOwner || server.role.manageServer) {
                 serverNavHTMLString += `        <li>
                         <a href=" ${analytics}" role="button">
                           <i class="far fa-chart-bar"></i> Analytics</a>
         </li>`
               }
 
-              if (server.role.managePlayers || isOwner) {
+              if (server.role.managePlayers || isOwner || server.role.manageServer) {
                 serverNavHTMLString += `        <li>
                 
                 <a href=" ${playersLink}" role="button">
