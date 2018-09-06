@@ -19,43 +19,56 @@ module.exports.policies = {
   // isLoggedIn gets included in most of these because it contains the redirect logic
 
   sdtdServerController: {
-    '*': ["isLoggedIn",'isServerOwner'],
+    '*': ["isLoggedIn", 'isServerOwner'],
     'add-server': 'isLoggedIn',
     'add-server-view': 'isLoggedIn',
     'view-gbl': 'isLoggedIn',
+    'subscribe-to-socket': ['isLoggedIn', 'roles/hasAccess'],
+    'is-online': ['isLoggedIn', 'roles/hasAccess'],
+    'get-fps': ['isLoggedIn', 'roles/hasAccess'],
+    'dashboard': ['isLoggedIn', 'roles/viewDashboard'],
+    'settings': ['isLoggedIn', 'roles/manageServer'],
+    'economy/*': ['isLoggedIn', 'roles/manageEconomy'],
+    'historicalData/*': ['isLoggedIn', 'roles/viewAnalytics'],
+    "view-tracking": ['isLoggedIn', 'roles/useTracking'],
+    "execute-command": ['isLoggedIn', 'roles/useCommands'],
+    "send-message": ['isLoggedIn', 'roles/useChat'],
+    "get-players": ['isLoggedIn', 'roles/hasAccess'],
   },
 
   gblController: {
-    '*' : 'isLoggedIn',
-    'set-note': ["isLoggedIn",'isServerOwner']
+    '*': 'isLoggedIn',
+    'set-note': ["isLoggedIn", 'isServerOwner']
   },
 
   roleController: {
-    '*': ["isLoggedIn",'isServerOwner'],
+    '*': ["isLoggedIn", 'roles/manageServer'],
+    'add-player': ["isLoggedIn", 'roles/manageServer'],
+    'get-role': ["isLoggedIn"],
   },
 
   ShopController: {
     '*': ['isLoggedIn'],
-    'listing-add': ["isLoggedIn",'isServerOwner'],
-    'listing-edit': ["isLoggedIn",'isServerOwner'],
-    'listing-delete': ["isLoggedIn",'isServerOwner'],
-    'listing-buy' : 'isLoggedIn',
-    'shop-export' : ["isLoggedIn",'isServerOwner'],
-    'shop-import' : ["isLoggedIn",'isServerOwner'],
+    'listing-add': ["isLoggedIn", 'roles/manageEconomy'],
+    'listing-edit': ["isLoggedIn", 'roles/manageEconomy'],
+    'listing-delete': ["isLoggedIn", 'roles/manageEconomy'],
+    'listing-buy': 'isLoggedIn',
+    'shop-export': ["isLoggedIn", 'roles/manageEconomy'],
+    'shop-import': ["isLoggedIn", 'roles/manageEconomy'],
   },
 
   customCommandController: {
-    '*': ["isLoggedIn",'isServerOwner'],
+    '*': ["isLoggedIn", 'roles/manageServer'],
   },
 
   playerController: {
-    '*': ['isLoggedIn', 'isPlayerOwner']
+    '*': ['isLoggedIn', 'roles/managePlayers']
   },
 
   userController: {
     '*': 'isLoggedIn',
-    'profile': ['isLoggedIn','isLoggedInUser'],
-    'dashboard': ['isLoggedIn','isLoggedInUser']
+    'profile': ['isLoggedIn', 'isLoggedInUser'],
+    'dashboard': ['isLoggedIn', 'isLoggedInUser']
   },
 
   authController: {
@@ -64,13 +77,18 @@ module.exports.policies = {
   },
 
   sdtdTicketController: {
+    '*': ["isLoggedIn", 'roles/manageTickets'],
     'view-ticket': ["isLoggedIn", 'canSeeTicket'],
     'open-tickets': true,
-    'server-tickets-view': ["isLoggedIn",'isServerOwner'],
+    'server-tickets-view': ["isLoggedIn", 'roles/manageTickets'],
+  },
+
+  "tracking-info": {
+    "*": ["isLoggedIn", 'roles/useTracking'],
   },
 
   "cron-job": {
-    "*" : ["isLoggedIn",'isServerOwner']
+    "*": ["isLoggedIn", 'roles/manageServer']
   },
 
 };

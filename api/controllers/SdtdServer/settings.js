@@ -20,6 +20,11 @@ module.exports = {
     notFound: {
       description: 'No server with the specified ID was found in the database.',
       responseType: 'notFound'
+    },
+    notAuthorized: {
+      description: 'user is not authorized to do this.',
+      responseType: 'view',
+      viewTemplatePath: 'meta/notauthorized'
     }
   },
 
@@ -33,12 +38,27 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
+    let server = await SdtdServer.findOne(inputs.serverId);
+    let serverConfig = await SdtdConfig.findOne({
+      server: server.id
+    });
+    let user = await User.findOne(this.req.session.userId);
 
+    let permCheck = await sails.helpers.roles.checkPermission.with({
+      userId: this.req.session.userId,
+      serverId: inputs.serverId,
+      permission: 'manageServer'
+    });
+
+    if (!permCheck.hasPermission) {
+      return exits.notAuthorized({
+        role: permCheck.role,
+        requiredPerm: 'manageServer'
+      })
+    }
 
     try {
-      let server = await SdtdServer.findOne(inputs.serverId);
-      let serverConfig = await SdtdConfig.findOne({ server: server.id });
-      let user = await User.findOne(this.req.session.userId);
+
       let customCommands = await CustomCommand.find({
         server: server.id,
       }).populate('arguments');

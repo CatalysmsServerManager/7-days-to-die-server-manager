@@ -350,6 +350,7 @@ module.exports.routes = {
 
   'get /api/user/info': 'User.get-user-info',
   'get /api/user/ownedServers': "User.get-owned-servers",
+  "get /api/user/serversWithPermission": "User.get-servers-with-permissions",
   'get /api/user/findguildsmanagedbyuser': "User.find-guilds-managed-by-user",
 
   'get /api/player/inventory': {

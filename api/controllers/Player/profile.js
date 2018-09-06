@@ -21,10 +21,7 @@ module.exports = {
       description: 'No player with the specified ID was found in the database.',
       responseType: 'notFound'
     },
-    forbidden: {
-      description: 'Someone who is not authorized tried to view this page',
-      responseType: 'forbidden'
-    }
+
   },
 
   /**
@@ -36,11 +33,11 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    sails.log.debug(`VIEW - Player:profile - Showing profile for ${inputs.playerId}`);
+    let player = await Player.findOne(inputs.playerId);
+    let server = await SdtdServer.findOne(player.server);
 
     try {
-      let player = await Player.findOne(inputs.playerId);
-      let server = await SdtdServer.findOne(player.server);
+
       let historicalInfo = await HistoricalInfo.find({
         player: player.id,
         server: server.id

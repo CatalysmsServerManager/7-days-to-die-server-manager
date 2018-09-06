@@ -20,7 +20,8 @@ module.exports = {
     notFound: {
       description: 'No server with the specified ID was found in the database.',
       responseType: 'notFound'
-    }
+    },
+
   },
 
   /**
@@ -31,8 +32,12 @@ module.exports = {
    */
 
   fn: async function (inputs, exits) {
+
+    let sdtdServer = await SdtdServer.findOne(inputs.serverId);
+
+
     try {
-      let sdtdServer = await SdtdServer.findOne(inputs.serverId);
+
       sdtdServerInfo = await sails.helpers.loadSdtdserverInfo(inputs.serverId)
         .tolerate('unauthorized', (error) => {
           sails.log.warn(`VIEW - SdtdServer:dashboard - unauthorized for server cannot load serverInfo ${inputs.serverId}`)
@@ -48,7 +53,8 @@ module.exports = {
 
       let allocsVersion = await sails.helpers.sdtd.checkModVersion('Mod Allocs MapRendering and Webinterface', sdtdServer.id);
       let cpmVersion = await sails.helpers.sdtd.checkModVersion('Mod CSMM Patrons', sdtdServer.id);
-     // let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({ serverId: sdtdServer.id });
+      // let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({ serverId: sdtdServer.id });
+      let userRole = await sails.helpers.roles.getUserRole(this.req.session.user.id, sdtdServer.id);
 
       let allocsObj = {
         supportedAllocs: sails.config.custom.currentAllocs,
@@ -65,7 +71,8 @@ module.exports = {
         server: sdtdServer,
         allocsVersion: allocsObj,
         cpmVersion: cpmObj,
-     //   donator: donatorRole
+        userRole: userRole,
+        //   donator: donatorRole
       });
     } catch (error) {
       sails.log.error(`VIEW - SdtdServer:dashboard - ${error}`);

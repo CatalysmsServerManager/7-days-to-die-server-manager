@@ -46,6 +46,7 @@ module.exports = {
           };
           sails.log.info(`User ${user.username} successfully logged in`);
           req.session.userId = user.id;
+          req.session.user = user;
           try {
             let players = await Player.find({
               steamId: user.steamId
