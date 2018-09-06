@@ -148,6 +148,22 @@
 
           <div class="form-check">
             <label class="form-check-label">
+              <input type="checkbox" class="form-check-input" name="edit-role-manageTickets" id="edit-role-manageTickets" aria-describedby="edit-role-manageTickets-help"
+                value="true"> Manage support tickets
+            </label>
+            <small id="edit-role-manageTickets-help" class="form-text text-muted">Allow a user to manage support tickets for your server. This includes closing and commenting on tickets.</small>
+          </div>
+
+          <div class="form-check">
+            <label class="form-check-label">
+              <input type="checkbox" class="form-check-input" name="edit-role-viewAnalytics" id="edit-role-viewAnalytics" aria-describedby="edit-role-viewAnalytics-help"
+                value="true"> View analytics
+            </label>
+            <small id="edit-role-viewAnalytics-help" class="form-text text-muted">Allow a user to view the analytics page of your server.</small>
+          </div>
+
+          <div class="form-check">
+            <label class="form-check-label">
               <input type="checkbox" class="form-check-input" name="edit-role-viewDashboard" id="edit-role-viewDashboard" aria-describedby="edit-role-viewDashboard-help"
                 value="true"> View dashboard
             </label>
@@ -248,6 +264,8 @@
       let useCommands = $("#edit-role-useCommands").prop('checked');
       let managePlayers = $("#edit-role-managePlayers").prop('checked');
       let viewDashboard = $("#edit-role-viewDashboard").prop('checked');
+      let viewAnalytics = $("#edit-role-viewAnalytics").prop('checked');
+      let manageTickets = $("#edit-role-manageTickets").prop('checked');
 
       $.ajax({
         url: "/api/role",
@@ -267,7 +285,9 @@
           useChat: useChat,
           useCommands: useCommands,
           managePlayers: managePlayers,
-          viewDashboard: viewDashboard
+          viewDashboard: viewDashboard,
+          viewAnalytics: viewAnalytics,
+          manageTickets: manageTickets
         },
         success: (data, status, xhr) => {
           drawRolesTable();
@@ -301,6 +321,8 @@
       $("#edit-role-useCommands").prop('checked', currentRole.useCommands);
       $("#edit-role-managePlayers").prop('checked', currentRole.managePlayers);
       $("#edit-role-viewDashboard").prop('checked', currentRole.viewDashboard);
+      $("#edit-role-viewAnalytics").prop('checked', currentRole.viewAnalytics);
+      $("#edit-role-manageTickets").prop('checked', currentRole.manageTickets);
 
     });
 

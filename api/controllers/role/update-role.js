@@ -61,7 +61,15 @@ module.exports = {
       type: 'boolean'
     },
 
+    manageTickets: {
+      type: 'boolean'
+    },
+
     useTracking: {
+      type: 'boolean'
+    },
+
+    viewAnalytics: {
       type: 'boolean'
     },
 
@@ -91,7 +99,9 @@ module.exports = {
       useCommands: inputs.useCommands,
       managePlayers: inputs.managePlayers,
       viewDashboard: inputs.viewDashboard,
-      useTracking: inputs.useTracking
+      useTracking: inputs.useTracking,
+      viewAnalytics: inputs.viewAnalytics,
+      manageTickets: inputs.manageTickets
     };
 
     let updatedRole = await Role.update({

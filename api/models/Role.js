@@ -51,6 +51,16 @@ module.exports = {
       defaultsTo: false
     },
 
+    manageTickets: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
+    viewAnalytics: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
     viewDashboard: {
       type: 'boolean',
       defaultsTo: false
