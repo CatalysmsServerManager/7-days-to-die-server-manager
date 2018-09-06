@@ -54,6 +54,7 @@ module.exports = {
       let allocsVersion = await sails.helpers.sdtd.checkModVersion('Mod Allocs MapRendering and Webinterface', sdtdServer.id);
       let cpmVersion = await sails.helpers.sdtd.checkModVersion('Mod CSMM Patrons', sdtdServer.id);
       // let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({ serverId: sdtdServer.id });
+      let userRole = await sails.helpers.roles.getUserRole(this.req.session.user.id, sdtdServer.id);
 
       let allocsObj = {
         supportedAllocs: sails.config.custom.currentAllocs,
@@ -70,6 +71,7 @@ module.exports = {
         server: sdtdServer,
         allocsVersion: allocsObj,
         cpmVersion: cpmObj,
+        userRole: userRole,
         //   donator: donatorRole
       });
     } catch (error) {
