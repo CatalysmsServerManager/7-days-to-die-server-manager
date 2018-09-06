@@ -94,16 +94,17 @@ module.exports = {
       if (foundPlayer.role) {
         foundRole = await Role.findOne(foundPlayer.role);
       }
-      if (_.isUndefined(foundRole)) {
-        foundRole = await Role.find({
-          where: {
-            server: foundPlayer.server
-          },
-          sort: 'level DESC',
-          limit: 1
-        });
-        foundRole = foundRole[0]
-      }
+    }
+
+    if (_.isUndefined(foundRole)) {
+      foundRole = await Role.find({
+        where: {
+          server: inputs.serverId
+        },
+        sort: 'level DESC',
+        limit: 1
+      });
+      foundRole = foundRole[0]
     }
 
     sails.log.verbose(`Found role ${foundRole.name} for user ${foundUser.username}`)
