@@ -32,8 +32,13 @@ module.exports = {
         let objectToSend = new Array();
 
         players.map(player => {
-          player.server.role = player.role;
-          objectToSend.push(player.server);
+          try {
+            player.server.role = player.role;
+            objectToSend.push(player.server);
+          } catch (error) {
+            sails.log.error(error)
+          }
+
         })
 
         return exits.success(objectToSend);
