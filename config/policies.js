@@ -33,6 +33,7 @@ module.exports.policies = {
     "view-tracking": ['isLoggedIn', 'roles/useTracking'],
     "execute-command": ['isLoggedIn', 'roles/useCommands'],
     "send-message": ['isLoggedIn', 'roles/useChat'],
+    "get-players": ['isLoggedIn', 'roles/hasAccess'],
   },
 
   gblController: {
