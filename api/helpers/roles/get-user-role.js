@@ -51,7 +51,9 @@ module.exports = {
     });
 
     try {
-      await sails.helpers.discord.setRoleFromDiscord(foundPlayer.id);
+      if (!_.isUndefined(foundPlayer)) {
+        await sails.helpers.discord.setRoleFromDiscord(foundPlayer.id);
+      }
     } catch (error) {
       sails.log.debug(`Couldn't update players roles via discord - ${error}`)
     }
@@ -67,7 +69,7 @@ module.exports = {
       await Role.create({
         name: "Default role",
         level: 9999,
-        server: foundPlayer.server,
+        server: inputs.serverId,
         amountOfteleports: 5
       });
     }
