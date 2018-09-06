@@ -80,6 +80,7 @@ module.exports = {
         sort: 'level ASC',
         limit: 1
       })
+      sails.log.warning(`Catalysm is accessing something... If you see this, you are catalysm and you're not on CSMM this means bad news bears.`)
     }
     foundRole = foundRole[0];
 
