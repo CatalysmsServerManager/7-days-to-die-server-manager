@@ -44,11 +44,6 @@ module.exports = {
       type: 'boolean'
     },
 
-    manageRoles: {
-      type: 'boolean',
-
-    },
-
     useChat: {
       type: 'boolean'
     },
@@ -94,7 +89,6 @@ module.exports = {
       discordRole: inputs.discordRole,
       manageServer: inputs.manageServer,
       manageEconomy: inputs.manageEconomy,
-      manageRoles: inputs.manageRoles,
       useChat: inputs.useChat,
       useCommands: inputs.useCommands,
       managePlayers: inputs.managePlayers,

@@ -66,11 +66,6 @@ module.exports = {
       defaultsTo: false
     },
 
-    manageRoles: {
-      type: 'boolean',
-      defaultsTo: false
-    },
-
     useTracking: {
       type: 'boolean',
       defaultsTo: false

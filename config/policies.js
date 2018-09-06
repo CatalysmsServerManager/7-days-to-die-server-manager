@@ -42,8 +42,8 @@ module.exports.policies = {
   },
 
   roleController: {
-    '*': ["isLoggedIn", 'roles/manageRoles'],
-    'add-player': ["isLoggedIn", 'roles/manageRoles'],
+    '*': ["isLoggedIn", 'roles/manageServer'],
+    'add-player': ["isLoggedIn", 'roles/manageServer'],
     'get-role': ["isLoggedIn"],
   },
 

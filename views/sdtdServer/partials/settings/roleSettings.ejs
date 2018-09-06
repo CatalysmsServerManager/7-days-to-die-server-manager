@@ -132,14 +132,6 @@
 
           <div class="form-check">
             <label class="form-check-label">
-              <input type="checkbox" class="form-check-input" name="edit-role-manageRoles" id="edit-role-manageRoles" aria-describedby="edit-role-manageRoles-help"
-                value="true"> Manage roles
-            </label>
-            <small id="edit-role-manageRoles-help" class="form-text text-muted">Allow a user to edit roles for your server.</small>
-          </div>
-
-          <div class="form-check">
-            <label class="form-check-label">
               <input type="checkbox" class="form-check-input" name="edit-role-managePlayers" id="edit-role-managePlayers" aria-describedby="edit-role-managePlayers-help"
                 value="true"> Manage players
             </label>
@@ -258,7 +250,6 @@
 
       let manageServer = $("#edit-role-manageServer").prop('checked');
       let manageEconomy = $("#edit-role-manageEconomy").prop('checked');
-      let manageRoles = $("#edit-role-manageRoles").prop('checked');
       let useTracking = $("#edit-role-useTracking").prop('checked');
       let useChat = $("#edit-role-useChat").prop('checked');
       let useCommands = $("#edit-role-useCommands").prop('checked');
@@ -280,7 +271,6 @@
           amountOfTeleports: amountOfTeleports,
           manageServer: manageServer,
           manageEconomy: manageEconomy,
-          manageRoles: manageRoles,
           useTracking: useTracking,
           useChat: useChat,
           useCommands: useCommands,
@@ -315,7 +305,6 @@
 
       $("#edit-role-manageServer").prop('checked', currentRole.manageServer);
       $("#edit-role-manageEconomy").prop('checked', currentRole.manageEconomy);
-      $("#edit-role-manageRoles").prop('checked', currentRole.manageRoles);
       $("#edit-role-useTracking").prop('checked', currentRole.useTracking);
       $("#edit-role-useChat").prop('checked', currentRole.useChat);
       $("#edit-role-useCommands").prop('checked', currentRole.useCommands);
