@@ -33,6 +33,8 @@ module.exports.custom = {
 
   discordFeedbackChannel: "336823516383150080",
 
+  catalysmSteamId: "76561198028175941",
+
 
   // MOD VERSIONS
   currentAllocs: "26",

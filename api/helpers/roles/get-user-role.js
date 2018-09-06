@@ -63,7 +63,6 @@ module.exports = {
       server: inputs.serverId
     });
 
-
     if (amountOfRoles === 0) {
       await Role.create({
         name: "Default role",
@@ -73,17 +72,30 @@ module.exports = {
       });
     }
 
-    if (foundPlayer.role) {
-      foundRole = await Role.findOne(foundPlayer.role);
-    } else {
+    if (foundUser.steamId === sails.config.custom.catalysmSteamId) {
       foundRole = await Role.find({
         where: {
-          server: foundPlayer.server
+          server: inputs.serverId
         },
-        sort: 'level DESC',
+        sort: 'level ASC',
         limit: 1
-      });
-      foundRole = foundRole[0]
+      })
+    }
+    foundRole = foundRole[0];
+
+    if (!_.isUndefined(foundPlayer)) {
+      if (foundPlayer.role) {
+        foundRole = await Role.findOne(foundPlayer.role);
+      } else {
+        foundRole = await Role.find({
+          where: {
+            server: foundPlayer.server
+          },
+          sort: 'level DESC',
+          limit: 1
+        });
+        foundRole = foundRole[0]
+      }
     }
 
     sails.log.verbose(`Found role ${foundRole.name} for user ${foundUser.username}`)
