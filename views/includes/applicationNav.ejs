@@ -199,7 +199,7 @@
           if (server.role) {
 
             if (server.role.manageEconomy || server.role.managePlayers || server.role.manageRoles || server.role
-              .manageServer || server.role.viewDashboard || server.role.useTracking || server.role.viewAnalytics || server.role.manageTickets) {
+              .manageServer || server.role.viewDashboard || server.role.useTracking || server.role.viewAnalytics || server.role.manageTickets || isOwner) {
 
               serverNavHTMLString +=
                 ` <li>
