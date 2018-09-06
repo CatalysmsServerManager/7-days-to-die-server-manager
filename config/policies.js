@@ -23,8 +23,13 @@ module.exports.policies = {
     'add-server': 'isLoggedIn',
     'add-server-view': 'isLoggedIn',
     'view-gbl': 'isLoggedIn',
+    'subscribe-to-socket': ['isLoggedIn', 'roles/hasAccess'],
+    'is-online': ['isLoggedIn', 'roles/hasAccess'],
+    'get-fps': ['isLoggedIn', 'roles/hasAccess'],
     'dashboard': ['isLoggedIn', 'roles/viewDashboard'],
     'settings' : ['isLoggedIn', 'roles/manageServer'],
+    'economy/*': ['isLoggedIn', 'roles/manageEconomy'],
+    'historicalData/*': ['isLoggedIn', 'roles/viewAnalytics'],
   },
 
   gblController: {
