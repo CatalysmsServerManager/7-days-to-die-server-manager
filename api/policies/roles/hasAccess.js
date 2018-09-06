@@ -14,7 +14,7 @@ module.exports = async function manageEconomy(req, res, next) {
   let role = await sails.helpers.roles.getUserRole(user.id, serverId)
 
 
-  if (role.manageEconomy || role.managePlayers || role.manageRoles || role.manage || role.viewDashboard || role.useTracking || role.viewAnalytics || role.manageTickets || user.steamId === sails.config.custom.catalysmSteamId) {
+  if (role.manageServer || role.manageEconomy || role.managePlayers || role.manageRoles || role.manage || role.viewDashboard || role.useTracking || role.viewAnalytics || role.manageTickets || user.steamId === sails.config.custom.catalysmSteamId) {
     next()
   } else {
     if (req.wantsJSON) {
