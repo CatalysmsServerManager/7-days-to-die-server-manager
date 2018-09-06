@@ -19,8 +19,8 @@ module.exports = async function manageEconomy(req, res, next) {
     next()
   } else {
     return res.view('meta/notauthorized', {
-      role: permCheck.role,
-      requiredPerm: 'manageEconomy'
+      role: role,
+      requiredPerm: 'any'
     })
   }
 
