@@ -38,17 +38,21 @@ module.exports = {
   },
 
   fn: async function (inputs, exits) {
-
+    
     try {
       let dateStarted = new Date();
       let server = await SdtdServer.findOne(inputs.serverId);
       let serverAvailable = await sails.helpers.sdtd.checkIfAvailable(server.id, true)
       if (!serverAvailable) {
-        let playerProfile = await Player.find({
-          steamId: inputs.steamId,
-          server: server.id
-        });
-        return exits.success(playerProfile)
+        if (inputs.onlyOnline) {
+          return exits.success([])
+        } else {
+          let playerProfile = await Player.find({
+            steamId: inputs.steamId,
+            server: server.id
+          });
+          return exits.success(playerProfile)
+        }
       }
 
       let playerList = await getPlayerList(server);
