@@ -2,227 +2,237 @@ var sevenDays = require('machinepack-7daystodiewebapi');
 var he = require('he');
 
 module.exports = {
-    friendlyName: 'Load player data',
-    description: 'Load player information from a 7 Days to die server',
-    inputs: {
-        serverId: {
-            type: 'number',
-            required: true
-        },
-        steamId: {
-            type: 'string'
-        },
-        onlyOnline: {
-            type: 'boolean',
-            description: 'Should we only load info about online players?'
-        },
-
-        steamAvatar: {
-            type: 'boolean',
-            description: 'Wheter or not to load steam avatars of the player(s). Defaults to false'
-        },
-
-        inventory: {
-            type: 'boolean',
-            description: 'Whether to load inventory data or not. Defaults to true'
-        }
+  friendlyName: 'Load player data',
+  description: 'Load player information from a 7 Days to die server',
+  inputs: {
+    serverId: {
+      type: 'number',
+      required: true
     },
-    exits: {
-        error: {
-            friendlyName: 'error'
-        },
-        playerNotFound: {
-            friendlyName: 'Player not found',
-            description: 'ID was given, but no player found on the server'
-        }
+    steamId: {
+      type: 'string'
+    },
+    onlyOnline: {
+      type: 'boolean',
+      description: 'Should we only load info about online players?'
     },
 
-    fn: async function (inputs, exits) {
+    steamAvatar: {
+      type: 'boolean',
+      description: 'Wheter or not to load steam avatars of the player(s). Defaults to false'
+    },
 
-        try {
-            let dateStarted = new Date();
-            let server = await SdtdServer.findOne(inputs.serverId);
-            let playerList = await getPlayerList(server);
+    inventory: {
+      type: 'boolean',
+      description: 'Whether to load inventory data or not. Defaults to true'
+    }
+  },
+  exits: {
+    error: {
+      friendlyName: 'error'
+    },
+    playerNotFound: {
+      friendlyName: 'Player not found',
+      description: 'ID was given, but no player found on the server'
+    }
+  },
 
-            if (_.isUndefined(inputs.inventory)) {
-                inputs.inventory = true
-            }
+  fn: async function (inputs, exits) {
 
-            // If steam ID is given, filter the response. Allocs API currently doesn't support filtering at this stage
-            if (inputs.steamId) {
-                playerList.players = playerList.players.filter(player => {
-                    return player.steamid == inputs.steamId
-                })
-                playerList.total = playerList.players.length;
-                playerList.totalUnfiltered = playerList.players.length;
-            }
+    try {
+      let dateStarted = new Date();
+      let server = await SdtdServer.findOne(inputs.serverId);
+      let serverAvailable = await sails.helpers.sdtd.checkIfAvailable(server.id, true)
+      if (!serverAvailable) {
+        let playerProfile = await Player.find({
+          steamId: inputs.steamId,
+          server: server.id
+        });
+        return exits.success(playerProfile)
+      }
 
-            // if onlyOnline is true, we only load info about online players. We filter the array for that
-            if (inputs.onlyOnline) {
-                playerList.players = playerList.players.filter(player => {
-                    return player.online
-                })
-                playerList.total = playerList.players.length;
-                playerList.totalUnfiltered = playerList.players.length;
-            }
+      let playerList = await getPlayerList(server);
 
-            let playersToSend = new Array();
+      if (_.isUndefined(inputs.inventory)) {
+        inputs.inventory = true
+      }
 
-            for (const player of playerList.players) {
+      // If steam ID is given, filter the response. Allocs API currently doesn't support filtering at this stage
+      if (inputs.steamId) {
+        playerList.players = playerList.players.filter(player => {
+          return player.steamid == inputs.steamId
+        })
+        playerList.total = playerList.players.length;
+        playerList.totalUnfiltered = playerList.players.length;
+      }
 
-                let playerProfile = await findOrCreatePlayer(player, inputs.serverId);
+      // if onlyOnline is true, we only load info about online players. We filter the array for that
+      if (inputs.onlyOnline) {
+        playerList.players = playerList.players.filter(player => {
+          return player.online
+        })
+        playerList.total = playerList.players.length;
+        playerList.totalUnfiltered = playerList.players.length;
+      }
 
-                // Inventory & stats data is only available when a player is online, so we only load it then.
-                let playerInventory
-                let playerStats
-                let steamAvatar
+      let playersToSend = new Array();
 
-                if (inputs.steamAvatar) {
-                    steamAvatar = await loadSteamAvatar(player.steamid);
+      for (const player of playerList.players) {
 
-                }
-                if (player.online && inputs.inventory) {
-                    playerInventory = await loadPlayerInventory(player.steamid, server);
-                }
+        let playerProfile = await findOrCreatePlayer(player, inputs.serverId);
 
-                let updateObj = {
-                    lastOnline: player.lastonline,
-                    name: player.name ? he.encode(player.name) : "Unknown",
-                    ip: player.ip,
-                    entityId: player.entityid,
-                    positionX: player.position.x,
-                    positionY: player.position.y,
-                    positionZ: player.position.z,
-                    playtime: player.totalplaytime,
-                    banned: player.banned
-                }
+        // Inventory & stats data is only available when a player is online, so we only load it then.
+        let playerInventory
+        let playerStats
+        let steamAvatar
 
-                if (!_.isUndefined(playerInventory)) {
-                    playerInventory = _.omit(playerInventory, 'playername');
-                    updateObj.inventory = playerInventory
-                }
+        if (inputs.steamAvatar) {
+          steamAvatar = await loadSteamAvatar(player.steamid);
 
-                if (!_.isUndefined(steamAvatar)) {
-                    updateObj.avatarUrl = steamAvatar
-                }
-
-                // Update the player record
-                playerProfile = await Player.update({ id: playerProfile.id }, updateObj).fetch();
-
-
-                if (player.online) {
-                    playerProfile[0].online = true
-                }
-
-                sails.log.verbose(`Loaded a player - ${playerProfile[0].id} - ${playerProfile[0].name} - server: ${server.name}`)
-                playersToSend.push(playerProfile[0]);
-            }
-            let dateEnded = new Date();
-
-            if (playersToSend.length > 0) {
-                sails.log.debug(`HELPER - loadPlayerData - Loaded player data for ${server.name}! Took ${dateEnded.valueOf() - dateStarted.valueOf()} ms - SteamId: ${inputs.steamId}`, playersToSend.map(player => {
-                    return player.name
-                }), inputs);
-            }
-            return exits.success(playersToSend)
-
-
-        } catch (error) {
-            exits.error(error);
+        }
+        if (player.online && inputs.inventory) {
+          playerInventory = await loadPlayerInventory(player.steamid, server);
         }
 
+        let updateObj = {
+          lastOnline: player.lastonline,
+          name: player.name ? he.encode(player.name) : "Unknown",
+          ip: player.ip,
+          entityId: player.entityid,
+          positionX: player.position.x,
+          positionY: player.position.y,
+          positionZ: player.position.z,
+          playtime: player.totalplaytime,
+          banned: player.banned
+        }
 
-    },
+        if (!_.isUndefined(playerInventory)) {
+          playerInventory = _.omit(playerInventory, 'playername');
+          updateObj.inventory = playerInventory
+        }
+
+        if (!_.isUndefined(steamAvatar)) {
+          updateObj.avatarUrl = steamAvatar
+        }
+
+        // Update the player record
+        playerProfile = await Player.update({
+          id: playerProfile.id
+        }, updateObj).fetch();
+
+
+        if (player.online) {
+          playerProfile[0].online = true
+        }
+
+        sails.log.verbose(`Loaded a player - ${playerProfile[0].id} - ${playerProfile[0].name} - server: ${server.name}`)
+        playersToSend.push(playerProfile[0]);
+      }
+      let dateEnded = new Date();
+
+      if (playersToSend.length > 0) {
+        sails.log.debug(`HELPER - loadPlayerData - Loaded player data for ${server.name}! Took ${dateEnded.valueOf() - dateStarted.valueOf()} ms - SteamId: ${inputs.steamId}`, playersToSend.map(player => {
+          return player.name
+        }), inputs);
+      }
+      return exits.success(playersToSend)
+
+
+    } catch (error) {
+      exits.error(error);
+    }
+
+
+  },
 };
 
 async function getPlayerList(server) {
-    return new Promise((resolve, reject) => {
-        sevenDays.getPlayerList({
-            ip: server.ip,
-            port: server.webPort,
-            authName: server.authName,
-            authToken: server.authToken
-        }).exec({
-            error: function (err) {
-                resolve({
-                    players: []
-                });
-            },
-            success: function (playerList) {
-                resolve(playerList);
-            }
+  return new Promise((resolve, reject) => {
+    sevenDays.getPlayerList({
+      ip: server.ip,
+      port: server.webPort,
+      authName: server.authName,
+      authToken: server.authToken
+    }).exec({
+      error: function (err) {
+        resolve({
+          players: []
         });
+      },
+      success: function (playerList) {
+        resolve(playerList);
+      }
     });
+  });
 }
 
 
 async function findOrCreatePlayer(player, serverId) {
-    try {
-        let foundOrCreatedPlayer = await Player.findOrCreate({ server: serverId, steamId: player.steamid }, {
-            steamId: player.steamid,
-            server: serverId,
-            entityId: player.entityid,
-            lastOnline: player.lastonline,
-            name: player.name ? he.encode(player.name) : "Unknown",
-            ip: player.ip,
-        });
-        return foundOrCreatedPlayer;
-    } catch (error) {
-        sails.log.error(`HELPER - loadPlayerData:findOrCreatePlayer ${error}`);
-        return undefined;
-    }
+  try {
+    let foundOrCreatedPlayer = await Player.findOrCreate({
+      server: serverId,
+      steamId: player.steamid
+    }, {
+      steamId: player.steamid,
+      server: serverId,
+      entityId: player.entityid,
+      lastOnline: player.lastonline,
+      name: player.name ? he.encode(player.name) : "Unknown",
+      ip: player.ip,
+    });
+    return foundOrCreatedPlayer;
+  } catch (error) {
+    sails.log.error(`HELPER - loadPlayerData:findOrCreatePlayer ${error}`);
+    return undefined;
+  }
 }
 
 function loadPlayerInventory(steamId, server) {
-    return new Promise((resolve, reject) => {
-        sevenDays.getPlayerInventory({
-            ip: server.ip,
-            port: server.webPort,
-            authName: server.authName,
-            authToken: server.authToken,
-            steamId: steamId
-        }).exec({
-            error: function (err) {
-                sails.log.error(`HELPER - loadPlayerData:loadPlayerInventory ${err}`);
-                resolve(undefined);
-            },
-            success: function (data) {
-                resolve(data)
-            }
-        });
-    })
+  return new Promise((resolve, reject) => {
+    sevenDays.getPlayerInventory({
+      ip: server.ip,
+      port: server.webPort,
+      authName: server.authName,
+      authToken: server.authToken,
+      steamId: steamId
+    }).exec({
+      error: function (err) {
+        sails.log.error(`HELPER - loadPlayerData:loadPlayerInventory ${err}`);
+        resolve(undefined);
+      },
+      success: function (data) {
+        resolve(data)
+      }
+    });
+  })
 }
 
 function loadSteamAvatar(steamId) {
-    let request = require('request-promise-native');
-    return new Promise((resolve, reject) => {
-        request({
-            uri: 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002',
-            qs: {
-                steamids: steamId,
-                key: process.env.API_KEY_STEAM,
-            },
-            json: true
-        }).then(async (response) => {
-            let avatar = undefined
-            if (response.response.players[0]) {
-                if (response.response.players[0].avatar) {
-                    avatar = response.response.players[0].avatar
-                }
-                if (response.response.players[0].avatarfull) {
-                    avatar = response.response.players[0].avatarfull
-                }
-                resolve(avatar)
-            } else {
-                resolve()
-            }
-        }).catch(async (error) => {
-            sails.log.error(`HELPER - loadPlayerData:loadSteamAvatar ${error}`);
-            resolve()
-        });
+  let request = require('request-promise-native');
+  return new Promise((resolve, reject) => {
+    request({
+      uri: 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002',
+      qs: {
+        steamids: steamId,
+        key: process.env.API_KEY_STEAM,
+      },
+      json: true
+    }).then(async (response) => {
+      let avatar = undefined
+      if (response.response.players[0]) {
+        if (response.response.players[0].avatar) {
+          avatar = response.response.players[0].avatar
+        }
+        if (response.response.players[0].avatarfull) {
+          avatar = response.response.players[0].avatarfull
+        }
+        resolve(avatar)
+      } else {
+        resolve()
+      }
+    }).catch(async (error) => {
+      sails.log.error(`HELPER - loadPlayerData:loadSteamAvatar ${error}`);
+      resolve()
     });
+  });
 }
-
-
-
-

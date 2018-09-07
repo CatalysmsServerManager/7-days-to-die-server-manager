@@ -15,6 +15,12 @@ module.exports = {
       type: 'number',
       description: 'Id of the server',
       required: true
+    },
+
+    onlyStats: {
+      type: 'boolean',
+      defaultsTo: false,
+      description: "If true, only check via API response and skip command"
     }
 
   },
@@ -44,8 +50,13 @@ module.exports = {
     let sdtdServer = await SdtdServer.findOne({
       id: inputs.serverId
     });
+
     let statsResponse = await checkStats(sdtdServer);
-    let commandResponse = await checkCommand(sdtdServer);
+
+    let commandResponse = true;
+    if (!inputs.onlyStats) {
+      commandResponse = await checkCommand(sdtdServer);
+    }
 
     if (statsResponse && commandResponse) {
       return exits.success(true);
@@ -87,7 +98,7 @@ async function checkCommand(sdtdServer) {
       port: sdtdServer.webPort,
       authName: sdtdServer.authName,
       authToken: sdtdServer.authToken,
-      command: 'mem'
+      command: 'help'
     }).exec({
       success: (response) => {
         resolve(true);
