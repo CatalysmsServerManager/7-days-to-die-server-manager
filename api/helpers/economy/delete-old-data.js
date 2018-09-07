@@ -44,7 +44,7 @@ module.exports = {
         server: inputs.serverId
       }).fetch()
       sails.log.debug(`Deleted ${deletedRecords.length} records for server ${inputs.serverId}`);
-      await sails.helpers.redis.set(`server:${inputs.serverId}:economyActionsCompleted`, 0);
+      await sails.helpers.redis.set(`server:${inputs.serverId}:economyActionsCompleted`, 1);
   
     }
     return exits.success()
