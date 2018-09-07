@@ -41,7 +41,7 @@ module.exports = {
         try {
             let playerToDeductFrom = await Player.findOne(inputs.playerId);
             let currentBalance = playerToDeductFrom.currency;
-            let playerRole = await sails.helpers.sdtd.getPlayerRole(player.id);
+            let playerRole = await sails.helpers.sdtd.getPlayerRole(inputs.playerId);
 
             inputs.amountToDeduct = (inputs.amountToGive * playerRole.economyDeductMultiplier)
             let newBalance = currentBalance - inputs.amountToDeduct;
