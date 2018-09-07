@@ -93,7 +93,7 @@
             <label for="edit-role-level">Level</label>
             <input type="number" class="form-control" name="edit-role-level" id="edit-role-level" aria-describedby="edit-role-level-help"
               placeholder="">
-            <small id="edit-role-level-help" class="form-text text-muted">The level of the new role. Defaults to 2000. Lower = more permissions</small>
+            <small id="edit-role-level-help" class="form-text text-muted">The level of the role. Defaults to 2000. Lower = more permissions</small>
           </div>
 
           <div class="form-group">
@@ -111,6 +111,20 @@
               placeholder="">
             <small id="edit-role-teleports-amount-help" class="form-text text-muted">The amount of teleport locations players with this role can set. Note that the global max you configure in teleport
               settings still applies!</small>
+          </div>
+
+          <div class="form-group">
+            <label for="edit-role-economy-give-multiplier">Economy give multiplier</label>
+            <input type="number" class="form-control" name="edit-role-economy-give-multiplier" id="edit-role-economy-give-multiplier" aria-describedby="edit-role-economy-give-multiplier-help"
+              placeholder="">
+            <small id="edit-role-economy-give-multiplier-help" class="form-text text-muted">Any time a player with this role gains currency, this multiplier will be applied. If this is 1, there is no difference. If this is 2 the player will earn double.</small>
+          </div>
+
+          <div class="form-group">
+            <label for="edit-role-economy-deduct-multiplier">Economy deduct multiplier</label>
+            <input type="number" class="form-control" name="edit-role-economy-deduct-multiplier" id="edit-role-economy-deduct-multiplier" aria-describedby="edit-role-economy-deduct-multiplier-help"
+              placeholder="">
+            <small id="edit-role-economy-deduct-multiplier-help" class="form-text text-muted">Any time a player with this role loses currency, this multiplier will be applied. If this is 1, there is no difference. If this is 2 the player will pay double.</small>
           </div>
 
           <div class="form-check">
@@ -248,6 +262,9 @@
         "#edit-role-teleports-amount").val();
       let discordRole = $("#edit-role-discord-role option:selected").val();
 
+      let economyDeductMultiplier = $("#edit-role-economy-deduct-multiplier").val();
+      let economyGiveMultiplier = $("#edit-role-economy-give-multiplier").val();
+
       let manageServer = $("#edit-role-manageServer").prop('checked');
       let manageEconomy = $("#edit-role-manageEconomy").prop('checked');
       let useTracking = $("#edit-role-useTracking").prop('checked');
@@ -269,6 +286,8 @@
           level: level,
           discordRole: discordRole,
           amountOfTeleports: amountOfTeleports,
+          economyDeductMultiplier: economyDeductMultiplier,
+          economyGiveMultiplier: economyGiveMultiplier,
           manageServer: manageServer,
           manageEconomy: manageEconomy,
           useTracking: useTracking,
@@ -302,6 +321,9 @@
       $("#edit-role-name").val(currentRole.name);
       $("#edit-role-level").val(currentRole.level);
       $("#edit-role-teleports-amount").val(currentRole.amountOfTeleports);
+
+      $("#edit-role-economy-give-multiplier").val(currentRole.economyGiveMultiplier);
+      $("#edit-role-economy-deduct-multiplier").val(currentRole.economyDeductMultiplier);
 
       $("#edit-role-manageServer").prop('checked', currentRole.manageServer);
       $("#edit-role-manageEconomy").prop('checked', currentRole.manageEconomy);
