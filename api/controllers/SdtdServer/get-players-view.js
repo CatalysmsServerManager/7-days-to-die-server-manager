@@ -57,7 +57,7 @@ module.exports = {
     }
 
     try {
-      let players = await Player.find({server: server.id})
+      let players = await Player.find({server: server.id}).populate('role');
 
       players.map(player => {
         const hhmmss = require('@streammedev/hhmmss')
