@@ -57,11 +57,11 @@ module.exports = {
                 economyAction: 'deduct'
             })
             
-            let actionsCompleted = await sails.helpers.redis.get(`economyActionsCompleted:${playerToDeductFrom.server}`);
-            if (_.isNull(actionsCompleted)) {
-                await sails.helpers.redis.set(`economyActionsCompleted:${playerToDeductFrom.server}`, 0);
+            let actionsCompleted = await sails.helpers.redis.get(`server:${playerToDeductFrom.server}:economyActionsCompleted`);
+            if (_.isNaN(actionsCompleted)) {
+                await sails.helpers.redis.set(`server:${playerToDeductFrom.server}:economyActionsCompleted`, 0);
             }
-            await sails.helpers.redis.set(`economyActionsCompleted:${playerToDeductFrom.server}`, parseInt(actionsCompleted) + 1);
+            await sails.helpers.redis.set(`server:${playerToDeductFrom.server}:economyActionsCompleted`, parseInt(actionsCompleted) + 1);
             await sails.helpers.economy.deleteOldData(playerToDeductFrom.server);
 
             return exits.success();

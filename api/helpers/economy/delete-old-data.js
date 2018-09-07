@@ -26,7 +26,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    let actionsCompleted = await sails.helpers.redis.get(`economyActionsCompleted:${inputs.serverId}`);
+    let actionsCompleted = await sails.helpers.redis.get(`server:${inputs.serverId}:economyActionsCompleted`);
     if (actionsCompleted && actionsCompleted > sails.config.custom.economyActionsBeforeDelete) {
       let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({
         serverId: inputs.serverId
@@ -44,7 +44,7 @@ module.exports = {
         server: inputs.serverId
       }).fetch()
       sails.log.debug(`Deleted ${deletedRecords.length} records for server ${inputs.serverId}`);
-      await sails.helpers.redis.set(`economyActionsCompleted:${inputs.serverId}`, 0);
+      await sails.helpers.redis.set(`server:${inputs.serverId}:economyActionsCompleted`, 0);
   
     }
     return exits.success()
