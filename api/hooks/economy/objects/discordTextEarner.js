@@ -6,9 +6,6 @@ class DiscordTextEarner {
         this.type = 'discordTextEarner'
         this.messageHandler = handleMessage.bind(this);
         this.userTimeoutMap = new Map();
-        this.deleteInterval = setInterval(async () => {
-            await cleanOldLogs(this.server.id);
-        }, 300000)
     }
 
     async start() {
@@ -64,26 +61,6 @@ async function handleMessage(message) {
 
 }
 
-async function cleanOldLogs(serverId) {
-    try {
-        // Discord text earner should not keep logs, it clogs up fast.
-        let hoursToKeepData = 1;
-        let milisecondsToKeepData = hoursToKeepData * 3600000;
-        let dateNow = Date.now();
-        let borderDate = new Date(dateNow.valueOf() - milisecondsToKeepData);
-   
-        await HistoricalInfo.destroy({
-            server: serverId,
-            type: 'economy',
-            createdAt: { '<': borderDate.valueOf() },
-            message: {'contains': 'discordTextEarner -'}
-        });
-        let dateEnded = Date.now();
-        sails.log.verbose(`Deleted discord text earner logs for server ${serverId} - took ${dateEnded.valueOf() - dateNow.valueOf()} ms`)
-    } catch (error) {
-        sails.log.error(error)
-    }
-}
 
 
 
