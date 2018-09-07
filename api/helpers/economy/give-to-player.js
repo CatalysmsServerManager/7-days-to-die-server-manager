@@ -48,7 +48,11 @@ module.exports = {
                 amount: inputs.amountToGive,
                 economyAction: 'give'
             })
-            deleteOldData(playerToGiveTo.server);
+
+            let actionsCompleted = await sails.helpers.redis.get(`economyActionsCompleted:${playerToGiveTo.server}`);
+            await sails.helpers.redis.set(`economyActionsCompleted:${playerToGiveTo.server}`, parseInt(actionsCompleted) + 1);
+            await sails.helpers.economy.deleteOldData(playerToGiveTo.server);
+
             return exits.success();
         } catch (error) {
             sails.log.error(`HELPER economy:give-to-player - ${error}`);
@@ -56,22 +60,3 @@ module.exports = {
         }
     }
 };
-
-async function deleteOldData(serverId) {
-    try {
-        let hoursToKeepData = 72
-        let milisecondsToKeepData = hoursToKeepData * 3600000;
-        let dateNow = Date.now();
-        let borderDate = new Date(dateNow.valueOf() - milisecondsToKeepData);
-
-        await HistoricalInfo.destroy({
-            createdAt: { '<': borderDate.valueOf() },
-            type: 'economy',
-            server: serverId
-        })
-
-    } catch (error) {
-        sails.log.error(error)
-    }
-
-}

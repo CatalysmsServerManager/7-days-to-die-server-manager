@@ -44,6 +44,10 @@ module.exports.custom = {
 
   trackingCyclesBeforeDelete: 10,
 
+  // Economy
+
+  economyActionsBeforeDelete: 50,
+
   // DONORS
   donorConfig: {
     devDiscordServer: '336821518250147850',
