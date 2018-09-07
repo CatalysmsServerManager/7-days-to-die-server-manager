@@ -48,6 +48,7 @@
                       <th>Name</th>
                       <th>Entity ID</th>
                       <th>Steam ID</th>
+                      <th>Role</th>
                       <th>IP</th>
                       <th>Country</th>
                       <th>Playtime</th>
@@ -90,6 +91,17 @@
           },
           {
             data: 'steamId'
+          },
+          {
+            data: 'role',
+            render: function (data, type, row, meta) {
+              if (_.isNull(data)) {
+                return 'None'
+              } else {
+                return data.name
+              }
+              
+            }
           },
           {
             data: 'ip'
