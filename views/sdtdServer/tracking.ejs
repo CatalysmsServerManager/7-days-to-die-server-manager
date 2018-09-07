@@ -571,19 +571,12 @@
 
     function drawData(data, x, z, size) {
 
-      trackingMap.clear();
-
       let foundPlayers = _.uniqBy(data, 'player');
       foundPlayers = foundPlayers.map(dataPoint => {
         return players.filter(player => dataPoint.player === player.id)[0]
       })
 
-      if ($("#tracking-location-enabled").prop('checked') === false) {
-        x = undefined
-        z = undefined
-      } else {
-        trackingMap.drawRectangle(x, z, size)
-      }
+
 
       $("#playerInfo").text(
         `Found ${foundPlayers.length} - ${foundPlayers.map(player => player.name + " - " + player.steamId).join(" ")}`
@@ -598,8 +591,13 @@
 
 
     function getDataAndUpdate(playerId, beginDate, endDate, x, z, size, limit) {
-
       trackingMap.clear();
+      if ($("#tracking-location-enabled").prop('checked') === false) {
+        x = undefined
+        z = undefined
+      } else {
+        trackingMap.drawRectangle(x, z, size)
+      }
       $("#slider-date").text(" ")
 
       $.ajax({
