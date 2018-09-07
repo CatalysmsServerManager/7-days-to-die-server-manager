@@ -36,6 +36,16 @@ module.exports = {
       min: 0,
     },
 
+    economyDeductMultiplier: {
+      type: 'number',
+      min: 0
+    },
+
+    economyGiveMultiplier: {
+      type: 'number',
+      min: 0
+    },
+
     manageServer: {
       type: 'boolean'
     },
@@ -86,6 +96,8 @@ module.exports = {
       name: inputs.name,
       level: inputs.level,
       amountOfTeleports: inputs.amountOfTeleports,
+      economyDeductMultiplier: inputs.economyDeductMultiplier,
+      economyGiveMultiplier: inputs.economyGiveMultiplier,
       discordRole: inputs.discordRole,
       manageServer: inputs.manageServer,
       manageEconomy: inputs.manageEconomy,

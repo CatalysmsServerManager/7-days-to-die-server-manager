@@ -38,7 +38,11 @@ module.exports = {
         try {
             let playerToGiveTo = await Player.findOne(inputs.playerId);
             let currentBalance = playerToGiveTo.currency;
+            let playerRole = await sails.helpers.sdtd.getPlayerRole(inputs.playerId);
+            inputs.amountToGive = (inputs.amountToGive * playerRole.economyGiveMultiplier)
             let newBalance = currentBalance + inputs.amountToGive;
+
+
             await Player.update({ id: playerToGiveTo.id }, { currency: newBalance });
             await HistoricalInfo.create({
                 server: playerToGiveTo.server,

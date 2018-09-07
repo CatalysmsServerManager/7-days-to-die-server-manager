@@ -32,6 +32,18 @@ module.exports = {
       defaultsTo: 1000000
     },
 
+    economyGiveMultiplier: {
+      type: 'number',
+      defaultsTo: 1,
+      min: 0.1
+    },
+
+    economyDeductMultiplier: {
+      type: 'number',
+      defaultsTo: 1,
+      min: 0.1
+    },
+
     discordRole: {
       type: 'string'
     },
