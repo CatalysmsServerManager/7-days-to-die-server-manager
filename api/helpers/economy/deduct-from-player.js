@@ -60,6 +60,7 @@ module.exports = {
             let actionsCompleted = await sails.helpers.redis.get(`server:${playerToDeductFrom.server}:economyActionsCompleted`);
             if (_.isNaN(actionsCompleted)) {
                 await sails.helpers.redis.set(`server:${playerToDeductFrom.server}:economyActionsCompleted`, 0);
+                return exits.success();
             }
             await sails.helpers.redis.set(`server:${playerToDeductFrom.server}:economyActionsCompleted`, parseInt(actionsCompleted) + 1);
             await sails.helpers.economy.deleteOldData(playerToDeductFrom.server);

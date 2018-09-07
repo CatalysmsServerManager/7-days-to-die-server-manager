@@ -52,6 +52,7 @@ module.exports = {
             let actionsCompleted = await sails.helpers.redis.get(`server:${playerToGiveTo.server}:economyActionsCompleted`);
             if (_.isNaN(actionsCompleted)) {
                 await sails.helpers.redis.set(`server:${playerToGiveTo.server}:economyActionsCompleted`, 0);
+                return exits.success();
             }
             await sails.helpers.redis.set(`server:${playerToGiveTo.server}:economyActionsCompleted`, parseInt(actionsCompleted) + 1);
             await sails.helpers.economy.deleteOldData(playerToGiveTo.server);
