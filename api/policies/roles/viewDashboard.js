@@ -14,7 +14,7 @@ module.exports = async function viewDashboard(req, res, next) {
 
   let permCheck = await sails.helpers.roles.checkPermission.with({
     userId: user.id,
-    serverId: server.id,
+    serverId: serverId,
     permission: 'viewDashboard'
   });
 

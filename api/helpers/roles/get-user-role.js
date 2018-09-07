@@ -46,7 +46,7 @@ module.exports = {
     let foundPlayer = await Player.findOne({
       where: {
         steamId: foundUser.steamId,
-        server: foundServer.id
+        server: inputs.serverId
       }
     });
 

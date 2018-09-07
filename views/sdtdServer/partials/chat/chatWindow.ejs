@@ -3,8 +3,7 @@
 
 <script>
   $(document).ready(function () {
-
-    let sdtdChatWindow = new sdtdChat(<%= server.id %>);
+    let sdtdChatWindow = new sdtdChat(window.SAILS_LOCALS.server.id);
     let userName = `user <%= req.session.userId %>`
 
     $.ajax({

@@ -5,7 +5,7 @@
 
 <script>
   $(document).ready(function () {
-    let sdtdConsoleWindow = new sdtdConsole("<%= server.id %>")
+    let sdtdConsoleWindow = new sdtdConsole(window.SAILS_LOCALS.server.id)
 
     $('#console-pause').click((event) => {
       event.preventDefault();
