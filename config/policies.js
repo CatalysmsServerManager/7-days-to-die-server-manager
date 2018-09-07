@@ -20,6 +20,7 @@ module.exports.policies = {
 
   sdtdServerController: {
     '*': ["isLoggedIn", 'roles/manageServer'],
+    "get-players-view": ["isLoggedIn", 'roles/managePlayers'],
     'add-server': 'isLoggedIn',
     'add-server-view': 'isLoggedIn',
     'view-gbl': 'isLoggedIn',
