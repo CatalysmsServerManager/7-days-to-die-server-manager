@@ -1,50 +1,50 @@
 <%- exposeLocalsToBrowser() %>
 
-    <div>
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <a href="<%= '/user/' + req.session.userId + '/dashboard' %>"> Dashboard </a>
-                </li>
-                <li class="breadcrumb-item">
-                    <a href="<%= '/sdtdserver/' + server.id + '/dashboard' %>">
-                        <%= server.name %>
-                    </a>
-                </li>
-                <li class="breadcrumb-item active" aria-current="page">Tracking</li>
-            </ol>
-        </nav>
-        <h1>Player tracking</h1>
+<div>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= '/user/' + req.session.userId + '/dashboard' %>"> Dashboard </a>
+      </li>
+      <li class="breadcrumb-item">
+        <a href="<%= '/sdtdserver/' + server.id + '/dashboard' %>">
+          <%= server.name %>
+        </a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Tracking</li>
+    </ol>
+  </nav>
+  <h1>Player tracking</h1>
 
-        <hr>
+  <hr>
 
-        <div>
-            <p id="playerInfo"></p>
-            <p id="loaded-data"></p>
-            <p id="daterange-data"></p>
+  <div>
+    <p id="playerInfo"></p>
+    <p id="loaded-data"></p>
+    <p id="daterange-data"></p>
 
+  </div>
+
+  <hr>
+
+  <div class="row">
+
+    <div class="col-lg-4">
+      <div class="card">
+        <div class="card-header">
+          Query
         </div>
+        <div class="card-body">
+          <p class="card-text">
 
-        <hr>
+            <div class="form-group">
+              <label for="player-name-select">Player</label>
+              <select class="form-control" name="player-name-select" id="player-name-select">
+                <option value="0">
+                  All
+                </option>
 
-        <div class="row">
-
-            <div class="col-lg-4">
-                <div class="card">
-                    <div class="card-header">
-                        Query
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">
-
-                            <div class="form-group">
-                                <label for="player-name-select">Player</label>
-                                <select class="form-control" name="player-name-select" id="player-name-select">
-                                    <option value="0">
-                                        All
-                                    </option>
-
-                                    <% players = players.sort((a,b) => {
+                <% players = players.sort((a,b) => {
                                         var nameA = a.name.toUpperCase(); // ignore upper and lowercase
                                         var nameB = b.name.toUpperCase(); // ignore upper and lowercase
                                         if (nameA < nameB) {
@@ -57,740 +57,758 @@
                                          return 0;
                                     }) %>
 
-                                    <% players.forEach(player => { %>
+                <% players.forEach(player => { %>
 
-                                        <option value="<%= player.id %>">
-                                            <%= player.name %>
-                                        </option>
+                <option value="<%= player.id %>">
+                  <%= player.name %>
+                </option>
 
-                                        <% }) %>
+                <% }) %>
 
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="tracking-steamID-lookup">Steam ID</label>
-                                <input type="text" class="form-control" name="tracking-steamID-lookup" id="tracking-steamID-lookup" aria-describedby="tracking-steamID-lookup-help"
-                                    placeholder="">
-                                <small id="tracking-steamID-lookup-help" class="form-text text-muted"></small>
-                            </div>
-
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input type="checkbox" class="form-check-input" name="tracking-location-enabled" id="tracking-location-enabled"> Location search
-                                </label>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="tracking-location-modal-x">X</label>
-                                <input type="number" name="tracking-location-modal-x" id="tracking-location-modal-x" class="form-control" value="0" aria-describedby="tracking-location-modal-x-help">
-                                <small id="tracking-location-modal-x-help" class="text-muted">The X coordinate to search</small>
-                            </div>
-
-
-                            <div class="form-group">
-                                <label for="tracking-location-modal-z">Z</label>
-                                <input type="number" name="tracking-location-modal-z" id="tracking-location-modal-z" class="form-control" value="0" aria-describedby="tracking-location-modal-z-help">
-                                <small id="tracking-location-modal-z-help" class="text-muted">The Z coordinate to search</small>
-                            </div>
-
-
-                            <div class="form-group">
-                                <label for="tracking-location-modal-radius">Size</label>
-                                <input type="number" name="tracking-location-modal-radius" id="tracking-location-modal-radius" class="form-control" value="50"
-                                    aria-describedby="tracking-location-modal-radius-help">
-                                <small id="tracking-location-modal-radius-help" class="text-muted">The size of the area to search.</small>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="tracking-limit">Limit</label>
-                                <input type="number" class="form-control" name="tracking-limit" id="tracking-limit" aria-describedby="tracking-limit-help"
-                                    value="2500">
-                                <small id="tracking-limit-help" class="form-text text-muted">Limit how much datapoints CSMM will retrieve. Maximum is 5000</small>
-                            </div>
-
-                            <div id="narrow-down" class="form-group">
-
-                                <label for="datetimes">Select time range</label>
-                                <input type="text" class="form-control" name="datetimes" />
-
-                            </div>
-
-                            <input name="tracking-player-btn" id="tracking-player-btn" class="btn btn-primary btn-lg" type="button" value="Get data">
-
-                        </p>
-                    </div>
-                </div>
+              </select>
             </div>
 
-            <div class="col-lg-8">
-                <div class="card">
-                    <div class="card-body">
-                        <p class="card-text">
-                            <button id="tracking-draw-land-claims" type="button" class="btn btn-secondary">Draw land claims</button>
-
-                            <div id="sdtdMap">
-                            </div>
-
-
-                            <input id="slider" class="slider" type="text" />
-                            <br>
-                            <div id="slider-date"></div>
-                        </p>
-                    </div>
-
-
-
-
-                </div>
+            <div class="form-group">
+              <label for="tracking-steamID-lookup">Steam ID</label>
+              <input type="text" class="form-control" name="tracking-steamID-lookup" id="tracking-steamID-lookup"
+                aria-describedby="tracking-steamID-lookup-help" placeholder="">
+              <small id="tracking-steamID-lookup-help" class="form-text text-muted"></small>
             </div>
 
+            <div class="form-check">
+              <label class="form-check-label">
+                <input type="checkbox" class="form-check-input" name="tracking-location-enabled" id="tracking-location-enabled">
+                Location search
+              </label>
+            </div>
+
+            <div class="form-group">
+              <label for="tracking-location-modal-x">X</label>
+              <input type="number" name="tracking-location-modal-x" id="tracking-location-modal-x" class="form-control"
+                value="0" aria-describedby="tracking-location-modal-x-help">
+              <small id="tracking-location-modal-x-help" class="text-muted">The X coordinate to search</small>
+            </div>
+
+
+            <div class="form-group">
+              <label for="tracking-location-modal-z">Z</label>
+              <input type="number" name="tracking-location-modal-z" id="tracking-location-modal-z" class="form-control"
+                value="0" aria-describedby="tracking-location-modal-z-help">
+              <small id="tracking-location-modal-z-help" class="text-muted">The Z coordinate to search</small>
+            </div>
+
+
+            <div class="form-group">
+              <label for="tracking-location-modal-radius">Size</label>
+              <input type="number" name="tracking-location-modal-radius" id="tracking-location-modal-radius" class="form-control"
+                value="50" aria-describedby="tracking-location-modal-radius-help">
+              <small id="tracking-location-modal-radius-help" class="text-muted">The size of the area to search.</small>
+            </div>
+
+            <div class="form-group">
+              <label for="tracking-limit">Limit</label>
+              <input type="number" class="form-control" name="tracking-limit" id="tracking-limit" aria-describedby="tracking-limit-help"
+                value="2500">
+              <small id="tracking-limit-help" class="form-text text-muted">Limit how much datapoints CSMM will
+                retrieve. Maximum is 5000</small>
+            </div>
+
+            <div id="narrow-down" class="form-group">
+
+              <label for="datetimes">Select time range</label>
+              <input type="text" class="form-control" name="datetimes" />
+
+            </div>
+
+            <input name="tracking-player-btn" id="tracking-player-btn" class="btn btn-primary btn-lg" type="button"
+              value="Get data">
+
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-8">
+      <div class="card">
+        <div class="card-body">
+          <p class="card-text">
+            <button id="tracking-draw-land-claims" type="button" class="btn btn-secondary">Draw land claims</button>
+
+            <div id="sdtdMap">
+            </div>
+
+
+            <input id="slider" class="slider" type="text" />
+            <br>
+            <div id="slider-date"></div>
+          </p>
         </div>
 
-        <hr>
-
-        <div class="card">
-            <div class="card-header">
-                Inventory changes
-            </div>
-            <div class="card-body">
-                <p class="card-text">
-
-                    <table id="inventory-changes-table" class="table table-striped table-bordered dataTable no-footer">
-
-                        <thead>
-                            <tr>
-                                <th>Date/time</th>
-                                <th>Player</th>
-                                <th>Item name</th>
-                                <th>Quality</th>
-                                <th>Amount</th>
-                                <th>Location</th>
-                            </tr>
-                        </thead>
-
-                    </table>
-                </p>
-            </div>
 
 
-            <hr>
 
-            <div class="card-columns">
+      </div>
+    </div>
 
-                <div class="card">
-                    <div class="card-header">
-                        Location data
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">
-                            <table id="location-result-table" class="table table-striped table-bordered dataTable no-footer">
+  </div>
 
-                                <thead>
-                                    <tr>
-                                        <th>Date/time</th>
-                                        <th>Player name</th>
-                                        <th>Location</th>
-                                        <th>Distance</th>
-                                    </tr>
-                                </thead>
+  <hr>
 
-                            </table>
-                        </p>
-                    </div>
-                </div>
+  <div class="card">
+    <div class="card-header">
+      Inventory changes
+    </div>
+    <div class="card-body">
+      <p class="card-text">
 
-                <div class="card">
-                    <div class="card-header">
-                        Inventory data
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">
-                            <table id="inventoryTable" class="table table-striped table-bordered dataTable no-footer">
+        <table id="inventory-changes-table" class="table table-striped table-bordered dataTable no-footer">
 
-                                <thead>
-                                    <tr>
-                                        <th>Date/time</th>
-                                        <th>Player name</th>
-                                        <th>Item name</th>
-                                        <th>Quality</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                </thead>
+          <thead>
+            <tr>
+              <th>Date/time</th>
+              <th>Player</th>
+              <th>Item name</th>
+              <th>Quality</th>
+              <th>Amount</th>
+              <th>Location</th>
+            </tr>
+          </thead>
 
-                            </table>
-                        </p>
-                    </div>
-                </div>
+        </table>
+      </p>
+    </div>
 
-            </div>
+
+    <hr>
+
+    <div class="card-columns">
+
+      <div class="card">
+        <div class="card-header">
+          Location data
         </div>
-
-        <style>
-            #sdtdMap {
-                height: 60em;
-                width: 100%;
-            }
-
-            #tracker-slider .slider-selection {
-                background: #BABABA;
-            }
-
-            .slider.slider-horizontal {
-                width: 100%
-            }
-        </style>
-
-
-        <script>
-
-            const server = window.SAILS_LOCALS.server;
-            const players = window.SAILS_LOCALS.players;
-            let trackingMap
-            let inventoryDataTable
-            let locationDataTable
-            let changesDataTable
-            let dateTimePicker
-            let beginDate
-            let endDate
-            let slider
-            let loadedData = new Array();
-
-            $(document).ready(() => {
-
-                $.get('/api/sdtdserver/tracking/stats', { serverId: window.SAILS_LOCALS.server.id }, data => {
-                    if (data.amount) {
-                        $('#loaded-data').text(`${data.amount} datapoints stored`)
-                    } else {
-                        $('#loaded-data').text(`Found no datapoints for your server! Make sure tracking is enabled in your settings`)
-                    }
-                    if (data.oldest[0] && data.newest[0]) {
-                        let createdAtOld = new Date(data.oldest[0].createdAt);
-                        let createdAtNew = new Date(data.newest[0].createdAt);
-                        $('#daterange-data').text(`Oldest: ${createdAtOld.toLocaleDateString()} ${createdAtOld.toLocaleTimeString()} Newest: ${createdAtNew.toLocaleDateString()} ${createdAtNew.toLocaleTimeString()}`)
-
-                        beginDate = createdAtOld;
-                        endDate = createdAtNew;
-
-                        dateTimePicker = $('input[name="datetimes"]').daterangepicker({
-                            timePicker: true,
-                            startDate: createdAtOld,
-                            endDate: createdAtNew,
-                        });
-
-                        slider = $("#slider").slider({
-                            min: beginDate.valueOf(),
-                            max: endDate.valueOf(),
-                            step: 30000,
-                            id: "tracker-slider",
-                            enabled: false
-                        });
-
-                        slider.on('change', (changeVal) => {
-
-                            var getClosestValues = function (array, x) {
-                                var lo = -1, hi = array.length;
-                                while (hi - lo > 1) {
-                                    var mid = Math.round((lo + hi) / 2);
-                                    if (array[mid].createdAt <= x) {
-                                        lo = mid;
-                                    } else {
-                                        hi = mid;
-                                    }
-                                }
-                                if (array[lo] == x) hi = lo;
-                                return [array[lo].createdAt, array[hi].createdAt];
-                            }
-
-                            let closestVals = getClosestValues(loadedData, changeVal.value.newValue);
-                            let tailingVals = getClosestValues(loadedData, closestVals[0] - 45000);
-
-                            let oldCreatedAt = closestVals[0];
-                            let currentCreatedAt = closestVals[1];
-
-                            let tailingOld = tailingVals[0];
-                            let tailingNew = tailingVals[1];
-
-                            let dataToDraw = loadedData.filter(dataPoint =>
-                                dataPoint.createdAt === currentCreatedAt ||
-                                dataPoint.createdAt === oldCreatedAt ||
-                                dataPoint.createdAt === tailingNew ||
-                                dataPoint.createdAt === tailingOld
-                            );
-
-                            let currentDate = new Date(currentCreatedAt);
-
-                            $("#slider-date").text(`${currentDate.toLocaleDateString()} - ${currentDate.toLocaleTimeString()}`)
-
-                            drawData(dataToDraw);
-
-                        })
-                    }
-                })
-
-                $('input[name="datetimes"]').on('apply.daterangepicker', function (ev, picker) {
-                    beginDate = picker.startDate.toDate();
-                    endDate = picker.endDate.toDate();
-                });
-
-                // Player select
-
-                $("#player-name-select").change(e => {
-                    let newPlayerId = parseInt($("#player-name-select").val());
-                    if (newPlayerId) {
-                        let newPlayer = players.filter(player => player.id === newPlayerId);
-                        $("#tracking-steamID-lookup").val(newPlayer[0].steamId)
-                    } else {
-                        $("#tracking-steamID-lookup").val(0)
-                    }
-                })
-
-                $('#tracking-steamID-lookup').on('keyup', e => {
-                    let steamIdToFind = $("#tracking-steamID-lookup").val();
-                    let newPlayer = players.filter(player => player.steamId === steamIdToFind);
-
-                    if (newPlayer[0]) {
-                        $("#player-name-select").val(newPlayer[0].id)
-                    } else {
-                        $("#player-name-select").val(0)
-                    }
-
-                })
-
-
-                if (!$("#tracking-location-enabled").prop('checked')) {
-                    $("#tracking-location-modal-x").attr('disabled', true)
-                    $("#tracking-location-modal-z").attr('disabled', true)
-                    $("#tracking-location-modal-radius").attr('disabled', true)
-                }
-
-                $("#tracking-location-enabled").click(e => {
-
-                    let locationEnabled = $("#tracking-location-enabled").prop('checked');
-
-                    $("#tracking-location-modal-x").attr('disabled', !locationEnabled)
-                    $("#tracking-location-modal-z").attr('disabled', !locationEnabled)
-                    $("#tracking-location-modal-radius").attr('disabled', !locationEnabled)
-
-
-                })
-
-
-                // Get data
-
-                $('#tracking-player-btn').click(e => {
-                    $("#loaded-data").html(`<i class="fas fa-spinner fa-spin"></i>`);
-
-                    let playerId = $("#player-name-select").val();
-                    let limit = $("#tracking-limit").val();
-                    limit = parseInt(limit);
-
-                    let elementX = $("#tracking-location-modal-x");
-                    let elementZ = $("#tracking-location-modal-z");
-                    let elementSize = $("#tracking-location-modal-radius");
-                    let resultElement = $("#tracking-location-modal-title")
-
-                    elementX.removeClass('bg-danger');
-                    elementZ.removeClass('bg-danger');
-                    elementSize.removeClass('bg-danger');
-
-                    let x = parseInt(elementX.val());
-                    let z = parseInt(elementZ.val());
-                    let size = parseInt(elementSize.val());
-
-                    if (isNaN(x)) {
-                        x = undefined
-                    }
-
-                    if (isNaN(z)) {
-                        z = undefined
-                    }
-
-                    if (isNaN(size)) {
-                        size = 50
-                    }
-
-                    $("#playerInfo").text("");
-
-                    getDataAndUpdate(playerId, beginDate, endDate, x, z, size, limit);
-                })
-
-                // Map
-                trackingMap = new sdtdMap($("#sdtdMap"))
-
-
-                $("#tracking-draw-land-claims").click(e => {
-                    trackingMap.clear()
-                    $.ajax({
-                        url: '/api/sdtdserver/tracking/landclaims',
-                        data: {
-                            serverId: server.id
-                        },
-                        success: data => {
-
-                            let drawnElements = trackingMap.drawLandClaims(data, players);
-
-                            for (const popup of drawnElements.popups) {
-                                popup.setContent(`<strong>Claim by ${popup.player.name}</strong>
-                            <br>
-            ${popup.claim.x} ${popup.claim.y} ${popup.claim.z}`)
-                            }
-
-
-                        },
-                        error: error => {
-                            console.log(error)
-                        }
-                    });
-
-                })
-
-                // Location lookup
-
-                locationDataTable = $("#location-result-table").DataTable({
-                    dom: 'Bfrtip',
-                    fixedHeader: true,
-                    responsive: true,
-                    buttons: [
-                        'copy', 'excel', 'pdf', 'print'
-                    ],
-                    columns: [{
-                        data: "createdAt",
-                        render: function (data, type, row, meta) {
-                            let date = new Date(data);
-                            return `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`;
-                        }
-                    },
-                    {
-                        data: 'playerName'
-                    },
-                    {
-                        data: 'location'
-                    },
-                    {
-                        data: 'distance'
-                    },
-                    ]
-                })
-
-                // Inventory
-
-                inventoryDataTable = $("#inventoryTable").DataTable({
-                    dom: 'Bfrtip',
-                    fixedHeader: true,
-                    responsive: true,
-                    buttons: [
-                        'copy', 'excel', 'pdf', 'print'
-                    ],
-                    columns: [{
-                        data: "createdAt",
-                        render: function (data, type, row, meta) {
-                            let date = new Date(data);
-                            return `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`;
-                        }
-                    },
-                    {
-                        data: 'playerName'
-                    },
-                    {
-                        data: 'itemName'
-                    },
-                    {
-                        data: 'quality'
-                    },
-                    {
-                        data: 'amount'
-                    },
-                    ]
-                })
-
-            });
-
-
-            // Changes
-
-            changesDataTable = $("#inventory-changes-table").DataTable({
-                dom: 'Bfrtip',
-                fixedHeader: true,
-                responsive: true,
-                buttons: [
-                    'copy', 'excel', 'pdf', 'print'
-                ],
-                rowCallback: function (row, data, index) {
-                    let rowChildren = $(row).children()
-                    let amountElement = $(rowChildren[4]);
-                    if (data.amount < 0) {
-                        amountElement.addClass('bg-danger')
-                    } else {
-                        amountElement.addClass('bg-success')
-                    }
-                },
-                columns: [{
-                    data: "createdAt",
-                    render: (data, type, row, meta) => {
-                        let date = new Date(data);
-                        return `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`;
-                    }
-                },
-                {
-                    data: 'player',
-                    render: (data, type, row, meta) => {
-                        let foundPlayer = players.filter(player => player.id === data);
-                        return foundPlayer[0].name
-                    }
-                },
-                {
-                    data: 'itemName'
-                },
-                {
-                    data: 'quality'
-                },
-                {
-                    data: 'amount'
-                },
-                {
-                    data: 'location'
-                },
-                ]
-            })
-
-
-            function drawData(data, x, z) {
-
-                trackingMap.clear();
-
-                let foundPlayers = _.uniqBy(data, 'player');
-                foundPlayers = foundPlayers.map(dataPoint => {
-                    return players.filter(player => dataPoint.player === player.id)[0]
-                })
-
-                $("#playerInfo").text(`Found ${foundPlayers.length} - ${foundPlayers.map(player => player.name + " - " + player.steamId).join(" ")}`)
-
-                trackingMap.drawPlayers(players.filter(player => foundPlayers.indexOf(player) !== -1), data);
-                refreshInventoryDataTable(data, inventoryDataTable)
-                refreshLocationDataTable(data, locationDataTable, x, z);
-                parseDataForChangesTable(data);
-            }
-
-
-
-            function getDataAndUpdate(playerId, beginDate, endDate, x, z, size, limit) {
-
-                trackingMap.clear();
-                $("#slider-date").text(" ")
-
-                if ($("#tracking-location-enabled").prop('checked') === false) {
-                    x = undefined
-                    z = undefined
+        <div class="card-body">
+          <p class="card-text">
+            <table id="location-result-table" class="table table-striped table-bordered dataTable no-footer">
+
+              <thead>
+                <tr>
+                  <th>Date/time</th>
+                  <th>Player name</th>
+                  <th>Location</th>
+                  <th>Distance</th>
+                </tr>
+              </thead>
+
+            </table>
+          </p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          Inventory data
+        </div>
+        <div class="card-body">
+          <p class="card-text">
+            <table id="inventoryTable" class="table table-striped table-bordered dataTable no-footer">
+
+              <thead>
+                <tr>
+                  <th>Date/time</th>
+                  <th>Player name</th>
+                  <th>Item name</th>
+                  <th>Quality</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+
+            </table>
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <style>
+    #sdtdMap {
+      height: 60em;
+      width: 100%;
+    }
+
+    #tracker-slider .slider-selection {
+      background: #BABABA;
+    }
+
+    .slider.slider-horizontal {
+      width: 100%
+    }
+
+  </style>
+
+
+  <script>
+    const server = window.SAILS_LOCALS.server;
+    const players = window.SAILS_LOCALS.players;
+    let trackingMap
+    let inventoryDataTable
+    let locationDataTable
+    let changesDataTable
+    let dateTimePicker
+    let beginDate
+    let endDate
+    let slider
+    let loadedData = new Array();
+
+    $(document).ready(() => {
+
+      $.get('/api/sdtdserver/tracking/stats', {
+        serverId: window.SAILS_LOCALS.server.id
+      }, data => {
+        if (data.amount) {
+          $('#loaded-data').text(`${data.amount} datapoints stored`)
+        } else {
+          $('#loaded-data').text(
+            `Found no datapoints for your server! Make sure tracking is enabled in your settings`)
+        }
+        if (data.oldest[0] && data.newest[0]) {
+          let createdAtOld = new Date(data.oldest[0].createdAt);
+          let createdAtNew = new Date(data.newest[0].createdAt);
+          $('#daterange-data').text(
+            `Oldest: ${createdAtOld.toLocaleDateString()} ${createdAtOld.toLocaleTimeString()} Newest: ${createdAtNew.toLocaleDateString()} ${createdAtNew.toLocaleTimeString()}`
+          )
+
+          beginDate = createdAtOld;
+          endDate = createdAtNew;
+
+          dateTimePicker = $('input[name="datetimes"]').daterangepicker({
+            timePicker: true,
+            startDate: createdAtOld,
+            endDate: createdAtNew,
+          });
+
+          slider = $("#slider").slider({
+            min: beginDate.valueOf(),
+            max: endDate.valueOf(),
+            step: 30000,
+            id: "tracker-slider",
+            enabled: false
+          });
+
+          slider.on('change', (changeVal) => {
+
+            var getClosestValues = function (array, x) {
+              var lo = -1,
+                hi = array.length;
+              while (hi - lo > 1) {
+                var mid = Math.round((lo + hi) / 2);
+                if (array[mid].createdAt <= x) {
+                  lo = mid;
                 } else {
-                    trackingMap.drawRectangle(x, z, size)
+                  hi = mid;
                 }
+              }
+              if (array[lo] == x) hi = lo;
+              return [array[lo].createdAt, array[hi].createdAt];
+            }
 
-                $.ajax({
-                    url: '/api/sdtdserver/tracking',
-                    data: {
-                        serverId: server.id,
-                        playerIds: [playerId],
-                        beginDate: beginDate.valueOf(),
-                        endDate: endDate.valueOf(),
-                        x: x,
-                        z: z,
-                        size: size,
-                        limit: isNaN(limit) || limit > 5000 || limit < 0 ? 5000 : limit
-                    },
-                    success: (data, status, xhr) => {
-                        loadedData = data;
-                        if (data.length === 0) {
-                            return alert('No data found')
-                        }
+            let closestVals = getClosestValues(loadedData, changeVal.value.newValue);
+            let tailingVals = getClosestValues(loadedData, closestVals[0] - 45000);
 
-                        $("#loaded-data").text(`${data.length} datapoints loaded`);
+            let oldCreatedAt = closestVals[0];
+            let currentCreatedAt = closestVals[1];
 
-                        let newest = new Date(data[0].createdAt);
-                        let oldest = new Date(data[data.length - 1].createdAt);
-                        $("#daterange-data").text(`Oldest: ${oldest.toLocaleDateString()} ${oldest.toLocaleTimeString()} Newest: ${newest.toLocaleDateString()} ${newest.toLocaleTimeString()}`);
+            let tailingOld = tailingVals[0];
+            let tailingNew = tailingVals[1];
 
-                        slider.slider('setAttribute', 'min', oldest.valueOf());
-                        slider.slider('setAttribute', 'max', newest.valueOf());
-                        slider.slider('refresh')
-                        slider.slider('enable');
+            let dataToDraw = loadedData.filter(dataPoint =>
+              dataPoint.createdAt === currentCreatedAt ||
+              dataPoint.createdAt === oldCreatedAt ||
+              dataPoint.createdAt === tailingNew ||
+              dataPoint.createdAt === tailingOld
+            );
+
+            let currentDate = new Date(currentCreatedAt);
+
+            $("#slider-date").text(
+              `${currentDate.toLocaleDateString()} - ${currentDate.toLocaleTimeString()}`)
+
+            drawData(dataToDraw);
+
+          })
+        }
+      })
+
+      $('input[name="datetimes"]').on('apply.daterangepicker', function (ev, picker) {
+        beginDate = picker.startDate.toDate();
+        endDate = picker.endDate.toDate();
+      });
+
+      // Player select
+
+      $("#player-name-select").change(e => {
+        let newPlayerId = parseInt($("#player-name-select").val());
+        if (newPlayerId) {
+          let newPlayer = players.filter(player => player.id === newPlayerId);
+          $("#tracking-steamID-lookup").val(newPlayer[0].steamId)
+        } else {
+          $("#tracking-steamID-lookup").val(0)
+        }
+      })
+
+      $('#tracking-steamID-lookup').on('keyup', e => {
+        let steamIdToFind = $("#tracking-steamID-lookup").val();
+        let newPlayer = players.filter(player => player.steamId === steamIdToFind);
+
+        if (newPlayer[0]) {
+          $("#player-name-select").val(newPlayer[0].id)
+        } else {
+          $("#player-name-select").val(0)
+        }
+
+      })
 
 
-                        drawData(data, x, z)
+      if (!$("#tracking-location-enabled").prop('checked')) {
+        $("#tracking-location-modal-x").attr('disabled', true)
+        $("#tracking-location-modal-z").attr('disabled', true)
+        $("#tracking-location-modal-radius").attr('disabled', true)
+      }
 
-                    },
-                    error: (xhr, status, error) => {
-                        console.log(xhr)
+      $("#tracking-location-enabled").click(e => {
 
-                    }
-                })
+        let locationEnabled = $("#tracking-location-enabled").prop('checked');
+
+        $("#tracking-location-modal-x").attr('disabled', !locationEnabled)
+        $("#tracking-location-modal-z").attr('disabled', !locationEnabled)
+        $("#tracking-location-modal-radius").attr('disabled', !locationEnabled)
+
+
+      })
+
+
+      // Get data
+
+      $('#tracking-player-btn').click(e => {
+        $("#loaded-data").html(`<i class="fas fa-spinner fa-spin"></i>`);
+
+        let playerId = $("#player-name-select").val();
+        let limit = $("#tracking-limit").val();
+        limit = parseInt(limit);
+
+        let elementX = $("#tracking-location-modal-x");
+        let elementZ = $("#tracking-location-modal-z");
+        let elementSize = $("#tracking-location-modal-radius");
+        let resultElement = $("#tracking-location-modal-title")
+
+        elementX.removeClass('bg-danger');
+        elementZ.removeClass('bg-danger');
+        elementSize.removeClass('bg-danger');
+
+        let x = parseInt(elementX.val());
+        let z = parseInt(elementZ.val());
+        let size = parseInt(elementSize.val());
+
+        if (isNaN(x)) {
+          x = undefined
+        }
+
+        if (isNaN(z)) {
+          z = undefined
+        }
+
+        if (isNaN(size)) {
+          size = 50
+        }
+
+        $("#playerInfo").text("");
+
+        getDataAndUpdate(playerId, beginDate, endDate, x, z, size, limit);
+      })
+
+      // Map
+      trackingMap = new sdtdMap($("#sdtdMap"))
+
+
+      $("#tracking-draw-land-claims").click(e => {
+        trackingMap.clear()
+        $.ajax({
+          url: '/api/sdtdserver/tracking/landclaims',
+          data: {
+            serverId: server.id
+          },
+          success: data => {
+
+            let drawnElements = trackingMap.drawLandClaims(data, players);
+
+            for (const popup of drawnElements.popups) {
+              popup.setContent(
+                `<strong>Claim by ${popup.player.name}</strong>
+                            <br>
+            ${popup.claim.x} ${popup.claim.y} ${popup.claim.z}`
+              )
             }
 
 
-            function refreshInventoryDataTable(trackingInfo, dataTable) {
-                dataTable.clear();
+          },
+          error: error => {
+            console.log(error)
+          }
+        });
 
-                let parsedDataForTable = new Array();
+      })
 
-                for (const record of trackingInfo) {
-                    let player = players.filter(player => record.player === player.id)
-                    if (record.inventory) {
-                        for (const inventoryItem of record.inventory) {
+      // Location lookup
+
+      locationDataTable = $("#location-result-table").DataTable({
+        dom: 'Bfrtip',
+        fixedHeader: true,
+        responsive: true,
+        buttons: [
+          'copy', 'excel', 'pdf', 'print'
+        ],
+        columns: [{
+            data: "createdAt",
+            render: function (data, type, row, meta) {
+              let date = new Date(data);
+              return `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`;
+            }
+          },
+          {
+            data: 'playerName'
+          },
+          {
+            data: 'location'
+          },
+          {
+            data: 'distance'
+          },
+        ]
+      })
+
+      // Inventory
+
+      inventoryDataTable = $("#inventoryTable").DataTable({
+        dom: 'Bfrtip',
+        fixedHeader: true,
+        responsive: true,
+        buttons: [
+          'copy', 'excel', 'pdf', 'print'
+        ],
+        columns: [{
+            data: "createdAt",
+            render: function (data, type, row, meta) {
+              let date = new Date(data);
+              return `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`;
+            }
+          },
+          {
+            data: 'playerName'
+          },
+          {
+            data: 'itemName'
+          },
+          {
+            data: 'quality'
+          },
+          {
+            data: 'amount'
+          },
+        ]
+      })
+
+    });
 
 
-                            let parsedData = {
-                                createdAt: record.createdAt,
-                                itemName: inventoryItem.name,
-                                amount: inventoryItem.count,
-                                quality: inventoryItem.quality,
-                                playerName: player[0].name
-                            };
-                            parsedDataForTable.push(parsedData);
+    // Changes
 
-                        }
-                    }
-                }
-                dataTable.rows.add(parsedDataForTable);
-                dataTable.draw()
+    changesDataTable = $("#inventory-changes-table").DataTable({
+      dom: 'Bfrtip',
+      fixedHeader: true,
+      responsive: true,
+      buttons: [
+        'copy', 'excel', 'pdf', 'print'
+      ],
+      rowCallback: function (row, data, index) {
+        let rowChildren = $(row).children()
+        let amountElement = $(rowChildren[4]);
+        if (data.amount < 0) {
+          amountElement.addClass('bg-danger')
+        } else {
+          amountElement.addClass('bg-success')
+        }
+      },
+      columns: [{
+          data: "createdAt",
+          render: (data, type, row, meta) => {
+            let date = new Date(data);
+            return `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`;
+          }
+        },
+        {
+          data: 'player',
+          render: (data, type, row, meta) => {
+            let foundPlayer = players.filter(player => player.id === data);
+            return foundPlayer[0].name
+          }
+        },
+        {
+          data: 'itemName'
+        },
+        {
+          data: 'quality'
+        },
+        {
+          data: 'amount'
+        },
+        {
+          data: 'location'
+        },
+      ]
+    })
 
+
+    function drawData(data, x, z, size) {
+
+      trackingMap.clear();
+
+      let foundPlayers = _.uniqBy(data, 'player');
+      foundPlayers = foundPlayers.map(dataPoint => {
+        return players.filter(player => dataPoint.player === player.id)[0]
+      })
+
+      if ($("#tracking-location-enabled").prop('checked') === false) {
+        x = undefined
+        z = undefined
+      } else {
+        trackingMap.drawRectangle(x, z, size)
+      }
+
+      $("#playerInfo").text(
+        `Found ${foundPlayers.length} - ${foundPlayers.map(player => player.name + " - " + player.steamId).join(" ")}`
+      )
+
+      trackingMap.drawPlayers(players.filter(player => foundPlayers.indexOf(player) !== -1), data);
+      refreshInventoryDataTable(data, inventoryDataTable)
+      refreshLocationDataTable(data, locationDataTable, x, z);
+      parseDataForChangesTable(data);
+    }
+
+
+
+    function getDataAndUpdate(playerId, beginDate, endDate, x, z, size, limit) {
+
+      trackingMap.clear();
+      $("#slider-date").text(" ")
+
+      $.ajax({
+        url: '/api/sdtdserver/tracking',
+        data: {
+          serverId: server.id,
+          playerIds: [playerId],
+          beginDate: beginDate.valueOf(),
+          endDate: endDate.valueOf(),
+          x: x,
+          z: z,
+          size: size,
+          limit: isNaN(limit) || limit > 5000 || limit < 0 ? 5000 : limit
+        },
+        success: (data, status, xhr) => {
+          loadedData = data;
+          if (data.length === 0) {
+            return alert('No data found')
+          }
+
+          $("#loaded-data").text(`${data.length} datapoints loaded`);
+
+          let newest = new Date(data[0].createdAt);
+          let oldest = new Date(data[data.length - 1].createdAt);
+          $("#daterange-data").text(
+            `Oldest: ${oldest.toLocaleDateString()} ${oldest.toLocaleTimeString()} Newest: ${newest.toLocaleDateString()} ${newest.toLocaleTimeString()}`
+          );
+
+          slider.slider('setAttribute', 'min', oldest.valueOf());
+          slider.slider('setAttribute', 'max', newest.valueOf());
+          slider.slider('refresh')
+          slider.slider('enable');
+
+
+          drawData(data, x, z, size)
+
+        },
+        error: (xhr, status, error) => {
+          console.log(xhr)
+
+        }
+      })
+    }
+
+
+    function refreshInventoryDataTable(trackingInfo, dataTable) {
+      dataTable.clear();
+
+      let parsedDataForTable = new Array();
+
+      for (const record of trackingInfo) {
+        let player = players.filter(player => record.player === player.id)
+        if (record.inventory) {
+          for (const inventoryItem of record.inventory) {
+
+
+            let parsedData = {
+              createdAt: record.createdAt,
+              itemName: inventoryItem.name,
+              amount: inventoryItem.count,
+              quality: inventoryItem.quality,
+              playerName: player[0].name
+            };
+            parsedDataForTable.push(parsedData);
+
+          }
+        }
+      }
+      dataTable.rows.add(parsedDataForTable);
+      dataTable.draw()
+
+    }
+
+    function refreshLocationDataTable(trackingInfo, dataTable, x, z) {
+      dataTable.clear();
+
+      let parsedDataForTable = new Array();
+
+      for (const record of trackingInfo) {
+
+        let player = players.filter(player => record.player === player.id)
+
+        let distance = "N/A";
+
+        if (!_.isUndefined(x) && !_.isUndefined(z)) {
+          let a = x - record.x;
+          let b = z - record.z;
+          distance = Math.trunc(Math.sqrt(a * a + b * b))
+        }
+
+        let parsedData = {
+          createdAt: record.createdAt,
+          playerName: player[0].name,
+          location: `${record.x} ${record.y} ${record.z}`,
+          distance: distance,
+        }
+        parsedDataForTable.push(parsedData);
+      }
+      dataTable.rows.add(parsedDataForTable);
+      dataTable.draw()
+
+    }
+
+
+    function parseDataForChangesTable(data) {
+      changesDataTable.clear();
+      let dataForTable = new Array();
+
+      _.reverse(data)
+
+      let playersHistory = new Map();
+      let dataRowsToSet = new Array();
+
+      // Sort the data per player
+      for (const dataPoint of data) {
+        let history = playersHistory.get(dataPoint.player);
+
+        if (_.isUndefined(history)) {
+          history = new Array();
+        }
+
+        history.push(dataPoint);
+        playersHistory.set(dataPoint.player, history);
+      }
+
+      // Combine all inventory data
+
+      playersHistory.forEach((dataPoints, playerId) => {
+
+        let previousInventory
+        for (const dataPoint of dataPoints) {
+
+          if (!_.isNull(dataPoint.inventory)) {
+
+
+            // Squash all inventory data into a map, so items in different slots are counted as one
+            let combinedInventory = new Map();
+
+            for (const inventoryEntry of dataPoint.inventory) {
+
+              let combinedEntry = combinedInventory.get(`${inventoryEntry.name}:${inventoryEntry.quality}`);
+
+              if (_.isUndefined(combinedEntry)) {
+                combinedEntry = inventoryEntry.count;
+              } else {
+                combinedEntry = combinedEntry + inventoryEntry.count;
+              }
+              combinedInventory.set(`${inventoryEntry.name}:${inventoryEntry.quality}`, combinedEntry);
             }
 
-            function refreshLocationDataTable(trackingInfo, dataTable, x, z) {
-                dataTable.clear();
+            // Detect changes
 
-                let parsedDataForTable = new Array();
+            if (!_.isUndefined(previousInventory)) {
+              combinedInventory.forEach((currentCount, itemNameQuality) => {
+                let itemInPreviousInventoryCount = previousInventory.get(itemNameQuality);
 
-                for (const record of trackingInfo) {
-
-                    let player = players.filter(player => record.player === player.id)
-
-                    let distance = "N/A";
-
-                    if (!_.isUndefined(x) && !_.isUndefined(z)) {
-                        let a = x - record.x;
-                        let b = z - record.z;
-                        distance = Math.trunc(Math.sqrt(a * a + b * b))
-                    }
-
-                    let parsedData = {
-                        createdAt: record.createdAt,
-                        playerName: player[0].name,
-                        location: `${record.x} ${record.y} ${record.z}`,
-                        distance: distance,
-                    }
-                    parsedDataForTable.push(parsedData);
-                }
-                dataTable.rows.add(parsedDataForTable);
-                dataTable.draw()
-
-            }
-
-
-            function parseDataForChangesTable(data) {
-                changesDataTable.clear();
-                let dataForTable = new Array();
-
-                _.reverse(data)
-
-                let playersHistory = new Map();
-                let dataRowsToSet = new Array();
-
-                // Sort the data per player
-                for (const dataPoint of data) {
-                    let history = playersHistory.get(dataPoint.player);
-
-                    if (_.isUndefined(history)) {
-                        history = new Array();
-                    }
-
-                    history.push(dataPoint);
-                    playersHistory.set(dataPoint.player, history);
+                if (_.isUndefined(itemInPreviousInventoryCount)) {
+                  itemInPreviousInventoryCount = 0
                 }
 
-                // Combine all inventory data
 
-                playersHistory.forEach((dataPoints, playerId) => {
+                if (currentCount !== itemInPreviousInventoryCount) {
 
-                    let previousInventory
-                    for (const dataPoint of dataPoints) {
+                  let splitNameQuality = itemNameQuality.split(':')
 
-                        if (!_.isNull(dataPoint.inventory)) {
+                  let changeTableEntry = {
+                    createdAt: dataPoint.createdAt,
+                    player: playerId,
+                    itemName: splitNameQuality[0],
+                    quality: splitNameQuality[1],
+                    amount: currentCount - itemInPreviousInventoryCount,
+                    location: `${dataPoint.x} ${dataPoint.y} ${dataPoint.z}`
+                  }
 
+                  dataForTable.push(changeTableEntry);
 
-                            // Squash all inventory data into a map, so items in different slots are counted as one
-                            let combinedInventory = new Map();
+                }
+              })
 
-                            for (const inventoryEntry of dataPoint.inventory) {
-
-                                let combinedEntry = combinedInventory.get(`${inventoryEntry.name}:${inventoryEntry.quality}`);
-
-                                if (_.isUndefined(combinedEntry)) {
-                                    combinedEntry = inventoryEntry.count;
-                                } else {
-                                    combinedEntry = combinedEntry + inventoryEntry.count;
-                                }
-                                combinedInventory.set(`${inventoryEntry.name}:${inventoryEntry.quality}`, combinedEntry);
-                            }
-
-                            // Detect changes
-
-                            if (!_.isUndefined(previousInventory)) {
-                                combinedInventory.forEach((currentCount, itemNameQuality) => {
-                                    let itemInPreviousInventoryCount = previousInventory.get(itemNameQuality);
-
-                                    if (_.isUndefined(itemInPreviousInventoryCount)) {
-                                        itemInPreviousInventoryCount = 0
-                                    }
+              previousInventory.forEach((oldCount, itemNameQuality) => {
+                if (!combinedInventory.has(itemNameQuality)) {
 
 
-                                    if (currentCount !== itemInPreviousInventoryCount) {
+                  let splitNameQuality = itemNameQuality.split(':')
 
-                                        let splitNameQuality = itemNameQuality.split(':')
+                  let changeTableEntry = {
+                    createdAt: dataPoint.createdAt,
+                    player: playerId,
+                    itemName: splitNameQuality[0],
+                    quality: splitNameQuality[1],
+                    amount: -oldCount,
+                    location: `${dataPoint.x} ${dataPoint.y} ${dataPoint.z}`
+                  }
 
-                                        let changeTableEntry = {
-                                            createdAt: dataPoint.createdAt,
-                                            player: playerId,
-                                            itemName: splitNameQuality[0],
-                                            quality: splitNameQuality[1],
-                                            amount: currentCount - itemInPreviousInventoryCount,
-                                            location: `${dataPoint.x} ${dataPoint.y} ${dataPoint.z}`
-                                        }
+                  dataForTable.push(changeTableEntry);
 
-                                        dataForTable.push(changeTableEntry);
-
-                                    }
-                                })
-
-                                previousInventory.forEach((oldCount, itemNameQuality) => {
-                                    if (!combinedInventory.has(itemNameQuality)) {
-
-
-                                        let splitNameQuality = itemNameQuality.split(':')
-
-                                        let changeTableEntry = {
-                                            createdAt: dataPoint.createdAt,
-                                            player: playerId,
-                                            itemName: splitNameQuality[0],
-                                            quality: splitNameQuality[1],
-                                            amount: - oldCount,
-                                            location: `${dataPoint.x} ${dataPoint.y} ${dataPoint.z}`
-                                        }
-
-                                        dataForTable.push(changeTableEntry);
-
-                                    }
-                                })
-                            }
-
-                            previousInventory = combinedInventory
-                        }
-                    }
-
-
-                })
-
-                changesDataTable.rows.add(dataForTable);
-                changesDataTable.draw();
+                }
+              })
             }
 
-        </script>
+            previousInventory = combinedInventory
+          }
+        }
+
+
+      })
+
+      changesDataTable.rows.add(dataForTable);
+      changesDataTable.draw();
+    }
+
+  </script>
