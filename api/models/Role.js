@@ -34,12 +34,14 @@ module.exports = {
 
     economyGiveMultiplier: {
       type: 'number',
-      defaultsTo: 1
+      defaultsTo: 1,
+      min: 0.1
     },
 
     economyDeductMultiplier: {
       type: 'number',
-      defaultsTo: 1
+      defaultsTo: 1,
+      min: 0.1
     },
 
     discordRole: {
