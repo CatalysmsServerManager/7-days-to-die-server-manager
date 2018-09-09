@@ -171,6 +171,8 @@ module.exports.routes = {
   'post /api/sdtdserver/economy': 'SdtdServerController/economy.enable-economy',
   'delete /api/sdtdserver/economy': 'SdtdServerController/economy.disable-economy',
 
+  'get /api/sdtdserver/economy/logs': 'SdtdServerController/economy.get-economy-logs',
+
   'post /api/sdtdserver/economy/module': 'SdtdServerController/economy.enable-economy-module',
   'delete /api/sdtdserver/economy/module': 'SdtdServerController/economy.disable-economy-module',
 
