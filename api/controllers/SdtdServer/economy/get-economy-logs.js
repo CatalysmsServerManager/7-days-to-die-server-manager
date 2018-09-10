@@ -51,7 +51,7 @@ module.exports = {
       }
 
       if (_.isUndefined(inputs.limit)) {
-        inputs.limit = 1000000
+        inputs.limit = 10000
       }
 
       let whereObject = {
@@ -69,7 +69,7 @@ module.exports = {
         sort: "createdAt DESC"
       }).populate('player');
 
-      sails.log.debug(`API - SdtdServer:economy:get-economy-logs - Got ${historicalInfo.lenght} records of economy logs for server ${inputs.serverId}`);
+      sails.log.info(`API - SdtdServer:economy:get-economy-logs - Got ${historicalInfo.lenght} records of economy logs for server ${inputs.serverId}`);
       
       return exits.success(historicalInfo);
     
