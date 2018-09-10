@@ -165,7 +165,29 @@
 <script>
   $(document).ready(function () {
 
-    getEconomyLogs();
+    let streamActive = true;
+
+    io.socket.on('economyLog', (economyLog) => {
+
+      if (economyLog === "END") {
+        streamActive = false
+        historicalInfoTable.draw();
+      }
+      if (streamActive) {
+        addLogToTable(economyLog)
+      }
+
+
+    });
+
+    function addLogToTable(data) {
+      historicalInfoTable.row.add(data);
+    }
+
+    setTimeout(() => {
+      getEconomyLogs();
+    }, 1000)
+
 
     if (window.SAILS_LOCALS.config.economyEnabled) {
       $('#economy-button-enable').hide();
@@ -317,16 +339,13 @@
     function getEconomyLogs() {
       $("#economy-loading-indicator").show()
 
+      historicalInfoTable.clear();
 
       $.get("/api/sdtdserver/economy/logs", {
         _csrf: window.SAILS_LOCALS._csrf,
         serverId: window.SAILS_LOCALS.server.id,
       }, function (data) {
-        console.log(data)
         $("#economy-loading-indicator").hide()
-        historicalInfoTable.clear();
-        historicalInfoTable.rows.add(data);
-        historicalInfoTable.draw();
       })
     }
 
@@ -372,12 +391,13 @@
     })
 
     $('#delete-economy-logs').click(e => {
+      historicalInfoTable.clear();
       $.post('/api/sdtdserver/data/purge', {
         _csrf: window.SAILS_LOCALS._csrf,
         serverId: window.SAILS_LOCALS.server.id,
         type: 'economy'
       }, data => {
-        historicalInfoTable.clear();
+
         historicalInfoTable.draw();
       })
     })

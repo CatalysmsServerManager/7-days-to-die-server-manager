@@ -32,9 +32,7 @@ module.exports = {
   },
 
   exits: {
-    success: {
-      responseType: 'json',
-    }
+    success: {}
   },
 
 
@@ -63,16 +61,24 @@ module.exports = {
         }
       }
 
-      let historicalInfo = await HistoricalInfo.find({
+      let totalLogs = 0;
+
+      await HistoricalInfo.stream({
         where: whereObject,
         limit: inputs.limit,
         sort: "createdAt DESC"
-      }).populate('player');
+      }).populate('player').eachRecord(async (log, next) => {
+        await sails.sockets.broadcast(inputs.serverId, 'economyLog', log);
+        totalLogs++
+        next()
+      })
 
-      sails.log.info(`API - SdtdServer:economy:get-economy-logs - Got ${historicalInfo.length} records of economy logs for server ${inputs.serverId}`);
-      
-      return exits.success(historicalInfo);
-    
+      sails.sockets.broadcast(inputs.serverId, 'economyLog', 'END')
+
+      sails.log.info(`API - SdtdServer:economy:get-economy-logs - Got ${totalLogs} records of economy logs for server ${inputs.serverId}`);
+
+      return exits.success();
+
     } catch (error) {
       sails.log.error(`API - SdtdServer:economy:get-economy-logs - ${error}`);
       throw 'notFound';
