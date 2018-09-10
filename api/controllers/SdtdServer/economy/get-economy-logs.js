@@ -69,7 +69,7 @@ module.exports = {
         limit: inputs.limit,
         sort: "createdAt DESC"
       }).populate('player').eachRecord(async (log, next) => {
-        await sails.sockets.broadcast(inputs.serverId, 'economyLog', log);
+        sails.sockets.broadcast(inputs.serverId, 'economyLog', log);
         totalLogs++
         next()
       })

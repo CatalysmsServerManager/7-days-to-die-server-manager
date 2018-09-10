@@ -166,23 +166,23 @@
   $(document).ready(function () {
 
     let streamActive = true;
+    let totalLogs = 0;
 
     io.socket.on('economyLog', (economyLog) => {
 
       if (economyLog === "END") {
         streamActive = false
-        
+        historicalInfoTable.draw()
       }
       if (streamActive) {
         addLogToTable(economyLog)
       }
-
-
     });
 
     function addLogToTable(data) {
       historicalInfoTable.row.add(data);
-      historicalInfoTable.draw();
+      totalLogs++
+      console.log(`${Date.now()} - Received ${totalLogs} economy logs in total`)
     }
 
     setTimeout(() => {
