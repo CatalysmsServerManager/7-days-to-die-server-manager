@@ -135,13 +135,20 @@
   </div>
 </div>
 
-
+<hr>
 
 <h2> <span id="economy-loading-indicator">
     <i class="fas fa-spinner fa-spin"></i>
   </span> Economy logs <span id="totalLogs"></span> </h2>
 
 <button id="delete-economy-logs" type="button" class="btn btn-danger">Delete economy logs</button>
+
+<div id="narrow-down" class="form-group">
+
+  <label for="datetimes">Select time range</label>
+  <input type="text" class="form-control" name="datetimes" />
+
+</div>
 
 <div id="table-container">
 
@@ -169,27 +176,21 @@
     let streamActive = true;
     let totalLogs = 0;
 
-    io.socket.on('economyLog', (economyLog) => {
-
-      if (economyLog === "END") {
-        streamActive = false
-        historicalInfoTable.draw()
-      }
-      if (streamActive) {
-        addLogToTable(economyLog)
-      }
+    let dateTimePicker = $('input[name="datetimes"]').daterangepicker({
+      timePicker: true,
+      startDate: 0,
+      endDate: Date.now(),
     });
 
-    function addLogToTable(data) {
-      historicalInfoTable.row.add(data);
-      totalLogs++
-      $("#totalLogs").text(` - ${totalLogs} lines loaded`)
-      console.log(`${Date.now()} - Received ${totalLogs} economy logs in total`)
-    }
-    setTimeout(() => {
-      getEconomyLogs();
-    }, 1000)
+    let beginningOfTime = new Date(0)
+    let beginDate = beginningOfTime.valueOf();
+    let endDate = Date.now();
 
+    $('input[name="datetimes"]').on('apply.daterangepicker', function (ev, picker) {
+      beginDate = picker.startDate.toDate().valueOf();
+      endDate = picker.endDate.toDate().valueOf();
+      getEconomyLogs();
+    });
 
     if (window.SAILS_LOCALS.config.economyEnabled) {
       $('#economy-button-enable').hide();
@@ -342,11 +343,16 @@
       $("#economy-loading-indicator").show()
 
       historicalInfoTable.clear();
+      historicalInfoTable.draw();
 
       $.get("/api/sdtdserver/economy/logs", {
         _csrf: window.SAILS_LOCALS._csrf,
         serverId: window.SAILS_LOCALS.server.id,
+        beginDate: beginDate,
+        endDate: endDate
       }, function (data) {
+        historicalInfoTable.rows.add(data);
+        historicalInfoTable.draw();
         $("#economy-loading-indicator").hide()
       })
     }
@@ -392,16 +398,16 @@
       ]
     })
 
+
+    getEconomyLogs();
+
     $('#delete-economy-logs').click(e => {
       historicalInfoTable.clear();
       $.post('/api/sdtdserver/data/purge', {
         _csrf: window.SAILS_LOCALS._csrf,
         serverId: window.SAILS_LOCALS.server.id,
         type: 'economy'
-      }, data => {
-
-        historicalInfoTable.draw();
-      })
+      }, data => {})
     })
 
 

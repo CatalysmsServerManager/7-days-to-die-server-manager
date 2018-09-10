@@ -50,7 +50,7 @@ module.exports = {
       }
 
       if (_.isUndefined(inputs.limit)) {
-        inputs.limit = 10000
+        inputs.limit = 5000
       }
 
       let whereObject = {
@@ -64,22 +64,16 @@ module.exports = {
 
       let totalLogs = 0;
 
-      await HistoricalInfo.stream({
+      let historicalInfo = await HistoricalInfo.find({
         where: whereObject,
         limit: inputs.limit,
         sort: "createdAt DESC"
-      }).populate('player').eachRecord(async (log, next) => {
-        sails.sockets.broadcast(inputs.serverId, 'economyLog', log);
-        totalLogs++
-        next()
-      })
-
-      sails.sockets.broadcast(inputs.serverId, 'economyLog', 'END')
+      }).populate('player');
 
       let dateEnded = Date.now()
-      sails.log.info(`API - SdtdServer:economy:get-economy-logs - Got ${totalLogs} records of economy logs for server ${inputs.serverId} - Took ${dateEnded - dateStarted} ms`);
+      sails.log.info(`API - SdtdServer:economy:get-economy-logs - Got ${historicalInfo.length} records of economy logs for server ${inputs.serverId} - Took ${dateEnded - dateStarted} ms`);
 
-      return exits.success();
+      return exits.success(historicalInfo);
 
     } catch (error) {
       sails.log.error(`API - SdtdServer:economy:get-economy-logs - ${error}`);
