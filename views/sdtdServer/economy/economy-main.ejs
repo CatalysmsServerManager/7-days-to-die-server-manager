@@ -397,10 +397,7 @@
         },
       ]
     })
-
-
-    getEconomyLogs();
-
+    
     $('#delete-economy-logs').click(e => {
       historicalInfoTable.clear();
       $.post('/api/sdtdserver/data/purge', {
