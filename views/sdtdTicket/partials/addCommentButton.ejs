@@ -42,6 +42,7 @@
                     data: {
                         _csrf: window.SAILS_LOCALS._csrf,
                         ticketId: window.SAILS_LOCALS.ticket.id,
+                        serverId: window.SAILS_LOCALS.server.id,
                         commentText: commentText
                     },
                     success: (data, status, xhr) => {

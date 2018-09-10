@@ -15,6 +15,7 @@
           type: "POST",
           data: {
             _csrf: window.SAILS_LOCALS._csrf,
+            serverId: window.SAILS_LOCALS.server.id,
             ticketId: window.SAILS_LOCALS.ticket.id,
             status: true
           },
