@@ -43,6 +43,7 @@
           data: {
             _csrf: window.SAILS_LOCALS._csrf,
             ticketId: <%= ticket.id %>,
+            serverId: window.SAILS_LOCALS.server.id,
             description: newDescription
           },
           success: (data, status, xhr) => {

@@ -45,6 +45,7 @@
                     data: {
                         _csrf: window.SAILS_LOCALS._csrf,
                         newText: commentText,
+                        serverId: window.SAILS_LOCALS.server.id,
                         commentId: commentId
                     },
                     success: (data, status, xhr) => {

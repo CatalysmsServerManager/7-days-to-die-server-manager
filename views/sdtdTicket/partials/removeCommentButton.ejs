@@ -40,7 +40,8 @@
                     method: 'DELETE',
                     data: {
                         _csrf: window.SAILS_LOCALS._csrf,
-                        commentId: <%= comment.id %>
+                        commentId: <%= comment.id %>,
+                        serverId: window.SAILS_LOCALS.server.id,
                     },
                     success: (data, status, xhr) => {
                         location.reload()
