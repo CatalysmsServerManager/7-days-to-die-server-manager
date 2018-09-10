@@ -51,7 +51,7 @@ module.exports = {
       }
 
       if (_.isUndefined(inputs.limit)) {
-        inputs.limit = 5000
+        inputs.limit = 1000000
       }
 
       let whereObject = {
