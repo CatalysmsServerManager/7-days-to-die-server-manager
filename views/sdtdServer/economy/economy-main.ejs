@@ -172,7 +172,7 @@
 <script>
   $(document).ready(function () {
 
-
+    $("#economy-loading-indicator").hide()
     let streamActive = true;
     let totalLogs = 0;
 
@@ -397,7 +397,7 @@
         },
       ]
     })
-    
+
     $('#delete-economy-logs').click(e => {
       historicalInfoTable.clear();
       $.post('/api/sdtdserver/data/purge', {
