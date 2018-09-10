@@ -69,7 +69,7 @@ module.exports = {
         sort: "createdAt DESC"
       }).populate('player');
 
-      sails.log.info(`API - SdtdServer:economy:get-economy-logs - Got ${historicalInfo.lenght} records of economy logs for server ${inputs.serverId}`);
+      sails.log.info(`API - SdtdServer:economy:get-economy-logs - Got ${historicalInfo.length} records of economy logs for server ${inputs.serverId}`);
       
       return exits.success(historicalInfo);
     
