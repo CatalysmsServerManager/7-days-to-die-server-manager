@@ -1,95 +1,183 @@
 <%- exposeLocalsToBrowser() %>
 
-    <div class="container-fluid">
+  <div class="container-fluid">
 
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <a href="<%= '/user/' + req.session.userId + '/dashboard' %>"> Dashboard </a>
-                </li>
-                <li class="breadcrumb-item">
-                    <a href="<%= '/sdtdserver/' + server.id + '/dashboard' %>">
-                        <%= server.name %>
-                    </a>
-                </li>
-                <li class="breadcrumb-item active" aria-current="page">Analytics</li>
-            </ol>
-        </nav>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="<%= '/user/' + req.session.userId + '/dashboard' %>"> Dashboard </a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="<%= '/sdtdserver/' + server.id + '/dashboard' %>">
+            <%= server.name %>
+          </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Analytics</li>
+      </ol>
+    </nav>
 
-        <h1>
-            <%= server.name %> analytics</h1>
+    <h1>
+      <%= server.name %> analytics</h1>
 
-        <button id="loadOlder-btn" type="button" class="btn btn-primary">Older</button>
-        <button id="loadNewer-btn" type="button" class="btn btn-secondary">Newer</button>
-        <button id="reload-btn" type="button" class="btn btn-warning">Reload</button>
+    <div id="narrow-down" class="form-group">
 
-
-        <div class="form-group">
-            <label for="charts-limit">Limit data</label>
-            <input type="number" class="form-control" name="charts-limit" id="charts-limit" aria-describedby="charts-limit-help" value="250">
-            <small id="charts-limit-help" class="form-text text-muted">This is the amount of data that will be drawn into the charts. If you want a more complete view, you can increase
-                this. Be aware that browsers are known to crash when handling loads of data</small>
-        </div>
-
-
-        <%- include('./partials/historicalData/chart-fps.ejs', {server: server}) %>
-            <%- include('./partials/historicalData/chart-players.ejs', {server: server}) %>
-
+      <label for="datetimes">Select time range</label>
+      <input type="text" class="form-control" name="datetimes" />
 
     </div>
 
+    <div class="form-group">
+      <label for="data-label">dataPoint</label>
+      <select class="form-control" name="data-label" id="data-label">
+        <option value="fps">FPS</option>
+        <option value="players">Players</option>
+        <option value="heap">Heap (MB)</option>
+        <option value="chunks">Chunks</option>
+        <option value="zombies">Zombies</option>
+        <option value="entities">Entities</option>
+        <option value="items">Items</option>
+        <option value="rss">RSS (MB)</option>
+        <option value="uptime">Uptime</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="charts-limit">Limit data</label>
+      <input type="number" class="form-control" name="charts-limit" id="charts-limit" aria-describedby="charts-limit-help" value="250">
+      <small id="charts-limit-help" class="form-text text-muted">This is the amount of data that will be drawn into the charts. If you want a more complete view, you can increase this.
+        Be aware that browsers are known to crash when handling loads of data</small>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        Chart
+      </div>
+      <div class="card-body">
+        <h4 id="chart-analytics-stats" class="card-title"></h4>
+
+        <p class="card-text">
+
+          <canvas id="analytics-chart" width="100%"></canvas>
+
+        </p>
+      </div>
+      <div id="chart-analytics-footer" class="card-footer text-muted">
+
+        <i class="fas fa-spinner fa-spin"></i> Loading
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const minimum = array => Math.min(...array);
+    const maximum = array => Math.max(...array);
+    const average = array => array.reduce((a, b) => a + b, 0) / array.length;
 
 
-    <!-- <%- include('./partials/historicalData/chart-memUpdate.ejs', {server: server}) %> -->
+    function drawAnalyticsChart(data, label) {
+      const analyticsChartCanvas = $("#analytics-chart");
+
+      if (window.analyticsChart) {
+        window.analyticsChart.destroy()
+      }
+
+      window.analyticsChart = new Chart(analyticsChartCanvas, {
+        type: 'line',
+        data: {
+          datasets: [{
+            fill: false,
+            yAxisID: 'analytics',
+            borderColor: 'rgb(0, 102, 255)',
+            backgroundColor: 'rgb(0, 102, 255)',
+            label: label,
+            data: data.map(dataPoint => {
+              return {
+                t: dataPoint.createdAt,
+                y: dataPoint[label]
+              }
+            }),
+          }, ]
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              id: 'analytics',
+              type: 'linear',
+              ticks: {
+                beginAtZero: true
+              }
+            }, ],
+            xAxes: [{
+              type: 'time',
+            }]
+          }
+        }
+      })
+
+      let date = new Date();
+      $("#chart-analytics-footer").html(
+        `<i class="fas fa-check"></i> ${data.length} data points`
+      );
+
+      if (data.length > 0) {
+
+        let dataBeginDate = new Date(data[0].createdAt);
+        let dataEndDate = new Date(data[data.length - 1].createdAt);
+        $("#chart-analytics-stats").text(`${dataEndDate.toDateString()} ${dataEndDate.toLocaleTimeString()} - ${dataBeginDate.toDateString()} ${dataEndDate.toLocaleTimeString()}`)
+      }
 
 
-    <script>
 
-        const minimum = array => Math.min(...array);
-        const maximum = array => Math.max(...array);
-        const average = array => array.reduce((a, b) => a + b, 0) / array.length;
+    }
 
-        $(document).ready(() => {
+    $(document).ready(() => {
 
-            let skip = 0;
-            const skipStep = 250 // Amount of updates per day for a server running 24/7
+      let dateTimePicker = $('input[name="datetimes"]').daterangepicker({
+        timePicker: true,
+        startDate: 0,
+        endDate: Date.now(),
+      });
 
-            let getLimit = () => {
-                let limit = $("#charts-limit").val();
-                return parseInt(limit)
-            }
+      let beginningOfTime = new Date(0)
+      let beginDate = beginningOfTime.valueOf();
+      let endDate = Date.now();
 
-            const serverId = "<%= server.id %>"
+      $('input[name="datetimes"]').on('apply.daterangepicker', function (ev, picker) {
+        beginDate = picker.startDate.toDate().valueOf();
+        endDate = picker.endDate.toDate().valueOf();
+        updateCharts(getLabel(), getLimit());
+      });
 
-                updateCharts(skip, getLimit());
+      $("#data-label").on('change', () => {
+        updateCharts(getLabel(), getLimit());
+      })
 
-            $('#reload-btn').click(e => {
-                let limit = getLimit();
-                updateCharts(skip, limit)
-            })
+      let getLimit = () => {
+        let limit = $("#charts-limit").val();
+        return parseInt(limit)
+      }
 
-            $('#loadOlder-btn').click(e => {
-                let limit = getLimit();
-                skip += parseInt(limit);
-                updateCharts(skip, limit)
-            })
+      let getLabel = () => {
+        let label = $("#data-label option:selected").val();
+        return label
+      }
 
-            $('#loadNewer-btn').click(e => {
-                let limit = getLimit();
-                skip -= limit;
-                if (skip < 0) {
-                    skip = 0
-                }
-                updateCharts(skip, limit)
-            })
+      const serverId = window.SAILS_LOCALS.server.id
 
-            function updateCharts(skip, limit) {
-                $.get('/api/sdtdserver/data/memupdate/', { serverId: serverId, skip: skip, limit: limit }, data => {
-                    drawFpsChart(data);
-                    drawPlayersChart(data);
-                })
-            }
+      updateCharts(getLabel(), getLimit());
 
+      function updateCharts(label, limit) {
+        $.get('/api/sdtdserver/data/memupdate/', {
+          serverId: serverId,
+          limit: limit,
+          beginDate: beginDate,
+          endDate: endDate,
+        }, data => {
+          drawAnalyticsChart(data, label)
         })
+      }
 
-    </script>
+    })
+
+  </script>
