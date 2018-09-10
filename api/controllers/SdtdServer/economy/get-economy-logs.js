@@ -39,6 +39,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     try {
+      let dateStarted = Date.now();
 
       if (_.isUndefined(inputs.beginDate)) {
         inputs.beginDate = 0
@@ -75,7 +76,8 @@ module.exports = {
 
       sails.sockets.broadcast(inputs.serverId, 'economyLog', 'END')
 
-      sails.log.info(`API - SdtdServer:economy:get-economy-logs - Got ${totalLogs} records of economy logs for server ${inputs.serverId}`);
+      let dateEnded = Date.now()
+      sails.log.info(`API - SdtdServer:economy:get-economy-logs - Got ${totalLogs} records of economy logs for server ${inputs.serverId} - Took ${dateEnded - dateStarted} ms`);
 
       return exits.success();
 
