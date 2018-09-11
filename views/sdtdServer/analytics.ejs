@@ -1,85 +1,180 @@
 <%- exposeLocalsToBrowser() %>
 
-  <div class="container-fluid">
+<div class="container-fluid">
 
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-          <a href="<%= '/user/' + req.session.userId + '/dashboard' %>"> Dashboard </a>
-        </li>
-        <li class="breadcrumb-item">
-          <a href="<%= '/sdtdserver/' + server.id + '/dashboard' %>">
-            <%= server.name %>
-          </a>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">Analytics</li>
-      </ol>
-    </nav>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= '/user/' + req.session.userId + '/dashboard' %>"> Dashboard </a>
+      </li>
+      <li class="breadcrumb-item">
+        <a href="<%= '/sdtdserver/' + server.id + '/dashboard' %>">
+          <%= server.name %>
+        </a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Analytics</li>
+    </ol>
+  </nav>
 
-    <h1>
-      <%= server.name %> analytics</h1>
+  <h1>
+    <%= server.name %> analytics</h1>
 
-    <div id="narrow-down" class="form-group">
+  <div id="narrow-down" class="form-group">
 
-      <label for="datetimes">Select time range</label>
-      <input type="text" class="form-control" name="datetimes" />
-
-    </div>
-
-    <div class="form-group">
-      <label for="data-label">Type</label>
-      <select class="form-control" name="data-label" id="data-label">
-        <option value="fps">FPS</option>
-        <option value="players">Players</option>
-        <option value="heap">Heap (MB)</option>
-        <option value="chunks">Chunks</option>
-        <option value="zombies">Zombies</option>
-        <option value="entities">Entities</option>
-        <option value="items">Items</option>
-        <option value="rss">RSS (MB)</option>
-        <option value="uptime">Uptime</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label for="charts-limit">Limit data</label>
-      <input type="number" class="form-control" name="charts-limit" id="charts-limit" aria-describedby="charts-limit-help" value="250">
-      <small id="charts-limit-help" class="form-text text-muted">This is the amount of data that will be drawn into the charts. Be aware that loading lots of data can slow down your browser</small>
-    </div>
-
-    <div class="card">
-      <div class="card-header">
-        Chart
-      </div>
-      <div class="card-body">
-        <h4 id="chart-analytics-stats" class="card-title"></h4>
-
-        <p class="card-text">
-
-          <canvas id="analytics-chart" width="100%"></canvas>
-
-        </p>
-      </div>
-      <div id="chart-analytics-footer" class="card-footer text-muted">
-
-        <i class="fas fa-spinner fa-spin"></i> Loading
-      </div>
-    </div>
+    <label for="datetimes">Select time range</label>
+    <input type="text" class="form-control" name="datetimes" />
 
   </div>
 
-  <script>
+  <div class="form-group">
+    <label for="data-label">Type</label>
+    <select class="form-control" name="data-label" id="data-label">
+      <option value="fps">FPS</option>
+      <option value="players">Players</option>
+      <option value="heap">Heap (MB)</option>
+      <option value="chunks">Chunks</option>
+      <option value="zombies">Zombies</option>
+      <option value="entities">Entities</option>
+      <option value="items">Items</option>
+      <option value="rss">RSS (MB)</option>
+      <option value="uptime">Uptime</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      Chart
+    </div>
+    <div class="card-body">
+      <h4 id="chart-analytics-stats" class="card-title"></h4>
+
+      <p class="card-text">
+
+        <canvas id="analytics-chart" width="100%"></canvas>
+
+      </p>
+    </div>
+    <div id="chart-analytics-footer" class="card-footer text-muted">
+
+      <i id="loading-indicator" class="fas fa-spinner fa-spin"></i> Loading
+    </div>
+  </div>
+
+</div>
+
+<script>
+  $(document).ready(() => {
+    const serverId = window.SAILS_LOCALS.server.id
+
+    var analyticsChartCanvas = $("#analytics-chart");
+    var limit = 10000
+    var label = 'fps';
+
+    let beginningOfTime = new Date(0);
+    let beginDate = beginningOfTime.valueOf();
+    let endDate = Date.now();
+    let data;
+
+    let dateTimePicker
+
+    initialize();
+
+    $('input[name="datetimes"]').on('apply.daterangepicker', function (ev, picker) {
+      beginDate = picker.startDate.toDate().valueOf();
+      endDate = picker.endDate.toDate().valueOf();
+      console.log('applied dates')
+      updateCharts();
+    });
+
+    $("#data-label").on('change', () => {
+      updateCharts();
+    })
+
+
     const minimum = array => Math.min(...array);
     const maximum = array => Math.max(...array);
     const average = array => array.reduce((a, b) => a + b, 0) / array.length;
 
+    let getLimit = () => {
+      let limit = $("#charts-limit").val();
+      return parseInt(limit)
+    }
 
-    function drawAnalyticsChart(data, label) {
-      const analyticsChartCanvas = $("#analytics-chart");
+    let getLabel = () => {
+      let label = $("#data-label option:selected").val();
+      return label
+    }
 
-      if (window.analyticsChart) {
-        window.analyticsChart.destroy()
+
+
+    async function updateCharts() {
+      label = getLabel();
+
+      let dataToDraw = _.filter(data, dataPoint => {
+        return beginDate < dataPoint.createdAt && dataPoint.createdAt < endDate
+      });
+
+      window.analyticsChart.data.datasets[0].data = dataToDraw.map(dataPoint => {
+        return {
+          t: dataPoint.createdAt,
+          y: dataPoint[label]
+        }
+      })
+      window.analyticsChart.update();
+      updateInfoLabels(dataToDraw);
+    }
+
+
+    async function getData() {
+      return new Promise((resolve, reject) => {
+        let opts = {
+          serverId: serverId,
+          limit: limit,
+          beginDate: beginDate,
+          endDate: endDate,
+        }
+
+        $.ajax({
+          url: '/api/sdtdserver/data/memupdate/',
+          type: 'GET',
+          data: opts,
+          success: function (data) {
+            console.log(`Data length: ${data.length} - ${JSON.stringify(opts)}`)
+            totalData = data;
+            updateInfoLabels(data)
+            resolve(data)
+          },
+          error: function (data) {
+            console.error(data);
+
+            reject(data)
+          }
+        });
+
+
+      })
+
+    }
+
+    function updateInfoLabels(data) {
+
+      let date = new Date();
+      $("#chart-analytics-footer").html(
+        `<i class="fas fa-check"></i> ${data.length} data points`
+      );
+
+      if (data.length > 0) {
+
+        let dataBeginDate = new Date(data[0].createdAt);
+        let dataEndDate = new Date(data[data.length - 1].createdAt);
+        $("#chart-analytics-stats").text(
+          `${dataEndDate.toDateString()} ${dataEndDate.toLocaleTimeString()} - ${dataBeginDate.toDateString()} ${dataBeginDate.toLocaleTimeString()}`
+        )
       }
+    }
+
+    async function initialize() {
+      data = await getData();
 
       window.analyticsChart = new Chart(analyticsChartCanvas, {
         type: 'line',
@@ -113,70 +208,15 @@
           }
         }
       })
-
-      let date = new Date();
-      $("#chart-analytics-footer").html(
-        `<i class="fas fa-check"></i> ${data.length} data points`
-      );
-
-      if (data.length > 0) {
-
-        let dataBeginDate = new Date(data[0].createdAt);
-        let dataEndDate = new Date(data[data.length - 1].createdAt);
-        $("#chart-analytics-stats").text(`${dataEndDate.toDateString()} ${dataEndDate.toLocaleTimeString()} - ${dataBeginDate.toDateString()} ${dataEndDate.toLocaleTimeString()}`)
-      }
-
-
-
+      dateTimePicker = $('input[name="datetimes"]').daterangepicker({
+        timePicker: true,
+        startDate: beginDate,
+        endDate: endDate,
+      });
     }
 
-    $(document).ready(() => {
 
-      let dateTimePicker = $('input[name="datetimes"]').daterangepicker({
-        timePicker: true,
-        startDate: 0,
-        endDate: Date.now(),
-      });
 
-      let beginningOfTime = new Date(0)
-      let beginDate = beginningOfTime.valueOf();
-      let endDate = Date.now();
+  })
 
-      $('input[name="datetimes"]').on('apply.daterangepicker', function (ev, picker) {
-        beginDate = picker.startDate.toDate().valueOf();
-        endDate = picker.endDate.toDate().valueOf();
-        updateCharts(getLabel(), getLimit());
-      });
-
-      $("#data-label").on('change', () => {
-        updateCharts(getLabel(), getLimit());
-      })
-
-      let getLimit = () => {
-        let limit = $("#charts-limit").val();
-        return parseInt(limit)
-      }
-
-      let getLabel = () => {
-        let label = $("#data-label option:selected").val();
-        return label
-      }
-
-      const serverId = window.SAILS_LOCALS.server.id
-
-      updateCharts(getLabel(), getLimit());
-
-      function updateCharts(label, limit) {
-        $.get('/api/sdtdserver/data/memupdate/', {
-          serverId: serverId,
-          limit: limit,
-          beginDate: beginDate,
-          endDate: endDate,
-        }, data => {
-          drawAnalyticsChart(data, label)
-        })
-      }
-
-    })
-
-  </script>
+</script>
