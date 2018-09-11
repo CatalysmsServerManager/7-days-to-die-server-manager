@@ -287,13 +287,13 @@ module.exports = function sdtdCountryBan(sails) {
                 try {
                   await startCountryBan(config.server);
                 } catch (error) {
-                  sails.log.error(`Error initializing countryban for server ${config.server} - ${error}`)               
+                  sails.log.error(`Error initializing countryban for server ${config.server} - ${error}`)
                 }
               }
             }
 
             sails.log.info(`HOOK: countryBan - Initialized ${countryBanInfoMap.size} country ban instances`);
-            return 
+            return
           } catch (error) {
             sails.log.error(`HOOK:countryBan ${error}`);
           }
@@ -312,101 +312,101 @@ module.exports = function sdtdCountryBan(sails) {
      */
 
     start: async function start(serverId) {
-      sails.log.debug(`HOOK:countryBan Starting countryBan for server ${serverId}`);
-      startCountryBan(serverId);
-    },
+        sails.log.debug(`HOOK:countryBan Starting countryBan for server ${serverId}`);
+        startCountryBan(serverId);
+      },
 
-    /**
-     * @name stop
-     * @memberof module:7dtdCountryBan
-     * @description Stops countryBan for a server
-     * @param {number} serverId - Id of the server
-     * @method
-     */
+      /**
+       * @name stop
+       * @memberof module:7dtdCountryBan
+       * @description Stops countryBan for a server
+       * @param {number} serverId - Id of the server
+       * @method
+       */
 
-    stop: async function (serverId) {
-      sails.log.debug(`HOOK:countryBan Stopping countryBan for server ${serverId} `);
+      stop: async function (serverId) {
+          sails.log.debug(`HOOK:countryBan Stopping countryBan for server ${serverId} `);
 
-      let loggingObj = sails.hooks.sdtdlogs.getLoggingObject(serverId);
+          let loggingObj = sails.hooks.sdtdlogs.getLoggingObject(serverId);
 
-      let currentConfig = countryBanInfoMap.get(String(serverId));
+          let currentConfig = countryBanInfoMap.get(String(serverId));
 
-      if (_.isUndefined(currentConfig)) {
-        return;
-      }
+          if (_.isUndefined(currentConfig)) {
+            return;
+          }
 
-      currentConfig.enabled = false;
-      await SdtdConfig.update({
-        server: serverId
-      }, {
-        countryBanConfig: currentConfig
-      });
+          currentConfig.enabled = false;
+          await SdtdConfig.update({
+            server: serverId
+          }, {
+            countryBanConfig: currentConfig
+          });
 
-      if (_.isUndefined(loggingObj)) {
-        throw new Error('Could not find logging object for server');
-      }
-      loggingObj.removeListener('playerConnected', handleCountryBan);
+          if (_.isUndefined(loggingObj)) {
+            throw new Error('Could not find logging object for server');
+          }
+          loggingObj.removeListener('playerConnected', handleCountryBan);
 
-      countryBanInfoMap.delete(String(serverId));
-    },
+          countryBanInfoMap.delete(String(serverId));
+        },
 
-    /**
-     * @name getStatus
-     * @memberof module:7dtdCountryBan
-     * @description Gets the country ban status/config for a server
-     * @param {number} serverId - Id of the server
-     * @method
-     */
+        /**
+         * @name getStatus
+         * @memberof module:7dtdCountryBan
+         * @description Gets the country ban status/config for a server
+         * @param {number} serverId - Id of the server
+         * @method
+         */
 
-    getStatus: function (serverId) {
-      sails.log.debug(`HOOK:countryBan Getting countryBan status for server ${serverId} `);
-      return countryBanInfoMap.get(String(serverId));
-    },
+        getStatus: function (serverId) {
+          sails.log.debug(`HOOK:countryBan Getting countryBan status for server ${serverId} `);
+          return countryBanInfoMap.get(String(serverId));
+        },
 
-    getAmount: function() {
-      return countryBanInfoMap.size;
-    },
+        getAmount: function () {
+          return countryBanInfoMap.size;
+        },
 
-    /**
-     * @name reload
-     * @memberof module:7dtdCountryBan
-     * @description Changes banned countries config for a server
-     * @param {number} serverId - Id of the server
-     * @method
-     */
+        /**
+         * @name reload
+         * @memberof module:7dtdCountryBan
+         * @description Changes banned countries config for a server
+         * @param {number} serverId - Id of the server
+         * @method
+         */
 
-    reload: async function (serverId, newConfig) {
+        reload: async function (serverId, newConfig) {
 
-      try {
-        sails.log.debug(`HOOK:countryBan Reloading country ban for server ${serverId} `);
+          try {
+            sails.log.debug(`HOOK:countryBan Reloading country ban for server ${serverId} `);
 
-        let config = await SdtdConfig.findOne({
-          server: serverId
-        });
+            let config = await SdtdConfig.findOne({
+              server: serverId
+            });
 
-        if (_.isUndefined(config)) {
-          throw new Error('Could not find server config with specified ID');
+            if (_.isUndefined(config)) {
+              throw new Error('Could not find server config with specified ID');
+            }
+
+            if (_.isUndefined(newConfig)) {
+              newConfig = config.countryBanConfig;
+            }
+
+
+            let updatedServer = await SdtdConfig.update({
+              server: serverId
+            }, {
+              countryBanConfig: newConfig
+            }).fetch();
+            countryBanInfoMap.set(String(serverId), newConfig);
+
+            await this.stop(serverId);
+            return await this.start(serverId);
+          } catch (error) {
+            sails.log.error(`HOOK:countryBan ${error}`);
+          }
+
         }
-
-        if (_.isUndefined(newConfig)) {
-          newConfig = config.countryBanConfig;
-        }
-
-
-        let updatedServer = await SdtdConfig.update({
-          server: serverId
-        }, {
-          countryBanConfig: newConfig
-        }).fetch();
-        countryBanInfoMap.set(String(serverId), newConfig);
-
-        await this.stop(serverId);
-        return await this.start(serverId);
-      } catch (error) {
-        sails.log.error(`HOOK:countryBan ${error}`);
-      }
-
-    }
   };
 
   async function handleCountryBan(connectedMessage) {
@@ -420,7 +420,13 @@ module.exports = function sdtdCountryBan(sails) {
         webPort: serverWebPort
       }).limit(1);
       server = server[0]
-      
+
+      let player = await Player.find({
+        steamId: steamId,
+        server: server.id
+      });
+      player = player[0];
+
       sails.log.debug(`HOOK:countryBan - Player from ${country} connected to server ${server.name}, checking if needs to be kicked`, connectedMessage);
       let config = await SdtdConfig.find({
         server: server.id
@@ -428,7 +434,14 @@ module.exports = function sdtdCountryBan(sails) {
 
       let countryBanConfig = config[0].countryBanConfig;
       if (countryBanConfig.bannedCountries.includes(country) && !countryBanConfig.whiteListedSteamIds.includes(steamId)) {
-
+        await CountryBan.create({
+          steamId: connectedMessage.steamID,
+          country: country,
+          ip: connectedMessage.ip,
+          type: countryBanConfig.ban ? "ban" : "kick",
+          server: server.id,
+          player: player.id,
+        });
 
         if (countryBanConfig.ban) {
 
@@ -446,15 +459,15 @@ module.exports = function sdtdCountryBan(sails) {
               sails.log.warn(`HOOK:countryBan - Failed to kick player from server ${server.id} - ${error}`);
             },
             success: async () => {
-              
+
               await sails.hooks.discordnotifications.sendNotification({
                 serverId: server.id,
                 notificationType: 'countrybanKick',
                 player: connectedMessage
-              })
+              });
             }
-          });          
-          
+          });
+
         } else {
           sevenDays.kickPlayer({
             ip: server.ip,
@@ -468,7 +481,7 @@ module.exports = function sdtdCountryBan(sails) {
               sails.log.warn(`HOOK:countryBan - Failed to kick player from server ${server.id} - ${error}`);
             },
             success: async () => {
-              
+
               await sails.hooks.discordnotifications.sendNotification({
                 serverId: server.id,
                 notificationType: 'countrybanKick',
@@ -477,13 +490,14 @@ module.exports = function sdtdCountryBan(sails) {
             }
           });
         }
-        
+
         sails.log.info(`HOOK:countryBan - Kicked player ${connectedMessage.playerName} from ${country} server ${server.name}`);
 
       }
 
     } catch (error) {
-      sails.log.error(`HOOK:countryBan failed to handle player connnect ${error}`);
+      sails.log.error(`HOOK:countryBan failed to handle player connnect`);
+      sails.log.error(error)
     }
   }
 
