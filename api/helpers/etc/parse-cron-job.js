@@ -34,33 +34,28 @@ module.exports = {
     let functionToExecute = async () => {
       
       let foundJob = await CronJob.findOne(inputs.jobId).populate('server');
+
+      let commandsToExecute = foundJob.command.split(';');
+      let responses = new Array();
+
+      for (const commandToExec of commandsToExecute) {
+        let response = await execCmd(foundJob, commandToExec);
+        responses.push(response);
+      }
+
+      sails.log.debug(`Executed a cron job for server ${foundJob.server.name}`, _.omit(foundJob, 'server'));
+  
+      foundJob.responses = responses;
+
+      if (foundJob.notificationEnabled) {
+        await sails.hooks.discordnotifications.sendNotification({
+          serverId: foundJob.server.id,
+          job: foundJob,
+          notificationType: "cronjob"
+        })
+      }
       
-      sevenDays.executeCommand({
-        ip: foundJob.server.ip,
-        port: foundJob.server.webPort,
-        authName: foundJob.server.authName,
-        authToken: foundJob.server.authToken,
-        command: foundJob.command
-      }).exec({
-        success: async (data) => {
-          sails.log.debug(`Executed a cron job for server ${foundJob.server.name}`, _.omit(foundJob, 'server'));
 
-          foundJob.response = data;
-
-          if (foundJob.notificationEnabled) {
-            await sails.hooks.discordnotifications.sendNotification({
-              serverId: foundJob.server.id,
-              job: foundJob,
-              notificationType: "cronjob"
-            })
-          }
-
-          return data
-        },
-        error: err => {
-          return err
-        }
-      })
     }
 
 
@@ -72,3 +67,21 @@ module.exports = {
 
 };
 
+async function execCmd(job, command) {
+  return new Promise((resolve, reject) => {
+    sevenDays.executeCommand({
+      ip: job.server.ip,
+      port: job.server.webPort,
+      authName: job.server.authName,
+      authToken: job.server.authToken,
+      command: command.trim()
+    }).exec({
+      success: async (data) => {
+        resolve(data)
+      },
+      error: err => {
+        reject(err)
+      }
+    })
+  })
+}

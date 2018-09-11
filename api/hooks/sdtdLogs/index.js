@@ -166,16 +166,16 @@ module.exports = function sdtdLogs(sails) {
           eventEmitter.on('playerConnected', async function (connectedMsg) {
             connectedMsg.server = _.omit(server, "authName", "authToken");
             let playerData = await sails.helpers.sdtd.loadPlayerData(server.id, connectedMsg.steamID);
-            connectedMsg.player = playerData[0]
+            connectedMsg.player = playerData[0];
             await sails.hooks.discordnotifications.sendNotification({
               serverId: server.id,
               notificationType: 'playerConnected',
               player: playerData[0]
             })
-            sails.sockets.broadcast(server.id, 'playerConnected', connectedMsg);
             if (connectedMsg.country != null) {
               await Player.update({ server: server.id, steamId: connectedMsg.steamID }, { country: connectedMsg.country })
             }
+            sails.sockets.broadcast(server.id, 'playerConnected', connectedMsg);
             sails.log.verbose(`Detected a player connected`, connectedMsg);
           });
 
