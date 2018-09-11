@@ -440,7 +440,7 @@ module.exports = function sdtdCountryBan(sails) {
           ip: connectedMessage.ip,
           type: countryBanConfig.ban ? "ban" : "kick",
           server: server.id,
-          player: player.id,
+          player: !_.isUndefined(player) ? player.id : null,
         });
 
         if (countryBanConfig.ban) {
