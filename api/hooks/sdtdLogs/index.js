@@ -158,20 +158,21 @@ module.exports = function sdtdLogs(sails) {
           });
 
           eventEmitter.on('chatMessage', function (chatMessage) {
-            chatMessage.server = _.omit(server, "authName", "authToken");;
+            chatMessage.server = _.omit(server, "authName", "authToken");
             sails.sockets.broadcast(server.id, 'chatMessage', chatMessage);
             sails.log.verbose(`Detected a chat message`, chatMessage);
           });
 
           eventEmitter.on('playerConnected', async function (connectedMsg) {
-            connectedMsg.server = _.omit(server, "authName", "authToken");;
-            sails.sockets.broadcast(server.id, 'playerConnected', connectedMsg);
+            connectedMsg.server = _.omit(server, "authName", "authToken");
             let playerData = await sails.helpers.sdtd.loadPlayerData(server.id, connectedMsg.steamID);
+            connectedMsg.player = playerData[0]
             await sails.hooks.discordnotifications.sendNotification({
               serverId: server.id,
               notificationType: 'playerConnected',
               player: playerData[0]
             })
+            sails.sockets.broadcast(server.id, 'playerConnected', connectedMsg);
             if (connectedMsg.country != null) {
               await Player.update({ server: server.id, steamId: connectedMsg.steamID }, { country: connectedMsg.country })
             }
@@ -179,14 +180,15 @@ module.exports = function sdtdLogs(sails) {
           });
 
           eventEmitter.on('playerDisconnected', async function (disconnectedMsg) {
-            disconnectedMsg.server = _.omit(server, "authName", "authToken");;
-            sails.sockets.broadcast(server.id, 'playerDisconnected', disconnectedMsg);
+            disconnectedMsg.server = _.omit(server, "authName", "authToken");
             let playerData = await sails.helpers.sdtd.loadPlayerData(server.id, disconnectedMsg.playerID);
+            disconnectedMsg.player = playerData[0]
             await sails.hooks.discordnotifications.sendNotification({
               serverId: server.id,
               notificationType: 'playerDisconnected',
               player: playerData[0]
             })
+            sails.sockets.broadcast(server.id, 'playerDisconnected', disconnectedMsg);
             sails.log.verbose(`Detected a player disconnected`, disconnectedMsg);
           });
 
