@@ -67,7 +67,11 @@ module.exports = {
       role = foundRole[0]
     }
 
-    let hasPermission = role[inputs.permission];
+    let hasPermission = false;
+
+    if (role[inputs.permission]) {
+      hasPermission = true
+    }
 
     if (role.manageServer) {
       hasPermission = true
