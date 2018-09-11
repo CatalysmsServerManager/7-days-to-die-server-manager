@@ -86,9 +86,9 @@
 
                             <div class="form-group">
                                 <label for="add-new-cron-command">Command</label>
-                                <input type="text" class="form-control" name="add-new-cron-command" id="add-new-cron-command" aria-describedby="add-new-cron-command-help"
-                                    placeholder="say 'Hello World'">
-                                <small id="add-new-cron-command-help" class="form-text text-muted">The command to execute every time this job runs.</small>
+                                <textarea type="text" class="form-control" name="add-new-cron-command" id="add-new-cron-command" aria-describedby="add-new-cron-command-help"
+                                    placeholder="say 'Hello World'" rows="5"></textarea>
+                                <small id="add-new-cron-command-help" class="form-text text-muted">The command to execute every time this job runs. Use ";" to separate multiple commands</small>
                             </div>
 
                             <div class="form-group">
@@ -100,10 +100,13 @@
                                 </small>
                             </div>
 
+                            <hr>
+
                             <em>Simple config</em>
                             <small>For users who want less control over the job and just want to get it running easily. Note that
                                 your job will still use a temporal value in cron syntax</small>
                             <br>
+
                             <form class="form-inline">
                                 <div class="form-group">
                                     <label for="add-new-cron-duration"> </label>
