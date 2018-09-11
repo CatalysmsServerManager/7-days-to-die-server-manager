@@ -1,4 +1,5 @@
 const sevenDays = require('machinepack-7daystodiewebapi');
+const he = require('he');
 
 /** Class to send MOTD messages */
 
@@ -75,9 +76,29 @@ class MotdSender {
   async sendMotd(message, serverId, playerSteamId) {
     try {
       let server = await SdtdServer.findOne(serverId);
+      let player = await Player.find({
+        server: server.id,
+        steamId: playerSteamId
+      });
+      player = player[0];
 
       if (_.isUndefined(server)) {
         return sails.log.error(`HOOKS - sdtdMotd:MotdSender:sendMotd - Unknown server id ${serverId}`);
+      }
+
+      if (!_.isUndefined(player)) {
+        message = _.replace(message, "${player.name}", he.decode(player.name));
+        message = _.replace(message, "${player.currency}", player.currency);
+        message = _.replace(message, "${player.positionX}", player.positionX);
+        message = _.replace(message, "${player.positionY}", player.positionY);
+        message = _.replace(message, "${player.positionZ}", player.positionZ);
+        message = _.replace(message, "${player.playtime}", player.playtime);
+        message = _.replace(message, "${player.lastOnline}", player.lastOnline);
+        message = _.replace(message, "${player.deaths}", player.deaths);
+        message = _.replace(message, "${player.playerKills}", player.playerKills);
+        message = _.replace(message, "${player.zombieKills}", player.zombieKills);
+        message = _.replace(message, "${player.score}", player.score);
+        message = _.replace(message, "${player.level}", player.level);
       }
 
       sevenDays.sendMessage({
