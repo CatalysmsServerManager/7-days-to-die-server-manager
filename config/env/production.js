@@ -417,6 +417,8 @@ module.exports = {
     //--------------------------------------------------------------------------
 
     discordFeedbackChannel: "442326331372601344",
+    // How often should we gather system usage statistics in ms
+    usageStatsInterval: 86400000, // 1 day
 
   },
 

@@ -44,6 +44,20 @@ module.exports = {
     let currencyTotal = await Player.sum('currency');
     let currencyAvg = await Player.avg('currency');
 
+    let gblEntries = await BanEntry.count();
+    let cronJobs = await CronJob.count({
+      enabled: true
+    });
+    let pingKickers = await SdtdConfig.count({
+      pingKickEnabled: true
+    });
+    let openTickets = await SdtdTicket.count({
+      status: true
+    });
+    let closedTickets = await SdtdTicket.count({
+      status: false
+    });
+
     let response = {
       servers: amountOfServers,
       players: amountOfPlayers,
@@ -59,7 +73,12 @@ module.exports = {
       amountOfCustomCommands: amountOfCustomCommands,
       amountOfCustomCommandsExecuted: amountOfCustomCommandsExecuted,
       currencyTotal: currencyTotal,
-      currencyAvg: currencyAvg
+      currencyAvg: currencyAvg,
+      gblEntries: gblEntries,
+      cronJobs: cronJobs,
+      pingKickers: pingKickers,
+      openTickets: openTickets,
+      closedTickets: closedTickets,
     }
 
     return exits.success(response)
