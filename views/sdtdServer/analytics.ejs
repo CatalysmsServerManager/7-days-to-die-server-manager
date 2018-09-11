@@ -36,13 +36,13 @@
       <option value="zombies">Zombies</option>
       <option value="entities">Entities</option>
       <option value="items">Items</option>
-      <option value="rss">RSS (MB)</option>
+      <option value="rss">Resident set size (MB)</option>
       <option value="uptime">Uptime</option>
     </select>
   </div>
 
   <div class="card">
-    <div class="card-header">
+    <div id="chart-stats" class="card-header">
       Chart
     </div>
     <div class="card-body">
@@ -68,7 +68,7 @@
 
     var analyticsChartCanvas = $("#analytics-chart");
     var limit = 10000
-    var label = 'fps';
+    var label;
 
     let beginningOfTime = new Date(0);
     let beginDate = beginningOfTime.valueOf();
@@ -82,7 +82,6 @@
     $('input[name="datetimes"]').on('apply.daterangepicker', function (ev, picker) {
       beginDate = picker.startDate.toDate().valueOf();
       endDate = picker.endDate.toDate().valueOf();
-      console.log('applied dates')
       updateCharts();
     });
 
@@ -108,6 +107,7 @@
 
 
     async function updateCharts() {
+      $("#loading-indicator").show();
       label = getLabel();
 
       let dataToDraw = _.filter(data, dataPoint => {
@@ -120,6 +120,7 @@
           y: dataPoint[label]
         }
       })
+      window.analyticsChart.data.datasets[0].label = label;
       window.analyticsChart.update();
       updateInfoLabels(dataToDraw);
     }
@@ -171,11 +172,21 @@
           `${dataEndDate.toDateString()} ${dataEndDate.toLocaleTimeString()} - ${dataBeginDate.toDateString()} ${dataBeginDate.toLocaleTimeString()}`
         )
       }
+
+      let reducedData = data.map(dataPoint => dataPoint[getLabel()])
+
+      let min = minimum(reducedData);
+      let max = maximum(reducedData);
+      let avg = _.round(average(reducedData), 2);
+
+      $("#chart-stats").text(`Minimum: ${min} - Maximum: ${max} - Average: ${avg}`);
+      $("#loading-indicator").hide();
+
     }
 
     async function initialize() {
       data = await getData();
-
+      label = getLabel();
       window.analyticsChart = new Chart(analyticsChartCanvas, {
         type: 'line',
         data: {
