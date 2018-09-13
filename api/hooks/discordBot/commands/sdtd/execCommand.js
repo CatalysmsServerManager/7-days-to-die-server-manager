@@ -46,9 +46,16 @@ class ExecCommand extends Commando.Command {
             return msg.channel.send(`Did not find server ${args.server}! Check your config please.`)
         }
 
-        let isAdmin = await checkIfAdmin(msg.author.id, sdtdServer.id);
-        if (!isAdmin) {
-            let errorEmbed = new client.errorEmbed(`You are not authorized to execute commands! The server owner can add you as admin on the website`)
+        let permCheck = await sails.helpers.roles.checkPermission.with({serverId: sdtdServer.id, discordId: msg.author.id, permission: 'discordExec'});
+
+        if (!permCheck.hasPermission) {
+            let errorEmbed = new this.client.errorEmbed(`You do not have sufficient permissions to execute this command. Your registered role is ${permCheck.role.name}. Contact your server admin if you think you should have a higher role.`)
+   
+            let usersWithDiscordId = await User.find({discordId: msg.author.id});
+
+            if (usersWithDiscordId.length === 0) {
+                errorEmbed.addField(`No users with your discord ID ${msg.author.id} found!`, "[How to link your discord profile to CSMM](https://confluence.catalysm.net/x/AQER)")
+            }
             return msg.channel.send(errorEmbed)
         }
 

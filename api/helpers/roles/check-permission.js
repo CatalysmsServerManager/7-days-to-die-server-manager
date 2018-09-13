@@ -22,6 +22,10 @@ module.exports = {
       type: 'number'
     },
 
+    discordId: {
+      type: 'string'
+    },
+
     permission: {
       type: 'string',
       required: true
@@ -41,11 +45,19 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    if ((_.isUndefined(inputs.userId) || _.isUndefined(inputs.serverId)) && _.isUndefined(inputs.playerId)) {
-      return exits.invalidInput('You must provide either userId AND serverID or just a playerId');
+    if ((_.isUndefined(inputs.userId) || _.isUndefined(inputs.serverId)) && (_.isUndefined(inputs.discordId) || _.isUndefined(inputs.serverId)) && _.isUndefined(inputs.playerId)) {
+      return exits.invalidInput('You must provide either userId AND serverID, discordId AND serverId or just a playerId');
     }
 
     let role;
+
+    if (inputs.discordId) {
+      let foundUser = await User.find({discordId: inputs.discordId});
+      if (!_.isUndefined(foundUser[0])) {
+        inputs.userId = foundUser[0].id
+      }
+    }
+
 
     if (inputs.userId && inputs.serverId) {
       role = await sails.helpers.roles.getUserRole(inputs.userId, inputs.serverId);
