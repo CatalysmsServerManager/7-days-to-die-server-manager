@@ -47,40 +47,48 @@ module.exports = {
     },
 
     manageServer: {
-      type: 'boolean'
+      type: 'boolean',
     },
 
     manageEconomy: {
-      type: 'boolean'
+      type: 'boolean',
     },
 
     useChat: {
-      type: 'boolean'
+      type: 'boolean',
     },
 
     useCommands: {
-      type: 'boolean'
+      type: 'boolean',
     },
 
     managePlayers: {
-      type: 'boolean'
+      type: 'boolean',
     },
 
     manageTickets: {
-      type: 'boolean'
+      type: 'boolean',
     },
 
     useTracking: {
-      type: 'boolean'
+      type: 'boolean',
     },
 
     viewAnalytics: {
-      type: 'boolean'
+      type: 'boolean',
     },
 
     viewDashboard: {
-      type: 'boolean'
-    }
+      type: 'boolean',
+    },
+
+    discordExec: {
+      type: 'boolean',
+    },
+
+    discordLookup: {
+      type: 'boolean',
+    },
 
   },
 
@@ -107,7 +115,9 @@ module.exports = {
       viewDashboard: inputs.viewDashboard,
       useTracking: inputs.useTracking,
       viewAnalytics: inputs.viewAnalytics,
-      manageTickets: inputs.manageTickets
+      manageTickets: inputs.manageTickets,
+      discordExec: inputs.discordExec,
+      discordLookup: inputs.discordLookup
     };
 
     let updatedRole = await Role.update({

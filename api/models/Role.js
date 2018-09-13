@@ -93,6 +93,16 @@ module.exports = {
       defaultsTo: false
     },
 
+    discordExec: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
+    discordLookup: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
 
 
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
