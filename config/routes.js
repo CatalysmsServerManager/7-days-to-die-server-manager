@@ -68,6 +68,7 @@ module.exports.routes = {
   },
 
   '/gbl': "SdtdServerController.view-gbl",
+  '/gbl/profile': "PlayerController.view-gbl",
 
   '/auth/discord': 'AuthController.discordLogin',
   '/auth/discord/return': 'AuthController.discordReturn',

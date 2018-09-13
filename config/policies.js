@@ -63,7 +63,8 @@ module.exports.policies = {
   },
 
   playerController: {
-    '*': ['isLoggedIn', 'roles/managePlayers']
+    '*': ['isLoggedIn', 'roles/managePlayers'],
+    "view-gbl": ['isLoggedIn']
   },
 
   userController: {
