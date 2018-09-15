@@ -74,22 +74,6 @@ module.exports = {
       });
     }
 
-    if (foundUser.steamId === sails.config.custom.catalysmSteamId) {
-      foundRole = await Role.find({
-        where: {
-          server: inputs.serverId
-        },
-        sort: 'level ASC',
-        limit: 1
-      })
-      sails.log.warn(`Catalysm is accessing something... If you see this, you are catalysm and you're not on CSMM this means bad news bears.`);
-      if (foundRole[0]) {
-        foundRole = foundRole[0];
-      }
-    }
-
-
-
     if (!_.isUndefined(foundPlayer)) {
       if (foundPlayer.role) {
         foundRole = await Role.findOne(foundPlayer.role);

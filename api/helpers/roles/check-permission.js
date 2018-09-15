@@ -52,7 +52,9 @@ module.exports = {
     let role;
 
     if (inputs.discordId) {
-      let foundUser = await User.find({discordId: inputs.discordId});
+      let foundUser = await User.find({
+        discordId: inputs.discordId
+      });
       if (!_.isUndefined(foundUser[0])) {
         inputs.userId = foundUser[0].id
       }
@@ -81,6 +83,23 @@ module.exports = {
 
     let hasPermission = false;
 
+    if (!_.isUndefined(inputs.userId)) {
+      let foundUser = await User.findOne(inputs.userId);
+      if (foundUser.steamId === sails.config.custom.catalysmSteamId) {
+        foundRole = await Role.find({
+          where: {
+            server: inputs.serverId
+          },
+          sort: 'level ASC',
+          limit: 1
+        })
+        if (foundRole[0]) {
+          role = foundRole[0];
+        }
+        hasPermission = true
+      }
+    }
+
     if (role[inputs.permission]) {
       hasPermission = true
     }
@@ -96,6 +115,8 @@ module.exports = {
         hasPermission = true;
       }
     }
+
+
 
     sails.log.debug(`Checked if ${inputs.playerId ? `player ${inputs.playerId}` : `user ${inputs.userId}`} has permission ${inputs.permission} - ${hasPermission}`)
 
