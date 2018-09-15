@@ -1,5 +1,223 @@
 <div class="container">
-    
-    <h1>GBL profile - <%= steamId %></h1>
+
+  <div class="row">
+    <div class="col-lg-4 text-center">
+      <img src="<%= steamProfile.avatarfull %>" class="img-fluid profile-picture">
+
+      <table class="table">
+        <tbody>
+          <tr>
+            <th>Last seen</th>
+            <td>
+              <% let date = new Date(steamProfile.lastlogoff * 1000) %>
+              <% let dateString = date.toLocaleDateString()  %>
+              <%= dateString %>
+            </td>
+          </tr>
+          <tr>
+            <th>On steam since</th>
+            <td>
+              <%  date = new Date(steamProfile.timecreated * 1000) %>
+              <%  dateString = date.toLocaleDateString()  %>
+              <%= dateString %>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+    <div class="col-lg-8">
+      <h1 class="align-middle">
+        <%= steamProfile.personaname %>
+        <small class="text-muted">
+          <%= steamProfile.steamid %></small>
+      </h1>
+
+      <br>
+      <h2 class="text-center">Bans</h2>
+      <div class="table-responsive">
+        <table id="bans-table" class="table table-bordered no-footer table-hover">
+
+          <thead>
+            <tr>
+              <th>Last updated at</th>
+              <th>Reason</th>
+              <th>banned until</th>
+              <th>Server</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <% banEntries.forEach(ban => { %>
+            <tr data-ban="<%= ban.id %>">
+              <%  date = new Date(ban.updatedAt) %>
+              <%  dateString = date.toLocaleDateString()  %>
+
+              <td>
+                <%= dateString %>
+              </td>
+
+              <td>
+                <%= ban.reason %>
+              </td>
+              <%  date = new Date(ban.bannedUntil) %>
+              <%  dateString = date.toLocaleDateString()  %>
+
+              <td>
+                <%= dateString %>
+              </td>
+              <td>
+                <%= ban.server.name %>
+              </td>
+            </tr>
+            <% }) %>
+
+          </tbody>
+
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <hr>
+
+  <div id="comments" class="comments-container">
+
+    <h1>Comments</h1>
+
+    <textarea name="comments-place-text" id="comments-place-text" cols="88" rows="7"></textarea>
+
+    <button id="comments-place-btn" type="button" class="btn btn-primary">Post</button>
+
+    <span id="comments-place-error"></span>
+
+    <ul id="comments-list" class="comments-list"> </ul>
+
+  </div>
 
 </div>
+
+<script>
+  $(document).ready(() => {
+
+    const csrfToken = "<%= _csrf %>";
+    const comments = JSON.parse('<%- JSON.stringify(comments) %>');
+    const bans = JSON.parse('<%- JSON.stringify(banEntries) %>');
+
+
+    for (let banIndex = 0; banIndex < bans.length; banIndex++) {
+      const ban = bans[banIndex];
+      for (let commentIndex = 0; commentIndex < ban.comments.length; commentIndex++) {
+
+        let commentId = ban.comments[commentIndex].id
+        ban.comments[commentIndex] = _.find(comments, comment => comment.id === commentId);
+
+      }
+    }
+
+    var selectedBan;
+    var selectedBanRow;
+
+    console.log(bans)
+
+    let commentsClass = new gblComments();
+
+    function drawComments(ban) {
+      commentsClass.clear();
+
+      for (const comment of ban.comments) {
+        commentsClass.add(comment, ban);
+      }
+    }
+
+    $("tr").click(e => {
+      let clickedRow = $(e.currentTarget);
+      clickedRow.toggleClass('bg-info');
+
+      if (!_.isUndefined(selectedBanRow)) {
+        selectedBanRow.toggleClass('bg-info')
+      }
+      selectedBanId = parseInt(clickedRow.data('ban'));
+      selectedBan = _.find(bans, ban => ban.id === selectedBanId);
+      selectedBanRow = clickedRow;
+      drawComments(selectedBan);
+    });
+
+    $("#comments-place-btn").click(e => {
+
+      let comment = $("#comments-place-text").val();
+      let errorElem = $("#comments-place-error")
+
+      if (comment.length < 10) {
+        return errorElem.text(`A comment must be minimum 10 characters long.`)
+      }
+
+      if (comment.length > 100000) {
+        return errorElem.text(`A comment must be maximum 100000 characters long.`)
+      }
+
+      if (_.isUndefined(selectedBan)) {
+        return errorElem.text('You must select a ban before commenting.')
+      }
+
+      $.ajax({
+        url: "/api/gbl/comment",
+        type: 'POST',
+        data: {
+          _csrf: csrfToken,
+          banId: selectedBan.id,
+          comment: comment
+        },
+        success: (data, status, xhr) => {
+          let ban = _.find(bans, ban => ban.id === data.ban);
+          console.log(data);
+          console.log(ban)
+          drawComments(ban);
+          $("#comments-place-text").val("")
+        },
+        error: (xhr, status, error) => {
+          console.log(xhr)
+          /*           if (xhr.responseJSON == "cantConnect") {
+                      $('#errorMessage').text(
+                        `Could not connect to the server!
+          Please check that you have entered correct IP and port.
+          Verify the authorization info you entered is valid and active on your server.`
+                      )
+                    }
+                    if (xhr.responseJSON == "serverExists") {
+                      $('#errorMessage').text(`A server with that IP and webport is already in the system.`)
+                    }
+
+                    if (xhr.responseJSON == "maxServers") {
+                      $('#errorMessage').text(
+                        `You have reached the maximum amount of servers you can have registered on CSMM. Consider deleting an old server (or donating :D)`
+                      )
+                    } */
+
+
+        }
+      })
+    })
+
+  })
+
+</script>
+
+<style>
+  .wrapper {
+    padding: 100px;
+  }
+
+  .profile-picture {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    margin: 20px;
+
+    object-fit: cover;
+    object-position: center right;
+  }
+
+</style>

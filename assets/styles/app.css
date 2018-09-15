@@ -1,12 +1,31 @@
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
 body {
-  background-color: white;
+  background: #dee1e3;
+  background-color: #dee1e3;
   margin-bottom: 60px;
   /* Margin bottom by footer height */
+  font-family: 'Roboto', Arial, Helvetica, Sans-serif, Verdana;
 }
 
 html {
   position: relative;
   min-height: 100%;
+}
+
+a {
+  color: #03658c;
+  text-decoration: none;
+}
+
+ul {
+  list-style-type: none;
 }
 
 .footer {

@@ -1,5 +1,5 @@
 /**
- * BanEntry.js
+ * GblComment.js
  *
  * @description :: A model definition.  Represents a database table/collection/etc.
  * @docs        :: https://sailsjs.com/docs/concepts/models-and-orm/models
@@ -13,25 +13,12 @@ module.exports = {
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
 
-    steamId: {
+    content: {
       type: 'string',
-      required: true
+      minLength: 1
     },
 
-    // An optional note added by server admins. Containing proof or extra information about the ban
-    note: {
-      type: 'string'
-    },
-
-    bannedUntil: {
-      type: 'number'
-    },
-
-    reason: {
-      type: 'string'
-    },
-
-    unbanned: {
+    deleted: {
       type: 'boolean',
       defaultsTo: false
     },
@@ -45,13 +32,13 @@ module.exports = {
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
 
-    server: {
-      model: 'sdtdserver'
+    user: {
+      model: "user"
     },
 
-    comments: {
-      collection: 'gblcomment',
-      via: 'ban'
+    ban: {
+      model: "BanEntry",
+      required: true
     }
 
   },
