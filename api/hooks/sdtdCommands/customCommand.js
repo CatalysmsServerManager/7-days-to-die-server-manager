@@ -30,15 +30,19 @@ class CustomCommand extends SdtdCommand {
         return chatMessage.reply(`You provided an invalid value! '${valueToFill}' is not valid for ${argument.key}`)
       }
 
-      
+
 
       if (_.isUndefined(valueToFill) && !_.isUndefined(argument.defaultValue)) {
         valueToFill = argument.defaultValue
       }
 
-      options.commandsToExecute = options.commandsToExecute.replace("${" + argument.key + "}", valueToFill);
-      argumentIterator++
+
+      options.commandsToExecute = replaceAllInString(options.commandsToExecute, `\${${argument.key}}`, valueToFill)
     }
+
+
+    argumentIterator++
+
 
     // Check if the player has exceeded the configured timeout
     if (this.options.timeout) {
@@ -141,6 +145,9 @@ function executeCommand(server, command) {
   })
 }
 
+function replaceAllInString(string, search, replacement) {
+  return string.split(search).join(replacement);
+}
 
 function validateArg(argumentRecord, value) {
 
