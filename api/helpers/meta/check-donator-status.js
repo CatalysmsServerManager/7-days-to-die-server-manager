@@ -61,7 +61,7 @@ module.exports = {
         }
 
         if (_.isUndefined(discordUser)) {
-            return exits.success('donator')
+            return exits.success('free')
         }
 
         let patronRole = await developerGuild.roles.get("410545564913238027");
