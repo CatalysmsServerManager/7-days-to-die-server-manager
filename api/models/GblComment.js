@@ -39,6 +39,11 @@ module.exports = {
     ban: {
       model: "BanEntry",
       required: true
+    },
+
+    heartedBy: {
+      collection: 'user',
+      via: 'heartedGblComment'
     }
 
   },

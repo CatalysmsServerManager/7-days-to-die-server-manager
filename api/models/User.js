@@ -106,6 +106,10 @@ module.exports = {
       via: 'admins'
     },
 
+    heartedGblComment: {
+      model: 'gblcomment'
+    }
+
   },
 
 };
