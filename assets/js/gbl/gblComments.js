@@ -35,20 +35,20 @@ class gblComments {
     let authorContainer;
 
     if (comment.user.steamId === ban.steamId) {
-      authorContainer = `<h6 class="comment-name by-author"><p>${comment.user.username}</p></h6>`
+      authorContainer = `<h6 class="comment-name by-author"><p>${_.escape(comment.user.username)}</p></h6>`
     } else {
-      authorContainer = `<h6 class="comment-name"><p>${comment.user.username}</p></h6>`
+      authorContainer = `<h6 class="comment-name"><p>${_.escape(comment.user.username)}</p></h6>`
     }
 
     let createdElem = `<span>${dateCreated.toLocaleDateString()} ${dateCreated.toLocaleTimeString()}</span>`
     let heartElem = `<i class="fa fa-heart"></i>`
     let containers3 = `</div>`
-    let commentElem = `<div class="comment-content">${comment.content}</div>`
+    let commentElem = `<div class="comment-content">${_.escape(comment.content)}</div>`
     let containers4 = `</div></div></li>`
 
     let elementString = containers1 + avatarElement + containers2 + authorContainer + createdElem + heartElem + containers3 + commentElem + containers4
 
-    this.listElement.append($(elementString)).hide().fadeIn(500);
+    this.listElement.append(elementString).hide().fadeIn(500);
     this.commentsMap.set(comment.id, comment);
   }
 

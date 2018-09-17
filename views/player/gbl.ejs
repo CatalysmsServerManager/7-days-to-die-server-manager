@@ -34,7 +34,11 @@
       </h1>
 
       <br>
-      <h2 class="text-center">Bans</h2>
+  
+        <h2 class="text-center">Bans </h2>
+        <small class="text-muted">Click a ban to see more info</small>
+  
+
       <div class="table-responsive">
         <table id="bans-table" class="table table-bordered no-footer table-hover">
 
@@ -103,24 +107,22 @@
   $(document).ready(() => {
 
     const csrfToken = "<%= _csrf %>";
-    const comments = JSON.parse('<%- JSON.stringify(comments) %>');
-    const bans = JSON.parse('<%- JSON.stringify(banEntries) %>');
+    let bans;
+    let comments
+
+    $("#comments").hide();
+    //  $("#comments-place-btn").hide();
 
 
-    for (let banIndex = 0; banIndex < bans.length; banIndex++) {
-      const ban = bans[banIndex];
-      for (let commentIndex = 0; commentIndex < ban.comments.length; commentIndex++) {
+    loadBans("<%- steamProfile.steamid %>").then(data => {
+        bans = data;
+        console.log(bans)
+      })
+      .catch(e => console.error)
 
-        let commentId = ban.comments[commentIndex].id
-        ban.comments[commentIndex] = _.find(comments, comment => comment.id === commentId);
 
-      }
-    }
-
-    var selectedBan;
-    var selectedBanRow;
-
-    console.log(bans)
+    let selectedBan;
+    let selectedBanRow;
 
     let commentsClass = new gblComments();
 
@@ -130,6 +132,9 @@
       for (const comment of ban.comments) {
         commentsClass.add(comment, ban);
       }
+
+      $("#comments").fadeIn();
+      // $("#comments-place-btn").fadeIn();
     }
 
     $("tr").click(e => {
@@ -172,8 +177,7 @@
         },
         success: (data, status, xhr) => {
           let ban = _.find(bans, ban => ban.id === data.ban);
-          console.log(data);
-          console.log(ban)
+          ban.comments.push(data)
           drawComments(ban);
           $("#comments-place-text").val("")
         },
@@ -201,6 +205,45 @@
       })
     })
 
+    function loadComments(ban) {
+      return new Promise((resolve, reject) => {
+        $.ajax({
+          url: "/api/gbl/comment",
+          type: 'GET',
+          data: {
+            _csrf: csrfToken,
+            banId: ban.id,
+          },
+          success: (data, status, xhr) => {
+            resolve(data)
+          },
+          error: (xhr, status, error) => {
+            console.log(xhr)
+            reject(new Error(error))
+          }
+        })
+      })
+    }
+
+    function loadBans(steamId) {
+      return new Promise((resolve, reject) => {
+        $.ajax({
+          url: "/api/gbl/find",
+          type: 'GET',
+          data: {
+            _csrf: csrfToken,
+            steamId: steamId
+          },
+          success: (data, status, xhr) => {
+            resolve(data)
+          },
+          error: (xhr, status, error) => {
+            console.log(xhr)
+            reject(new Error(error))
+          }
+        })
+      })
+    }
   })
 
 </script>

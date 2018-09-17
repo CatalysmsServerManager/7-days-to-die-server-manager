@@ -11,12 +11,10 @@ module.exports = {
 
     commentId: {
       type: 'number',
-      required: true
     },
 
     banId: {
       type: 'number',
-      required: true
     },
 
   },
@@ -42,9 +40,9 @@ module.exports = {
     let comments = new Array();
 
     if (inputs.banId) {
-      comments = await GblComment.find({ban: inputs.banId})
+      comments = await GblComment.find({ban: inputs.banId}).populate('user');
     } else {
-      comments = await GblComment.find({id: inputs.commentId})
+      comments = await GblComment.find({id: inputs.commentId}).populate('user');
     }
 
     return exits.success(comments);
