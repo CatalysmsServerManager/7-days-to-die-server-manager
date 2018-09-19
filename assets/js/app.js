@@ -1,6 +1,3 @@
-
-
-
 /**
  * General (utility) functions
  */
@@ -34,3 +31,17 @@ function loadSdtdServers(userId) {
   });
 }
 
+// Error modal controller
+
+function showErrorModal(errorMessage) {
+
+  $("#error-modal-message").text(errorMessage)
+
+  if (errorMessage) {
+    $("#error-modal-message-bool").show();
+  } else {
+    $("#error-modal-message-bool").hide();
+  }
+
+  $('#error-modal').modal('show');
+}

@@ -170,7 +170,7 @@
 
         },
         error: (xhr, status, error) => {
-          showErrorModal(error)
+          showErrorModal(xhr.responseText)
           console.log(xhr)
           
         }
@@ -184,15 +184,15 @@
       let errorElem = $("#comments-place-error")
 
       if (comment.length < 10) {
-        return errorElem.text(`A comment must be minimum 10 characters long.`)
+        return showErrorModal(`A comment must be minimum 10 characters long. Yours was ${comment.length} characters long.`)
       }
 
       if (comment.length > 100000) {
-        return errorElem.text(`A comment can be maximum 100000 characters long.`)
+        return showErrorModal(`A comment can be maximum 100000 characters long. Yours was ${comment.length} characters long.`);
       }
 
       if (_.isUndefined(selectedBan)) {
-        return errorElem.text('You must select a ban before commenting.')
+        return showErrorModal('You must select a ban before commenting.');
       }
 
       $.ajax({
