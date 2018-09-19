@@ -89,6 +89,43 @@
     </div>
   </div>
 
+  <div id="ban-note">
+
+    <p id="ban-note-text" class="text-center lead">Center aligned text on all viewport sizes.</p>
+
+    <div class="text-center">
+      <!-- Button trigger modal -->
+      <button id="modal-set-note-btn" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal-set-note">
+        Set message
+      </button>
+    </div>
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="modal-set-note" tabindex="-1" role="dialog" aria-labelledby="modal-set-note"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="modal-set-note">Set a message</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <textarea name="modal-set-note-input" id="modal-set-note-input" style="width: 100%" rows="10"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="modal-set-note-confirm">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
   <hr>
 
   <div id="comments" class="comments-container">
@@ -98,10 +135,9 @@
     <ul id="comments-list" class="comments-list"> </ul>
 
     <textarea name="comments-place-text" id="comments-place-text" cols="88" rows="7"></textarea>
-
-    <button id="comments-place-btn" type="button" class="btn btn-primary">Post</button>
-
-    <span id="comments-place-error"></span>
+    <div class="text-center">
+      <button id="comments-place-btn" type="button" class="btn btn-primary">Post</button>
+    </div>
 
   </div>
 
@@ -166,7 +202,9 @@
     let bannedUserSteamId = "<%- steamProfile.steamid %>"
 
     $("#comments").hide();
-    //  $("#comments-place-btn").hide();
+    $("#ban-note").hide();
+
+    let userIsAdminOfSelectedServer = false;
 
 
     loadBans(bannedUserSteamId).then(data => {
@@ -200,6 +238,7 @@
       // $("#comments-place-btn").fadeIn();
     }
 
+    // Click a ban
     $("td").click(e => {
       let clickedRow = $(e.currentTarget.parentElement);
       clickedRow.toggleClass('bg-info');
@@ -207,11 +246,75 @@
       if (!_.isUndefined(selectedBanRow)) {
         selectedBanRow.toggleClass('bg-info')
       }
+
       selectedBanId = parseInt(clickedRow.data('ban'));
       selectedBan = _.find(bans, ban => ban.id === selectedBanId);
       selectedBanRow = clickedRow;
+
+      $("#ban-note").show();
+      $("#ban-note-text").text(selectedBan.note);
+
+      if (!selectedBan.note) {
+        $("#ban-note-text").text(
+          `No message has been set for this ban yet. Admins of the server ${selectedBan.server.name} can edit this message to provide extra explanation about this ban, proof, chat logs, ...`
+        );
+      }
+
+      checkUserPermission(loggedInUserId, selectedBan.server.id, 'manageGbl').then(result => {
+        if (result) {
+          $("#modal-set-note-btn").show()
+        } else {
+          $("#modal-set-note-btn").hide()
+        }
+
+      })
+
       drawComments(selectedBan);
     });
+
+    // Edit ban message
+
+    $("#modal-set-note").on('show.bs.modal', e => {
+      $("#modal-set-note-input").val(selectedBan.note);
+    });
+
+    $("#modal-set-note-confirm").click(e => {
+      let newNote = $("#modal-set-note-input").val();
+
+      if (newNote.length < 10) {
+        $("#modal-set-note").modal('hide');
+        return showErrorModal(
+          `A ban message must be minimum 10 characters long. Yours was ${newNote.length} characters long.`)
+      }
+
+      if (newNote.length > 100000) {
+        $("#modal-set-note").modal('hide');
+        return showErrorModal(
+          `A ban message can be maximum 100000 characters long. Yours was ${newNote.length} characters long.`
+        );
+      }
+
+      $.ajax({
+        url: "/api/gbl/note",
+        type: 'POST',
+        data: {
+          _csrf: csrfToken,
+          banId: selectedBan.id,
+          note: newNote
+        },
+        success: (data, status, xhr) => {
+          window.location.reload();
+        },
+        error: (xhr, status, error) => {
+          $("#modal-set-note").modal('hide');
+          showErrorModal(`Error while processing an API request. ${xhr.responseText}`)
+          console.log(xhr)
+
+        }
+      })
+
+
+    })
 
     // Toggle hearts listener
     $("#comments").on('click', ".comment-heart", e => {
@@ -258,12 +361,14 @@
 
       if (newContent.length < 10) {
         $('#edit-comment-modal').modal('hide');
-        return showErrorModal(`A comment must be minimum 10 characters long. Yours was ${newContent.length} characters long.`)
+        return showErrorModal(
+          `A comment must be minimum 10 characters long. Yours was ${newContent.length} characters long.`)
       }
 
       if (newContent.length > 100000) {
         $('#edit-comment-modal').modal('hide');
-        return showErrorModal(`A comment can be maximum 100000 characters long. Yours was ${newContent.length} characters long.`);
+        return showErrorModal(
+          `A comment can be maximum 100000 characters long. Yours was ${newContent.length} characters long.`);
       }
 
       $.ajax({
