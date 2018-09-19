@@ -79,5 +79,6 @@ class gblComments {
     let commentElement = $(`li #comment-${commentId}`);
     commentElement.remove();
     this.commentsMap.delete(String(commentId));
+    console.log('Removed a comment from list ' + commentId)
   }
 }

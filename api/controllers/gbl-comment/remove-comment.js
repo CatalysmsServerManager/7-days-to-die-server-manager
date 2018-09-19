@@ -50,7 +50,7 @@ module.exports = {
       deleted: true
     }).fetch();
 
-    sails.log.info(`User #${this.req.session.user.id} ${this.req.session.username} has deleted a comment on ban #${inputs.banId}`, deletedComment)
+    sails.log.info(`User #${this.req.session.user.id} ${this.req.session.username} has deleted a comment on ban #${deletedComment.ban}`, deletedComment)
 
     return exits.success(deletedComment);
 

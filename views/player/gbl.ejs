@@ -219,9 +219,7 @@
           commentId: selectedCommentId
         },
         success: (data, status, xhr) => {
-          console.log("Deleted a comment");
-          console.log(data)
-          commentsClass.remove(selectedCommentId)
+          window.location.reload();
         },
         error: (xhr, status, error) => {
           showErrorModal(`Error while processing an API request. ${xhr.responseText}`)
