@@ -95,20 +95,20 @@
 
     <h1>Comments</h1>
 
+    <ul id="comments-list" class="comments-list"> </ul>
+
     <textarea name="comments-place-text" id="comments-place-text" cols="88" rows="7"></textarea>
 
     <button id="comments-place-btn" type="button" class="btn btn-primary">Post</button>
 
     <span id="comments-place-error"></span>
 
-    <ul id="comments-list" class="comments-list"> </ul>
-
   </div>
 
 </div>
 
 
-<!-- Modal -->
+<!-- Remove Modal -->
 <div class="modal fade" id="remove-comment-modal" tabindex="-1" role="dialog" aria-labelledby="remove-comment-modal-title"
   aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -132,12 +132,36 @@
   </div>
 </div>
 
+<!-- Edit Modal -->
+<div class="modal fade" id="edit-comment-modal" tabindex="-1" role="dialog" aria-labelledby="edit-comment-modal-title"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="edit-comment-modal-title">Edit comment</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <textarea name="edit-comment-textarea" id="edit-comment-modal-textarea" style="width:100%" rows="10"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="edit-comment-modal-confirm">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
   $(document).ready(() => {
 
     const csrfToken = "<%= _csrf %>";
     let bans;
-    let comments
+    let comments = new Array();
     let loggedInUserId = "<%= req.session.user.id %>"
     let bannedUserSteamId = "<%- steamProfile.steamid %>"
 
@@ -147,7 +171,13 @@
 
     loadBans(bannedUserSteamId).then(data => {
         bans = data;
-        console.log(bans)
+        console.log(bans);
+        comments = new Array();
+        bans.map(ban => {
+          ban.comments.map(comment => {
+            comments.push(comment);
+          })
+        })
       })
       .catch(e => console.error)
 
@@ -189,8 +219,6 @@
 
       let commentId = $(e.currentTarget).data('commentid');
 
-      console.log('hearting comment ' + commentId)
-
       $.ajax({
         url: "/api/gbl/comment/heart",
         type: 'POST',
@@ -209,12 +237,58 @@
       })
     })
 
+    // Edit comment
+
+    $("#comments").on('click', ".edit-comment-btn", e => {
+      selectedCommentId = $(e.currentTarget).data('commentid');
+      selectedComment = _.find(comments, comment => comment.id === selectedCommentId);
+
+      if (_.isUndefined(selectedComment)) {
+        return showErrorModal(
+          `Failed to identify comment - please report this on the dev server. selectedComment = ${selectedComment}`
+        )
+      }
+
+      $("#edit-comment-modal-textarea").val(selectedComment.content);
+      $('#edit-comment-modal').modal('show');
+    });
+
+    $("#edit-comment-modal-confirm").on('click', e => {
+      let newContent = $("#edit-comment-modal-textarea").val();
+
+      if (newContent.length < 10) {
+        $('#edit-comment-modal').modal('hide');
+        return showErrorModal(`A comment must be minimum 10 characters long. Yours was ${newContent.length} characters long.`)
+      }
+
+      if (newContent.length > 100000) {
+        $('#edit-comment-modal').modal('hide');
+        return showErrorModal(`A comment can be maximum 100000 characters long. Yours was ${newContent.length} characters long.`);
+      }
+
+      $.ajax({
+        url: "/api/gbl/comment",
+        type: 'PATCH',
+        data: {
+          _csrf: csrfToken,
+          commentId: selectedCommentId,
+          comment: newContent
+        },
+        success: (data, status, xhr) => {
+          window.location.reload();
+        },
+        error: (xhr, status, error) => {
+          showErrorModal(`Error while processing an API request. ${xhr.responseText}`)
+          console.log(xhr)
+
+        }
+      })
+    })
 
 
     // Remove comment
 
     $("#remove-comment-modal-confirm").on('click', e => {
-      console.log("rem")
       $.ajax({
         url: "/api/gbl/comment",
         type: 'DELETE',
@@ -233,16 +307,10 @@
       })
     })
 
-
-    $('#remove-comment-modal').on('show.bs.modal', event => {
-      var button = $(event.relatedTarget);
-    });
-
     $("#comments").on('click', ".remove-comment-btn", e => {
       selectedCommentId = $(e.currentTarget).data('commentid');
       $('#remove-comment-modal').modal('show');
-
-    })
+    });
 
     // Place comment
     $("#comments-place-btn").click(e => {
