@@ -50,7 +50,6 @@ async function checkUserPermission(userId, serverId, permissionField) {
 
       },
       error: (xhr, status, error) => {
-        showErrorModal(`Error while processing an API request. ${xhr.responseText}`)
         console.log(xhr)
         reject(xhr)
 

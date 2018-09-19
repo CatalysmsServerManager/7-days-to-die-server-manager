@@ -46,6 +46,7 @@ module.exports.policies = {
     '*': ["isLoggedIn", 'roles/manageServer'],
     'add-player': ["isLoggedIn", 'roles/manageServer'],
     'get-role': ["isLoggedIn"],
+    'check-permission': ["isLoggedIn"]
   },
 
   ShopController: {
