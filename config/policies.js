@@ -39,7 +39,7 @@ module.exports.policies = {
 
   gblController: {
     '*': 'isLoggedIn',
-    'set-note': ["isLoggedIn", 'roles/manageServer']
+    'set-note': ["isLoggedIn"] // Permission check is handled inside the action
   },
 
   roleController: {
