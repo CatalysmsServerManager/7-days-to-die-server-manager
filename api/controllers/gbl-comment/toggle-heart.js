@@ -42,10 +42,6 @@ module.exports = {
 
     let foundComment = await GblComment.findOne(inputs.commentId).populate('heartedBy');
 
-    if (foundComment.user !== user.id) {
-      return exits.notAuthorized();
-    }
-
     let alreadyHearted = _.includes(foundComment.heartedBy.map(heartUser => heartUser.id), user.id);
 
     if (alreadyHearted) {

@@ -27,19 +27,26 @@ class gblComments {
       throw new Error("You must provide a ban with the comment to add");
     }
 
-    let userPlacedComment = comment.user.id.toString() === this.loggedInUserId.toString();
+
+    let userPlacedComment = false;
+
+    if (comment.user) {
+      userPlacedComment = comment.user.id.toString() === this.loggedInUserId.toString();
+    }
 
     let dateCreated = new Date(comment.createdAt);
 
     let containers1 = `<li id="comment-${comment.id}"><div class="comment-main-level">`
-    let avatarElement = `<div class="comment-avatar"><img src="${comment.user.avatar}" alt=""></div>`
+    let avatarElement = `<div class="comment-avatar"><img src="${comment.user ? comment.user.avatar : ""}" alt="User avatar"></div>`
     let containers2 = `<div class="comment-box"><div class="comment-head">`
-    let authorContainer;
+    let authorContainer = `<h6 class="comment-name"><p>Unknown user</p></h6>`
 
-    if (comment.user.steamId === ban.steamId) {
-      authorContainer = `<h6 class="comment-name by-author"><p>${_.escape(comment.user.username)}</p></h6>`
-    } else {
-      authorContainer = `<h6 class="comment-name"><p>${_.escape(comment.user.username)}</p></h6>`
+    if (comment.user) {
+      if (comment.user.steamId === ban.steamId) {
+        authorContainer = `<h6 class="comment-name by-author"><p>${_.escape(comment.user.username)}</p></h6>`
+      } else {
+        authorContainer = `<h6 class="comment-name"><p>${_.escape(comment.user.username)}</p></h6>`
+      }
     }
 
     let createdElem = `<span>${dateCreated.toLocaleDateString()} ${dateCreated.toLocaleTimeString()}</span> `

@@ -35,7 +35,8 @@ module.exports = {
     }).populate('server').populate('comments')
 
     let comments = await GblComment.find({
-      ban: banEntries.map(ban => ban.id)
+      ban: banEntries.map(ban => ban.id),
+      deleted: false
     }).populate('user');
 
     let steamProfile = await sails.helpers.steam.getProfile(inputs.steamId);

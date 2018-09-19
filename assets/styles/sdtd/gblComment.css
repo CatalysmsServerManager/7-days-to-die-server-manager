@@ -1,3 +1,8 @@
+.ban-row {
+  cursor: pointer;
+ }
+ 
+ 
  /** ====================
 * Comments list 
 =======================*/
@@ -177,6 +182,8 @@
    -o-transition: color 0.3s ease;
    transition: color 0.3s ease;
  }
+
+
 
  .comment-box .comment-head .fa-heart:hover {
   color: #03658c;

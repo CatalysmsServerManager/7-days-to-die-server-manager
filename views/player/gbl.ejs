@@ -48,13 +48,14 @@
               <th>Reason</th>
               <th>banned until</th>
               <th>Server</th>
+              <th>Comments</th>
             </tr>
           </thead>
 
           <tbody>
 
             <% banEntries.forEach(ban => { %>
-            <tr data-ban="<%= ban.id %>">
+            <tr data-ban="<%= ban.id %>" class="ban-row">
               <%  date = new Date(ban.updatedAt) %>
               <%  dateString = date.toLocaleDateString()  %>
 
@@ -73,6 +74,9 @@
               </td>
               <td>
                 <%= ban.server.name %>
+              </td>
+              <td>
+                <%= comments.filter(comment => comment.ban === ban.id).length %>
               </td>
             </tr>
             <% }) %>
@@ -166,8 +170,8 @@
       // $("#comments-place-btn").fadeIn();
     }
 
-    $("tr").click(e => {
-      let clickedRow = $(e.currentTarget);
+    $("td").click(e => {
+      let clickedRow = $(e.currentTarget.parentElement);
       clickedRow.toggleClass('bg-info');
 
       if (!_.isUndefined(selectedBanRow)) {
