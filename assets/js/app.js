@@ -31,6 +31,36 @@ function loadSdtdServers(userId) {
   });
 }
 
+async function checkUserPermission(userId, serverId, permissionField) {
+  return new Promise((resolve, reject) => {
+    if (_.isUndefined(serverId) || _.isUndefined(userId) || _.isUndefined(permissionField)) {
+      return showErrorModal(`checkUserPermission - Invalid input! Function requires serverId, userId and permissionField`)
+    }
+
+    $.ajax({
+      url: "/api/permission",
+      type: 'GET',
+      data: {
+        serverId: serverId,
+        userId: userId,
+        permissionField: permissionField
+      },
+      success: (data, status, xhr) => {
+        resolve(data);
+
+      },
+      error: (xhr, status, error) => {
+        showErrorModal(`Error while processing an API request. ${xhr.responseText}`)
+        console.log(xhr)
+        reject(xhr)
+
+      }
+    })
+
+  })
+
+}
+
 // Error modal controller
 
 function showErrorModal(errorMessage) {

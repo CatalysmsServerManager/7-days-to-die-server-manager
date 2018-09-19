@@ -42,7 +42,7 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     if ((_.isUndefined(inputs.userId) || _.isUndefined(inputs.serverId)) && _.isUndefined(inputs.playerId)) {
-      return exits.invalidInput('You must provide either userId AND serverID or just a playerId');
+      return exits.invalidInput('You must provide either userId AND serverID or just a playerId' + JSON.stringify(inputs));
     }
 
     let role;

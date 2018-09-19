@@ -171,6 +171,8 @@ module.exports.routes = {
   'post /api/role' : 'roleController/create-role',
   'patch /api/role': "roleController/update-role",
 
+  'get /api/permission': 'roleController/check-permission',
+
   'post /api/role/player' : "roleController/add-player",
   'delete /api/role/player': "roleController/remove-player",
   
