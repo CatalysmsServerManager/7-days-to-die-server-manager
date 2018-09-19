@@ -109,6 +109,7 @@
     const csrfToken = "<%= _csrf %>";
     let bans;
     let comments
+    let loggedInUserId = "<%= req.session.user.id %>"
 
     $("#comments").hide();
     //  $("#comments-place-btn").hide();
@@ -124,7 +125,7 @@
     let selectedBan;
     let selectedBanRow;
 
-    let commentsClass = new gblComments();
+    let commentsClass = new gblComments(loggedInUserId);
 
     function drawComments(ban) {
       commentsClass.clear();
@@ -150,6 +151,33 @@
       drawComments(selectedBan);
     });
 
+    // Toggle hearts listener
+    $("#comments").on('click', ".comment-heart", e => {
+      $(e.currentTarget).toggleClass('text-danger');
+
+      let commentId = $(e.currentTarget).data('commentid');
+
+      console.log('hearting comment ' + commentId)
+
+      $.ajax({
+        url: "/api/gbl/comment/heart",
+        type: 'POST',
+        data: {
+          _csrf: csrfToken,
+          commentId: commentId
+        },
+        success: (data, status, xhr) => {
+
+        },
+        error: (xhr, status, error) => {
+          showErrorModal(error)
+          console.log(xhr)
+          
+        }
+      })
+
+    })
+
     $("#comments-place-btn").click(e => {
 
       let comment = $("#comments-place-text").val();
@@ -160,7 +188,7 @@
       }
 
       if (comment.length > 100000) {
-        return errorElem.text(`A comment must be maximum 100000 characters long.`)
+        return errorElem.text(`A comment can be maximum 100000 characters long.`)
       }
 
       if (_.isUndefined(selectedBan)) {

@@ -18,11 +18,25 @@ module.exports = {
 
 
   exits: {
+    badRequest: {
+      description: '',
+      statusCode: 400
+    },
 
+    notAuthorized: {
+      description: '',
+      statusCode: 403
+    }
   },
 
 
   fn: async function (inputs, exits) {
+
+    let loggedInUser = this.req.session.user;
+
+    if (_.isUndefined(loggedInUser)) {
+      return exits.badRequest();
+    }
 
     let foundBans = await BanEntry.find({
       steamId: inputs.steamId
@@ -32,8 +46,8 @@ module.exports = {
     foundBans = foundBans.map(async ban => {
 
       ban.comments = ban.comments.map(async comment => {
-        let foundUser = await User.findOne(comment.user);
-        comment.user = foundUser
+        comment = await GblComment.findOne(comment.id).populate('user').populate('heartedBy');
+
         return comment
       });
 

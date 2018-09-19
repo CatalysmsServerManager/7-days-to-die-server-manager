@@ -166,7 +166,7 @@
    border-radius: 4px 4px 0 0;
  }
 
- .comment-box .comment-head i {
+ .comment-box .comment-head .fa-heart {
    float: right;
    margin-left: 14px;
    position: relative;
@@ -178,9 +178,10 @@
    transition: color 0.3s ease;
  }
 
- .comment-box .comment-head i:hover {
-   color: #03658c;
- }
+ .comment-box .comment-head .fa-heart:hover {
+  color: #03658c;
+}
+
 
  .comment-box .comment-name {
    color: #283035;

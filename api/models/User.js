@@ -107,7 +107,8 @@ module.exports = {
     },
 
     heartedGblComment: {
-      model: 'gblcomment'
+      collection: 'gblcomment',
+      via: 'heartedBy'
     }
 
   },

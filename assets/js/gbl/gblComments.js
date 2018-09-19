@@ -1,8 +1,9 @@
 class gblComments {
-  constructor() {
+  constructor(loggedInUserId) {
     this.listElement = $("#comments-list");
     // Map of comments, indexed by ID
     this.commentsMap = new Map();
+    this.loggedInUserId = loggedInUserId
   }
 
   clear() {
@@ -17,7 +18,7 @@ class gblComments {
   }
 
   add(comment, ban) {
-    console.log('Drawing a new comment' + JSON.stringify(comment))
+    //console.log('Drawing a new comment' + JSON.stringify(comment))
     if (_.isUndefined(comment.user)) {
       throw new Error("You must provide a user with the comment to add");
     }
@@ -41,7 +42,7 @@ class gblComments {
     }
 
     let createdElem = `<span>${dateCreated.toLocaleDateString()} ${dateCreated.toLocaleTimeString()}</span>`
-    let heartElem = `<i class="fa fa-heart"></i>`
+    let heartElem = `<i data-commentId="${comment.id}" class="fa fa-heart comment-heart${_.includes(comment.heartedBy.map(user => user.id.toString()), this.loggedInUserId) ? " text-danger" : ""}"></i>`
     let containers3 = `</div>`
     let commentElem = `<div class="comment-content">${_.escape(comment.content)}</div>`
     let containers4 = `</div></div></li>`

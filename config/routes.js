@@ -125,10 +125,12 @@ module.exports.routes = {
   'post /api/gbl/load' : 'gbl.load-bans',
   'post /api/gbl/note' : 'gbl.set-note',
 
-  'get /api/gbl/comment': 'gbl.get-comment',
-  'post /api/gbl/comment': 'gbl.place-comment',
-  'patch /api/gbl/comment': 'gbl.edit-comment',
-  'delete /api/gbl/comment': 'gbl.remove-comment',
+  'get /api/gbl/comment': 'gbl-comment.get-comment',
+  'post /api/gbl/comment': 'gbl-comment.place-comment',
+  'patch /api/gbl/comment': 'gbl-comment.edit-comment',
+  'delete /api/gbl/comment': 'gbl-comment.remove-comment',
+
+  'post /api/gbl/comment/heart': 'gbl-comment.toggle-heart',
 
   'post /api/sdtdserver/gbl/autoban' : 'gbl.set-autoban-status',
   'post /api/sdtdserver/gbl/autoban/bans' : 'gbl.set-autoban-bans',
