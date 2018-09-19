@@ -219,7 +219,7 @@
  }
 
  .comment-box .comment-name.by-author:after {
-   content: 'Player';
+   content: 'Banned player';
    background: #03658c;
    color: #FFF;
    font-size: 12px;

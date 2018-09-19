@@ -51,11 +51,15 @@ module.exports = {
         return comment
       });
 
+
       return new Promise((resolve => {
         Promise.all(ban.comments).then(completed => {
-            ban.comments = completed
-            resolve(ban);
-          });
+          completed = _.filter(completed, comment => !comment.deleted)
+          // Sort comments by amount of hearts
+          completed = _.sortBy(completed, comment => -1 * comment.heartedBy.length)
+          ban.comments = completed
+          resolve(ban);
+        });
       }))
 
 

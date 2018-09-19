@@ -27,6 +27,7 @@ class gblComments {
       throw new Error("You must provide a ban with the comment to add");
     }
 
+    let userPlacedComment = comment.user.id.toString() === this.loggedInUserId.toString();
 
     let dateCreated = new Date(comment.createdAt);
 
@@ -41,16 +42,30 @@ class gblComments {
       authorContainer = `<h6 class="comment-name"><p>${_.escape(comment.user.username)}</p></h6>`
     }
 
-    let createdElem = `<span>${dateCreated.toLocaleDateString()} ${dateCreated.toLocaleTimeString()}</span>`
-    let heartElem = `<i data-commentId="${comment.id}" class="fa fa-heart comment-heart${_.includes(comment.heartedBy.map(user => user.id.toString()), this.loggedInUserId) ? " text-danger" : ""}"></i>`
+    let createdElem = `<span>${dateCreated.toLocaleDateString()} ${dateCreated.toLocaleTimeString()}</span> `
+    let editAndRemoveButtons = new String();
+    if (userPlacedComment) {
+      editAndRemoveButtons = `<div class="btn-group btn-group-sm" role="group" aria-label="Remove or edit comment">
+      <button data-commentId="${comment.id}" type="button" class="btn btn-danger remove-comment-btn">Remove</button>
+      <button data-commentId="${comment.id}" type="button" class="btn btn-info edit-comment-btn">Edit</button>
+    </div>`
+    }
+
+    let userHasHeartedComment = false;
+
+    if (comment.heartedBy) {
+      userHasHeartedComment = _.includes(comment.heartedBy.map(user => user.id.toString()), this.loggedInUserId);
+    }
+
+    let heartElem = `<i data-commentId="${comment.id}" class="fa fa-heart comment-heart${userHasHeartedComment ? " text-danger" : ""}"></i>`
     let containers3 = `</div>`
     let commentElem = `<div class="comment-content">${_.escape(comment.content)}</div>`
     let containers4 = `</div></div></li>`
 
-    let elementString = containers1 + avatarElement + containers2 + authorContainer + createdElem + heartElem + containers3 + commentElem + containers4
+    let elementString = containers1 + avatarElement + containers2 + authorContainer + createdElem + editAndRemoveButtons + heartElem + containers3 + commentElem + containers4
 
     this.listElement.append(elementString).hide().fadeIn(500);
-    this.commentsMap.set(comment.id, comment);
+    this.commentsMap.set(String(comment.id), comment);
   }
 
   remove(comment) {
@@ -59,12 +74,10 @@ class gblComments {
       throw new Error('Comment is required');
     }
 
-    if (_.isUndefined(comment.id)) {
-      comment.id = comment;
-    }
+    let commentId = comment.id ? comment.id : comment;
 
-    let commentElement = $(`li #comment-${comment.id}`);
+    let commentElement = $(`li #comment-${commentId}`);
     commentElement.remove();
-    this.commentsMap.delete(comment.id);
+    this.commentsMap.delete(String(commentId));
   }
 }

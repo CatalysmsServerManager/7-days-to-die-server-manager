@@ -34,10 +34,10 @@
       </h1>
 
       <br>
-  
-        <h2 class="text-center">Bans </h2>
-        <small class="text-muted">Click a ban to see more info</small>
-  
+
+      <h2 class="text-center">Bans </h2>
+      <small class="text-muted">Click a ban to see more info</small>
+
 
       <div class="table-responsive">
         <table id="bans-table" class="table table-bordered no-footer table-hover">
@@ -103,6 +103,31 @@
 
 </div>
 
+
+<!-- Modal -->
+<div class="modal fade" id="remove-comment-modal" tabindex="-1" role="dialog" aria-labelledby="remove-comment-modal-title"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="remove-comment-modal-title">Are you sure?</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          Are you sure you want to delete this comment?
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" id="remove-comment-modal-confirm">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
   $(document).ready(() => {
 
@@ -110,12 +135,13 @@
     let bans;
     let comments
     let loggedInUserId = "<%= req.session.user.id %>"
+    let bannedUserSteamId = "<%- steamProfile.steamid %>"
 
     $("#comments").hide();
     //  $("#comments-place-btn").hide();
 
 
-    loadBans("<%- steamProfile.steamid %>").then(data => {
+    loadBans(bannedUserSteamId).then(data => {
         bans = data;
         console.log(bans)
       })
@@ -124,6 +150,8 @@
 
     let selectedBan;
     let selectedBanRow;
+
+    let selectedCommentId;
 
     let commentsClass = new gblComments(loggedInUserId);
 
@@ -170,25 +198,64 @@
 
         },
         error: (xhr, status, error) => {
-          showErrorModal(xhr.responseText)
+          showErrorModal(`Error while processing an API request. ${xhr.responseText}`)
           console.log(xhr)
-          
+
         }
       })
+    })
+
+
+
+    // Remove comment
+
+    $("#remove-comment-modal-confirm").on('click', e => {
+      console.log("rem")
+      $.ajax({
+        url: "/api/gbl/comment",
+        type: 'DELETE',
+        data: {
+          _csrf: csrfToken,
+          commentId: selectedCommentId
+        },
+        success: (data, status, xhr) => {
+          console.log("Deleted a comment");
+          console.log(data)
+          commentsClass.remove(selectedCommentId)
+        },
+        error: (xhr, status, error) => {
+          showErrorModal(`Error while processing an API request. ${xhr.responseText}`)
+          console.log(xhr)
+
+        }
+      })
+    })
+
+
+    $('#remove-comment-modal').on('show.bs.modal', event => {
+      var button = $(event.relatedTarget);
+    });
+
+    $("#comments").on('click', ".remove-comment-btn", e => {
+      selectedCommentId = $(e.currentTarget).data('commentid');
+      $('#remove-comment-modal').modal('show');
 
     })
 
+    // Place comment
     $("#comments-place-btn").click(e => {
 
       let comment = $("#comments-place-text").val();
       let errorElem = $("#comments-place-error")
 
       if (comment.length < 10) {
-        return showErrorModal(`A comment must be minimum 10 characters long. Yours was ${comment.length} characters long.`)
+        return showErrorModal(
+          `A comment must be minimum 10 characters long. Yours was ${comment.length} characters long.`)
       }
 
       if (comment.length > 100000) {
-        return showErrorModal(`A comment can be maximum 100000 characters long. Yours was ${comment.length} characters long.`);
+        return showErrorModal(
+          `A comment can be maximum 100000 characters long. Yours was ${comment.length} characters long.`);
       }
 
       if (_.isUndefined(selectedBan)) {
@@ -205,30 +272,13 @@
         },
         success: (data, status, xhr) => {
           let ban = _.find(bans, ban => ban.id === data.ban);
-          ban.comments.push(data)
+          ban.comments.push(data);
           drawComments(ban);
           $("#comments-place-text").val("")
         },
         error: (xhr, status, error) => {
           console.log(xhr)
-          /*           if (xhr.responseJSON == "cantConnect") {
-                      $('#errorMessage').text(
-                        `Could not connect to the server!
-          Please check that you have entered correct IP and port.
-          Verify the authorization info you entered is valid and active on your server.`
-                      )
-                    }
-                    if (xhr.responseJSON == "serverExists") {
-                      $('#errorMessage').text(`A server with that IP and webport is already in the system.`)
-                    }
-
-                    if (xhr.responseJSON == "maxServers") {
-                      $('#errorMessage').text(
-                        `You have reached the maximum amount of servers you can have registered on CSMM. Consider deleting an old server (or donating :D)`
-                      )
-                    } */
-
-
+          showErrorModal(`Error while processing an API request. ${xhr.responseText}`)
         }
       })
     })
@@ -263,6 +313,7 @@
             steamId: steamId
           },
           success: (data, status, xhr) => {
+            console.log(`Loaded ${data.length} bans`)
             resolve(data)
           },
           error: (xhr, status, error) => {
