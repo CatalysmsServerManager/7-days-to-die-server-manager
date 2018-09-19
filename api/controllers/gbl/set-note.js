@@ -55,7 +55,7 @@ module.exports = {
     }, {
       note: he.encode(inputs.note)
     });
-    sails.log.info(`Update note on ban ${inputs.banId} - ${inputs.note}`)
+    sails.log.info(`Update note on ban ${inputs.banId} by user ${this.req.session.user.id} - ${inputs.note}`)
     return exits.success(updatedRecord);
 
   }
