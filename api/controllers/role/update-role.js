@@ -80,6 +80,10 @@ module.exports = {
 
     viewDashboard: {
       type: 'boolean'
+    },
+
+    manageGbl: {
+      type: 'boolean'
     }
 
   },
@@ -107,7 +111,8 @@ module.exports = {
       viewDashboard: inputs.viewDashboard,
       useTracking: inputs.useTracking,
       viewAnalytics: inputs.viewAnalytics,
-      manageTickets: inputs.manageTickets
+      manageTickets: inputs.manageTickets,
+      manageGbl: inputs.manageGbl
     };
 
     let updatedRole = await Role.update({
