@@ -23,6 +23,16 @@
       </ol>
     </nav>
 
+    <% if (player.static) { %>
+    <div class="alert alert-warning" role="alert">
+      CSMM could not load data for this player from your server. The data you see is old and hasn't been updated since
+      the player was last online. If you did a map/server wipe, this could be a player that has not logged in since
+      that. You can still edit this players role, economy and other settings.
+    </div>
+
+    <% } %>
+
+
     <div class="card-columns">
 
       <div class="card">
@@ -41,16 +51,16 @@
                   <div class="btn-group btn-group-vertical">
 
                     <% if (player.banned) { %>
-                      <%- include("./partials/unbanPlayerButton", {player: player}) %>
-                        <% } else { %>
+                    <%- include("./partials/unbanPlayerButton", {player: player}) %>
+                    <% } else { %>
 
-                          <%- include("./partials/banPlayerButton", {player: player}) %>
-                            <%- include("./partials/kickPlayerButton", {player: player}) %>
-                              <%- include("./partials/teleportPlayerButton", {player: player}) %>
-                                <%- include("./partials/giveItemButton", {player: player}) %>
-                                  <% } %>
-                                    <%- include("./partials/setMoneyButton", {player: player}) %>
-                                      <%- include("./partials/deletePlayerButton", {player: player}) %>
+                    <%- include("./partials/banPlayerButton", {player: player}) %>
+                    <%- include("./partials/kickPlayerButton", {player: player}) %>
+                    <%- include("./partials/teleportPlayerButton", {player: player}) %>
+                    <%- include("./partials/giveItemButton", {player: player}) %>
+                    <% } %>
+                    <%- include("./partials/setMoneyButton", {player: player}) %>
+                    <%- include("./partials/deletePlayerButton", {player: player}) %>
                   </div>
                 </div>
                 <div class="col-lg-3">
@@ -80,47 +90,48 @@
 
             <% if(bans.length > 0) { %>
 
-              <div class="alert alert-warning" role="alert">
-                <strong>Players can get banned for unfair reasons! Take this information and make a good decision. </strong>
-              </div>
+            <div class="alert alert-warning" role="alert">
+              <strong>Players can get banned for unfair reasons! Take this information and make a good decision.
+              </strong>
+            </div>
 
 
-              <table class="table table-striped table-bordered dataTable no-footer">
-                <thead>
-                  <th>Reason</th>
-                  <th>Note</th>
-                  <th>Until</th>
-                </thead>
+            <table class="table table-striped table-bordered dataTable no-footer">
+              <thead>
+                <th>Reason</th>
+                <th>Note</th>
+                <th>Until</th>
+              </thead>
 
-                <tbody>
+              <tbody>
 
-                  <% bans.forEach(banEntry => { %>
+                <% bans.forEach(banEntry => { %>
 
-                    <tr>
-                      <td scope="row">
-                        <%= banEntry.reason %>
-                      </td>
-                      <td>
-                        <%= banEntry.note %>
-                      </td>
-                      <td>
-                        <% let bannedUntil = new Date(banEntry.bannedUntil) %>
-                          <%= bannedUntil.toDateString() %>
-                            <%= bannedUntil.toTimeString() %>
-                      </td>
-                    </tr>
+                <tr>
+                  <td scope="row">
+                    <%= banEntry.reason %>
+                  </td>
+                  <td>
+                    <%= banEntry.note %>
+                  </td>
+                  <td>
+                    <% let bannedUntil = new Date(banEntry.bannedUntil) %>
+                    <%= bannedUntil.toDateString() %>
+                    <%= bannedUntil.toTimeString() %>
+                  </td>
+                </tr>
 
 
 
-                    <% }) %>
+                <% }) %>
 
-                </tbody>
-              </table>
+              </tbody>
+            </table>
 
-              <% } else { %>
+            <% } else { %>
 
-               <p> Did not find any bans for this player :) </p>
-                <% } %>
+            <p> Did not find any bans for this player :) </p>
+            <% } %>
           </p>
         </div>
       </div>
@@ -163,10 +174,10 @@
                   <td scope="row">Country</td>
                   <td>
                     <% if (player.country) { %>
-                      <% let lowerCaseCountry = player.country.toLowerCase(); %>
-                        <img src="../../images/flags/blank.gif" class="flag flag-<%= lowerCaseCountry %>" />
-                        <%= player.country %>
-                          <% } %>
+                    <% let lowerCaseCountry = player.country.toLowerCase(); %>
+                    <img src="../../images/flags/blank.gif" class="flag flag-<%= lowerCaseCountry %>" />
+                    <%= player.country %>
+                    <% } %>
                   </td>
                 </tr>
 
@@ -174,8 +185,8 @@
                   <td scope="row">Location</td>
                   <td>
                     <%= player.positionX %>
-                      <%= player.positionY %>
-                        <%= player.positionZ %>
+                    <%= player.positionY %>
+                    <%= player.positionZ %>
                   </td>
                 </tr>
 
@@ -190,8 +201,8 @@
                   <td scope="row">Last online</td>
                   <td>
                     <% let lastOnlineDate = new Date(player.lastOnline) %>
-                      <% let lastOnlineString = `${lastOnlineDate.toDateString()} ${lastOnlineDate.toTimeString()}` %>
-                        <%= lastOnlineString %>
+                    <% let lastOnlineString = `${lastOnlineDate.toDateString()} ${lastOnlineDate.toTimeString()}` %>
+                    <%= lastOnlineString %>
                   </td>
                 </tr>
 

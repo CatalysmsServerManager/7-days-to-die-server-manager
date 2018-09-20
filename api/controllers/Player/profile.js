@@ -49,7 +49,10 @@ module.exports = {
 
       let updatedPlayer = await sails.helpers.sdtd.loadPlayerData(server.id, player.steamId, false, true);
       if (_.isArray(updatedPlayer) && !_.isUndefined(updatedPlayer[0])) {
-        player = updatedPlayer[0]
+        player = updatedPlayer[0];
+        player.static = false;
+      } else {
+        player.static = true
       }
 
 
