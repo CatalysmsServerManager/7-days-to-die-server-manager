@@ -304,7 +304,6 @@
           });
 
           slider.on('change', (changeVal) => {
-
             var getClosestValues = function (array, x) {
               var lo = -1,
                 hi = array.length;
@@ -583,7 +582,7 @@
 
 
     function drawData(data, x, z, size) {
-
+      trackingMap.clear();
       let foundPlayers = _.uniqBy(data, 'player');
       foundPlayers = foundPlayers.map(dataPoint => {
         return players.filter(player => dataPoint.player === player.id)[0]
@@ -604,7 +603,6 @@
 
 
     function getDataAndUpdate(playerId, beginDate, endDate, x, z, size, limit, item) {
-      trackingMap.clear();
       if ($("#tracking-location-enabled").prop('checked') === false) {
         x = undefined
         z = undefined
