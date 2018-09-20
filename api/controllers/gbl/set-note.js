@@ -53,7 +53,7 @@ module.exports = {
     let updatedRecord = await BanEntry.update({
       id: inputs.banId
     }, {
-      note: he.encode(inputs.note)
+      note: _.escape(inputs.note)
     });
     sails.log.info(`Update note on ban ${inputs.banId} by user ${this.req.session.user.id} - ${inputs.note}`)
     return exits.success(updatedRecord);
