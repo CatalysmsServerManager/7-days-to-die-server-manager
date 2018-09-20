@@ -1,55 +1,43 @@
-<div class="container">
-  <div class="card">
+<div id="ldh-card" class="card">
 
-    <div class="card-body">
-      <h1 class="card-title">Let's DO hosting</h1>
-      <p class="card-text">
+  <div class="card-body">
 
-        <div class="row">
-          <div class="col-4">
-            <img src="../../images/meta/letsdohostinglogo.png">
-          </div>
-          <div class="col-6" align='right'>
-            Tired of looking for an honest and fair priced hosting provider?
-            <br> Let's DO Hosting (https://letsdohosting.com/) offers both, and so much more.
-            <br>
+    <p class="card-text">
 
-            <ul style="list-style-type: none;">
-              <strong>
-                <li>Top of the line customer support.</li>
-                <li>Pay by day, no contracts that force you to stay.</li>
-                <li>All gameservers are 0.35€/day, no matter the amount of slots used. </li>
-                <li>We have no conventional RAM and CPU limitations that force you pay extra for an identical service. </li>
-              </strong>
-            </ul>
-            Give LDH a chance to prove that most, if not all, other providers are scamming you out of your hard earned money.
-            <br> In return stand by us in our vision to grow together, to become even cheaper over time
-            <br>
-            <strong> LDH's motto: Giving back the Power of Hosting, back to the People. </strong>
-            <br> First 3 Tokens Free upon Registration. (One used each day to run any gameserver.)
-            <br>
-
-          </div>
+      <div class="row">
+        <div class="col-3">
+          <img width="75%" src="../../images/meta/letsdohostinglogo.png">
         </div>
-        <div class="row">
-          <div class="col-12" align='center'>
-            <ul style="list-style-type: none;">
-              100% Enterprise Grade
+        <div class="col-6 text-center">
+          <h1 class="card-title text-center">Let's DO hosting</h1>
+          Tired of looking for an honest and fair priced hosting provider?
+          <br> Let's DO Hosting offers both, and so much more.
+          <br>
 
-              <li>Every Game Server is Hosted on Enterprise Grade Hardware!</li>
-              <li>CPUs: i7-7700K OC - 4.5 GHz/5 GHz (Turbo)</li>
-              <li>RAM: 64 GB DDR4 2400 MHz</li>
-              <li>Storage: PCIe NVMe (Last Gen. SSD)</li>
-              <li>Dedicated Network: 1 Gbps (Up- & Download)</li>
-              <li>Allowed Server History: Keep up to 7 Restorable Servers</li>
-              <a target="_blank" class="btn btn-primary btn-lg" href="https://letsdohosting.com/?p=Register&ref=Cata" role="button">First 3 days FREE</a>
-            </ul>
-          </div>
+          <ul style="list-style-type: none;">
+            <strong>
+              <li>Top of the line customer support.</li>
+              <li>Pay by day, no contracts that force you to stay.</li>
+              <li>All gameservers are 0.35€/day, no matter the amount of slots used. </li>
+              <li>We have no conventional RAM and CPU limitations that force you pay extra for an identical service.
+              </li>
+            </strong>
+          </ul>
+          <br>
+
+          <button type="button" class="btn btn-primary">First 3 days FREE!</button>
         </div>
+      </div>
 
-      </p>
-    </div>
+    </p>
   </div>
-
-
 </div>
+
+<script>
+  $(document).ready(e => {
+    $("#ldh-card").click(e => {
+      window.open("https://letsdohosting.com/?p=Register&ref=Cata")
+    })
+  })
+
+</script>

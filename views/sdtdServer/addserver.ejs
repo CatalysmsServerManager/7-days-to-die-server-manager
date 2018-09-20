@@ -1,137 +1,244 @@
 <body>
   <%- exposeLocalsToBrowser() %>
 
+  <%- include('../meta/sponsors/letsdohosting') %>
 
-    <div class="card text-center">
-      <img class="card-img-top" src="holder.js/100px180/" alt="">
-      <div class="card-body">
-        <h4 class="card-title">Add a server</h4>
-        <div class="card-text">
+  <hr>
+
+  <div id="addserver-input" class="card text-center">
+    <div class="card-body">
+      <h4 class="card-title">Add a server</h4>
+      <div class="card-text">
 
 
-          <a href="https://confluence.catalysm.net/x/mgER">Quick start guide</a>
+        <a href="https://confluence.catalysm.net/x/mgER">Quick start guide</a>
 
-          <form id="addServer">
-            <div class="form-group">
-              <label for="servername">Name</label>
-              <input type="text" class="form-control" id="servername" aria-describedby="server-name-help" placeholder="World's best server!!">
-              <small id="server-name-help" class="form-text text-muted">Give your server a memorable name - This is mostly used internally so make sure you can recognize the server</small>
-            </div>
-            <div class="form-group">
-              <label for="serverip">Server IP</label>
-              <input type="text" class="form-control" id="serverip" placeholder="Server IP address">
-              <small>Provide a valid IPv4/6 adress or a
-                <a href="https://en.wikipedia.org/wiki/Fully_qualified_domain_name">FQDN</a>
-              </small>
-            </div>
-            <div class="form-group">
-              <label for="webport">Web API port</label>
-              <input type="number" class="form-control" id="webport" aria-describedby="webportHelp" placeholder="ex. 8084">
-              <small id="webportHelp" class="form-text text-muted">Port added by Allocs fixes</small>
-            </div>
-            <div class="form-group">
-              <label for="authName">Authorization name</label>
-              <input type="text" class="form-control" id="authName" placeholder="ex. csmm">
-              <small class="form-text text-muted">Set this with telnet command</small>
-            </div>
-            <div class="form-group">
-              <label for="authToken">Authorization token</label>
-              <input type="password" class="form-control" id="authToken" placeholder="ex. super-secret-token">
-              <small class="form-text text-muted">Set this with telnet command</small>
-            </div>
-         
-            <div class="alert alert-warning" role="alert">
-              <strong>For better security please choose a strong token!</strong> <br>
-              Randomly generated string: 
-              <%= Math.random().toString(36).substr(2, 25); %>
-            </div>
+        <form id="addServer">
+          <div class="form-group">
+            <label for="servername">Name</label>
+            <input type="text" class="form-control" id="servername" aria-describedby="server-name-help" placeholder="World's best server!!">
+            <small id="server-name-help" class="form-text text-muted">Give your server a memorable name - This is
+              mostly used internally so make sure you can recognize the server</small>
+          </div>
+          <div class="form-group">
+            <label for="serverip">Server IP</label>
+            <input type="text" class="form-control" id="serverip" placeholder="Server IP address">
+            <small>Provide a valid IPv4/6 adress or a
+              <a href="https://en.wikipedia.org/wiki/Fully_qualified_domain_name">FQDN</a>
+            </small>
+          </div>
+          <div class="form-group">
+            <label for="webport">Web API port</label>
+            <input type="number" class="form-control" id="webport" aria-describedby="webportHelp" placeholder="ex. 8082">
+            <small id="webportHelp" class="form-text text-muted">Port added by Allocs fixes. This is the same port as
+              your dynamic web map.</small>
+          </div>
+          <div class="form-group">
+            <label for="authName">Authorization name</label>
+            <input type="text" class="form-control" id="authName" placeholder="ex. csmm">
+            <small class="form-text text-muted">Set this with telnet command</small>
+          </div>
+          <div class="form-group">
+            <label for="authToken">Authorization token</label>
+            <input type="password" class="form-control" id="authToken" placeholder="ex. super-secret-token">
+            <small class="form-text text-muted">Set this with telnet command</small>
+          </div>
 
-            <button type="submit" class="btn btn-primary">Submit</button>
+          <div class="alert alert-warning" role="alert">
+            <strong>For better security please choose a strong token!</strong> <br>
+            Randomly generated string (but please make a secure, random token yourself):
+            <%= Math.random().toString(36).substr(2, 25); %>
+          </div>
 
-            <p>Check the documentation if you don't know what to fill in. If you are lost or keep getting errors, swing by the
-              discord server for some help! :)</p>
-          </form>
+          <button type="submit" class="btn btn-primary">Submit</button>
 
-        </div>
+          <p>Check the documentation if you don't know what to fill in. If you are lost or keep getting errors, swing
+            by the
+            discord server for some help! :)</p>
+        </form>
+
       </div>
-      <div id="errorMessage" class="card-footer"></div>
     </div>
 
-    <hr>
+  </div>
 
-    <%- include('../meta/sponsors/letsdohosting') %>
+  <div id="addserver-connect" class="card text-center">
+    <div class="card-body">
+      <div class="text-left">
+        <button id="back-to-form" type="button" class="btn btn-primary"><i class="fas fa-arrow-circle-left"></i> Back
+          to form</button>
+      </div>
+      <div class="card-text">
+        <div id="loading" class="fa-3x">
+          <i class="fas fa-spinner fa-spin"></i>
+        </div>
+
+        <div class="text-center" id="test-result"></div>
+
+      </div>
+    </div>
+
+  </div>
+
+
+
 
 
 </body>
 
 <script>
-  $("#addServer").submit(function (event) {
-    event.preventDefault();
-    const serverip = $("#serverip").val(),
-      webport = $("#webport").val(),
-      authName = $("#authName").val(),
-      authToken = $("#authToken").val(),
-      servername = $("#servername").val()
+  $(document).ready(e => {
 
-    $('#servername').removeClass("is-invalid");
-    $('#serverip').removeClass("is-invalid");
-    $('#webport').removeClass("is-invalid");
-    $('#authName').removeClass("is-invalid");
-    $('#authToken').removeClass("is-invalid");
+    let errorIcon = `<div class="fa-3x"><i class="fas fa-exclamation-circle text-danger"></i></div>`
+    let successIcon = `<div class="fa-3x text-success"><i class="fas fa-check"></i></div>`
 
-    if (servername === '') {
-      return $('#servername').addClass("is-invalid")
-    }
+    $("#addserver-connect").hide();
 
-    if (serverip === '' || !(validator.isIP(serverip) || validator.isFQDN(serverip))) {
-      return $('#serverip').addClass("is-invalid")
-    }
+    $("#loading").hide();
+    $("#back-to-form").hide();
 
-    if (webport === '' || !validator.isPort(webport)) {
-      return $('#webport').addClass("is-invalid")
-    }
-    if (authName === '') {
-      return $('#authName').addClass("is-invalid")
-    }
-    if (authToken === '') {
-      return $('#authToken').addClass("is-invalid")
-    }
-
-
-
-    $.ajax({
-      url: "/api/sdtdserver/addserver",
-      type: 'POST',
-      data: {
-        _csrf: window.SAILS_LOCALS._csrf,
-        serverName: servername,
-        serverIp: serverip,
-        webPort: webport,
-        authName: authName,
-        authToken: authToken
-      },
-      success: (data, status, xhr) => {
-        window.location.replace(`/sdtdserver/${data.id}/dashboard`)
-      },
-      error: (xhr, status, error) => {
-        if (xhr.responseJSON == "cantConnect") {
-          $('#errorMessage').text(`Could not connect to the server!
-Please check that you have entered correct IP and port.
-Verify the authorization info you entered is valid and active on your server.`)
-        }
-        if (xhr.responseJSON == "serverExists") {
-          $('#errorMessage').text(`A server with that IP and webport is already in the system.`)
-        }
-
-        if (xhr.responseJSON == "maxServers") {
-          $('#errorMessage').text(`You have reached the maximum amount of servers you can have registered on CSMM. Consider deleting an old server (or donating :D)`)
-        }
-
-        $('#errorMessage').prepend("Error: <br>")
-      }
+    $("#back-to-form").click(e => {
+      $("#loading").hide();
+      $("#addserver-connect").fadeOut();
+      $("#addserver-input").fadeIn();
     })
 
+    $("#addServer").submit(function (event) {
+      event.preventDefault();
 
+      let testResponseElement = $("#test-result");
+      testResponseElement.html("");
+      const serverip = $("#serverip").val(),
+        webport = $("#webport").val(),
+        authName = $("#authName").val(),
+        authToken = $("#authToken").val(),
+        servername = $("#servername").val()
+
+      if (servername === '') {
+        return showErrorModal(
+          "You must provide a server name. Please make sure this is a recognizable name for your server. ('Catalysm Server - Ravenhearst' is better than 'CSR')"
+        );
+      }
+
+      if (servername.length > 50) {
+        return showErrorModal("A server name can be maximum 50 characters long.")
+      }
+
+      if (servername.length < 5) {
+        return showErrorModal(
+          "A server name must have at least 5 characters Please make sure this is a recognizable name for your server. ('Catalysm Server - Ravenhearst' is better than 'CSR')"
+        )
+      }
+
+      if (serverip === '' || !(validator.isIP(serverip) || validator.isFQDN(serverip))) {
+        return showErrorModal(`The value you entered (${serverip}) is not a valid IP adress or FQDN.`)
+      }
+
+      if (webport === '' || !validator.isPort(webport)) {
+        return showErrorModal(
+          `The value you enered (${webport}) is not a valid web API port.`
+        )
+      }
+      if (authName === '') {
+        return showErrorModal(`Authentication info cannot be empty.`);
+      }
+      if (authToken === '') {
+        return showErrorModal(`Authentication info cannot be empty.`);
+      }
+
+      $("#loading").show();
+      $("#back-to-form").hide();
+      $("#addserver-input").fadeOut();
+      $("#addserver-connect").fadeIn();
+
+      $.ajax({
+        url: "/api/sdtdserver/addserver",
+        type: 'POST',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverName: servername,
+          serverIp: serverip,
+          webPort: webport,
+          authName: authName,
+          authToken: authToken
+        },
+        success: (data, status, xhr) => {
+          $("#loading").hide();
+          let response = xhr.responseJSON;
+
+          let responseString = new String();
+          responseString +=
+            `${successIcon} <p> Your server "${response.server.name}" was successfully added to the system. <a href="/sdtdserver/${response.server.id}/dashboard">Go to your server dashboard</a> </p>`
+          return testResponseElement.html(responseString);
+
+        },
+        error: (xhr, status, error) => {
+          $("#loading").hide();
+          $("#back-to-form").fadeIn();
+          console.log(xhr);
+          let response = xhr.responseJSON;
+
+          let responseString = new String();
+
+          responseString += `<p>Something went wrong while adding your server!</p> <br><a href="http://catalysm.net/discord" target="_blank"><i class="fab fa-discord"></i> Join our Discord for
+                support.</a> <br>`
+
+          if (response.duplicateCheck) {
+            responseString +=
+              `${errorIcon}</i><p>A server with this IP and webport is already registered with CSMM. You cannot add the same server twice</p>`
+            return testResponseElement.html(responseString);
+          }
+
+          if (response.maxLimitCheck) {
+            responseString +=
+              `${errorIcon}</i><p>You have added the max number of servers to CSMM already. Consider deleting an old server or <a href="/donate">donating</a> to increase your server limit.</p>`
+            return testResponseElement.html(responseString);
+          }
+
+          if (response.connectCheck) {
+            if (response.statsResponse) {
+              responseString +=
+                `${successIcon} <p>CSMM was able to retrieve basic stats of your server. This means you have entered the correct IP and port (unless there are multiple servers running on the ip address in question.)
+                  
+                  Your server is on day ${response.statsResponse.gametime.days}, hour ${response.statsResponse.gametime.hours} and minute ${response.statsResponse.gametime.minutes}. There ${response.statsResponse.players === 1 ? "is" : "are"} ${response.statsResponse.players} player${response.statsResponse.players === 1 ? "" : "s"} online.
+                  
+                  </p>`
+            } else {
+              responseString +=
+                `${errorIcon}</i> <p>CSMM could not connect to your server. CSMM tried to send a GET request to <a href="http://${serverip}:${webport}/api/getstats" target="_blank">/api/getstats</a> but failed to get a response. Usually this means you entered a bad IP and/or port. Make sure you enter the web API port of your server that was added by Allocs Fixes. This is <strong>NOT</strong> the telnet port and also <strong>NOT</strong> the port used by players to connect.
+              <a href="https://confluence.catalysm.net/x/CgAR" target="_blank">More info</a></p>`
+              if (response.detectedControlPanelPortUsed) {
+                responseString +=
+                  `The response CSMM received looks like it came from the control panel port, the web API port is defined as control panel port + 2. Did you mean to enter "<strong>${parseInt(webport) + 2}</strong>" as web API port? :)`
+              }
+
+              return testResponseElement.html(responseString);
+            }
+
+            if (!response.commandResponse) {
+              responseString +=
+                `${errorIcon}</i> <p>CSMM could not execute the 'mem' command on your server. This is most likely an authentication issue. Make sure you have set up an authorization token and name (you can do this via telnet commands or by editing an xml)
+                
+                  <a href="https://confluence.catalysm.net/x/dAAR" target="_blank">More info</a></p>`
+              return testResponseElement.html(responseString);
+            } else {
+              responseString +=
+                `${successIcon} <p>Mem command response : ${JSON.stringify(response.commandResponse)}</p>`
+            }
+
+
+          }
+
+
+
+          return showErrorModal(
+            `An unexpected error occured! Please let us know about this on the development server. Please provide us with any messages in the result box.`
+          )
+        }
+      })
+
+
+    })
   })
 
 </script>
