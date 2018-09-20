@@ -36,24 +36,31 @@ module.exports = {
     let player = await Player.findOne(inputs.playerId);
     let server = await SdtdServer.findOne(player.server);
 
+    if (_.isUndefined(player)) {
+      throw 'notFound';
+    }
+
     try {
 
       let historicalInfo = await HistoricalInfo.find({
         player: player.id,
         server: server.id
       })
-      player = await sails.helpers.sdtd.loadPlayerData(server.id, player.steamId, false, true);
-      player = player[0]
-      try {
-        const hhmmss = require('@streammedev/hhmmss')
-        Object.defineProperty(player, 'playtimeHHMMSS', {
-          value: hhmmss(player.playtime)
-        })
-      } catch (error) {
-        sails.log.error(`Error calculating player playtime`, player)
+
+      let updatedPlayer = await sails.helpers.sdtd.loadPlayerData(server.id, player.steamId, false, true);
+      if (_.isArray(updatedPlayer) && !_.isUndefined(updatedPlayer[0])) {
+        player = updatedPlayer[0]
       }
 
-      let bans = await BanEntry.find({steamId: player.steamId});
+
+      const hhmmss = require('@streammedev/hhmmss')
+      Object.defineProperty(player, 'playtimeHHMMSS', {
+        value: hhmmss(player.playtime)
+      })
+
+      let bans = await BanEntry.find({
+        steamId: player.steamId
+      });
 
       sails.log.info(`Loading player profile ${player.id} - ${player.name} for server ${server.name}`)
 

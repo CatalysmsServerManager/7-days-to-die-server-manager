@@ -42,7 +42,8 @@ module.exports = {
     try {
       let dateStarted = new Date();
       let server = await SdtdServer.findOne(inputs.serverId);
-      let serverAvailable = await sails.helpers.sdtd.checkIfAvailable(server.id, true)
+      let serverAvailable = await sails.helpers.sdtd.checkIfAvailable(server.id, true);
+      
       if (!serverAvailable) {
         if (inputs.onlyOnline) {
           return exits.success([])
