@@ -45,7 +45,8 @@ module.exports = {
     },
 
     discordRole: {
-      type: 'string'
+      type: 'string',
+      allowNull: true
     },
 
     manageServer: {
