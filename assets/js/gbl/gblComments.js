@@ -52,10 +52,13 @@ class gblComments {
     let createdElem = `<span>${dateCreated.toLocaleDateString()} ${dateCreated.toLocaleTimeString()}</span> `
     let editAndRemoveButtons = new String();
     if (userPlacedComment) {
-      editAndRemoveButtons = `<div class="btn-group btn-group-sm" role="group" aria-label="Remove or edit comment">
+      editAndRemoveButtons = `<div class="text-right">
+      <div class="btn-group btn-group-sm" role="group" aria-label="Remove or edit comment">
       <button data-commentId="${comment.id}" type="button" class="btn btn-danger remove-comment-btn">Remove</button>
       <button data-commentId="${comment.id}" type="button" class="btn btn-info edit-comment-btn">Edit</button>
-    </div>`
+    </div>
+    </div>
+    `
     }
 
     let userHasHeartedComment = false;

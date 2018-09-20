@@ -27,16 +27,21 @@
 
     </div>
     <div class="col-lg-8">
-      <h1 class="align-middle">
-        <%= steamProfile.personaname %>
-        <small class="text-muted">
-          <%= steamProfile.steamid %></small>
-      </h1>
+      <div class="text-left">
+        <h1>
+          <%= steamProfile.personaname %>
+          <small class="text-muted">
+            <%= steamProfile.steamid %></small>
+        </h1>
+
+      </div>
 
       <br>
 
       <h2 class="text-center">Bans </h2>
-      <small class="text-muted">Click a ban to see more info</small>
+      <div class="text-center">
+        <small class="text-muted">Click a ban to see more info</small>
+      </div>
 
 
       <div class="table-responsive">
@@ -200,11 +205,11 @@
     let comments = new Array();
     let loggedInUserId = "<%= req.session.user.id %>"
     let bannedUserSteamId = "<%- steamProfile.steamid %>"
+    let userIsAdminOfSelectedServer = false;
 
     $("#comments").hide();
     $("#ban-note").hide();
 
-    let userIsAdminOfSelectedServer = false;
 
 
     loadBans(bannedUserSteamId).then(data => {
@@ -238,8 +243,11 @@
       // $("#comments-place-btn").fadeIn();
     }
 
+
+
     // Click a ban
     $("td").click(e => {
+      console.log('Selected a ban')
       let clickedRow = $(e.currentTarget.parentElement);
       clickedRow.toggleClass('bg-info');
 
