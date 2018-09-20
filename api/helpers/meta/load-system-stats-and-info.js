@@ -58,7 +58,7 @@ module.exports = {
       status: false
     });
 
-    let gblComments = await gblComments.count({
+    let gblComments = await GblComment.count({
       deleted: false
     });
 
