@@ -1,8 +1,10 @@
 <div class="container">
 
   <div class="alert alert-warning" role="alert">
-    <strong>Warning: If a player is not assigned to a role, CSMM will default to the role with highest level (so lowest permissions).
-      Make sure there is an appropriate role configured with a high level number. For example, if you have only an 'Admin'
+    <strong>Warning: If a player is not assigned to a role, CSMM will default to the role with highest level (so lowest
+      permissions).
+      Make sure there is an appropriate role configured with a high level number. For example, if you have only an
+      'Admin'
       role, every player will default to that - not good!</strong>
   </div>
 
@@ -29,7 +31,8 @@
 
           <div class="form-group">
             <label for="add-role-name">Name</label>
-            <input type="text" class="form-control" name="add-role-name" id="add-role-name" aria-describedby="add-role-name-help" placeholder="Donator">
+            <input type="text" class="form-control" name="add-role-name" id="add-role-name" aria-describedby="add-role-name-help"
+              placeholder="Donator">
             <small id="add-role-name-help" class="form-text text-muted">The name of the new role</small>
           </div>
 
@@ -37,7 +40,8 @@
             <label for="add-role-level">Level</label>
             <input type="number" class="form-control" name="add-role-level" id="add-role-level" aria-describedby="add-role-level-help"
               placeholder="2000">
-            <small id="add-role-level-help" class="form-text text-muted">The level of the new role. Defaults to 2000. Lower = more permissions</small>
+            <small id="add-role-level-help" class="form-text text-muted">The level of the new role. Defaults to 2000.
+              Lower = more permissions</small>
           </div>
 
         </div>
@@ -50,7 +54,8 @@
   </div>
 
   <!-- Delete modal -->
-  <div class="modal fade" id="delete-role-modal" tabindex="-1" role="dialog" aria-labelledby="delete-role-modal-title" aria-hidden="true">
+  <div class="modal fade" id="delete-role-modal" tabindex="-1" role="dialog" aria-labelledby="delete-role-modal-title"
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -71,7 +76,8 @@
   </div>
 
   <!-- Edit Modal -->
-  <div class="modal fade" id="edit-role-modal" tabindex="-1" role="dialog" aria-labelledby="edit-role-modal-title" aria-hidden="true">
+  <div class="modal fade" id="edit-role-modal" tabindex="-1" role="dialog" aria-labelledby="edit-role-modal-title"
+    aria-hidden="true">
     <div class="modal-dialog  modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -93,7 +99,8 @@
             <label for="edit-role-level">Level</label>
             <input type="number" class="form-control" name="edit-role-level" id="edit-role-level" aria-describedby="edit-role-level-help"
               placeholder="">
-            <small id="edit-role-level-help" class="form-text text-muted">The level of the role. Defaults to 2000. Lower = more permissions</small>
+            <small id="edit-role-level-help" class="form-text text-muted">The level of the role. Defaults to 2000.
+              Lower = more permissions</small>
           </div>
 
           <div class="form-group">
@@ -101,103 +108,127 @@
             <select class="form-control" name="edit-role-discord-role" id="edit-role-discord-role">
 
             </select>
-            <small id="edit-role-level-help" class="form-text text-muted">Link a Discord role to this CSMM role. CSMM will sync users' roles. For this to work, a player will need to link
+            <small id="edit-role-level-help" class="form-text text-muted">Link a Discord role to this CSMM role. CSMM
+              will sync users' roles. For this to work, a player will need to link
               his discord profile to his csmm profile!</small>
           </div>
 
           <div class="form-group">
             <label for="edit-role-teleports-amount">Amount of teleports allowed</label>
-            <input type="number" class="form-control" name="edit-role-teleports-amount" id="edit-role-teleports-amount" aria-describedby="edit-role-teleports-amount-help"
-              placeholder="">
-            <small id="edit-role-teleports-amount-help" class="form-text text-muted">The amount of teleport locations players with this role can set. Note that the global max you configure in teleport
+            <input type="number" class="form-control" name="edit-role-teleports-amount" id="edit-role-teleports-amount"
+              aria-describedby="edit-role-teleports-amount-help" placeholder="">
+            <small id="edit-role-teleports-amount-help" class="form-text text-muted">The amount of teleport locations
+              players with this role can set. Note that the global max you configure in teleport
               settings still applies!</small>
           </div>
 
           <div class="form-group">
             <label for="edit-role-economy-give-multiplier">Economy give multiplier</label>
-            <input type="number" class="form-control" name="edit-role-economy-give-multiplier" id="edit-role-economy-give-multiplier" aria-describedby="edit-role-economy-give-multiplier-help"
-              placeholder="">
-            <small id="edit-role-economy-give-multiplier-help" class="form-text text-muted">Any time a player with this role gains currency, this multiplier will be applied. If this is 1, there is no difference. If this is 2 the player will earn double. Use , for decimals.</small>
+            <input type="number" class="form-control" name="edit-role-economy-give-multiplier" id="edit-role-economy-give-multiplier"
+              aria-describedby="edit-role-economy-give-multiplier-help" placeholder="">
+            <small id="edit-role-economy-give-multiplier-help" class="form-text text-muted">Any time a player with this
+              role gains currency, this multiplier will be applied. If this is 1, there is no difference. If this is 2
+              the player will earn double. Use , for decimals.</small>
           </div>
 
           <div class="form-group">
             <label for="edit-role-economy-deduct-multiplier">Economy deduct multiplier</label>
-            <input type="number" class="form-control" name="edit-role-economy-deduct-multiplier" id="edit-role-economy-deduct-multiplier" aria-describedby="edit-role-economy-deduct-multiplier-help"
-              placeholder="">
-            <small id="edit-role-economy-deduct-multiplier-help" class="form-text text-muted">Any time a player with this role loses currency, this multiplier will be applied. If this is 1, there is no difference. If this is 2 the player will pay double. Use , for decimals.</small>
+            <input type="number" class="form-control" name="edit-role-economy-deduct-multiplier" id="edit-role-economy-deduct-multiplier"
+              aria-describedby="edit-role-economy-deduct-multiplier-help" placeholder="">
+            <small id="edit-role-economy-deduct-multiplier-help" class="form-text text-muted">Any time a player with
+              this role loses currency, this multiplier will be applied. If this is 1, there is no difference. If this
+              is 2 the player will pay double. Use , for decimals.</small>
           </div>
 
           <div class="form-check">
             <label class="form-check-label">
-              <input type="checkbox" class="form-check-input" name="edit-role-manageServer" id="edit-role-manageServer" aria-describedby="edit-role-manageServer-help"
-                value="true"> Manage server
+              <input type="checkbox" class="form-check-input" name="edit-role-manageServer" id="edit-role-manageServer"
+                aria-describedby="edit-role-manageServer-help" value="true"> Manage server
             </label>
-            <small id="edit-role-manageServer-help" class="form-text text-muted">Allow a user to do anything to your server on CSMM. This is a very powerfull permission and you should be careful
+            <small id="edit-role-manageServer-help" class="form-text text-muted">Allow a user to do anything to your
+              server on CSMM. This is a very powerfull permission and you should be careful
               who you give this to!</small>
           </div>
 
           <div class="form-check">
             <label class="form-check-label">
-              <input type="checkbox" class="form-check-input" name="edit-role-manageEconomy" id="edit-role-manageEconomy" aria-describedby="edit-role-manageEconomy-help"
-                value="true"> Manage economy
+              <input type="checkbox" class="form-check-input" name="edit-role-manageEconomy" id="edit-role-manageEconomy"
+                aria-describedby="edit-role-manageEconomy-help" value="true"> Manage economy
             </label>
-            <small id="edit-role-manageEconomy-help" class="form-text text-muted">Allow a user to manage economy settings</small>
+            <small id="edit-role-manageEconomy-help" class="form-text text-muted">Allow a user to manage economy
+              settings</small>
           </div>
 
           <div class="form-check">
             <label class="form-check-label">
-              <input type="checkbox" class="form-check-input" name="edit-role-managePlayers" id="edit-role-managePlayers" aria-describedby="edit-role-managePlayers-help"
-                value="true"> Manage players
+              <input type="checkbox" class="form-check-input" name="edit-role-manageGbl" id="edit-role-manageGbl"
+                aria-describedby="edit-role-manageGbl-help" value="true"> Manage global ban list
             </label>
-            <small id="edit-role-managePlayers-help" class="form-text text-muted">Allow a user to manage players. Includes giving items, deleting profiles, kicking and banning.</small>
+            <small id="edit-role-manageGbl-help" class="form-text text-muted">Allow a user to edit the ban message of
+              players that were banned on your server.</small>
           </div>
 
           <div class="form-check">
             <label class="form-check-label">
-              <input type="checkbox" class="form-check-input" name="edit-role-manageTickets" id="edit-role-manageTickets" aria-describedby="edit-role-manageTickets-help"
-                value="true"> Manage support tickets
+              <input type="checkbox" class="form-check-input" name="edit-role-managePlayers" id="edit-role-managePlayers"
+                aria-describedby="edit-role-managePlayers-help" value="true"> Manage players
             </label>
-            <small id="edit-role-manageTickets-help" class="form-text text-muted">Allow a user to manage support tickets for your server. This includes closing and commenting on tickets.</small>
+            <small id="edit-role-managePlayers-help" class="form-text text-muted">Allow a user to manage players.
+              Includes giving items, deleting profiles, kicking and banning.</small>
           </div>
 
           <div class="form-check">
             <label class="form-check-label">
-              <input type="checkbox" class="form-check-input" name="edit-role-viewAnalytics" id="edit-role-viewAnalytics" aria-describedby="edit-role-viewAnalytics-help"
-                value="true"> View analytics
+              <input type="checkbox" class="form-check-input" name="edit-role-manageTickets" id="edit-role-manageTickets"
+                aria-describedby="edit-role-manageTickets-help" value="true"> Manage support tickets
             </label>
-            <small id="edit-role-viewAnalytics-help" class="form-text text-muted">Allow a user to view the analytics page of your server.</small>
+            <small id="edit-role-manageTickets-help" class="form-text text-muted">Allow a user to manage support
+              tickets for your server. This includes closing and commenting on tickets.</small>
           </div>
 
           <div class="form-check">
             <label class="form-check-label">
-              <input type="checkbox" class="form-check-input" name="edit-role-viewDashboard" id="edit-role-viewDashboard" aria-describedby="edit-role-viewDashboard-help"
-                value="true"> View dashboard
+              <input type="checkbox" class="form-check-input" name="edit-role-viewAnalytics" id="edit-role-viewAnalytics"
+                aria-describedby="edit-role-viewAnalytics-help" value="true"> View analytics
             </label>
-            <small id="edit-role-viewDashboard-help" class="form-text text-muted">Allow a user to view your servers dashboard on CSMM.</small>
+            <small id="edit-role-viewAnalytics-help" class="form-text text-muted">Allow a user to view the analytics
+              page of your server.</small>
           </div>
 
           <div class="form-check">
             <label class="form-check-label">
-              <input type="checkbox" class="form-check-input" name="edit-role-useTracking" id="edit-role-useTracking" aria-describedby="edit-role-useTracking-help"
-                value="true"> Use tracking
+              <input type="checkbox" class="form-check-input" name="edit-role-viewDashboard" id="edit-role-viewDashboard"
+                aria-describedby="edit-role-viewDashboard-help" value="true"> View dashboard
             </label>
-            <small id="edit-role-useTracking-help" class="form-text text-muted">Allow a user to use the location and inventory tracking page.</small>
+            <small id="edit-role-viewDashboard-help" class="form-text text-muted">Allow a user to view your servers
+              dashboard on CSMM.</small>
           </div>
 
           <div class="form-check">
             <label class="form-check-label">
-              <input type="checkbox" class="form-check-input" name="edit-role-useChat" id="edit-role-useChat" aria-describedby="edit-role-useChat-help"
-                value="true"> Use chat
+              <input type="checkbox" class="form-check-input" name="edit-role-useTracking" id="edit-role-useTracking"
+                aria-describedby="edit-role-useTracking-help" value="true"> Use tracking
             </label>
-            <small id="edit-role-useChat-help" class="form-text text-muted">Allow a user to use the chatbox on your servers dashboard.</small>
+            <small id="edit-role-useTracking-help" class="form-text text-muted">Allow a user to use the location and
+              inventory tracking page.</small>
           </div>
 
           <div class="form-check">
             <label class="form-check-label">
-              <input type="checkbox" class="form-check-input" name="edit-role-useCommands" id="edit-role-useCommands" aria-describedby="edit-role-useCommands-help"
-                value="true"> Execute commands
+              <input type="checkbox" class="form-check-input" name="edit-role-useChat" id="edit-role-useChat"
+                aria-describedby="edit-role-useChat-help" value="true"> Use chat
             </label>
-            <small id="edit-role-useCommands-help" class="form-text text-muted">Allow a user to use the command console on your servers dashboard.</small>
+            <small id="edit-role-useChat-help" class="form-text text-muted">Allow a user to use the chatbox on your
+              servers dashboard.</small>
+          </div>
+
+          <div class="form-check">
+            <label class="form-check-label">
+              <input type="checkbox" class="form-check-input" name="edit-role-useCommands" id="edit-role-useCommands"
+                aria-describedby="edit-role-useCommands-help" value="true"> Execute commands
+            </label>
+            <small id="edit-role-useCommands-help" class="form-text text-muted">Allow a user to use the command console
+              on your servers dashboard.</small>
           </div>
 
           <hr>
@@ -292,6 +323,7 @@
       let viewDashboard = $("#edit-role-viewDashboard").prop('checked');
       let viewAnalytics = $("#edit-role-viewAnalytics").prop('checked');
       let manageTickets = $("#edit-role-manageTickets").prop('checked');
+      let manageGbl = $("#edit-role-manageGbl").prop('checked');
       let discordExec = $("#edit-role-discordExec").prop('checked');
       let discordLookup = $("#edit-role-discordLookup").prop('checked');
 
@@ -317,6 +349,7 @@
           viewDashboard: viewDashboard,
           viewAnalytics: viewAnalytics,
           manageTickets: manageTickets,
+          manageGbl: manageGbl,
           discordExec: discordExec,
           discordLookup: discordLookup
         },
@@ -356,6 +389,7 @@
       $("#edit-role-viewDashboard").prop('checked', currentRole.viewDashboard);
       $("#edit-role-viewAnalytics").prop('checked', currentRole.viewAnalytics);
       $("#edit-role-manageTickets").prop('checked', currentRole.manageTickets);
+      $("#edit-role-manageGbl").prop('checked', currentRole.manageGbl);
       $("#edit-role-discordExec").prop('checked', currentRole.discordExec);
       $("#edit-role-discordLookup").prop('checked', currentRole.discordLookup);
 

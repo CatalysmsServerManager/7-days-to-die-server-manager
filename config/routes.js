@@ -68,6 +68,7 @@ module.exports.routes = {
   },
 
   '/gbl': "SdtdServerController.view-gbl",
+  '/gbl/profile': "PlayerController.view-gbl",
 
   '/auth/discord': 'AuthController.discordLogin',
   '/auth/discord/return': 'AuthController.discordReturn',
@@ -124,6 +125,13 @@ module.exports.routes = {
   'post /api/gbl/load' : 'gbl.load-bans',
   'post /api/gbl/note' : 'gbl.set-note',
 
+  'get /api/gbl/comment': 'gbl-comment.get-comment',
+  'post /api/gbl/comment': 'gbl-comment.place-comment',
+  'patch /api/gbl/comment': 'gbl-comment.edit-comment',
+  'delete /api/gbl/comment': 'gbl-comment.remove-comment',
+
+  'post /api/gbl/comment/heart': 'gbl-comment.toggle-heart',
+
   'post /api/sdtdserver/gbl/autoban' : 'gbl.set-autoban-status',
   'post /api/sdtdserver/gbl/autoban/bans' : 'gbl.set-autoban-bans',
   'post /api/sdtdserver/gbl/notification/bans' : 'gbl.set-notification-bans',
@@ -162,6 +170,8 @@ module.exports.routes = {
   'delete /api/role' : "roleController/delete-role",
   'post /api/role' : 'roleController/create-role',
   'patch /api/role': "roleController/update-role",
+
+  'get /api/permission': 'roleController/check-permission',
 
   'post /api/role/player' : "roleController/add-player",
   'delete /api/role/player': "roleController/remove-player",

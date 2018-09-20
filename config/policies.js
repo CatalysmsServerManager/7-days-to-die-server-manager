@@ -39,13 +39,14 @@ module.exports.policies = {
 
   gblController: {
     '*': 'isLoggedIn',
-    'set-note': ["isLoggedIn", 'roles/manageServer']
+    'set-note': ["isLoggedIn"] // Permission check is handled inside the action
   },
 
   roleController: {
     '*': ["isLoggedIn", 'roles/manageServer'],
     'add-player': ["isLoggedIn", 'roles/manageServer'],
     'get-role': ["isLoggedIn"],
+    'check-permission': ["isLoggedIn"]
   },
 
   ShopController: {
@@ -63,7 +64,8 @@ module.exports.policies = {
   },
 
   playerController: {
-    '*': ['isLoggedIn', 'roles/managePlayers']
+    '*': ['isLoggedIn', 'roles/managePlayers'],
+    "view-gbl": ['isLoggedIn']
   },
 
   userController: {

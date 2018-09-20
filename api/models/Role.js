@@ -92,6 +92,11 @@ module.exports = {
       type: 'boolean',
       defaultsTo: false
     },
+    
+    manageGbl: {
+      type: 'boolean',
+      defaultsTo: false
+    },
 
     discordExec: {
       type: 'boolean',

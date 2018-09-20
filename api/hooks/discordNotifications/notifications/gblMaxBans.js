@@ -26,10 +26,8 @@ class GblMaxBan extends DiscordNotification {
         embed.addField('Steam ID', `[${event.player.steamId}](https://steamidfinder.com/lookup/${event.player.steamId}/)`, true)
             .addField('Name', event.player.name)
             .setFooter(`${event.server.name}`)
+            .addField(`${event.bans.length} ban${event.bans.length === 1 ? "" : "s"} on the global ban list`, `[GBL profile page](${process.env.CSMM_HOSTNAME}/gbl/profile?steamId=${event.player.steamId})`)
             .setURL(`${process.env.CSMM_HOSTNAME}/player/${event.player.id}/profile`)
-
-
-
 
         return embed
     }

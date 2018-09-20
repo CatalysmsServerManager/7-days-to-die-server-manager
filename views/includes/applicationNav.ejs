@@ -146,10 +146,22 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
       </div>
       <div class="modal-body text-center">
-        <div class="container-fluid" id="error-modal-message">
-          Something went horribly wrong! Just kidding, it's probably not that bad but we cannot show any extra info
-          here. There is
-          possibly more info in the console.
+        <div class="container-fluid">
+          Something went horribly wrong! Just kidding, it's probably not that bad. <span id="error-modal-message-bool">Here's
+            the error message: </span>
+
+          <br>
+
+          <div id="error-modal-message" class="font-weight-bold"></div>
+
+          <br>
+
+          <a href="http://catalysm.net/discord" target="_blank"><i class="fab fa-discord"></i> Join our Discord for
+            support.</a>
+
+          <br>
+
+          <small class="text-muted">Pssst, there might be an error message in the console you can send us!</small>
         </div>
       </div>
     </div>
@@ -160,17 +172,6 @@
 
 <script>
   $(document).ready(() => {
-
-    $('#error-modal').on('show.bs.modal', event => {
-      var modal = $(this);
-      // Use above variables to manipulate the DOM
-
-      if (!_.isUndefined(window.SAILS_LOCALS.error)) {
-        $("#error-modal-message").text(window.SAILS_LOCALS.error)
-      }
-
-
-    });
 
 
     let loggedInUserId = "<%- req.session.userId %>";

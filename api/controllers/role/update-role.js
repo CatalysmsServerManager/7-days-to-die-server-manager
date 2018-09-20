@@ -79,7 +79,11 @@ module.exports = {
     },
 
     viewDashboard: {
-      type: 'boolean',
+      type: 'boolean'
+    },
+
+    manageGbl: {
+      type: 'boolean'
     },
 
     discordExec: {
@@ -116,8 +120,12 @@ module.exports = {
       useTracking: inputs.useTracking,
       viewAnalytics: inputs.viewAnalytics,
       manageTickets: inputs.manageTickets,
+<<<<<<< HEAD
+      manageGbl: inputs.manageGbl
+=======
       discordExec: inputs.discordExec,
       discordLookup: inputs.discordLookup
+>>>>>>> fa60bd045ddb724d83c0006850beb83bf8c51566
     };
 
     let updatedRole = await Role.update({

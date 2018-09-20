@@ -1,0 +1,528 @@
+<div class="container">
+
+  <div class="row">
+    <div class="col-lg-4 text-center">
+      <img src="<%= steamProfile.avatarfull %>" class="img-fluid profile-picture">
+
+      <table class="table">
+        <tbody>
+          <tr>
+            <th>Last seen</th>
+            <td>
+              <% let date = new Date(steamProfile.lastlogoff * 1000) %>
+              <% let dateString = date.toLocaleDateString()  %>
+              <%= dateString %>
+            </td>
+          </tr>
+          <tr>
+            <th>On steam since</th>
+            <td>
+              <%  date = new Date(steamProfile.timecreated * 1000) %>
+              <%  dateString = date.toLocaleDateString()  %>
+              <%= dateString %>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+    <div class="col-lg-8">
+      <div class="text-left">
+        <h1>
+          <%= steamProfile.personaname %>
+          <small class="text-muted">
+            <%= steamProfile.steamid %></small>
+        </h1>
+
+      </div>
+
+      <br>
+
+      <h2 class="text-center">Bans </h2>
+      <div class="text-center">
+        <small class="text-muted">Click a ban to see more info</small>
+      </div>
+
+
+      <div class="table-responsive">
+        <table id="bans-table" class="table table-bordered no-footer table-hover">
+
+          <thead>
+            <tr>
+              <th>Last updated at</th>
+              <th>Reason</th>
+              <th>banned until</th>
+              <th>Server</th>
+              <th>Comments</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <% banEntries.forEach(ban => { %>
+            <tr data-ban="<%= ban.id %>" class="ban-row">
+              <%  date = new Date(ban.updatedAt) %>
+              <%  dateString = date.toLocaleDateString()  %>
+
+              <td>
+                <%= dateString %>
+              </td>
+
+              <td>
+                <%= ban.reason %>
+              </td>
+              <%  date = new Date(ban.bannedUntil) %>
+              <%  dateString = date.toLocaleDateString()  %>
+
+              <td>
+                <%= dateString %>
+              </td>
+              <td>
+                <%= ban.server.name %>
+              </td>
+              <td>
+                <%= comments.filter(comment => comment.ban === ban.id).length %>
+              </td>
+            </tr>
+            <% }) %>
+
+          </tbody>
+
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="ban-note">
+
+    <p id="ban-note-text" class="text-center lead">Center aligned text on all viewport sizes.</p>
+
+    <div class="text-center">
+      <!-- Button trigger modal -->
+      <button id="modal-set-note-btn" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal-set-note">
+        Set message
+      </button>
+    </div>
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="modal-set-note" tabindex="-1" role="dialog" aria-labelledby="modal-set-note"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="modal-set-note">Set a message</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <textarea name="modal-set-note-input" id="modal-set-note-input" style="width: 100%" rows="10"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="modal-set-note-confirm">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <hr>
+
+  <div id="comments" class="comments-container">
+
+    <h1>Comments</h1>
+
+    <ul id="comments-list" class="comments-list"> </ul>
+
+    <textarea name="comments-place-text" id="comments-place-text" cols="88" rows="7"></textarea>
+    <div class="text-center">
+      <button id="comments-place-btn" type="button" class="btn btn-primary">Post</button>
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- Remove Modal -->
+<div class="modal fade" id="remove-comment-modal" tabindex="-1" role="dialog" aria-labelledby="remove-comment-modal-title"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="remove-comment-modal-title">Are you sure?</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          Are you sure you want to delete this comment?
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" id="remove-comment-modal-confirm">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="edit-comment-modal" tabindex="-1" role="dialog" aria-labelledby="edit-comment-modal-title"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="edit-comment-modal-title">Edit comment</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <textarea name="edit-comment-textarea" id="edit-comment-modal-textarea" style="width:100%" rows="10"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="edit-comment-modal-confirm">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(() => {
+
+    const csrfToken = "<%= _csrf %>";
+    let bans;
+    let comments = new Array();
+    let loggedInUserId = "<%= req.session.user.id %>"
+    let bannedUserSteamId = "<%- steamProfile.steamid %>"
+    let userIsAdminOfSelectedServer = false;
+
+    $("#comments").hide();
+    $("#ban-note").hide();
+
+
+
+    loadBans(bannedUserSteamId).then(data => {
+        bans = data;
+        console.log(bans);
+        comments = new Array();
+        bans.map(ban => {
+          ban.comments.map(comment => {
+            comments.push(comment);
+          })
+        })
+      })
+      .catch(e => console.error)
+
+
+    let selectedBan;
+    let selectedBanRow;
+
+    let selectedCommentId;
+
+    let commentsClass = new gblComments(loggedInUserId);
+
+    function drawComments(ban) {
+      commentsClass.clear();
+
+      for (const comment of ban.comments) {
+        commentsClass.add(comment, ban);
+      }
+
+      $("#comments").fadeIn();
+      // $("#comments-place-btn").fadeIn();
+    }
+
+
+
+    // Click a ban
+    $("td").click(e => {
+      console.log('Selected a ban')
+      let clickedRow = $(e.currentTarget.parentElement);
+      clickedRow.toggleClass('bg-info');
+
+      if (!_.isUndefined(selectedBanRow)) {
+        selectedBanRow.toggleClass('bg-info')
+      }
+
+      selectedBanId = parseInt(clickedRow.data('ban'));
+      selectedBan = _.find(bans, ban => ban.id === selectedBanId);
+      selectedBanRow = clickedRow;
+
+      $("#ban-note").show();
+      $("#ban-note-text").text(selectedBan.note);
+
+      if (!selectedBan.note) {
+        $("#ban-note-text").text(
+          `No message has been set for this ban yet. Admins of the server ${selectedBan.server.name} can edit this message to provide extra explanation about this ban, proof, chat logs, ...`
+        );
+      }
+
+      checkUserPermission(loggedInUserId, selectedBan.server.id, 'manageGbl').then(result => {
+        if (result) {
+          $("#modal-set-note-btn").show()
+        } else {
+          $("#modal-set-note-btn").hide()
+        }
+
+      })
+
+      drawComments(selectedBan);
+    });
+
+    // Edit ban message
+
+    $("#modal-set-note").on('show.bs.modal', e => {
+      $("#modal-set-note-input").val(selectedBan.note);
+    });
+
+    $("#modal-set-note-confirm").click(e => {
+      let newNote = $("#modal-set-note-input").val();
+
+      if (newNote.length < 10) {
+        $("#modal-set-note").modal('hide');
+        return showErrorModal(
+          `A ban message must be minimum 10 characters long. Yours was ${newNote.length} characters long.`)
+      }
+
+      if (newNote.length > 100000) {
+        $("#modal-set-note").modal('hide');
+        return showErrorModal(
+          `A ban message can be maximum 100000 characters long. Yours was ${newNote.length} characters long.`
+        );
+      }
+
+      $.ajax({
+        url: "/api/gbl/note",
+        type: 'POST',
+        data: {
+          _csrf: csrfToken,
+          banId: selectedBan.id,
+          note: newNote
+        },
+        success: (data, status, xhr) => {
+          window.location.reload();
+        },
+        error: (xhr, status, error) => {
+          $("#modal-set-note").modal('hide');
+          showErrorModal(`Error while processing an API request. ${xhr.responseText}`)
+          console.log(xhr)
+
+        }
+      })
+
+
+    })
+
+    // Toggle hearts listener
+    $("#comments").on('click', ".comment-heart", e => {
+      $(e.currentTarget).toggleClass('text-danger');
+
+      let commentId = $(e.currentTarget).data('commentid');
+
+      $.ajax({
+        url: "/api/gbl/comment/heart",
+        type: 'POST',
+        data: {
+          _csrf: csrfToken,
+          commentId: commentId
+        },
+        success: (data, status, xhr) => {
+
+        },
+        error: (xhr, status, error) => {
+          showErrorModal(`Error while processing an API request. ${xhr.responseText}`)
+          console.log(xhr)
+
+        }
+      })
+    })
+
+    // Edit comment
+
+    $("#comments").on('click', ".edit-comment-btn", e => {
+      selectedCommentId = $(e.currentTarget).data('commentid');
+      selectedComment = _.find(comments, comment => comment.id === selectedCommentId);
+
+      if (_.isUndefined(selectedComment)) {
+        return showErrorModal(
+          `Failed to identify comment - please report this on the dev server. selectedComment = ${selectedComment}`
+        )
+      }
+
+      $("#edit-comment-modal-textarea").val(selectedComment.content);
+      $('#edit-comment-modal').modal('show');
+    });
+
+    $("#edit-comment-modal-confirm").on('click', e => {
+      let newContent = $("#edit-comment-modal-textarea").val();
+
+      if (newContent.length < 10) {
+        $('#edit-comment-modal').modal('hide');
+        return showErrorModal(
+          `A comment must be minimum 10 characters long. Yours was ${newContent.length} characters long.`)
+      }
+
+      if (newContent.length > 100000) {
+        $('#edit-comment-modal').modal('hide');
+        return showErrorModal(
+          `A comment can be maximum 100000 characters long. Yours was ${newContent.length} characters long.`);
+      }
+
+      $.ajax({
+        url: "/api/gbl/comment",
+        type: 'PATCH',
+        data: {
+          _csrf: csrfToken,
+          commentId: selectedCommentId,
+          comment: newContent
+        },
+        success: (data, status, xhr) => {
+          window.location.reload();
+        },
+        error: (xhr, status, error) => {
+          showErrorModal(`Error while processing an API request. ${xhr.responseText}`)
+          console.log(xhr)
+
+        }
+      })
+    })
+
+
+    // Remove comment
+
+    $("#remove-comment-modal-confirm").on('click', e => {
+      $.ajax({
+        url: "/api/gbl/comment",
+        type: 'DELETE',
+        data: {
+          _csrf: csrfToken,
+          commentId: selectedCommentId
+        },
+        success: (data, status, xhr) => {
+          window.location.reload();
+        },
+        error: (xhr, status, error) => {
+          showErrorModal(`Error while processing an API request. ${xhr.responseText}`)
+          console.log(xhr)
+
+        }
+      })
+    })
+
+    $("#comments").on('click', ".remove-comment-btn", e => {
+      selectedCommentId = $(e.currentTarget).data('commentid');
+      $('#remove-comment-modal').modal('show');
+    });
+
+    // Place comment
+    $("#comments-place-btn").click(e => {
+
+      let comment = $("#comments-place-text").val();
+      let errorElem = $("#comments-place-error")
+
+      if (comment.length < 10) {
+        return showErrorModal(
+          `A comment must be minimum 10 characters long. Yours was ${comment.length} characters long.`)
+      }
+
+      if (comment.length > 100000) {
+        return showErrorModal(
+          `A comment can be maximum 100000 characters long. Yours was ${comment.length} characters long.`);
+      }
+
+      if (_.isUndefined(selectedBan)) {
+        return showErrorModal('You must select a ban before commenting.');
+      }
+
+      $.ajax({
+        url: "/api/gbl/comment",
+        type: 'POST',
+        data: {
+          _csrf: csrfToken,
+          banId: selectedBan.id,
+          comment: comment
+        },
+        success: (data, status, xhr) => {
+          let ban = _.find(bans, ban => ban.id === data.ban);
+          ban.comments.push(data);
+          drawComments(ban);
+          $("#comments-place-text").val("")
+        },
+        error: (xhr, status, error) => {
+          console.log(xhr)
+          showErrorModal(`Error while processing an API request. ${xhr.responseText}`)
+        }
+      })
+    })
+
+    function loadComments(ban) {
+      return new Promise((resolve, reject) => {
+        $.ajax({
+          url: "/api/gbl/comment",
+          type: 'GET',
+          data: {
+            _csrf: csrfToken,
+            banId: ban.id,
+          },
+          success: (data, status, xhr) => {
+            resolve(data)
+          },
+          error: (xhr, status, error) => {
+            console.log(xhr)
+            reject(new Error(error))
+          }
+        })
+      })
+    }
+
+    function loadBans(steamId) {
+      return new Promise((resolve, reject) => {
+        $.ajax({
+          url: "/api/gbl/find",
+          type: 'GET',
+          data: {
+            _csrf: csrfToken,
+            steamId: steamId
+          },
+          success: (data, status, xhr) => {
+            console.log(`Loaded ${data.length} bans`)
+            resolve(data)
+          },
+          error: (xhr, status, error) => {
+            console.log(xhr)
+            reject(new Error(error))
+          }
+        })
+      })
+    }
+  })
+
+</script>
+
+<style>
+  .wrapper {
+    padding: 100px;
+  }
+
+  .profile-picture {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    margin: 20px;
+
+    object-fit: cover;
+    object-position: center right;
+  }
+
+</style>

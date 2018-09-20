@@ -76,6 +76,8 @@
           <h4 class="card-title">Global bans</h4>
           <p class="card-text">
 
+            <a href="/gbl/profile?steamId=<%= player.steamId %>">GBL profile</a>
+
             <% if(bans.length > 0) { %>
 
               <div class="alert alert-warning" role="alert">
@@ -117,7 +119,7 @@
 
               <% } else { %>
 
-                Did not find any bans for this player :)
+               <p> Did not find any bans for this player :) </p>
                 <% } %>
           </p>
         </div>

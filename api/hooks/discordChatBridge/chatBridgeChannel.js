@@ -118,13 +118,17 @@ class ChatBridgeChannel {
     let connectedPlayer = await Player.find({
       steamId: connectedMsg.steamID,
       server: this.sdtdServer.id
-    })
+    });
+
+    let gblBans = await BanEntry.find({steamId: connectedMsg.steamID});
+
     connectedPlayer = connectedPlayer[0]
     let embed = new this.channel.client.customEmbed();
 
     embed.setTitle(`${connectedMsg.playerName} connected`)
       .addField('Steam ID', `[${connectedMsg.steamID}](https://steamidfinder.com/lookup/${connectedMsg.steamID}/)`, true)
       .addField('Country', connectedMsg.country, true)
+      .addField(`${gblBans.length} ban${gblBans.length === 1 ? "" : "s"} on the global ban list`, `[GBL profile page](${process.env.CSMM_HOSTNAME}/gbl/profile?steamId=${connectedMsg.steamID})`)
       .setColor('GREEN')
       .setFooter(`${this.sdtdServer.name}`)
 
@@ -145,6 +149,9 @@ class ChatBridgeChannel {
       entityId: disconnectedMsg.entityID,
       server: this.sdtdServer.id
     })
+
+    let gblBans = await BanEntry.find({steamId: disconnectedPlayer.steamId});
+
     disconnectedPlayer = disconnectedPlayer[0]
     let embed = new this.channel.client.customEmbed();
     embed.setTitle(`${disconnectedMsg.playerName} disconnected`)
@@ -155,6 +162,7 @@ class ChatBridgeChannel {
       embed.addField('Steam ID', disconnectedPlayer.steamId ? `[${disconnectedPlayer.steamId}](https://steamidfinder.com/lookup/${disconnectedPlayer.steamId}/)` : `Unknown`, true)
         .addField('Playtime', hhmmss(disconnectedPlayer.playtime), true)
         .addField('CSMM profile', `${process.env.CSMM_HOSTNAME}/player/${disconnectedPlayer.id}/profile`)
+        .addField(`${gblBans.length} ban${gblBans.length === 1 ? "" : "s"} on the global ban list`, `[GBL profile page](${process.env.CSMM_HOSTNAME}/gbl/profile?steamId=${disconnectedMsg.steamID})`)
       if (disconnectedPlayer.avatarUrl) {
         embed.setThumbnail(disconnectedPlayer.avatarUrl);
       }
