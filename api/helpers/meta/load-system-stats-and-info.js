@@ -58,6 +58,10 @@ module.exports = {
       status: false
     });
 
+    let gblComments = await gblComments.count({
+      deleted: false
+    });
+
     let response = {
       servers: amountOfServers,
       players: amountOfPlayers,
@@ -79,6 +83,7 @@ module.exports = {
       pingKickers: pingKickers,
       openTickets: openTickets,
       closedTickets: closedTickets,
+      gblComments: gblComments,
     }
 
     return exits.success(response)

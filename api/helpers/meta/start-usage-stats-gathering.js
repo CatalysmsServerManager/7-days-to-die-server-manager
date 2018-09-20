@@ -49,6 +49,7 @@ module.exports = {
             pingKickers: currentStats.pingKickers,
             openTickets: currentStats.openTickets,
             closedTickets: currentStats.closedTickets,
+            gblComments: currentStats.gblComments,
           })
 
           sails.log.info(`Gathered system usage information.`, currentStats)

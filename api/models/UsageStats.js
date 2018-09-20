@@ -81,6 +81,10 @@ module.exports = {
       type: "number"
     },
 
+    gblComments: {
+      type: "number"
+    }
+
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
