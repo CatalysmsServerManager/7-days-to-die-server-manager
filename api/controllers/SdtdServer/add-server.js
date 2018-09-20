@@ -40,19 +40,9 @@ module.exports = {
     success: {
       description: 'Server was added successfully',
     },
-    serverExists: {
-      description: 'Server with inputted data was found in the system!',
-      responseType: 'badRequest',
-      statusCode: 400
-    },
-    cantConnect: {
-      description: 'Cant connect to the server',
-      responseType: 'badRequest',
-      statusCode: 400
-    },
 
-    maxServers: {
-      description: "User has added max amount of servers already",
+    badRequest: {
+      description: 'User did a bad thing :D',
       responseType: 'badRequest',
       statusCode: 400
     }
@@ -62,10 +52,12 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     let userProfile = await User.findOne(this.req.session.userId).populate('servers');
-    let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({ userId: userProfile.id });
+    let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({
+      userId: userProfile.id
+    });
     let maxServers = sails.config.custom.donorConfig[donatorRole].maxServers;
 
-    
+
     let sdtdServer = {
       ip: inputs.serverIp,
       webPort: inputs.webPort,
@@ -74,30 +66,48 @@ module.exports = {
       name: inputs.serverName,
       owner: userProfile.id
     }
-    
- 
+
+    let errorResponse = {
+      connectCheck: false,
+      statsResponse: false,
+      commandResponse: false,
+      duplicateCheck: false,
+      maxLimitCheck: false,
+      detectedControlPanelPortUsed: false
+    }
+
+
+
+    let existsCheck = await checkIfServerExists(sdtdServer);
+
+    if (existsCheck) {
+      sails.log.info(`${userProfile.username} tried to add a new server - ${sdtdServer.name} - but it is duplicate`);
+      errorResponse.duplicateCheck = true;
+      return exits.badRequest(errorResponse);
+    }
 
     if (userProfile.servers) {
       if (userProfile.servers.length >= maxServers) {
         sails.log.info(`${userProfile.username} tried to add a new server - ${sdtdServer.name} - Max server limit (${maxServers}) reached! `);
-        return exits.maxServers("maxServers")
+        errorResponse.maxLimitCheck = true;
+        return exits.badRequest(errorResponse);
       }
-      
     }
 
     let serverCheck = await checkServerResponse(sdtdServer);
-    let existsCheck = await checkIfServerExists(sdtdServer);
 
-
-    if (!serverCheck) {
+    if (!serverCheck.statsResponse || !serverCheck.memResponse) {
       sails.log.info(`${userProfile.username} tried to add a new server - ${sdtdServer.name} - but cannot connect - ${sdtdServer.ip}:${sdtdServer.webPort}`);
-      return exits.cantConnect("cantConnect");
+      errorResponse.statsResponse = serverCheck.statsResponse;
+      errorResponse.commandResponse = serverCheck.memResponse;
+      errorResponse.connectCheck = true;
+      if (serverCheck.detectedControlPanelPortUsed) {
+        errorResponse.detectedControlPanelPortUsed = serverCheck.detectedControlPanelPortUsed
+      }
+      return exits.badRequest(errorResponse);
     }
 
-    if (existsCheck) {
-      sails.log.info(`${userProfile.username} tried to add a new server - ${sdtdServer.name} - but it is duplicate`);
-      return exits.serverExists("serverExists");
-    }
+
 
 
     let addedServer = await addServerToDb(sdtdServer);
@@ -106,7 +116,46 @@ module.exports = {
       await sails.hooks.historicalinfo.start(addedServer.id, 'memUpdate');
       sails.log.warn(`${userProfile.username} added a new server - ${addedServer.name}`);
       await sails.helpers.sdtd.loadAllPlayerData(addedServer.id);
-      return exits.success(addedServer);
+      errorResponse.server = addedServer;
+
+      await Role.create({
+        server: addedServer.id,
+        name: "Admin",
+        level: "1",
+        manageServer: true
+      });
+
+      await Role.create({
+        server: addedServer.id,
+        name: "Moderator",
+        level: "10",
+        manageEconomy: true,
+        managePlayers: true,
+        manageTickets: true,
+        viewAnalytics: true,
+        viewDashboard: true,
+        useTracking: true,
+        useChat: true,
+        manageGbl: true,
+        discordLookup: true
+      });
+
+      await Role.create({
+        server: addedServer.id,
+        name: "Donator",
+        level: "1000",
+        economyGiveMultiplier: 1.25,
+        amountOfTeleports: 5
+      })
+
+      await Role.create({
+        server: addedServer.id,
+        name: "Player",
+        level: "2000",
+        amountOfTeleports: 2
+      })
+
+      return exits.success(errorResponse);
     } else {
       return exits.error()
     }
@@ -120,59 +169,65 @@ async function checkServerResponse(sdtdServer) {
   let statsResponse = await checkStats(sdtdServer);
   let commandResponse = await checkCommand(sdtdServer);
 
-  if (statsResponse && commandResponse) {
-    return true
-  } else {
-    return false
+  let responseObj = {
+    statsResponse: statsResponse,
+    memResponse: commandResponse,
+    detectedControlPanelPortUsed: false
   }
 
-  async function checkStats(sdtdServer) {
-    return new Promise(resolve => {
-      let statsResponse = sevenDays.getStats({
-        ip: sdtdServer.ip,
-        port: sdtdServer.webPort,
-        authName: sdtdServer.authName,
-        authToken: sdtdServer.authToken
-      }).exec({
-        success: (response) => {
-          if (response.gametime) {
-            resolve(true);
-          } else {
-            resolve(false)
-          }
-        },
-        error: (error) => {
-          resolve(false);
-        },
-        connectionRefused: error => {
-          resolve(false);
-        }
-      });
-    })
+  if (!statsResponse.gametime) {
+    if (String(statsResponse).startsWith('<html>')) {
+      responseObj.detectedControlPanelPortUsed = true;
+    }
+    responseObj.statsResponse = false;
   }
 
-  async function checkCommand(sdtdServer) {
-    return new Promise(resolve => {
-      let statsResponse = sevenDays.executeCommand({
-        ip: sdtdServer.ip,
-        port: sdtdServer.webPort,
-        authName: sdtdServer.authName,
-        authToken: sdtdServer.authToken,
-        command: 'mem'
-      }).exec({
-        success: (response) => {
-          resolve(true);
-        },
-        error: (error) => {
-          resolve(false);
-        },
-        connectionRefused: error => {
-          resolve(false)
-        }
-      });
+
+
+  return responseObj
+}
+
+async function checkStats(sdtdServer) {
+  return new Promise(resolve => {
+    sevenDays.getStats({
+      ip: sdtdServer.ip,
+      port: sdtdServer.webPort,
+      authName: sdtdServer.authName,
+      authToken: sdtdServer.authToken
+    }).exec({
+      success: (response) => {
+        resolve(response);
+      },
+      error: (error) => {
+        resolve(false);
+      },
+      connectionRefused: error => {
+        resolve(false);
+      }
     });
-  }
+  })
+}
 
+async function checkCommand(sdtdServer) {
+  return new Promise(resolve => {
+    sevenDays.executeCommand({
+      ip: sdtdServer.ip,
+      port: sdtdServer.webPort,
+      authName: sdtdServer.authName,
+      authToken: sdtdServer.authToken,
+      command: 'mem'
+    }).exec({
+      success: (response) => {
+        resolve(response);
+      },
+      error: (error) => {
+        resolve(false);
+      },
+      connectionRefused: error => {
+        resolve(false)
+      }
+    });
+  });
 }
 
 async function checkIfServerExists(sdtdServerToAdd) {

@@ -25,6 +25,7 @@ module.exports = {
 
     amountOfTeleports: {
       type: 'number',
+      defaultsTo: 5
     },
 
     radiusAllowedToExplore: {
