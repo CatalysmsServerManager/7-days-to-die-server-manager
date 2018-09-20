@@ -116,7 +116,45 @@ module.exports = {
       await sails.hooks.historicalinfo.start(addedServer.id, 'memUpdate');
       sails.log.warn(`${userProfile.username} added a new server - ${addedServer.name}`);
       await sails.helpers.sdtd.loadAllPlayerData(addedServer.id);
-      errorResponse.server = addedServer
+      errorResponse.server = addedServer;
+
+      await Role.create({
+        server: addedServer.id,
+        name: "Admin",
+        level: "1",
+        manageServer: true
+      });
+
+      await Role.create({
+        server: addedServer.id,
+        name: "Moderator",
+        level: "10",
+        manageEconomy: true,
+        managePlayers: true,
+        manageTickets: true,
+        viewAnalytics: true,
+        viewDashboard: true,
+        useTracking: true,
+        useChat: true,
+        manageGbl: true,
+        discordLookup: true
+      });
+
+      await Role.create({
+        server: addedServer.id,
+        name: "Donator",
+        level: "1000",
+        economyGiveMultiplier: 1.25,
+        amountOfTeleports: 5
+      })
+
+      await Role.create({
+        server: addedServer.id,
+        name: "Player",
+        level: "2000",
+        amountOfTeleports: 2
+      })
+
       return exits.success(errorResponse);
     } else {
       return exits.error()
