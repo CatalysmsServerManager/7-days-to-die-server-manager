@@ -22,6 +22,10 @@ module.exports = {
       type: 'number'
     },
 
+    discordId: {
+      type: 'string'
+    },
+
     permission: {
       type: 'string',
       required: true
@@ -41,11 +45,21 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    if ((_.isUndefined(inputs.userId) || _.isUndefined(inputs.serverId)) && _.isUndefined(inputs.playerId)) {
-      return exits.invalidInput('You must provide either userId AND serverID or just a playerId' + JSON.stringify(inputs));
+    if ((_.isUndefined(inputs.userId) || _.isUndefined(inputs.serverId)) && (_.isUndefined(inputs.discordId) || _.isUndefined(inputs.serverId)) && _.isUndefined(inputs.playerId)) {
+      return exits.invalidInput('You must provide either userId AND serverID, discordId AND serverId or just a playerId' + JSON.stringify(inputs));
     }
 
     let role;
+
+    if (inputs.discordId) {
+      let foundUser = await User.find({
+        discordId: inputs.discordId
+      });
+      if (!_.isUndefined(foundUser[0])) {
+        inputs.userId = foundUser[0].id
+      }
+    }
+
 
     if (inputs.userId && inputs.serverId) {
       role = await sails.helpers.roles.getUserRole(inputs.userId, inputs.serverId);
@@ -69,6 +83,23 @@ module.exports = {
 
     let hasPermission = false;
 
+    if (!_.isUndefined(inputs.userId)) {
+      let foundUser = await User.findOne(inputs.userId);
+      if (foundUser.steamId === sails.config.custom.catalysmSteamId) {
+        foundRole = await Role.find({
+          where: {
+            server: inputs.serverId
+          },
+          sort: 'level ASC',
+          limit: 1
+        })
+        if (foundRole[0]) {
+          role = foundRole[0];
+        }
+        hasPermission = true
+      }
+    }
+
     if (role[inputs.permission]) {
       hasPermission = true
     }
@@ -84,6 +115,8 @@ module.exports = {
         hasPermission = true;
       }
     }
+
+
 
     sails.log.debug(`Checked if ${inputs.playerId ? `player ${inputs.playerId}` : `user ${inputs.userId}`} has permission ${inputs.permission} - ${hasPermission}`)
 

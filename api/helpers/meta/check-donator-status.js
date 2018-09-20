@@ -61,7 +61,7 @@ module.exports = {
         }
 
         if (_.isUndefined(discordUser)) {
-            return exits.success('donator')
+            return exits.success('free')
         }
 
         let patronRole = await developerGuild.roles.get("410545564913238027");
@@ -69,24 +69,23 @@ module.exports = {
         let contributorRole = await developerGuild.roles.get("434462681068470272");
         let sponsorRole = await developerGuild.roles.get("434462786962325504");
 
-        if (discordUser.roles.has(patronRole.id)) {
-            return exits.success('patron')
-        }
-
-        if (discordUser.roles.has(donatorRole.id)) {
-            return exits.success('donator')
+        if (discordUser.roles.has(sponsorRole.id)) {
+            return exits.success('sponsor')
         }
 
         if (discordUser.roles.has(contributorRole.id)) {
             return exits.success('contributor')
         }
 
-        if (discordUser.roles.has(sponsorRole.id)) {
-            return exits.success('sponsor')
+        if (discordUser.roles.has(donatorRole.id)) {
+            return exits.success('donator')
         }
 
-        // Temporarily changed all free users to donator
-        return exits.success('donator')
+        if (discordUser.roles.has(patronRole.id)) {
+            return exits.success('patron')
+        }
+
+        return exits.success('free')
 
     }
 

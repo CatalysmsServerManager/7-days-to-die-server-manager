@@ -231,6 +231,24 @@
               on your servers dashboard.</small>
           </div>
 
+          <hr>
+
+          <div class="form-check">
+            <label class="form-check-label">
+              <input type="checkbox" class="form-check-input" name="edit-role-discordExec" id="edit-role-discordExec" aria-describedby="edit-role-discordExec-help"
+                value="true"> Use the Discord command "ExecCommand"
+            </label>
+            <small id="edit-role-discordExec-help" class="form-text text-muted">Allow a user to execute commands via Discord.</small>
+          </div>
+
+          <div class="form-check">
+            <label class="form-check-label">
+              <input type="checkbox" class="form-check-input" name="edit-role-discordLookup" id="edit-role-discordLookup" aria-describedby="edit-role-discordLookup-help"
+                value="true"> Use the Discord command "Lookup"
+            </label>
+            <small id="edit-role-discordLookup-help" class="form-text text-muted">Allow a user to retrieve extra information about a player via Discord.</small>
+          </div>
+
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -306,6 +324,8 @@
       let viewAnalytics = $("#edit-role-viewAnalytics").prop('checked');
       let manageTickets = $("#edit-role-manageTickets").prop('checked');
       let manageGbl = $("#edit-role-manageGbl").prop('checked');
+      let discordExec = $("#edit-role-discordExec").prop('checked');
+      let discordLookup = $("#edit-role-discordLookup").prop('checked');
 
       $.ajax({
         url: "/api/role",
@@ -329,7 +349,9 @@
           viewDashboard: viewDashboard,
           viewAnalytics: viewAnalytics,
           manageTickets: manageTickets,
-          manageGbl: manageGbl
+          manageGbl: manageGbl,
+          discordExec: discordExec,
+          discordLookup: discordLookup
         },
         success: (data, status, xhr) => {
           drawRolesTable();
@@ -368,6 +390,8 @@
       $("#edit-role-viewAnalytics").prop('checked', currentRole.viewAnalytics);
       $("#edit-role-manageTickets").prop('checked', currentRole.manageTickets);
       $("#edit-role-manageGbl").prop('checked', currentRole.manageGbl);
+      $("#edit-role-discordExec").prop('checked', currentRole.discordExec);
+      $("#edit-role-discordLookup").prop('checked', currentRole.discordLookup);
 
     });
 

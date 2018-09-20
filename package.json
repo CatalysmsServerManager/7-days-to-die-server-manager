@@ -35,6 +35,7 @@
     "sails-hook-sockets": "^1.5.3",
     "sails-mysql": "^1.0.0",
     "sails-redis": "^1.0.0",
+    "swagger-stats": "^0.95.6",
     "validator": "^10.4.0",
     "winston": "^2.4.3"
   },
