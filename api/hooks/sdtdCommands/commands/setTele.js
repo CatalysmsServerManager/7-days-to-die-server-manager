@@ -36,8 +36,12 @@ class setTele extends SdtdCommand {
       return chatMessage.reply('Too many arguments, please provide a name only.');
     }
 
-    if (playerTeleports.length >= server.config.maxPlayerTeleportLocations || playerTeleports.length >= playerRole.amountOfTeleports) {
+    if (playerTeleports.length >= server.config.maxPlayerTeleportLocations) {
       return chatMessage.reply("You've set too many locations already, remove one before adding any more");
+    }
+
+    if (playerTeleports.length >= playerRole.amountOfTeleports) {
+      return chatMessage.reply(`Your role (${playerRole.name}) is only allowed to have ${playerRole.amountOfTeleports} teleport locations.`);
     }
 
 
