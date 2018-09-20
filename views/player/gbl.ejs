@@ -222,7 +222,10 @@
           })
         })
       })
-      .catch(e => console.error)
+      .catch(e => {
+        console.log(e)
+        return showErrorModal('Error while loading ban info.')
+      })
 
 
     let selectedBan;
