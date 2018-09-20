@@ -24,6 +24,10 @@ class callAdmin extends SdtdCommand {
         return chatMessage.reply(`You must tell us what you're having trouble with!`);
       }
 
+      if (args.length > 50000) {
+        return chatMessage.reply(`Your message is too long! A ticket title can hold maximum 50.000 characters.`);
+      }
+
       let ticket = await sails.helpers.sdtd.createTicket(
         server.id,
         player.id,
