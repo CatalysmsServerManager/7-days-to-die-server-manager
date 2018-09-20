@@ -150,9 +150,9 @@ class ChatBridgeChannel {
       server: this.sdtdServer.id
     })
 
+    disconnectedPlayer = disconnectedPlayer[0]
     let gblBans = await BanEntry.find({steamId: disconnectedPlayer.steamId});
 
-    disconnectedPlayer = disconnectedPlayer[0]
     let embed = new this.channel.client.customEmbed();
     embed.setTitle(`${disconnectedMsg.playerName} disconnected`)
       .setColor('RED')
