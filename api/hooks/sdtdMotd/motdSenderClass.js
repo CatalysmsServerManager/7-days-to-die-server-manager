@@ -75,6 +75,7 @@ class MotdSender {
    */
   async sendMotd(message, serverId, playerSteamId) {
     try {
+      console.log(message, playerSteamId, serverId)
       let server = await SdtdServer.findOne(serverId);
       let player = await Player.find({
         server: server.id,
@@ -101,13 +102,12 @@ class MotdSender {
         message = _.replace(message, "${player.level}", player.level);
       }
 
-      sevenDays.sendMessage({
+      sevenDays.executeCommand({
         ip: server.ip,
         port: server.webPort,
         authName: server.authName,
         authToken: server.authToken,
-        message: message,
-        playerID: playerSteamId,
+        command: `pm ${playerSteamId} "${message}"`
       }).exec({
         success: (response) => {
           sails.log.debug(`HOOKS - sdtdMotd:MotdSender:sendMotd - Successfully sent MOTD message to server ${serverId}`);
