@@ -54,7 +54,12 @@ customLogger = new winston.Logger({
       colorize: true
     })
   ]
-})
+});
+
+let useRedis = false;
+if (process.env.REDISSTRING !== "") {
+  useRedis = true;
+}
 
 module.exports = {
 
@@ -92,7 +97,7 @@ module.exports = {
 
     cache: {
       adapter: 'sails-redis',
-      url: process.env.REDISSTRING,
+      url: useRedis ? process.env.REDISSTRING : undefined,
     },
 
   },
@@ -202,10 +207,7 @@ module.exports = {
      * > (For a full list, see https://sailsjs.com/plugins/sessions)            *
      *                                                                          *
      ***************************************************************************/
-    adapter: "@sailshq/connect-redis",
-    host: '127.0.0.1',
-    port: '6379',
-    db: "1",
+    url: useRedis ? process.env.REDISSTRING : undefined,
 
     /***************************************************************************
      *                                                                          *
