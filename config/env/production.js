@@ -24,35 +24,23 @@ const winston = require('winston');
 customLogger = new winston.Logger({
   transports: [
     new winston.transports.Console({
-      level: 'debug',
+      level: process.env.LOGLEVEL === "" ? 'info' : 'debug',
       colorize: true,
       timestamp: true,
       humanReadableUnhandledException: true
     }),
     new winston.transports.File({
-      level: 'info',
-      name: 'infolog',
+      level: process.env.LOGLEVEL === "" ? 'info' : 'debug',
+      name: 'csmm-log',
       timestamp: true,
       humanReadableUnhandledException: true,
-      filename: './logs/prod.log',
+      filename: './logs/csmm.log',
       tailable: true,
-      maxsize: 1000,
+      maxsize: 10000,
       maxFiles: 3,
       json: false,
       colorize: true
     }),
-    new winston.transports.File({
-      level: 'debug',
-      name: 'debuglog',
-      timestamp: true,
-      humanReadableUnhandledException: true,
-      filename: './logs/debug.log',
-      tailable: true,
-      maxsize: 10000,
-      maxFiles: 5,
-      json: false,
-      colorize: true
-    })
   ]
 });
 
@@ -64,8 +52,6 @@ if (process.env.REDISSTRING !== "") {
 module.exports = {
 
   hookTimeout: 900000,
-
-
 
   /**************************************************************************
    *                                                                         *
@@ -207,7 +193,7 @@ module.exports = {
      * > (For a full list, see https://sailsjs.com/plugins/sessions)            *
      *                                                                          *
      ***************************************************************************/
-    url: useRedis ? process.env.REDISSTRING : undefined,
+   // url: useRedis ? process.env.REDISSTRING : undefined,
 
     /***************************************************************************
      *                                                                          *
@@ -339,20 +325,6 @@ module.exports = {
      *                                                                          *
      ***************************************************************************/
     trustProxy: true,
-
-    express: {
-
-      serverOptions: {
-
-        key: require('fs').readFileSync('/home/csmm/ssl/privkey.pem'),
-
-        cert: require('fs').readFileSync('/home/csmm/ssl/cert.pem'),
-
-      }
-
-    }
-
-
   },
 
 
@@ -388,15 +360,6 @@ module.exports = {
    *                                                                         *
    **************************************************************************/
 
-
-  ssl: {
-    ca: require('fs').readFileSync(require('path').resolve(__dirname, '/home/csmm/ssl/chain.pem')),
-    key: require('fs').readFileSync(require('path').resolve(__dirname, '/home/csmm/ssl/privkey.pem')),
-    cert: require('fs').readFileSync(require('path').resolve(__dirname, '/home/csmm/ssl/cert.pem'))
-  },
-
-
-
   /**************************************************************************
    *                                                                         *
    * Overrides for any custom configuration specifically for your app.       *
@@ -423,7 +386,4 @@ module.exports = {
     usageStatsInterval: 86400000, // 1 day
 
   },
-
-
-
 };
