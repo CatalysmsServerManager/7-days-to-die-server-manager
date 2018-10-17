@@ -17,8 +17,6 @@ var passport = require('passport');
 var SteamStrategy = require('passport-steam');
 var DiscordStrategy = require('passport-discord').Strategy;
 
-var swStats = require('swagger-stats');    
-var swaggerSpec = require('../swagger.json');
 var maxAge = 900;
 /**
  * Steam strategy config
@@ -82,18 +80,6 @@ passport.deserializeUser(function (steamId, done) {
   });
 });
 
-/* SENTRY CONFIG */
-
-const Raven = require('raven');
-  Raven.config(process.env.SENTRY_DSN, {
-    autoBreadcrumbs: {
-      'console': true,
-    },
-    captureUnhandledRejections: true,
-  }).install();
-
-
-
 module.exports.http = {
 
   /****************************************************************************
@@ -109,8 +95,6 @@ module.exports.http = {
 
     passportInit: require('passport').initialize(),
     passportSession: require('passport').session(),
-    ravenRequestHandler: Raven.requestHandler(),
-    ravenErrorHandler: Raven.errorHandler(),
     xframe: require('lusca').xframe('SAMEORIGIN'),
 
     /***************************************************************************
@@ -121,8 +105,6 @@ module.exports.http = {
      ***************************************************************************/
 
     order: [
-      'ravenRequestHandler',
-      'swaggerStats',
       'cookieParser',
       'session',
       'passportInit',
@@ -132,7 +114,6 @@ module.exports.http = {
       'compress',
       'poweredBy',
       'router',
-      'ravenErrorHandler',
       'www',
       'favicon',
     ],
@@ -151,34 +132,6 @@ module.exports.http = {
     //   var middlewareFn = skipper({ strict: true });
     //   return middlewareFn;
     // })(),
-
-    swaggerStats: (function _configureSwaggerStats(){
-      let swsOptions = {
-        name: 'swagger-stats-sailsjs',
-        version: '0.1.0',
-        timelineBucketDuration: 60000,
-        swaggerSpec:swaggerSpec,
-        durationBuckets: [50, 100, 200, 500, 1000, 5000],
-        requestSizeBuckets: [500, 5000, 15000, 50000],
-        responseSizeBuckets: [600, 6000, 6000, 60000],
-        // Make sure both 50 and 50*4 are buckets in durationBuckets, 
-        // so Apdex could be calculated in Prometheus 
-        apdexThreshold: 50,    
-        onResponseFinish: function(req,res,rrr){
-          debug('onResponseFinish: %s', JSON.stringify(rrr));
-        },
-        authentication: true,
-        sessionMaxAge: maxAge,
-        onAuthenticate: function(req,username,password){
-            // simple check for username and password
-            if(username=== process.env.SWAG_U) {
-                return ((username ===  process.env.SWAG_U) && (password === process.env.SWAG_PW));
-            }
-            return false;
-    }
-      };
-      return swStats.getMiddleware(swsOptions);
-    })(),
 
   },
 
