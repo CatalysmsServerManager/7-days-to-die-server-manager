@@ -217,7 +217,7 @@ module.exports = {
      *                                                                          *
      ***************************************************************************/
     cookie: {
-      secure: true,
+      secure: false,
       maxAge: 24 * 60 * 60 * 1000 * 7, // 1 week
     },
 
@@ -381,7 +381,6 @@ module.exports = {
     // ```
     //--------------------------------------------------------------------------
 
-    discordFeedbackChannel: "442326331372601344",
     // How often should we gather system usage statistics in ms
     usageStatsInterval: 86400000, // 1 day
 
