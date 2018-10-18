@@ -49,7 +49,7 @@ if (process.env.REDISSTRING !== "") {
   useRedis = true;
 }
 
-module.exports = {
+let production = {
 
   hookTimeout: 900000,
 
@@ -77,13 +77,7 @@ module.exports = {
      *                                                                          *
      ***************************************************************************/
     default: {
-      adapter: 'sails-mysql',
       url: process.env.DBSTRING
-    },
-
-    cache: {
-      adapter: 'sails-redis',
-      url: useRedis ? process.env.REDISSTRING : undefined,
     },
 
   },
@@ -193,7 +187,8 @@ module.exports = {
      * > (For a full list, see https://sailsjs.com/plugins/sessions)            *
      *                                                                          *
      ***************************************************************************/
-   // url: useRedis ? process.env.REDISSTRING : undefined,
+
+
 
     /***************************************************************************
      *                                                                          *
@@ -386,3 +381,14 @@ module.exports = {
 
   },
 };
+
+if (process.env.REDISSTRING) {
+  production.datastores.cache = {
+    adapter: 'sails-redis',
+    url: process.env.REDISSTRING
+  }
+  production.session.adapter = "@sailshq/connect-redis"
+  production.session.url = process.env.REDISSTRING
+}
+
+module.exports = production;

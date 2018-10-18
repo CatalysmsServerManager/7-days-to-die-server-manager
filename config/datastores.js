@@ -13,12 +13,7 @@
  * https://sailsjs.com/config/datastores
  */
 
-let useRedis = false;
-if (process.env.REDISSTRING !== "") {
-  useRedis = true;
-}
-
-module.exports.datastores = {
+let datastores = {
 
 
   /***************************************************************************
@@ -58,9 +53,14 @@ module.exports.datastores = {
 
   },
 
-  cache: {
-    adapter: useRedis ? 'sails-redis': undefined,
-    url: useRedis ? process.env.REDISSTRING : undefined,
-  },
-
 };
+
+let useRedis = false;
+if (process.env.REDISSTRING) {
+  datastores.cache = {
+    adapter: 'sails-redis',
+    url: process.env.REDISSTRING
+  }
+}
+
+module.exports.datastores = datastores;
