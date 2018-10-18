@@ -33,7 +33,7 @@ module.exports.custom = {
 
   discordFeedbackChannel: "336823516383150080",
 
-  catalysmSteamId: "76561198028175941",
+  adminSteamId: "76561198028175941",
 
   // How often should we gather system usage statistics in ms
   usageStatsInterval: 5000, //86400000, // 1 day

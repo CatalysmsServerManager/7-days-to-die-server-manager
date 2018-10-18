@@ -85,7 +85,7 @@ module.exports = {
 
     if (!_.isUndefined(inputs.userId)) {
       let foundUser = await User.findOne(inputs.userId);
-      if (foundUser.steamId === sails.config.custom.catalysmSteamId) {
+      if (foundUser.steamId === sails.config.custom.adminSteamId) {
         foundRole = await Role.find({
           where: {
             server: inputs.serverId
