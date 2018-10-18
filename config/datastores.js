@@ -55,7 +55,6 @@ let datastores = {
 
 };
 
-let useRedis = false;
 if (process.env.REDISSTRING) {
   datastores.cache = {
     adapter: 'sails-redis',
