@@ -19,7 +19,7 @@
     "he": "^1.1.1",
     "lodash": "^4.17.10",
     "lusca": "^1.6.0",
-    "machinepack-7daystodiewebapi": "git+https://github.com/niekcandaele/machinepack-7Days-webapi.git",
+    "machinepack-7daystodiewebapi": "^0.3.2",
     "minimist": "^1.2.0",
     "moment": "^2.22.2",
     "node-schedule": "^1.3.0",
