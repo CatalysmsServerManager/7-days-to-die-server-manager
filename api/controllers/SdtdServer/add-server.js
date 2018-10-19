@@ -1,4 +1,5 @@
 const sevenDays = require('machinepack-7daystodiewebapi');
+const sevenDaysAPI = require('7daystodie-api-wrapper');
 
 module.exports = {
 
@@ -209,25 +210,19 @@ async function checkStats(sdtdServer) {
 }
 
 async function checkCommand(sdtdServer) {
-  return new Promise(resolve => {
-    sevenDays.executeCommand({
+  try {
+    let response = await sevenDaysAPI.executeConsoleCommand({
       ip: sdtdServer.ip,
       port: sdtdServer.webPort,
-      authName: sdtdServer.authName,
-      authToken: sdtdServer.authToken,
-      command: 'mem'
-    }).exec({
-      success: (response) => {
-        resolve(response);
-      },
-      error: (error) => {
-        resolve(false);
-      },
-      connectionRefused: error => {
-        resolve(false)
-      }
-    });
-  });
+      adminUser: sdtdServer.authName,
+      adminToken: sdtdServer.authToken
+    }, "mem");
+    return response;
+  } catch (error) {
+    sails.log.warn(error);
+    return false
+  }
+
 }
 
 async function checkIfServerExists(sdtdServerToAdd) {
@@ -242,6 +237,8 @@ async function checkIfServerExists(sdtdServerToAdd) {
     return false
   }
 }
+
+
 
 
 async function addServerToDb(sdtdServerToAdd) {
