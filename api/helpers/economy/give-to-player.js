@@ -62,8 +62,8 @@ module.exports = {
 
             return exits.success();
         } catch (error) {
-            sails.log.error(`HELPER economy:give-to-player - ${error}`);
-            return exits.error(error);
+            //sails.log.error(`HELPER economy:give-to-player - ${error}`);
+            //return exits.error(error);
         }
     }
 };

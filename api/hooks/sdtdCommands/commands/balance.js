@@ -14,7 +14,7 @@ class Balance extends SdtdCommand {
     async isEnabled(chatMessage, player, server, args) {
         return server.config.economyEnabled
       }
-    
+
 
     async run(chatMessage, player, server, args) {
 

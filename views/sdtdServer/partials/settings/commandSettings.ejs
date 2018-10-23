@@ -40,6 +40,8 @@
       Lets players create support tickets ingame. You can view these from the website.
     </p>
   </div>
+
+
   <div class="form-check">
     <label class="form-check-label">
       <input type="checkbox" class="form-check-input" name="input-settings-commands-playerTeleports-checkbox" id="input-settings-commands-playerTeleports-checkbox"
@@ -48,7 +50,74 @@
     <p class="form-text text-muted">
       CSMM's teleport system. Includes a suite of commands to set, remove, make public/private teleports.
     </p>
+    <div class="form-text" id="player-teleport-settings">
+      <hr>
+
+      <h4>Player teleport settings</h4>
+
+      <div class="form-group">
+        <label for="">Max locations that players can set</label>
+        <input type="text" class="form-control" name="inputs-settings-commands-playerteleports-maxlocations" id="inputs-settings-commands-playerteleports-maxlocations"
+          placeholder="<%= config.maxPlayerTeleportLocations %>">
+        <input name="inputs-settings-playerteleports-maxlocations-btn" id="inputs-settings-playerteleports-maxlocations-btn" class="btn btn-primary"
+          type="button" value="Set">
+      </div>
+
+      <div class="form-group">
+        <label for="">Time (in seconds) that a player has to wait before teleporting again</label>
+        <input type="text" class="form-control" name="inputs-settings-commands-playerteleports-timeout" id="inputs-settings-commands-playerteleports-timeout"
+          placeholder="<%= config.playerTeleportTimeout %>">
+        <input name="inputs-settings-playerteleports-timeout-btn" id="inputs-settings-playerteleports-timeout-btn" class="btn btn-primary"
+          type="button" value="Set">
+      </div>
+
+      <div class="form-group">
+        <label for="">Time (in seconds) that a teleport will be delayed. This makes sure players cannot use tele to escape a dire situation.</label>
+        <input type="text" class="form-control" name="inputs-settings-commands-playerteleports-delay" id="inputs-settings-commands-playerteleports-delay"
+          placeholder="<%= config.playerTeleportDelay %>">
+        <input name="inputs-settings-playerteleports-delay-btn" id="inputs-settings-playerteleports-delay-btn" class="btn btn-primary"
+          type="button" value="Set">
+      </div>
+    </div>
   </div>
+
+
+
+  <div class="form-check">
+    <label class="form-check-label">
+      <input type="checkbox" class="form-check-input" name="input-settings-commands-vote-checkbox" id="input-settings-commands-vote-checkbox"> Vote - lets players vote for your server directly In-Game
+    </label>
+    <p class="form-text text-muted">
+      CSMM's In-Game Voting system. Includes a suite of commands to set, serverKey and possible Currency Reward.
+    </p>
+        <div class="form-text" id="vote-for-server-settings">
+        <hr>
+
+        <h4>Vote for server settings</h4>
+
+        <div class="form-group">
+          <label for="">Your server API KEY for (7daystodie-servers.com)</label>
+          <p class="form-text text-muted">*You can add more than one server, by separating them with a semicolon ";" IMPORTANT: Note that the Currency reward will only be attributed for EACH server.</p>
+          <input type="text" class="form-control" name="inputs-settings-commands-server-key-for-vote" id="inputs-settings-commands-server-key-for-vote"
+            placeholder="<%= config.voteForServerServerKey %>">
+          <input name="inputs-settings-server-key-for-vote-btn" id="inputs-settings-server-key-for-vote-btn" class="btn btn-primary"
+            type="button" value="Set">
+        </div>
+
+        <div class="form-group">
+          <label for="">Currency Reward (Only applicable if the Economy system is Active)</label>
+          <input type="text" class="form-control" name="inputs-settings-commands-vote-reward" id="inputs-settings-commands-vote-reward"
+            placeholder="<%= config.voteForServerCurrencyReward %>">
+          <input name="inputs-settings-vote-reward-btn" id="inputs-settings-vote-reward-btn" class="btn btn-primary"
+            type="button" value="Set">
+        </div>
+
+      </div>
+  </div>
+
+
+
+
 
   <div class="form-check">
     <label class="form-check-label">
@@ -56,36 +125,12 @@
     </label>
   </div>
 
-  <div id="player-teleport-settings">
-    <hr>
 
-    <h4>Player teleport settings</h4>
 
-    <div class="form-group">
-      <label for="">Max locations that players can set</label>
-      <input type="text" class="form-control" name="inputs-settings-commands-playerteleports-maxlocations" id="inputs-settings-commands-playerteleports-maxlocations"
-        placeholder="<%= config.maxPlayerTeleportLocations %>">
-      <input name="inputs-settings-playerteleports-maxlocations-btn" id="inputs-settings-playerteleports-maxlocations-btn" class="btn btn-primary"
-        type="button" value="Set">
-    </div>
 
-    <div class="form-group">
-      <label for="">Time (in seconds) that a player has to wait before teleporting again</label>
-      <input type="text" class="form-control" name="inputs-settings-commands-playerteleports-timeout" id="inputs-settings-commands-playerteleports-timeout"
-        placeholder="<%= config.playerTeleportTimeout %>">
-      <input name="inputs-settings-playerteleports-timeout-btn" id="inputs-settings-playerteleports-timeout-btn" class="btn btn-primary"
-        type="button" value="Set">
-    </div>
 
-    <div class="form-group">
-      <label for="">Time (in seconds) that a teleport will be delayed. This makes sure players cannot use tele to escape a dire situation.</label>
-      <input type="text" class="form-control" name="inputs-settings-commands-playerteleports-delay" id="inputs-settings-commands-playerteleports-delay"
-        placeholder="<%= config.playerTeleportDelay %>">
-      <input name="inputs-settings-playerteleports-delay-btn" id="inputs-settings-playerteleports-delay-btn" class="btn btn-primary"
-        type="button" value="Set">
-    </div>
 
-  </div>
+
 
 
   <hr>
@@ -192,6 +237,10 @@
 
       $("#input-settings-commands-who-checkbox").prop('checked', <%= config.enabledWho %>);
 
+      $("#input-settings-commands-vote-checkbox").prop('checked', <%= config.enabledVote %>);
+      if(<%= config.enabledVote %>){}
+      else{ $("#vote-for-server-settings").hide(); }
+
       $.get('/api/sdtdserver/commands', {
         serverId: window.SAILS_LOCALS.server.id
       }, status => {
@@ -221,6 +270,7 @@
           $("#player-teleport-settings").hide();
         }
       })
+
     }
 
     updateCommandsStatus()
@@ -237,7 +287,7 @@
           status: newStatus
         },
         success: (data, status, xhr) => {
-          
+
         },
         error: (xhr, status, error) => {
           alert(`Error while setting status of who, check console for more details!`)
@@ -245,6 +295,67 @@
         }
       })
     })
+
+    $("#input-settings-commands-vote-checkbox").change(e => {
+      let newStatus = $(e.target).prop('checked');
+
+      $.ajax({
+        url: '/api/sdtdserver/commands/vote',
+        method: 'POST',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+          status: newStatus
+        },
+        success: (data, status, xhr) => {
+          if(newStatus) $("#vote-for-server-settings").fadeIn();
+          else $("#vote-for-server-settings").fadeOut();
+        },
+        error: (xhr, status, error) => {
+          alert(`Error while setting status of vote, check console for more details!`)
+          console.log(xhr)
+        }
+      })
+    })
+
+    $('#inputs-settings-server-key-for-vote-btn').click(e => {
+      e.preventDefault();
+      let newValue = $('#inputs-settings-commands-server-key-for-vote').val();
+
+      $.ajax({
+        url: '/api/sdtdserver/commands/vote/serverkey',
+        method: 'POST',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+          serverKey: newValue
+        },
+        error: e => {
+          console.log(e);
+          alert('Error! ' + e)
+        }
+      })
+    })
+
+    $('#inputs-settings-vote-reward-btn').click(e => {
+      e.preventDefault();
+      let newValue = $('#inputs-settings-commands-vote-reward').val();
+      $.ajax({
+        url: '/api/sdtdserver/commands/vote/reward',
+        method: 'POST',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+          rewardAmount: newValue
+        },
+        error: e => {
+          console.log(e);
+          alert('Error! ' + e)
+        }
+      })
+    })
+
+
 
     $('#settings-disable-commands-btn').click(e => {
       e.preventDefault();

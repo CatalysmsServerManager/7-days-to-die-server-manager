@@ -48,7 +48,7 @@ let datastores = {
      *    (See https://sailsjs.com/config/datastores for help.)                 *
      *                                                                          *
      ***************************************************************************/
-    adapter: require('sails-mysql'),
+    adapter: require('sails-disk'),
     url: process.env.DBSTRING
 
   },

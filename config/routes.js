@@ -175,7 +175,7 @@ module.exports.routes = {
 
   'post /api/role/player' : "roleController/add-player",
   'delete /api/role/player': "roleController/remove-player",
-  
+
   // Economy
 
   'post /api/sdtdserver/economy': 'SdtdServerController/economy.enable-economy',
@@ -312,6 +312,10 @@ module.exports.routes = {
 
   'post /api/sdtdserver/commands/who': "SdtdServerController/commands.set-status-who",
 
+  'post /api/sdtdserver/commands/vote': "SdtdServerController/commands.set-vote-status",
+  'post /api/sdtdserver/commands/vote/serverkey': "SdtdServerController/commands.set-vote-server-key",
+  'post /api/sdtdserver/commands/vote/reward': "SdtdServerController/commands.set-vote-reward",
+
   'post /api/sdtdserver/commands/playerteleports': "SdtdServerController/commands.enable-player-teleports",
   'delete /api/sdtdserver/commands/playerteleports': "SdtdServerController/commands.disable-player-teleports",
   'get /api/sdtdserver/commands/playerteleports': "SdtdServerController/commands.get-player-teleports",
@@ -324,7 +328,7 @@ module.exports.routes = {
 
   'post /api/sdtdserver/commands/playerteleports/delay': 'SdtdServerController/commands.set-teleport-delay',
 
-  // Player teleports 
+  // Player teleports
 
   'get /api/sdtdserver/playerteleports': "player-teleport.get-teleports",
 
