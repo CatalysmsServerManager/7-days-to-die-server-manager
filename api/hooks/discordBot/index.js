@@ -25,6 +25,7 @@ module.exports = function discordBot(sails) {
      */
     initialize: function (cb) {
       sails.on('hook:orm:loaded', function () {
+        cb();
         sails.log.info('Initializing custom hook (`discordBot`)');
           client = new Commando.Client({
             owner: sails.config.custom.botOwners,
@@ -109,7 +110,7 @@ module.exports = function discordBot(sails) {
                 name: presenceTextToSet
               }})
             }, 60000)
-            return cb();
+         
           })
             .catch((err) => {
               sails.log.error(err);
