@@ -57,22 +57,22 @@ module.exports = {
             }
 
             if (!player) {
-                return exits.notLoggedIn('Not a valid player profile. Make sure you have logged in to this server. If you think this message is a mistake, please report this issue.')
+                return exits.notLoggedIn('Not a valid player profile. Make sure you have logged in to this server. You should also try logging out and back in to CSMM. If you think this message is a mistake, please report this issue.')
             }
 
             let unclaimedItems = await PlayerClaimItem.find({player: player.id, claimed: false});
 
             let isAdmin = false;
 
-            if (server.owner === user.id) {
-                isAdmin = true
-            }
+            let permCheck = await sails.helpers.roles.checkPermission.with({
+                userId: user.id,
+                serverId: server.id,
+                permission: 'manageEconomy'
+              });
 
-            server.admins.forEach(adminProfile => {
-                if (adminProfile.id === user.id) {
-                    isAdmin = true
-                }
-            })
+              if (permCheck.hasPermission) {
+                  isAdmin = true
+              }
 
             server = _.omit(server, 'authName', 'authToken', 'webPort')
 
