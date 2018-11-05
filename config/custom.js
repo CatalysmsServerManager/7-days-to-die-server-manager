@@ -26,7 +26,7 @@ module.exports.custom = {
 
 
   // Discord bot config
-  botOwners: ['220554523561820160', '252369082991509514'],
+  botOwners: ['220554523561820160', '252369082991509514', "250381843482935308"],
   botToken: process.env.DISCORDBOTTOKEN,
   botEmbedLink: `${process.env.CSMM_HOSTNAME}`,
   botEmbedTitle: 'CSMM',
