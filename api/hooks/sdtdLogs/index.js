@@ -1,4 +1,6 @@
 var sevenDays = require('machinepack-7daystodiewebapi');
+const LoggingObject = require('./LoggingObject');
+const EventEmitter = require('events');
 
 /**
  * @module 7dtdLoggingHook
@@ -56,8 +58,8 @@ module.exports = function sdtdLogs(sails) {
           await SdtdConfig.update({
             server: serverID
           }, {
-              loggingEnabled: true
-            });
+            loggingEnabled: true
+          });
           let loggingObj = await createLogObject(serverID);
           loggingInfoMap.set(serverID, loggingObj);
           sails.hooks.playertracking.start(serverID);
@@ -88,8 +90,8 @@ module.exports = function sdtdLogs(sails) {
           await SdtdConfig.update({
             server: serverID
           }, {
-              loggingEnabled: false
-            });
+            loggingEnabled: false
+          });
           let loggingObj = loggingInfoMap.get(serverID);
           loggingInfoMap.delete(serverID);
           return loggingObj.stop();
@@ -138,9 +140,16 @@ module.exports = function sdtdLogs(sails) {
    * @private
    */
 
-  function createLogObject(serverID) {
-    return new Promise(async (resolve, reject) => {
-      let server = await SdtdServer.findOne(serverID);
+  async function createLogObject(serverID) {
+
+    let server = await SdtdServer.findOne(serverID);
+
+    let eventEmitter = new EventEmitter;
+
+    let version = await sails.helpers.sdtd.checkModVersion('Game version', server.id);
+    if (version === "Alpha 17") {
+      eventEmitter = new LoggingObject(server.ip, server.webPort, server.authName, server.authToken);
+    } else {
       sevenDays.startLoggingEvents({
         ip: server.ip,
         port: server.webPort,
@@ -150,90 +159,96 @@ module.exports = function sdtdLogs(sails) {
         error: function (error) {
           reject(error);
         },
-        success: (eventEmitter) => {
-
-          eventEmitter.on('logLine', function (logLine) {
-            logLine.server = _.omit(server, "authName", "authToken");
-            sails.sockets.broadcast(server.id, 'logLine', logLine);
-          });
-
-          eventEmitter.on('chatMessage', function (chatMessage) {
-            chatMessage.server = _.omit(server, "authName", "authToken");
-            sails.sockets.broadcast(server.id, 'chatMessage', chatMessage);
-            sails.log.verbose(`Detected a chat message`, chatMessage);
-          });
-
-          eventEmitter.on('playerConnected', async function (connectedMsg) {
-            connectedMsg.server = _.omit(server, "authName", "authToken");
-            let playerData = await sails.helpers.sdtd.loadPlayerData(server.id, connectedMsg.steamID);
-            connectedMsg.player = playerData[0];
-            await sails.hooks.discordnotifications.sendNotification({
-              serverId: server.id,
-              notificationType: 'playerConnected',
-              player: playerData[0]
-            })
-            if (connectedMsg.country != null) {
-              await Player.update({ server: server.id, steamId: connectedMsg.steamID }, { country: connectedMsg.country })
-            }
-            sails.sockets.broadcast(server.id, 'playerConnected', connectedMsg);
-            sails.log.verbose(`Detected a player connected`, connectedMsg);
-          });
-
-          eventEmitter.on('playerDisconnected', async function (disconnectedMsg) {
-            disconnectedMsg.server = _.omit(server, "authName", "authToken");
-            let playerData = await sails.helpers.sdtd.loadPlayerData(server.id, disconnectedMsg.playerID);
-            disconnectedMsg.player = playerData[0]
-            await sails.hooks.discordnotifications.sendNotification({
-              serverId: server.id,
-              notificationType: 'playerDisconnected',
-              player: playerData[0]
-            })
-            sails.sockets.broadcast(server.id, 'playerDisconnected', disconnectedMsg);
-            sails.log.verbose(`Detected a player disconnected`, disconnectedMsg);
-          });
-
-          eventEmitter.on('connectionLost', async function (eventMsg) {
-            if (eventMsg) {
-              eventMsg.server = _.omit(server, "authName", "authToken");;
-            }
-
-            sails.sockets.broadcast(server.id, 'connectionLost', eventMsg);
-            await sails.hooks.discordnotifications.sendNotification({
-              serverId: server.id,
-              notificationType: 'connectionLost',
-              msg: eventMsg
-            })
-            sails.log.debug(`Lost connection to server ${server.name}`);
-          });
-
-          eventEmitter.on('connected', async function (eventMsg) {
-            if (eventMsg) {
-              eventMsg.server = _.omit(server, "authName", "authToken");;
-            }
-
-            sails.sockets.broadcast(server.id, 'connected', eventMsg);
-            await sails.hooks.discordnotifications.sendNotification({
-              serverId: server.id,
-              notificationType: 'connected'
-            })
-
-            sails.log.debug(`Connected to server ${server.name}`);
-          });
-
-          eventEmitter.on('playerDeath', function (deathMessage) {
-            deathMessage.server = _.omit(server, "authName", "authToken");;
-            sails.sockets.broadcast(server.id, 'playerDeath', deathMessage);
-          });
-
-          eventEmitter.on('memUpdate', (memUpdate) => {
-            memUpdate.server = _.omit(server, "authName", "authToken");;
-            sails.sockets.broadcast(server.id, 'memUpdate', memUpdate);
-          })
-          resolve(eventEmitter);
+        success: (logObj) => {
+          eventEmitter = logObj;
         }
       });
+    }
 
-    })
+    eventEmitter.on('logLine', function (logLine) {
+      logLine.server = _.omit(server, "authName", "authToken");
+      sails.sockets.broadcast(server.id, 'logLine', logLine);
+    });
+
+    eventEmitter.on('chatMessage', function (chatMessage) {
+      chatMessage.server = _.omit(server, "authName", "authToken");
+      sails.sockets.broadcast(server.id, 'chatMessage', chatMessage);
+      sails.log.verbose(`Detected a chat message`, chatMessage);
+    });
+
+    eventEmitter.on('playerConnected', async function (connectedMsg) {
+      connectedMsg.server = _.omit(server, "authName", "authToken");
+      let playerData = await sails.helpers.sdtd.loadPlayerData(server.id, connectedMsg.steamID);
+      connectedMsg.player = playerData[0];
+      await sails.hooks.discordnotifications.sendNotification({
+        serverId: server.id,
+        notificationType: 'playerConnected',
+        player: playerData[0]
+      })
+      if (connectedMsg.country != null) {
+        await Player.update({
+          server: server.id,
+          steamId: connectedMsg.steamID
+        }, {
+          country: connectedMsg.country
+        })
+      }
+      sails.sockets.broadcast(server.id, 'playerConnected', connectedMsg);
+      sails.log.verbose(`Detected a player connected`, connectedMsg);
+    });
+
+    eventEmitter.on('playerDisconnected', async function (disconnectedMsg) {
+      disconnectedMsg.server = _.omit(server, "authName", "authToken");
+      let playerData = await sails.helpers.sdtd.loadPlayerData(server.id, disconnectedMsg.playerID);
+      disconnectedMsg.player = playerData[0]
+      await sails.hooks.discordnotifications.sendNotification({
+        serverId: server.id,
+        notificationType: 'playerDisconnected',
+        player: playerData[0]
+      })
+      sails.sockets.broadcast(server.id, 'playerDisconnected', disconnectedMsg);
+      sails.log.verbose(`Detected a player disconnected`, disconnectedMsg);
+    });
+
+    eventEmitter.on('connectionLost', async function (eventMsg) {
+      if (eventMsg) {
+        eventMsg.server = _.omit(server, "authName", "authToken");;
+      }
+
+      sails.sockets.broadcast(server.id, 'connectionLost', eventMsg);
+      await sails.hooks.discordnotifications.sendNotification({
+        serverId: server.id,
+        notificationType: 'connectionLost',
+        msg: eventMsg
+      })
+      sails.log.debug(`Lost connection to server ${server.name}`);
+    });
+
+    eventEmitter.on('connected', async function (eventMsg) {
+      if (eventMsg) {
+        eventMsg.server = _.omit(server, "authName", "authToken");;
+      }
+
+      sails.sockets.broadcast(server.id, 'connected', eventMsg);
+      await sails.hooks.discordnotifications.sendNotification({
+        serverId: server.id,
+        notificationType: 'connected'
+      })
+
+      sails.log.debug(`Connected to server ${server.name}`);
+    });
+
+    eventEmitter.on('playerDeath', function (deathMessage) {
+      deathMessage.server = _.omit(server, "authName", "authToken");;
+      sails.sockets.broadcast(server.id, 'playerDeath', deathMessage);
+    });
+
+    eventEmitter.on('memUpdate', (memUpdate) => {
+      memUpdate.server = _.omit(server, "authName", "authToken");;
+      sails.sockets.broadcast(server.id, 'memUpdate', memUpdate);
+    });
+
+    return eventEmitter;
   }
 
 
