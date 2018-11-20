@@ -45,7 +45,8 @@ module.exports = (logLine) => {
 
   }
 
-  if (_.startsWith(logLine.msg, 'Chat')) {
+  // A17 Chat
+  if (_.startsWith(logLine.msg, 'Chat') && logLine.msg.includes("(from")) {
     /*
     { 
        date: '2018-11-20',
@@ -69,9 +70,65 @@ module.exports = (logLine) => {
 
     returnValue.type = 'chatMessage';
     returnValue.data = data;
-
-
   }
+
+  // pre A17 chat
+  if (_.startsWith(logLine.msg, 'Chat:')) {
+    /*
+    {
+      "date": "2017-11-14",
+      "time": "14:50:39",
+      "uptime": "123.278",
+      "msg": "Chat: 'Catalysm': hey",
+      "trace": "",
+      "type": "Log"
+    }
+    */
+
+    let firstIdx = logLine.msg.indexOf('\'');
+    let secondIdx = logLine.msg.indexOf('\'', firstIdx + 1)
+    let playerName = logLine.msg.slice(firstIdx + 1, secondIdx)
+    let messageText = logLine.msg.slice(secondIdx + 3, logLine.msg.length)
+
+    let date = logLine.date
+    let time = logLine.time
+    let type = "chat"
+    if (playerName == 'Server') {
+        type = "server"
+    }
+
+    /*
+    Workaround for when the server uses servertools roles
+    Server tools 
+    */
+    if (playerName.includes('[-]') && playerName.includes("](")) {
+        let roleColourDividerIndex = playerName.indexOf("](")
+        let roleEndIndex = playerName.indexOf(")", roleColourDividerIndex);
+        let newPlayerName = playerName.substring(roleEndIndex + 2).replace('[-]', '');
+        playerName = newPlayerName;
+    }
+
+    /**
+     * Workaround for coppi colours (with the colour ending indicator [-])
+     */
+
+     if (playerName.includes('[-]')) {
+        let colourEndIdx = playerName.indexOf("]");
+        let newPlayerName = playerName.substring(colourEndIdx + 1).replace('[-]', '');
+        playerName = newPlayerName
+     }
+
+    let data = {
+        playerName,
+        messageText,
+        type,
+        date,
+        time
+    };
+
+    returnValue.type = 'chatMessage';
+    returnValue.data = data;
+}
 
   if (_.startsWith(logLine.msg, 'Player connected,')) {
     /*

@@ -2,11 +2,14 @@ const SdtdApi = require('7daystodie-api-wrapper');
 const EventEmitter = require('events');
 const handleLogLine = require('./handleLogLine');
 
+var sevenDays = require('machinepack-7daystodiewebapi');
+
 class LoggingObject extends EventEmitter {
 
-  constructor(ip, port, authName, authToken, intervalTime = 2000) {
+  constructor(ip, port, authName, authToken, serverId, intervalTime = 2000) {
     super();
     this.server = {
+      id: serverId,
       ip: ip,
       port: port,
       adminUser: authName,
@@ -18,6 +21,7 @@ class LoggingObject extends EventEmitter {
   }
 
   async init() {
+
     // Get the latest log line
     let webUIUpdate;
     let lastLogLine;
@@ -64,8 +68,6 @@ class LoggingObject extends EventEmitter {
     }, this.intervalTime)
 
   }
-
-
 
 }
 

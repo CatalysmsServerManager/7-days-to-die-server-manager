@@ -144,33 +144,10 @@ module.exports = function sdtdLogs(sails) {
 
     let server = await SdtdServer.findOne(serverID);
 
-    let eventEmitter = new EventEmitter;
-    let version;
-
-    try {
-      version = await sails.helpers.sdtd.checkModVersion('Game version', server.id);
-    } catch (error) {
-      sails.log.warn(`Could not determine version info of server ${serverID} during logging initialization - defaulting to pre A17 logging code.`);
-    }
-    if (version === "Alpha 17") {
-      eventEmitter = new LoggingObject(server.ip, server.webPort, server.authName, server.authToken);
-    } else {
-      sevenDays.startLoggingEvents({
-        ip: server.ip,
-        port: server.webPort,
-        authName: server.authName,
-        authToken: server.authToken,
-      }).exec({
-        error: function (error) {
-          reject(error);
-        },
-        success: (logObj) => {
-          eventEmitter = logObj;
-        }
-      });
-    }
+    let eventEmitter = new LoggingObject(server.ip, server.webPort, server.authName, server.authToken, serverID);
 
     eventEmitter.on('logLine', function (logLine) {
+      console.log(logLine)
       logLine.server = _.omit(server, "authName", "authToken");
       sails.sockets.broadcast(server.id, 'logLine', logLine);
     });
