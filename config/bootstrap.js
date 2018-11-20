@@ -13,6 +13,11 @@ module.exports.bootstrap = async function(done) {
 
   await sails.helpers.meta.startUsageStatsGathering();
   sails.log.info(`Started the system stats gathering interval`);
+  if (process.env.REDISSTRING === "" || process.env.REDISSTRING === undefined) {
+    sails.log.warn(`Not using redis as cache. Defaulting to in-memory caching. Be aware that this is not ideal for production environments!`);
+    sails.cache = new Object();
+  }
+
 
   // It's very important to trigger this callback method when you are finished
   // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)

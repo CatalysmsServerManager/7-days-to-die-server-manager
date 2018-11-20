@@ -90,7 +90,7 @@ module.exports = function definePlayerTrackingHook(sails) {
 
         }
 
-        let currentCycles = await getTrackingCyclesCompleted(server.id);
+        let currentCycles = await sails.helpers.redis.get(`server:${serverId}:trackingCyclesCompleted`);
 
         if (!currentCycles) {
           currentCycles = 1
@@ -99,14 +99,14 @@ module.exports = function definePlayerTrackingHook(sails) {
         if (currentCycles >= sails.config.custom.trackingCyclesBeforeDelete) {
           await deleteLocationData(server);
           // await deleteInventoryData(server);
-          await setTrackingCyclesCompleted(server.id, 0)
+          await sails.helpers.redis.set(`server:${serverId}:trackingCyclesCompleted`, 0);
         } else {
-          await setTrackingCyclesCompleted(server.id, currentCycles + 1)
+          await sails.helpers.redis.set(`server:${serverId}:trackingCyclesCompleted`, currentCycles + 1);
         }
 
         let dateEnded = new Date();
         sails.log.verbose(`Received memUpdate - Performed tracking for server ${server.name} - ${playerRecords.length} players online - ${currentCycles}/${sails.config.custom.trackingCyclesBeforeDelete} tracking cycles - took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`);
-      })
+      });
 
     },
 
@@ -363,38 +363,4 @@ async function deleteInventoryData(server) {
   } catch (error) {
     sails.log.error(error)
   }
-}
-
-
-
-function getTrackingCyclesCompleted(serverId) {
-  return new Promise(async (resolve, reject) => {
-
-    sails.getDatastore('cache').leaseConnection(function during(redisConnection, proceed) {
-      redisConnection.get(`server:${serverId}:trackingCyclesCompleted`, (err, reply) => {
-        if (err) return proceed(err);
-
-        return proceed(undefined, reply)
-      })
-    }).exec((err, result) => {
-      if (err) return reject(err);
-      resolve(parseInt(result));
-    })
-  })
-}
-
-function setTrackingCyclesCompleted(serverId, cyclesCompleted) {
-  return new Promise(async (resolve, reject) => {
-
-    sails.getDatastore('cache').leaseConnection(function during(redisConnection, proceed) {
-      redisConnection.set(`server:${serverId}:trackingCyclesCompleted`, cyclesCompleted, (err, reply) => {
-        if (err) return proceed(err);
-
-        return proceed(undefined, reply)
-      })
-    }).exec((err, result) => {
-      if (err) return reject(err);
-      resolve(result)
-    })
-  })
 }
