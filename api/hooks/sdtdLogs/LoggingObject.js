@@ -19,15 +19,41 @@ class LoggingObject extends EventEmitter {
 
   async init() {
     // Get the latest log line
-    let webUIUpdate = await SdtdApi.getWebUIUpdates(this.server);
-    let lastLogLine = webUIUpdate.newlogs;
+    let webUIUpdate;
+    let lastLogLine;
+    try {
+      webUIUpdate = await SdtdApi.getWebUIUpdates(this.server);
+      lastLogLine = webUIUpdate.newlogs;
 
+    } catch (error) {
+      sails.log.debug(`Error when getting logs for server with ip ${this.server.ip} - ${error}`);
+    }
+
+    let failed = false;
     // Get new logs in a timed interval
     this.requestInterval = setInterval(async () => {
-      let newLogs = await SdtdApi.getLog(this.server, lastLogLine);
-      
+      let newLogs = {};
+
+      if (failed) {
+        try {
+          webUIUpdate = await SdtdApi.getWebUIUpdates(this.server);
+          lastLogLine = webUIUpdate.newlogs;
+          failed = false;
+        } catch (error) {
+          sails.log.debug(`Error when getting logs for server with ip ${this.server.ip} - ${error}`);
+        }
+
+      }
+
+      try {
+        newLogs = await SdtdApi.getLog(this.server, lastLogLine);
+      } catch (error) {
+        sails.log.debug(`Error when getting logs for server with ip ${this.server.ip} - ${error}`);
+        failed = true;
+        newLogs.entries = [];
+      }
+
       _.each(newLogs.entries, line => {
-        console.log(line);
         let parsedLogLine = handleLogLine(line);
 
         this.emit(parsedLogLine.type, parsedLogLine.data);

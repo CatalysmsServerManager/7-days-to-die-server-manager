@@ -145,8 +145,13 @@ module.exports = function sdtdLogs(sails) {
     let server = await SdtdServer.findOne(serverID);
 
     let eventEmitter = new EventEmitter;
+    let version;
 
-    let version = await sails.helpers.sdtd.checkModVersion('Game version', server.id);
+    try {
+      version = await sails.helpers.sdtd.checkModVersion('Game version', server.id);
+    } catch (error) {
+      sails.log.warn(`Could not determine version info of server ${serverID} during logging initialization - defaulting to pre A17 logging code.`);
+    }
     if (version === "Alpha 17") {
       eventEmitter = new LoggingObject(server.ip, server.webPort, server.authName, server.authToken);
     } else {
