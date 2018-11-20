@@ -71,7 +71,8 @@ module.exports = {
         })
       }
     } else {
-      return exits.success(sails.cache[inputs.keyString]);
+      sails.cache[inputs.keyString] = inputs.value;
+      return;
     }
 
   }

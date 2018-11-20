@@ -44,7 +44,7 @@ class LoggingObject extends EventEmitter {
           lastLogLine = webUIUpdate.newlogs;
           failed = false;
         } catch (error) {
-          sails.log.debug(`Error when getting logs for server with ip ${this.server.ip} - ${error}`);
+          //sails.log.debug(`Error when getting logs for server with ip ${this.server.ip} - ${error}`);
         }
 
       }
@@ -52,7 +52,7 @@ class LoggingObject extends EventEmitter {
       try {
         newLogs = await SdtdApi.getLog(this.server, lastLogLine);
       } catch (error) {
-        sails.log.debug(`Error when getting logs for server with ip ${this.server.ip} - ${error}`);
+        //sails.log.debug(`Error when getting logs for server with ip ${this.server.ip} - ${error}`);
         failed = true;
         newLogs.entries = [];
       }

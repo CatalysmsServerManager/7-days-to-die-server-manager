@@ -91,7 +91,8 @@ module.exports = function definePlayerTrackingHook(sails) {
         }
 
         let currentCycles = await sails.helpers.redis.get(`server:${serverId}:trackingCyclesCompleted`);
-
+        currentCycles = parseInt(currentCycles);
+  
         if (!currentCycles) {
           currentCycles = 1
         }
