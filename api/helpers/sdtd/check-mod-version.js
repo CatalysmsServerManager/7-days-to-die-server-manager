@@ -47,7 +47,6 @@ module.exports = {
     let modsArray = versionResult.result.replace('\r', '').split('\n');
 
     let versionToFindLine = new String();
-
     for (const modLine of modsArray) {
       if (modLine.startsWith(inputs.modName)) {
         versionToFindLine = modLine
@@ -56,10 +55,14 @@ module.exports = {
 
     let splitVersionLine = versionToFindLine.split(":");
 
+    if (inputs.modName === "Game version") {
+      return exits.success(_.trim(splitVersionLine[splitVersionLine.length - 1]))
+    }
+
     let versionNumber = _.trim(splitVersionLine[splitVersionLine.length - 1]);
-      if (versionNumber === '') {
-        versionNumber = 0
-      }
+    if (versionNumber === '') {
+      versionNumber = 0
+    }
 
     // All done.
     return exits.success(parseFloat(versionNumber));
@@ -68,4 +71,3 @@ module.exports = {
 
 
 };
-
