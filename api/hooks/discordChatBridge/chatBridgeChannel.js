@@ -77,7 +77,6 @@ class ChatBridgeChannel {
   }
 
   sendChatMessageToDiscord(chatMessage) {
-
     let blockedPrefixes = this.config.chatChannelBlockedPrefixes;
 
     let messageStartsWithABlockedPrefix = (message) => {

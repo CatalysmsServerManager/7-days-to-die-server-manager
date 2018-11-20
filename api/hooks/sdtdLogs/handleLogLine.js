@@ -64,7 +64,7 @@ module.exports = (logLine) => {
       entityId: splitMessage[3],
       channel: splitMessage[5],
       playerName: splitMessage[7],
-      messageText: splitMessage.slice(9).join('\'')
+      messageText: splitMessage.slice(8).join(' ').replace(": ", "")
     }
 
     returnValue.type = 'chatMessage';

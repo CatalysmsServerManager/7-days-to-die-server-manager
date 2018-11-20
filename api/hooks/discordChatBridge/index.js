@@ -105,12 +105,11 @@ module.exports = function SdtdDiscordChatBridge(sails) {
         throw new Error(`Tried to start chatbridge for server without config`);
       }
 
-      if (config.chatChannelId == 0) {
-        return
+      if (config.chatChannelId === 0) {
+        return;
       }
 
       let server = await SdtdServer.findOne(serverId);
-      let guild = discordClient.guilds.get(config.discordGuildId);
       let textChannel = discordClient.channels.get(config.chatChannelId);
 
       if (_.isUndefined(server)) {
@@ -118,7 +117,8 @@ module.exports = function SdtdDiscordChatBridge(sails) {
       }
 
       if (_.isUndefined(textChannel)) {
-        return
+        sails.log.error(`Tried starting chatbridge for an unknown Discord text channel ${textChannel}`);
+        return;
       }
 
       let oldChat = getChatBridge(serverId);
@@ -129,7 +129,7 @@ module.exports = function SdtdDiscordChatBridge(sails) {
 
       let chatBridge = new ChatBridgeChannel(textChannel, server);
       setChatBridge(serverId, chatBridge)
-      return
+      return;
     } catch (error) {
       sails.log.error(`HOOK SdtdDiscordChatBridge:start - ${error}`);
       throw error;
