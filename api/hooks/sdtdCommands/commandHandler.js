@@ -82,8 +82,14 @@ class CommandHandler {
         if (chatMessage.playerName === "Server") {
           return
         }
-
-        let player = await Player.find({ name: he.encode(_.trim(chatMessage.playerName)), server: this.config.server });
+        let player;
+        let version = await sails.helpers.sdtd.checkModVersion('Game version', this.config.server);
+        if (version === "Alpha 17") {
+          player = await Player.find({ steamId: chatMessage.steamId, server: this.config.server });
+        } else {
+          player = await Player.find({ name: he.encode(_.trim(chatMessage.playerName)), server: this.config.server });
+        }
+        
 
         if (player.length === 0) {
           sails.log.warn(`Did not find player data...`, chatMessage);
