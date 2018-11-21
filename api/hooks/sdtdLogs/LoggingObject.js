@@ -57,10 +57,11 @@ class LoggingObject extends EventEmitter {
         newLogs.entries = [];
       }
 
-      _.each(newLogs.entries, line => {
+      _.each(newLogs.entries, async line => {
         let parsedLogLine = handleLogLine(line);
-
-        this.emit(parsedLogLine.type, parsedLogLine.data);
+        if (parsedLogLine) {
+          this.emit(parsedLogLine.type, parsedLogLine.data);
+        }
 
       });
 

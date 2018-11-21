@@ -60,12 +60,21 @@ module.exports = (logLine) => {
 
     let splitMessage = logLine.msg.split('\'');
 
+    if (logLine.msg.includes('Chat handled by mod')) {
+      splitMessage = splitMessage.slice(2);
+    }
+
     let data = {
       steamId: splitMessage[1],
       entityId: splitMessage[3],
       channel: splitMessage[5],
       playerName: splitMessage[7],
       messageText: splitMessage.slice(8).join(' ').replace(": ", "")
+    };
+
+    if (data.steamId === "-non-player-" && data.playerName !== 'Server') {
+      sails.log.debug(`Discarding duplicate chat message`, data);
+      return;
     }
 
     returnValue.type = 'chatMessage';
@@ -94,7 +103,7 @@ module.exports = (logLine) => {
     let time = logLine.time
     let type = "chat"
     if (playerName == 'Server') {
-        type = "server"
+      type = "server"
     }
 
     /*
@@ -102,33 +111,33 @@ module.exports = (logLine) => {
     Server tools 
     */
     if (playerName.includes('[-]') && playerName.includes("](")) {
-        let roleColourDividerIndex = playerName.indexOf("](")
-        let roleEndIndex = playerName.indexOf(")", roleColourDividerIndex);
-        let newPlayerName = playerName.substring(roleEndIndex + 2).replace('[-]', '');
-        playerName = newPlayerName;
+      let roleColourDividerIndex = playerName.indexOf("](")
+      let roleEndIndex = playerName.indexOf(")", roleColourDividerIndex);
+      let newPlayerName = playerName.substring(roleEndIndex + 2).replace('[-]', '');
+      playerName = newPlayerName;
     }
 
     /**
      * Workaround for coppi colours (with the colour ending indicator [-])
      */
 
-     if (playerName.includes('[-]')) {
-        let colourEndIdx = playerName.indexOf("]");
-        let newPlayerName = playerName.substring(colourEndIdx + 1).replace('[-]', '');
-        playerName = newPlayerName
-     }
+    if (playerName.includes('[-]')) {
+      let colourEndIdx = playerName.indexOf("]");
+      let newPlayerName = playerName.substring(colourEndIdx + 1).replace('[-]', '');
+      playerName = newPlayerName
+    }
 
     let data = {
-        playerName,
-        messageText,
-        type,
-        date,
-        time
+      playerName,
+      messageText,
+      type,
+      date,
+      time
     };
 
     returnValue.type = 'chatMessage';
     returnValue.data = data;
-}
+  }
 
   if (_.startsWith(logLine.msg, 'Player connected,')) {
     /*
