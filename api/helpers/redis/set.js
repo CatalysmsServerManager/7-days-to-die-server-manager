@@ -72,7 +72,7 @@ module.exports = {
       }
     } else {
       sails.cache[inputs.keyString] = inputs.value;
-      return;
+      return exits.success();
     }
 
   }
