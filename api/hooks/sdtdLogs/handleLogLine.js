@@ -168,7 +168,6 @@ module.exports = (logLine) => {
     returnValue.data = connectedMsg;
 
   }
-
   if (_.startsWith(logLine.msg, 'Player disconnected:')) {
     /*
     {
@@ -201,7 +200,7 @@ module.exports = (logLine) => {
       time
     };
 
-    returnValue.type = "playerDisonnected";
+    returnValue.type = "playerDisconnected";
     returnValue.data = disconnectedMsg;
 
   }
