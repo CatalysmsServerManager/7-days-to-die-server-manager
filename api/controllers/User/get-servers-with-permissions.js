@@ -56,11 +56,11 @@ module.exports = {
         });
         if (highestRole.length > 0) {
           highestRole = highestRole[0];
-          server.role = highestRole
+          server.role = highestRole;
           objectToSend.push(server)
         }
       });
-
+      
       sails.log.debug(`API - User:getServersWithPermissions - Found ${objectToSend.length} servers for user ${inputs.userId}`);
       return exits.success(objectToSend);
 

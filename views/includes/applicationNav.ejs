@@ -166,6 +166,8 @@
 
           let serverNavHTMLString = new String();
 
+          console.log(server);
+
           if (server.role || isOwner) {
 
             if (isOwner || server.role.manageEconomy || server.role.managePlayers || server.role.manageRoles ||
@@ -274,32 +276,35 @@
             fpsCounter.text(`${memUpdate.fps} FPS`)
           })
 
-          if (server.role.manageTickets) {
-            let openTicketsElement = $("#open-tickets");
+          if (server.role) {
 
-            $("#open-tickets-alert").hide();
+            if (isOwner || server.role.manageTickets) {
+              let openTicketsElement = $("#open-tickets");
 
-            $.get("/api/sdtdticket/opentickets", {
-              serverId: server.id
-            }, data => {
+              $("#open-tickets-alert").hide();
 
-              if (data.length > 0) {
-                $("#open-tickets-alert").show();
-              }
+              $.get("/api/sdtdticket/opentickets", {
+                serverId: server.id
+              }, data => {
 
-              for (const ticket of data) {
+                if (data.length > 0) {
+                  $("#open-tickets-alert").show();
+                }
 
-                let playerName =
-                  `<a class="dropdown-item" href="/sdtdticket/${ticket.id}"> <strong>${ticket.playerInfo.name}</strong>`
-                let updatedDate = new Date(ticket.updatedAt)
-                let lastUpdated =
-                  `<span class="small float-right text-muted">${updatedDate.toLocaleDateString()} - ${updatedDate.toLocaleTimeString()}</span>`
-                let ticketTitle = `<div class="dropdown-message"> ${ticket.title} </div> </a>`
+                for (const ticket of data) {
 
-                openTicketsElement.append('<div class="dropdown - divider"></div>' + playerName +
-                  lastUpdated + ticketTitle);
-              }
-            })
+                  let playerName =
+                    `<a class="dropdown-item" href="/sdtdticket/${ticket.id}"> <strong>${ticket.playerInfo.name}</strong>`
+                  let updatedDate = new Date(ticket.updatedAt)
+                  let lastUpdated =
+                    `<span class="small float-right text-muted">${updatedDate.toLocaleDateString()} - ${updatedDate.toLocaleTimeString()}</span>`
+                  let ticketTitle = `<div class="dropdown-message"> ${ticket.title} </div> </a>`
+
+                  openTicketsElement.append('<div class="dropdown - divider"></div>' + playerName +
+                    lastUpdated + ticketTitle);
+                }
+              })
+            }
           }
         }
       },
