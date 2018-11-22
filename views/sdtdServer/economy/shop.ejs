@@ -82,7 +82,7 @@
                 spelled 100% correctly.</small>
             </div>
 
-            <h3>Possible items:</h3>
+            <h3>Possible items:</h3> <small>Click to autofill</small>
 
             <div id="possibleItems">
 
@@ -369,7 +369,7 @@
     });
 
     $("#possibleItems").on('click', ".itemName", (e) => {
-      $("#add-name").val(e.target.textContent)
+      $("#add-name").val(e.target.textContent.trim())
     })
 
     $("#list-view").fadeOut();
