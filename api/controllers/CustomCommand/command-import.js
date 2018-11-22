@@ -72,6 +72,7 @@ module.exports = {
       // Check if we can execute the entered commands
       commandsToExecute.forEach(command => {
         let splitMessage = command.split(' ');
+        splitMessage = splitMessage.filter(el => el !== "");
         let idx = allowedCommands.findIndex(serverCommand => serverCommand == splitMessage[0]);
         if (idx === -1) {
           problems.push(`${splitMessage[0]} is not a valid command.`);
