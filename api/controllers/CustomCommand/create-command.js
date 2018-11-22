@@ -64,20 +64,23 @@ module.exports = {
             let commandsToExecute = inputs.commandsToExecute.split(';');
 
             let badCommandFlag = false;
+            let badCommandName;
 
             // Check if we can execute the entered commands
             commandsToExecute.forEach(command => {
                 let splitMessage = command.split(' ');
+                splitMessage = splitMessage.filter(el => el !== "");
                 let idx = allowedCommands.findIndex(serverCommand => {
                     return serverCommand == splitMessage[0]
                 });
                 if (idx === -1) {
+                    badCommandName = command;
                     badCommandFlag = true;
                 }
             })
 
             if (badCommandFlag) {
-                return exits.badCommand('Invalid command! Make you provide valid, existing commands')
+                return exits.badCommand(`Invalid command! Make you provide valid, existing commands - ${badCommandName}`)
             }
 
             let commandsWithSameName = await CustomCommand.find({
