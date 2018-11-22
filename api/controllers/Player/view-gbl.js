@@ -32,7 +32,9 @@ module.exports = {
     }).populate('server');
     let banEntries = await BanEntry.find({
       steamId: inputs.steamId
-    }).populate('server').populate('comments')
+    }).populate('server').populate('comments');
+
+    banEntries = banEntries.filter(ban => ban.server !== null);
 
     let comments = await GblComment.find({
       ban: banEntries.map(ban => ban.id),
