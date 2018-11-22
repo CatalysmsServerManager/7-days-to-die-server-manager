@@ -147,7 +147,6 @@ module.exports = function sdtdLogs(sails) {
     let eventEmitter = new LoggingObject(server.ip, server.webPort, server.authName, server.authToken, serverID);
 
     eventEmitter.on('logLine', function (logLine) {
-      console.log(logLine)
       logLine.server = _.omit(server, "authName", "authToken");
       sails.sockets.broadcast(server.id, 'logLine', logLine);
     });

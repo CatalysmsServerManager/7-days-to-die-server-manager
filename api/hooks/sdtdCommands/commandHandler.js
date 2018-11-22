@@ -83,8 +83,8 @@ class CommandHandler {
           return
         }
         let player;
-        let version = await sails.helpers.sdtd.checkModVersion('Game version', this.config.server);
-        if (version === "Alpha 17") {
+
+        if (chatMessage.steamId) {
           player = await Player.find({ steamId: chatMessage.steamId, server: this.config.server });
         } else {
           player = await Player.find({ name: he.encode(_.trim(chatMessage.playerName)), server: this.config.server });
