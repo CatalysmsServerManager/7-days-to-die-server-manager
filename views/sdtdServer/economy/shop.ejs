@@ -1,557 +1,606 @@
 <%- exposeLocalsToBrowser() %>
 
-  <div class="row">
-    <h1>Shop -
-      <%= server.name %>
-    </h1>
+<div class="row">
+  <h1>Shop -
+    <%= server.name %>
+  </h1>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <h2>
+      Welcome,
+      <%= player.name %>. Your balance is:
+      <%= player.currency %>.</h2>
+
+    <% if (unclaimedItems.length > 0) { %>
+    <div class="alert alert-warning">You have unclaimed items! Use the claim command ingame to receive these.</div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">
+            Name
+          </th>
+          <th scope="col">Amount</th>
+          <th scope="col">Quality</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <% unclaimedItems.forEach(item => { %>
+
+        <tr>
+          <td scope="row">
+            <%= item.name %>
+          </td>
+          <td>
+            <%= item.amount %>
+          </td>
+          <td>
+            <%= item.quality %>
+          </td>
+        </tr>
+
+        <% }) %>
+
+      </tbody>
+    </table>
+
+    <% } %>
   </div>
+</div>
 
-  <div class="row">
-    <div class="col-12">
-      <h2>
-        Welcome,
-        <%= player.name %>. Your balance is:
-          <%= player.currency %>.</h2>
+<hr>
 
-      <% if (unclaimedItems.length > 0) { %>
-        <div class="alert alert-warning">You have unclaimed items! Use the claim command ingame to receive these.</div>
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">
-                Name
-              </th>
-              <th scope="col">Amount</th>
-              <th scope="col">Quality</th>
-            </tr>
-          </thead>
-          <tbody>
+<div class="row">
+  <div class="col-12">
+    <% if (isAdmin) { %>
 
-            <% unclaimedItems.forEach(item => { %>
-
-              <tr>
-                <td scope="row">
-                  <%= item.name %>
-                </td>
-                <td>
-                  <%= item.amount %>
-                </td>
-                <td>
-                  <%= item.quality %>
-                </td>
-              </tr>
-
-              <% }) %>
-
-          </tbody>
-        </table>
-
-        <% } %>
-    </div>
-  </div>
-
-  <hr>
-
-  <div class="row">
-    <div class="col-12">
-      <% if (isAdmin) { %>
-
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#shop-add">
-          <i class="fas fa-plus-circle"></i> Create a new listing
-        </button>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#shop-add">
+      <i class="fas fa-plus-circle"></i> Create a new listing
+    </button>
 
 
 
-        <!-- Modal -->
-        <div class="modal fade" id="shop-add" tabindex="-1" role="dialog" aria-labelledby="shop-add-title" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h4 class="modal-title" id="shop-add-title">Add a new listing u </h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
+    <!-- Modal -->
+    <div class="modal fade" id="shop-add" tabindex="-1" role="dialog" aria-labelledby="shop-add-title" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="shop-add-title">Add a new listing. </h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
 
-                <div class="form-group">
-                  <label for="add-name">Item name</label>
-                  <input type="text" class="form-control" name="add-name" id="add-name" aria-describedby="add-name-help">
-                  <small id="add-name-help" class="form-text text-muted">The name of the ingame item. Make sure this is spelled 100% correctly.</small>
-                </div>
-
-                <div class="form-group">
-                  <label for="add-friendlyName">Item friendly name</label>
-                  <input type="text" class="form-control" name="add-friendlyName" id="add-friendlyName" aria-describedby="add-friendlyName-help">
-                  <small id="add-friendlyName-help" class="form-text text-muted">This will be shown large to your players and should be used to differentiate the listings
-                  </small>
-                </div>
-
-                <div class="form-group">
-                  <label for="add-amount">Amount</label>
-                  <input type="text" class="form-control" name="add-amount" id="add-amount" aria-describedby="add-amount-help">
-                  <small id="add-amount-help" class="form-text text-muted">The amount of this item that will be given to the player when this listing is bought.
-                  </small>
-                </div>
-
-                <div class="form-group">
-                  <label for="add-quality">Quality</label>
-                  <input type="text" class="form-control" name="add-quality" id="add-quality" aria-describedby="add-quality-help">
-                  <small id="add-quality-help" class="form-text text-muted">Quality of the item. If amount is larger than one, you cannot set this.</small>
-                </div>
-
-                <div class="form-group">
-                  <label for="add-price">Price</label>
-                  <input type="text" class="form-control" name="add-price" id="add-price" aria-describedby="add-price-help">
-                  <small id="add-price-help" class="form-text text-muted">How much players pay to buy this listing</small>
-                </div>
-
-              </div>
-              <div class="modal-footer">
-                <div id="add-listing-status"></div>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button id="add-listing-btn" type="button" class="shop-edit btn btn-primary">Save</button>
-              </div>
+            <div class="form-group">
+              <label for="add-name">Item name</label>
+              <input type="text" class="form-control" name="add-name" id="add-name" aria-describedby="add-name-help">
+              <small id="add-name-help" class="form-text text-muted">The name of the ingame item. Make sure this is
+                spelled 100% correctly.</small>
             </div>
+
+            <h3>Possible items:</h3>
+
+            <div id="possibleItems">
+
+            </div>
+
+            <div class="form-group">
+              <label for="add-friendlyName">Item friendly name</label>
+              <input type="text" class="form-control" name="add-friendlyName" id="add-friendlyName" aria-describedby="add-friendlyName-help">
+              <small id="add-friendlyName-help" class="form-text text-muted">This will be shown large to your players
+                and should be used to differentiate the listings
+              </small>
+            </div>
+
+            <div class="form-group">
+              <label for="add-amount">Amount</label>
+              <input type="text" class="form-control" name="add-amount" id="add-amount" aria-describedby="add-amount-help">
+              <small id="add-amount-help" class="form-text text-muted">The amount of this item that will be given to
+                the player when this listing is bought.
+              </small>
+            </div>
+
+            <div class="form-group">
+              <label for="add-quality">Quality</label>
+              <input type="text" class="form-control" name="add-quality" id="add-quality" aria-describedby="add-quality-help">
+              <small id="add-quality-help" class="form-text text-muted">Quality of the item. If amount is larger than
+                one, you cannot set this.</small>
+            </div>
+
+            <div class="form-group">
+              <label for="add-price">Price</label>
+              <input type="text" class="form-control" name="add-price" id="add-price" aria-describedby="add-price-help">
+              <small id="add-price-help" class="form-text text-muted">How much players pay to buy this listing</small>
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <div id="add-listing-status"></div>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button id="add-listing-btn" type="button" class="shop-edit btn btn-primary">Save</button>
           </div>
         </div>
+      </div>
+    </div>
 
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#shop-import-modal">
-          Import
-        </button>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#shop-import-modal">
+      Import
+    </button>
 
-        <!-- Modal -->
-        <div class="modal fade" id="shop-import-modal" tabindex="-1" role="dialog" aria-labelledby="shop-import-modal-title" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h4 class="modal-title" id="shop-import-modal-title">Import</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
+    <!-- Modal -->
+    <div class="modal fade" id="shop-import-modal" tabindex="-1" role="dialog" aria-labelledby="shop-import-modal-title"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="shop-import-modal-title">Import</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid">
+
+              <div class="alert alert-warning" role="alert">
+                Importing listings is an advanced function. Check the documentation for more info
+                <br> This will delete the current listings you have. Make sure to include them in your import
+                statement.
               </div>
-              <div class="modal-body">
-                <div class="container-fluid">
 
-                  <div class="alert alert-warning" role="alert">
-                    Importing listings is an advanced function. Check the documentation for more info
-                    <br> This will delete the current listings you have. Make sure to include them in your import statement.
+              <div class="form-group">
+                <label for="shop-import-json">Shop JSON</label>
+                <textarea class="form-control" name="shop-import-json" id="shop-import-json" rows="10"></textarea>
+              </div>
+
+              <div id="import-problems" class="alert alert-warning invisible" role="alert">
+
+              </div>
+
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button id="import-listings" type="button" class="btn btn-primary">Import</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a name="export-listings" id="export-listings" class="btn btn-secondary" href="/api/shop/export?serverId=<%= server.id %>"
+      role="button">Export to file</a>
+
+
+
+    <% } %>
+  </div>
+</div>
+
+<hr>
+
+
+
+<button id="toggle-gallery" type="button" class="btn btn-primary">
+  <i class="fas fa-th-large"></i> Gallery</button>
+<button id="toggle-list" type="button" class="btn btn-secondary">
+  <i class="fas fa-list-ul"></i> List</button>
+
+<hr>
+
+<div id="gallery-view" class="row">
+
+  <div class="col-12">
+    <div class="card-columns">
+      <% listings.forEach(listing => { %>
+      <div style="text-align: center" class="card">
+        <img class="card-img-top" src="/images/sdtdIcons/<%= listing.name %>.png" alt="<%= listing.name %>" style="width: 25%">
+        <div class="card-body">
+          <h4 class="card-title">
+            <%=  listing.friendlyName ?  listing.friendlyName : listing.name%>
+          </h4>
+          <p class="card-text">
+            Bought
+            <%= listing.timesBought %> times.
+          </p>
+          <ul>
+            <li class="list-group-item">Amount:
+              <%= listing.amount %>
+            </li>
+            <% if (listing.quality) { %>
+            <li class="list-group-item">Quality:
+              <%= listing.quality %>
+            </li>
+            <% } %>
+            <li class="list-group-item">Price:
+              <%= listing.price %>
+            </li>
+          </ul>
+        </div>
+        <div class="card-footer">
+
+          <div class="form-group">
+            <input type="number" class="form-control" name="shop-buy-amount-<%= listing.id %>" id="shop-buy-amount-<%= listing.id %>"
+              value="1">
+          </div>
+
+          <button class="btn shop-buy btn-success" value="<%= listing.id %>">
+            Buy</button>
+
+          <% if (isAdmin) { %>
+          <button class="btn shop-delete btn-danger" value="<%= listing.id %>">
+            <i class="fas fa-trash-alt"></i> Delete</button>
+
+          <!-- Button trigger modal -->
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#shop-edit<%= listing.id %>">
+            <i class="fas fa-edit"></i> Edit
+          </button>
+
+          <!-- Modal -->
+          <div class="modal fade" id="shop-edit<%= listing.id %>" tabindex="-1" role="dialog" aria-labelledby="shop-edit-<%= listing.id %>-title"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="shop-edit-<%= listing.id %>-title">Edit
+                    <%= listing.friendlyName %>
+                  </h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+
+                  <div class="form-group">
+                    <label for="edit-<%= listing.id %>-name">Item name</label>
+                    <input type="text" class="form-control" name="edit-<%= listing.id %>-name" id="edit-<%= listing.id %>-name"
+                      aria-describedby="edit-<%=listing.id%>-name-help" placeholder="<%= listing.name %>">
+                    <small id="edit-<%=listing.id%>-name-help" class="form-text text-muted">The name of the ingame
+                      item. Make sure this is spelled 100% correctly.</small>
                   </div>
 
                   <div class="form-group">
-                    <label for="shop-import-json">Shop JSON</label>
-                    <textarea class="form-control" name="shop-import-json" id="shop-import-json" rows="10"></textarea>
+                    <label for="edit-<%= listing.id %>-friendlyName">Item friendly name</label>
+                    <input type="text" class="form-control" name="edit-<%= listing.id %>-friendlyName" id="edit-<%= listing.id %>-friendlyName"
+                      aria-describedby="edit-<%=listing.id%>-friendlyName-help" placeholder="<%= listing.friendlyName %>">
+                    <small id="edit-<%=listing.id%>-friendlyName-help" class="form-text text-muted">This will be shown
+                      large to your players and should be used to differentiate the listings</small>
                   </div>
 
-                  <div id="import-problems" class="alert alert-warning invisible" role="alert">
+                  <div class="form-group">
+                    <label for="edit-<%= listing.id %>-amount">Amount</label>
+                    <input type="text" class="form-control" name="edit-<%= listing.id %>-amount" id="edit-<%= listing.id %>-amount"
+                      aria-describedby="edit-<%=listing.id%>-amount-help" placeholder="<%= listing.amount %>">
+                    <small id="edit-<%=listing.id%>-amount-help" class="form-text text-muted">The amount of this item
+                      that will be given to the player when this listing is bought.
+                    </small>
+                  </div>
 
+                  <div class="form-group">
+                    <label for="edit-<%= listing.id %>-quality">Quality</label>
+                    <input type="text" class="form-control" name="edit-<%= listing.id %>-quality" id="edit-<%= listing.id %>-quality"
+                      aria-describedby="edit-<%=listing.id%>-quality-help" placeholder="<%= listing.quality %>">
+                    <small id="edit-<%=listing.id%>-quality-help" class="form-text text-muted">Quality of the item. If
+                      amount is larger than one, you cannot set this.
+                    </small>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="edit-<%= listing.id %>-price">Price</label>
+                    <input type="text" class="form-control" name="edit-<%= listing.id %>-price" id="edit-<%= listing.id %>-price"
+                      aria-describedby="edit-<%=listing.id%>-price-help" placeholder="<%= listing.price %>">
+                    <small id="edit-<%=listing.id%>-price-help" class="form-text text-muted">How much players pay to
+                      buy this listing</small>
                   </div>
 
                 </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button id="import-listings" type="button" class="btn btn-primary">Import</button>
+                <div class="modal-footer">
+                  <div id="edit-<%= listing.id %>-status"></div>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" class="shop-edit btn btn-primary" value="<%= listing.id %>">Save</button>
+                </div>
               </div>
             </div>
           </div>
+
+          <% } %>
         </div>
-
-        <a name="export-listings" id="export-listings" class="btn btn-secondary" href="/api/shop/export?serverId=<%= server.id %>"
-          role="button">Export to file</a>
-
-
-
-        <% } %>
-    </div>
-  </div>
-
-  <hr>
-
-
-
-  <button id="toggle-gallery" type="button" class="btn btn-primary">
-    <i class="fas fa-th-large"></i> Gallery</button>
-  <button id="toggle-list" type="button" class="btn btn-secondary">
-    <i class="fas fa-list-ul"></i> List</button>
-
-  <hr>
-
-  <div id="gallery-view" class="row">
-
-    <div class="col-12">
-      <div class="card-columns">
-        <% listings.forEach(listing => { %>
-          <div style="text-align: center" class="card">
-            <img class="card-img-top" src="/images/sdtdIcons/<%= listing.name %>.png" alt="<%= listing.name %>" style="width: 25%">
-            <div class="card-body">
-              <h4 class="card-title">
-                <%=  listing.friendlyName ?  listing.friendlyName : listing.name%>
-              </h4>
-              <p class="card-text">
-                Bought
-                <%= listing.timesBought %> times.
-              </p>
-              <ul>
-                <li class="list-group-item">Amount:
-                  <%= listing.amount %>
-                </li>
-                <% if (listing.quality) { %>
-                  <li class="list-group-item">Quality:
-                    <%= listing.quality %>
-                  </li>
-                  <% } %>
-                    <li class="list-group-item">Price:
-                      <%= listing.price %>
-                    </li>
-              </ul>
-            </div>
-            <div class="card-footer">
-
-              <div class="form-group">
-                <input type="number" class="form-control" name="shop-buy-amount-<%= listing.id %>" id="shop-buy-amount-<%= listing.id %>" value="1">
-              </div>
-
-              <button class="btn shop-buy btn-success" value="<%= listing.id %>">
-                Buy</button>
-
-              <% if (isAdmin) { %>
-                <button class="btn shop-delete btn-danger" value="<%= listing.id %>">
-                  <i class="fas fa-trash-alt"></i> Delete</button>
-
-                <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#shop-edit<%= listing.id %>">
-                  <i class="fas fa-edit"></i> Edit
-                </button>
-
-                <!-- Modal -->
-                <div class="modal fade" id="shop-edit<%= listing.id %>" tabindex="-1" role="dialog" aria-labelledby="shop-edit-<%= listing.id %>-title"
-                  aria-hidden="true">
-                  <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h4 class="modal-title" id="shop-edit-<%= listing.id %>-title">Edit
-                          <%= listing.friendlyName %>
-                        </h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div class="modal-body">
-
-                        <div class="form-group">
-                          <label for="edit-<%= listing.id %>-name">Item name</label>
-                          <input type="text" class="form-control" name="edit-<%= listing.id %>-name" id="edit-<%= listing.id %>-name" aria-describedby="edit-<%=listing.id%>-name-help"
-                            placeholder="<%= listing.name %>">
-                          <small id="edit-<%=listing.id%>-name-help" class="form-text text-muted">The name of the ingame item. Make sure this is spelled 100% correctly.</small>
-                        </div>
-
-                        <div class="form-group">
-                          <label for="edit-<%= listing.id %>-friendlyName">Item friendly name</label>
-                          <input type="text" class="form-control" name="edit-<%= listing.id %>-friendlyName" id="edit-<%= listing.id %>-friendlyName"
-                            aria-describedby="edit-<%=listing.id%>-friendlyName-help" placeholder="<%= listing.friendlyName %>">
-                          <small id="edit-<%=listing.id%>-friendlyName-help" class="form-text text-muted">This will be shown large to your players and should be used to differentiate the listings</small>
-                        </div>
-
-                        <div class="form-group">
-                          <label for="edit-<%= listing.id %>-amount">Amount</label>
-                          <input type="text" class="form-control" name="edit-<%= listing.id %>-amount" id="edit-<%= listing.id %>-amount" aria-describedby="edit-<%=listing.id%>-amount-help"
-                            placeholder="<%= listing.amount %>">
-                          <small id="edit-<%=listing.id%>-amount-help" class="form-text text-muted">The amount of this item that will be given to the player when this listing is bought.
-                          </small>
-                        </div>
-
-                        <div class="form-group">
-                          <label for="edit-<%= listing.id %>-quality">Quality</label>
-                          <input type="text" class="form-control" name="edit-<%= listing.id %>-quality" id="edit-<%= listing.id %>-quality" aria-describedby="edit-<%=listing.id%>-quality-help"
-                            placeholder="<%= listing.quality %>">
-                          <small id="edit-<%=listing.id%>-quality-help" class="form-text text-muted">Quality of the item. If amount is larger than one, you cannot set this.
-                          </small>
-                        </div>
-
-                        <div class="form-group">
-                          <label for="edit-<%= listing.id %>-price">Price</label>
-                          <input type="text" class="form-control" name="edit-<%= listing.id %>-price" id="edit-<%= listing.id %>-price" aria-describedby="edit-<%=listing.id%>-price-help"
-                            placeholder="<%= listing.price %>">
-                          <small id="edit-<%=listing.id%>-price-help" class="form-text text-muted">How much players pay to buy this listing</small>
-                        </div>
-
-                      </div>
-                      <div class="modal-footer">
-                        <div id="edit-<%= listing.id %>-status"></div>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="shop-edit btn btn-primary" value="<%= listing.id %>">Save</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <% } %>
-            </div>
-          </div>
-          <% }) %>
       </div>
-
+      <% }) %>
     </div>
 
   </div>
 
-  <div id="list-view" class="row">
+</div>
 
-    <table id='list-view-table' class="table table-striped table-bordered dataTable no-footer">
-      <thead>
-        <tr>
-          <th>Friendly name</th>
-          <th>Item name</th>
-          <th>Price</th>
-          <th>Amount</th>
-          <th>Quality</th>
-          <th>Times bought</th>
-          <th>Buy</th>
-        </tr>
-      </thead>
+<div id="list-view" class="row">
 
-    </table>
+  <table id='list-view-table' class="table table-striped table-bordered dataTable no-footer">
+    <thead>
+      <tr>
+        <th>Friendly name</th>
+        <th>Item name</th>
+        <th>Price</th>
+        <th>Amount</th>
+        <th>Quality</th>
+        <th>Times bought</th>
+        <th>Buy</th>
+      </tr>
+    </thead>
 
-  </div>
+  </table>
+
+</div>
 
 
 
 
-  <script>
-    $(document).ready(function () {
+<script>
+  $(document).ready(function () {
 
+    let availableItems;
+
+    $.ajax({
+      url: "/api/sdtdserver/availableItems",
+      method: "GET",
+      data: {
+        serverId: window.SAILS_LOCALS.server.id,
+        _csrf: window.SAILS_LOCALS._csrf,
+        item: "*"
+      },
+      success: (data, status, xhr) => {
+        availableItems = data;
+      },
+      error: (xhr, status, error) => {
+        console.log(xhr)
+      }
+    });
+
+    $("#add-name").on('keydown', (e) => {
+      let subString = $("#add-name").val();
+      let possibleItems = availableItems.filter(item => item.includes(subString));
+      $("#possibleItems").empty();
+      possibleItems.forEach(item => {
+        $("#possibleItems").append(`<span class="itemName">${item} </span>`);
+      })
+    });
+
+    $("#possibleItems").on('click', ".itemName", (e) => {
+      $("#add-name").val(e.target.textContent)
+    })
+
+    $("#list-view").fadeOut();
+
+    $("#toggle-gallery").click(e => {
+      $("#toggle-gallery").toggleClass('btn-primary btn-secondary');
+      $("#toggle-list").toggleClass('btn-primary btn-secondary');
+      $("#gallery-view").fadeIn();
       $("#list-view").fadeOut();
+    });
 
-      $("#toggle-gallery").click(e => {
-        $("#toggle-gallery").toggleClass('btn-primary btn-secondary');
-        $("#toggle-list").toggleClass('btn-primary btn-secondary');
-        $("#gallery-view").fadeIn();
-        $("#list-view").fadeOut();
-      });
+    $("#toggle-list").click(e => {
+      $("#toggle-list").toggleClass('btn-primary btn-secondary');
+      $("#toggle-gallery").toggleClass('btn-primary btn-secondary');
+      $("#gallery-view").fadeOut();
+      $("#list-view").fadeIn();
+    });
 
-      $("#toggle-list").click(e => {
-        $("#toggle-list").toggleClass('btn-primary btn-secondary');
-        $("#toggle-gallery").toggleClass('btn-primary btn-secondary');
-        $("#gallery-view").fadeOut();
-        $("#list-view").fadeIn();
-      });
-
-      let listViewTable = $('#list-view-table').DataTable({
-        data: window.SAILS_LOCALS.listings,
-        fixedHeader: true,
-        responsive: true,
-        order: [
-          [0, 'desc']
-        ],
-        columns: [{
-            data: "friendlyName",
-          },
-          {
-            data: 'name'
-          },
-          {
-            data: 'price'
-          },
-          {
-            data: 'amount'
-          },
-          {
-            data: 'quality',
-          },
-          {
-            data: 'timesBought',
-          },
-          {
-            data: 'id',
-            render: function (data, type, row, meta) {
-              return `      <button class="btn shop-buy btn-success" value="${data}">
+    let listViewTable = $('#list-view-table').DataTable({
+      data: window.SAILS_LOCALS.listings,
+      fixedHeader: true,
+      responsive: true,
+      order: [
+        [0, 'desc']
+      ],
+      columns: [{
+          data: "friendlyName",
+        },
+        {
+          data: 'name'
+        },
+        {
+          data: 'price'
+        },
+        {
+          data: 'amount'
+        },
+        {
+          data: 'quality',
+        },
+        {
+          data: 'timesBought',
+        },
+        {
+          data: 'id',
+          render: function (data, type, row, meta) {
+            return `      <button class="btn shop-buy btn-success" value="${data}">
                 Buy</button>`
-            }
           }
-        ]
-      })
-
-      $('#add-listing-btn').click(e => {
-        // If a user doesn't fill in a field, we change the value from an empty string to undefined
-        const emptyStringToUndefined = value => value.length === 0 ? undefined : value;
-
-        const tryParseInt = value => {
-          let parsedInt = parseInt(value, 10);
-
-          if (_.isFinite(parsedInt)) {
-            value = parsedInt
-          }
-          return value
         }
+      ]
+    })
 
+    $('#add-listing-btn').click(e => {
+      // If a user doesn't fill in a field, we change the value from an empty string to undefined
+      const emptyStringToUndefined = value => value.length === 0 ? undefined : value;
 
-        let name = emptyStringToUndefined($(`#add-name`).val());
-        let friendlyName = emptyStringToUndefined($(`#add-friendlyName`).val());
-        let amount = emptyStringToUndefined($(`#add-amount`).val());
-        let quality = emptyStringToUndefined($(`#add-quality`).val());
-        let price = emptyStringToUndefined($(`#add-price`).val());
+      const tryParseInt = value => {
+        let parsedInt = parseInt(value, 10);
 
-        if (!name && !amount && !price) {
-          return $(`#add-listing-status`).text("Name amount and price are required values");
+        if (_.isFinite(parsedInt)) {
+          value = parsedInt
         }
+        return value
+      }
 
 
-        $.ajax({
-          url: "/api/shop/listing",
-          method: "POST",
-          data: {
-            serverId: window.SAILS_LOCALS.server.id,
-            _csrf: window.SAILS_LOCALS._csrf,
-            name: name,
-            friendlyName: friendlyName,
-            amount: amount,
-            quality: quality,
-            price: price
-          },
-          success: (data, status, xhr) => {
-            location.reload();
-          },
-          error: (xhr, status, error) => {
-            $(`#add-listing-status`).text(xhr.responseText)
-            console.log(xhr)
-          }
-        })
-      })
+      let name = emptyStringToUndefined($(`#add-name`).val());
+      let friendlyName = emptyStringToUndefined($(`#add-friendlyName`).val());
+      let amount = emptyStringToUndefined($(`#add-amount`).val());
+      let quality = emptyStringToUndefined($(`#add-quality`).val());
+      let price = emptyStringToUndefined($(`#add-price`).val());
+
+      if (!name && !amount && !price) {
+        return $(`#add-listing-status`).text("Name amount and price are required values");
+      }
 
 
-      $(".shop-buy").click(e => {
-
-        let listingId = e.target.value;
-        let amount = $(`#shop-buy-amount-${listingId}`).val();
-        let playerId = window.SAILS_LOCALS.player.id;
-
-        if (amount < 1) {
-          return alert('You must buy at least one.')
+      $.ajax({
+        url: "/api/shop/listing",
+        method: "POST",
+        data: {
+          serverId: window.SAILS_LOCALS.server.id,
+          _csrf: window.SAILS_LOCALS._csrf,
+          name: name,
+          friendlyName: friendlyName,
+          amount: amount,
+          quality: quality,
+          price: price
+        },
+        success: (data, status, xhr) => {
+          location.reload();
+        },
+        error: (xhr, status, error) => {
+          $(`#add-listing-status`).text(xhr.responseText)
+          console.log(xhr)
         }
-
-        $.ajax({
-          url: "/api/shop/listing/buy",
-          method: "POST",
-          data: {
-            listingId: listingId,
-            playerId: playerId,
-            _csrf: window.SAILS_LOCALS._csrf,
-            amount: amount
-          },
-          success: (data, status, xhr) => {
-            location.reload();
-          },
-          error: (xhr, status, error) => {
-            if (xhr.responseText == "\"You do not have enough money to buy this!\"") {
-              return alert(`You do not have enough money to buy this item`)
-            }
-            alert('Error something went wrong!')
-            console.log(xhr)
-          }
-        })
-
       })
+    })
 
-      $(".shop-edit").click(e => {
-        let listingId = e.target.value
 
-        // If a user doesn't fill in a field, we change the value from an empty string to undefined
-        const emptyStringToUndefined = value => value.length === 0 ? undefined : value;
+    $(".shop-buy").click(e => {
 
-        const tryParseInt = value => {
-          let parsedInt = parseInt(value, 10);
+      let listingId = e.target.value;
+      let amount = $(`#shop-buy-amount-${listingId}`).val();
+      let playerId = window.SAILS_LOCALS.player.id;
 
-          if (_.isFinite(parsedInt)) {
-            value = parsedInt
+      if (amount < 1) {
+        return alert('You must buy at least one.')
+      }
+
+      $.ajax({
+        url: "/api/shop/listing/buy",
+        method: "POST",
+        data: {
+          listingId: listingId,
+          playerId: playerId,
+          _csrf: window.SAILS_LOCALS._csrf,
+          amount: amount
+        },
+        success: (data, status, xhr) => {
+          location.reload();
+        },
+        error: (xhr, status, error) => {
+          if (xhr.responseText == "\"You do not have enough money to buy this!\"") {
+            return alert(`You do not have enough money to buy this item`)
           }
-          return value
+          alert('Error something went wrong!')
+          console.log(xhr)
         }
-
-
-        let name = emptyStringToUndefined($(`#edit-${listingId}-name`).val());
-        let friendlyName = emptyStringToUndefined($(`#edit-${listingId}-friendlyName`).val());
-        let amount = emptyStringToUndefined($(`#edit-${listingId}-amount`).val());
-        let quality = emptyStringToUndefined($(`#edit-${listingId}-quality`).val());
-        let price = emptyStringToUndefined($(`#edit-${listingId}-price`).val());
-
-        if (!name && !friendlyName && !amount && !quality && !price) {
-          return $(`#edit-${listingId}-status`).text("You must change atleast one of the values!")
-        }
-
-        $.ajax({
-          url: "/api/shop/listing",
-          method: "PATCH",
-          data: {
-            listingId: listingId,
-            serverId: window.SAILS_LOCALS.server.id,
-            _csrf: window.SAILS_LOCALS._csrf,
-            name: name,
-            friendlyName: friendlyName,
-            amount: amount,
-            quality: quality,
-            price: price
-          },
-          success: (data, status, xhr) => {
-            location.reload();
-          },
-          error: (xhr, status, error) => {
-            $(`#edit-${listingId}-status`).text(xhr.responseText)
-            console.log(xhr)
-          }
-        })
-      })
-
-      $(".shop-delete").click(e => {
-        let listingId = e.target.value
-        $.ajax({
-          url: "/api/shop/listing",
-          method: "DELETE",
-          data: {
-            listingId: listingId,
-            serverId: window.SAILS_LOCALS.server.id,
-            _csrf: window.SAILS_LOCALS._csrf,
-          },
-          success: (data, status, xhr) => {
-            location.reload();
-          },
-          error: (xhr, status, error) => {
-            console.log(xhr)
-            alert("Something went wrong! Please report this to the dev server");
-          }
-        })
-      })
-
-
-      $("#import-listings").click(e => {
-
-        let json = $("#shop-import-json").val();
-
-        $.ajax({
-          url: "/api/shop/import",
-          method: "POST",
-          data: {
-            file: json,
-            serverId: window.SAILS_LOCALS.server.id,
-            _csrf: window.SAILS_LOCALS._csrf,
-          },
-          success: (data, status, xhr) => {
-            location.reload();
-          },
-          error: (xhr, status, error) => {
-            $("#import-problems").removeClass('invisible');
-            $("#import-problems").empty();
-            if (_.isArray(xhr.responseJSON)) {
-              $("#import-problems").text(xhr.responseJSON.join(" | "))
-            } else {
-              $("#import-problems").text(xhr.responseJSON)
-            }
-          }
-        })
       })
 
     })
 
-  </script>
+    $(".shop-edit").click(e => {
+      let listingId = e.target.value
+
+      // If a user doesn't fill in a field, we change the value from an empty string to undefined
+      const emptyStringToUndefined = value => value.length === 0 ? undefined : value;
+
+      const tryParseInt = value => {
+        let parsedInt = parseInt(value, 10);
+
+        if (_.isFinite(parsedInt)) {
+          value = parsedInt
+        }
+        return value
+      }
+
+
+      let name = emptyStringToUndefined($(`#edit-${listingId}-name`).val());
+      let friendlyName = emptyStringToUndefined($(`#edit-${listingId}-friendlyName`).val());
+      let amount = emptyStringToUndefined($(`#edit-${listingId}-amount`).val());
+      let quality = emptyStringToUndefined($(`#edit-${listingId}-quality`).val());
+      let price = emptyStringToUndefined($(`#edit-${listingId}-price`).val());
+
+      if (!name && !friendlyName && !amount && !quality && !price) {
+        return $(`#edit-${listingId}-status`).text("You must change atleast one of the values!")
+      }
+
+      $.ajax({
+        url: "/api/shop/listing",
+        method: "PATCH",
+        data: {
+          listingId: listingId,
+          serverId: window.SAILS_LOCALS.server.id,
+          _csrf: window.SAILS_LOCALS._csrf,
+          name: name,
+          friendlyName: friendlyName,
+          amount: amount,
+          quality: quality,
+          price: price
+        },
+        success: (data, status, xhr) => {
+          location.reload();
+        },
+        error: (xhr, status, error) => {
+          $(`#edit-${listingId}-status`).text(xhr.responseText)
+          console.log(xhr)
+        }
+      })
+    })
+
+    $(".shop-delete").click(e => {
+      let listingId = e.target.value
+      $.ajax({
+        url: "/api/shop/listing",
+        method: "DELETE",
+        data: {
+          listingId: listingId,
+          serverId: window.SAILS_LOCALS.server.id,
+          _csrf: window.SAILS_LOCALS._csrf,
+        },
+        success: (data, status, xhr) => {
+          location.reload();
+        },
+        error: (xhr, status, error) => {
+          console.log(xhr)
+          alert("Something went wrong! Please report this to the dev server");
+        }
+      })
+    })
+
+
+    $("#import-listings").click(e => {
+
+      let json = $("#shop-import-json").val();
+
+      $.ajax({
+        url: "/api/shop/import",
+        method: "POST",
+        data: {
+          file: json,
+          serverId: window.SAILS_LOCALS.server.id,
+          _csrf: window.SAILS_LOCALS._csrf,
+        },
+        success: (data, status, xhr) => {
+          location.reload();
+        },
+        error: (xhr, status, error) => {
+          $("#import-problems").removeClass('invisible');
+          $("#import-problems").empty();
+          if (_.isArray(xhr.responseJSON)) {
+            $("#import-problems").text(xhr.responseJSON.join(" | "))
+          } else {
+            $("#import-problems").text(xhr.responseJSON)
+          }
+        }
+      })
+    })
+
+  })
+
+</script>
