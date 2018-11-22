@@ -59,7 +59,21 @@ class LoggingObject extends EventEmitter {
 
       _.each(newLogs.entries, async line => {
         let parsedLogLine = handleLogLine(line);
+
+
         if (parsedLogLine) {
+          if (parsedLogLine.type === "memUpdate") {
+            let currentDate = Date.now();
+            let lastMemUpdate = await sails.helpers.redis.get(`server:${this.server.id}:lastMemUpdate`);
+            lastMemUpdate = new Date(parseInt(lastMemUpdate));
+            lastMemUpdate = lastMemUpdate.valueOf();
+            await sails.helpers.redis.set(`server:${this.server.id}:lastMemUpdate`, currentDate);
+            if (currentDate < lastMemUpdate + 25000) {
+              sails.log.warn(`Detected memUpdate happening too soon for server ${this.server.id} - discarding event at ${line.date} ${line.time}`);
+              return;
+            }
+
+          }
           this.emit(parsedLogLine.type, parsedLogLine.data);
         }
 
