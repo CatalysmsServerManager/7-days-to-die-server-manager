@@ -54,7 +54,10 @@ class LoggingObject extends EventEmitter {
 
     } catch (error) {
       this.failed = true;
-      sails.log.debug(`Error when getting latest log line for server with ip ${this.server.ip} - ${error}`);
+      if (this.debug) {
+        sails.log.debug(`Error when getting latest log line for server with ip ${this.server.ip} - ${error}`);
+      }
+
       return 0;
     }
   }
