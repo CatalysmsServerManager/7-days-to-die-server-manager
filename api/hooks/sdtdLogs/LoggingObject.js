@@ -17,71 +17,107 @@ class LoggingObject extends EventEmitter {
     };
     this.intervalTime = intervalTime;
     this.requestInterval;
+    this.failed = false;
+    this.lastLogLine;
+    // Set this to true to view detailed info about logs for a server. (protip: use discord bot eval command to set this to true in production instances)
+    this.debug = false;
     this.init();
   }
 
   async init() {
 
-    // Get the latest log line
-    let webUIUpdate;
-    let lastLogLine;
+    await this._getLatestLogLine();
+
+    // Get new logs in a timed interval
+    this.requestInterval = setInterval(this._intervalFunction.bind(this), this.intervalTime);
+
+  }
+
+
+  stop() {
+    clearInterval(this.requestInterval);
+  }
+
+  _toggleDebug() {
+    this.debug = !this.debug;
+  }
+
+  async _getLatestLogLine() {
     try {
-      webUIUpdate = await SdtdApi.getWebUIUpdates(this.server);
-      lastLogLine = webUIUpdate.newlogs;
+      const webUIUpdate = await SdtdApi.getWebUIUpdates(this.server);
+
+      if (this.debug) {
+        sails.log.debug(`SdtdLogs - DEBUG MESSAGE - Latest log line for server ${this.server.id} is ${webUIUpdate.newlogs}`);
+      }
+
+      this.lastLogLine = parseInt(webUIUpdate.newlogs) + 1;
 
     } catch (error) {
-      sails.log.debug(`Error when getting logs for server with ip ${this.server.ip} - ${error}`);
+      this.failed = true;
+      sails.log.debug(`Error when getting latest log line for server with ip ${this.server.ip} - ${error}`);
+      return 0;
+    }
+  }
+
+  async _intervalFunction() {
+    let newLogs = {};
+
+    if (this.failed) {
+      await this._getLatestLogLine();
     }
 
-    let failed = false;
-    // Get new logs in a timed interval
-    this.requestInterval = setInterval(async () => {
-      let newLogs = {};
+    try {
+      newLogs = await SdtdApi.getLog(this.server, this.lastLogLine);
+      this.lastLogLine = this.lastLogLine + newLogs.entries.length;
+      this.failed = false;
+    } catch (error) {
+      this.failed = true;
+      newLogs.entries = [];
+    }
 
-      if (failed) {
-        try {
-          webUIUpdate = await SdtdApi.getWebUIUpdates(this.server);
-          lastLogLine = webUIUpdate.newlogs;
-          failed = false;
-        } catch (error) {
-          //sails.log.debug(`Error when getting logs for server with ip ${this.server.ip} - ${error}`);
-        }
+    if (this.debug && newLogs.entries.length > 0) {
+      sails.log.debug(`SdtdLogs - DEBUG MESSAGE - found ${newLogs.entries.length} new logs for server ${this.server.id}. Latest line: ${this.lastLogLine} First line ${newLogs.entries[0].time}, last line ${newLogs.entries[newLogs.entries.length - 1].time}`);
+    }
 
+    _.each(newLogs.entries, async line => {
+
+      if (this.debug) {
+        sails.log.verbose(`SdtdLogs - DEBUG MESSAGE - server ${this.server.id} --- ${line.msg}`)
       }
 
-      try {
-        newLogs = await SdtdApi.getLog(this.server, lastLogLine);
-      } catch (error) {
-        //sails.log.debug(`Error when getting logs for server with ip ${this.server.ip} - ${error}`);
-        failed = true;
-        newLogs.entries = [];
-      }
-
-      _.each(newLogs.entries, async line => {
-        let parsedLogLine = handleLogLine(line);
-
-
-        if (parsedLogLine) {
-          if (parsedLogLine.type === "memUpdate") {
-            let currentDate = Date.now();
-            let lastMemUpdate = await sails.helpers.redis.get(`server:${this.server.id}:lastMemUpdate`);
-            lastMemUpdate = new Date(parseInt(lastMemUpdate));
-            lastMemUpdate = lastMemUpdate.valueOf();
-            await sails.helpers.redis.set(`server:${this.server.id}:lastMemUpdate`, currentDate);
-            if (currentDate < lastMemUpdate + 25000) {
-              sails.log.warn(`Detected memUpdate happening too soon for server ${this.server.id} - discarding event at ${line.date} ${line.time}`);
-              return;
-            }
-
-          }
+      let parsedLogLine = handleLogLine(line);
+      if (parsedLogLine) {
+        if (!await this._checkDuplicateMemUpdate(parsedLogLine, line)) {
           this.emit(parsedLogLine.type, parsedLogLine.data);
         }
+      }
+    });
 
-      });
+    this.lastLogLine = newLogs.lastLine;
+  }
 
-      lastLogLine = newLogs.lastLine;
-    }, this.intervalTime)
 
+  async _checkDuplicateMemUpdate(parsedLogLine, line) {
+    if (parsedLogLine.type === "memUpdate") {
+      let currentDate = Date.now();
+      let lastMemUpdate = await sails.helpers.redis.get(`server:${this.server.id}:lastMemUpdate`);
+      lastMemUpdate = new Date(parseInt(lastMemUpdate));
+      lastMemUpdate = lastMemUpdate.valueOf();
+      await sails.helpers.redis.set(`server:${this.server.id}:lastMemUpdate`, currentDate);
+      if (currentDate < lastMemUpdate + 25000) {
+
+        if (this.debug) {
+          sails.log.debug(`SdtdLogs - DEBUG MESSAGE - Detected memUpdate happening too soon for server ${this.server.id} - discarding event at ${line.date} ${line.time}`);
+        }
+
+        return true;
+      } else {
+        return false;
+      }
+
+    } else {
+      return false;
+    }
   }
 
 }
