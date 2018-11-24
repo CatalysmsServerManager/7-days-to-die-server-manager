@@ -226,6 +226,24 @@
 
       </div>
 
+      <div class="card">
+        <div class="card-header" id="settings-heading-cpmSettings">
+          <h5 class="mb-0">
+            <button class="btn btn-link" data-toggle="collapse" data-target="#settings-collapse-cpmSettings">
+              <i class="fas fa-plus"></i> CPM Settings
+            </button>
+          </h5>
+        </div>
+
+        <div id="settings-collapse-cpmSettings" class="collapse">
+          <div class="card-body">
+            <%- include('./partials/settings/cpmSettings', {server: server, config: config, cpmVersion: cpmVersion}) %>
+
+          </div>
+        </div>
+
+      </div>
+
 
     </div>
   </div>
