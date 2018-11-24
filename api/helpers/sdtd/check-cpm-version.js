@@ -14,6 +14,11 @@ module.exports = {
       type: 'string'
     },
 
+    refresh: {
+      type: 'boolean',
+      defaultsTo: false
+    }
+
   },
 
 
@@ -28,10 +33,10 @@ module.exports = {
 
     version = await sails.helpers.redis.get(`server:${inputs.serverId}:cpm-version`);
 
-    if (!version) {
-        let apiResponse = await sails.helpers.sdtd.checkModVersion('Mod CSMM Patrons', inputs.serverId);
-        await sails.helpers.redis.set(`server:${inputs.serverId}:cpm-version`, apiResponse);
-        version = apiResponse;
+    if (!version || inputs.refresh) {
+      let apiResponse = await sails.helpers.sdtd.checkModVersion('Mod CSMM Patrons', inputs.serverId);
+      await sails.helpers.redis.set(`server:${inputs.serverId}:cpm-version`, apiResponse);
+      version = apiResponse;
     }
     sails.log.debug(`Detected CPM version ${version} for server ${inputs.serverId}`);
     return exits.success(parseFloat(version));

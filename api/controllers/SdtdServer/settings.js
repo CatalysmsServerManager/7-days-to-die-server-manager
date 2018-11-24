@@ -44,6 +44,8 @@ module.exports = {
     });
     let user = await User.findOne(this.req.session.userId);
 
+    const cpmVersion = await sails.helpers.sdtd.checkCpmVersion(inputs.serverId, true);
+
     let permCheck = await sails.helpers.roles.checkPermission.with({
       userId: this.req.session.userId,
       serverId: inputs.serverId,
@@ -67,7 +69,8 @@ module.exports = {
         server: server,
         config: serverConfig,
         user: user,
-        customCommands: customCommands
+        customCommands: customCommands,
+        cpmVersion: cpmVersion
       });
     } catch (error) {
       sails.log.error(`VIEW - SdtdServer:settings - ${error}`);
