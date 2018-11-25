@@ -1,4 +1,4 @@
-var sevenDays = require('machinepack-7daystodiewebapi');
+const SdtdApi = require('7daystodie-api-wrapper');
 
 module.exports = {
 
@@ -24,15 +24,20 @@ module.exports = {
     },
 
     quality: {
-      type: 'string'
+      type: 'number',
+      min: 0,
+      max: 6
     }
   },
 
   exits: {
     success: {},
     notFound: {
-      description: 'No player with the specified ID was found in the database.',
       responseType: 'notFound'
+    },
+
+    badRequest: {
+      responseType: 'badRequest'
     }
   },
 
@@ -46,36 +51,38 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     try {
-      
-      inputs.quality = inputs.quality ? inputs.quality : Math.trunc(Math.random() * 600)
+
       let player = await Player.findOne(inputs.playerId).populate('server');
       let server = await SdtdServer.findOne(player.server.id);
+      const cpmVersion = await sails.helpers.sdtd.checkCpmVersion(server.id);
 
+      let cmdToExec;
+      if (cpmVersion >= 6.4) {
+        cmdToExec = `giveplus ${player.steamId} ${inputs.itemName} ${inputs.amount} ${inputs.quality ? inputs.quality + " 0" : ''}`;
+      } else {
+        cmdToExec = `give ${player.entityId} ${inputs.itemName} ${inputs.amount} ${inputs.quality ? inputs.quality : ''}`;
+      }
 
-      return sevenDays.giveItem({
+      let response = await SdtdApi.executeConsoleCommand({
         ip: server.ip,
         port: server.webPort,
-        authName: server.authName,
-        authToken: server.authToken,
-        entityId: player.entityId,
-        itemName: inputs.itemName,
-        amount: inputs.amount,
-        quality: inputs.quality
-      }).exec({
-        error: function (error) {
-          return exits.error(error);
-        },
-        playerNotFound: function () {
-          return exits.notFound('Did not find online player with given ID');
-        },
-        itemNotFound: function () {
-          return exits.notFound('Did not find given item');
-        },
-        success: function (response) {
-          sails.log.info(`API - Player:give-item - giving ${inputs.amount} of ${inputs.itemName} to ${inputs.playerId} with quality: ${inputs.quality}`);
-          return exits.success(response);
-        }
-      });
+        adminUser: server.authName,
+        adminToken: server.authToken
+      }, cmdToExec);
+
+      if (response.result.startsWith('ERR:')) {
+        return exits.badRequest(`Error while giving item - ${response.result}`);
+      }
+
+      
+      await SdtdApi.executeConsoleCommand({
+        ip: server.ip,
+        port: server.webPort,
+        adminUser: server.authName,
+        adminToken: server.authToken
+      }, `pm ${player.steamId} "CSMM - You have received ${inputs.amount} of ${inputs.itemName}"`);
+
+      sails.log.info(`API - Player:give-item - giving ${inputs.amount} of ${inputs.itemName} to ${inputs.playerId} with quality: ${inputs.quality}`);
 
     } catch (error) {
       sails.log.error(`API - Player:give-item - ${error}`);
