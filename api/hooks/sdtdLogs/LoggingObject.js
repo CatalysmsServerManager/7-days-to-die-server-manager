@@ -2,8 +2,6 @@ const SdtdApi = require('7daystodie-api-wrapper');
 const EventEmitter = require('events');
 const handleLogLine = require('./handleLogLine');
 
-var sevenDays = require('machinepack-7daystodiewebapi');
-
 class LoggingObject extends EventEmitter {
 
   constructor(ip, port, authName, authToken, serverId, intervalTime = 2000) {
@@ -19,6 +17,8 @@ class LoggingObject extends EventEmitter {
     this.requestInterval;
     this.failed = false;
     this.lastLogLine;
+    // Keeps track of wheter a request is happening already. This is to block the interval from queueing massive amounts of requests.
+    this.handlingRequest = false;
     // Set this to true to view detailed info about logs for a server. (protip: use discord bot eval command to set this to true in production instances)
     this.debug = false;
     this.init();
@@ -65,11 +65,18 @@ class LoggingObject extends EventEmitter {
   async _intervalFunction() {
     let newLogs = {};
 
+    if (this.handlingRequest) {
+      sails.log.debug(`SdtdLogs - DEBUG MESSAGE - Waiting for a request already, skipping this one.`);
+      return;
+    }
+
     if (this.failed) {
       await this._getLatestLogLine();
     }
 
+
     try {
+      this.handlingRequest = true;
       newLogs = await SdtdApi.getLog(this.server, this.lastLogLine);
       this.lastLogLine = this.lastLogLine + newLogs.entries.length;
       this.failed = false;
@@ -77,7 +84,7 @@ class LoggingObject extends EventEmitter {
       this.failed = true;
       newLogs.entries = [];
     }
-
+    this.handlingRequest = false;
     if (this.debug && newLogs.entries.length > 0) {
       sails.log.debug(`SdtdLogs - DEBUG MESSAGE - found ${newLogs.entries.length} new logs for server ${this.server.id}. Latest line: ${this.lastLogLine} First line ${newLogs.entries[0].time}, last line ${newLogs.entries[newLogs.entries.length - 1].time}`);
     }
