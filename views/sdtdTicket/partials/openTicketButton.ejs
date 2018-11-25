@@ -1,37 +1,36 @@
 <%- exposeLocalsToBrowser() %>
 
-  <!-- Button trigger modal -->
-  <button id='button-open-ticket-<%= ticket.id %>' type="button" class="btn btn-warning">
-    Reopen ticket
-  </button>
+<!-- Button trigger modal -->
+<button id='button-open-ticket-<%= ticket.id %>' type="button" class="btn btn-warning">
+  Reopen ticket
+</button>
 
 <script>
-    $(document).ready(function () {
-      $('#button-open-ticket-<%= ticket.id %>').click((event) => {
-        event.preventDefault();
+  $(document).ready(function () {
+    $('#button-open-ticket-<%= ticket.id %>').click((event) => {
+      event.preventDefault();
 
-        $.ajax({
-          url: `/api/sdtdticket/updateticketstatus`,
-          type: "POST",
-          data: {
-            _csrf: window.SAILS_LOCALS._csrf,
-            serverId: window.SAILS_LOCALS.server.id,
-            ticketId: window.SAILS_LOCALS.ticket.id,
-            status: true
-          },
-          success: (data, status, xhr) => {
-            location.reload()
-          },
-          error: (xhr, status, error) => {
-            alert('Something went wrong while trying to close a ticket');
-          }
-        });
-      })
-
-
-
+      $.ajax({
+        url: `/api/sdtdticket/updateticketstatus`,
+        type: "POST",
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+          ticketId: window.SAILS_LOCALS.ticket.id,
+          status: true
+        },
+        success: (data, status, xhr) => {
+          location.reload()
+        },
+        error: (xhr, status, error) => {
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
+        }
+      });
     })
 
-  </script>
 
 
+  })
+
+</script>

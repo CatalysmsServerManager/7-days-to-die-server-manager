@@ -67,11 +67,11 @@
         item: "*",
       },
       success: (data, status, xhr) => {
-        console.log(data)
         availableItems = data;
       },
       error: (xhr, status, error) => {
-        console.log(error)
+        displayAjaxToSupportData(xhr, this.URL);;
+        showErrorModal(`${error} - ${xhr.responseText}`);
       }
     });
 
@@ -123,9 +123,8 @@
           alert('Gave items to player');
         },
         error: (xhr, status, error) => {
-          alert(
-            'Something went wrong while trying to give items to a player! Make sure you\'re using a valid item name'
-          );
+          displayAjaxToSupportData(xhr, this.URL);
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       });
     })

@@ -21,9 +21,7 @@ function loadSdtdServers(userId) {
       }
     },
     error: (xhr, status, error) => {
-      let errorHtml = `<a class="dropdown-item .text-danger"> Error loading servers </a>`;
-      serverslist.append(errorHtml);
-
+      showErrorModal(`${error} - ${xhr.responseText}`);
     },
     complete: () => {
       $('#loading-servers').remove();
@@ -50,7 +48,7 @@ async function checkUserPermission(userId, serverId, permissionField) {
 
       },
       error: (xhr, status, error) => {
-        console.log(xhr)
+        displayAjaxToSupportData(xhr, this.URL);
         reject(xhr)
 
       }
@@ -73,4 +71,27 @@ function showErrorModal(errorMessage) {
   }
 
   $('#error-modal').modal('show');
+}
+
+// This function parses an xhr object and displays a console.log which users can copy and send to support.
+function displayAjaxToSupportData(xhr, url) {
+
+  console.log('---------');
+  console.log(`
+  _____                    
+  |  ___|                   
+  | |__ _ __ _ __ ___  _ __ 
+  |  __| '__| '__/ _ \| '__|
+  | |__| |  | | | (_) | |   
+  \____/_|  |_|  \___/|_|   
+                                                     
+  `);
+  console.log('Ajax request ERROR!');
+  console.log('You can copy and paste this info to the support team, please also include what you were doing (eg, what button(s) did you press, what data did you fill in?');
+  console.log('---------');
+  console.log('Headers:')
+  console.log(xhr.getAllResponseHeaders());
+  console.log(`Status: ${xhr.status} - ${xhr.statusText}`);
+  console.log(`URL: ${url}`);
+  console.log('---------');
 }

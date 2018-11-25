@@ -21,7 +21,8 @@
             alert('unbanned player');
           },
           error: (xhr, status, error) => {
-            alert('Something went wrong while trying to unban a player!');
+            displayAjaxToSupportData(xhr, this.URL);;
+            showErrorModal(`${error} - ${xhr.responseText}`);
           }
         });
       })

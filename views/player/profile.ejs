@@ -376,8 +376,8 @@
             window.location.reload();
           },
           error: (xhr, status, error) => {
-            alert('Error editing role, check browser console for more info.')
-            console.log(xhr);
+            displayAjaxToSupportData(xhr, this.URL);;
+            showErrorModal(`${error} - ${xhr.responseText}`);
           }
         })
       } else {
@@ -395,13 +395,8 @@
             window.location.reload();
           },
           error: (xhr, status, error) => {
-            if (xhr.responseJSON.error) {
-              window.SAILS_LOCALS.error = xhr.responseJSON.error
-            } else {
-              window.SAILS_LOCALS.error = undefined;
-            }
-            $("#error-modal").modal('show');
-            console.log(xhr);
+            showErrorModal(`${error} - ${xhr.responseText}`);
+            displayAjaxToSupportData(xhr, this.URL);;
           }
         })
 

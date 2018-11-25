@@ -86,7 +86,8 @@
                 success: data => {
                     location.reload()
                 },
-                error: e => {
+                error: (xhr, status, error) => {
+
                     return statusElement.text(e.responseText)
 
                 }

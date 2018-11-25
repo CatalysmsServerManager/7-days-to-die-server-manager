@@ -92,8 +92,8 @@
                         $('#economy-module-playtimeEarner-config-enabled').addClass('bg-success').removeClass('bg-danger');
                     },
                     error: (xhr, status, error) => {
-                        console.log(error)
-                        alert('Something went wrong while enabling playtimeEarner')
+                        displayAjaxToSupportData(xhr, this.URL);
+                        showErrorModal(`${error} - ${xhr.responseText}`);
                     }
                 })
             } else {
@@ -109,8 +109,8 @@
                         $('#economy-module-playtimeEarner-config-enabled').addClass('bg-success').removeClass('bg-danger');
                     },
                     error: (xhr, status, error) => {
-                        console.log(error)
-                        alert('Something went wrong while disabling playtimeEarner')
+                        displayAjaxToSupportData(xhr, this.URL);
+                        showErrorModal(`${error} - ${xhr.responseText}`);
                     }
                 })
             }
@@ -137,8 +137,8 @@
                     $('#economy-module-playtimeEarner-config-interval').addClass('bg-success').removeClass('bg-danger');
                 },
                 error: (xhr, status, error) => {
-                    console.log(error)
-                    alert('Something went wrong while setting a new interval')
+                    displayAjaxToSupportData(xhr, this.URL);;
+                    showErrorModal(`${error} - ${xhr.responseText}`);
                 }
             })
         }
@@ -165,40 +165,12 @@
                     $('#economy-module-playtimeEarner-config-amount').addClass('bg-success').removeClass('bg-danger');
                 },
                 error: (xhr, status, error) => {
-                    console.log(error)
-                    alert('Something went wrong while setting a new amount')
+                    displayAjaxToSupportData(xhr, this.URL);
+                    showErrorModal(`${error} - ${xhr.responseText}`);
                 }
             })
 
         }
     })
-
-
-
-
-            //     $('#economy-button-enable-playtimeEarner').click(e => {
-            //     e.preventDefault();
-
-
-            // $('#economy-button-disable-playtimeEarner').click(e => {
-            //     e.preventDefault();
-            //     $.ajax({
-            //         url: '/api/sdtdserver/economy/module',
-            //         method: 'DELETE',
-            //         data: {
-            //             _csrf: window.SAILS_LOCALS._csrf,
-            //             serverId: window.SAILS_LOCALS.server.id,
-            //             moduleType: 'playtimeEarner'
-            //         },
-            //         success: (data, status, xhr) => {
-            //             $('#economy-button-enable-playtimeEarner').fadeIn();
-            //             $('#economy-button-disable-playtimeEarner').fadeOut();
-            //             console.log(data)
-            //         },
-            //         error: (xhr, status, error) => {
-            //             console.log(error)
-            //         }
-            //     })
-            // })
 
 </script>

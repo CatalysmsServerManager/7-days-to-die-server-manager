@@ -1,266 +1,276 @@
 <%- exposeLocalsToBrowser() %>
 
-    <div class="container">
+<div class="container">
 
-        <p>Allow your players to earn and spend money on your server.</p>
+  <p>Allow your players to earn and spend money on your server.</p>
 
-        <button id="economy-button-enable" type="button" class=" btn-lg bg-success">
-            <i class="fas fa-toggle-on"></i> Enable economy</button>
-        <button id="economy-button-disable" type="button" class=" btn-lg bg-warning">
-            <i class="fas fa-toggle-off"></i>Disable economy</button>
+  <button id="economy-button-enable" type="button" class=" btn-lg bg-success">
+    <i class="fas fa-toggle-on"></i> Enable economy</button>
+  <button id="economy-button-disable" type="button" class=" btn-lg bg-warning">
+    <i class="fas fa-toggle-off"></i>Disable economy</button>
 
-        <hr>
+  <hr>
 
-        <% const shopLink = '/shop/' + server.id %>
+  <% const shopLink = '/shop/' + server.id %>
 
-            <a href='<%= shopLink %>' class="btn btn-lg text-white bg-secondary" role="button">
-                <i class="fas fa-shopping-cart"></i> Shop</a>
+  <a href='<%= shopLink %>' class="btn btn-lg text-white bg-secondary" role="button">
+    <i class="fas fa-shopping-cart"></i> Shop</a>
 
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-lg text-white bg-secondary" data-toggle="modal" data-target="#economy-setPrices-modal">
-                <i class="fas fa-hand-holding-usd"></i> Set prices
-            </button>
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-lg text-white bg-secondary" data-toggle="modal" data-target="#economy-setPrices-modal">
+    <i class="fas fa-hand-holding-usd"></i> Set prices
+  </button>
 
-            <!-- Modal -->
-            <div class="modal fade" id="economy-setPrices-modal" tabindex="-1" role="dialog" aria-labelledby="economy-setPrices-modal-title"
-                aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="economy-setPrices-modal-title"> Set prices</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
+  <!-- Modal -->
+  <div class="modal fade" id="economy-setPrices-modal" tabindex="-1" role="dialog" aria-labelledby="economy-setPrices-modal-title"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="economy-setPrices-modal-title"> Set prices</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
 
-                            <div class="form-group">
+          <div class="form-group">
 
-                                <label for="economy-setPrices-costToTeleport">Teleport</label>
-                                <input type="text" name="economy-setPrices-costToTeleport" id="economy-setPrices-costToTeleport" class="form-control" placeholder="<%= config.costToTeleport %>"
-                                    aria-describedby="economy-costToTeleport-help">
-                                <input name="economy-costToTeleport-btn" id="economy-costToTeleport-btn" class="btn btn-primary" type="button" value="Set">
-                                <small id="economy-costToTeleport-help" class="text-muted">How much does a player have to pay to teleport</small>
-                                <br>
-                                <label for="economy-setPrices-costToSetTeleport">Set teleport</label>
-                                <input type="text" name="economy-setPrices-costToSetTeleport" id="economy-setPrices-costToSetTeleport" class="form-control"
-                                    placeholder="<%= config.costToSetTeleport %>" aria-describedby="economy-costToSetTeleport-help">
-                                <input name="economy-costToSetTeleport-btn" id="economy-costToSetTeleport-btn" class="btn btn-primary" type="button" value="Set">
-                                <small id="economy-costToSetTeleport-help" class="text-muted">How much does a player have to pay to create a new teleport location</small>
-                                <br>
-                                <label for="economy-setPrices-costToMakeTeleportPublic">Teleport public</label>
-                                <input type="text" name="economy-setPrices-costToMakeTeleportPublic" id="economy-setPrices-costToMakeTeleportPublic" class="form-control"
-                                    placeholder="<%= config.costToMakeTeleportPublic %>" aria-describedby="economy-costToMakeTeleportPublic-help">
-                                <input name="economy-costToMakeTeleportPublic-btn" id="economy-costToMakeTeleportPublic-btn" class="btn btn-primary" type="button"
-                                    value="Set">
-                                <small id="economy-costToMakeTeleportPublic-help" class="text-muted">How much does a player have to pay to make a teleport location public</small>
+            <label for="economy-setPrices-costToTeleport">Teleport</label>
+            <input type="text" name="economy-setPrices-costToTeleport" id="economy-setPrices-costToTeleport" class="form-control"
+              placeholder="<%= config.costToTeleport %>" aria-describedby="economy-costToTeleport-help">
+            <input name="economy-costToTeleport-btn" id="economy-costToTeleport-btn" class="btn btn-primary" type="button"
+              value="Set">
+            <small id="economy-costToTeleport-help" class="text-muted">How much does a player have to pay to teleport</small>
+            <br>
+            <label for="economy-setPrices-costToSetTeleport">Set teleport</label>
+            <input type="text" name="economy-setPrices-costToSetTeleport" id="economy-setPrices-costToSetTeleport"
+              class="form-control" placeholder="<%= config.costToSetTeleport %>" aria-describedby="economy-costToSetTeleport-help">
+            <input name="economy-costToSetTeleport-btn" id="economy-costToSetTeleport-btn" class="btn btn-primary" type="button"
+              value="Set">
+            <small id="economy-costToSetTeleport-help" class="text-muted">How much does a player have to pay to create
+              a new teleport location</small>
+            <br>
+            <label for="economy-setPrices-costToMakeTeleportPublic">Teleport public</label>
+            <input type="text" name="economy-setPrices-costToMakeTeleportPublic" id="economy-setPrices-costToMakeTeleportPublic"
+              class="form-control" placeholder="<%= config.costToMakeTeleportPublic %>" aria-describedby="economy-costToMakeTeleportPublic-help">
+            <input name="economy-costToMakeTeleportPublic-btn" id="economy-costToMakeTeleportPublic-btn" class="btn btn-primary"
+              type="button" value="Set">
+            <small id="economy-costToMakeTeleportPublic-help" class="text-muted">How much does a player have to pay to
+              make a teleport location public</small>
 
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-lg text-white bg-secondary" data-toggle="modal" data-target="#economy-setCurrencyName-modal">
-                <i class="far fa-money-bill-alt"></i> Set currency name
-            </button>
-
-            <!-- Modal -->
-            <div class="modal fade" id="economy-setCurrencyName-modal" tabindex="-1" role="dialog" aria-labelledby="economy-setCurrencyName-modal-title"
-                aria-hidden="true">
-                <div class="modal-dialog modal-sm" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="economy-setCurrencyName-modal-title">
-                                </i> Set currency name</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label for="economy-setCurrencyName-input">Name</label>
-                                <input type="text" class="form-control" name="economy-setCurrencyName-input" id="economy-setCurrencyName-input" aria-describedby="economy-setCurrencyName-input-help"
-                                    placeholder="<%= config.currencyName %>">
-                                <small id="economy-setCurrencyName-input-help" class="form-text text-muted">Eg. ZCash, credits, bucks, dollars, ...</small>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button id="economy-setCurrencyName-save-btn" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <hr>
-
-
-            <h3>Modules</h3>
-
-            <%- include('../../economy/module-playtimeEarner') %>
-                <%- include('../../economy/module-discordTextEarner') %>
-                    <%- include('../../economy/module-killEarner') %>
-
-
-
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <script>
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-lg text-white bg-secondary" data-toggle="modal" data-target="#economy-setCurrencyName-modal">
+    <i class="far fa-money-bill-alt"></i> Set currency name
+  </button>
 
-        $(document).ready(function () {
+  <!-- Modal -->
+  <div class="modal fade" id="economy-setCurrencyName-modal" tabindex="-1" role="dialog" aria-labelledby="economy-setCurrencyName-modal-title"
+    aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="economy-setCurrencyName-modal-title">
+            </i> Set currency name</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="economy-setCurrencyName-input">Name</label>
+            <input type="text" class="form-control" name="economy-setCurrencyName-input" id="economy-setCurrencyName-input"
+              aria-describedby="economy-setCurrencyName-input-help" placeholder="<%= config.currencyName %>">
+            <small id="economy-setCurrencyName-input-help" class="form-text text-muted">Eg. ZCash, credits, bucks,
+              dollars, ...</small>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button id="economy-setCurrencyName-save-btn" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-            if (window.SAILS_LOCALS.config.economyEnabled) {
-                $('#economy-button-enable').hide();
-
-            } else {
-                $('#economy-button-disable').hide();
-            }
-
-
-            $("#economy-button-enable").click(e => {
-                e.preventDefault();
-                $.ajax({
-                    url: '/api/sdtdserver/economy',
-                    method: 'POST',
-                    data: {
-                        _csrf: window.SAILS_LOCALS._csrf,
-                        serverId: window.SAILS_LOCALS.server.id
-                    },
-                    success: (data, status, xhr) => {
-                        $('#economy-button-enable').fadeOut();
-                        $('#economy-button-disable').fadeIn();
-                    },
-                    error: (xhr, status, error) => {
-                        console.log(error)
-                    }
-                })
-            })
-
-            $("#economy-button-disable").click(e => {
-                e.preventDefault();
-                $.ajax({
-                    url: '/api/sdtdserver/economy',
-                    method: 'DELETE',
-                    data: {
-                        _csrf: window.SAILS_LOCALS._csrf,
-                        serverId: window.SAILS_LOCALS.server.id
-                    },
-                    success: (data, status, xhr) => {
-                        $('#economy-button-enable').fadeIn();
-                        $('#economy-button-disable').fadeOut();
-                    },
-                    error: (xhr, status, error) => {
-                        console.log(error)
-                    }
-                })
-            })
+  <hr>
 
 
-            $('#economy-costToTeleport-btn').click(e => {
-                let newCost = $('#economy-setPrices-costToTeleport').val();
-                if (!newCost) {
-                    return
-                }
-                $.ajax({
-                    url: '/api/sdtdserver/economy/cost',
-                    method: 'POST',
-                    data: {
-                        _csrf: window.SAILS_LOCALS._csrf,
-                        serverId: window.SAILS_LOCALS.server.id,
-                        costTypeToSet: 'costToTeleport',
-                        newCost: newCost
-                    },
-                    success: (data, status, xhr) => {
-                        $('#economy-costToTeleport-btn').addClass('bg-success').removeClass('bg-danger');
-                        console.log(data)
-                    },
-                    error: (xhr, status, error) => {
-                        console.log(error)
-                        $('#economy-costToTeleport-btn').addClass('bg-danger').removeClass('bg-success');
-                    }
-                })
-            })
+  <h3>Modules</h3>
 
-            $('#economy-costToSetTeleport-btn').click(e => {
-                let newCost = $('#economy-setPrices-costToSetTeleport').val();
-                if (!newCost) {
-                    return
-                }
-                $.ajax({
-                    url: '/api/sdtdserver/economy/cost',
-                    method: 'POST',
-                    data: {
-                        _csrf: window.SAILS_LOCALS._csrf,
-                        serverId: window.SAILS_LOCALS.server.id,
-                        costTypeToSet: 'costToSetTeleport',
-                        newCost: newCost
-                    },
-                    success: (data, status, xhr) => {
-                        $('#economy-costToSetTeleport-btn').addClass('bg-success').removeClass('bg-danger');
-                        console.log(data)
-                    },
-                    error: (xhr, status, error) => {
-                        console.log(error)
-                        $('#economy-costToSetTeleport-btn').addClass('bg-danger').removeClass('bg-success');
-                    }
-                })
-            })
-
-            $('#economy-costToMakeTeleportPublic-btn').click(e => {
-                let newCost = $('#economy-setPrices-costToMakeTeleportPublic').val();
-                if (!newCost) {
-                    return
-                }
-                $.ajax({
-                    url: '/api/sdtdserver/economy/cost',
-                    method: 'POST',
-                    data: {
-                        _csrf: window.SAILS_LOCALS._csrf,
-                        serverId: window.SAILS_LOCALS.server.id,
-                        costTypeToSet: 'costToMakeTeleportPublic',
-                        newCost: newCost
-                    },
-                    success: (data, status, xhr) => {
-                        $('#economy-costToMakeTeleportPublic-btn').addClass('bg-success').removeClass('bg-danger');
-                    },
-                    error: (xhr, status, error) => {
-                        console.log(error)
-                        $('#economy-costToMakeTeleportPublic-btn').addClass('bg-danger').removeClass('bg-success');
-                    }
-                })
-            })
+  <%- include('../../economy/module-playtimeEarner') %>
+  <%- include('../../economy/module-discordTextEarner') %>
+  <%- include('../../economy/module-killEarner') %>
 
 
-            $('#economy-setCurrencyName-save-btn').click(e => {
-                let newName = $('#economy-setCurrencyName-input').val();
 
-                if (!newName) {
-                    return
-                }
+</div>
 
-                $.ajax({
-                    url: '/api/sdtdserver/economy/currencyname',
-                    method: 'POST',
-                    data: {
-                        _csrf: window.SAILS_LOCALS._csrf,
-                        serverId: window.SAILS_LOCALS.server.id,
-                        newCurrencyName: newName
-                    },
-                    success: (data, status, xhr) => {
+<script>
+  $(document).ready(function () {
 
-                    },
-                    error: (xhr, status, error) => {
-                        console.log(error)
-                        alert(error)
-                    }
-                })
-            })
+    if (window.SAILS_LOCALS.config.economyEnabled) {
+      $('#economy-button-enable').hide();
 
-        })
+    } else {
+      $('#economy-button-disable').hide();
+    }
 
-    </script>
+
+    $("#economy-button-enable").click(e => {
+      e.preventDefault();
+      $.ajax({
+        url: '/api/sdtdserver/economy',
+        method: 'POST',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id
+        },
+        success: (data, status, xhr) => {
+          $('#economy-button-enable').fadeOut();
+          $('#economy-button-disable').fadeIn();
+        },
+        error: (xhr, status, error) => {
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
+        }
+      })
+    })
+
+    $("#economy-button-disable").click(e => {
+      e.preventDefault();
+      $.ajax({
+        url: '/api/sdtdserver/economy',
+        method: 'DELETE',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id
+        },
+        success: (data, status, xhr) => {
+          $('#economy-button-enable').fadeIn();
+          $('#economy-button-disable').fadeOut();
+        },
+        error: (xhr, status, error) => {
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
+        }
+      })
+    })
+
+
+    $('#economy-costToTeleport-btn').click(e => {
+      let newCost = $('#economy-setPrices-costToTeleport').val();
+      if (!newCost) {
+        return
+      }
+      $.ajax({
+        url: '/api/sdtdserver/economy/cost',
+        method: 'POST',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+          costTypeToSet: 'costToTeleport',
+          newCost: newCost
+        },
+        success: (data, status, xhr) => {
+          $('#economy-costToTeleport-btn').addClass('bg-success').removeClass('bg-danger');
+          console.log(data)
+        },
+        error: (xhr, status, error) => {
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
+          $('#economy-costToTeleport-btn').addClass('bg-danger').removeClass('bg-success');
+        }
+      })
+    })
+
+    $('#economy-costToSetTeleport-btn').click(e => {
+      let newCost = $('#economy-setPrices-costToSetTeleport').val();
+      if (!newCost) {
+        return
+      }
+      $.ajax({
+        url: '/api/sdtdserver/economy/cost',
+        method: 'POST',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+          costTypeToSet: 'costToSetTeleport',
+          newCost: newCost
+        },
+        success: (data, status, xhr) => {
+          $('#economy-costToSetTeleport-btn').addClass('bg-success').removeClass('bg-danger');
+          console.log(data)
+        },
+        error: (xhr, status, error) => {
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
+          $('#economy-costToSetTeleport-btn').addClass('bg-danger').removeClass('bg-success');
+        }
+      })
+    })
+
+    $('#economy-costToMakeTeleportPublic-btn').click(e => {
+      let newCost = $('#economy-setPrices-costToMakeTeleportPublic').val();
+      if (!newCost) {
+        return
+      }
+      $.ajax({
+        url: '/api/sdtdserver/economy/cost',
+        method: 'POST',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+          costTypeToSet: 'costToMakeTeleportPublic',
+          newCost: newCost
+        },
+        success: (data, status, xhr) => {
+          $('#economy-costToMakeTeleportPublic-btn').addClass('bg-success').removeClass('bg-danger');
+        },
+        error: (xhr, status, error) => {
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
+          $('#economy-costToMakeTeleportPublic-btn').addClass('bg-danger').removeClass('bg-success');
+        }
+      })
+    })
+
+
+    $('#economy-setCurrencyName-save-btn').click(e => {
+      let newName = $('#economy-setCurrencyName-input').val();
+
+      if (!newName) {
+        return
+      }
+
+      $.ajax({
+        url: '/api/sdtdserver/economy/currencyname',
+        method: 'POST',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+          newCurrencyName: newName
+        },
+        success: (data, status, xhr) => {
+
+        },
+        error: (xhr, status, error) => {
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
+          alert(error)
+        }
+      })
+    })
+
+  })
+
+</script>

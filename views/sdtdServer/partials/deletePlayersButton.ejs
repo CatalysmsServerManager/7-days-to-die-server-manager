@@ -31,8 +31,6 @@
   $(document).ready(() => {
     $("#confirm-delete").click(e => {
 
-
-        // Add a playerId to get past policy ;)
       $.ajax({
         url: `/api/sdtdserver/players`,
         type: "DELETE",
@@ -44,8 +42,8 @@
           location.reload();
         },
         error: (xhr, status, error) => {
-          console.log(xhr);
-          alert('Something went wrong while trying to delete players!');
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       });
 

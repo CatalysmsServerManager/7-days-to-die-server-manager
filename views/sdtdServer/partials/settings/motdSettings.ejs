@@ -1,82 +1,84 @@
 <%- exposeLocalsToBrowser() %>
 
-  <!-- MOTD SETTINGS -->
+<!-- MOTD SETTINGS -->
 
-  <div class="container">
-    <p>Send a message to a player when they connect to your server.</p>
+<div class="container">
+  <p>Send a message to a player when they connect to your server.</p>
 
-    <label for="input-settings-motd-message">Message</label>
+  <label for="input-settings-motd-message">Message</label>
 
-    <input type="text" class="form-control" id="input-settings-motd-message" value="<%= config.motdMessage %>">
+  <input type="text" class="form-control" id="input-settings-motd-message" value="<%= config.motdMessage %>">
 
-    <hr>
+  <hr>
 
-    <% if(config.motdEnabled) {%>
-      <btn id='input-settings-motd-toggle' class="btn btn-danger">
-        <i class="fa fa-power-off"></i> Disable
-      </btn>
-      <% } else { %>
-        <btn id='input-settings-motd-toggle' class="btn btn-success">
-          <i class="fa fa-power-off"></i> Enable
-        </btn>
-        <% } %>
+  <% if(config.motdEnabled) {%>
+  <btn id='input-settings-motd-toggle' class="btn btn-danger">
+    <i class="fa fa-power-off"></i> Disable
+  </btn>
+  <% } else { %>
+  <btn id='input-settings-motd-toggle' class="btn btn-success">
+    <i class="fa fa-power-off"></i> Enable
+  </btn>
+  <% } %>
 
-          <button id="settings-reload-motd" class="btn btn-default btn-primary" type="button">
-            <em class="glyphicon glyphicon-align-right"></em>
-            <i class="fas fa-sync-alt"></i> Apply changes
-          </button>
+  <button id="settings-reload-motd" class="btn btn-default btn-primary" type="button">
+    <em class="glyphicon glyphicon-align-right"></em>
+    <i class="fas fa-sync-alt"></i> Apply changes
+  </button>
 
-  </div>
+</div>
 
-  <script>
-    $(document).ready(function () {
+<script>
+  $(document).ready(function () {
 
-      $('#input-settings-motd-toggle').click((event) => {
-        event.preventDefault();
-        $.ajax({
-          url: `/api/sdtdserver/togglemotd`,
-          type: 'POST',
-          data: {
-            _csrf: window.SAILS_LOCALS._csrf,
-            serverId: <%= server.id %>
-          },
-          success: (data, status, xhr) => {
-            location.reload();
-          },
-          error: (xhr, status, error) => {
-            alert('Something went wrong while trying to toggle motd!');
-          }
-        });
-      })
-
-
-      $('#settings-reload-motd').click((event) => {
-        event.preventDefault();
-
-        let newMessage = $('#input-settings-motd-message').val();
-
-        let newOnJoinEnabled
-
-        $.ajax({
-          url: `/api/sdtdserver/reloadmotd`,
-          type: "POST",
-          data: {
-            _csrf: window.SAILS_LOCALS._csrf,
-            serverId: <%= server.id %>,
-            newMessage: (newMessage == '') ? undefined : newMessage,
-            newStatusOnJoin: newOnJoinEnabled
-          },
-          success: (data, status, xhr) => {
-            location.reload();
-          },
-          error: (xhr, status, error) => {
-            alert('Something went wrong while trying to change motd settings! ' + error);
-          }
-        });
+    $('#input-settings-motd-toggle').click((event) => {
+      event.preventDefault();
+      $.ajax({
+        url: `/api/sdtdserver/togglemotd`,
+        type: 'POST',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: <%= server.id %>
+        },
+        success: (data, status, xhr) => {
+          location.reload();
+        },
+        error: (xhr, status, error) => {
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
+        }
+      });
+    })
 
 
-      })
+    $('#settings-reload-motd').click((event) => {
+      event.preventDefault();
+
+      let newMessage = $('#input-settings-motd-message').val();
+
+      let newOnJoinEnabled
+
+      $.ajax({
+        url: `/api/sdtdserver/reloadmotd`,
+        type: "POST",
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: <%= server.id %>,
+          newMessage: (newMessage == '') ? undefined : newMessage,
+          newStatusOnJoin: newOnJoinEnabled
+        },
+        success: (data, status, xhr) => {
+          location.reload();
+        },
+        error: (xhr, status, error) => {
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
+        }
+      });
+
 
     })
 
-  </script>
+  })
+
+</script>

@@ -1,8 +1,8 @@
 class sdtdConsole {
   constructor(serverId) {
     this.serverId = parseInt(serverId);
-    this.status = true
-    this.init()
+    this.status = true;
+    this.init();
   }
 
   init() {
@@ -38,7 +38,7 @@ class sdtdConsole {
           resolve(data);
         },
         error: (xhr, status, error) => {
-          addNewLogLine(error)
+          showErrorModal(`${error} - ${xhr.responseText}`);
           reject(error);
         }
       });

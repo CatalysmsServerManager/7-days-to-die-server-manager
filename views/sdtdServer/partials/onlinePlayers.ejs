@@ -56,7 +56,8 @@
         updatePlayerList(data)
       },
       error: (xhr, status, error) => {
-        console.log(`Could not update online players! error: ${error}`)
+        displayAjaxToSupportData(xhr, this.URL);;
+        showErrorModal(`${error} - ${xhr.responseText}`);
       }
     })
   }

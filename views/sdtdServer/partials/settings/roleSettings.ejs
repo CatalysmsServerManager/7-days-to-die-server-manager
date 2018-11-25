@@ -235,18 +235,20 @@
 
           <div class="form-check">
             <label class="form-check-label">
-              <input type="checkbox" class="form-check-input" name="edit-role-discordExec" id="edit-role-discordExec" aria-describedby="edit-role-discordExec-help"
-                value="true"> Use the Discord command "ExecCommand"
+              <input type="checkbox" class="form-check-input" name="edit-role-discordExec" id="edit-role-discordExec"
+                aria-describedby="edit-role-discordExec-help" value="true"> Use the Discord command "ExecCommand"
             </label>
-            <small id="edit-role-discordExec-help" class="form-text text-muted">Allow a user to execute commands via Discord.</small>
+            <small id="edit-role-discordExec-help" class="form-text text-muted">Allow a user to execute commands via
+              Discord.</small>
           </div>
 
           <div class="form-check">
             <label class="form-check-label">
-              <input type="checkbox" class="form-check-input" name="edit-role-discordLookup" id="edit-role-discordLookup" aria-describedby="edit-role-discordLookup-help"
-                value="true"> Use the Discord command "Lookup"
+              <input type="checkbox" class="form-check-input" name="edit-role-discordLookup" id="edit-role-discordLookup"
+                aria-describedby="edit-role-discordLookup-help" value="true"> Use the Discord command "Lookup"
             </label>
-            <small id="edit-role-discordLookup-help" class="form-text text-muted">Allow a user to retrieve extra information about a player via Discord.</small>
+            <small id="edit-role-discordLookup-help" class="form-text text-muted">Allow a user to retrieve extra
+              information about a player via Discord.</small>
           </div>
 
         </div>
@@ -298,8 +300,8 @@
           $("#delete-role-modal").modal('hide');
         },
         error: (xhr, status, error) => {
-          alert('Error deleting role, check browser console for more info.')
-          console.log(xhr);
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       })
     });
@@ -358,8 +360,8 @@
           $("#edit-role-modal").modal('hide');
         },
         error: (xhr, status, error) => {
-          alert('Error editing role, check browser console for more info.')
-          console.log(xhr);
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       })
     });

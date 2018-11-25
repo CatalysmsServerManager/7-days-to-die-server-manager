@@ -89,7 +89,7 @@
           checksToFail: $("#settings-maxPingKicker-pingChecksToFail").val()
         }).fail((xhr, status, error) => {
           alert(`Something went wrong! - ${status}. See console for more info`)
-          console.log(xhr)
+          displayAjaxToSupportData(xhr, this.URL);
         })
       });
 
@@ -121,7 +121,7 @@
           whitelist: trimmedArray
         }).fail((xhr, status, error) => {
           alert(`Something went wrong! - ${status}. See console for more info`)
-          console.log(xhr)
+          displayAjaxToSupportData(xhr, this.URL);
         })
 
       })

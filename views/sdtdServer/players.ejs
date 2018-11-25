@@ -1,178 +1,179 @@
 <%- exposeLocalsToBrowser() %>
 
-  <body>
+<body>
 
-    <div class="container-fluid">
+  <div class="container-fluid">
 
-      <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            <a href="<%= '/user/' + req.session.userId + '/dashboard' %>"> Dashboard </a>
-          </li>
-          <li class="breadcrumb-item">
-            <a href="<%= '/sdtdserver/' + server.id + '/dashboard' %>">
-              <%= server.name %>
-            </a>
-          </li>
-          <li class="breadcrumb-item active" aria-current="page">Players</li>
-        </ol>
-      </nav>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="<%= '/user/' + req.session.userId + '/dashboard' %>"> Dashboard </a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="<%= '/sdtdserver/' + server.id + '/dashboard' %>">
+            <%= server.name %>
+          </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Players</li>
+      </ol>
+    </nav>
 
-      <h1>Player overview</h1>
+    <h1>Player overview</h1>
 
-        <% if(players.length === 0) { %>
-          <div class="row">
-            <div class="col-12">
-              <div class="alert alert-warning" role="alert">
-                <strong>No players detected! CSMM will load player data continually. As players log in and out, execute commands,
-                  ... you will see their data pop up here</strong>
-              </div>
-            </div>
-          </div>
-          <% } %>
-
-            <br>
-
-            <%- include('./partials/deletePlayersButton') %>
-
-            <button id="load-all-player-data-btn" type="button" class="btn btn-primary">Load ALL player data</button>
-
-            <br>
-
-            <div class="row">
-              <div class="col-md-12">
-
-                <table id='players-overview' class="table table-striped table-bordered dataTable no-footer">
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Entity ID</th>
-                      <th>Steam ID</th>
-                      <th>Role</th>
-                      <th>IP</th>
-                      <th>Country</th>
-                      <th>Playtime</th>
-                      <th>Last online</th>
-                      <th>Level</th>
-                      <th>Currency</th>
-                      <th>Score</th>
-                      <th>Deaths</th>
-                      <th>Players killed</th>
-                      <th>Zombies killed</th>
-                    </tr>
-                  </thead>
-                </table>
-              </div>
-            </div>
+    <% if(players.length === 0) { %>
+    <div class="row">
+      <div class="col-12">
+        <div class="alert alert-warning" role="alert">
+          <strong>No players detected! CSMM will load player data continually. As players log in and out, execute
+            commands,
+            ... you will see their data pop up here</strong>
+        </div>
+      </div>
     </div>
-  </body>
+    <% } %>
+
+    <br>
+
+    <%- include('./partials/deletePlayersButton') %>
+
+    <button id="load-all-player-data-btn" type="button" class="btn btn-primary">Load ALL player data</button>
+
+    <br>
+
+    <div class="row">
+      <div class="col-md-12">
+
+        <table id='players-overview' class="table table-striped table-bordered dataTable no-footer">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Entity ID</th>
+              <th>Steam ID</th>
+              <th>Role</th>
+              <th>IP</th>
+              <th>Country</th>
+              <th>Playtime</th>
+              <th>Last online</th>
+              <th>Level</th>
+              <th>Currency</th>
+              <th>Score</th>
+              <th>Deaths</th>
+              <th>Players killed</th>
+              <th>Zombies killed</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
 
 
-  <script>
-    $(document).ready(function () {
-      $('#loading-indicator').hide();
+<script>
+  $(document).ready(function () {
+    $('#loading-indicator').hide();
 
-      let playerDataTable = $('#players-overview').DataTable({
-        data: window.SAILS_LOCALS.players,
-        dom: 'Bfrtip',
-        fixedHeader: true,
-        responsive: true,
-        buttons: [
-          'copy', 'excel', 'pdf', 'print'
-        ],
-        columns: [{
-            data: "name",
-            render: function (data, type, row, meta) {
-              return `<a href="/player/${row.id}/profile">${data}</a>`;
-            }
-          },
-          {
-            data: 'entityId'
-          },
-          {
-            data: 'steamId'
-          },
-          {
-            data: 'role',
-            render: function (data, type, row, meta) {
-              if (_.isNull(data)) {
-                return 'None'
-              } else {
-                return data.name
-              }
-              
-            }
-          },
-          {
-            data: 'ip'
-          },
-          {
-            data: 'country',
-            render: function (data, type, row, meta) {
-              if (row.country) {
-                let flagImg =
-                  `<img src="../../images/flags/blank.gif" class="flag flag-${row.country.toLowerCase()}"/>`
-                return `${flagImg} ${row.country}`;
-              } else {
-                return `Unknown`
-              }
-            }
-          },
-          {
-            data: 'playtime',
-            render: function (data, type, row, meta) {
-              return `${row.playtimeHHMMSS}`
-            }
-          },
-          {
-            data: 'lastOnline',
-          },
-          {
-            data: 'level'
-          },
-          {
-            data: 'currency'
-          },
-          {
-            data: 'score'
-          },
-          {
-            data: 'deaths'
-          },
-          {
-            data: 'playerKills'
-          },
-          {
-            data: 'zombieKills'
+    let playerDataTable = $('#players-overview').DataTable({
+      data: window.SAILS_LOCALS.players,
+      dom: 'Bfrtip',
+      fixedHeader: true,
+      responsive: true,
+      buttons: [
+        'copy', 'excel', 'pdf', 'print'
+      ],
+      columns: [{
+          data: "name",
+          render: function (data, type, row, meta) {
+            return `<a href="/player/${row.id}/profile">${data}</a>`;
           }
+        },
+        {
+          data: 'entityId'
+        },
+        {
+          data: 'steamId'
+        },
+        {
+          data: 'role',
+          render: function (data, type, row, meta) {
+            if (_.isNull(data)) {
+              return 'None'
+            } else {
+              return data.name
+            }
 
-        ]
-      });
-
-      $("#load-all-player-data-btn").click(e => {
-
-        $("#load-all-player-data-btn").hide();
-
-        $.ajax({
-          url: '/api/sdtdserver/players/all',
-          method: 'GET',
-          data: {
-            _csrf: window.SAILS_LOCALS._csrf,
-            serverId: window.SAILS_LOCALS.server.id,
-          },
-          success: (data, status, xhr) => {
-            location.reload();
-          },
-          error: (xhr, status, error) => {
-            console.log(xhr);
-            alert('Something went wrong while loading player data.')
           }
-        })
+        },
+        {
+          data: 'ip'
+        },
+        {
+          data: 'country',
+          render: function (data, type, row, meta) {
+            if (row.country) {
+              let flagImg =
+                `<img src="../../images/flags/blank.gif" class="flag flag-${row.country.toLowerCase()}"/>`
+              return `${flagImg} ${row.country}`;
+            } else {
+              return `Unknown`
+            }
+          }
+        },
+        {
+          data: 'playtime',
+          render: function (data, type, row, meta) {
+            return `${row.playtimeHHMMSS}`
+          }
+        },
+        {
+          data: 'lastOnline',
+        },
+        {
+          data: 'level'
+        },
+        {
+          data: 'currency'
+        },
+        {
+          data: 'score'
+        },
+        {
+          data: 'deaths'
+        },
+        {
+          data: 'playerKills'
+        },
+        {
+          data: 'zombieKills'
+        }
 
-       $("#load-all-player-data-btn").show();
-
-      })
-
+      ]
     });
 
-  </script>
+    $("#load-all-player-data-btn").click(e => {
+
+      $("#load-all-player-data-btn").hide();
+
+      $.ajax({
+        url: '/api/sdtdserver/players/all',
+        method: 'GET',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+        },
+        success: (data, status, xhr) => {
+          location.reload();
+        },
+        error: (xhr, status, error) => {
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
+        }
+      })
+
+      $("#load-all-player-data-btn").show();
+
+    })
+
+  });
+
+</script>

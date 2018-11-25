@@ -78,7 +78,7 @@
             alert('Banned player');
           },
           error: (xhr, status, error) => {
-            alert('Something went wrong while trying to ban a player!');
+            showErrorModal(`${error} - ${xhr.responseText}`);
           }
         });
       })

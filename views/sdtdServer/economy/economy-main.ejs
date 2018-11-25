@@ -214,7 +214,8 @@
           $('#economy-button-disable').fadeIn();
         },
         error: (xhr, status, error) => {
-          console.log(error)
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       })
     })
@@ -233,7 +234,8 @@
           $('#economy-button-disable').fadeOut();
         },
         error: (xhr, status, error) => {
-          console.log(error)
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       })
     })
@@ -255,11 +257,11 @@
         },
         success: (data, status, xhr) => {
           $('#economy-costToTeleport-btn').addClass('bg-success').removeClass('bg-danger');
-          console.log(data)
         },
         error: (xhr, status, error) => {
-          console.log(error)
+          displayAjaxToSupportData(xhr, this.URL);
           $('#economy-costToTeleport-btn').addClass('bg-danger').removeClass('bg-success');
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       })
     })
@@ -283,7 +285,8 @@
           console.log(data)
         },
         error: (xhr, status, error) => {
-          console.log(error)
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
           $('#economy-costToSetTeleport-btn').addClass('bg-danger').removeClass('bg-success');
         }
       })
@@ -307,7 +310,8 @@
           $('#economy-costToMakeTeleportPublic-btn').addClass('bg-success').removeClass('bg-danger');
         },
         error: (xhr, status, error) => {
-          console.log(error)
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
           $('#economy-costToMakeTeleportPublic-btn').addClass('bg-danger').removeClass('bg-success');
         }
       })
@@ -333,8 +337,8 @@
 
         },
         error: (xhr, status, error) => {
-          console.log(error)
-          alert(error)
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       })
     })

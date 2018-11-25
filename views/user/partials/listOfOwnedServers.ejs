@@ -1,194 +1,199 @@
 <%- exposeLocalsToBrowser() %>
 
-  <div id="list-of-owned-servers" aria-multiselectable="true">
+<div id="list-of-owned-servers" aria-multiselectable="true">
 
-    <% if (ownedServers.length === 0) { %>
-      <div class="alert alert-warning" role="alert">
-        <strong>It seems like you are neither an owner or admin of any server! </strong>
+  <% if (ownedServers.length === 0) { %>
+  <div class="alert alert-warning" role="alert">
+    <strong>It seems like you are neither an owner or admin of any server! </strong>
+  </div>
+  <% } %>
+  <div class="card-columns">
+    <% ownedServers.forEach(server => { %>
+    <div class="card">
+      <div id="server-<%= server.id %>-name" class="card-header">
+        <%= server.name %>
       </div>
-      <% } %>
-        <div class="card-columns">
-          <% ownedServers.forEach(server => { %>
-            <div class="card">
-              <div id="server-<%= server.id %>-name" class="card-header">
-                <%= server.name %>
-              </div>
-              <div class="card-body">
-                <h4 class="card-title">
+      <div class="card-body">
+        <h4 class="card-title">
 
-                  <% let playersId = `server-${server.id}-players` %>
-                    <div id="<%=playersId %>"> Loading
-                    </div>
-                </h4>
-                <p class="card-text">
-                  <!-- Button trigger modal -->
-                  <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete-server-<%= server.id %>-button">
-                    <i class="fas fa-trash-alt"></i> Delete
+          <% let playersId = `server-${server.id}-players` %>
+          <div id="<%=playersId %>"> Loading
+          </div>
+        </h4>
+        <p class="card-text">
+          <!-- Button trigger modal -->
+          <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete-server-<%= server.id %>-button">
+            <i class="fas fa-trash-alt"></i> Delete
+          </button>
+          <!-- Modal -->
+          <div class="modal fade" id="delete-server-<%= server.id %>-button" tabindex="-1" role="dialog"
+            aria-labelledby="delete-server-<%= server.id %>-modal" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="delete-server-<%= server.id %>-modal">Delete server</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
                   </button>
-                  <!-- Modal -->
-                  <div class="modal fade" id="delete-server-<%= server.id %>-button" tabindex="-1" role="dialog" aria-labelledby="delete-server-<%= server.id %>-modal"
-                    aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h4 class="modal-title" id="delete-server-<%= server.id %>-modal">Delete server</h4>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <div class="container-fluid">
-                            Are you sure?
-                          </div>
-                        </div>
-                        <div class="modal-footer">
-                          <% const deleteLink = '/sdtdserver/' + server.id + '/delete' %>
-                            <a href='<%= deleteLink %>'>
-                              <button id="delete-server-<%= server.id %>-button" class="btn btn-default btn-danger" type="button">
-
-                                Delete server
-                              </button>
-                            </a>
-
-                            <button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
-                        </div>
-                      </div>
-                    </div>
+                </div>
+                <div class="modal-body">
+                  <div class="container-fluid">
+                    Are you sure?
                   </div>
+                </div>
+                <div class="modal-footer">
+                  <% const deleteLink = '/sdtdserver/' + server.id + '/delete' %>
+                  <a href='<%= deleteLink %>'>
+                    <button id="delete-server-<%= server.id %>-button" class="btn btn-default btn-danger" type="button">
 
-                  <% if(server.serverInfo) { %>
-                    <p>
-                      <%= server.serverInfo.ServerDescription %>
-                    </p>
-                    <% } %>
-                      <ul class="list-group">
+                      Delete server
+                    </button>
+                  </a>
 
-                        <% const dashboardLink = '/sdtdserver/' + server.id + '/dashboard' %>
-                          <a href='<%= dashboardLink %>' class="list-group-item list-group-item-action">
-
-                            <i class="fas fa-tachometer-alt"></i> Dashboard
-                          </a>
-
-
-                          <% const settingsLink = '/sdtdserver/' + server.id + '/settings' %>
-                            <a href='<%= settingsLink %>' class="list-group-item list-group-item-action">
-
-                              <i class="fa fa-cog" aria-hidden="true"></i> Settings
-                            </a>
-
-                            <% const ticketsLink = '/sdtdserver/' + server.id + '/tickets' %>
-                              <a href='<%= ticketsLink %>' class="list-group-item list-group-item-action">
-
-                                <i class="fas fa-question"></i> Support tickets
-                              </a>
-
-
-                              <%const economy = '/sdtdserver/' + server.id + '/economy' %>
-                                <a href='<%= economy %>' class="list-group-item list-group-item-action">
-
-                                  <i class="far fa-money-bill-alt"></i> Economy</a>
-                                </a>
-
-                                <%     const analytics = '/sdtdserver/' + server.id + '/analytics'%>
-                                  <a href='<%= analytics %>' class="list-group-item list-group-item-action">
-
-                                    <i class="far fa-chart-bar"></i> Analytics</a>
-                                  </a>
-
-                                  <% const tracker = '/sdtdserver/' + server.id + '/tracker' %>
-                                    <a href='<%= tracker %>' class="list-group-item list-group-item-action">
-
-                                      <i class="fas fa-search"></i> Player tracker</a>
-                                    </a>
-
-                                    <%       const playersLink = '/sdtdserver/' + server.id + '/players' %>
-                                      <a href='<%= playersLink %>' class="list-group-item list-group-item-action">
-
-                                        <i class="far fa-address-card"></i> Players</a>
-                                      </a>
-
-
-
-
-                      </ul>
-                </p>
-              </div>
-              <div class="card-footer text-muted">
-                <% let fpsId = `server-${server.id}-fps` %>
-                  <div id="<%= fpsId %>">Loading</div>
+                  <button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
+                </div>
               </div>
             </div>
+          </div>
 
-            <% }) %>
+          <% if(server.serverInfo) { %>
+          <p>
+            <%= server.serverInfo.ServerDescription %>
+          </p>
+          <% } %>
+          <ul class="list-group">
+
+            <% const dashboardLink = '/sdtdserver/' + server.id + '/dashboard' %>
+            <a href='<%= dashboardLink %>' class="list-group-item list-group-item-action">
+
+              <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+
+
+            <% const settingsLink = '/sdtdserver/' + server.id + '/settings' %>
+            <a href='<%= settingsLink %>' class="list-group-item list-group-item-action">
+
+              <i class="fa fa-cog" aria-hidden="true"></i> Settings
+            </a>
+
+            <% const ticketsLink = '/sdtdserver/' + server.id + '/tickets' %>
+            <a href='<%= ticketsLink %>' class="list-group-item list-group-item-action">
+
+              <i class="fas fa-question"></i> Support tickets
+            </a>
+
+
+            <%const economy = '/sdtdserver/' + server.id + '/economy' %>
+            <a href='<%= economy %>' class="list-group-item list-group-item-action">
+
+              <i class="far fa-money-bill-alt"></i> Economy</a>
+            </a>
+
+            <%     const analytics = '/sdtdserver/' + server.id + '/analytics'%>
+            <a href='<%= analytics %>' class="list-group-item list-group-item-action">
+
+              <i class="far fa-chart-bar"></i> Analytics</a>
+            </a>
+
+            <% const tracker = '/sdtdserver/' + server.id + '/tracker' %>
+            <a href='<%= tracker %>' class="list-group-item list-group-item-action">
+
+              <i class="fas fa-search"></i> Player tracker</a>
+            </a>
+
+            <%       const playersLink = '/sdtdserver/' + server.id + '/players' %>
+            <a href='<%= playersLink %>' class="list-group-item list-group-item-action">
+
+              <i class="far fa-address-card"></i> Players</a>
+            </a>
 
 
 
-        </div>
+
+          </ul>
+        </p>
+      </div>
+      <div class="card-footer text-muted">
+        <% let fpsId = `server-${server.id}-fps` %>
+        <div id="<%= fpsId %>">Loading</div>
+      </div>
+    </div>
+
+    <% }) %>
+
+
+
   </div>
+</div>
 
-  <script>
-    $(document).ready(function () {
+<script>
+  $(document).ready(function () {
 
-      let listOfServers = window.SAILS_LOCALS.ownedServers
+    let listOfServers = window.SAILS_LOCALS.ownedServers
 
-      listOfServers.forEach(server => {
+    listOfServers.forEach(server => {
 
-        $.get('/api/sdtdserver/onlinestatus', { serverId: server.id }, onlineStatus => {
+      $.get('/api/sdtdserver/onlinestatus', {
+        serverId: server.id
+      }, onlineStatus => {
 
-          let elementToAdd = `<i class="${onlineStatus ? "fas fa-check-circle text-success" : "fas fa-times-circle text-danger"}"></i> `
+        let elementToAdd =
+          `<i class="${onlineStatus ? "fas fa-check-circle text-success" : "fas fa-times-circle text-danger"}"></i> `
 
-          $(`#server-${server.id}-name`).prepend(elementToAdd)
-        })
-
-
-        sendRequestAndUpdateFps(server);
-        io.socket.get('/sdtdserver/' + server.id + '/socket', (response) => {
-          sendRequestAndUpdatePlayers(server);
-        });
-
-        io.socket.on('memUpdate', memUpdate => {
-          $(`#server-${memUpdate.server.id}-fps`).text(`${memUpdate.fps} FPS`)
-
-        })
-
-        io.socket.on('playerConnected', (connectedMessage) => {
-          sendRequestAndUpdatePlayers(server);
-        })
-
-        io.socket.on('playerDisconnected', (disconnectedMessage) => {
-          sendRequestAndUpdatePlayers(server);
-        })
+        $(`#server-${server.id}-name`).prepend(elementToAdd)
       })
 
+
+      sendRequestAndUpdateFps(server);
+      io.socket.get('/sdtdserver/' + server.id + '/socket', (response) => {
+        sendRequestAndUpdatePlayers(server);
+      });
+
+      io.socket.on('memUpdate', memUpdate => {
+        $(`#server-${memUpdate.server.id}-fps`).text(`${memUpdate.fps} FPS`)
+
+      })
+
+      io.socket.on('playerConnected', (connectedMessage) => {
+        sendRequestAndUpdatePlayers(server);
+      })
+
+      io.socket.on('playerDisconnected', (disconnectedMessage) => {
+        sendRequestAndUpdatePlayers(server);
+      })
     })
 
-    function sendRequestAndUpdateFps(server) {
+  })
 
-      let serverId = server.id;
-      $.get('/api/sdtdserver/fps', { serverId: serverId }, response => {
-        $(`#server-${server.id}-fps`).text(`${response} FPS`)
-      })
+  function sendRequestAndUpdateFps(server) {
 
-    }
+    let serverId = server.id;
+    $.get('/api/sdtdserver/fps', {
+      serverId: serverId
+    }, response => {
+      $(`#server-${server.id}-fps`).text(`${response} FPS`)
+    })
 
-
-    function sendRequestAndUpdatePlayers(server) {
-      $.ajax({
-        url: '/api/sdtdserver/players',
-        data: {
-          serverId: server.id
-        },
-        success: (data, status, xhr) => {
-          let onlinePlayers = data.filter(player => {
-            return player.online
-          })
-          $(`#server-${server.id}-players`).text(`${onlinePlayers.length} online`)
-        },
-        error: (xhr, status, error) => {
-          console.log(`Could not update online players! error: ${error}`)
-        }
-      })
-    }
+  }
 
 
-  </script>
+  function sendRequestAndUpdatePlayers(server) {
+    $.ajax({
+      url: '/api/sdtdserver/players',
+      data: {
+        serverId: server.id
+      },
+      success: (data, status, xhr) => {
+        let onlinePlayers = data.filter(player => {
+          return player.online
+        })
+        $(`#server-${server.id}-players`).text(`${onlinePlayers.length} online`)
+      },
+      error: (xhr, status, error) => {
+        displayAjaxToSupportData(xhr, this.URL);;
+        showErrorModal(`${error} - ${xhr.responseText}`);
+      }
+    })
+  }
+
+</script>

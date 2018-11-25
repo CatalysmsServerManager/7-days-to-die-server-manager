@@ -50,7 +50,7 @@
           location.reload();
         },
         error: (xhr, status, error) => {
-          alert('Something went wrong while trying to update connection info for your server!');
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       });
     })

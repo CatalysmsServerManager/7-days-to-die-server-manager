@@ -31,7 +31,8 @@
           <label for="custom-notification-stringToSearchFor">Text to search for</label>
           <input type="text" class="form-control" name="custom-notification-stringToSearchFor" id="custom-notification-stringToSearchFor"
             aria-describedby="custom-notification-stringToSearchFor-help" placeholder="">
-          <small id="custom-notification-stringToSearchFor-help" class="form-text text-muted">The piece of text that will trigger a notification</small>
+          <small id="custom-notification-stringToSearchFor-help" class="form-text text-muted">The piece of text that
+            will trigger a notification</small>
         </div>
 
         <button id="custom-notification-create" type="button" class="btn btn-success">Add</button>
@@ -92,17 +93,13 @@
           drawNotificationsTable()
         },
         error: (xhr, status, error) => {
-          if (xhr.status === 400 && xhr.responseText) {
-            alert(xhr.responseText)
-          } else {
-            alert(`Something went wrong! ${error}`);
-          }
-          console.log(xhr);
-        }
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
+        },
       })
     })
 
-    $(document).on('click', '.delete-custom-notification',e => {
+    $(document).on('click', '.delete-custom-notification', e => {
       $.ajax({
         url: `/api/sdtdserver/discord/customNotification`,
         method: 'DELETE',
@@ -115,9 +112,9 @@
           drawNotificationsTable()
         },
         error: (xhr, status, error) => {
-          console.log(error);
-
-        }
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
+        },
       });
     })
 
@@ -138,9 +135,9 @@
         }
       },
       error: (xhr, status, error) => {
-        console.log(error);
-
-      }
+        displayAjaxToSupportData(xhr, this.URL);;
+        showErrorModal(`${error} - ${xhr.responseText}`);
+      },
     });
   }
 
@@ -158,9 +155,10 @@
           resolve(foundChannels);
         },
         error: (xhr, status, error) => {
-          console.log(error);
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
           reject(error)
-        }
+        },
       })
     })
   }

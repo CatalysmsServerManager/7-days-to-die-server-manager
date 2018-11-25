@@ -175,7 +175,7 @@
         error: (xhr, status, error) => {
           $("#loading").hide();
           $("#back-to-form").fadeIn();
-          console.log(xhr);
+          displayAjaxToSupportData(xhr, this.URL);;
           let response = xhr.responseJSON;
 
           let responseString = new String();

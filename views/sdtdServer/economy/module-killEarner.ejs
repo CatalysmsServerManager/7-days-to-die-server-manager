@@ -95,8 +95,8 @@
                         $('#economy-module-killEarner-config-enabled').addClass('bg-success').removeClass('bg-danger');
                     },
                     error: (xhr, status, error) => {
-                        console.log(xhr)
-                        alert('Something went wrong while enabling killEarner')
+                        displayAjaxToSupportData(xhr, this.URL);
+                        showErrorModal(`${error} - ${xhr.responseText}`);
                     }
                 })
             } else {
@@ -112,8 +112,8 @@
                         $('#economy-module-killEarner-config-enabled').addClass('bg-success').removeClass('bg-danger');
                     },
                     error: (xhr, status, error) => {
-                        console.log(xhr)
-                        alert('Something went wrong while disabling killEarner')
+                        displayAjaxToSupportData(xhr, this.URL);
+                        showErrorModal(`${error} - ${xhr.responseText}`);
                     }
                 })
             }
@@ -140,8 +140,8 @@
                     $('#economy-module-killearner-config-playerKill').addClass('bg-success').removeClass('bg-danger');
                 },
                 error: (xhr, status, error) => {
-                    console.log(error)
-                    alert('Something went wrong while setting a new amount')
+                    displayAjaxToSupportData(xhr, this.URL);
+                    showErrorModal(`${error} - ${xhr.responseText}`);
                 }
             })
 
@@ -166,8 +166,8 @@
                     $('#economy-module-killearner-config-zombieKill').addClass('bg-success').removeClass('bg-danger');
                 },
                 error: (xhr, status, error) => {
-                    console.log(error)
-                    alert('Something went wrong while setting a new amount')
+                    displayAjaxToSupportData(xhr, this.URL);
+                    showErrorModal(`${error} - ${xhr.responseText}`);
                 }
             })
 

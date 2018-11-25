@@ -1,488 +1,498 @@
 <% exposeLocalsToBrowser() %>
 
-  <!-- Button trigger modal -->
-  <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#custom-command-<%= command.id %>-modal">
-    <%= command.name %>
-  </button>
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#custom-command-<%= command.id %>-modal">
+  <%= command.name %>
+</button>
 
-  <!-- Modal -->
-  <div class="modal fade" id="custom-command-<%= command.id %>-modal" tabindex="-1" role="dialog" aria-labelledby="custom-command-<%= command.id %>-modal-title"
-    aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title" id="custom-command-<%= command.id %>-modal-title">
-            <%= command.name %>
-          </h4>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+<!-- Modal -->
+<div class="modal fade" id="custom-command-<%= command.id %>-modal" tabindex="-1" role="dialog" aria-labelledby="custom-command-<%= command.id %>-modal-title"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="custom-command-<%= command.id %>-modal-title">
+          <%= command.name %>
+        </h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <div class="form-group">
+          <label for="custom-command-<%= command.id %>-modal-edit-name">Name</label>
+          <input type="text" class="form-control" name="custom-command-<%= command.id %>-modal-edit-name" id="custom-command-<%= command.id %>-modal-edit-name"
+            aria-describedby="custom-command-<%= command.id %>-modal-edit-name-help" value="<%= command.name %>">
+          <small id="custom-command-<%= command.id %>-modal-edit-name-help" class="form-text text-muted">What your
+            players will type to execute the command
+          </small>
         </div>
-        <div class="modal-body">
 
-          <div class="form-group">
-            <label for="custom-command-<%= command.id %>-modal-edit-name">Name</label>
-            <input type="text" class="form-control" name="custom-command-<%= command.id %>-modal-edit-name" id="custom-command-<%= command.id %>-modal-edit-name"
-              aria-describedby="custom-command-<%= command.id %>-modal-edit-name-help" value="<%= command.name %>">
-            <small id="custom-command-<%= command.id %>-modal-edit-name-help" class="form-text text-muted">What your players will type to execute the command
-            </small>
-          </div>
-
-          <div class="form-group">
-            <label for="custom-command-<%= command.id %>-modal-edit-commands">Command(s) to execute</label>
-            <textarea class="form-control" class="form-control" name="custom-command-<%= command.id %>-modal-edit-commands" id="custom-command-<%= command.id %>-modal-edit-commands"
-              aria-describedby="custom-command-<%= command.id %>-modal-edit-commands-help" rows="5">
+        <div class="form-group">
+          <label for="custom-command-<%= command.id %>-modal-edit-commands">Command(s) to execute</label>
+          <textarea class="form-control" class="form-control" name="custom-command-<%= command.id %>-modal-edit-commands"
+            id="custom-command-<%= command.id %>-modal-edit-commands" aria-describedby="custom-command-<%= command.id %>-modal-edit-commands-help"
+            rows="5">
               <%= command.commandsToExecute %>
             </textarea>
-            <small id="custom-command-<%= command.id %>-modal-edit-commands-help" class="form-text text-muted"> Example: "sayplayer ${entityId} Boo!" </small>
-          </div>
-
-          <div class="form-group">
-            <label for="custom-command-<%= command.id %>-modal-edit-cost">Cost to execute</label>
-            <input type="text" class="form-control" name="custom-command-<%= command.id %>-modal-edit-cost" id="custom-command-<%= command.id %>-modal-edit-cost"
-              aria-describedby="custom-command-<%= command.id %>-modal-edit-cost-help" value="<%= command.costToExecute %>">
-            <small id="custom-command-<%= command.id %>-modal-edit-cost-help" class="form-text text-muted"> How much players have to pay to execute the command </small>
-          </div>
-
-          <div class="form-group">
-            <label for="custom-command-<%= command.id %>-modal-edit-delay">Delay</label>
-            <input type="text" class="form-control" name="custom-command-<%= command.id %>-modal-edit-delay" id="custom-command-<%= command.id %>-modal-edit-delay"
-              aria-describedby="custom-command-<%= command.id %>-modal-edit-delay-help" value="<%= command.delay %>">
-            <small id="custom-command-<%= command.id %>-modal-edit-delay-help" class="form-text text-muted"> How many seconds will the system wait before executing the command </small>
-          </div>
-
-          <div class="form-group">
-            <label for="custom-command-<%= command.id %>-modal-edit-timeout">Timeout</label>
-            <input type="text" class="form-control" name="custom-command-<%= command.id %>-modal-edit-timeout" id="custom-command-<%= command.id %>-modal-edit-timeout"
-              aria-describedby="custom-command-<%= command.id %>-modal-edit-timeout-help" value="<%= command.timeout %>">
-            <small id="custom-command-<%= command.id %>-modal-edit-timeout-help" class="form-text text-muted"> How many seconds do players have to wait before executing the command again </small>
-          </div>
-
-          <div class="form-group">
-            <label for="custom-command-<%= command.id %>-modal-edit-role-level">Role level needed for execution</label>
-            <input type="number" class="form-control" name="custom-command-<%= command.id %>-modal-edit-role-level" id="custom-command-<%= command.id %>-modal-edit-role-level"
-              aria-describedby="custom-command-<%= command.id %>-modal-edit-role-level-help" value="<%= command.level %>">
-            <small id="custom-command-<%= command.id %>-modal-edit-role-level-help" class="form-text text-muted">The minimum permission level required to execute this custom command. Note that this refers to CSMM roles, not
-              7dtd admin permission!</small>
-          </div>
-
-          <div class="form-check">
-            <label class="form-check-label">
-              <input type="checkbox" class="form-check-input" name="custom-command-<%= command.id %>-modal-edit-output" id="custom-command-<%= command.id %>-modal-edit-output"> Send output to executing player
-            </label>
-          </div>
-
-          <div class="form-check">
-            <label class="form-check-label">
-              <input type="checkbox" class="form-check-input" name="custom-command-<%= command.id %>-modal-edit-enabled" id="custom-command-<%= command.id %>-modal-edit-enabled"
-                value=""> Enabled
-            </label>
-          </div>
-
-          <hr>
-
-          <strong>Configured arguments</strong>
-          <% command.arguments.forEach(argument => { %>
-
-            <div class="form-group">
-              <label for="command-<%= argument.id %>-arg-name">Argument name</label>
-              <input type="text" class="form-control" name="command-<%= argument.id %>-arg-name" id="command-<%= argument.id %>-arg-name"
-                aria-describedby="command-<%= argument.id %>-arg-name-help" value="<%= argument.key %>">
-              <small id="command-<%= argument.id %>-arg-name-help" class="form-text text-muted"></small>
-            </div>
-
-
-            <div class="form-group">
-              <label for="command-<%= argument.id %>-arg-type">Argument type</label>
-              <input type="text" class="form-control" name="command-<%= argument.id %>-arg-type" id="command-<%= argument.id %>-arg-type"
-                aria-describedby="command-<%= argument.id %>-arg-type-help" value="<%= argument.type %>">
-              <small id="command-<%= argument.id %>-arg-type-help" class="form-text text-muted">
-              </small>
-            </div>
-
-            <div class="form-check">
-              <label class="form-check-label">
-                <input type="checkbox" class="form-check-input" name="command-<%= argument.id %>-arg-required" id="command-<%= argument.id %>-arg-required"
-                  value="true" <% if (argument.required) { %> checked
-                <%  } %> > Required
-              </label>
-            </div>
-
-            <div class="form-group">
-              <label for="command-<%= argument.id %>-arg-default">Argument default</label>
-              <input default="text" class="form-control" name="command-<%= argument.id %>-arg-default" id="command-<%= argument.id %>-arg-default"
-                aria-describedby="command-<%= argument.id %>-arg-default-help" value="<%= argument.defaultValue %>">
-              <small id="command-<%= argument.id %>-arg-default-help" class="form-text text-muted">
-              </small>
-            </div>
-
-            <button type="button" class="btn btn-danger argument-delete" value="<%= argument.id %>">Delete
-              <%= argument.key %>
-            </button>
-            <button type="button" class="btn btn-secondary argument-edit" value="<%= argument.id %>">Edit
-              <%= argument.key %>
-            </button>
-
-            <% }) %>
-
-              <hr>
-              <strong>Add a command argument</strong>
-
-              <div class="form-group">
-                <label for="command-<%= command.id %>-new-arg-name">Argument name</label>
-                <input type="text" class="form-control" name="command-<%= command.id %>-new-arg-name" id="command-<%= command.id %>-new-arg-name"
-                  aria-describedby="command-<%= command.id %>-new-arg-name-help" placeholder="name">
-                <small id="command-<%= command.id %>-new-arg-name-help" class="form-text text-muted">This is the name you will use to insert the argument in your commands sequence. Will be converted to lowercase.</small>
-              </div>
-
-
-              <div class="form-group">
-                <label for="command-<%= command.id %>-new-arg-type">Argument type</label>
-                <input type="text" class="form-control" name="command-<%= command.id %>-new-arg-type" id="command-<%= command.id %>-new-arg-type"
-                  aria-describedby="command-<%= command.id %>-new-arg-type-help" placeholder="number">
-                <small id="command-<%= command.id %>-new-arg-type-help" class="form-text text-muted">Specify the type of this argument. This is used to validate the user's input. See the documentation for more
-                  info
-                </small>
-              </div>
-
-              <div class="form-check">
-                <label class="form-check-label">
-                  <input type="checkbox" class="form-check-input" name="command-<%= command.id %>-new-arg-required" id="command-<%= command.id %>-new-arg-required"
-                    value="true" checked> Required
-                </label>
-              </div>
-
-
-              <div class="form-group">
-                <label for="command-<%= command.id %>-new-arg-default">Argument default</label>
-                <input default="text" class="form-control" name="command-<%= command.id %>-new-arg-default" id="command-<%= command.id %>-new-arg-default"
-                  aria-describedby="command-<%= command.id %>-new-arg-default-help" placeholder="0">
-                <small id="command-<%= command.id %>-new-arg-default-help" class="form-text text-muted"> If the argument is not required, you must provide a default value. This will be used when a user does not
-                  specify a value for this argment.
-                </small>
-              </div>
-
-              <button id="command-<%= command.id %>-new-arg-btn" type="button" class="btn btn-primary">Add argument</button>
-
-
-
+          <small id="custom-command-<%= command.id %>-modal-edit-commands-help" class="form-text text-muted"> Example:
+            "sayplayer ${entityId} Boo!" </small>
         </div>
-        <div class="modal-footer">
-          <p id="custom-command-<%= command.id %>-modal-edit-status"></p>
-          <button id="custom-command-<%= command.id %>-modal-edit-delete" type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button id="custom-command-<%= command.id %>-modal-edit-save" type="button" class="btn btn-primary">Save</button>
+
+        <div class="form-group">
+          <label for="custom-command-<%= command.id %>-modal-edit-cost">Cost to execute</label>
+          <input type="text" class="form-control" name="custom-command-<%= command.id %>-modal-edit-cost" id="custom-command-<%= command.id %>-modal-edit-cost"
+            aria-describedby="custom-command-<%= command.id %>-modal-edit-cost-help" value="<%= command.costToExecute %>">
+          <small id="custom-command-<%= command.id %>-modal-edit-cost-help" class="form-text text-muted"> How much
+            players have to pay to execute the command </small>
         </div>
+
+        <div class="form-group">
+          <label for="custom-command-<%= command.id %>-modal-edit-delay">Delay</label>
+          <input type="text" class="form-control" name="custom-command-<%= command.id %>-modal-edit-delay" id="custom-command-<%= command.id %>-modal-edit-delay"
+            aria-describedby="custom-command-<%= command.id %>-modal-edit-delay-help" value="<%= command.delay %>">
+          <small id="custom-command-<%= command.id %>-modal-edit-delay-help" class="form-text text-muted"> How many
+            seconds will the system wait before executing the command </small>
+        </div>
+
+        <div class="form-group">
+          <label for="custom-command-<%= command.id %>-modal-edit-timeout">Timeout</label>
+          <input type="text" class="form-control" name="custom-command-<%= command.id %>-modal-edit-timeout" id="custom-command-<%= command.id %>-modal-edit-timeout"
+            aria-describedby="custom-command-<%= command.id %>-modal-edit-timeout-help" value="<%= command.timeout %>">
+          <small id="custom-command-<%= command.id %>-modal-edit-timeout-help" class="form-text text-muted"> How many
+            seconds do players have to wait before executing the command again </small>
+        </div>
+
+        <div class="form-group">
+          <label for="custom-command-<%= command.id %>-modal-edit-role-level">Role level needed for execution</label>
+          <input type="number" class="form-control" name="custom-command-<%= command.id %>-modal-edit-role-level" id="custom-command-<%= command.id %>-modal-edit-role-level"
+            aria-describedby="custom-command-<%= command.id %>-modal-edit-role-level-help" value="<%= command.level %>">
+          <small id="custom-command-<%= command.id %>-modal-edit-role-level-help" class="form-text text-muted">The
+            minimum permission level required to execute this custom command. Note that this refers to CSMM roles, not
+            7dtd admin permission!</small>
+        </div>
+
+        <div class="form-check">
+          <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" name="custom-command-<%= command.id %>-modal-edit-output"
+              id="custom-command-<%= command.id %>-modal-edit-output"> Send output to executing player
+          </label>
+        </div>
+
+        <div class="form-check">
+          <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" name="custom-command-<%= command.id %>-modal-edit-enabled"
+              id="custom-command-<%= command.id %>-modal-edit-enabled" value=""> Enabled
+          </label>
+        </div>
+
+        <hr>
+
+        <strong>Configured arguments</strong>
+        <% command.arguments.forEach(argument => { %>
+
+        <div class="form-group">
+          <label for="command-<%= argument.id %>-arg-name">Argument name</label>
+          <input type="text" class="form-control" name="command-<%= argument.id %>-arg-name" id="command-<%= argument.id %>-arg-name"
+            aria-describedby="command-<%= argument.id %>-arg-name-help" value="<%= argument.key %>">
+          <small id="command-<%= argument.id %>-arg-name-help" class="form-text text-muted"></small>
+        </div>
+
+
+        <div class="form-group">
+          <label for="command-<%= argument.id %>-arg-type">Argument type</label>
+          <input type="text" class="form-control" name="command-<%= argument.id %>-arg-type" id="command-<%= argument.id %>-arg-type"
+            aria-describedby="command-<%= argument.id %>-arg-type-help" value="<%= argument.type %>">
+          <small id="command-<%= argument.id %>-arg-type-help" class="form-text text-muted">
+          </small>
+        </div>
+
+        <div class="form-check">
+          <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" name="command-<%= argument.id %>-arg-required" id="command-<%= argument.id %>-arg-required"
+              value="true" <% if (argument.required) { %> checked
+            <%  } %> > Required
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label for="command-<%= argument.id %>-arg-default">Argument default</label>
+          <input default="text" class="form-control" name="command-<%= argument.id %>-arg-default" id="command-<%= argument.id %>-arg-default"
+            aria-describedby="command-<%= argument.id %>-arg-default-help" value="<%= argument.defaultValue %>">
+          <small id="command-<%= argument.id %>-arg-default-help" class="form-text text-muted">
+          </small>
+        </div>
+
+        <button type="button" class="btn btn-danger argument-delete" value="<%= argument.id %>">Delete
+          <%= argument.key %>
+        </button>
+        <button type="button" class="btn btn-secondary argument-edit" value="<%= argument.id %>">Edit
+          <%= argument.key %>
+        </button>
+
+        <% }) %>
+
+        <hr>
+        <strong>Add a command argument</strong>
+
+        <div class="form-group">
+          <label for="command-<%= command.id %>-new-arg-name">Argument name</label>
+          <input type="text" class="form-control" name="command-<%= command.id %>-new-arg-name" id="command-<%= command.id %>-new-arg-name"
+            aria-describedby="command-<%= command.id %>-new-arg-name-help" placeholder="name">
+          <small id="command-<%= command.id %>-new-arg-name-help" class="form-text text-muted">This is the name you
+            will use to insert the argument in your commands sequence. Will be converted to lowercase.</small>
+        </div>
+
+
+        <div class="form-group">
+          <label for="command-<%= command.id %>-new-arg-type">Argument type</label>
+          <input type="text" class="form-control" name="command-<%= command.id %>-new-arg-type" id="command-<%= command.id %>-new-arg-type"
+            aria-describedby="command-<%= command.id %>-new-arg-type-help" placeholder="number">
+          <small id="command-<%= command.id %>-new-arg-type-help" class="form-text text-muted">Specify the type of this
+            argument. This is used to validate the user's input. See the documentation for more
+            info
+          </small>
+        </div>
+
+        <div class="form-check">
+          <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" name="command-<%= command.id %>-new-arg-required" id="command-<%= command.id %>-new-arg-required"
+              value="true" checked> Required
+          </label>
+        </div>
+
+
+        <div class="form-group">
+          <label for="command-<%= command.id %>-new-arg-default">Argument default</label>
+          <input default="text" class="form-control" name="command-<%= command.id %>-new-arg-default" id="command-<%= command.id %>-new-arg-default"
+            aria-describedby="command-<%= command.id %>-new-arg-default-help" placeholder="0">
+          <small id="command-<%= command.id %>-new-arg-default-help" class="form-text text-muted"> If the argument is
+            not required, you must provide a default value. This will be used when a user does not
+            specify a value for this argment.
+          </small>
+        </div>
+
+        <button id="command-<%= command.id %>-new-arg-btn" type="button" class="btn btn-primary">Add argument</button>
+
+
+
+      </div>
+      <div class="modal-footer">
+        <p id="custom-command-<%= command.id %>-modal-edit-status"></p>
+        <button id="custom-command-<%= command.id %>-modal-edit-delete" type="button" class="btn btn-danger"
+          data-dismiss="modal">Delete</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button id="custom-command-<%= command.id %>-modal-edit-save" type="button" class="btn btn-primary">Save</button>
       </div>
     </div>
   </div>
+</div>
 
-  <script>
-    $(document).ready(function () {
+<script>
+  $(document).ready(function () {
 
-      let currentConfig = <%- JSON.stringify(command) %>;
+    let currentConfig = <%- JSON.stringify(command) %>;
 
-      if (currentConfig.enabled) {
-        $('#custom-command-<%= command.id %>-modal-edit-enabled').prop('checked', true);
-      }
+    if (currentConfig.enabled) {
+      $('#custom-command-<%= command.id %>-modal-edit-enabled').prop('checked', true);
+    }
 
-      if (currentConfig.sendOutput) {
-        $('#custom-command-<%= command.id %>-modal-edit-output').prop('checked', true);
-      }
+    if (currentConfig.sendOutput) {
+      $('#custom-command-<%= command.id %>-modal-edit-output').prop('checked', true);
+    }
 
-      $('#custom-command-<%= command.id %>-modal-edit-delete').click(e => {
+    $('#custom-command-<%= command.id %>-modal-edit-delete').click(e => {
+      $.ajax({
+        url: '/api/sdtdserver/commands/custom',
+        method: 'DELETE',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          commandId: currentConfig.id,
+          serverId: window.SAILS_LOCALS.server.id
+        },
+        success: (data, status, xhr) => {
+          location.reload()
+        },
+        error: (xhr, status, error) => {
+          errored = true;
+          displayAjaxToSupportData(xhr, this.URL);
+          $('#custom-command-<%= command.id %>-modal-edit-status').text(
+            `${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
+        }
+      })
+    })
+
+
+    $('#custom-command-<%= command.id %>-modal-edit-save').click(e => {
+      let newName = $('#custom-command-<%= command.id %>-modal-edit-name').val();
+      let newCommandsToExecute = $('#custom-command-<%= command.id %>-modal-edit-commands').val();
+      let newCost = $('#custom-command-<%= command.id %>-modal-edit-cost').val();
+      let newDelay = $('#custom-command-<%= command.id %>-modal-edit-delay').val();
+      let newTimeout = $('#custom-command-<%= command.id %>-modal-edit-timeout').val();
+      let newEnabled = $('#custom-command-<%= command.id %>-modal-edit-enabled').prop('checked');
+      let newOutput = $('#custom-command-<%= command.id %>-modal-edit-output').prop('checked');
+      let newLevel = $("#custom-command-<%= command.id %>-modal-edit-role-level").val();
+
+
+      $('#custom-command-<%= command.id %>-modal-edit-status').html(`<i class="fas fa-sync"></i> Saving`)
+      let errored = false;
+
+      if (newName != currentConfig.name) {
         $.ajax({
-          url: '/api/sdtdserver/commands/custom',
-          method: 'DELETE',
+          url: '/api/sdtdserver/commands/custom/name',
+          method: 'POST',
           data: {
             _csrf: window.SAILS_LOCALS._csrf,
             commandId: currentConfig.id,
+            newName: newName,
             serverId: window.SAILS_LOCALS.server.id
           },
           success: (data, status, xhr) => {
-            location.reload()
+            console.log(data)
           },
           error: (xhr, status, error) => {
             errored = true;
-            console.log(xhr)
+            displayAjaxToSupportData(xhr, this.URL);
             $('#custom-command-<%= command.id %>-modal-edit-status').text(
               `${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
           }
         })
-      })
+      }
 
-
-      $('#custom-command-<%= command.id %>-modal-edit-save').click(e => {
-        let newName = $('#custom-command-<%= command.id %>-modal-edit-name').val();
-        let newCommandsToExecute = $('#custom-command-<%= command.id %>-modal-edit-commands').val();
-        let newCost = $('#custom-command-<%= command.id %>-modal-edit-cost').val();
-        let newDelay = $('#custom-command-<%= command.id %>-modal-edit-delay').val();
-        let newTimeout = $('#custom-command-<%= command.id %>-modal-edit-timeout').val();
-        let newEnabled = $('#custom-command-<%= command.id %>-modal-edit-enabled').prop('checked');
-        let newOutput = $('#custom-command-<%= command.id %>-modal-edit-output').prop('checked');
-        let newLevel = $("#custom-command-<%= command.id %>-modal-edit-role-level").val();
-
-
-        $('#custom-command-<%= command.id %>-modal-edit-status').html(`<i class="fas fa-sync"></i> Saving`)
-        let errored = false;
-
-        if (newName != currentConfig.name) {
-          $.ajax({
-            url: '/api/sdtdserver/commands/custom/name',
-            method: 'POST',
-            data: {
-              _csrf: window.SAILS_LOCALS._csrf,
-              commandId: currentConfig.id,
-              newName: newName,
-              serverId: window.SAILS_LOCALS.server.id
-            },
-            success: (data, status, xhr) => {
-              console.log(data)
-            },
-            error: (xhr, status, error) => {
-              errored = true;
-              console.log(xhr)
-              $('#custom-command-<%= command.id %>-modal-edit-status').text(
-                `${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
-            }
-          })
-        }
-
-        if (newLevel != currentConfig.level) {
-          $.ajax({
-            url: '/api/sdtdserver/commands/custom/level',
-            method: 'POST',
-            data: {
-              _csrf: window.SAILS_LOCALS._csrf,
-              commandId: currentConfig.id,
-              newLevel: newLevel,
-              serverId: window.SAILS_LOCALS.server.id
-            },
-            success: (data, status, xhr) => {
-              console.log(data)
-            },
-            error: (xhr, status, error) => {
-              errored = true;
-              console.log(xhr)
-              $('#custom-command-<%= command.id %>-modal-edit-status').text(
-                `${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
-            }
-          })
-        }
-
-        if (parseInt(newCost, 10) != currentConfig.costToExecute) {
-          $.ajax({
-            url: '/api/sdtdserver/commands/custom/cost',
-            method: 'POST',
-            data: {
-              _csrf: window.SAILS_LOCALS._csrf,
-              commandId: currentConfig.id,
-              newCost: parseInt(newCost, 10),
-              serverId: window.SAILS_LOCALS.server.id
-            },
-            success: (data, status, xhr) => {
-
-            },
-            error: (xhr, status, error) => {
-              errored = true;
-              console.log(xhr)
-              $('#custom-command-<%= command.id %>-modal-edit-status').text(
-                `${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
-            }
-          })
-        }
-
-        if (newEnabled != currentConfig.enabled) {
-          $.ajax({
-            url: '/api/sdtdserver/commands/custom/enabled',
-            method: 'POST',
-            data: {
-              _csrf: window.SAILS_LOCALS._csrf,
-              commandId: currentConfig.id,
-              newEnabled: newEnabled,
-              serverId: window.SAILS_LOCALS.server.id
-            },
-            success: (data, status, xhr) => {},
-            error: (xhr, status, error) => {
-              errored = true;
-              console.log(xhr)
-              $('#custom-command-<%= command.id %>-modal-edit-status').text(
-                `${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
-            }
-          })
-        }
-
-        if (newOutput != currentConfig.sendOutput) {
-          $.ajax({
-            url: '/api/sdtdserver/commands/custom/output',
-            method: 'POST',
-            data: {
-              _csrf: window.SAILS_LOCALS._csrf,
-              commandId: currentConfig.id,
-              newOutput: newOutput,
-              serverId: window.SAILS_LOCALS.server.id
-            },
-            success: (data, status, xhr) => {},
-            error: (xhr, status, error) => {
-              errored = true;
-              console.log(xhr)
-              $('#custom-command-<%= command.id %>-modal-edit-status').text(
-                `${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
-            }
-          })
-        }
-
-        if (newCommandsToExecute != currentConfig.commandsToExecute) {
-          $.ajax({
-            url: '/api/sdtdserver/commands/custom/commandsToExecute',
-            method: 'POST',
-            data: {
-              _csrf: window.SAILS_LOCALS._csrf,
-              commandId: currentConfig.id,
-              newCommandsToExecute: newCommandsToExecute,
-              serverId: window.SAILS_LOCALS.server.id
-            },
-            success: (data, status, xhr) => {},
-            error: (xhr, status, error) => {
-              errored = true;
-              console.log(xhr)
-              $('#custom-command-<%= command.id %>-modal-edit-status').text(
-                `${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
-            }
-          })
-        }
-
-        if (newDelay != currentConfig.delay) {
-          $.ajax({
-            url: '/api/sdtdserver/commands/custom/delay',
-            method: 'POST',
-            data: {
-              _csrf: window.SAILS_LOCALS._csrf,
-              commandId: currentConfig.id,
-              newDelay: newDelay,
-              serverId: window.SAILS_LOCALS.server.id
-            },
-            success: (data, status, xhr) => {},
-            error: (xhr, status, error) => {
-              errored = true;
-              console.log(xhr)
-              $('#custom-command-<%= command.id %>-modal-edit-status').text(
-                `${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
-            }
-          })
-        }
-
-        if (newTimeout != currentConfig.timeout) {
-          $.ajax({
-            url: '/api/sdtdserver/commands/custom/timeout',
-            method: 'POST',
-            data: {
-              _csrf: window.SAILS_LOCALS._csrf,
-              commandId: currentConfig.id,
-              newTimeout: newTimeout,
-              serverId: window.SAILS_LOCALS.server.id
-            },
-            success: (data, status, xhr) => {},
-            error: (xhr, status, error) => {
-              errored = true;
-              console.log(xhr)
-              $('#custom-command-<%= command.id %>-modal-edit-status').text(
-                `${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
-            }
-          })
-        }
-
-        if (!errored) {
-          return $('#custom-command-<%= command.id %>-modal-edit-status').text('Saved!')
-        }
-      })
-
-
-      $("#command-<%= command.id %>-new-arg-btn").click(e => {
-
-        let key = $("#command-<%= command.id %>-new-arg-name").val();
-        let type = $("#command-<%= command.id %>-new-arg-type").val();
-        let required = $("#command-<%= command.id %>-new-arg-required").prop('checked');
-        let defaultValue = $("#command-<%= command.id %>-new-arg-default").val();
-
+      if (newLevel != currentConfig.level) {
         $.ajax({
-          url: '/api/sdtdserver/commands/custom/argument',
+          url: '/api/sdtdserver/commands/custom/level',
           method: 'POST',
           data: {
             _csrf: window.SAILS_LOCALS._csrf,
-            commandId: "<%= command.id %>",
-            key: key,
-            type: type,
-            required: required,
-            default: defaultValue,
+            commandId: currentConfig.id,
+            newLevel: newLevel,
             serverId: window.SAILS_LOCALS.server.id
           },
           success: (data, status, xhr) => {
-            location.reload()
+            console.log(data)
           },
           error: (xhr, status, error) => {
-            alert(JSON.stringify(xhr.responseJSON))
-            console.log(xhr)
+            errored = true;
+            displayAjaxToSupportData(xhr, this.URL);
+            $('#custom-command-<%= command.id %>-modal-edit-status').text(
+              `${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
           }
         })
+      }
 
-      });
-
-      $(".argument-delete").click(e => {
-        let argumentId = e.target.getAttribute('value');
-
+      if (parseInt(newCost, 10) != currentConfig.costToExecute) {
         $.ajax({
-          url: '/api/sdtdserver/commands/custom/argument',
-          method: 'DELETE',
+          url: '/api/sdtdserver/commands/custom/cost',
+          method: 'POST',
           data: {
             _csrf: window.SAILS_LOCALS._csrf,
-            argumentId: argumentId,
+            commandId: currentConfig.id,
+            newCost: parseInt(newCost, 10),
             serverId: window.SAILS_LOCALS.server.id
           },
           success: (data, status, xhr) => {
-            location.reload()
+
           },
           error: (xhr, status, error) => {
-            alert(JSON.stringify(xhr.responseJSON))
-            console.log(xhr)
+            errored = true;
+            displayAjaxToSupportData(xhr, this.URL);
+            $('#custom-command-<%= command.id %>-modal-edit-status').text(
+              `${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
           }
         })
-      });
+      }
 
-
-      $(".argument-edit").click(e => {
-
-        let argumentId = e.target.getAttribute('value');
-
-        let key = $(`#command-${argumentId}-arg-name`).val();
-        let type = $(`#command-${argumentId}-arg-type`).val();
-        let required = $(`#command-${argumentId}-arg-required`).prop('checked');
-        let defaultValue = $(`#command-${argumentId}-arg-default`).val();
-
-        console.log(key, type, required, defaultValue)
-
+      if (newEnabled != currentConfig.enabled) {
         $.ajax({
-          url: '/api/sdtdserver/commands/custom/argument',
-          method: 'PATCH',
+          url: '/api/sdtdserver/commands/custom/enabled',
+          method: 'POST',
           data: {
             _csrf: window.SAILS_LOCALS._csrf,
-            argumentId: argumentId,
-            key: key,
-            type: type,
-            required: required,
-            default: defaultValue,
+            commandId: currentConfig.id,
+            newEnabled: newEnabled,
             serverId: window.SAILS_LOCALS.server.id
           },
-          success: (data, status, xhr) => {
-            location.reload()
-          },
+          success: (data, status, xhr) => {},
           error: (xhr, status, error) => {
-            alert(JSON.stringify(xhr.responseJSON))
-            console.log(xhr)
+            errored = true;
+            displayAjaxToSupportData(xhr, this.URL);
+            $('#custom-command-<%= command.id %>-modal-edit-status').text(
+              `${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
           }
         })
+      }
 
-      });
+      if (newOutput != currentConfig.sendOutput) {
+        $.ajax({
+          url: '/api/sdtdserver/commands/custom/output',
+          method: 'POST',
+          data: {
+            _csrf: window.SAILS_LOCALS._csrf,
+            commandId: currentConfig.id,
+            newOutput: newOutput,
+            serverId: window.SAILS_LOCALS.server.id
+          },
+          success: (data, status, xhr) => {},
+          error: (xhr, status, error) => {
+            errored = true;
+            displayAjaxToSupportData(xhr, this.URL);
+            $('#custom-command-<%= command.id %>-modal-edit-status').text(
+              `${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
+          }
+        })
+      }
+
+      if (newCommandsToExecute != currentConfig.commandsToExecute) {
+        $.ajax({
+          url: '/api/sdtdserver/commands/custom/commandsToExecute',
+          method: 'POST',
+          data: {
+            _csrf: window.SAILS_LOCALS._csrf,
+            commandId: currentConfig.id,
+            newCommandsToExecute: newCommandsToExecute,
+            serverId: window.SAILS_LOCALS.server.id
+          },
+          success: (data, status, xhr) => {},
+          error: (xhr, status, error) => {
+            errored = true;
+            displayAjaxToSupportData(xhr, this.URL);
+            $('#custom-command-<%= command.id %>-modal-edit-status').text(
+              `${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
+          }
+        })
+      }
+
+      if (newDelay != currentConfig.delay) {
+        $.ajax({
+          url: '/api/sdtdserver/commands/custom/delay',
+          method: 'POST',
+          data: {
+            _csrf: window.SAILS_LOCALS._csrf,
+            commandId: currentConfig.id,
+            newDelay: newDelay,
+            serverId: window.SAILS_LOCALS.server.id
+          },
+          success: (data, status, xhr) => {},
+          error: (xhr, status, error) => {
+            errored = true;
+            displayAjaxToSupportData(xhr, this.URL);
+            $('#custom-command-<%= command.id %>-modal-edit-status').text(
+              `${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
+          }
+        })
+      }
+
+      if (newTimeout != currentConfig.timeout) {
+        $.ajax({
+          url: '/api/sdtdserver/commands/custom/timeout',
+          method: 'POST',
+          data: {
+            _csrf: window.SAILS_LOCALS._csrf,
+            commandId: currentConfig.id,
+            newTimeout: newTimeout,
+            serverId: window.SAILS_LOCALS.server.id
+          },
+          success: (data, status, xhr) => {},
+          error: (xhr, status, error) => {
+            errored = true;
+            displayAjaxToSupportData(xhr, this.URL);
+            $('#custom-command-<%= command.id %>-modal-edit-status').text(
+              `${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
+          }
+        })
+      }
+
+      if (!errored) {
+        return $('#custom-command-<%= command.id %>-modal-edit-status').text('Saved!')
+      }
     })
 
-  </script>
+
+    $("#command-<%= command.id %>-new-arg-btn").click(e => {
+
+      let key = $("#command-<%= command.id %>-new-arg-name").val();
+      let type = $("#command-<%= command.id %>-new-arg-type").val();
+      let required = $("#command-<%= command.id %>-new-arg-required").prop('checked');
+      let defaultValue = $("#command-<%= command.id %>-new-arg-default").val();
+
+      $.ajax({
+        url: '/api/sdtdserver/commands/custom/argument',
+        method: 'POST',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          commandId: "<%= command.id %>",
+          key: key,
+          type: type,
+          required: required,
+          default: defaultValue,
+          serverId: window.SAILS_LOCALS.server.id
+        },
+        success: (data, status, xhr) => {
+          location.reload()
+        },
+        error: (xhr, status, error) => {
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
+        }
+      })
+
+    });
+
+    $(".argument-delete").click(e => {
+      let argumentId = e.target.getAttribute('value');
+
+      $.ajax({
+        url: '/api/sdtdserver/commands/custom/argument',
+        method: 'DELETE',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          argumentId: argumentId,
+          serverId: window.SAILS_LOCALS.server.id
+        },
+        success: (data, status, xhr) => {
+          location.reload()
+        },
+        error: (xhr, status, error) => {
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
+        }
+      })
+    });
+
+
+    $(".argument-edit").click(e => {
+
+      let argumentId = e.target.getAttribute('value');
+
+      let key = $(`#command-${argumentId}-arg-name`).val();
+      let type = $(`#command-${argumentId}-arg-type`).val();
+      let required = $(`#command-${argumentId}-arg-required`).prop('checked');
+      let defaultValue = $(`#command-${argumentId}-arg-default`).val();
+
+      $.ajax({
+        url: '/api/sdtdserver/commands/custom/argument',
+        method: 'PATCH',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          argumentId: argumentId,
+          key: key,
+          type: type,
+          required: required,
+          default: defaultValue,
+          serverId: window.SAILS_LOCALS.server.id
+        },
+        success: (data, status, xhr) => {
+          location.reload()
+        },
+        error: (xhr, status, error) => {
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
+        }
+      })
+
+    });
+  })
+
+</script>

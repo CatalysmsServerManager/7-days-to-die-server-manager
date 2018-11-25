@@ -355,7 +355,8 @@
         availableItems = data;
       },
       error: (xhr, status, error) => {
-        console.log(xhr)
+        displayAjaxToSupportData(xhr, this.URL);;
+        showErrorModal(`${error} - ${xhr.responseText}`);
       }
     });
 
@@ -464,8 +465,8 @@
           location.reload();
         },
         error: (xhr, status, error) => {
-          $(`#add-listing-status`).text(xhr.responseText)
-          console.log(xhr)
+          showErrorModal(`${error} - ${xhr.responseText}`);
+          displayAjaxToSupportData(xhr, this.URL);
         }
       })
     })
@@ -497,8 +498,8 @@
           if (xhr.responseText == "\"You do not have enough money to buy this!\"") {
             return alert(`You do not have enough money to buy this item`)
           }
-          alert('Error something went wrong!')
-          console.log(xhr)
+          showErrorModal(`${error} - ${xhr.responseText}`);
+          displayAjaxToSupportData(xhr, this.URL);
         }
       })
 
@@ -547,8 +548,8 @@
           location.reload();
         },
         error: (xhr, status, error) => {
-          $(`#edit-${listingId}-status`).text(xhr.responseText)
-          console.log(xhr)
+          displayAjaxToSupportData(xhr, this.URL);
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       })
     })
@@ -567,8 +568,8 @@
           location.reload();
         },
         error: (xhr, status, error) => {
-          console.log(xhr)
-          alert("Something went wrong! Please report this to the dev server");
+          displayAjaxToSupportData(xhr, this.URL);
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       })
     })

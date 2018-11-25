@@ -49,7 +49,8 @@
             location.reload();
           },
           error: (xhr, status, error) => {
-            alert('Something went wrong while trying to toggle logging!');
+            displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
           }
         });
 

@@ -7,196 +7,208 @@
 
   <% if ('' === user.discordId) { %>
 
-    <div class="alert alert-warning" role="alert">
-      <strong>You have not linked a discord ID yet. Please login to control discord settings</strong>
+  <div class="alert alert-warning" role="alert">
+    <strong>You have not linked a discord ID yet. Please login to control discord settings</strong>
+  </div>
+
+  <a href="/auth/discord">
+    <img src="../../images/discordIcon.png" width="50%">
+  </a>
+
+  <%  } else { %>
+
+  <a class="btn btn-primary" href='https://discordapp.com/oauth2/authorize?client_id=396968286853529600&scope=bot&permissions=268749889'
+    target="_blank" role="button">Add bot to your server</a>
+
+  <hr>
+
+  <!-- Server select -->
+
+  <label for="input-settings-discord-guild">Select discord guild to associate with this 7DTD server</label>
+  <div class="form-inline">
+    <button id="input-settings-discord-setguild-btn" type="button" class="btn btn-primary">Set guild</button>
+    <select class="form-control" id="input-settings-discord-guild"> </select>
+  </div>
+
+  <hr>
+  <!-- Prefix select -->
+
+  <div class="form-inline">
+    <div class="form-group">
+      <button id="inputs-setting-discord-prefix-btn" type="button" class="btn btn-primary">Set prefix</button>
+      <input type="text" class="form-control" name="input-settings-discord-prefix" id="input-settings-discord-prefix"
+        aria-describedby="discord-prefix-help" value="<%= config.discordPrefix %>">
+      <small id="discord-prefix-help" class="form-text text-muted"></small>
     </div>
 
-    <a href="/auth/discord">
-      <img src="../../images/discordIcon.png" width="50%">
-    </a>
+  </div>
 
-    <%  } else { %>
+  <hr>
 
-      <a class="btn btn-primary" href='https://discordapp.com/oauth2/authorize?client_id=396968286853529600&scope=bot&permissions=268749889'
-        target="_blank" role="button">Add bot to your server</a>
+  <!-- Chat channel select -->
 
-      <hr>
+  <label for="input-settings-discord-chatchannel">Chat bridge channel</label>
+  <br>
+  <p>Designate a discord channel to create a chat bridge to your server with. Make sure the bot has permissions to send
+    messages and embed links </p>
 
-      <!-- Server select -->
-
-      <label for="input-settings-discord-guild">Select discord guild to associate with this 7DTD server</label>
-      <div class="form-inline">
-        <button id="input-settings-discord-setguild-btn" type="button" class="btn btn-primary">Set guild</button>
-        <select class="form-control" id="input-settings-discord-guild"> </select>
-      </div>
-
-      <hr>
-      <!-- Prefix select -->
-
-      <div class="form-inline">
-        <div class="form-group">
-          <button id="inputs-setting-discord-prefix-btn" type="button" class="btn btn-primary">Set prefix</button>
-          <input type="text" class="form-control" name="input-settings-discord-prefix" id="input-settings-discord-prefix" aria-describedby="discord-prefix-help"
-            value="<%= config.discordPrefix %>">
-          <small id="discord-prefix-help" class="form-text text-muted"></small>
-        </div>
-
-      </div>
-
-      <hr>
-
-      <!-- Chat channel select -->
-
-      <label for="input-settings-discord-chatchannel">Chat bridge channel</label>
+  <select class="form-control" id="input-settings-discord-chatchannel">
+  </select>
+  <div class="form-check">
+    <% if(config.chatChannelRichMessages) { %>
+    <input class="form-check-input" type="checkbox" value="" id="input-settings-discord-chatchannel-richmessages"
+      checked>
+    <% } else { %>
+    <input class="form-check-input" type="checkbox" value="" id="input-settings-discord-chatchannel-richmessages">
+    <% } %>
+    <label class="form-check-label" for="input-settings-discord-chatchannel-richmessages">
+      <strong> Rich messages </strong>
       <br>
-      <p>Designate a discord channel to create a chat bridge to your server with. Make sure the bot has permissions to send
-        messages and embed links </p>
+      <p> Displays additional information on player (dis)connect. When disabled, chatbridge will only show a simple
+        "playername connected" message. </p>
+    </label>
+  </div>
 
-      <select class="form-control" id="input-settings-discord-chatchannel">
-      </select>
-      <div class="form-check">
-        <% if(config.chatChannelRichMessages) { %>
-          <input class="form-check-input" type="checkbox" value="" id="input-settings-discord-chatchannel-richmessages" checked>
-          <% } else { %>
-            <input class="form-check-input" type="checkbox" value="" id="input-settings-discord-chatchannel-richmessages">
-            <% } %>
-              <label class="form-check-label" for="input-settings-discord-chatchannel-richmessages">
-                <strong> Rich messages </strong>
-                <br>
-                <p> Displays additional information on player (dis)connect. When disabled, chatbridge will only show a simple
-                  "playername connected" message. </p>
-              </label>
-      </div>
+  <div class="form-group">
+    <label for="input-settings-discord-chatchannel-blockedPrefixes">Blocked prefixes</label>
+    <input type="text" class="form-control" name="input-settings-discord-chatchannel-blockedPrefixes" id="input-settings-discord-chatchannel-blockedPrefixes"
+      aria-describedby="input-settings-discord-chatchannel-blockedPrefixes-help" value="<%= config.chatChannelBlockedPrefixes %>">
+    <small id="input-settings-discord-chatchannel-blockedPrefixes-help" class="form-text text-muted">Specify prefixes
+      here that should not show up in the chat bridge. This is useful to protect information from leaking
+      if you have a public chatbridge. Type each prefix and seperate them with ','. So for example: /,!
+    </small>
+  </div>
 
-      <div class="form-group">
-        <label for="input-settings-discord-chatchannel-blockedPrefixes">Blocked prefixes</label>
-        <input type="text" class="form-control" name="input-settings-discord-chatchannel-blockedPrefixes" id="input-settings-discord-chatchannel-blockedPrefixes"
-          aria-describedby="input-settings-discord-chatchannel-blockedPrefixes-help" value="<%= config.chatChannelBlockedPrefixes %>">
-        <small id="input-settings-discord-chatchannel-blockedPrefixes-help" class="form-text text-muted">Specify prefixes here that should not show up in the chat bridge. This is useful to protect information from leaking
-          if you have a public chatbridge. Type each prefix and seperate them with ','. So for example: /,!
-        </small>
-      </div>
+  <button id="input-settings-discord-setchatchannel-btn" type="button" class="btn btn-primary">Set chat channel</button>
 
-      <button id="input-settings-discord-setchatchannel-btn" type="button" class="btn btn-primary">Set chat channel</button>
-
-      <hr>
+  <hr>
 
 
-      <p> CSMM can send notifications to Discord when certain events happen. </p>
+  <p> CSMM can send notifications to Discord when certain events happen. </p>
 
-      <!-- Button trigger modal -->
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#settings-discord-notifications-modal">
-        Notifications
-      </button>
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#settings-discord-notifications-modal">
+    Notifications
+  </button>
 
-      <!-- Modal -->
-      <div class="modal fade" id="settings-discord-notifications-modal" tabindex="-1" role="dialog" aria-labelledby="settings-discord-notifications-modal-title"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title" id="settings-discord-notifications-modal-title">Discord notifications</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
+  <!-- Modal -->
+  <div class="modal fade" id="settings-discord-notifications-modal" tabindex="-1" role="dialog" aria-labelledby="settings-discord-notifications-modal-title"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="settings-discord-notifications-modal-title">Discord notifications</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
 
-              <!-- Notification channel select -->
+          <!-- Notification channel select -->
 
-              <div class="form-group">
-                <label for="discord-settings-notifications-reboots-select">CSMM reboots</label>
-                <select class="form-control" name="discord-settings-notifications-reboots-select" id="discord-settings-notifications-reboots-select">
-                  <option>Loading</option>
-                </select>
-                <button id="input-settings-discord-setnotification-systemboot-btn" type="button" class="btn btn-primary">Set reboot notification</button>
-              </div>
-
-              <div class="form-group">
-                <label for="discord-settings-notifications-playerconnect-select">Player connect</label>
-                <select class="form-control" name="discord-settings-notifications-playerconnect-select" id="discord-settings-notifications-playerconnect-select">
-                  <option>Loading</option>
-                </select>
-                <button id="input-settings-discord-setnotification-playerConnected-btn" type="button" class="btn btn-primary">Set player connect notification</button>
-              </div>
-
-              <div class="form-group">
-                <label for="discord-settings-notifications-playerdisconnect-select">Player disconnect</label>
-                <select class="form-control" name="discord-settings-notifications-playerdisconnect-select" id="discord-settings-notifications-playerdisconnect-select">
-                  <option>Loading</option>
-                </select>
-                <button id="input-settings-discord-setnotification-playerDisconnected-btn" type="button" class="btn btn-primary">Set player disconnect notification</button>
-              </div>
-
-              <div class="form-group">
-                <label for="discord-settings-notifications-connectionlost-select">Connection lost</label>
-                <select class="form-control" name="discord-settings-notifications-connectionlost-select" id="discord-settings-notifications-connectionlost-select">
-                  <option>Loading</option>
-                </select>
-                <button id="input-settings-discord-setnotification-connectionLost-btn" type="button" class="btn btn-primary">Set CSMM disconnect notification</button>
-              </div>
-
-              <div class="form-group">
-                <label for="discord-settings-notifications-connected-select">(re)connected</label>
-                <select class="form-control" name="discord-settings-notifications-connected-select" id="discord-settings-notifications-connected-select">
-                  <option>Loading</option>
-                </select>
-                <button id="input-settings-discord-setnotification-connected-btn" type="button" class="btn btn-primary">Set CSMM connected notification</button>
-              </div>
-
-              <div class="form-group">
-                <label for="discord-settings-notifications-countrybankick-select">Country ban kick</label>
-                <small>Psst, this only makes sense to enable if you have country ban enabled ;)</small>
-                <select class="form-control" name="discord-settings-notifications-countrybankick-select" id="discord-settings-notifications-countrybankick-select">
-                  <option>Loading</option>
-                </select>
-                <button id="input-settings-discord-setnotification-countrybankick-btn" type="button" class="btn btn-primary">Set country ban kick notification</button>
-              </div>
-
-              <div class="form-group">
-                <label for="discord-settings-notifications-ticket-select">Tickets</label>
-                <small>Receive notifications for calladmin ticket updates</small>
-                <select class="form-control" name="discord-settings-notifications-ticket-select" id="discord-settings-notifications-ticket-select">
-                  <option>Loading</option>
-                </select>
-                <button id="input-settings-discord-setnotification-ticket-btn" type="button" class="btn btn-primary">Set tickets notification</button>
-              </div>
-
-
-              <div class="form-group">
-                <label for="discord-settings-notifications-cronjob-select">Automation jobs</label>
-                <small>Receive notifications when automated jobs run.</small>
-                <select class="form-control" name="discord-settings-notifications-cronjob-select" id="discord-settings-notifications-cronjob-select">
-                  <option>Loading</option>
-                </select>
-                <button id="input-settings-discord-setnotification-cronjob-btn" type="button" class="btn btn-primary">Set automation notification</button>
-              </div>
-
-              <div class="form-group">
-                <label for="discord-settings-notifications-gbl-select">Global ban list check</label>
-                <small>Receive notifications a player with more than the configured amount of bans on the GBL joins your server.</small>
-                <select class="form-control" name="discord-settings-notifications-gbl-select" id="discord-settings-notifications-gbl-select">
-                  <option>Loading</option>
-                </select>
-                <button id="input-settings-discord-setnotification-gbl-btn" type="button" class="btn btn-primary">Set GBL notification</button>
-              </div>
-
-
-              </li>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save</button>
-            </div>
+          <div class="form-group">
+            <label for="discord-settings-notifications-reboots-select">CSMM reboots</label>
+            <select class="form-control" name="discord-settings-notifications-reboots-select" id="discord-settings-notifications-reboots-select">
+              <option>Loading</option>
+            </select>
+            <button id="input-settings-discord-setnotification-systemboot-btn" type="button" class="btn btn-primary">Set
+              reboot notification</button>
           </div>
+
+          <div class="form-group">
+            <label for="discord-settings-notifications-playerconnect-select">Player connect</label>
+            <select class="form-control" name="discord-settings-notifications-playerconnect-select" id="discord-settings-notifications-playerconnect-select">
+              <option>Loading</option>
+            </select>
+            <button id="input-settings-discord-setnotification-playerConnected-btn" type="button" class="btn btn-primary">Set
+              player connect notification</button>
+          </div>
+
+          <div class="form-group">
+            <label for="discord-settings-notifications-playerdisconnect-select">Player disconnect</label>
+            <select class="form-control" name="discord-settings-notifications-playerdisconnect-select" id="discord-settings-notifications-playerdisconnect-select">
+              <option>Loading</option>
+            </select>
+            <button id="input-settings-discord-setnotification-playerDisconnected-btn" type="button" class="btn btn-primary">Set
+              player disconnect notification</button>
+          </div>
+
+          <div class="form-group">
+            <label for="discord-settings-notifications-connectionlost-select">Connection lost</label>
+            <select class="form-control" name="discord-settings-notifications-connectionlost-select" id="discord-settings-notifications-connectionlost-select">
+              <option>Loading</option>
+            </select>
+            <button id="input-settings-discord-setnotification-connectionLost-btn" type="button" class="btn btn-primary">Set
+              CSMM disconnect notification</button>
+          </div>
+
+          <div class="form-group">
+            <label for="discord-settings-notifications-connected-select">(re)connected</label>
+            <select class="form-control" name="discord-settings-notifications-connected-select" id="discord-settings-notifications-connected-select">
+              <option>Loading</option>
+            </select>
+            <button id="input-settings-discord-setnotification-connected-btn" type="button" class="btn btn-primary">Set
+              CSMM connected notification</button>
+          </div>
+
+          <div class="form-group">
+            <label for="discord-settings-notifications-countrybankick-select">Country ban kick</label>
+            <small>Psst, this only makes sense to enable if you have country ban enabled ;)</small>
+            <select class="form-control" name="discord-settings-notifications-countrybankick-select" id="discord-settings-notifications-countrybankick-select">
+              <option>Loading</option>
+            </select>
+            <button id="input-settings-discord-setnotification-countrybankick-btn" type="button" class="btn btn-primary">Set
+              country ban kick notification</button>
+          </div>
+
+          <div class="form-group">
+            <label for="discord-settings-notifications-ticket-select">Tickets</label>
+            <small>Receive notifications for calladmin ticket updates</small>
+            <select class="form-control" name="discord-settings-notifications-ticket-select" id="discord-settings-notifications-ticket-select">
+              <option>Loading</option>
+            </select>
+            <button id="input-settings-discord-setnotification-ticket-btn" type="button" class="btn btn-primary">Set
+              tickets notification</button>
+          </div>
+
+
+          <div class="form-group">
+            <label for="discord-settings-notifications-cronjob-select">Automation jobs</label>
+            <small>Receive notifications when automated jobs run.</small>
+            <select class="form-control" name="discord-settings-notifications-cronjob-select" id="discord-settings-notifications-cronjob-select">
+              <option>Loading</option>
+            </select>
+            <button id="input-settings-discord-setnotification-cronjob-btn" type="button" class="btn btn-primary">Set
+              automation notification</button>
+          </div>
+
+          <div class="form-group">
+            <label for="discord-settings-notifications-gbl-select">Global ban list check</label>
+            <small>Receive notifications a player with more than the configured amount of bans on the GBL joins your
+              server.</small>
+            <select class="form-control" name="discord-settings-notifications-gbl-select" id="discord-settings-notifications-gbl-select">
+              <option>Loading</option>
+            </select>
+            <button id="input-settings-discord-setnotification-gbl-btn" type="button" class="btn btn-primary">Set GBL
+              notification</button>
+          </div>
+
+
+          </li>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save</button>
         </div>
       </div>
+    </div>
+  </div>
 
-      <%- include('./customDiscordNotifications') %>
+  <%- include('./customDiscordNotifications') %>
 
-      <% } %>
+  <% } %>
 
-        </ul>
+  </ul>
 </div>
 
 <script>
@@ -205,45 +217,45 @@
 
     let writableChannels = new Array();
     let selectsWithDiscordChannels = [{
-      select: $("#discord-settings-notifications-reboots-select"),
-      option: 'systemboot'
-    },
-    {
-      select: $("#discord-settings-notifications-playerconnect-select"),
-      option: 'playerConnected'
-    },
-    {
-      select: $("#discord-settings-notifications-playerdisconnect-select"),
-      option: 'playerDisconnected'
-    },
-    {
-      select: $("#discord-settings-notifications-connectionlost-select"),
-      option: 'connectionLost'
-    },
-    {
-      select: $("#discord-settings-notifications-connected-select"),
-      option: 'connected'
-    },
-    {
-      select: $("#input-settings-discord-chatchannel"),
-      option: 'chatChannel'
-    },
-    {
-      select: $("#discord-settings-notifications-countrybankick-select"),
-      option: 'countrybanKick'
-    },
-    {
-      select: $("#discord-settings-notifications-ticket-select"),
-      option: 'ticket'
-    },
-    {
-      select: $("#discord-settings-notifications-cronjob-select"),
-      option: 'cronjob'
-    },
-    {
-      select: $("#discord-settings-notifications-gbl-select"),
-      option: 'gblmaxban'
-    },
+        select: $("#discord-settings-notifications-reboots-select"),
+        option: 'systemboot'
+      },
+      {
+        select: $("#discord-settings-notifications-playerconnect-select"),
+        option: 'playerConnected'
+      },
+      {
+        select: $("#discord-settings-notifications-playerdisconnect-select"),
+        option: 'playerDisconnected'
+      },
+      {
+        select: $("#discord-settings-notifications-connectionlost-select"),
+        option: 'connectionLost'
+      },
+      {
+        select: $("#discord-settings-notifications-connected-select"),
+        option: 'connected'
+      },
+      {
+        select: $("#input-settings-discord-chatchannel"),
+        option: 'chatChannel'
+      },
+      {
+        select: $("#discord-settings-notifications-countrybankick-select"),
+        option: 'countrybanKick'
+      },
+      {
+        select: $("#discord-settings-notifications-ticket-select"),
+        option: 'ticket'
+      },
+      {
+        select: $("#discord-settings-notifications-cronjob-select"),
+        option: 'cronjob'
+      },
+      {
+        select: $("#discord-settings-notifications-gbl-select"),
+        option: 'gblmaxban'
+      },
     ]
 
     if (!discordGuildId) {
@@ -262,26 +274,27 @@
         let foundGuilds = data;
         foundGuilds.forEach(guild => {
           $('#input-settings-discord-guild').append($('<option>', {
-            value: guild.id
-          })
+              value: guild.id
+            })
             .text(guild.name));
         })
         $(`#input-settings-discord-guild option[value='${discordGuildId}']`).prop('selected', true);
         if (discordGuildId) {
           let selectedGuildId = $('#input-settings-discord-guild').val()
           getWritableChannels(selectedGuildId).then(channels => {
-            writeableChannels = channels
-            selectsWithDiscordChannels.forEach(select => {
-              fillSelectWithDiscordChannels(select, channels)
+              writeableChannels = channels
+              selectsWithDiscordChannels.forEach(select => {
+                fillSelectWithDiscordChannels(select, channels)
+              })
             })
-          })
             .catch(e => {
               console.log(e)
             })
         }
       },
       error: (xhr, status, error) => {
-        console.log(error);
+        displayAjaxToSupportData(xhr, this.URL);;
+        showErrorModal(`${error} - ${xhr.responseText}`);
       }
     })
 
@@ -289,7 +302,10 @@
       e.preventDefault();
       let newPrefix = $('#input-settings-discord-prefix').val();
       let guildId = $('#input-settings-discord-guild').val();
-      if (!validator.isLength(newPrefix, { min: 0, max: 3 })) {
+      if (!validator.isLength(newPrefix, {
+          min: 0,
+          max: 3
+        })) {
         $('#input-settings-discord-prefix').addClass("bg-danger").removeClass("bg-success");
         return alert('Prefix is maximum 3 characters long');
       }
@@ -308,7 +324,8 @@
         },
         error: (xhr, status, error) => {
           $('#input-settings-discord-prefix').addClass("bg-danger").removeClass("bg-success");
-          console.log(error);
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       })
     })
@@ -327,7 +344,8 @@
             resolve(foundChannels);
           },
           error: (xhr, status, error) => {
-            console.log(error);
+            displayAjaxToSupportData(xhr, this.URL);;
+            showErrorModal(`${error} - ${xhr.responseText}`);
           }
         })
       })
@@ -351,13 +369,13 @@
         idToLookFor = '0'
       }
       element.select.append($('<option>', {
-        value: 0
-      })
+          value: 0
+        })
         .text('Disabled'));
       channels.forEach(channel => {
         element.select.append($('<option>', {
-          value: channel.id
-        })
+            value: channel.id
+          })
           .text("#" + channel.name));
       })
       element.select.val(idToLookFor);
@@ -394,9 +412,9 @@
             })
         },
         error: (xhr, status, error) => {
-          alert(`Whoa can't set server to that guild! error: ${error}`)
           $('#input-settings-discord-guild').addClass("bg-danger").removeClass("bg-success");
-          console.log(error);
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       })
 
@@ -421,9 +439,9 @@
 
           },
           error: (xhr, status, error) => {
-            alert(`Error setting blocked prefixes. Please check the values you entered.`)
             $('#input-settings-discord-chatchannel').addClass("bg-danger").removeClass("bg-success");
-            console.log(xhr);
+            displayAjaxToSupportData(xhr, this.URL);;
+            showErrorModal(`${error} - ${xhr.responseText}`);
           }
         })
       }
@@ -449,9 +467,9 @@
           $('#input-settings-discord-chatchannel').addClass("bg-success").removeClass("bg-danger");
         },
         error: (xhr, status, error) => {
-          alert(`Whoa can't set chat to that channel! error: ${error}`)
           $('#input-settings-discord-chatchannel').addClass("bg-danger").removeClass("bg-success");
-          console.log(error);
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       })
     })
@@ -475,10 +493,10 @@
             "bg-danger");
         },
         error: (xhr, status, error) => {
-          alert(`Whoa can't set chat to that channel! error: ${error}`)
           $('#discord-settings-notifications-reboots-select').addClass("bg-danger").removeClass(
             "bg-success");
-          console.log(error);
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       })
     })
@@ -502,10 +520,10 @@
             "bg-danger");
         },
         error: (xhr, status, error) => {
-          alert(`Whoa can't set chat to that channel! error: ${error}`)
           $('#discord-settings-notifications-playerconnect-select').addClass("bg-danger").removeClass(
             "bg-success");
-          console.log(error);
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       })
     })
@@ -529,10 +547,10 @@
             "bg-danger");
         },
         error: (xhr, status, error) => {
-          alert(`Whoa can't set chat to that channel! error: ${error}`)
           $('#discord-settings-notifications-playerdisconnect-select').addClass("bg-danger").removeClass(
             "bg-success");
-          console.log(error);
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       })
     })
@@ -556,10 +574,10 @@
             "bg-danger");
         },
         error: (xhr, status, error) => {
-          alert(`Whoa can't set chat to that channel! error: ${error}`)
           $('#discord-settings-notifications-connected-select').addClass("bg-danger").removeClass(
             "bg-success");
-          console.log(error);
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       })
     })
@@ -583,10 +601,10 @@
             "bg-danger");
         },
         error: (xhr, status, error) => {
-          alert(`Whoa can't set chat to that channel! error: ${error}`)
           $('#discord-settings-notifications-connectionlost-select').addClass("bg-danger").removeClass(
             "bg-success");
-          console.log(error);
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       })
     })
@@ -611,10 +629,10 @@
             "bg-danger");
         },
         error: (xhr, status, error) => {
-          alert(`Whoa can't set chat to that channel! error: ${error}`)
           $('#discord-settings-notifications-countrybankick-select').addClass("bg-danger").removeClass(
             "bg-success");
-          console.log(error);
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       })
     })
@@ -638,10 +656,10 @@
             "bg-danger");
         },
         error: (xhr, status, error) => {
-          alert(`Whoa can't set notifications to that channel! error: ${error}`)
           $('#discord-settings-notifications-ticket-select').addClass("bg-danger").removeClass(
             "bg-success");
-          console.log(error);
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       })
     })
@@ -666,10 +684,10 @@
             "bg-danger");
         },
         error: (xhr, status, error) => {
-          alert(`Whoa can't set notifications to that channel! error: ${error}`)
           $('#discord-settings-notifications-cronjob-select').addClass("bg-danger").removeClass(
             "bg-success");
-          console.log(error);
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       })
     })
@@ -693,10 +711,10 @@
             "bg-danger");
         },
         error: (xhr, status, error) => {
-          alert(`Whoa can't set notifications to that channel! error: ${error}`)
           $("#discord-settings-notifications-gbl-select").addClass("bg-danger").removeClass(
             "bg-success");
-          console.log(error);
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       })
     })

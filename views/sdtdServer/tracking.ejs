@@ -464,9 +464,10 @@
 
 
           },
-          error: error => {
-            console.log(error)
-          }
+          error: (xhr, status, error) => {
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
+        }
         });
 
       })
@@ -648,8 +649,8 @@
 
         },
         error: (xhr, status, error) => {
-          console.log(xhr)
-
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       })
     }

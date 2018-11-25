@@ -42,8 +42,8 @@
           alert('Deleted player');
         },
         error: (xhr, status, error) => {
-          console.log(xhr);
-          alert('Something went wrong while trying to Delete a player!');
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       });
 

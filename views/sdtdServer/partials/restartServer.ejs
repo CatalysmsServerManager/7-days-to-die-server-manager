@@ -58,7 +58,8 @@
           alert('Shutting down your server. Please refresh this page in a few minutes');
         },
         error: (xhr, status, error) => {
-          alert('Something went wrong while trying to restart your server!');
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       });
 

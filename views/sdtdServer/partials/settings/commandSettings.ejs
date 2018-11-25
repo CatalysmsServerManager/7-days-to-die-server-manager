@@ -240,8 +240,8 @@
           
         },
         error: (xhr, status, error) => {
-          alert(`Error while setting status of who, check console for more details!`)
-          console.log(xhr)
+          displayAjaxToSupportData(xhr, this.URL);
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       })
     })
@@ -259,7 +259,8 @@
           updateCommandsStatus();
         },
         error: (xhr, status, error) => {
-          console.log(error)
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       })
     })
@@ -277,7 +278,8 @@
           updateCommandsStatus();
         },
         error: (xhr, status, error) => {
-          console.log(error)
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       })
     })
@@ -302,9 +304,9 @@
         success: data => {
           $("#input-settings-commands-prefix").empty();
         },
-        error: error => {
-          alert('Error! ' + error)
-          console.log(error);
+        error: (xhr, status, error) => {
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       })
     })
@@ -323,9 +325,9 @@
           success: data => {
             $("#player-teleport-settings").fadeOut();
           },
-          error: e => {
-            console.log(e);
-            alert('Error! ' + e)
+          error: (xhr, status, error) => {
+            displayAjaxToSupportData(xhr, this.URL);;
+            showErrorModal(`${error} - ${xhr.responseText}`);
           }
         })
       } else {
@@ -336,9 +338,9 @@
             _csrf: window.SAILS_LOCALS._csrf,
             serverId: window.SAILS_LOCALS.server.id,
           },
-          error: e => {
-            console.log(e);
-            alert('Error! ' + e)
+          error: (xhr, status, error) => {
+            displayAjaxToSupportData(xhr, this.URL);;
+            showErrorModal(`${error} - ${xhr.responseText}`);
           },
           success: data => {
             $("#player-teleport-settings").fadeIn();
@@ -358,9 +360,9 @@
             serverId: window.SAILS_LOCALS.server.id,
           },
           success: data => {},
-          error: e => {
-            console.log(e);
-            alert('Error! ' + e)
+          error: (xhr, status, error) => {
+            displayAjaxToSupportData(xhr, this.URL);;
+            showErrorModal(`${error} - ${xhr.responseText}`);
           }
         })
       } else {
@@ -371,9 +373,9 @@
             _csrf: window.SAILS_LOCALS._csrf,
             serverId: window.SAILS_LOCALS.server.id,
           },
-          error: e => {
-            console.log(e);
-            alert('Error! ' + e)
+          error:(xhr, status, error) => {
+            displayAjaxToSupportData(xhr, this.URL);;
+            showErrorModal(`${error} - ${xhr.responseText}`);
           }
         })
       }
@@ -396,9 +398,9 @@
           serverId: window.SAILS_LOCALS.server.id,
           maxLocations: newMax
         },
-        error: e => {
-          console.log(e);
-          alert('Error! ' + e)
+        error: (xhr, status, error) => {
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       })
     })
@@ -420,9 +422,9 @@
           serverId: window.SAILS_LOCALS.server.id,
           timeout: newTimeout
         },
-        error: e => {
-          console.log(e);
-          alert('Error! ' + e)
+        error: (xhr, status, error) => {
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       })
     })
@@ -445,9 +447,9 @@
           serverId: window.SAILS_LOCALS.server.id,
           delay: newDelay
         },
-        error: e => {
-          console.log(e);
-          alert('Error! ' + e)
+        error: (xhr, status, error) => {
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       })
     })

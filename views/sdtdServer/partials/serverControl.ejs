@@ -79,7 +79,8 @@
 
       },
       error: (xhr, status, error) => {
-        console.log(error)
+        displayAjaxToSupportData(xhr, this.URL);;
+        showErrorModal(`${error} - ${xhr.responseText}`);
       }
     });
   })

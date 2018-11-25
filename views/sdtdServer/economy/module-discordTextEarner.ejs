@@ -94,8 +94,8 @@
                         $('#economy-module-discordTextEarner-config-enabled').addClass('bg-success').removeClass('bg-danger');
                     },
                     error: (xhr, status, error) => {
-                        console.log(error)
-                        alert('Something went wrong while enabling discordTextEarner')
+                        displayAjaxToSupportData(xhr, this.URL);
+                        showErrorModal(`${error} - ${xhr.responseText}`);
                     }
                 })
             } else {
@@ -111,8 +111,8 @@
                         $('#economy-module-discordTextEarner-config-enabled').addClass('bg-success').removeClass('bg-danger');
                     },
                     error: (xhr, status, error) => {
-                        console.log(error)
-                        alert('Something went wrong while disabling discordTextEarner')
+                        displayAjaxToSupportData(xhr, this.URL);
+                        showErrorModal(`${error} - ${xhr.responseText}`);
                     }
                 })
             }
@@ -139,8 +139,8 @@
                     $('#economy-module-discordtextearner-config-amount').addClass('bg-success').removeClass('bg-danger');
                 },
                 error: (xhr, status, error) => {
-                    console.log(error)
-                    alert('Something went wrong while setting a new amount')
+                    displayAjaxToSupportData(xhr, this.URL);;
+                    showErrorModal(`${error} - ${xhr.responseText}`);
                 }
             })
 
@@ -165,8 +165,8 @@
                     $('#economy-module-discordtextearner-config-timeout').addClass('bg-success').removeClass('bg-danger');
                 },
                 error: (xhr, status, error) => {
-                    console.log(error)
-                    alert('Something went wrong while setting a new timeout')
+                    displayAjaxToSupportData(xhr, this.URL);
+                    showErrorModal(`${error} - ${xhr.responseText}`);
                 }
             })
 

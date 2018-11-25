@@ -319,7 +319,7 @@
         error: (xhr, status, error) => {
           $("#modal-set-note").modal('hide');
           showErrorModal(`Error while processing an API request. ${xhr.responseText}`)
-          console.log(xhr)
+          displayAjaxToSupportData(xhr, this.URL);
 
         }
       })
@@ -345,7 +345,7 @@
         },
         error: (xhr, status, error) => {
           showErrorModal(`Error while processing an API request. ${xhr.responseText}`)
-          console.log(xhr)
+          displayAjaxToSupportData(xhr, this.URL);
 
         }
       })
@@ -395,7 +395,7 @@
         },
         error: (xhr, status, error) => {
           showErrorModal(`Error while processing an API request. ${xhr.responseText}`)
-          console.log(xhr)
+          displayAjaxToSupportData(xhr, this.URL);
 
         }
       })
@@ -417,7 +417,7 @@
         },
         error: (xhr, status, error) => {
           showErrorModal(`Error while processing an API request. ${xhr.responseText}`)
-          console.log(xhr)
+          displayAjaxToSupportData(xhr, this.URL);
 
         }
       })
@@ -463,7 +463,7 @@
           $("#comments-place-text").val("")
         },
         error: (xhr, status, error) => {
-          console.log(xhr)
+          displayAjaxToSupportData(xhr, this.URL);
           showErrorModal(`Error while processing an API request. ${xhr.responseText}`)
         }
       })
@@ -482,7 +482,7 @@
             resolve(data)
           },
           error: (xhr, status, error) => {
-            console.log(xhr)
+            displayAjaxToSupportData(xhr, this.URL);
             reject(new Error(error))
           }
         })
@@ -503,7 +503,7 @@
             resolve(data)
           },
           error: (xhr, status, error) => {
-            console.log(xhr)
+            displayAjaxToSupportData(xhr, this.URL);
             reject(new Error(error))
           }
         })

@@ -145,8 +145,9 @@
             updateInfoLabels(data)
             resolve(data)
           },
-          error: function (data) {
-            console.error(data);
+          error: function (xhr, status, error) {
+            displayAjaxToSupportData(xhr, this.URL);;
+            showErrorModal(`${error} - ${xhr.responseText}`);
 
             reject(data)
           }

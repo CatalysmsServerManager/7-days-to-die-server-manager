@@ -8,20 +8,19 @@ class sdtdChat {
   start() {
 
     io.socket.on('chatMessage', (chatMessage) => {
-      console.log(chatMessage)
       if (chatMessage.server.id === this.serverId) {
         addNewChatMessage(chatMessage);
       }
     });
     io.socket.on('playerConnected', (connectedMessage) => {
       if (connectedMessage.server.id === this.serverId) {
-        addPlayerConnectedMessage(connectedMessage)
+        addPlayerConnectedMessage(connectedMessage);
       }
 
     })
     io.socket.on('playerDisconnected', (disconnectedMessage) => {
       if (disconnectedMessage.server.id === this.serverId) {
-        addPlayerDisconnectedMessage(disconnectedMessage)
+        addPlayerDisconnectedMessage(disconnectedMessage);
       }
     })
     addSavedMessagesToChatWindow(this.serverId);
@@ -43,7 +42,7 @@ class sdtdChat {
           resolve(data);
         },
         error: (xhr, status, error) => {
-          $('.chat-window').append('<li class=\"chat-message text-danger\">' + error + '</li>');
+          showErrorModal(`${error} - ${xhr.responseText}`);
           resolve(error);
         }
       });

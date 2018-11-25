@@ -150,8 +150,9 @@
             data: {
                 serverId: window.SAILS_LOCALS.server.id,
             },
-            error: e => {
-                console.log(e);
+            error: (xhr, status, error) => {
+                displayAjaxToSupportData(xhr, this.URL);;
+                showErrorModal(`${error} - ${xhr.responseText}`);
             },
             success: (data, xhr) => {
                 data.forEach(job => {
@@ -301,8 +302,9 @@
                     serverId: window.SAILS_LOCALS.server.id,
                     jobId: cronIdToDelete,
                 },
-                error: (e, xhr) => {
-                    alert(e)
+                error: (xhr, status, data) => {
+                    displayAjaxToSupportData(xhr, this.URL);
+                    showErrorModal(`${error} - ${xhr.responseText}`);
                 },
                 success: (data, status, xhr) => {
                     alert(data)
@@ -323,8 +325,9 @@
                         serverId: window.SAILS_LOCALS.server.id,
                         jobId: cronJob.id,
                     },
-                    error: (e, xhr) => {
-                        console.log(xhr);
+                    error: (xhr, status, error) => {
+                        displayAjaxToSupportData(xhr, this.URL);;
+                        showErrorModal(`${error} - ${xhr.responseText}`);
                     },
                     success: (data, status, xhr) => {
                     }
@@ -338,8 +341,9 @@
                         serverId: window.SAILS_LOCALS.server.id,
                         jobId: cronJob.id,
                     },
-                    error: (e, xhr) => {
-                        console.log(xhr);
+                    error: (xhr, status, error) => {
+                        displayAjaxToSupportData(xhr, this.URL);;
+                        showErrorModal(`${error} - ${xhr.responseText}`);
                     },
                     success: (data, status, xhr) => {
                     }
@@ -360,8 +364,9 @@
                         serverId: window.SAILS_LOCALS.server.id,
                         jobId: cronJob.id,
                     },
-                    error: (e, xhr) => {
-                        console.log(xhr);
+                    error: (xhr, status, error) => {
+                        displayAjaxToSupportData(xhr, this.URL);;
+                        showErrorModal(`${error} - ${xhr.responseText}`);
                     },
                     success: (data, status, xhr) => {
                     }
@@ -375,8 +380,9 @@
                         serverId: window.SAILS_LOCALS.server.id,
                         jobId: cronJob.id,
                     },
-                    error: (e, xhr) => {
-                        console.log(xhr);
+                    error: (xhr, status, error) => {
+                        displayAjaxToSupportData(xhr, this.URL);;
+                        showErrorModal(`${error} - ${xhr.responseText}`);
                     },
                     success: (data, status, xhr) => {
                     }
@@ -396,9 +402,10 @@
                     serverId: window.SAILS_LOCALS.server.id,
                     jobId: cronIdToDelete,
                 },
-                error: (e, xhr) => {
-                    console.log(xhr);
-                },
+                error: (xhr, status, error) => {
+                        displayAjaxToSupportData(xhr, this.URL);;
+                        showErrorModal(`${error} - ${xhr.responseText}`);
+                    },
                 success: (data, status, xhr) => {
                     deleteJobFromTable(newRow)
                 }

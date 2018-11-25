@@ -140,8 +140,8 @@
 
               },
               error: (xhr, status, error) => {
-                console.log(error)
-                console.log(xhr)
+                displayAjaxToSupportData(xhr, this.URL);
+                showErrorModal(`${error} - ${xhr.responseText}`);
               }
             })
           } else {
@@ -156,8 +156,8 @@
 
               },
               error: (xhr, status, error) => {
-                console.log(error)
-                console.log(xhr)
+                displayAjaxToSupportData(xhr, this.URL);
+                showErrorModal(`${error} - ${xhr.responseText}`);
               }
             })
           }
@@ -192,7 +192,8 @@
                   resolve(data)
                 },
                 error: (xhr, status, error) => {
-                  console.log(error)
+                  displayAjaxToSupportData(xhr, this.URL);;
+                  showErrorModal(`${error} - ${xhr.responseText}`);
                   resolve([])
                 }
               })
@@ -217,7 +218,8 @@
               updateCountriesList();
             },
             error: (xhr, status, error) => {
-              console.log(error)
+              displayAjaxToSupportData(xhr, this.URL);;
+              showErrorModal(`${error} - ${xhr.responseText}`);
             }
           })
         })
@@ -238,7 +240,8 @@
               updateCountriesList();
             },
             error: (xhr, status, error) => {
-              console.log(error)
+              displayAjaxToSupportData(xhr, this.URL);;
+              showErrorModal(`${error} - ${xhr.responseText}`);
             }
           })
         })
@@ -257,7 +260,8 @@
               location.reload();
             },
             error: (xhr, status, error) => {
-              alert('Something went wrong while trying to toggle country ban!');
+              displayAjaxToSupportData(xhr, this.URL);;
+              showErrorModal(`${error} - ${xhr.responseText}`);
             }
           });
         })
@@ -287,7 +291,8 @@
                   resolve(data)
                 },
                 error: (xhr, status, error) => {
-                  console.log(error)
+                  displayAjaxToSupportData(xhr, this.URL);;
+                  showErrorModal(`${error} - ${xhr.responseText}`);
                   resolve([]);
                 }
               })
@@ -312,7 +317,8 @@
               updateWhitelist();
             },
             error: (xhr, status, error) => {
-              console.log(error)
+              displayAjaxToSupportData(xhr, this.URL);;
+              showErrorModal(`${error} - ${xhr.responseText}`);
             }
           })
         })
@@ -333,7 +339,8 @@
               updateWhitelist();
             },
             error: (xhr, status, error) => {
-              console.log(error)
+              displayAjaxToSupportData(xhr, this.URL);;
+              showErrorModal(`${error} - ${xhr.responseText}`);
             }
           })
         })

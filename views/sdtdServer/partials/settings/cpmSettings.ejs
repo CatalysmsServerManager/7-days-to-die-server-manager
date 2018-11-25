@@ -213,7 +213,8 @@
           fillSettingField(data)
         },
         error: (xhr, status, error) => {
-          console.log(xhr);
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
         }
       });
     };
@@ -269,7 +270,7 @@
       },
       error: (xhr, status, error) => {
         showErrorModal(`${error} - ${xhr.responseText}`);
-        console.log(xhr);
+        displayAjaxToSupportData(xhr, this.URL);;
         return false;
       }
     });

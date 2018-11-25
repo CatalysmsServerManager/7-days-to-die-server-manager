@@ -54,8 +54,8 @@
                         window.location.reload();
                     },
                     error: (xhr, status, error) => {
-                        console.log(xhr);
-                        alert('Error while setting balance!!');
+                        displayAjaxToSupportData(xhr, this.URL);;
+                        showErrorModal(`${error} - ${xhr.responseText}`);
                     }
                 });
             })

@@ -307,7 +307,7 @@
         }
       },
       error: (xhr, status, error) => {
-        console.log(xhr)
+        displayAjaxToSupportData(xhr, this.URL);
       }
     })
   })

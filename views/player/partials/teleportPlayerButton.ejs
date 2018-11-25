@@ -83,7 +83,8 @@
             alert('Teleported player');
           },
           error: (xhr, status, error) => {
-            alert('Something went wrong while trying to teleport a player!');
+            displayAjaxToSupportData(xhr, this.URL);;
+            showErrorModal(`${error} - ${xhr.responseText}`);
           }
         });
       })
