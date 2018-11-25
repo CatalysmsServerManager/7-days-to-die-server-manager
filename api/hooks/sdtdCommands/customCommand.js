@@ -106,8 +106,8 @@ class CustomCommand extends SdtdCommand {
             let secondsToWait;
 
             secondsToWait = parseInt(secondsToWaitStr);
-
-            if (secondsToWait === NaN) {
+            console.log(secondsToWait);
+            if (isNaN(secondsToWait)) {
               return chatMessage.reply(`Invalid wait() syntax! example: wait(5)`);
             }
 

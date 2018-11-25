@@ -47,7 +47,7 @@ module.exports = {
 
           secondsToWait = parseInt(secondsToWaitStr);
 
-          if (secondsToWait === NaN) {
+          if (isNaN(secondsToWait)) {
             return responses.push(`Invalid wait() syntax! example: wait(5)`);
           }
 
