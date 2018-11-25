@@ -30,21 +30,39 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    
+
     let functionToExecute = async () => {
-      
+
       let foundJob = await CronJob.findOne(inputs.jobId).populate('server');
 
       let commandsToExecute = foundJob.command.split(';');
       let responses = new Array();
 
       for (const commandToExec of commandsToExecute) {
-        let response = await execCmd(foundJob, commandToExec);
-        responses.push(response);
+
+
+        if (commandToExec.includes("wait(")) {
+          let secondsToWaitStr = commandToExec.replace('wait(', '').replace(')', '');
+          let secondsToWait;
+
+          secondsToWait = parseInt(secondsToWaitStr);
+
+          if (secondsToWait === NaN) {
+            return responses.push(`Invalid wait() syntax! example: wait(5)`);
+          }
+
+          await delaySeconds(secondsToWait);
+          responses.push(`Waiting ${secondsToWait} seconds`);
+        } else {
+          let response = await execCmd(foundJob, commandToExec);
+          responses.push(response);
+
+        }
+
       }
 
       sails.log.debug(`Executed a cron job for server ${foundJob.server.name}`, _.omit(foundJob, 'server'));
-  
+
       foundJob.responses = responses;
 
       if (foundJob.notificationEnabled) {
@@ -54,7 +72,7 @@ module.exports = {
           notificationType: "cronjob"
         })
       }
-      
+
 
     }
 
@@ -85,3 +103,12 @@ async function execCmd(job, command) {
     })
   })
 }
+
+
+function delaySeconds(seconds) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve()
+    }, seconds * 1000)
+  });
+};
