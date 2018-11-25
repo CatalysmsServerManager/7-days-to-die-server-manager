@@ -98,15 +98,32 @@ class CustomCommand extends SdtdCommand {
       let commandsExecuted = new Array();
       try {
         let commandsToExecute = options.commandsToExecute.split(';');
-        for (const command of commandsToExecute) {
-          let commandInfoFilledIn = command.replace('${entityId}', player.entityId)
-          commandInfoFilledIn = commandInfoFilledIn.replace('${steamId}', player.steamId)
-          let commandResult = await executeCommand(server, _.trim(commandInfoFilledIn));
-          commandsExecuted.push(commandResult);
 
-          if (options.sendOutput) {
-            await chatMessage.reply(commandResult.result);
+        for (const command of commandsToExecute) {
+
+          if (command.includes("wait(")) {
+            let secondsToWaitStr = command.replace('wait(', '').replace(')', '');
+            let secondsToWait;
+
+            secondsToWait = parseInt(secondsToWaitStr);
+
+            if (secondsToWait === NaN) {
+              return chatMessage.reply(`Invalid wait() syntax! example: wait(5)`);
+            }
+
+            await delaySeconds(secondsToWait);
+          } else {
+
+            let commandInfoFilledIn = command.replace('${entityId}', player.entityId)
+            commandInfoFilledIn = commandInfoFilledIn.replace('${steamId}', player.steamId)
+            let commandResult = await executeCommand(server, _.trim(commandInfoFilledIn));
+            commandsExecuted.push(commandResult);
+
+            if (options.sendOutput) {
+              await chatMessage.reply(commandResult.result);
+            }
           }
+
 
         }
         sails.log.debug(`HOOK SdtdCommands - custom command ran by player ${player.name} on server ${server.name} - ${chatMessage.messageText}`, chatMessage, commandsExecuted);
@@ -170,3 +187,11 @@ function validateArg(argumentRecord, value) {
       break;
   }
 }
+
+function delaySeconds(seconds) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve()
+    }, seconds * 1000)
+  });
+};
