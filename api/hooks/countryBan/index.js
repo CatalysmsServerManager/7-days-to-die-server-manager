@@ -312,114 +312,110 @@ module.exports = function sdtdCountryBan(sails) {
      */
 
     start: async function start(serverId) {
-        sails.log.debug(`HOOK:countryBan Starting countryBan for server ${serverId}`);
-        startCountryBan(serverId);
-      },
+      sails.log.debug(`HOOK:countryBan Starting countryBan for server ${serverId}`);
+      startCountryBan(serverId);
+    },
 
-      /**
-       * @name stop
-       * @memberof module:7dtdCountryBan
-       * @description Stops countryBan for a server
-       * @param {number} serverId - Id of the server
-       * @method
-       */
+    /**
+     * @name stop
+     * @memberof module:7dtdCountryBan
+     * @description Stops countryBan for a server
+     * @param {number} serverId - Id of the server
+     * @method
+     */
 
-      stop: async function (serverId) {
-          sails.log.debug(`HOOK:countryBan Stopping countryBan for server ${serverId} `);
+    stop: async function (serverId) {
+      sails.log.debug(`HOOK:countryBan Stopping countryBan for server ${serverId} `);
 
-          let loggingObj = sails.hooks.sdtdlogs.getLoggingObject(serverId);
+      let loggingObj = sails.hooks.sdtdlogs.getLoggingObject(serverId);
 
-          let currentConfig = countryBanInfoMap.get(String(serverId));
+      let currentConfig = countryBanInfoMap.get(String(serverId));
 
-          if (_.isUndefined(currentConfig)) {
-            return;
-          }
+      if (_.isUndefined(currentConfig)) {
+        return;
+      }
 
-          currentConfig.enabled = false;
-          await SdtdConfig.update({
-            server: serverId
-          }, {
-            countryBanConfig: currentConfig
-          });
+      currentConfig.enabled = false;
+      await SdtdConfig.update({
+        server: serverId
+      }, {
+        countryBanConfig: currentConfig
+      });
 
-          if (_.isUndefined(loggingObj)) {
-            throw new Error('Could not find logging object for server');
-          }
-          loggingObj.removeListener('playerConnected', handleCountryBan);
+      if (_.isUndefined(loggingObj)) {
+        throw new Error('Could not find logging object for server');
+      }
+      loggingObj.removeListener('playerConnected', handleCountryBan);
 
-          countryBanInfoMap.delete(String(serverId));
-        },
+      countryBanInfoMap.delete(String(serverId));
+    },
 
-        /**
-         * @name getStatus
-         * @memberof module:7dtdCountryBan
-         * @description Gets the country ban status/config for a server
-         * @param {number} serverId - Id of the server
-         * @method
-         */
+    /**
+     * @name getStatus
+     * @memberof module:7dtdCountryBan
+     * @description Gets the country ban status/config for a server
+     * @param {number} serverId - Id of the server
+     * @method
+     */
 
-        getStatus: function (serverId) {
-          sails.log.debug(`HOOK:countryBan Getting countryBan status for server ${serverId} `);
-          return countryBanInfoMap.get(String(serverId));
-        },
+    getStatus: function (serverId) {
+      sails.log.debug(`HOOK:countryBan Getting countryBan status for server ${serverId} `);
+      return countryBanInfoMap.get(String(serverId));
+    },
 
-        getAmount: function () {
-          return countryBanInfoMap.size;
-        },
+    getAmount: function () {
+      return countryBanInfoMap.size;
+    },
 
-        /**
-         * @name reload
-         * @memberof module:7dtdCountryBan
-         * @description Changes banned countries config for a server
-         * @param {number} serverId - Id of the server
-         * @method
-         */
+    /**
+     * @name reload
+     * @memberof module:7dtdCountryBan
+     * @description Changes banned countries config for a server
+     * @param {number} serverId - Id of the server
+     * @method
+     */
 
-        reload: async function (serverId, newConfig) {
+    reload: async function (serverId, newConfig) {
 
-          try {
-            sails.log.debug(`HOOK:countryBan Reloading country ban for server ${serverId} `);
+      try {
+        sails.log.debug(`HOOK:countryBan Reloading country ban for server ${serverId} `);
 
-            let config = await SdtdConfig.findOne({
-              server: serverId
-            });
+        let config = await SdtdConfig.findOne({
+          server: serverId
+        });
 
-            if (_.isUndefined(config)) {
-              throw new Error('Could not find server config with specified ID');
-            }
-
-            if (_.isUndefined(newConfig)) {
-              newConfig = config.countryBanConfig;
-            }
-
-
-            let updatedServer = await SdtdConfig.update({
-              server: serverId
-            }, {
-              countryBanConfig: newConfig
-            }).fetch();
-            countryBanInfoMap.set(String(serverId), newConfig);
-
-            await this.stop(serverId);
-            return await this.start(serverId);
-          } catch (error) {
-            sails.log.error(`HOOK:countryBan ${error}`);
-          }
-
+        if (_.isUndefined(config)) {
+          throw new Error('Could not find server config with specified ID');
         }
+
+        if (_.isUndefined(newConfig)) {
+          newConfig = config.countryBanConfig;
+        }
+
+
+        let updatedServer = await SdtdConfig.update({
+          server: serverId
+        }, {
+          countryBanConfig: newConfig
+        }).fetch();
+        countryBanInfoMap.set(String(serverId), newConfig);
+
+        await this.stop(serverId);
+        return await this.start(serverId);
+      } catch (error) {
+        sails.log.error(`HOOK:countryBan ${error}`);
+      }
+
+    }
   };
 
   async function handleCountryBan(connectedMessage) {
     let country = connectedMessage.country;
     let steamId = connectedMessage.steamID;
-    let serverIp = this.ip;
-    let serverWebPort = this.port;
+    let serverId = this.server.id;
+    console.log(this);
     try {
-      let server = await SdtdServer.find({
-        ip: serverIp,
-        webPort: serverWebPort
-      }).limit(1);
-      server = server[0]
+      let server = await SdtdServer.findOne(serverId)
 
       let player = await Player.find({
         steamId: steamId,
