@@ -44,7 +44,14 @@ module.exports = {
     });
     let user = await User.findOne(this.req.session.userId);
 
-    const cpmVersion = await sails.helpers.sdtd.checkCpmVersion(inputs.serverId, true);
+    let cpmVersion;
+
+    try {
+      cpmVersion = await sails.helpers.sdtd.checkCpmVersion(inputs.serverId, true);
+    } catch (error) {
+      cpmVersion = 0;
+    }
+
 
     let permCheck = await sails.helpers.roles.checkPermission.with({
       userId: this.req.session.userId,
