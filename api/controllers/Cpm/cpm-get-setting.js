@@ -50,6 +50,11 @@ module.exports = {
         adminUser: server.authName,
         adminToken: server.authToken
       }, commandToExecute);
+
+      if (response.result.startsWith('ERR:')) {
+        return exits.badRequest(`Error while executing CPM command - ${response.result}`);
+      }
+
     } catch (error) {
       sails.log.warn(`Error executing a command for server ${server.name} while getting a CPM setting - ${error}`);
       return exits.badRequest(`Error connecting to server.`);
