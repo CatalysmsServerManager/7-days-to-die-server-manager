@@ -54,12 +54,17 @@ class Claim extends SdtdCommand {
       }
 
       try {
-        await SdtdApi.executeConsoleCommand({
+        let response = await SdtdApi.executeConsoleCommand({
           ip: server.ip,
           port: server.webPort,
           adminUser: server.authName,
           adminToken: server.authToken
         }, cmdToExec);
+
+        if (response.result.startsWith('ERR:')) {
+          return chatMessage.reply(`Error while giving item - ${response.result}`);
+        }
+
         chatMessage.reply(`Gave ${item.amount}x ${item.name} of quality ${item.quality}.`);
         await PlayerClaimItem.update({
           id: item.id
