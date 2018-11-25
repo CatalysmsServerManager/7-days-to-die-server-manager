@@ -106,7 +106,11 @@ class CustomCommand extends SdtdCommand {
             let secondsToWait;
 
             secondsToWait = parseInt(secondsToWaitStr);
-            console.log(secondsToWait);
+
+            if (secondsToWait < 1) {
+              return chatMessage.reply(`Cannot wait for a negative or 0 amount of seconds`);
+            }
+
             if (isNaN(secondsToWait)) {
               return chatMessage.reply(`Invalid wait() syntax! example: wait(5)`);
             }

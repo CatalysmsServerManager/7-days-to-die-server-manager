@@ -47,6 +47,10 @@ module.exports = {
 
           secondsToWait = parseInt(secondsToWaitStr);
 
+          if (secondsToWait < 1) {
+            return chatMessage.reply(`Cannot wait for a negative or 0 amount of seconds`);
+          }
+
           if (isNaN(secondsToWait)) {
             return responses.push(`Invalid wait() syntax! example: wait(5)`);
           }
