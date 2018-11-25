@@ -65,7 +65,7 @@ class LoggingObject extends EventEmitter {
   async _intervalFunction() {
     let newLogs = {};
 
-    if (this.handlingRequest) {
+    if (this.handlingRequest && this.debug) {
       sails.log.debug(`SdtdLogs - DEBUG MESSAGE - Waiting for a request already, skipping this one.`);
       return;
     }
