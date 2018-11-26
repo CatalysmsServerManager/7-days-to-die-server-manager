@@ -34,10 +34,17 @@ module.exports = function definePlayerTrackingHook(sails) {
         sails.log.warn(`Tried to start tracking for a server without a loggingObject`, {
           server: serverId
         });
-        return
+        return;
       }
 
       loggingObject.on('memUpdate', async (memUpdate) => {
+        let handlingTracking = await sails.helpers.redis.get(`server:${memUpdate.server.id}:handling-tracking`);
+        if (handlingTracking) {
+          sails.log.warn(`Already handling a tracking cycle for server ${memUpdate.server.id} - discarding event`);
+          return;
+        }
+
+        await sails.helpers.redis.set(`server:${memUpdate.server.id}:handling-tracking`, 1);
 
         let dateStarted = new Date();
 
@@ -106,6 +113,7 @@ module.exports = function definePlayerTrackingHook(sails) {
         }
 
         let dateEnded = new Date();
+        await sails.helpers.redis.del(`server:${memUpdate.server.id}:handling-tracking`);
         sails.log.verbose(`Received memUpdate - Performed tracking for server ${server.name} - ${playerRecords.length} players online - ${currentCycles}/${sails.config.custom.trackingCyclesBeforeDelete} tracking cycles - took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`);
       });
 
