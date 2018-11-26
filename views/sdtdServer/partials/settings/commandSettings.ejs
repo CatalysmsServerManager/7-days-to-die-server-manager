@@ -9,8 +9,10 @@
     <i class="fa fa-power-off"></i> Enable
   </div>
 
-  <p>Control the ingame commands used by your players. To see a full list of commands, check the documentation. Not all commands
-    are listed here, they will get enabled automatically when their corresponding module is enabled. For example, enabling
+  <p>Control the ingame commands used by your players. To see a full list of commands, check the documentation. Not all
+    commands
+    are listed here, they will get enabled automatically when their corresponding module is enabled. For example,
+    enabling
     economy will automatically enable the balance command </p>
 
 
@@ -52,11 +54,32 @@
 
   <div class="form-check">
     <label class="form-check-label">
-      <input type="checkbox" class="form-check-input" name="input-settings-commands-who-checkbox" id="input-settings-commands-who-checkbox"> Who - lets players check an area around them to see if other players have been there
+      <input type="checkbox" class="form-check-input" name="input-settings-commands-who-checkbox" id="input-settings-commands-who-checkbox">
+      Who
     </label>
+    <p class="form-text text-muted">
+      Lets players check an area around them to see if other players have been there. Requires location tracking to be enabled.
+    </p>
   </div>
 
+  <div class="form-check">
+    <label class="form-check-label">
+      <input type="checkbox" class="form-check-input" name="input-settings-commands-gimme-checkbox" id="input-settings-commands-gimme-checkbox">
+      Gimme
+    </label>
+    <p class="form-text text-muted">
+      Give players a random item, spawn an entity or execute an arbitrary command.
+    </p>
+  </div>
+
+  <div id="gimme-settings">
+    <hr>
+    <%- include('./gimmeModal') %>
+  </div>
+
+
   <div id="player-teleport-settings">
+
     <hr>
 
     <h4>Player teleport settings</h4>
@@ -65,8 +88,8 @@
       <label for="">Max locations that players can set</label>
       <input type="text" class="form-control" name="inputs-settings-commands-playerteleports-maxlocations" id="inputs-settings-commands-playerteleports-maxlocations"
         placeholder="<%= config.maxPlayerTeleportLocations %>">
-      <input name="inputs-settings-playerteleports-maxlocations-btn" id="inputs-settings-playerteleports-maxlocations-btn" class="btn btn-primary"
-        type="button" value="Set">
+      <input name="inputs-settings-playerteleports-maxlocations-btn" id="inputs-settings-playerteleports-maxlocations-btn"
+        class="btn btn-primary" type="button" value="Set">
     </div>
 
     <div class="form-group">
@@ -78,7 +101,8 @@
     </div>
 
     <div class="form-group">
-      <label for="">Time (in seconds) that a teleport will be delayed. This makes sure players cannot use tele to escape a dire situation.</label>
+      <label for="">Time (in seconds) that a teleport will be delayed. This makes sure players cannot use tele to
+        escape a dire situation.</label>
       <input type="text" class="form-control" name="inputs-settings-commands-playerteleports-delay" id="inputs-settings-commands-playerteleports-delay"
         placeholder="<%= config.playerTeleportDelay %>">
       <input name="inputs-settings-playerteleports-delay-btn" id="inputs-settings-playerteleports-delay-btn" class="btn btn-primary"
@@ -94,67 +118,65 @@
 
   <% customCommands.forEach(command => { %>
 
-    <%- include('./editCommandModal.ejs', { command: command}) %>
+  <%- include('./editCommandModal.ejs', { command: command}) %>
 
 
-      <% }) %>
+  <% }) %>
 
-        <hr>
+  <hr>
 
 
-        <%- include('./addCommandModal.ejs') %>
+  <%- include('./addCommandModal.ejs') %>
 
-          <!-- Button trigger modal -->
-          <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#custom-commands-import-modal">
-            Import
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#custom-commands-import-modal">
+    Import
+  </button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="custom-commands-import-modal" tabindex="-1" role="dialog" aria-labelledby="custom-commands-import-modal-title"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="custom-commands-import-modal-title">Import</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
           </button>
+        </div>
+        <div class="modal-body">
+          <div class="container-fluid">
 
-          <!-- Modal -->
-          <div class="modal fade" id="custom-commands-import-modal" tabindex="-1" role="dialog" aria-labelledby="custom-commands-import-modal-title"
-            aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h4 class="modal-title" id="custom-commands-import-modal-title">Import</h4>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <div class="container-fluid">
-
-                    <div class="alert alert-warning" role="alert">
-                      Importing custom commands is an advanced function. Check the documentation for more info.
-                      <br> This will delete the current custom commands you have. Make sure to include them in your import statement.
-                      Command arguments are currently not supported to be imported!
-                    </div>
-
-                    <div class="form-group">
-                      <label for="custom-commands-import-json">Custom commands JSON</label>
-                      <textarea class="form-control" name="custom-commands-import-json" id="custom-commands-import-json" rows="10"></textarea>
-                    </div>
-
-                    <div id="custom-commands-import-problems" class="alert alert-warning invisible" role="alert">
-
-                    </div>
-
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button id="custom-commands-import-btn" type="button" class="btn btn-primary">Import</button>
-                </div>
-              </div>
+            <div class="alert alert-warning" role="alert">
+              Importing custom commands is an advanced function. Check the documentation for more info.
+              <br> This will delete the current custom commands you have. Make sure to include them in your import
+              statement.
+              Command arguments are currently not supported to be imported!
             </div>
+
+            <div class="form-group">
+              <label for="custom-commands-import-json">Custom commands JSON</label>
+              <textarea class="form-control" name="custom-commands-import-json" id="custom-commands-import-json" rows="10"></textarea>
+            </div>
+
+            <div id="custom-commands-import-problems" class="alert alert-warning invisible" role="alert">
+
+            </div>
+
           </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button id="custom-commands-import-btn" type="button" class="btn btn-primary">Import</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-          <a name="export-customcommands" id="export-custom-commands" class="btn btn-secondary" href="/api/sdtdserver/commands/export?serverId=<%= server.id %>"
-            role="button">Export to file</a>
+  <a name="export-customcommands" id="export-custom-commands" class="btn btn-secondary" href="/api/sdtdserver/commands/export?serverId=<%= server.id %>"
+    role="button">Export to file</a>
 
-          <%- include('../commandsHelpButton') %>
-
-
-
+  <%- include('../commandsHelpButton') %>
 
 </div>
 
@@ -237,7 +259,7 @@
           status: newStatus
         },
         success: (data, status, xhr) => {
-          
+
         },
         error: (xhr, status, error) => {
           displayAjaxToSupportData(xhr, this.URL);
@@ -373,7 +395,7 @@
             _csrf: window.SAILS_LOCALS._csrf,
             serverId: window.SAILS_LOCALS.server.id,
           },
-          error:(xhr, status, error) => {
+          error: (xhr, status, error) => {
             displayAjaxToSupportData(xhr, this.URL);;
             showErrorModal(`${error} - ${xhr.responseText}`);
           }
