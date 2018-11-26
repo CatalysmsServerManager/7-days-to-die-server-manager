@@ -328,7 +328,7 @@ module.exports.routes = {
 
   'post /api/sdtdserver/commands/playerteleports/delay': 'SdtdServerController/commands.set-teleport-delay',
 
-  'post /api/sdtdserver/commands/gimme/status': 'SdtdServerController/commands/gimme.set-gimme-status',
+  'post /api/sdtdserver/commands/gimme': 'SdtdServerController/commands/gimme.set-gimme-status',
   'post /api/sdtdserver/commands/gimme/cooldown': 'SdtdServerController/commands/gimme.set-gimme-cooldown',
   'post /api/sdtdserver/commands/gimme/item': 'SdtdServerController/commands/gimme.add-gimme-item',
   'delete /api/sdtdserver/commands/gimme/item': 'SdtdServerController/commands/gimme.delete-gimme-item',

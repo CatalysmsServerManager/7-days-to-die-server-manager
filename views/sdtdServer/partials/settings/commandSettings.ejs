@@ -265,7 +265,27 @@
           displayAjaxToSupportData(xhr, this.URL);
           showErrorModal(`${error} - ${xhr.responseText}`);
         }
-      })
+      });
+    });
+
+    $("#input-settings-commands-gimme-checkbox").click(e => {
+      let status = $(e.target).prop('checked');
+      $.ajax({
+        url: '/api/sdtdserver/commands/gimme',
+        method: 'POST',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+          status: status
+        },
+        success: (data, status, xhr) => {
+
+        },
+        error: (xhr, status, error) => {
+          displayAjaxToSupportData(xhr, this.URL);
+          showErrorModal(`${error} - ${xhr.responseText}`);
+        }
+      });
     })
 
     $('#settings-disable-commands-btn').click(e => {
