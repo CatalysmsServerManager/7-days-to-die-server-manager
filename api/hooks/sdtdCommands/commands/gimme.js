@@ -23,9 +23,33 @@ class Gimme extends SdtdCommand {
       server: server.id
     });
 
+    let itemToUseIndex = await sails.helpers.etc.randomNumber(0, possibleGimmeItems.length - 1);
+    let itemToUse = possibleGimmeItems[itemToUseIndex];
+
+    let dateNow = Date.now();
+    let cooldownInMs = server.config.gimmeCooldown * 60000; // Convert minutes to ms
+    let borderDate = new Date(dateNow.valueOf() - cooldownInMs);
+
+    const previousUse = await PlayerUsedGimme.find({
+      where: {
+        player: player.id,
+        createdAt: {
+          '>': borderDate.valueOf()
+        }
+      },
+      sort: "createdAt DESC",
+      limit: 1
+    });
+
+    if (previousUse.length > 0) {
+      let coolDownRemainderMs = cooldownInMs - (dateNow - previousUse[0].createdAt);
+      return chatMessage.reply(`You need to wait ${Math.round(coolDownRemainderMs / 60000)} minutes more before executing this command again.`);
+    }
+
     if (possibleGimmeItems.length === 0) {
       return chatMessage.reply(`Found 0 configured items. An admin must configure some via the webinterface before this command will work!`);
     }
+
 
     if (server.config.economyEnabled && server.config.costToUseGimme) {
       let notEnoughMoney = false
@@ -41,8 +65,7 @@ class Gimme extends SdtdCommand {
       }
     }
 
-    let itemToUseIndex = await sails.helpers.etc.randomNumber(0, possibleGimmeItems.length - 1);
-    let itemToUse = possibleGimmeItems[itemToUseIndex];
+
 
     switch (itemToUse.type) {
 
@@ -120,6 +143,11 @@ class Gimme extends SdtdCommand {
     }
 
     chatMessage.reply(itemToUse.friendlyName);
+
+    await PlayerUsedGimme.create({
+      item: itemToUse.id,
+      player: player.id
+    });
 
   }
 
