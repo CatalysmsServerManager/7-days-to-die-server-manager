@@ -58,7 +58,8 @@
       Who
     </label>
     <p class="form-text text-muted">
-      Lets players check an area around them to see if other players have been there. Requires location tracking to be enabled.
+      Lets players check an area around them to see if other players have been there. Requires location tracking to be
+      enabled.
     </p>
   </div>
 
@@ -267,6 +268,9 @@
         }
       });
     });
+
+    $("#input-settings-commands-gimme-checkbox").prop('checked', window.SAILS_LOCALS.config.enabledGimme);
+
 
     $("#input-settings-commands-gimme-checkbox").click(e => {
       let status = $(e.target).prop('checked');
