@@ -69,7 +69,7 @@ class CommandHandler {
        */
 
   static async commandListener(chatMessage) {
-
+    let dateStarted = Date.now();
     try {
       if (chatMessage.messageText.startsWith(this.config.commandPrefix)) {
         // Cut out the prefix
@@ -114,12 +114,13 @@ class CommandHandler {
 
           try {
             await commandToRun.run(chatMessage, player, server, args, commandToRun.options);
-            sails.log.debug(`HOOK SdtdCommands - command ran by player ${player.name} on server ${server.name} - ${chatMessage.messageText}`)
-            return
+            let dateEnded = Date.now();
+            sails.log.info(`HOOK SdtdCommands - command ran by player ${player.name} on server ${server.name}. Took ${dateEnded - dateStarted} ms - ${chatMessage.messageText}`)
+            return;
           } catch (error) {
             sails.log.error(error)
             chatMessage.reply(`An error occured! Please report this on the development server. ${error}`);
-            return
+            return;
           }
         }
 
