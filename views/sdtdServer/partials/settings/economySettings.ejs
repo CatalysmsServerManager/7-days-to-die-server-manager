@@ -58,7 +58,14 @@
               type="button" value="Set">
             <small id="economy-costToMakeTeleportPublic-help" class="text-muted">How much does a player have to pay to
               make a teleport location public</small>
-
+            <br>
+            <label for="economy-setPrices-costToUseGimme">Gimme</label>
+            <input type="text" name="economy-setPrices-costToUseGimme" id="economy-setPrices-costToUseGimme" class="form-control"
+              placeholder="<%= config.costToUseGimme %>" aria-describedby="economy-costToUseGimme-help">
+            <input name="economy-costToUseGimme-btn" id="economy-costToUseGimme-btn" class="btn btn-primary" type="button"
+              value="Set">
+            <small id="economy-costToUseGimme-help" class="text-muted">How much does a player have to pay to
+              use the gimme command</small>
           </div>
         </div>
         <div class="modal-footer">
@@ -166,11 +173,36 @@
       })
     })
 
+    $("#economy-costToUseGimme-btn").click(e => {
+      let newCost = $("#economy-setPrices-costToUseGimme").val();
+      if (!newCost) {
+        return showErrorModal(`You must provide a value for the new cost.`)
+      }
+      $.ajax({
+        url: '/api/sdtdserver/economy/cost',
+        method: 'POST',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+          costTypeToSet: 'costToUseGimme',
+          newCost: newCost
+        },
+        success: (data, status, xhr) => {
+          $('#economy-costToUseGimme-btn').addClass('bg-success').removeClass('bg-danger');
+          console.log(data)
+        },
+        error: (xhr, status, error) => {
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
+          $('#economy-costToUseGimme-btn').addClass('bg-danger').removeClass('bg-success');
+        }
+      })
+    })
 
     $('#economy-costToTeleport-btn').click(e => {
       let newCost = $('#economy-setPrices-costToTeleport').val();
       if (!newCost) {
-        return
+        return showErrorModal(`You must provide a value for the new cost.`)
       }
       $.ajax({
         url: '/api/sdtdserver/economy/cost',
@@ -196,7 +228,7 @@
     $('#economy-costToSetTeleport-btn').click(e => {
       let newCost = $('#economy-setPrices-costToSetTeleport').val();
       if (!newCost) {
-        return
+        return showErrorModal(`You must provide a value for the new cost.`)
       }
       $.ajax({
         url: '/api/sdtdserver/economy/cost',
@@ -222,7 +254,7 @@
     $('#economy-costToMakeTeleportPublic-btn').click(e => {
       let newCost = $('#economy-setPrices-costToMakeTeleportPublic').val();
       if (!newCost) {
-        return
+        return showErrorModal(`You must provide a value for the new cost.`)
       }
       $.ajax({
         url: '/api/sdtdserver/economy/cost',
@@ -249,7 +281,7 @@
       let newName = $('#economy-setCurrencyName-input').val();
 
       if (!newName) {
-        return
+        return showErrorModal(`You must provide a value for the new name.`)
       }
 
       $.ajax({
