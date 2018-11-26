@@ -61,7 +61,7 @@ class Claim extends SdtdCommand {
           adminToken: server.authToken
         }, cmdToExec);
 
-        if (response.result.startsWith('ERR:')) {
+        if (response.result.includes('ERR:')) {
           return chatMessage.reply(`Error while giving item - ${response.result}`);
         }
 
@@ -75,10 +75,7 @@ class Claim extends SdtdCommand {
         chatMessage.reply(`Something went wrong while trying to give ${item.name}. Please contact a server admin.`);
       }
 
-    })
-
-
-
+    });
   }
 }
 
