@@ -63,8 +63,10 @@ module.exports = {
       return exits.notAuthorized({
         role: permCheck.role,
         requiredPerm: 'manageServer'
-      })
+      });
     }
+
+    let gimmeItems = await GimmeItem.find({server: server.id});
 
     try {
 
@@ -77,7 +79,8 @@ module.exports = {
         config: serverConfig,
         user: user,
         customCommands: customCommands,
-        cpmVersion: cpmVersion
+        cpmVersion: cpmVersion,
+        gimmeItems: gimmeItems
       });
     } catch (error) {
       sails.log.error(`VIEW - SdtdServer:settings - ${error}`);

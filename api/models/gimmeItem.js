@@ -12,8 +12,9 @@ module.exports = {
       isIn: ["item", "command", "entity"]
     },
 
-    itemName: {
+    value: {
       type: 'string',
+      required: true,
       minLength: 1
     },
 
@@ -21,17 +22,7 @@ module.exports = {
       type: 'string',
       required: true,
       minLength: 1,
-      maxLength : 100
-    },
-
-    command: {
-      type: 'string',
-      minLength: 1
-    },
-
-    entity: {
-      type: 'number',
-      min: 1
+      maxLength: 100
     },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
