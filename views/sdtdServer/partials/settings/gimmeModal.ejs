@@ -16,14 +16,18 @@
       </div>
       <div class="modal-body">
         <div class="container-fluid">
-
-          <div class="form-group">
-            <label for="modal-settings-gimme-cooldown">Cooldown</label>
-            <input type="text" class="form-control" name="modal-settings-gimme-cooldown" id="modal-settings-gimme-cooldown"
-              aria-describedby="modal-settings-gimme-cooldown-help" placeholder="">
-            <small id="modal-settings-gimme-cooldown-help" class="form-text text-muted">The amount of time (in minutes)
+          <form class="form-inline">
+            <input name="modal-settings-gimme-cooldown-set" id="modal-settings-gimme-cooldown-set" class="btn btn-primary mb-2 mr-sm-2"
+              type="button" value="Set">
+            <input type="text" class="form-control mb-2 mr-sm-2" name="modal-settings-gimme-cooldown" id="modal-settings-gimme-cooldown"
+              aria-describedby="modal-settings-gimme-cooldown-help" placeholder="Cooldown" value="<%= config.gimmeCooldown %>">
+            <small id="modal-settings-gimme-cooldown-help" class="form-text text-muted mb-2 mr-sm-2">The amount of time
+              (in minutes)
               a player has to wait before using gimme again.</small>
-          </div>
+
+          </form>
+
+          <br>
 
           <table class="table" id="modal-settings-gimme-table">
             <thead>
@@ -79,6 +83,26 @@
     for (const gimmeItem of window.SAILS_LOCALS.gimmeItems) {
       addItemToTable(gimmeItem);
     }
+
+    $("#modal-settings-gimme-cooldown-set").click(e => {
+      let cooldown = $("#modal-settings-gimme-cooldown").val();
+      $.ajax({
+        url: '/api/sdtdserver/commands/gimme/cooldown',
+        method: 'POST',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+          cooldown: cooldown
+        },
+        success: (data, status, xhr) => {
+
+        },
+        error: (xhr, status, error) => {
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
+        }
+      });
+    })
 
     $("#modal-settings-gimme-input-add").click(e => {
       let type = $('#modal-settings-gimme-input-type').find(":selected").val();
