@@ -24,7 +24,7 @@ module.exports.policies = {
     'add-server': 'isLoggedIn',
     'add-server-view': 'isLoggedIn',
     'view-gbl': 'isLoggedIn',
-    'available-items': ['isLoggedIn', 'roles/hasAccess'],
+    'available-items': 'isLoggedIn',
     'subscribe-to-socket': ['isLoggedIn', 'roles/hasAccess'],
     'is-online': ['isLoggedIn', 'roles/hasAccess'],
     'get-fps': ['isLoggedIn', 'roles/hasAccess'],
