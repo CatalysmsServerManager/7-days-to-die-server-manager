@@ -47,9 +47,9 @@
 
               <label for="modal-settings-gimme-input-type"></label>
               <select class="form-control mb-2 mr-sm-2" name="modal-settings-gimme-input-type" id="modal-settings-gimme-input-type">
+                <option value='command'>Command</option>
                 <option value="item">Item</option>
                 <option value="entity">Entity</option>
-                <option value='command'>Command</option>
               </select>
 
 
@@ -68,6 +68,10 @@
             </form>
           </span>
 
+          <div id="available-items" class="invisible">ITEMS</div>
+
+          <div id="available-entities" class="invisible">ENTS</div>
+
         </div>
       </div>
       <div class="modal-footer">
@@ -83,6 +87,37 @@
     for (const gimmeItem of window.SAILS_LOCALS.gimmeItems) {
       addItemToTable(gimmeItem);
     }
+
+    let availableItems = [];
+
+    $.ajax({
+      url: `/api/sdtdserver/availableitems`,
+      data: {
+        serverId: window.SAILS_LOCALS.server.id,
+        item: "*",
+      },
+      success: (data, status, xhr) => {
+        availableItems = data;
+      },
+      error: (xhr, status, error) => {
+        displayAjaxToSupportData(xhr, this.URL);;
+        showErrorModal(`${error} - ${xhr.responseText}`);
+      }
+    });
+
+    $("#modal-settings-gimme-input-value").on('keyup', (e) => {
+      let subString = $("#modal-settings-gimme-input-value").val();
+      let possibleItems = availableItems.filter(item => item.includes(subString));
+      $("#available-items").empty();
+      possibleItems.forEach(item => {
+        $("#available-items").append(`<span class="itemName">${item} </span>`);
+      })
+    });
+
+    $("#available-items").on('click', ".itemName", (e) => {
+      let stringToAppend = e.target.textContent.trim();
+      $("#modal-settings-gimme-input-value").val(stringToAppend);
+    })
 
     $("#modal-settings-gimme-cooldown-set").click(e => {
       let cooldown = $("#modal-settings-gimme-cooldown").val();
@@ -102,7 +137,26 @@
           showErrorModal(`${error} - ${xhr.responseText}`);
         }
       });
-    })
+    });
+
+    $("#modal-settings-gimme-input-type").change(e => {
+      let type = $('#modal-settings-gimme-input-type').find(":selected").val();
+
+      if (type === "item") {
+        $("#available-items").removeClass('invisible');
+        $("#available-entities").addClass('invisible');
+      }
+
+      if (type === "entity") {
+        $("#available-items").addClass('invisible');
+        $("#available-entities").removeClass('invisible');
+      }
+
+      if (type === 'command') {
+        $("#available-items").addClass('invisible');
+        $("#available-entities").addClass('invisible');
+      }
+    });
 
     $("#modal-settings-gimme-input-add").click(e => {
       let type = $('#modal-settings-gimme-input-type').find(":selected").val();
