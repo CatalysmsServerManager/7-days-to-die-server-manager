@@ -52,7 +52,7 @@ module.exports = {
       }
 
       let allocsVersion = await sails.helpers.sdtd.checkModVersion('Mod Allocs MapRendering and Webinterface', sdtdServer.id);
-      let cpmVersion = await sails.helpers.sdtd.checkModVersion('Mod CSMM Patrons', sdtdServer.id);
+      const cpmVersion = await sails.helpers.sdtd.checkCpmVersion(sdtdServer.id);
       // let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({ serverId: sdtdServer.id });
       let userRole = await sails.helpers.roles.getUserRole(this.req.session.user.id, sdtdServer.id);
 
