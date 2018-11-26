@@ -75,7 +75,7 @@
       }
     });
 
-    $("#player-give-item-input-itemName").on('keydown', (e) => {
+    $("#player-give-item-input-itemName").on('keyup', (e) => {
       let subString = $("#player-give-item-input-itemName").val();
       let possibleItems = availableItems.filter(item => item.includes(subString));
       $("#player-give-item-possible-items").empty();
