@@ -21,11 +21,11 @@
             <label for="modal-settings-gimme-cooldown">Cooldown</label>
             <input type="text" class="form-control" name="modal-settings-gimme-cooldown" id="modal-settings-gimme-cooldown"
               aria-describedby="modal-settings-gimme-cooldown-help" placeholder="">
-            <small id="modal-settings-gimme-cooldown-help" class="form-text text-muted">The amount of time (in seconds)
+            <small id="modal-settings-gimme-cooldown-help" class="form-text text-muted">The amount of time (in minutes)
               a player has to wait before using gimme again.</small>
           </div>
 
-          <table class="table">
+          <table class="table" id="modal-settings-gimme-table">
             <thead>
               <tr>
                 <th>Type</th>
@@ -35,18 +35,6 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td scope="row"></td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr>
-                <td scope="row"></td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
             </tbody>
           </table>
 
@@ -55,9 +43,9 @@
 
               <label for="modal-settings-gimme-input-type"></label>
               <select class="form-control mb-2 mr-sm-2" name="modal-settings-gimme-input-type" id="modal-settings-gimme-input-type">
-                <option>Item</option>
-                <option>Entity</option>
-                <option>Command</option>
+                <option value="item">Item</option>
+                <option value="entity">Entity</option>
+                <option value='command'>Command</option>
               </select>
 
 
@@ -70,7 +58,7 @@
               <input type="text" class="form-control mb-2 mr-sm-2" name="modal-settings-gimme-input-value" id="modal-settings-gimme-input-value"
                 placeholder="Value">
 
-              <input name="modal-settings-gimme-input-value" id="modal-settings-gimme-input-value" class="btn btn-success mb-2 mr-sm-2"
+              <input name="modal-settings-gimme-input-add" id="modal-settings-gimme-input-add" class="btn btn-success mb-2 mr-sm-2"
                 type="button" value="Add">
 
             </form>
@@ -80,18 +68,113 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save</button>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-  $('#exampleModal').on('show.bs.modal', event => {
-    var button = $(event.relatedTarget);
-    var modal = $(this);
-    // Use above variables to manipulate the DOM
+  $(document).ready(() => {
+
+    for (const gimmeItem of window.SAILS_LOCALS.gimmeItems) {
+      addItemToTable(gimmeItem);
+    }
+
+    $("#modal-settings-gimme-input-add").click(e => {
+      let type = $('#modal-settings-gimme-input-type').find(":selected").val();
+      let friendlyName = $("#modal-settings-gimme-input-friendlyName").val();
+      let value = $("#modal-settings-gimme-input-value").val();
+
+      $.ajax({
+        url: '/api/sdtdserver/commands/gimme/item',
+        method: 'POST',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+          type: type,
+          value: value,
+          friendlyName: friendlyName
+        },
+        success: (data, status, xhr) => {
+          addItemToTable(data);
+        },
+        error: (xhr, status, error) => {
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
+        }
+      });
+    });
+
+    $("#modal-settings-gimme-table").on('click', ".gimme-delete", (e) => {
+      let idTodelete = e.target.dataset.itemid;
+      $.ajax({
+        url: '/api/sdtdserver/commands/gimme/item',
+        method: 'DELETE',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+          itemId: idTodelete
+        },
+        success: (data, status, xhr) => {
+          removeItemFromTable(idTodelete);
+        },
+        error: (xhr, status, error) => {
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
+        }
+      });
+    });
+
+    $("#modal-settings-gimme-table").on('input', ".gimme-item-row", (e) => {
+      let changedItemId = e.target.dataset.itemid;
+      $(`tr[data-itemid=${changedItemId}] .gimme-edit`).removeClass('invisible');
+    });
+
+    $("#modal-settings-gimme-table").on('click', ".gimme-edit", (e) => {
+      let idToEdit = e.target.dataset.itemid;
+      let type = $(`tr[data-itemid=${idToEdit}] .gimme-item-type`).text();
+      let friendlyName = $(`tr[data-itemid=${idToEdit}] .gimme-item-friendlyName`).text();
+      let value = $(`tr[data-itemid=${idToEdit}] .gimme-item-value`).text();
+
+      $.ajax({
+        url: '/api/sdtdserver/commands/gimme/item',
+        method: 'PATCH',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+          gimmeId: idToEdit,
+          type: type,
+          value: value,
+          friendlyName: friendlyName
+        },
+        success: (data, status, xhr) => {
+          $(e.target).addClass('invisible');
+        },
+        error: (xhr, status, error) => {
+          displayAjaxToSupportData(xhr, this.URL);;
+          showErrorModal(`${error} - ${xhr.responseText}`);
+        }
+      });
+    });
 
   });
+
+  function addItemToTable(item) {
+    let markup =
+      `<tr class="gimme-item-row" data-itemid=${item.id} contenteditable="true"><td class="gimme-item-type">${item.type}</td><td class="gimme-item-friendlyName">${item.friendlyName}</td><td class="gimme-item-value">${item.value}</td><td>${getDeleteButton(item.id)} ${getEditButton(item.id)}</td></tr>`;
+    $("#modal-settings-gimme-table tbody").append(markup);
+  }
+
+  function removeItemFromTable(id) {
+    $(`tr[data-itemid=${id}]`).remove();
+  }
+
+  function getDeleteButton(itemId) {
+    return `<button type="button" class="btn btn-danger gimme-delete" data-itemid=${itemId}>Delete</button>`
+  }
+
+  function getEditButton(itemId) {
+    return `<button type="button" class="btn btn-primary gimme-edit invisible" data-itemid=${itemId}>Save</button>`
+  }
 
 </script>
