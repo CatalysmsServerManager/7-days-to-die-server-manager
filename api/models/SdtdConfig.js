@@ -118,6 +118,11 @@ module.exports = {
       defaultsTo: 25
     },
 
+    costToUseGimme: {
+      type: 'number',
+      defaultsTo: 50
+    },
+
     //   _____                                          _
     //  / ____|                                        | |
     // | |     ___  _ __ ___  _ __ ___   __ _ _ __   __| |___
@@ -178,6 +183,11 @@ module.exports = {
       defaultsTo: false
     },
 
+    enabledGimme: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
     maxPlayerTeleportLocations: {
       type: 'number',
       defaultsTo: 3
@@ -192,6 +202,12 @@ module.exports = {
     playerTeleportTimeout: {
       type: 'number',
       defaultsTo: 60,
+      min: 0
+    },
+
+    gimmeCooldown: {
+      type: 'number',
+      defaultsTo: 30,
       min: 0
     },
 
