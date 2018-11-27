@@ -81,8 +81,8 @@ function checkIfRunningAlloc26(sdtdServer) {
         let mapRenderingEntry = _.find(splitResult, (versionLine) => {
           return versionLine.startsWith('Mod Allocs MapRendering and Webinterface:')
         })
-        detectedVersion = mapRenderingEntry;
-        resolve(mapRenderingEntry.endsWith('26') || mapRenderingEntry.endsWith('26\r'))
+        detectedVersion = parseInt(mapRenderingEntry.replace('Mod Allocs MapRendering and Webinterface: ', '').replace('\r', '').replace('\n', ''));
+        resolve(detectedVersion > 26)
       },
       unknownCommand: (error) => {
         resolve(false);
