@@ -65,6 +65,7 @@ module.exports = (logLine) => {
     }
 
     let data = {
+      time: logLine.time,
       steamId: splitMessage[1],
       entityId: splitMessage[3],
       channel: splitMessage[5],
