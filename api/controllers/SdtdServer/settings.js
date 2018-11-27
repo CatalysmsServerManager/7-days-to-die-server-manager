@@ -52,7 +52,6 @@ module.exports = {
       cpmVersion = 0;
     }
 
-
     let permCheck = await sails.helpers.roles.checkPermission.with({
       userId: this.req.session.userId,
       serverId: inputs.serverId,
@@ -80,7 +79,8 @@ module.exports = {
         user: user,
         customCommands: customCommands,
         cpmVersion: cpmVersion,
-        gimmeItems: gimmeItems
+        gimmeItems: gimmeItems,
+        serverTime: Date.now()
       });
     } catch (error) {
       sails.log.error(`VIEW - SdtdServer:settings - ${error}`);
