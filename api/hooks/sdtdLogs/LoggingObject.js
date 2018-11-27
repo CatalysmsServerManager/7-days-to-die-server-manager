@@ -19,6 +19,7 @@ class LoggingObject extends EventEmitter {
     this.lastLogLine;
     // Keeps track of wheter a request is happening already. This is to block the interval from queueing massive amounts of requests.
     this.handlingRequest = false;
+    this.lastMemUpdate = Date.now();
     // Set this to true to view detailed info about logs for a server. (protip: use discord bot eval command to set this to true in production instances)
     this.debug = false;
     this.init();
@@ -30,7 +31,6 @@ class LoggingObject extends EventEmitter {
 
     // Get new logs in a timed interval
     this.requestInterval = setInterval(this._intervalFunction.bind(this), this.intervalTime);
-
   }
 
 
@@ -40,6 +40,31 @@ class LoggingObject extends EventEmitter {
 
   _toggleDebug() {
     this.debug = !this.debug;
+  }
+
+  // Used for testing purposes
+  _sendMockMemUpdate() {
+    let event = {
+      type: 'memUpdate',
+      data: {
+        fps: '34.55',
+        heap: '847.3MB',
+        chunks: '198',
+        zombies: '1',
+        entities: '2',
+        players: '1',
+        items: '3',
+        rss: '1946.6MB',
+        uptime: '758.965'
+      }
+    };
+
+    if (!this._checkDuplicateMemUpdate(event, {
+        date: "n/a",
+        time: "n/a"
+      })) {
+      this.emit(event.type, event.data);
+    }
   }
 
   async _getLatestLogLine() {
@@ -75,6 +100,7 @@ class LoggingObject extends EventEmitter {
     }
 
 
+
     try {
       this.handlingRequest = true;
       newLogs = await SdtdApi.getLog(this.server, this.lastLogLine);
@@ -84,7 +110,6 @@ class LoggingObject extends EventEmitter {
       this.failed = true;
       newLogs.entries = [];
     }
-    this.handlingRequest = false;
     if (this.debug && newLogs.entries.length > 0) {
       sails.log.debug(`SdtdLogs - DEBUG MESSAGE - found ${newLogs.entries.length} new logs for server ${this.server.id}. Latest line: ${this.lastLogLine} First line ${newLogs.entries[0].time}, last line ${newLogs.entries[newLogs.entries.length - 1].time}`);
     }
@@ -97,31 +122,31 @@ class LoggingObject extends EventEmitter {
 
       let parsedLogLine = handleLogLine(line);
       if (parsedLogLine) {
-        if (!await this._checkDuplicateMemUpdate(parsedLogLine, line)) {
+
+        if (!this._checkDuplicateMemUpdate(parsedLogLine, line)) {
           this.emit(parsedLogLine.type, parsedLogLine.data);
         }
       }
     });
 
     this.lastLogLine = newLogs.lastLine;
+    this.handlingRequest = false;
   }
 
 
-  async _checkDuplicateMemUpdate(parsedLogLine, line) {
+  _checkDuplicateMemUpdate(parsedLogLine, line) {
     if (parsedLogLine.type === "memUpdate") {
       let currentDate = Date.now();
-      let lastMemUpdate = await sails.helpers.redis.get(`server:${this.server.id}:lastMemUpdate`);
-      lastMemUpdate = new Date(parseInt(lastMemUpdate));
-      lastMemUpdate = lastMemUpdate.valueOf();
-      await sails.helpers.redis.set(`server:${this.server.id}:lastMemUpdate`, currentDate);
+      let lastMemUpdate = this.lastMemUpdate;
       if (currentDate < lastMemUpdate + 25000) {
-
+        
         if (this.debug) {
           sails.log.debug(`SdtdLogs - DEBUG MESSAGE - Detected memUpdate happening too soon for server ${this.server.id} - discarding event at ${line.date} ${line.time}`);
         }
-
+        
         return true;
       } else {
+        this.lastMemUpdate = currentDate;
         return false;
       }
 
