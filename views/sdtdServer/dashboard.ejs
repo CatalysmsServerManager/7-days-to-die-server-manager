@@ -138,7 +138,7 @@
 <hr>
 
 <div class="card-columns">
-  <% if (userRole.useChat || owner) { %>
+  <% if (userRole.useChat || userRole.manageServer || owner) { %>
   <div class="card">
     <div class="card-header">
       <i class="fas fa-comments"></i> Chat
@@ -153,7 +153,7 @@
     </div>
   </div>
   <% } %>
-  <% if (userRole.useCommands || owner) { %>
+  <% if (userRole.useCommands || userRole.manageServer || owner) { %>
   <div class="card">
     <div class="card-header">
       <i class="fas fa-terminal"></i> Console
