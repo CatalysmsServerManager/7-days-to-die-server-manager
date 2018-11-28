@@ -1,44 +1,65 @@
 module.exports = {
 
-    friendlyName: 'Disable economy module',
+  friendlyName: 'Disable economy module',
 
-    description: '',
+  description: '',
 
-    inputs: {
-        serverId: {
-            type: 'number',
-            required: true
-        },
-
-        moduleType: {
-            type: 'string',
-            required: true,
-            isIn: ['playtimeEarner', 'discordTextEarner', 'killEarner']
-        }
+  inputs: {
+    serverId: {
+      type: 'number',
+      required: true
     },
 
-    exits: {
-        success: {
-        },
-    },
-
-
-    fn: async function (inputs, exits) {
-
-        try {
-            await sails.hooks.economy.stop(inputs.serverId, inputs.moduleType)
-            await HistoricalInfo.create({
-                type: 'economy',
-                economyAction: 'config',
-                server: inputs.serverId,
-                message: `Disabled module ${inputs.moduleType}`
-            });
-            sails.log.info(`Disabled a ${inputs.moduleType} module for server ${inputs.serverId}`);
-            return exits.success();
-        } catch (error) {
-            sails.log.error(`API - Sdtdserver:disable-economy - ${error}`);
-            return exits.error(error);
-        }
-
+    moduleType: {
+      type: 'string',
+      required: true,
+      isIn: ['playtimeEarner', 'discordTextEarner', 'killEarner']
     }
+  },
+
+  exits: {
+    success: {},
+  },
+
+
+  fn: async function (inputs, exits) {
+
+    try {
+
+      let databaseUpdateObject = {};
+
+      switch (inputs.moduleType) {
+        case 'playtimeEarner':
+          databaseUpdateObject.playtimeEarnerEnabled = false;
+          break;
+        case 'killEarner':
+          databaseUpdateObject.killEarnerEnabled = false;
+          break;
+        case 'discordTextEarner':
+          databaseUpdateObject.discordTextEarnerEnabled = false;
+          break;
+
+        default:
+          break;
+      }
+
+      await SdtdConfig.update({
+        server: inputs.serverId
+      }, databaseUpdateObject);
+
+      await sails.hooks.economy.stop(inputs.serverId, inputs.moduleType)
+      await HistoricalInfo.create({
+        type: 'economy',
+        economyAction: 'config',
+        server: inputs.serverId,
+        message: `Disabled module ${inputs.moduleType}`
+      });
+      sails.log.info(`Disabled a ${inputs.moduleType} module for server ${inputs.serverId}`);
+      return exits.success();
+    } catch (error) {
+      sails.log.error(`API - Sdtdserver:disable-economy - ${error}`);
+      return exits.error(error);
+    }
+
+  }
 };
