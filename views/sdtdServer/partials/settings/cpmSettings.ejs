@@ -3,7 +3,11 @@
 <div class="container">
 
   <h2>CPM version :
+    <% if(cpmVersion) { %>
     <%= cpmVersion %>
+    <% } else { %>
+      <p>Not installed! Check <a href="https://confluence.catalysm.net/display/CPM" target="_blank">here</a> for more info </p> 
+    <% } %>
   </h2>
 
   <div>
@@ -197,27 +201,28 @@
   ];
 
   $(document).ready(function () {
+    if (window.SAILS_LOCALS.cpmVersion !== 0) {
+      for (const setting of CPMSettings) {
+        $.ajax({
+          url: `/api/sdtdserver/cpm/setting`,
+          type: 'GET',
+          data: {
+            _csrf: window.SAILS_LOCALS._csrf,
+            serverId: window.SAILS_LOCALS.server.id,
+            setting: setting
+          },
+          success: (data, status, xhr) => {
+            fillSettingField(data)
+          },
+          error: (xhr, status, error) => {
+            displayAjaxToSupportData(xhr, this.URL);;
+            showErrorModal(`${error} - ${xhr.responseText}`);
+          }
+        });
+      };
+    }
 
 
-
-    for (const setting of CPMSettings) {
-      $.ajax({
-        url: `/api/sdtdserver/cpm/setting`,
-        type: 'GET',
-        data: {
-          _csrf: window.SAILS_LOCALS._csrf,
-          serverId: window.SAILS_LOCALS.server.id,
-          setting: setting
-        },
-        success: (data, status, xhr) => {
-          fillSettingField(data)
-        },
-        error: (xhr, status, error) => {
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
-        }
-      });
-    };
 
     $("#settings-cpm-set").click(e => {
 
