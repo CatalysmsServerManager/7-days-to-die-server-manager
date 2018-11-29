@@ -25,63 +25,62 @@ module.exports = function discordBot(sails) {
      */
     initialize: function (cb) {
       sails.on('hook:orm:loaded', function () {
-        
         sails.log.info('Initializing custom hook (`discordBot`)');
-          client = new Commando.Client({
-            owner: sails.config.custom.botOwners,
-            unknownCommandResponse: false
-          });
+        cb();
+        client = new Commando.Client({
+          owner: sails.config.custom.botOwners,
+          unknownCommandResponse: false
+        });
 
-          sails.discordBotClient = client;
+        sails.discordBotClient = client;
 
-          // Register custom embed messages
+        // Register custom embed messages
 
-          client.customEmbed = require('./util/createEmbed').CustomEmbed;
-          client.errorEmbed = require('./util/createEmbed').ErrorEmbed;
+        client.customEmbed = require('./util/createEmbed').CustomEmbed;
+        client.errorEmbed = require('./util/createEmbed').ErrorEmbed;
 
-          // Register some stuff in the registry... yeah..
-          client.registry
-            .registerGroups([
-              ['sdtd', '7 Days to die'],
-              ['meta', 'Commands about the system']
-            ])
-            .registerDefaults()
-            .registerCommandsIn(path.join(__dirname, 'commands'));
+        // Register some stuff in the registry... yeah..
+        client.registry
+          .registerGroups([
+            ['sdtd', '7 Days to die'],
+            ['meta', 'Commands about the system']
+          ])
+          .registerDefaults()
+          .registerCommandsIn(path.join(__dirname, 'commands'));
 
-          // Listeners
+        // Listeners
 
-          client.on('commandError', (command, error) => {
-            sails.log.error(`Command error! ${command.memberName} trace: ${error.stack}`);
-          });
+        client.on('commandError', (command, error) => {
+          sails.log.error(`Command error! ${command.memberName} trace: ${error.stack}`);
+        });
 
-          client.on('ready', () => {
-            cb();
-          })
+        client.on('ready', () => {
+          sails.log.info(`Connected to Discord as ${client.user.tag} - ${client.guilds.size} guilds`)
+        });
 
-          client.on('commandRun', (command, promise, message) => {
-            sails.log.info(`Command ${command.name} ran by ${message.author.username} on ${message.guild ? message.guild.name : 'DM'} - ${message.content}`);
-          });
+        client.on('commandRun', (command, promise, message) => {
+          sails.log.info(`Command ${command.name} ran by ${message.author.username} on ${message.guild ? message.guild.name : 'DM'} - ${message.content}`);
+        });
 
-          client.on('error', error => {
-            sails.log.warn('DISCORD ERROR!');
-            sails.log.error(error.message);
-          });
+        client.on('error', error => {
+          sails.log.warn('DISCORD ERROR!');
+          sails.log.error(error.message);
+        });
 
-          client.on('guildMemberUpdate', (oldMember, newMember) => {
+        client.on('guildMemberUpdate', (oldMember, newMember) => {
 
-            try {
-              handleRoleUpdate(oldMember, newMember)
-            } catch (error) {
-              sails.log.error(`Error handling role change`, error)
-            }
+          try {
+            handleRoleUpdate(oldMember, newMember)
+          } catch (error) {
+            sails.log.error(`Error handling role change`, error)
+          }
 
-          });
+        });
 
 
-          // Login
+        // Login
 
-          client.login(sails.config.custom.botToken).then(() => {
-            sails.log.info(`Discord bot logged in - ${client.guilds.size} guilds`);
+        client.login(sails.config.custom.botToken).then(() => {
             initializeGuildPrefixes();
 
 
@@ -96,30 +95,32 @@ module.exports = function discordBot(sails) {
                 case 0:
                   presenceTextToSet += `Servers: ${statsInfo.servers}`
                   break;
-                  case 1:
+                case 1:
                   presenceTextToSet += `Players: ${statsInfo.players}`
                   break;
-                  case 2:
+                case 2:
                   presenceTextToSet += `Guilds: ${statsInfo.guilds}`
                   break;
-                  case 3:
+                case 3:
                   presenceTextToSet += `Uptime: ${statsInfo.uptime}`
                   break;
-              
+
                 default:
                   break;
               }
 
-              client.user.setPresence({game: {
-                name: presenceTextToSet
-              }})
+              client.user.setPresence({
+                game: {
+                  name: presenceTextToSet
+                }
+              })
             }, 60000)
-         
+
           })
-            .catch((err) => {
-              sails.log.error(err);
-            });
- 
+          .catch((err) => {
+            sails.log.error(err);
+          });
+
       });
     },
 

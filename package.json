@@ -41,11 +41,8 @@
   },
   "scripts": {
     "start": "npm run build-docs && node app.js --prod",
-    "test": "npm run custom-tests && echo 'Done.'",
+    "test": "./node_modules/.bin/nyc --reporter=html --report-dir=./test/output/coverage mocha test/lifecycle.test.js ./test/**/*.test.js --reporter mochawesome --reporter-options reportDir=./test/output/mochawesome --exit",
     "build-docs": "./node_modules/.bin/jsdoc -c ./.jsdoc.json",
-    "custom-tests": "npm run unit-service-tests && npm run feature-tests",
-    "unit-service-tests": "./node_modules/.bin/nyc --reporter=html --report-dir=./test/output/coverage mocha test/lifecycle.test.js ./test/unit-service/*.test.js --reporter mochawesome --reporter-options reportDir=./test/output/mochawesome --exit",
-    "feature-tests": "./node_modules/.bin/codeceptjs run -c ./test --steps",
     "dev": "nodemon",
     "debug": "node debug app.js"
   },
@@ -60,15 +57,11 @@
     "node": "8"
   },
   "devDependencies": {
-    "codeceptjs-webdriverio": "^1.1.0",
-    "docdash": "^0.4.0",
+    "chai": "^4.2.0",
     "grunt-bower-task": "^0.5.0",
-    "jsdoc": "^3.5.5",
     "mocha": "^5.2.0",
     "mocha-junit-reporter": "^1.17.0",
     "mochawesome": "^3.0.1",
-    "nyc": "^12.0.2",
-    "supertest": "^3.1.0",
-    "tui-jsdoc-template": "^1.2.2"
+    "nyc": "^12.0.2"
   }
 }

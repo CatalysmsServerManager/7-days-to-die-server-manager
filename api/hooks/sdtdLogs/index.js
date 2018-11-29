@@ -24,7 +24,7 @@ module.exports = function sdtdLogs(sails) {
      * @private
      */
     initialize: function (cb) {
-      sails.on('hook:discordbot:loaded', async () => {
+      sails.on('hook:orm:loaded', async () => {
         sails.log.info('Initializing custom hook (`sdtdLogs`)');
 
         try {

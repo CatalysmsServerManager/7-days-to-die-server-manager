@@ -275,32 +275,29 @@ module.exports = function sdtdCountryBan(sails) {
     ],
 
     initialize: function (cb) {
-      sails.on('hook:orm:loaded', function () {
-        sails.on('hook:sdtdlogs:loaded', async function () {
-          try {
-            let configs = await SdtdConfig.find();
+      sails.on('hook:sdtdlogs:loaded', async function () {
+        try {
+          let configs = await SdtdConfig.find();
 
-            cb();
 
-            for (const config of configs) {
-              if (config.countryBanConfig.enabled) {
-                try {
-                  await startCountryBan(config.server);
-                } catch (error) {
-                  sails.log.error(`Error initializing countryban for server ${config.server} - ${error}`)
-                }
+
+          for (const config of configs) {
+            if (config.countryBanConfig.enabled) {
+              try {
+                await startCountryBan(config.server);
+              } catch (error) {
+                sails.log.error(`Error initializing countryban for server ${config.server} - ${error}`)
               }
             }
-
-            sails.log.info(`HOOK: countryBan - Initialized ${countryBanInfoMap.size} country ban instances`);
-            return
-          } catch (error) {
-            sails.log.error(`HOOK:countryBan ${error}`);
           }
 
-
-        });
+          sails.log.info(`HOOK: countryBan - Initialized ${countryBanInfoMap.size} country ban instances`);
+          return cb();
+        } catch (error) {
+          sails.log.error(`HOOK:countryBan ${error}`);
+        }
       });
+
     },
 
     /**

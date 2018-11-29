@@ -3,12 +3,9 @@ var sails = require('sails');
 // Before running any tests...
 before(function (done) {
 
-  // Increase the Mocha timeout so that Sails has enough time to lift, even if you have a bunch of assets.
-  this.timeout(30000);
-
-  // Load env vars
+  // Increase the Mocha timeout so that Sails has enough time to lift
+  this.timeout(10000);
   require('dotenv').config();
-
   sails.lift({
     // Your sails app's configuration files will be loaded automatically,
     // but you can also specify any other special overrides here for testing purposes.
@@ -18,76 +15,26 @@ before(function (done) {
     hooks: {
       grunt: false
     },
-    log: {
-      level: 'warn'
-    },
-    // Clean out DB before running tests
-    models: {
-      migrate: 'drop'
-    },
-    policies: {
-      sdtdServerController: {
-        '*': true
-      },
-      playerController: {
-        '*': true
-      }
-    },
-    port: 1338
-  }, async function (err) {
+    log: { level: 'warn' },
+
+  }, function (err) {
     if (err) {
       return done(err);
     }
+
     // here you can load fixtures, etc.
     // (for example, you might want to create some records in the database)
 
-    try {
-      let client = sails.hooks.discordbot.getClient();
-
-      // Password = "something"
-      var testUser = await User.create({
-        username: 'CSMMTesterFixture',
-        encryptedPassword: '$2a$10$b8kbwLOvUvJH3Y.37ZAwdu77K3zaFfjXAQnaym3BqpSuzDApJcbcG',
-        steamId: process.env.CSMM_TEST_STEAMID
-      }).fetch();
-
-      var testServer = await sails.helpers.add7DtdServer.with({
-        ip: process.env.CSMM_TEST_IP,
-        telnetPort: process.env.CSMM_TEST_TELNETPORT,
-        telnetPassword: process.env.CSMM_TEST_TELNETPW,
-        webPort: process.env.CSMM_TEST_WEBPORT,
-        owner: testUser.id,
-        serverName: 'Test server'
-      });
-
-      sails.testUser = testUser;
-      testServer.telnetPassword = process.env.CSMM_TEST_TELNETPW
-      sails.testServer = testServer
-      sails.testChannel = client.channels.get(process.env.DISCORDTESTCHANNEL);
-
-      sails.log.warn('Finished bootstrapping test data');
-      return done();
-
-    } catch (error) {
-      sails.log.error(error);
-      return done(error);
-    }
-
+    return done();
   });
 });
 
 // After all tests have finished...
-after(async function () {
-  try {
-    await SdtdServer.destroy({});
-    await User.destroy({});
-    await Player.destroy({});
-    return sails.lower();
-  } catch (error) {
-    return error
-  }
+after(function (done) {
 
+  // here you can clear fixtures, etc.
+  // (e.g. you might want to destroy the records you created above)
 
-
+  sails.lower(done);
 
 });

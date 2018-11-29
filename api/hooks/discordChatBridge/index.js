@@ -26,30 +26,36 @@ module.exports = function SdtdDiscordChatBridge(sails) {
     initialize: async function (cb) {
       sails.on('hook:sdtdlogs:loaded', async function () {
         sails.log.info('Initializing custom hook (`discordChatbridge`)');
-        cb();
-        try {
-          let enabledServers = await SdtdConfig.find({
-            or: [{
-              chatChannelId: {
-                '!=': ''
+
+        let discordClient = sails.hooks.discordbot.getClient();
+
+        discordClient.on('ready', async () => {
+          try {
+            let enabledServers = await SdtdConfig.find({
+              or: [{
+                chatChannelId: {
+                  '!=': ''
+                }
+              }]
+            });
+
+            for (const serverConfig of enabledServers) {
+              try {
+                await start(serverConfig.server);
+              } catch (error) {
+                sails.log.error(`HOOK - DiscordChatBridge:initialize - Error for server ${serverConfig.server} - ${error}`)
               }
-            }]
-          });
-
-          for (const serverConfig of enabledServers) {
-            try {
-              await start(serverConfig.server);
-            } catch (error) {
-              sails.log.error(`HOOK - DiscordChatBridge:initialize - Error for server ${serverConfig.server} - ${error}`)
             }
+            sails.log.info(`HOOK SdtdDiscordChatBridge:initialize - Initialized ${chatBridgeInfoMap.size} chatbridge(s)`);
+
+
+          } catch (error) {
+            sails.log.error(`HOOK SdtdDiscordChatBridge:initialize - ${error}`);
           }
-          sails.log.info(`HOOK SdtdDiscordChatBridge:initialize - Initialized ${chatBridgeInfoMap.size} chatbridge(s)`);
+        });
 
+        return cb();
 
-        } catch (error) {
-          sails.log.error(`HOOK SdtdDiscordChatBridge:initialize - ${error}`);
-        }
-        return 
       });
 
     },
