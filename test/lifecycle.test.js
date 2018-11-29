@@ -17,13 +17,14 @@ before(function (done) {
     },
     log: { level: 'warn' },
 
-  }, function (err) {
+  }, async function (err) {
     if (err) {
       return done(err);
     }
 
     // here you can load fixtures, etc.
     // (for example, you might want to create some records in the database)
+
 
     return done();
   });
