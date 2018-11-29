@@ -24,7 +24,7 @@ module.exports = function SdtdDiscordChatBridge(sails) {
      * @description Initializes the chatbridges(s)
      */
     initialize: async function (cb) {
-      sails.on('hook:sdtdlogs:loaded', async function () {
+      sails.on('hook:discordbot:loaded', async function () {
         sails.log.info('Initializing custom hook (`discordChatbridge`)');
 
         let discordClient = sails.hooks.discordbot.getClient();

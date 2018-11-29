@@ -24,15 +24,15 @@ module.exports = function discordBot(sails) {
      * @description Starts the discord bot & logs in
      */
     initialize: function (cb) {
-      sails.on('hook:orm:loaded', function () {
+      sails.on('hook:sdtdlogs:loaded', function () {
         sails.log.info('Initializing custom hook (`discordBot`)');
-        cb();
         client = new Commando.Client({
           owner: sails.config.custom.botOwners,
           unknownCommandResponse: false
         });
-
+        
         sails.discordBotClient = client;
+        cb();
 
         // Register custom embed messages
 
