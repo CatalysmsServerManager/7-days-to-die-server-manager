@@ -38,12 +38,12 @@ module.exports = {
   },
 
   fn: async function (inputs, exits) {
-    
+
     try {
       let dateStarted = new Date();
       let server = await SdtdServer.findOne(inputs.serverId);
       let serverAvailable = await sails.helpers.sdtd.checkIfAvailable(server.id, true);
-      
+
       if (!serverAvailable) {
         if (inputs.onlyOnline) {
           return exits.success([])
@@ -187,8 +187,14 @@ async function findOrCreatePlayer(player, serverId) {
     });
     return foundOrCreatedPlayer;
   } catch (error) {
-    sails.log.error(`HELPER - loadPlayerData:findOrCreatePlayer ${error}`);
-    return undefined;
+    let foundPlayer = await Player.find({
+      where: {
+        server: serverId,
+        steamId: player.steamid
+      },
+      limit: 1
+    });
+    return foundPlayer[0];
   }
 }
 
