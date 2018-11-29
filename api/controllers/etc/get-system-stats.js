@@ -8,7 +8,11 @@ module.exports = {
 
 
   inputs: {
-
+    since: {
+      type: 'number',
+      isBefore: new Date(),
+      defaultsTo: Date.now() - 4233600000 // 1 month ago
+    }
   },
 
 
@@ -19,8 +23,15 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    let stats = await sails.helpers.meta.loadSystemStatsAndInfo(); 
 
+    let stats = await UsageStats.find({
+      where: {
+        createdAt: {
+          '>': inputs.since
+        }
+      }
+    });
+    sails.log.info(`Loaded ${stats.length} records of CSMM usage stats`);
     return exits.success(stats);
 
   }
