@@ -61,6 +61,11 @@ describe('fill-player-variables', () => {
     expect(result).to.be.eql('sayplayer 76561198028175941 "Your balance is 42"');
   });
 
+  it('fills correct coordinate info', async () => {
+    let result = await sails.helpers.sdtd.fillPlayerVariables('sayplayer ${steamId} "Your position is ${posX} ${posY} ${posZ}"', testPlayerData);
+    expect(result).to.be.eql('sayplayer 76561198028175941 "Your position is -1262 47 1207"');
+  });
+
   it('errors when invalid player data is provided', () => {
     return expect(sails.helpers.sdtd.fillPlayerVariables('should not resolve', {
       invalidPlayer: true
