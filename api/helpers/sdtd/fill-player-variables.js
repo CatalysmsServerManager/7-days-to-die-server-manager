@@ -19,7 +19,7 @@ module.exports = {
       type: 'json',
       required: true,
       custom: (value) => {
-        if (!value.steamId || !value.entityId || !value.name || !value.currency) {
+        if (!value.steamId || !value.entityId || !value.name || value.currency === undefined) {
           return false;
         } else {
           return true;

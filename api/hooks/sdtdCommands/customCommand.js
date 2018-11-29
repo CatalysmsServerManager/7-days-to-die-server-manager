@@ -97,7 +97,7 @@ class CustomCommand extends SdtdCommand {
     async function runCustomCommand(chatMessage, player, server, args, options) {
       let commandsExecuted = new Array();
       try {
-        let commandsToExecute = options.commandsToExecute.split(';');
+        let commandsToExecute = sails.helpers.sdtd.parseCommandsString(options.commandsToExecute);
 
         for (const command of commandsToExecute) {
 
@@ -117,10 +117,8 @@ class CustomCommand extends SdtdCommand {
 
             await delaySeconds(secondsToWait);
           } else {
-
-            let commandInfoFilledIn = command.replace('${entityId}', player.entityId)
-            commandInfoFilledIn = commandInfoFilledIn.replace('${steamId}', player.steamId)
-            let commandResult = await executeCommand(server, _.trim(commandInfoFilledIn));
+            let commandInfoFilledIn = await sails.helpers.sdtd.fillPlayerVariables(command, player);
+            let commandResult = await executeCommand(server, commandInfoFilledIn);
             commandsExecuted.push(commandResult);
 
             if (options.sendOutput) {
@@ -134,8 +132,8 @@ class CustomCommand extends SdtdCommand {
 
 
       } catch (error) {
-        chatMessage.reply(`Error! Contact your server admin with this message: ${error.replace(/\"/g,"")}`)
         sails.log.error(`Custom command error - ${server.name} - ${chatMessage.messageText} - ${error}`)
+        chatMessage.reply(`Error! Contact your server admin with this message: ${error.replace(/\"/g,"")}`)
       }
     }
   }
