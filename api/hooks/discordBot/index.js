@@ -80,47 +80,51 @@ module.exports = function discordBot(sails) {
 
         // Login
 
-        client.login(sails.config.custom.botToken).then(() => {
-            initializeGuildPrefixes();
+        if (process.env.DISCORDBOTTOKEN) {
+          client.login(sails.config.custom.botToken).then(() => {
+              initializeGuildPrefixes();
 
 
-            // Rotate presence with stats info
-            client.setInterval(async function () {
-              let statsInfo = await sails.helpers.meta.loadSystemStatsAndInfo();
-              let randomNumber = Math.trunc(Math.random() * 3);
+              // Rotate presence with stats info
+              client.setInterval(async function () {
+                let statsInfo = await sails.helpers.meta.loadSystemStatsAndInfo();
+                let randomNumber = Math.trunc(Math.random() * 3);
 
-              let presenceTextToSet = `$info | `
+                let presenceTextToSet = `$info | `
 
-              switch (randomNumber) {
-                case 0:
-                  presenceTextToSet += `Servers: ${statsInfo.servers}`
-                  break;
-                case 1:
-                  presenceTextToSet += `Players: ${statsInfo.players}`
-                  break;
-                case 2:
-                  presenceTextToSet += `Guilds: ${statsInfo.guilds}`
-                  break;
-                case 3:
-                  presenceTextToSet += `Uptime: ${statsInfo.uptime}`
-                  break;
+                switch (randomNumber) {
+                  case 0:
+                    presenceTextToSet += `Servers: ${statsInfo.servers}`
+                    break;
+                  case 1:
+                    presenceTextToSet += `Players: ${statsInfo.players}`
+                    break;
+                  case 2:
+                    presenceTextToSet += `Guilds: ${statsInfo.guilds}`
+                    break;
+                  case 3:
+                    presenceTextToSet += `Uptime: ${statsInfo.uptime}`
+                    break;
 
-                default:
-                  break;
-              }
-
-              client.user.setPresence({
-                game: {
-                  name: presenceTextToSet
+                  default:
+                    break;
                 }
-              })
-            }, 60000)
 
-          })
-          .catch((err) => {
-            sails.log.error(err);
-          });
+                client.user.setPresence({
+                  game: {
+                    name: presenceTextToSet
+                  }
+                })
+              }, 60000)
 
+            })
+            .catch((err) => {
+              sails.log.error(err);
+            });
+
+        } else {
+          sails.log.warn(`No Discord bot token was given, not logging in. This is probably not what you wanted!`);
+        }
       });
     },
 

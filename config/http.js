@@ -53,18 +53,24 @@ passport.use(new SteamStrategy({
 
 let discordScopes = ['identify', 'guilds'];
 
-passport.use(new DiscordStrategy({
-  clientID: process.env.DISCORDCLIENTID,
-  clientSecret: process.env.DISCORDCLIENTSECRET,
-  callbackURL: `${process.env.CSMM_HOSTNAME}/auth/discord/return`,
-  scope: discordScopes
-}, async function (accessToken, refreshToken, profile, cb) {
-  try {
-    return cb(null, profile);
-  } catch (error) {
-    sails.log.error(`Discord auth error! ${error}`)
-  }
-}));
+if (process.env.DISCORDCLIENTID && process.env.DISCORDCLIENTSECRET && process.env.CSMM_HOSTNAME) {
+  passport.use(new DiscordStrategy({
+    clientID: process.env.DISCORDCLIENTID,
+    clientSecret: process.env.DISCORDCLIENTSECRET,
+    callbackURL: `${process.env.CSMM_HOSTNAME}/auth/discord/return`,
+    scope: discordScopes
+  }, async function (accessToken, refreshToken, profile, cb) {
+    try {
+      return cb(null, profile);
+    } catch (error) {
+      sails.log.error(`Discord auth error! ${error}`)
+    }
+  }));
+  
+} else {
+  console.log(`No Discord client ID and/or client secret given in dotenv. Discarding Discord passport configuration`);
+}
+
 
 
 passport.serializeUser(function (user, done) {
