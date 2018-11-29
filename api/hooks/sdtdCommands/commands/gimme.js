@@ -120,16 +120,17 @@ class Gimme extends SdtdCommand {
 
       case "command":
 
-        let parsedCommands = parseCommand(itemToUse.value, player);
+        let parsedCommands = sails.helpers.sdtd.parseCommandsString(itemToUse.value);
 
         for (const cmdToExec of parsedCommands) {
           try {
+            let commandInfoFilledIn = await sails.helpers.sdtd.fillPlayerVariables(cmdToExec, player);
             let response = await SdtdApi.executeConsoleCommand({
               ip: server.ip,
               port: server.webPort,
               adminUser: server.authName,
               adminToken: server.authToken
-            }, cmdToExec.trim());
+            }, commandInfoFilledIn);
 
           } catch (error) {
             chatMessage.reply(`Error while executing a command! Please report this to a server admin - ${error}`);
