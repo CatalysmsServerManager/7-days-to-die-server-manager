@@ -52,6 +52,13 @@ module.exports.routes = {
     }
   },
 
+  '/stats': {
+    view: 'meta/stats',
+    locals: {
+      layout: 'layouts/homepageLayoutNoFooter'
+    }
+  },
+
   '/auth/steam': {
     controller: 'AuthController',
     action: 'steamLogin'
