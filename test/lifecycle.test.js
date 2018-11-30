@@ -10,8 +10,6 @@ before(function (done) {
     // Your sails app's configuration files will be loaded automatically,
     // but you can also specify any other special overrides here for testing purposes.
 
-    // For example, we might want to skip the Grunt hook,
-    // and disable all logs except errors and warnings:
     hooks: {
       grunt: false
     },

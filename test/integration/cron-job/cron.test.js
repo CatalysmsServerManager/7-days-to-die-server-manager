@@ -44,3 +44,45 @@ describe('POST /api/sdtdserver/cron', function () {
       .expect(400, done);
   });
 });
+
+describe('PATCH /api/sdtdserver/cron', function () {
+
+  it('should return 200 with valid info', function (done) {
+    supertest(sails.hooks.http.app)
+      .patch('/api/sdtdserver/cron')
+      .send({
+        jobId: 1,
+        command: 'help',
+        temporalValue: '0 */5 * * *'
+      })
+      .expect('Content-Type', /json/)
+      .expect(200, done);
+  });
+  it('should return 400 when command or temporal value is not given', function (done) {
+    supertest(sails.hooks.http.app)
+      .patch('/api/sdtdserver/cron')
+      .send({
+        jobId: 1,
+        temporalValue: '0 */5 * * *'
+      })
+      .expect(400);
+
+    supertest(sails.hooks.http.app)
+      .patch('/api/sdtdserver/cron')
+      .send({
+        jobId: 1,
+        command: 'help',
+      })
+      .expect(400, done);
+  });
+  it('should return 400 when temporal value is invalid', function (done) {
+    supertest(sails.hooks.http.app)
+      .patch('/api/sdtdserver/cron')
+      .send({
+        jobId: 1,
+        command: 'help',
+        temporalValue: 'invalid'
+      })
+      .expect(400, done);
+  });
+});

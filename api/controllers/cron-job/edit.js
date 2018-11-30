@@ -43,15 +43,15 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    await CronJob.update({
+    let editedCron = await CronJob.update({
       id: inputs.jobId
     }, {
       command: inputs.command,
       temporalValue: inputs.temporalValue
-    });
+    }).fetch();
 
     sails.log.info(`Edited a cron job with id ${inputs.jobId} to ${inputs.command} and ${inputs.temporalValue}`);
-    return exits.success();
+    return exits.success(editedCron);
 
   }
 
