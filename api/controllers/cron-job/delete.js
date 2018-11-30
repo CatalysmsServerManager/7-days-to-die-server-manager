@@ -29,9 +29,9 @@ module.exports = {
   fn: async function (inputs, exits) {
     
     await sails.hooks.cron.stop(inputs.jobId);
-    await CronJob.destroy({id: inputs.jobId});
+    let deletedJob = await CronJob.destroy({id: inputs.jobId}).fetch();
     sails.log.info(`Deleted cron job ${inputs.jobId}`)
-    return exits.success();
+    return exits.success(deletedJob);
 
   }
 
