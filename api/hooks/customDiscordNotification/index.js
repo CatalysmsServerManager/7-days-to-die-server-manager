@@ -46,7 +46,7 @@ module.exports = function defineCustomDiscordNotificationHook(sails) {
 
           
           if (logMessage.includes(stringToSearchFor) && notification.enabled ) {
-            if (notification.ignoreServerChat && (logMessage.startsWith("chat: 'server':") || logMessage.includes('webcommandresult_for_say')) ) {
+            if (notification.ignoreServerChat && (logMessage.startsWith("chat (from '-non-player-',") || logMessage.includes('webcommandresult_for_say')) ) {
               
             } else {
               sendNotification(logLine, server, notification)
