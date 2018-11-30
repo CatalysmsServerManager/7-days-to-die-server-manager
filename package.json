@@ -63,6 +63,7 @@
     "mocha": "^5.2.0",
     "mocha-junit-reporter": "^1.17.0",
     "mochawesome": "^3.0.1",
-    "nyc": "^12.0.2"
+    "nyc": "^12.0.2",
+    "supertest": "^3.3.0"
   }
 }
