@@ -145,7 +145,7 @@
 
     $.get('/api/stats', (stats) => {
 
-      let statsString = `${stats.servers} servers - ${stats.players} players - ${stats.guilds} Discord guilds`;
+      let statsString = `${stats[stats.length -1].servers} servers - ${stats[stats.length -1].players} players - ${stats[stats.length -1].discordGuilds} Discord guilds`;
       $('#system-stats').text(statsString)
 
     })
