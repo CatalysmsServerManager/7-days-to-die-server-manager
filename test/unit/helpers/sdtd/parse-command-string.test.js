@@ -1,6 +1,6 @@
 var expect = require("chai").expect;
 
-describe('parse-command-string', () => {
+describe('HELPER sdtd/parse-command-string', () => {
   it('Returns an array', () => {
     let result = sails.helpers.sdtd.parseCommandsString("help; say test; another command");
 

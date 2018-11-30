@@ -33,7 +33,7 @@ const testPlayerData = {
   role: null
 };
 
-describe('fill-player-variables', () => {
+describe('HELPER sdtd/fill-player-variables', () => {
   it('returns a string', async () => {
     let result = await sails.helpers.sdtd.fillPlayerVariables('test', testPlayerData);
 
