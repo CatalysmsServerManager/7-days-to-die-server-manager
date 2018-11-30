@@ -14,7 +14,7 @@
  */
 
 
-module.exports.policies = {
+let policyObject = {
 
   // isLoggedIn gets included in most of these because it contains the redirect logic
 
@@ -100,3 +100,13 @@ module.exports.policies = {
   },
 
 };
+
+
+if (process.env.IS_TEST) {
+  console.log(`Detected a testing environment, disabling policies. If you are NOT running test this is VERY VERY bad.`);
+  module.exports.policies = {
+    '*': true
+  };
+} else {
+  module.exports.policies = policyObject;
+}

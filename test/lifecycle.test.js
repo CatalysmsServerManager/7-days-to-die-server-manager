@@ -16,15 +16,41 @@ before(function (done) {
       grunt: false
     },
     log: { level: 'warn' },
+    security: {
+      csrf: false
+    },
+
+    datastores: {
+      testDB: {
+        adapter: 'sails-disk'
+      }
+    },
+    models: {
+      connection: 'testDB',
+    },
 
   }, async function (err) {
     if (err) {
       return done(err);
     }
 
-    // here you can load fixtures, etc.
-    // (for example, you might want to create some records in the database)
+    let testUser = await User.create({
+      steamId: 'fake_id',
+      username: 'test_user'
+    }).fetch();
 
+    let testServer = await SdtdServer.create({
+      name: 'test server',
+      ip: 'localhost',
+      webPort: '8082',
+      authName: 'test_authName',
+      authToken: 'test_authToken',
+      owner: testUser.id
+    }).fetch();
+
+
+    sails.testUser = testUser;
+    sails.testServer = testServer;
 
     return done();
   });
@@ -32,9 +58,20 @@ before(function (done) {
 
 // After all tests have finished...
 after(function (done) {
+  const fs = require('fs');
+  const path = require('path');
 
-  // here you can clear fixtures, etc.
-  // (e.g. you might want to destroy the records you created above)
+  let diskDatabaseDir = __dirname + '/../.tmp/localDiskDb';
+
+  fs.readdir(diskDatabaseDir, (err, files) => {
+    if (err) throw err;
+  
+    for (const file of files) {
+      fs.unlink(path.join(diskDatabaseDir, file), err => {
+        if (err) throw err;
+      });
+    }
+  });
 
   sails.lower(done);
 
