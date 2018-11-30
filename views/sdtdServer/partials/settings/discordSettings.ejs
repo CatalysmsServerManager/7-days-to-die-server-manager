@@ -293,8 +293,7 @@
         }
       },
       error: (xhr, status, error) => {
-        displayAjaxToSupportData(xhr, this.URL);;
-        showErrorModal(`${error} - ${xhr.responseText}`);
+        displayAjaxToSupportData(xhr, this.URL);
       }
     })
 
