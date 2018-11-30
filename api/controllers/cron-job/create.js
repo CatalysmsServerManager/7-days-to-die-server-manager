@@ -14,7 +14,7 @@ module.exports = {
       type: 'number',
       custom: async function (valueToCheck) {
         let foundServer = await SdtdServer.findOne(valueToCheck);
-        return foundServer
+        return foundServer;
       }
     },
 

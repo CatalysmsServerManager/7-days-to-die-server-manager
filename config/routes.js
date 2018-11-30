@@ -267,6 +267,7 @@ module.exports.routes = {
   'post /api/sdtdserver/cron/import': "cron-job.cron-import",
 
   'post /api/sdtdserver/cron': "cron-job.create",
+  'patch /api/sdtdserver/cron': 'cron-job.edit',
   'get /api/sdtdserver/cron/list': 'cron-job.list',
   'delete /api/sdtdserver/cron': 'cron-job.delete',
   'post /api/sdtdserver/cron/status': 'cron-job.enable',
