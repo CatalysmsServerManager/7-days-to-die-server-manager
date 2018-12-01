@@ -40,6 +40,7 @@ class ServerInfo extends Commando.Command {
       return msg.channel.send(`Could not load server data. Make sure the server is online.`)
     }
 
+
     // Change data to a nice string
     switch (serverInfo.serverInfo.PlayerKillingMode) {
       case 0:
@@ -112,6 +113,7 @@ ${serverInfo.serverInfo.EACEnabled} EAC
 :small_orange_diamond: Player killing mode:  ${serverInfo.serverInfo.PlayerKillingMode}
 :small_orange_diamond: Air drop frequency: ${serverInfo.serverInfo.AirDropFrequency / 24} days
 :small_orange_diamond: Loot respawns in ${serverInfo.serverInfo.LootRespawnDays} days
+:small_orange_diamond: Loot abundance ${serverInfo.serverInfo.LootAbundance}
 `)
       .setColor('RANDOM')
 
