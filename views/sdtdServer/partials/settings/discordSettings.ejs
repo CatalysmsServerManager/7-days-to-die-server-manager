@@ -332,6 +332,11 @@
 
     async function getWritableChannels(guildId) {
       return new Promise((resolve, reject) => {
+
+        if (!guildId) {
+          return resolve([]);
+        }
+
         $.ajax({
           url: `/api/sdtdserver/findwriteablechannelsinguild`,
           data: {

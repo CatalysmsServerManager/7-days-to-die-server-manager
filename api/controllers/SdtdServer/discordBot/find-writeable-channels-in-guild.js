@@ -9,7 +9,8 @@ module.exports = {
 
   inputs: {
     guildId: {
-      example: '1337'
+      example: '1337',
+      required: true
     }
 
   },
@@ -35,7 +36,7 @@ module.exports = {
       let discordClient = sails.hooks.discordbot.getClient();
       let guild = discordClient.guilds.get(inputs.guildId);
       if (_.isUndefined(guild)) {
-        return exits.badRequest();
+        return exits.badRequest(`Unknown discord guild! Make sure you add the bot to your server.`);
       }
 
       let foundChannels = guild.channels.filter(channel => {
