@@ -260,6 +260,11 @@
   });
 
   function setSetting(type, value, settingField) {
+
+    if (!value) {
+      return false;
+    }
+
     $.ajax({
       url: `/api/sdtdserver/cpm/setting`,
       type: 'POST',
