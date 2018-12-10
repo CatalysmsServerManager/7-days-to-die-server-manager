@@ -41,8 +41,8 @@ class sdtdChat {
         success: (data, status, xhr) => {
           resolve(data);
         },
-        error: (xhr, status, error) => {
-          showErrorModal(`${error} - ${xhr.responseText}`);
+        error: function (xhr, status, error) {
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
           resolve(error);
         }
       });

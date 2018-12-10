@@ -139,9 +139,9 @@
               success: (data, status, xhr) => {
 
               },
-              error: (xhr, status, error) => {
-                displayAjaxToSupportData(xhr, this.URL);
-                showErrorModal(`${error} - ${xhr.responseText}`);
+              error: function (xhr, status, error) {
+                displayAjaxToSupportData(xhr, this);
+                showErrorModal(`${error} - ${xhr.responseText}`, xhr);
               }
             })
           } else {
@@ -155,9 +155,9 @@
               success: (data, status, xhr) => {
 
               },
-              error: (xhr, status, error) => {
-                displayAjaxToSupportData(xhr, this.URL);
-                showErrorModal(`${error} - ${xhr.responseText}`);
+              error: function (xhr, status, error) {
+                displayAjaxToSupportData(xhr, this);
+                showErrorModal(`${error} - ${xhr.responseText}`, xhr);
               }
             })
           }
@@ -191,9 +191,9 @@
                 success: (data, status, xhr) => {
                   resolve(data)
                 },
-                error: (xhr, status, error) => {
-                  displayAjaxToSupportData(xhr, this.URL);;
-                  showErrorModal(`${error} - ${xhr.responseText}`);
+                error: function (xhr, status, error) {
+                  displayAjaxToSupportData(xhr, this);;
+                  showErrorModal(`${error} - ${xhr.responseText}`, xhr);
                   resolve([])
                 }
               })
@@ -217,9 +217,9 @@
             success: (data, status, xhr) => {
               updateCountriesList();
             },
-            error: (xhr, status, error) => {
-              displayAjaxToSupportData(xhr, this.URL);;
-              showErrorModal(`${error} - ${xhr.responseText}`);
+            error: function (xhr, status, error) {
+              displayAjaxToSupportData(xhr, this);;
+              showErrorModal(`${error} - ${xhr.responseText}`, xhr);
             }
           })
         })
@@ -239,9 +239,9 @@
             success: (data, status, xhr) => {
               updateCountriesList();
             },
-            error: (xhr, status, error) => {
-              displayAjaxToSupportData(xhr, this.URL);;
-              showErrorModal(`${error} - ${xhr.responseText}`);
+            error: function (xhr, status, error) {
+              displayAjaxToSupportData(xhr, this);;
+              showErrorModal(`${error} - ${xhr.responseText}`, xhr);
             }
           })
         })
@@ -259,9 +259,9 @@
             success: (data, status, xhr) => {
               location.reload();
             },
-            error: (xhr, status, error) => {
-              displayAjaxToSupportData(xhr, this.URL);;
-              showErrorModal(`${error} - ${xhr.responseText}`);
+            error: function (xhr, status, error) {
+              displayAjaxToSupportData(xhr, this);;
+              showErrorModal(`${error} - ${xhr.responseText}`, xhr);
             }
           });
         })
@@ -290,9 +290,9 @@
                 success: (data, status, xhr) => {
                   resolve(data)
                 },
-                error: (xhr, status, error) => {
-                  displayAjaxToSupportData(xhr, this.URL);;
-                  showErrorModal(`${error} - ${xhr.responseText}`);
+                error: function (xhr, status, error) {
+                  displayAjaxToSupportData(xhr, this);;
+                  showErrorModal(`${error} - ${xhr.responseText}`, xhr);
                   resolve([]);
                 }
               })
@@ -316,9 +316,9 @@
             success: (data, status, xhr) => {
               updateWhitelist();
             },
-            error: (xhr, status, error) => {
-              displayAjaxToSupportData(xhr, this.URL);;
-              showErrorModal(`${error} - ${xhr.responseText}`);
+            error: function (xhr, status, error) {
+              displayAjaxToSupportData(xhr, this);;
+              showErrorModal(`${error} - ${xhr.responseText}`, xhr);
             }
           })
         })
@@ -338,9 +338,9 @@
             success: (data, status, xhr) => {
               updateWhitelist();
             },
-            error: (xhr, status, error) => {
-              displayAjaxToSupportData(xhr, this.URL);;
-              showErrorModal(`${error} - ${xhr.responseText}`);
+            error: function (xhr, status, error) {
+              displayAjaxToSupportData(xhr, this);;
+              showErrorModal(`${error} - ${xhr.responseText}`, xhr);
             }
           })
         })

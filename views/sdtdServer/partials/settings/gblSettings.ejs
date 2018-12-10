@@ -66,8 +66,8 @@
     $.ajax({
       url: '/api/gbl/total',
       error: (xhr, error) => {
-        displayAjaxToSupportData(xhr, this.URL);;
-        showErrorModal(`${error} - ${xhr.responseText}`);
+        displayAjaxToSupportData(xhr, this);;
+        showErrorModal(`${error} - ${xhr.responseText}`, xhr);
       },
       success: data => {
         $("#gbl-stats").text(`${data} total bans registered in the system.`)

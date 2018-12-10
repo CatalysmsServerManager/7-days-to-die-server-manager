@@ -292,8 +292,8 @@
             })
         }
       },
-      error: (xhr, status, error) => {
-        displayAjaxToSupportData(xhr, this.URL);
+      error: function (xhr, status, error) {
+        displayAjaxToSupportData(xhr, this);
       }
     })
 
@@ -321,10 +321,10 @@
         success: (data, status, xhr) => {
           $('#input-settings-discord-prefix').addClass("bg-success").removeClass("bg-danger");
         },
-        error: (xhr, status, error) => {
+        error: function (xhr, status, error) {
           $('#input-settings-discord-prefix').addClass("bg-danger").removeClass("bg-success");
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         }
       })
     })
@@ -342,9 +342,9 @@
             let foundChannels = data;
             resolve(foundChannels);
           },
-          error: (xhr, status, error) => {
-            displayAjaxToSupportData(xhr, this.URL);;
-            showErrorModal(`${error} - ${xhr.responseText}`);
+          error: function (xhr, status, error) {
+            displayAjaxToSupportData(xhr, this);;
+            showErrorModal(`${error} - ${xhr.responseText}`, xhr);
           }
         })
       })
@@ -410,10 +410,10 @@
               console.log(e)
             })
         },
-        error: (xhr, status, error) => {
+        error: function (xhr, status, error) {
           $('#input-settings-discord-guild').addClass("bg-danger").removeClass("bg-success");
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         }
       })
 
@@ -437,10 +437,10 @@
           success: (data, status, xhr) => {
 
           },
-          error: (xhr, status, error) => {
+          error: function (xhr, status, error) {
             $('#input-settings-discord-chatchannel').addClass("bg-danger").removeClass("bg-success");
-            displayAjaxToSupportData(xhr, this.URL);;
-            showErrorModal(`${error} - ${xhr.responseText}`);
+            displayAjaxToSupportData(xhr, this);;
+            showErrorModal(`${error} - ${xhr.responseText}`, xhr);
           }
         })
       }
@@ -465,10 +465,10 @@
         success: (data, status, xhr) => {
           $('#input-settings-discord-chatchannel').addClass("bg-success").removeClass("bg-danger");
         },
-        error: (xhr, status, error) => {
+        error: function (xhr, status, error) {
           $('#input-settings-discord-chatchannel').addClass("bg-danger").removeClass("bg-success");
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         }
       })
     })
@@ -491,11 +491,11 @@
           $('#discord-settings-notifications-reboots-select').addClass("bg-success").removeClass(
             "bg-danger");
         },
-        error: (xhr, status, error) => {
+        error: function (xhr, status, error) {
           $('#discord-settings-notifications-reboots-select').addClass("bg-danger").removeClass(
             "bg-success");
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         }
       })
     })
@@ -518,11 +518,11 @@
           $('#discord-settings-notifications-playerconnect-select').addClass("bg-success").removeClass(
             "bg-danger");
         },
-        error: (xhr, status, error) => {
+        error: function (xhr, status, error) {
           $('#discord-settings-notifications-playerconnect-select').addClass("bg-danger").removeClass(
             "bg-success");
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         }
       })
     })
@@ -545,11 +545,11 @@
           $('#discord-settings-notifications-playerdisconnect-select').addClass("bg-success").removeClass(
             "bg-danger");
         },
-        error: (xhr, status, error) => {
+        error: function (xhr, status, error) {
           $('#discord-settings-notifications-playerdisconnect-select').addClass("bg-danger").removeClass(
             "bg-success");
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         }
       })
     })
@@ -572,11 +572,11 @@
           $('#discord-settings-notifications-connected-select').addClass("bg-success").removeClass(
             "bg-danger");
         },
-        error: (xhr, status, error) => {
+        error: function (xhr, status, error) {
           $('#discord-settings-notifications-connected-select').addClass("bg-danger").removeClass(
             "bg-success");
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         }
       })
     })
@@ -599,11 +599,11 @@
           $('#discord-settings-notifications-connectionlost-select').addClass("bg-success").removeClass(
             "bg-danger");
         },
-        error: (xhr, status, error) => {
+        error: function (xhr, status, error) {
           $('#discord-settings-notifications-connectionlost-select').addClass("bg-danger").removeClass(
             "bg-success");
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         }
       })
     })
@@ -627,11 +627,11 @@
           $('#discord-settings-notifications-countrybankick-select').addClass("bg-success").removeClass(
             "bg-danger");
         },
-        error: (xhr, status, error) => {
+        error: function (xhr, status, error) {
           $('#discord-settings-notifications-countrybankick-select').addClass("bg-danger").removeClass(
             "bg-success");
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         }
       })
     })
@@ -654,11 +654,11 @@
           $('#discord-settings-notifications-ticket-select').addClass("bg-success").removeClass(
             "bg-danger");
         },
-        error: (xhr, status, error) => {
+        error: function (xhr, status, error) {
           $('#discord-settings-notifications-ticket-select').addClass("bg-danger").removeClass(
             "bg-success");
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         }
       })
     })
@@ -682,11 +682,11 @@
           $('#discord-settings-notifications-cronjob-select').addClass("bg-success").removeClass(
             "bg-danger");
         },
-        error: (xhr, status, error) => {
+        error: function (xhr, status, error) {
           $('#discord-settings-notifications-cronjob-select').addClass("bg-danger").removeClass(
             "bg-success");
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         }
       })
     })
@@ -709,11 +709,11 @@
           $("#discord-settings-notifications-gbl-select").addClass("bg-success").removeClass(
             "bg-danger");
         },
-        error: (xhr, status, error) => {
+        error: function (xhr, status, error) {
           $("#discord-settings-notifications-gbl-select").addClass("bg-danger").removeClass(
             "bg-success");
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         }
       })
     })

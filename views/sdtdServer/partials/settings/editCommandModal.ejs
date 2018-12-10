@@ -214,9 +214,9 @@
         success: (data, status, xhr) => {
           location.reload()
         },
-        error: (xhr, status, error) => {
+        error: function (xhr, status, error) {
           errored = true;
-          displayAjaxToSupportData(xhr, this.URL);
+          displayAjaxToSupportData(xhr, this);
           $('#custom-command-<%= command.id %>-modal-edit-status').text(
             `${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
         }
@@ -251,9 +251,9 @@
           success: (data, status, xhr) => {
             console.log(data)
           },
-          error: (xhr, status, error) => {
+          error: function (xhr, status, error) {
             errored = true;
-            displayAjaxToSupportData(xhr, this.URL);
+            displayAjaxToSupportData(xhr, this);
             $('#custom-command-<%= command.id %>-modal-edit-status').text(
               `${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
           }
@@ -273,9 +273,9 @@
           success: (data, status, xhr) => {
             console.log(data)
           },
-          error: (xhr, status, error) => {
+          error: function (xhr, status, error) {
             errored = true;
-            displayAjaxToSupportData(xhr, this.URL);
+            displayAjaxToSupportData(xhr, this);
             $('#custom-command-<%= command.id %>-modal-edit-status').text(
               `${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
           }
@@ -295,9 +295,9 @@
           success: (data, status, xhr) => {
 
           },
-          error: (xhr, status, error) => {
+          error: function (xhr, status, error) {
             errored = true;
-            displayAjaxToSupportData(xhr, this.URL);
+            displayAjaxToSupportData(xhr, this);
             $('#custom-command-<%= command.id %>-modal-edit-status').text(
               `${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
           }
@@ -315,9 +315,9 @@
             serverId: window.SAILS_LOCALS.server.id
           },
           success: (data, status, xhr) => {},
-          error: (xhr, status, error) => {
+          error: function (xhr, status, error) {
             errored = true;
-            displayAjaxToSupportData(xhr, this.URL);
+            displayAjaxToSupportData(xhr, this);
             $('#custom-command-<%= command.id %>-modal-edit-status').text(
               `${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
           }
@@ -335,9 +335,9 @@
             serverId: window.SAILS_LOCALS.server.id
           },
           success: (data, status, xhr) => {},
-          error: (xhr, status, error) => {
+          error: function (xhr, status, error) {
             errored = true;
-            displayAjaxToSupportData(xhr, this.URL);
+            displayAjaxToSupportData(xhr, this);
             $('#custom-command-<%= command.id %>-modal-edit-status').text(
               `${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
           }
@@ -355,9 +355,9 @@
             serverId: window.SAILS_LOCALS.server.id
           },
           success: (data, status, xhr) => {},
-          error: (xhr, status, error) => {
+          error: function (xhr, status, error) {
             errored = true;
-            displayAjaxToSupportData(xhr, this.URL);
+            displayAjaxToSupportData(xhr, this);
             $('#custom-command-<%= command.id %>-modal-edit-status').text(
               `${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
           }
@@ -375,9 +375,9 @@
             serverId: window.SAILS_LOCALS.server.id
           },
           success: (data, status, xhr) => {},
-          error: (xhr, status, error) => {
+          error: function (xhr, status, error) {
             errored = true;
-            displayAjaxToSupportData(xhr, this.URL);
+            displayAjaxToSupportData(xhr, this);
             $('#custom-command-<%= command.id %>-modal-edit-status').text(
               `${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
           }
@@ -395,9 +395,9 @@
             serverId: window.SAILS_LOCALS.server.id
           },
           success: (data, status, xhr) => {},
-          error: (xhr, status, error) => {
+          error: function (xhr, status, error) {
             errored = true;
-            displayAjaxToSupportData(xhr, this.URL);
+            displayAjaxToSupportData(xhr, this);
             $('#custom-command-<%= command.id %>-modal-edit-status').text(
               `${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
           }
@@ -432,9 +432,9 @@
         success: (data, status, xhr) => {
           location.reload()
         },
-        error: (xhr, status, error) => {
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         }
       })
 
@@ -454,9 +454,9 @@
         success: (data, status, xhr) => {
           location.reload()
         },
-        error: (xhr, status, error) => {
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         }
       })
     });
@@ -486,9 +486,9 @@
         success: (data, status, xhr) => {
           location.reload()
         },
-        error: (xhr, status, error) => {
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         }
       })
 

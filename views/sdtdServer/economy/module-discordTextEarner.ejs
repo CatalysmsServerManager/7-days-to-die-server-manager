@@ -93,9 +93,9 @@
                     success: (data, status, xhr) => {
                         $('#economy-module-discordTextEarner-config-enabled').addClass('bg-success').removeClass('bg-danger');
                     },
-                    error: (xhr, status, error) => {
-                        displayAjaxToSupportData(xhr, this.URL);
-                        showErrorModal(`${error} - ${xhr.responseText}`);
+                    error: function (xhr, status, error) {
+                        displayAjaxToSupportData(xhr, this);
+                        showErrorModal(`${error} - ${xhr.responseText}`, xhr);
                     }
                 })
             } else {
@@ -110,9 +110,9 @@
                     success: (data, status, xhr) => {
                         $('#economy-module-discordTextEarner-config-enabled').addClass('bg-success').removeClass('bg-danger');
                     },
-                    error: (xhr, status, error) => {
-                        displayAjaxToSupportData(xhr, this.URL);
-                        showErrorModal(`${error} - ${xhr.responseText}`);
+                    error: function (xhr, status, error) {
+                        displayAjaxToSupportData(xhr, this);
+                        showErrorModal(`${error} - ${xhr.responseText}`, xhr);
                     }
                 })
             }
@@ -138,9 +138,9 @@
                 success: (data, status, xhr) => {
                     $('#economy-module-discordtextearner-config-amount').addClass('bg-success').removeClass('bg-danger');
                 },
-                error: (xhr, status, error) => {
-                    displayAjaxToSupportData(xhr, this.URL);;
-                    showErrorModal(`${error} - ${xhr.responseText}`);
+                error: function (xhr, status, error) {
+                    displayAjaxToSupportData(xhr, this);;
+                    showErrorModal(`${error} - ${xhr.responseText}`, xhr);
                 }
             })
 
@@ -164,9 +164,9 @@
                 success: (data, status, xhr) => {
                     $('#economy-module-discordtextearner-config-timeout').addClass('bg-success').removeClass('bg-danger');
                 },
-                error: (xhr, status, error) => {
-                    displayAjaxToSupportData(xhr, this.URL);
-                    showErrorModal(`${error} - ${xhr.responseText}`);
+                error: function (xhr, status, error) {
+                    displayAjaxToSupportData(xhr, this);
+                    showErrorModal(`${error} - ${xhr.responseText}`, xhr);
                 }
             })
 

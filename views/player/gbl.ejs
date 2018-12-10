@@ -316,10 +316,10 @@
         success: (data, status, xhr) => {
           window.location.reload();
         },
-        error: (xhr, status, error) => {
+        error: function (xhr, status, error) {
           $("#modal-set-note").modal('hide');
           showErrorModal(`Error while processing an API request. ${xhr.responseText}`)
-          displayAjaxToSupportData(xhr, this.URL);
+          displayAjaxToSupportData(xhr, this);
 
         }
       })
@@ -343,9 +343,9 @@
         success: (data, status, xhr) => {
 
         },
-        error: (xhr, status, error) => {
+        error: function (xhr, status, error) {
           showErrorModal(`Error while processing an API request. ${xhr.responseText}`)
-          displayAjaxToSupportData(xhr, this.URL);
+          displayAjaxToSupportData(xhr, this);
 
         }
       })
@@ -393,9 +393,9 @@
         success: (data, status, xhr) => {
           window.location.reload();
         },
-        error: (xhr, status, error) => {
+        error: function (xhr, status, error) {
           showErrorModal(`Error while processing an API request. ${xhr.responseText}`)
-          displayAjaxToSupportData(xhr, this.URL);
+          displayAjaxToSupportData(xhr, this);
 
         }
       })
@@ -415,9 +415,9 @@
         success: (data, status, xhr) => {
           window.location.reload();
         },
-        error: (xhr, status, error) => {
+        error: function (xhr, status, error) {
           showErrorModal(`Error while processing an API request. ${xhr.responseText}`)
-          displayAjaxToSupportData(xhr, this.URL);
+          displayAjaxToSupportData(xhr, this);
 
         }
       })
@@ -462,8 +462,8 @@
           drawComments(ban);
           $("#comments-place-text").val("")
         },
-        error: (xhr, status, error) => {
-          displayAjaxToSupportData(xhr, this.URL);
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);
           showErrorModal(`Error while processing an API request. ${xhr.responseText}`)
         }
       })
@@ -481,8 +481,8 @@
           success: (data, status, xhr) => {
             resolve(data)
           },
-          error: (xhr, status, error) => {
-            displayAjaxToSupportData(xhr, this.URL);
+          error: function (xhr, status, error) {
+            displayAjaxToSupportData(xhr, this);
             reject(new Error(error))
           }
         })
@@ -502,8 +502,8 @@
             console.log(`Loaded ${data.length} bans`)
             resolve(data)
           },
-          error: (xhr, status, error) => {
-            displayAjaxToSupportData(xhr, this.URL);
+          error: function (xhr, status, error) {
+            displayAjaxToSupportData(xhr, this);
             reject(new Error(error))
           }
         })

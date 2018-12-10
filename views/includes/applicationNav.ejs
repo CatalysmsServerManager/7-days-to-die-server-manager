@@ -313,8 +313,8 @@
           }
         }
       },
-      error: (xhr, status, error) => {
-        displayAjaxToSupportData(xhr, this.URL);
+      error: function (xhr, status, error) {
+        displayAjaxToSupportData(xhr, this);
       }
     })
   })

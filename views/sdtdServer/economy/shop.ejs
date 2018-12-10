@@ -354,9 +354,9 @@
       success: (data, status, xhr) => {
         availableItems = data;
       },
-      error: (xhr, status, error) => {
-        displayAjaxToSupportData(xhr, this.URL);;
-        showErrorModal(`${error} - ${xhr.responseText}`);
+      error: function (xhr, status, error) {
+        displayAjaxToSupportData(xhr, this);;
+        showErrorModal(`${error} - ${xhr.responseText}`, xhr);
       }
     });
 
@@ -464,9 +464,9 @@
         success: (data, status, xhr) => {
           location.reload();
         },
-        error: (xhr, status, error) => {
-          showErrorModal(`${error} - ${xhr.responseText}`);
-          displayAjaxToSupportData(xhr, this.URL);
+        error: function (xhr, status, error) {
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+          displayAjaxToSupportData(xhr, this);
         }
       })
     })
@@ -494,12 +494,12 @@
         success: (data, status, xhr) => {
           location.reload();
         },
-        error: (xhr, status, error) => {
+        error: function (xhr, status, error) {
           if (xhr.responseText == "\"You do not have enough money to buy this!\"") {
             return alert(`You do not have enough money to buy this item`)
           }
-          showErrorModal(`${error} - ${xhr.responseText}`);
-          displayAjaxToSupportData(xhr, this.URL);
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+          displayAjaxToSupportData(xhr, this);
         }
       })
 
@@ -547,9 +547,9 @@
         success: (data, status, xhr) => {
           location.reload();
         },
-        error: (xhr, status, error) => {
-          displayAjaxToSupportData(xhr, this.URL);
-          showErrorModal(`${error} - ${xhr.responseText}`);
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         }
       })
     })
@@ -567,9 +567,9 @@
         success: (data, status, xhr) => {
           location.reload();
         },
-        error: (xhr, status, error) => {
-          displayAjaxToSupportData(xhr, this.URL);
-          showErrorModal(`${error} - ${xhr.responseText}`);
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         }
       })
     })
@@ -590,7 +590,7 @@
         success: (data, status, xhr) => {
           location.reload();
         },
-        error: (xhr, status, error) => {
+        error: function (xhr, status, error) {
           $("#import-problems").removeClass('invisible');
           $("#import-problems").empty();
           if (_.isArray(xhr.responseJSON)) {

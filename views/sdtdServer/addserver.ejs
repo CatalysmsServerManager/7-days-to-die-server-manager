@@ -172,10 +172,10 @@
           return testResponseElement.html(responseString);
 
         },
-        error: (xhr, status, error) => {
+        error: function (xhr, status, error) {
           $("#loading").hide();
           $("#back-to-form").fadeIn();
-          displayAjaxToSupportData(xhr, this.URL);;
+          displayAjaxToSupportData(xhr, this);;
           let response = xhr.responseJSON;
 
           let responseString = new String();

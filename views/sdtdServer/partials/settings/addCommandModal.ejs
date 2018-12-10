@@ -87,9 +87,9 @@
         success: data => {
           location.reload()
         },
-        error: (xhr, status, error) => {
-          showErrorModal(`${error} - ${xhr.responseText}`);
-          displayAjaxToSupportData(xhr, this.URL);;
+        error: function (xhr, status, error) {
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+          displayAjaxToSupportData(xhr, this);;
 
         }
       })

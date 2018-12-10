@@ -126,8 +126,8 @@
           newStatus: $('#settings-tracking-inventory-check').prop('checked')
         },
         error: (xhr, error) => {
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         }
       })
 

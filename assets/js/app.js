@@ -20,8 +20,8 @@ function loadSdtdServers(userId) {
         serverslist.append(serverHtml);
       }
     },
-    error: (xhr, status, error) => {
-      showErrorModal(`${error} - ${xhr.responseText}`);
+    error: function (xhr, status, error) {
+      showErrorModal(`${error} - ${xhr.responseText}`, xhr);
     },
     complete: () => {
       $('#loading-servers').remove();
@@ -47,8 +47,8 @@ async function checkUserPermission(userId, serverId, permissionField) {
         resolve(data);
 
       },
-      error: (xhr, status, error) => {
-        displayAjaxToSupportData(xhr, this.URL);
+      error: function (xhr, status, error) {
+        displayAjaxToSupportData(xhr, this);
         reject(xhr)
 
       }
@@ -60,7 +60,11 @@ async function checkUserPermission(userId, serverId, permissionField) {
 
 // Error modal controller
 
-function showErrorModal(errorMessage) {
+function showErrorModal(errorMessage, xhr) {
+
+  if (xhr && xhr.responseJSON && xhr.responseJSON.problems && xhr.responseJSON.problems.length > 0) {
+    errorMessage = xhr.responseJSON.problems.join("\n");
+  }
 
   $("#error-modal-message").text(errorMessage)
 
@@ -74,7 +78,7 @@ function showErrorModal(errorMessage) {
 }
 
 // This function parses an xhr object and displays a console.log which users can copy and send to support.
-function displayAjaxToSupportData(xhr, url) {
+function displayAjaxToSupportData(xhr, ajaxRequest) {
 
   console.log('---------');
   console.log(`
@@ -87,11 +91,14 @@ function displayAjaxToSupportData(xhr, url) {
                                                      
   `);
   console.log('Ajax request ERROR!');
-  console.log('You can copy and paste this info to the support team, please also include what you were doing (eg, what button(s) did you press, what data did you fill in?');
+  console.log('You can copy and paste this info to the support team.');
+  console.log('Be careful! The data of your request might include sensitive details about your session (csrf token). Make sure you create a support ticket and share the info there if you are unsure.');
   console.log('---------');
   console.log('Headers:')
   console.log(xhr.getAllResponseHeaders());
   console.log(`Status: ${xhr.status} - ${xhr.statusText}`);
-  console.log(`URL: ${url}`);
+  console.log(`URL: ${ajaxRequest.type} ${ajaxRequest.url}`);
+  console.log('Data:');
+  console.log(ajaxRequest.data);
   console.log('---------');
 }

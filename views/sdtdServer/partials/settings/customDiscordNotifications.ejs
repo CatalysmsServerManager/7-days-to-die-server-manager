@@ -92,9 +92,9 @@
         success: (data, status, xhr) => {
           drawNotificationsTable()
         },
-        error: (xhr, status, error) => {
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         },
       })
     })
@@ -111,9 +111,9 @@
         success: (data, status, xhr) => {
           drawNotificationsTable()
         },
-        error: (xhr, status, error) => {
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         },
       });
     })
@@ -134,9 +134,9 @@
           );
         }
       },
-      error: (xhr, status, error) => {
-        displayAjaxToSupportData(xhr, this.URL);;
-        showErrorModal(`${error} - ${xhr.responseText}`);
+      error: function (xhr, status, error) {
+        displayAjaxToSupportData(xhr, this);;
+        showErrorModal(`${error} - ${xhr.responseText}`, xhr);
       },
     });
   }
@@ -154,9 +154,9 @@
           let foundChannels = data;
           resolve(foundChannels);
         },
-        error: (xhr, status, error) => {
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
           reject(error)
         },
       })

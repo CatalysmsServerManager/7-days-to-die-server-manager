@@ -37,8 +37,8 @@ class sdtdConsole {
           addNewLogLine(data.msg);
           resolve(data);
         },
-        error: (xhr, status, error) => {
-          showErrorModal(`${error} - ${xhr.responseText}`);
+        error: function (xhr, status, error) {
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
           reject(error);
         }
       });

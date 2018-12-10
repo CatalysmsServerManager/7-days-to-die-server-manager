@@ -53,9 +53,9 @@
                     success: (data, status, xhr) => {
                         window.location.reload();
                     },
-                    error: (xhr, status, error) => {
-                        displayAjaxToSupportData(xhr, this.URL);;
-                        showErrorModal(`${error} - ${xhr.responseText}`);
+                    error: function (xhr, status, error) {
+                        displayAjaxToSupportData(xhr, this);;
+                        showErrorModal(`${error} - ${xhr.responseText}`, xhr);
                     }
                 });
             })

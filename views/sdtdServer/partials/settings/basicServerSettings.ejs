@@ -49,8 +49,8 @@
         success: (data, status, xhr) => {
           location.reload();
         },
-        error: (xhr, status, error) => {
-          showErrorModal(`${error} - ${xhr.responseText}`);
+        error: function (xhr, status, error) {
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         }
       });
     })

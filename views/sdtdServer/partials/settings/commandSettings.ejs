@@ -199,7 +199,7 @@
         success: (data, status, xhr) => {
           location.reload();
         },
-        error: (xhr, status, error) => {
+        error: function (xhr, status, error) {
           $("#custom-commands-import-problems").removeClass('invisible');
           $("#custom-commands-import-problems").empty();
           if (_.isArray(xhr.responseJSON)) {
@@ -262,9 +262,9 @@
         success: (data, status, xhr) => {
 
         },
-        error: (xhr, status, error) => {
-          displayAjaxToSupportData(xhr, this.URL);
-          showErrorModal(`${error} - ${xhr.responseText}`);
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         }
       });
     });
@@ -285,9 +285,9 @@
         success: (data, status, xhr) => {
 
         },
-        error: (xhr, status, error) => {
-          displayAjaxToSupportData(xhr, this.URL);
-          showErrorModal(`${error} - ${xhr.responseText}`);
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         }
       });
     })
@@ -304,9 +304,9 @@
         success: (data, status, xhr) => {
           updateCommandsStatus();
         },
-        error: (xhr, status, error) => {
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         }
       })
     })
@@ -323,9 +323,9 @@
         success: (data, status, xhr) => {
           updateCommandsStatus();
         },
-        error: (xhr, status, error) => {
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         }
       })
     })
@@ -336,7 +336,7 @@
       let newPrefix = $("#input-settings-commands-prefix").val();
 
       if (newPrefix.length > 1) {
-        return alert(`Prefix is maximum one character!`)
+        return showErrorModal(`Prefix is maximum one character!`)
       }
 
       $.ajax({
@@ -350,9 +350,9 @@
         success: data => {
           $("#input-settings-commands-prefix").empty();
         },
-        error: (xhr, status, error) => {
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         }
       })
     })
@@ -371,9 +371,9 @@
           success: data => {
             $("#player-teleport-settings").fadeOut();
           },
-          error: (xhr, status, error) => {
-            displayAjaxToSupportData(xhr, this.URL);;
-            showErrorModal(`${error} - ${xhr.responseText}`);
+          error: function (xhr, status, error) {
+            displayAjaxToSupportData(xhr, this);;
+            showErrorModal(`${error} - ${xhr.responseText}`, xhr);
           }
         })
       } else {
@@ -384,9 +384,9 @@
             _csrf: window.SAILS_LOCALS._csrf,
             serverId: window.SAILS_LOCALS.server.id,
           },
-          error: (xhr, status, error) => {
-            displayAjaxToSupportData(xhr, this.URL);;
-            showErrorModal(`${error} - ${xhr.responseText}`);
+          error: function (xhr, status, error) {
+            displayAjaxToSupportData(xhr, this);;
+            showErrorModal(`${error} - ${xhr.responseText}`, xhr);
           },
           success: data => {
             $("#player-teleport-settings").fadeIn();
@@ -406,9 +406,9 @@
             serverId: window.SAILS_LOCALS.server.id,
           },
           success: data => {},
-          error: (xhr, status, error) => {
-            displayAjaxToSupportData(xhr, this.URL);;
-            showErrorModal(`${error} - ${xhr.responseText}`);
+          error: function (xhr, status, error) {
+            displayAjaxToSupportData(xhr, this);;
+            showErrorModal(`${error} - ${xhr.responseText}`, xhr);
           }
         })
       } else {
@@ -419,9 +419,9 @@
             _csrf: window.SAILS_LOCALS._csrf,
             serverId: window.SAILS_LOCALS.server.id,
           },
-          error: (xhr, status, error) => {
-            displayAjaxToSupportData(xhr, this.URL);;
-            showErrorModal(`${error} - ${xhr.responseText}`);
+          error: function (xhr, status, error) {
+            displayAjaxToSupportData(xhr, this);;
+            showErrorModal(`${error} - ${xhr.responseText}`, xhr);
           }
         })
       }
@@ -433,7 +433,7 @@
       if (!validator.isInt(newMax, {
           min: 1
         })) {
-        return alert('Please provide a valid value for max locations.')
+        return showErrorModal('Please provide a valid value for max locations.')
       }
 
       $.ajax({
@@ -444,9 +444,9 @@
           serverId: window.SAILS_LOCALS.server.id,
           maxLocations: newMax
         },
-        error: (xhr, status, error) => {
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         }
       })
     })
@@ -457,7 +457,7 @@
       if (!validator.isInt(newTimeout, {
           min: 3
         })) {
-        return alert('Please provide a valid value for timeout. (number larger than 3)')
+        return showErrorModal('Please provide a valid value for timeout. (number larger than 3)')
       }
 
       $.ajax({
@@ -468,9 +468,9 @@
           serverId: window.SAILS_LOCALS.server.id,
           timeout: newTimeout
         },
-        error: (xhr, status, error) => {
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         }
       })
     })
@@ -482,7 +482,7 @@
       if (!validator.isInt(newDelay, {
           min: 0
         })) {
-        return alert('Please provide a valid value for delay. (number larger than 0)')
+        return showErrorModal('Please provide a valid value for delay. (number larger than 0)')
       }
 
       $.ajax({
@@ -493,9 +493,9 @@
           serverId: window.SAILS_LOCALS.server.id,
           delay: newDelay
         },
-        error: (xhr, status, error) => {
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         }
       })
     })

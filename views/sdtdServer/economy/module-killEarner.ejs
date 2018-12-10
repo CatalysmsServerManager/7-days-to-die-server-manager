@@ -94,9 +94,9 @@
                     success: (data, status, xhr) => {
                         $('#economy-module-killEarner-config-enabled').addClass('bg-success').removeClass('bg-danger');
                     },
-                    error: (xhr, status, error) => {
-                        displayAjaxToSupportData(xhr, this.URL);
-                        showErrorModal(`${error} - ${xhr.responseText}`);
+                    error: function (xhr, status, error) {
+                        displayAjaxToSupportData(xhr, this);
+                        showErrorModal(`${error} - ${xhr.responseText}`, xhr);
                     }
                 })
             } else {
@@ -111,9 +111,9 @@
                     success: (data, status, xhr) => {
                         $('#economy-module-killEarner-config-enabled').addClass('bg-success').removeClass('bg-danger');
                     },
-                    error: (xhr, status, error) => {
-                        displayAjaxToSupportData(xhr, this.URL);
-                        showErrorModal(`${error} - ${xhr.responseText}`);
+                    error: function (xhr, status, error) {
+                        displayAjaxToSupportData(xhr, this);
+                        showErrorModal(`${error} - ${xhr.responseText}`, xhr);
                     }
                 })
             }
@@ -139,9 +139,9 @@
                 success: (data, status, xhr) => {
                     $('#economy-module-killearner-config-playerKill').addClass('bg-success').removeClass('bg-danger');
                 },
-                error: (xhr, status, error) => {
-                    displayAjaxToSupportData(xhr, this.URL);
-                    showErrorModal(`${error} - ${xhr.responseText}`);
+                error: function (xhr, status, error) {
+                    displayAjaxToSupportData(xhr, this);
+                    showErrorModal(`${error} - ${xhr.responseText}`, xhr);
                 }
             })
 
@@ -165,9 +165,9 @@
                 success: (data, status, xhr) => {
                     $('#economy-module-killearner-config-zombieKill').addClass('bg-success').removeClass('bg-danger');
                 },
-                error: (xhr, status, error) => {
-                    displayAjaxToSupportData(xhr, this.URL);
-                    showErrorModal(`${error} - ${xhr.responseText}`);
+                error: function (xhr, status, error) {
+                    displayAjaxToSupportData(xhr, this);
+                    showErrorModal(`${error} - ${xhr.responseText}`, xhr);
                 }
             })
 

@@ -146,9 +146,9 @@
           $('#economy-button-enable').fadeOut();
           $('#economy-button-disable').fadeIn();
         },
-        error: (xhr, status, error) => {
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         }
       })
     })
@@ -166,9 +166,9 @@
           $('#economy-button-enable').fadeIn();
           $('#economy-button-disable').fadeOut();
         },
-        error: (xhr, status, error) => {
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         }
       })
     })
@@ -191,9 +191,9 @@
           $('#economy-costToUseGimme-btn').addClass('bg-success').removeClass('bg-danger');
           console.log(data)
         },
-        error: (xhr, status, error) => {
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
           $('#economy-costToUseGimme-btn').addClass('bg-danger').removeClass('bg-success');
         }
       })
@@ -217,9 +217,9 @@
           $('#economy-costToTeleport-btn').addClass('bg-success').removeClass('bg-danger');
           console.log(data)
         },
-        error: (xhr, status, error) => {
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
           $('#economy-costToTeleport-btn').addClass('bg-danger').removeClass('bg-success');
         }
       })
@@ -243,9 +243,9 @@
           $('#economy-costToSetTeleport-btn').addClass('bg-success').removeClass('bg-danger');
           console.log(data)
         },
-        error: (xhr, status, error) => {
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
           $('#economy-costToSetTeleport-btn').addClass('bg-danger').removeClass('bg-success');
         }
       })
@@ -268,9 +268,9 @@
         success: (data, status, xhr) => {
           $('#economy-costToMakeTeleportPublic-btn').addClass('bg-success').removeClass('bg-danger');
         },
-        error: (xhr, status, error) => {
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
           $('#economy-costToMakeTeleportPublic-btn').addClass('bg-danger').removeClass('bg-success');
         }
       })
@@ -295,9 +295,9 @@
         success: (data, status, xhr) => {
 
         },
-        error: (xhr, status, error) => {
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
           alert(error)
         }
       })

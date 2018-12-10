@@ -77,8 +77,8 @@
           success: (data, status, xhr) => {
             alert('Banned player');
           },
-          error: (xhr, status, error) => {
-            showErrorModal(`${error} - ${xhr.responseText}`);
+          error: function (xhr, status, error) {
+            showErrorModal(`${error} - ${xhr.responseText}`, xhr);
           }
         });
       })

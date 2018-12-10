@@ -162,9 +162,9 @@
       data: {
         serverId: window.SAILS_LOCALS.server.id,
       },
-      error: (xhr, status, error) => {
-        displayAjaxToSupportData(xhr, this.URL);;
-        showErrorModal(`${error} - ${xhr.responseText}`);
+      error: function (xhr, status, error) {
+        displayAjaxToSupportData(xhr, this);;
+        showErrorModal(`${error} - ${xhr.responseText}`, xhr);
       },
       success: (data, xhr) => {
         data.forEach(job => {
@@ -188,7 +188,7 @@
         success: (data, status, xhr) => {
           location.reload();
         },
-        error: (xhr, status, error) => {
+        error: function (xhr, status, error) {
           $("#cron-import-problems").removeClass('invisible');
           $("#cron-import-problems").empty();
           if (_.isArray(xhr.responseJSON)) {
@@ -238,7 +238,7 @@
         url: '/api/sdtdserver/cron',
         method: 'POST',
         data: requestData,
-        error: (xhr, status, error) => {
+        error: function (xhr, status, error) {
 
           if (xhr.responseJSON) {
             if (xhr.responseJSON.problems) {
@@ -343,9 +343,9 @@
         success: function (response) {
           $($(cellSave)[0].childNodes[0]).addClass('invisible');
         },
-        error: (xhr, status, error) => {
-          displayAjaxToSupportData(xhr, this.URL);
-          showErrorModal(`${error} - ${xhr.responseText}`);
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         },
       });
     })
@@ -361,9 +361,9 @@
           serverId: window.SAILS_LOCALS.server.id,
           jobId: cronIdToDelete,
         },
-        error: (xhr, status, data) => {
-          displayAjaxToSupportData(xhr, this.URL);
-          showErrorModal(`${error} - ${xhr.responseText}`);
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         },
         success: (data, status, xhr) => {
           alert(data)
@@ -384,9 +384,9 @@
             serverId: window.SAILS_LOCALS.server.id,
             jobId: cronJob.id,
           },
-          error: (xhr, status, error) => {
-            displayAjaxToSupportData(xhr, this.URL);;
-            showErrorModal(`${error} - ${xhr.responseText}`);
+          error: function (xhr, status, error) {
+            displayAjaxToSupportData(xhr, this);;
+            showErrorModal(`${error} - ${xhr.responseText}`, xhr);
           },
           success: (data, status, xhr) => {}
         })
@@ -399,9 +399,9 @@
             serverId: window.SAILS_LOCALS.server.id,
             jobId: cronJob.id,
           },
-          error: (xhr, status, error) => {
-            displayAjaxToSupportData(xhr, this.URL);;
-            showErrorModal(`${error} - ${xhr.responseText}`);
+          error: function (xhr, status, error) {
+            displayAjaxToSupportData(xhr, this);;
+            showErrorModal(`${error} - ${xhr.responseText}`, xhr);
           },
           success: (data, status, xhr) => {}
         })
@@ -421,9 +421,9 @@
             serverId: window.SAILS_LOCALS.server.id,
             jobId: cronJob.id,
           },
-          error: (xhr, status, error) => {
-            displayAjaxToSupportData(xhr, this.URL);;
-            showErrorModal(`${error} - ${xhr.responseText}`);
+          error: function (xhr, status, error) {
+            displayAjaxToSupportData(xhr, this);;
+            showErrorModal(`${error} - ${xhr.responseText}`, xhr);
           },
           success: (data, status, xhr) => {}
         })
@@ -436,9 +436,9 @@
             serverId: window.SAILS_LOCALS.server.id,
             jobId: cronJob.id,
           },
-          error: (xhr, status, error) => {
-            displayAjaxToSupportData(xhr, this.URL);;
-            showErrorModal(`${error} - ${xhr.responseText}`);
+          error: function (xhr, status, error) {
+            displayAjaxToSupportData(xhr, this);;
+            showErrorModal(`${error} - ${xhr.responseText}`, xhr);
           },
           success: (data, status, xhr) => {}
         })
@@ -457,9 +457,9 @@
           serverId: window.SAILS_LOCALS.server.id,
           jobId: cronIdToDelete,
         },
-        error: (xhr, status, error) => {
-          displayAjaxToSupportData(xhr, this.URL);;
-          showErrorModal(`${error} - ${xhr.responseText}`);
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         },
         success: (data, status, xhr) => {
           deleteJobFromTable(newRow)
