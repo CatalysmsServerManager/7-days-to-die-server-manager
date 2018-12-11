@@ -36,7 +36,7 @@ module.exports = {
       let discordClient = sails.hooks.discordbot.getClient();
       let guild = discordClient.guilds.get(inputs.guildId);
       if (_.isUndefined(guild)) {
-        return exits.badRequest(`Unknown discord guild! Make sure you add the bot to your server.`);
+        return exits.success([]);
       }
 
       let foundChannels = guild.channels.filter(channel => {

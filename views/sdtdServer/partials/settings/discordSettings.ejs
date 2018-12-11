@@ -278,6 +278,10 @@
             })
             .text(guild.name));
         })
+        $('#input-settings-discord-guild').append($('<option>', {
+            value: 0
+          })
+          .text("None"));
         $(`#input-settings-discord-guild option[value='${discordGuildId}']`).prop('selected', true);
         if (discordGuildId) {
           let selectedGuildId = $('#input-settings-discord-guild').val()
@@ -332,8 +336,8 @@
 
     async function getWritableChannels(guildId) {
       return new Promise((resolve, reject) => {
-
-        if (!guildId) {
+        console.log("guildId " + guildId)
+        if (guildId === 0 || guildId === "0") {
           return resolve([]);
         }
 
@@ -399,8 +403,12 @@
         },
         success: (data, status, xhr) => {
           $('#input-settings-discord-guild').addClass("bg-success").removeClass("bg-danger");
-
           let selectedGuildId = $('#input-settings-discord-guild').val()
+
+          if (selectedGuildId === "0") {
+            return;
+          }
+
           selectsWithDiscordChannels.forEach(select => {
             select.select.prop('disabled', false)
           })

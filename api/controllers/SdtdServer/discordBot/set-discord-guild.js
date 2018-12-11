@@ -31,7 +31,16 @@ module.exports = {
     try {
       let server = await SdtdServer.findOne(inputs.serverId);
       let discordClient = sails.hooks.discordbot.getClient();
-      let chatBridgeHook = sails.hooks.discordchatbridge
+      let chatBridgeHook = sails.hooks.discordchatbridge;
+
+      if (inputs.discordGuildId === "0" ) {
+        await SdtdConfig.update({
+          server: inputs.serverId
+        }, {
+          discordGuildId: inputs.discordGuildId
+        });
+        return exits.success();
+      }
 
       if (!discordClient.guilds.has(inputs.discordGuildId)) {
         return exits.badGuild();
@@ -49,7 +58,7 @@ module.exports = {
         server: inputs.serverId
       }, {
         discordGuildId: inputs.discordGuildId
-      })
+      });
 
       sails.log.info(`API - SdtdServer:set-discord-guid - set guild ${inputs.discordGuildId} for server ${inputs.serverId}`);
       return exits.success();
