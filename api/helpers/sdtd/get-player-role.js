@@ -65,7 +65,7 @@ module.exports = {
             foundRole = foundRole[0]
         }
 
-        sails.log.verbose(`Found role ${foundRole.name} for player ${player.name}`)
+        //sails.log.verbose(`Found role ${foundRole.name} for player ${player.name}`)
         return exits.success(foundRole);
 
     }

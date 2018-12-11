@@ -33,8 +33,12 @@ module.exports = {
     let discordClient = sails.hooks.discordbot.getClient();
     let discordGuild = await discordClient.guilds.get(serverConfig.discordGuildId);
 
-    if (_.isUndefined(discordGuild)) {
-      return exits.error(new Error("Unknown guild ID"));
+    if (_.isUndefined(discordGuild) || !discordGuild) {
+      return exits.success(player, undefined);
+    }
+
+    if (!user.discordId) {
+      return exits.success(player, undefined);
     }
 
     let member = await discordGuild.members.get(user.discordId);
