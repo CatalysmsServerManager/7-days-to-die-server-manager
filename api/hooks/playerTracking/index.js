@@ -1,6 +1,4 @@
 const sevenDays = require('machinepack-7daystodiewebapi');
-const request = require('request-promise-native');
-const he = require('he');
 const SdtdApi = require('7daystodie-api-wrapper');
 
 /**
@@ -56,13 +54,13 @@ module.exports = function definePlayerTrackingHook(sails) {
           initialValues.push({
             server: server.id,
             player: playerRecord.id
-          })
+          });
         }
 
         try {
           await basicTracking(server, loggingObject, onlinePlayers, playerRecords);
         } catch (error) {
-          sails.log.error(error)
+          sails.log.error(error);
         }
 
         if (server.config[0].locationTracking || server.config[0].inventoryTracking) {
@@ -73,7 +71,7 @@ module.exports = function definePlayerTrackingHook(sails) {
             try {
               initialValues = await locationTracking(server, loggingObject, onlinePlayers, initialValues, playerRecords);
             } catch (error) {
-              sails.log.error(error)
+              sails.log.error(error);
             }
           }
 
@@ -82,7 +80,7 @@ module.exports = function definePlayerTrackingHook(sails) {
             try {
               initialValues = await inventoryTracking(server, loggingObject, onlinePlayers, initialValues, playerRecords);
             } catch (error) {
-              sails.log.error(error)
+              sails.log.error(error);
             }
           }
           await TrackingInfo.createEach(initialValues);
@@ -91,14 +89,14 @@ module.exports = function definePlayerTrackingHook(sails) {
 
         let currentCycles = await sails.helpers.redis.get(`server:${serverId}:trackingCyclesCompleted`);
         currentCycles = parseInt(currentCycles);
-  
+
         if (!currentCycles) {
-          currentCycles = 1
+          currentCycles = 1;
         }
 
         if (currentCycles >= sails.config.custom.trackingCyclesBeforeDelete) {
           await deleteLocationData(server);
-          // await deleteInventoryData(server);
+          await deleteInventoryData(server);
           await sails.helpers.redis.set(`server:${serverId}:trackingCyclesCompleted`, 0);
         } else {
           await sails.helpers.redis.set(`server:${serverId}:trackingCyclesCompleted`, currentCycles + 1);
@@ -129,12 +127,12 @@ module.exports = function definePlayerTrackingHook(sails) {
           deaths: playerStats.playerdeaths,
           score: playerStats.score,
           level: Math.trunc(playerStats.level)
-        }
+        };
         // Update with the new data
-        player = player[0]
+        player = player[0];
 
         if (_.isUndefined(player)) {
-          return
+          return;
         }
 
         await Player.update(player.id, statsUpdate);
@@ -176,7 +174,7 @@ module.exports = function definePlayerTrackingHook(sails) {
     let dateEnded = new Date();
     sails.log.verbose(`Performed basicTracking for server ${server.name} - ${playerRecords.length} players online - took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`);
 
-    return
+    return;
   }
 
   async function locationTracking(server, loggingObject, playerList, playersArray, playerRecords) {
@@ -190,7 +188,7 @@ module.exports = function definePlayerTrackingHook(sails) {
         let trackingRecordIdx = playersArray.indexOf(trackingRecord[0]);
 
         if (trackingRecord.length === 1) {
-          trackingRecord[0].x = onlinePlayer.position.x
+          trackingRecord[0].x = onlinePlayer.position.x;
           trackingRecord[0].y = onlinePlayer.position.y;
           trackingRecord[0].z = onlinePlayer.position.z;
 
@@ -216,10 +214,10 @@ module.exports = function definePlayerTrackingHook(sails) {
         port: server.webPort,
         adminUser: server.authName,
         adminToken: server.authToken,
-      })
+      });
     } catch (error) {
 
-      sails.log.warn(`${server.name} Errored during inventory tracking - ${error}.`)
+      sails.log.warn(`${server.name} Errored during inventory tracking - ${error}.`);
     }
 
 
@@ -231,25 +229,25 @@ module.exports = function definePlayerTrackingHook(sails) {
         let trackingRecordIdx = playersArray.indexOf(trackingRecord[0]);
 
         if (trackingRecord.length === 1) {
-          let inventory = inventories.filter(inventoryEntry => inventoryEntry.steamid === playerRecord[0].steamId)
+          let inventory = inventories.filter(inventoryEntry => inventoryEntry.steamid === playerRecord[0].steamId);
           if (inventory.length === 1) {
             let itemsInInventory = new Array();
-            inventory = inventory[0]
+            inventory = inventory[0];
 
             inventory.bag = _.filter(inventory.bag, (value) => !_.isNull(value));
             inventory.belt = _.filter(inventory.belt, (value) => !_.isNull(value));
             inventory.equipment = _.filter(inventory.equipment, (value) => !_.isNull(value));
 
             for (const inventoryItem of inventory.bag) {
-              itemsInInventory.push(_.omit(inventoryItem, "iconcolor", "qualitycolor", "icon"))
+              itemsInInventory.push(_.omit(inventoryItem, 'iconcolor', 'qualitycolor', 'icon'));
             }
 
             for (const inventoryItem of inventory.belt) {
-              itemsInInventory.push(_.omit(inventoryItem, "iconcolor", "qualitycolor", "icon"))
+              itemsInInventory.push(_.omit(inventoryItem, 'iconcolor', 'qualitycolor', 'icon'));
             }
 
             for (const inventoryItem of inventory.equipment) {
-              itemsInInventory.push(_.omit(inventoryItem, "iconcolor", "qualitycolor", "icon"))
+              itemsInInventory.push(_.omit(inventoryItem, 'iconcolor', 'qualitycolor', 'icon'));
             }
 
             trackingRecord[0].inventory = itemsInInventory;
@@ -266,69 +264,28 @@ module.exports = function definePlayerTrackingHook(sails) {
 
     let dateEnded = new Date();
     sails.log.verbose(`Performed inventory tracking for ${server.name} - ${playerList.length} players, took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`);
-    return playersArray
+    return playersArray;
   }
 
 };
 
-
-function getPlayerList(server) {
-  return new Promise((resolve, reject) => {
-    sevenDays.getPlayerList({
-      ip: server.ip,
-      port: server.webPort,
-      authName: server.authName,
-      authToken: server.authToken
-    }).exec({
-      success: (data) => {
-        let playersToSend = data.players.filter(player => player.online)
-        resolve(playersToSend)
-      },
-      error: (error) => {
-        sails.log.warn(`Error getting playerlist for tracking - ${error}`);
-        resolve([])
-      }
-    })
-  })
-}
-
-function getPlayerInventory(server, steamId) {
-  return new Promise((resolve, reject) => {
-    sevenDays.getPlayerInventory({
-      ip: server.ip,
-      port: server.webPort,
-      authName: server.authName,
-      authToken: server.authToken,
-      steamId: steamId
-    }).exec({
-      success: (data) => {
-        resolve(data)
-      },
-      error: (error) => {
-        sails.log.warn(`Error getting player inventory for tracking - ${error}`);
-        resolve(undefined)
-      }
-    })
-  })
-}
-
 async function deleteLocationData(server) {
   let dateNow = Date.now();
-  let deleteResult
+  let deleteResult;
   try {
     let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({
       serverId: server.id
     });
-    let hoursToKeepData = sails.config.custom.donorConfig[donatorRole].playerTrackerKeepLocationHours
+    let hoursToKeepData = sails.config.custom.donorConfig[donatorRole].playerTrackerKeepLocationHours;
     let milisecondsToKeepData = hoursToKeepData * 3600000;
     let borderDate = new Date(dateNow.valueOf() - milisecondsToKeepData);
 
-    const locationDeleteSQL = `DELETE FROM trackinginfo WHERE server = ${server.id} AND createdAt < ${borderDate.valueOf()};`
+    const locationDeleteSQL = `DELETE FROM trackinginfo WHERE server = ${server.id} AND createdAt < ${borderDate.valueOf()};`;
 
     deleteResult = await sails.sendNativeQuery(locationDeleteSQL);
 
   } catch (error) {
-    sails.log.error(error)
+    sails.log.error(error);
   }
 
   let dateEnded = new Date();
@@ -343,24 +300,24 @@ async function deleteInventoryData(server) {
     let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({
       serverId: server.id
     });
-    let hoursToKeepData = sails.config.custom.donorConfig[donatorRole].playerTrackerKeepInventoryHours
+    let hoursToKeepData = sails.config.custom.donorConfig[donatorRole].playerTrackerKeepInventoryHours;
     let milisecondsToKeepData = hoursToKeepData * 3600000;
     let dateNow = Date.now();
     let borderDate = new Date(dateNow.valueOf() - milisecondsToKeepData);
 
-    let updatedRecords = await TrackingInfo.update({
+    await TrackingInfo.update({
       createdAt: {
         '<': borderDate.valueOf()
       },
       server: server.id
     }, {
       inventory: null
-    }).fetch();
+    });
 
     let dateEnded = new Date();
-    sails.log.verbose(`Deleted inventory data for server ${server.name} - deleted ${updatedRecords.length} rows - took ${dateEnded.valueOf() - dateNow.valueOf()} ms`);
+    sails.log.verbose(`Deleted inventory data for server ${server.name} - took ${dateEnded.valueOf() - dateNow.valueOf()} ms`);
 
   } catch (error) {
-    sails.log.error(error)
+    sails.log.error(error);
   }
 }
