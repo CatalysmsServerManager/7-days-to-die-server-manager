@@ -29,7 +29,7 @@ process.chdir(__dirname);
 // Attempt to import `sails` dependency, as well as `rc` (for loading `.sailsrc` files).
 var sails;
 var rc;
-try{
+try {
   require('dotenv').config();
   sails = require('sails');
   rc = require('sails/accessible/rc');
@@ -48,6 +48,20 @@ try{
 
 process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+});
+
+process.on('SIGINT', function () {
+
+  sails.lower(
+    function (err) {
+      if (err) {
+        sails.log.error("Error occurred lowering Sails app: ", err);
+      }
+      sails.log.info("Sails app lowered successfully!");
+      return process.exit(err ? 1 : 0);
+    }
+  );
+
 });
 
 
