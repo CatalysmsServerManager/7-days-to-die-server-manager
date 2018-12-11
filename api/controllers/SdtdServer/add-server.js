@@ -119,12 +119,13 @@ module.exports = {
       await sails.helpers.sdtd.loadAllPlayerData(addedServer.id);
       errorResponse.server = addedServer;
 
-      await Role.create({
+      // Create some default roles
+      let adminRole = await Role.create({
         server: addedServer.id,
         name: "Admin",
         level: "1",
         manageServer: true
-      });
+      }).fetch();
 
       await Role.create({
         server: addedServer.id,
@@ -156,9 +157,23 @@ module.exports = {
         amountOfTeleports: 2
       })
 
+      // Add server owner to admins group
+      let ownerPlayerProfile = await Player.findOne({
+        server: addedServer.id,
+        steamId: userProfile.steamId
+      });
+
+      if (ownerPlayerProfile) {
+        await Player.update({
+          id: ownerPlayerProfile.id
+        }, {
+          role: adminRole.id
+        });
+      }
+
       return exits.success(errorResponse);
     } else {
-      return exits.error()
+      return exits.error(errorResponse)
     }
   }
 
