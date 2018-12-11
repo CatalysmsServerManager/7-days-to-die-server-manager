@@ -36,7 +36,7 @@
     "sails-mysql": "^1.0.1",
     "sails-redis": "^1.0.0",
     "validator": "^10.9.0",
-    "winston": "^3.1.0"
+    "winston": "^2.4.3"
   },
   "scripts": {
     "start": "npm run build-docs && node app.js --prod",

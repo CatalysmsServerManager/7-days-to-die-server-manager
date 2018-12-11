@@ -24,25 +24,38 @@ const winston = require('winston');
 customLogger = new winston.Logger({
   transports: [
     new winston.transports.Console({
-      level: process.env.LOGLEVEL === "" ? 'info' : 'debug',
+      level: 'debug',
       colorize: true,
       timestamp: true,
       humanReadableUnhandledException: true
     }),
     new winston.transports.File({
-      level: process.env.LOGLEVEL === "" ? 'info' : 'debug',
-      name: 'csmm-log',
+      level: 'info',
+      name: 'infolog',
       timestamp: true,
       humanReadableUnhandledException: true,
-      filename: './logs/csmm.log',
+      filename: './logs/prod.log',
       tailable: true,
-      maxsize: 10000,
+      maxsize: 10000000,
       maxFiles: 3,
       json: false,
       colorize: true
     }),
+    new winston.transports.File({
+      level: 'debug',
+      name: 'debuglog',
+      timestamp: true,
+      humanReadableUnhandledException: true,
+      filename: './logs/debug.log',
+      tailable: true,
+      maxsize: 10000000,
+      maxFiles: 5,
+      json: false,
+      colorize: true
+    })
   ]
 });
+
 
 let useRedis = false;
 if (process.env.REDISSTRING !== "") {
