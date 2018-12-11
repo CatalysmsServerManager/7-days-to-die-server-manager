@@ -2,7 +2,9 @@
 
 <div class="container">
 
-  <div>Detected CPM version <%= cpmVersion %></div>
+  <div>Detected CPM version
+    <%= cpmVersion %>
+  </div>
   <br>
 
   <label for="input-settings-server-servername">Server name</label>
@@ -13,8 +15,14 @@
   <input type="text" class="form-control" id="input-settings-server-ip" value="<%= server.ip %>">
 
 
-  <label for="inputs-settings-server-webPort">Web port</label>
-  <input type="text" class="form-control" id="inputs-settings-server-webPort" value="<%= server.webPort %>">
+  <label for="input-settings-server-webPort">Web port</label>
+  <input type="text" class="form-control" id="input-settings-server-webPort" value="<%= server.webPort %>">
+
+  <label for="input-settings-server-authName">Authorization name</label>
+  <input type="text" class="form-control" id="input-settings-server-authName" value="">
+
+  <label for="input-settings-server-authToken">Authorization token</label>
+  <input type="text" class="form-control" id="input-settings-server-authToken" value="">
 
   <hr>
 
@@ -36,20 +44,49 @@
     $('#input-settings-server-update').click((event) => {
       event.preventDefault();
 
+      let ip = $("#input-settings-server-ip").val();
+      let webPort = $("#input-settings-server-webPort").val()
+      let serverName = $('#input-settings-server-servername').val();
+      let authName = $('#input-settings-server-authName').val()
+      let authToken = $('#input-settings-server-authToken').val();
+
+      if (!validator.isFQDN(ip) && !validator.isIP(ip)) {
+        return showErrorModal(`${ip} is not a valid IP or FQDN.`)
+      }
+
+      if (!validator.isPort(webPort)) {
+        return showErrorModal(`${webPort} is not a valid port.`)
+      }
+
+      if (validator.isEmpty(authName, {
+          ignore_whitespace: true
+        })) {
+        authName = undefined
+      }
+
+      if (validator.isEmpty(authToken, {
+          ignore_whitespace: true
+        })) {
+        authToken = undefined
+      }
+
       $.ajax({
         url: `/api/sdtdserver/updateconnectioninfo`,
         type: 'POST',
         data: {
           _csrf: window.SAILS_LOCALS._csrf,
           serverId: <%= server.id %>,
-          serverIp: $("#input-settings-server-ip").val(),
-          webPort: $("#inputs-settings-server-webPort").val(),
-          serverName: $('#input-settings-server-servername').val()
+          serverIp: ip,
+          webPort: webPort,
+          serverName: serverName,
+          authName: authName,
+          authToken: authToken
         },
         success: (data, status, xhr) => {
           location.reload();
         },
         error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
           showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         }
       });

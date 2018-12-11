@@ -16,30 +16,40 @@ module.exports = {
     },
     serverIp: {
       type: 'string',
+      minLength: 2,
+      maxLength: 100
     },
 
     webPort: {
       type: 'number',
+      min: 50,
+      max: 100000
     },
 
     authName: {
       type: 'string',
+      minLength: 2,
+      maxLength: 200,
     },
 
     authToken: {
       type: 'string',
+      minLength: 10,
+      maxLength: 200,
     },
     serverName: {
-      type: 'string'
+      type: 'string',
+      minLength: 6,
+      maxLength: 200,
     }
   },
 
 
   exits: {
 
-    notFound: {
+    badRequest: {
       description: 'Server with given ID not found in the system',
-      responseType: 'notFound'
+      responseType: 'badRequest'
     },
     success: {}
 
@@ -61,26 +71,36 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     try {
-      
+
       let server = await SdtdServer.findOne(inputs.serverId);
-      
-      let ip = ('' == inputs.serverIp) ? server.ip : inputs.serverIp;
-      let webPort = ('' == inputs.webPort) ? server.webPort : inputs.webPort;
-      let serverName = ('' == inputs.serverName) ? server.name : inputs.serverName;
-      
+
+      if (_.isUndefined(server)) {
+        return exits.badRequest(`Unknown server ID`);
+      }
+
+      let updateObject = {
+        ip: _.isUndefined(inputs.serverIp) ? undefined : inputs.serverIp,
+        webPort: _.isUndefined(inputs.webPort) ? undefined : inputs.webPort,
+        authName: _.isUndefined(inputs.authName) ? undefined : inputs.authName,
+        authToken: _.isUndefined(inputs.authToken) ? undefined : inputs.authToken,
+        name: _.isUndefined(inputs.serverName) ? undefined : inputs.serverName,
+      };
+
       await SdtdServer.update({
         id: inputs.serverId
-      }, {
-        ip: ip,
-        webPort: webPort,
-        name: serverName
-      });
-      
-      if (inputs.webPort || inputs.serverIp) {
-        await sails.hooks.sdtdlogs.stop(inputs.serverId);
-        await sails.hooks.sdtdlogs.start(inputs.serverId);
-      }
-      sails.log.info(`API - SdtdServer:update-connection-info - Updated connection info for server ${inputs.serverId}`, inputs);
+      }, updateObject);
+
+      let loggingObject = sails.hooks.sdtdlogs.getLoggingObject(inputs.serverId);
+
+      loggingObject.ip = _.isUndefined(inputs.serverIp) ? loggingObject.ip : inputs.serverIp;
+      loggingObject.port = _.isUndefined(inputs.webPort) ? loggingObject.port : inputs.webPort;
+      loggingObject.adminUser = _.isUndefined(inputs.authName) ? loggingObject.adminUser : inputs.authName;
+      loggingObject.adminToken = _.isUndefined(inputs.authToken) ? loggingObject.adminToken : inputs.authToken;
+
+      // Make sure we are on the correct log line.
+      loggingObject._getLatestLogLine();
+
+      sails.log.info(`API - SdtdServer:update-connection-info - Updated connection info for server ${inputs.serverId}`, _.omit(inputs, ["authName", "authToken"]));
       return exits.success();
     } catch (error) {
       sails.log.error(`API - SdtdServer:update-connection-info - ${error}`);
