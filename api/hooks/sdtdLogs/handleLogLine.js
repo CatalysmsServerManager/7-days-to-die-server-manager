@@ -73,8 +73,9 @@ module.exports = (logLine) => {
       messageText: splitMessage.slice(8).join(' ').replace(": ", "")
     };
 
-    if (data.steamId === "-non-player-" && data.playerName !== 'Server') {
-      sails.log.debug(`Discarding duplicate chat message`, data);
+    // Filter out chatmessages that have been handled by some API mod already
+    if ((data.steamId === "-non-player-" && data.playerName !== 'Server') || data.entityId === "-1") {
+      sails.log.debug(`Discarding chat message because it's not from a player`, data);
       return;
     }
 
