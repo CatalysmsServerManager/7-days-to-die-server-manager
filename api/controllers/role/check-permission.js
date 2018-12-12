@@ -12,6 +12,7 @@ module.exports = {
     permissionField: {
       type: 'string',
       required: true,
+      isIn: ["manageServer", "manageEconomy", "managePlayers", "manageTickets", "viewAnalytics", "viewDashboard", "useTracking", "useChat", "useCommands", "manageGbl", "discordExec", "discordLookup"]
     },
 
     serverId: {
@@ -59,7 +60,7 @@ module.exports = {
 
     let permCheck = await sails.helpers.roles.checkPermission.with(options);
 
-    return exits.success(permCheck.hasPermission)
+    return exits.success(permCheck.hasPermission);
 
   }
 

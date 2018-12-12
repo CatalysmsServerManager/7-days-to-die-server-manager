@@ -1,5 +1,6 @@
 const expect = require("chai").expect;
 const faker = require('faker');
+const permissionFields = ["manageServer", "manageEconomy", "managePlayers", "manageTickets", "viewAnalytics", "viewDashboard", "useTracking", "useChat", "useCommands", "manageGbl", "discordExec", "discordLookup"];
 
 let testRoles = [];
 let testPlayers = [];
@@ -11,14 +12,14 @@ describe('HELPER roles/check-permission', () => {
     // Create some default roles
     let createdRole = await Role.create({
       server: sails.testServer.id,
-      name: "test-Admin",
+      name: "Admin",
       level: "1",
       manageServer: true
     }).fetch();
     testRoles.push(createdRole);
     createdRole = await Role.create({
       server: sails.testServer.id,
-      name: "test-Moderator",
+      name: "Moderator",
       level: "10",
       manageEconomy: true,
       managePlayers: true,
@@ -34,7 +35,7 @@ describe('HELPER roles/check-permission', () => {
 
     createdRole = await Role.create({
       server: sails.testServer.id,
-      name: "test-Donator",
+      name: "Donator",
       level: "1000",
       economyGiveMultiplier: 1.25,
       amountOfTeleports: 5
@@ -43,19 +44,12 @@ describe('HELPER roles/check-permission', () => {
 
     createdRole = await Role.create({
       server: sails.testServer.id,
-      name: "test-Player",
+      name: "Player",
       level: "2000",
       amountOfTeleports: 2
     }).fetch();
     testRoles.push(createdRole);
 
-
-    for (let index = 0; index < 50; index++) {
-
-      testPlayers.push(mockPlayer({}));
-    }
-
-    await Promise.all(testPlayers);
     await Promise.all(testRoles);
     return;
 
@@ -82,18 +76,98 @@ describe('HELPER roles/check-permission', () => {
     expect(result.role).to.be.an('object');
     return;
   });
+
+  it(`Correctly checks if a user has the correct permission for the player role via user ID`, async function () {
+    let playerRole = testRoles.filter(r => r.name === "Player")[0];
+    let player = await mockPlayer({
+      roleId: playerRole.id
+    });
+    let promises = permissionFields.map(async function (field) {
+
+      let result = await sails.helpers.roles.checkPermission.with({
+        userId: player.user,
+        serverId: sails.testServer.id,
+        permission: field
+      });
+
+      return expect(result.hasPermission).to.be.eq(false);
+    });
+    return Promise.all(promises);
+  });
+
+  it(`Correctly checks if a user has the correct permission for the admin role via user ID`, async function () {
+    let playerRole = testRoles.filter(r => r.name === "Admin")[0];
+    let player = await mockPlayer({
+      roleId: playerRole.id
+    });
+    let promises = permissionFields.map(async function (field) {
+
+      let result = await sails.helpers.roles.checkPermission.with({
+        userId: player.user,
+        serverId: sails.testServer.id,
+        permission: field
+      });
+      return expect(result.hasPermission).to.be.eq(true);
+    });
+    return Promise.all(promises);
+  });
+  it(`Correctly checks if a user has the correct permission for the player role via player ID`, async function () {
+    let playerRole = testRoles.filter(r => r.name === "Player")[0];
+    let player = await mockPlayer({
+      roleId: playerRole.id
+    });
+    let promises = permissionFields.map(async function (field) {
+
+      let result = await sails.helpers.roles.checkPermission.with({
+        playerId: player.id,
+        permission: field
+      });
+
+      return expect(result.hasPermission).to.be.eq(false);
+    });
+    return Promise.all(promises);
+  });
+
+  it(`Correctly checks if a user has the correct permission for the admin role via user ID`, async function () {
+    let playerRole = testRoles.filter(r => r.name === "Admin")[0];
+    let player = await mockPlayer({
+      roleId: playerRole.id
+    });
+    let promises = permissionFields.map(async function (field) {
+
+      let result = await sails.helpers.roles.checkPermission.with({
+        playerId: player.id,
+        permission: field
+      });
+
+      return expect(result.hasPermission).to.be.eq(true);
+    });
+    return Promise.all(promises);
+  });
 });
 
 async function mockPlayer({
+  roleId,
   steamId,
+  userId,
   serverId,
-  userId
 }) {
+  if (!roleId) {
+    throw new Error("Required parameter missing")
+  }
+
+  let createdUser = await User.create({
+    steamId: faker.random.uuid(),
+    username: faker.internet.userName()
+  }).fetch();
+
   let createdPlayer = await Player.create({
-    steamId: steamId ? steamId : faker.random.number(),
+    steamId: steamId ? steamId : createdUser.steamId,
     name: faker.internet.userName(),
     server: serverId ? serverId : sails.testServer.id,
-    user: userId ? userId : sails.testUser.id
+    user: userId ? userId : createdUser.id,
+    role: roleId,
   }).fetch();
+  testPlayers.push(createdPlayer);
   return createdPlayer;
 }
