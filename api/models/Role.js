@@ -23,6 +23,12 @@ module.exports = {
       defaultsTo: 2000
     },
 
+    // if true, csmm will use this role for any permission check where role is not explicitly set.
+    isDefault: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
     amountOfTeleports: {
       type: 'number',
       defaultsTo: 5
