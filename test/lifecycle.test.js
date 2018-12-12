@@ -1,4 +1,6 @@
 var sails = require('sails');
+const faker = require('faker');
+
 process.env.IS_TEST = true;
 // Before running any tests...
 before(function (done) {
@@ -13,7 +15,7 @@ before(function (done) {
     hooks: {
       grunt: false
     },
-   // log: { level: 'warn' },
+    log: { level: 'warn' },
     security: {
       csrf: false
     },
@@ -33,22 +35,30 @@ before(function (done) {
     }
 
     let testUser = await User.create({
-      steamId: 'fake_id',
-      username: 'test_user'
+      steamId: faker.random.number(0),
+      username: faker.internet.userName()
     }).fetch();
 
     let testServer = await SdtdServer.create({
-      name: 'test server',
+      name: faker.company.companyName(),
       ip: 'localhost',
       webPort: '8082',
-      authName: 'test_authName',
-      authToken: 'test_authToken',
+      authName: faker.random.alphaNumeric(20),
+      authToken: faker.random.alphaNumeric(20),
       owner: testUser.id
+    }).fetch();
+
+    let testPlayer = await Player.create({
+      steamId: testUser.steamId,
+      server: testServer.id,
+      user: testUser.id,
+      name: faker.internet.userName(),
     }).fetch();
 
 
     sails.testUser = testUser;
     sails.testServer = testServer;
+    sails.testPlayer = testPlayer;
 
     return done();
   });

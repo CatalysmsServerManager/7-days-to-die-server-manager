@@ -15,7 +15,6 @@ module.exports = {
 
     serverId: {
       type: 'number',
-      required: true
     },
 
     playerId: {
@@ -60,16 +59,17 @@ module.exports = {
 
 
     if (inputs.playerId) {
-
       try {
         await sails.helpers.discord.setRoleFromDiscord(inputs.playerId);
       } catch (error) {
         sails.log.debug(`Couldn't update players roles via discord - ${error}`)
       }
     }
+
     if (inputs.userId && inputs.serverId) {
       role = await sails.helpers.roles.getUserRole(inputs.userId, inputs.serverId);
     }
+
     if (inputs.playerId) {
       role = await sails.helpers.sdtd.getPlayerRole(inputs.playerId);
     }

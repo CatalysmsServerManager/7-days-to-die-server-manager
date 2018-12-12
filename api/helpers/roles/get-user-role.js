@@ -12,18 +12,18 @@ module.exports = {
     userId: {
       required: true,
       type: 'number',
-      custom: async (valueToCheck) => {
+      custom: async function (valueToCheck) {
         let foundUser = await User.findOne(valueToCheck);
-        return foundUser
+        return foundUser;
       },
     },
 
     serverId: {
       required: true,
       type: 'number',
-      custom: async (valueToCheck) => {
+      custom: async function (valueToCheck) {
         let foundServer = await SdtdServer.findOne(valueToCheck);
-        return foundServer
+        return foundServer;
       },
     },
 
@@ -41,14 +41,12 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     let foundUser = await User.findOne(inputs.userId);
-
     let foundPlayer = await Player.findOne({
       where: {
         steamId: foundUser.steamId,
         server: inputs.serverId
       }
     });
-
     let foundRole;
 
     if (!_.isUndefined(foundPlayer)) {
@@ -56,12 +54,6 @@ module.exports = {
         foundRole = await Role.findOne(foundPlayer.role);
       }
     }
-
-    if (_.isUndefined(foundRole)) {
-      return exits.success(undefined);
-    }
-
-    //sails.log.verbose(`Found role ${foundRole.name} for user ${foundUser.username}`)
     return exits.success(foundRole);
 
   }
