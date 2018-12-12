@@ -1,5 +1,5 @@
 var sails = require('sails');
-
+process.env.IS_TEST = true;
 // Before running any tests...
 before(function (done) {
 
@@ -13,7 +13,7 @@ before(function (done) {
     hooks: {
       grunt: false
     },
-    log: { level: 'warn' },
+   // log: { level: 'warn' },
     security: {
       csrf: false
     },
