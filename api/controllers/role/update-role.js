@@ -27,6 +27,10 @@ module.exports = {
       min: 0
     },
 
+    isDefault: {
+      type: 'boolean',
+    },
+
     discordRole: {
       type: 'string'
     },
@@ -103,6 +107,20 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
+
+    const role = await Role.findOne(inputs.roleId).populate('server');
+    const server = role.server;
+
+    // If another role is currently set as default, we must set that one to false.
+    // There can only be one default role per server.
+    if (inputs.isDefault) {
+      await Role.update({
+        server: server.id,
+        isDefault: true
+      }, {
+        isDefault: false,
+      });
+    }
 
     let updateObj = {
       name: inputs.name,
