@@ -1,44 +1,22 @@
-const expect = require("chai").expect;
+const chai = require('chai');
+const expect = chai.expect;
 const faker = require('faker');
 const permissionFields = ["manageServer", "manageEconomy", "managePlayers", "manageTickets", "viewAnalytics", "viewDashboard", "useTracking", "useChat", "useCommands", "manageGbl", "discordExec", "discordLookup"];
 
-let testRoles = [];
-let testPlayers = [];
+const testRoles = [];
+const testPlayers = [];
 
+chai.config.truncateThreshold = 0;
 
 
 describe('HELPER roles/check-permission', () => {
-  before(async function () {
+  beforeEach(async function () {
     // Create some default roles
     let createdRole = await Role.create({
       server: sails.testServer.id,
       name: "Admin",
       level: "1",
       manageServer: true
-    }).fetch();
-    testRoles.push(createdRole);
-    createdRole = await Role.create({
-      server: sails.testServer.id,
-      name: "Moderator",
-      level: "10",
-      manageEconomy: true,
-      managePlayers: true,
-      manageTickets: true,
-      viewAnalytics: true,
-      viewDashboard: true,
-      useTracking: true,
-      useChat: true,
-      manageGbl: true,
-      discordLookup: true
-    }).fetch();
-    testRoles.push(createdRole);
-
-    createdRole = await Role.create({
-      server: sails.testServer.id,
-      name: "Donator",
-      level: "1000",
-      economyGiveMultiplier: 1.25,
-      amountOfTeleports: 5
     }).fetch();
     testRoles.push(createdRole);
 
@@ -50,12 +28,20 @@ describe('HELPER roles/check-permission', () => {
     }).fetch();
     testRoles.push(createdRole);
 
+    createdRole = await Role.create({
+      server: sails.testServer.id,
+      name: "Default",
+      level: "5000",
+      isDefault: true
+    }).fetch();
+    testRoles.push(createdRole);
+
     await Promise.all(testRoles);
     return;
 
   });
 
-  after(async function () {
+  afterEach(async function () {
 
     await Player.destroy({
       id: testPlayers.map(p => p.id)
@@ -63,6 +49,8 @@ describe('HELPER roles/check-permission', () => {
     await Role.destroy({
       id: testRoles.map(r => r.id)
     });
+    testPlayers.length = 0;
+    testRoles.length = 0;
   });
 
   it('Returns an object with attributes "hasPermission" and "role"', async function () {
@@ -119,6 +107,7 @@ describe('HELPER roles/check-permission', () => {
     let promises = permissionFields.map(async function (field) {
 
       let result = await sails.helpers.roles.checkPermission.with({
+        serverId: sails.testServer.id,
         playerId: player.id,
         permission: field
       });
@@ -136,6 +125,7 @@ describe('HELPER roles/check-permission', () => {
     let promises = permissionFields.map(async function (field) {
 
       let result = await sails.helpers.roles.checkPermission.with({
+        serverId: sails.testServer.id,
         playerId: player.id,
         permission: field
       });
@@ -143,6 +133,40 @@ describe('HELPER roles/check-permission', () => {
       return expect(result.hasPermission).to.be.eq(true);
     });
     return Promise.all(promises);
+  });
+
+  it(`Defaults to the highest level role if no default is set`, async function () {
+    const player = await mockPlayer({});
+    const defaultRole = testRoles.filter(r => r.name === "Default")[0];
+    await Role.destroy({id: defaultRole.id});
+    const highestLevelRole = await Role.find({
+      where: {
+        server: sails.testServer.id,
+      },
+      sort: 'level DESC',
+      limit: 1
+    });
+    const result = await sails.helpers.roles.checkPermission.with({
+      serverId: sails.testServer.id,
+      playerId: player.id,
+      permission: "manageServer"
+    });
+
+    expect(result.role).to.deep.eq(highestLevelRole[0]);
+  });
+
+  it('Defaults to the default role if one is set', async function () {
+    const player = await mockPlayer({});
+    const defaultRole = testRoles.filter(r => r.name === "Default")[0];
+
+    const result = await sails.helpers.roles.checkPermission.with({
+      serverId: sails.testServer.id,
+      playerId: player.id,
+      permission: "manageServer"
+    });
+
+    expect(result.role).to.deep.eq(defaultRole);
+
   });
 });
 
@@ -152,10 +176,6 @@ async function mockPlayer({
   userId,
   serverId,
 }) {
-  if (!roleId) {
-    throw new Error("Required parameter missing")
-  }
-
   let createdUser = await User.create({
     steamId: faker.random.uuid(),
     username: faker.internet.userName()

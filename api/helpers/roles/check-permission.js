@@ -15,6 +15,7 @@ module.exports = {
 
     serverId: {
       type: 'number',
+      required: true
     },
 
     playerId: {
