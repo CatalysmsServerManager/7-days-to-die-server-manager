@@ -153,3 +153,4 @@ config/datastores.js
 test/output/*
 .env
 .nyc_output/*
+coverage/*

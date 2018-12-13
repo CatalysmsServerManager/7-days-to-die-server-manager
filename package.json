@@ -40,15 +40,16 @@
   },
   "scripts": {
     "start": "npm run build-docs && node app.js --prod",
-    "test": "./node_modules/.bin/nyc --reporter=html --report-dir=./test/output/coverage mocha test/lifecycle.test.js ./test/**/*.test.js --reporter mochawesome --reporter-options reportDir=./test/output/mochawesome --exit",
+    "test": "node node_modules/mocha/bin/_mocha --reporter mochawesome --reporter-options reportDir=./test/output/mochawesome --exit",
     "build-docs": "./node_modules/.bin/jsdoc -c ./.jsdoc.json",
     "dev": "nodemon",
-    "debug": "node debug app.js"
+    "debug": "node debug app.js",
+    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec --exit"
   },
   "main": "app.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/niek/bill-sails.git"
+    "url": "git://github.com/CatalysmsServerManager/7-days-to-die-server-manager.git"
   },
   "author": "Catalysm",
   "license": "",
@@ -58,12 +59,14 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
+    "coveralls": "^3.0.2",
     "faker": "^4.1.0",
     "grunt-bower-task": "^0.5.0",
+    "istanbul": "^0.4.5",
     "mocha": "^5.2.0",
     "mocha-junit-reporter": "^1.18.0",
+    "mocha-lcov-reporter": "^1.3.0",
     "mochawesome": "^3.1.1",
-    "nyc": "^13.1.0",
     "supertest": "^3.3.0"
   }
 }
