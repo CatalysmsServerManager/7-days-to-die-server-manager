@@ -14,7 +14,7 @@ module.exports = {
       type: 'number',
       custom: async (valueToCheck) => {
         let foundRole = await Role.findOne(valueToCheck);
-        return foundRole
+        return foundRole;
       },
     },
 
@@ -140,7 +140,8 @@ module.exports = {
       manageTickets: inputs.manageTickets,
       manageGbl: inputs.manageGbl,
       discordExec: inputs.discordExec,
-      discordLookup: inputs.discordLookup
+      discordLookup: inputs.discordLookup,
+      isDefault: inputs.isDefault,
     };
 
     let updatedRole = await Role.update({
@@ -149,7 +150,7 @@ module.exports = {
 
     sails.log.info(`Updated a role for server ${updatedRole[0].server}`, updatedRole[0])
 
-    return exits.success(updatedRole);
+    return exits.success(updatedRole[0]);
 
   }
 

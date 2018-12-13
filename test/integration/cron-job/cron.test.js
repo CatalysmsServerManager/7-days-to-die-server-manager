@@ -1,8 +1,6 @@
 var supertest = require('supertest');
 var expect = require("chai").expect;
 
-
-
 describe('POST /api/sdtdserver/cron', function () {
 
   it('should return 200 with valid info', function (done) {
