@@ -1,4 +1,4 @@
-[![Coverage Status](https://coveralls.io/repos/github/CatalysmsServerManager/7-days-to-die-server-manager/badge.svg?branch=master)](https://coveralls.io/github/CatalysmsServerManager/7-days-to-die-server-manager?branch=master)
+[![codecov](https://codecov.io/gh/CatalysmsServerManager/7-days-to-die-server-manager/branch/master/graph/badge.svg)](https://codecov.io/gh/CatalysmsServerManager/7-days-to-die-server-manager)
 [![Build Status](https://travis-ci.org/CatalysmsServerManager/7-Days-to-Die-API-wrapper.svg?branch=master)](https://travis-ci.org/CatalysmsServerManager/7-Days-to-Die-API-wrapper)
 
 # 7DTD Server manager 
