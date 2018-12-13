@@ -42,7 +42,7 @@ module.exports = {
     }
 
     if (_.isUndefined(foundRole)) {
-      foundRole = await sails.helpers.roles.getDefaultRole(inputs.serverId);
+      foundRole = await sails.helpers.roles.getDefaultRole(player.server);
     }
 
     //sails.log.verbose(`Found role ${foundRole.name} for player ${player.name}`)
