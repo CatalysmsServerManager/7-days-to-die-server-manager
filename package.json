@@ -1,6 +1,5 @@
 {
   "name": "Catalysm-server-manager",
-  "private": true,
   "version": "0.7.0",
   "description": "A 7dtd server manager made with Sails.js",
   "keywords": [],
@@ -40,7 +39,7 @@
   },
   "scripts": {
     "start": "npm run build-docs && node app.js --prod",
-    "test": "nyc node_modules/mocha/bin/_mocha --reporter mochawesome --reporter-options reportDir=./test/output/mochawesome --exit",
+    "test": "nyc --report-dir ./coverage node_modules/mocha/bin/_mocha --reporter mochawesome --reporter-options reportDir=./test/output/mochawesome --exit",
     "build-docs": "./node_modules/.bin/jsdoc -c ./.jsdoc.json",
     "dev": "nodemon",
     "debug": "node debug app.js",
@@ -68,5 +67,14 @@
     "mochawesome": "^3.1.1",
     "nyc": "^13.1.0",
     "supertest": "^3.3.0"
+  },
+  "nyc": {
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ],
+    "cache": true,
+    "all": true,
+    "report-dir": "./coverage"
   }
 }
