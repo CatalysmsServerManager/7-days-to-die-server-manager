@@ -6,6 +6,23 @@ const permissionFields = ["manageServer", "manageEconomy", "managePlayers", "man
 const testRoles = [];
 const testPlayers = [];
 
+const OtherServerRoles = [{
+    server: 65489654,
+    name: "Player",
+    level: "2000"
+  },
+  {
+    server: 65489654,
+    name: "Player",
+    level: "1000"
+  },
+  {
+    server: 65489654,
+    name: "Admin",
+    level: "0"
+  }
+];
+
 chai.config.truncateThreshold = 0;
 
 
@@ -138,7 +155,9 @@ describe('HELPER roles/check-permission', () => {
   it(`Defaults to the highest level role if no default is set`, async function () {
     const player = await mockPlayer({});
     const defaultRole = testRoles.filter(r => r.name === "Default")[0];
-    await Role.destroy({id: defaultRole.id});
+    await Role.destroy({
+      id: defaultRole.id
+    });
     const highestLevelRole = await Role.find({
       where: {
         server: sails.testServer.id,
@@ -167,6 +186,31 @@ describe('HELPER roles/check-permission', () => {
 
     expect(result.role).to.deep.eq(defaultRole);
 
+  });
+
+  it('Returns false when a player with a role on another server tries to access', async function () {
+    let otherRoles = OtherServerRoles.map(role => Role.create(role).fetch());
+    otherRoles = await Promise.all(otherRoles);
+    let checks = otherRoles.map(async function (role) {
+      await role;
+      sails.log.warn(role);
+      testRoles.push(role);
+      const player = await mockPlayer({
+        roleId: role.id,
+        serverId: role.server
+      });
+      return Promise.all(permissionFields.map(async permissionField => {
+
+        const result = await sails.helpers.roles.checkPermission.with({
+          serverId: sails.testServer.id,
+          playerId: player.id,
+          permission: permissionField
+        });
+        expect(result.hasPermission).to.deep.eq(false);
+      }));
+    });
+
+    return Promise.all(checks);
   });
 });
 
