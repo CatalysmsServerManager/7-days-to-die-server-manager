@@ -193,7 +193,6 @@ describe('HELPER roles/check-permission', () => {
     otherRoles = await Promise.all(otherRoles);
     let checks = otherRoles.map(async function (role) {
       await role;
-      sails.log.warn(role);
       testRoles.push(role);
       const player = await mockPlayer({
         roleId: role.id,

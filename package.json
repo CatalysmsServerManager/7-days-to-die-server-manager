@@ -73,6 +73,11 @@
       "lcov",
       "text-summary"
     ],
+    "exclude": [
+      "assets/dependencies/**/*",
+      "tasks/**/*",
+      "confg/**/*"
+    ],
     "cache": true,
     "all": true,
     "report-dir": "./coverage"
