@@ -314,6 +314,7 @@ module.exports.routes = {
   'post /api/sdtdserver/commands/custom/level': 'CustomCommandController/update-level',
   'post /api/sdtdserver/commands/custom/output': 'CustomCommandController/update-output',
   'post /api/sdtdserver/commands/custom/timeout': 'CustomCommandController/update-timeout',
+  'post /api/sdtdserver/commands/custom/description': 'CustomCommandController/update-description',
   'post /api/sdtdserver/commands/custom/argument' : "CustomCommandController/create-argument",
   'delete /api/sdtdserver/commands/custom/argument' : "CustomCommandController/delete-argument",
   'patch /api/sdtdserver/commands/custom/argument' : "CustomCommandController/edit-argument",

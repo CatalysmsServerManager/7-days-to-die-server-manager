@@ -1,7 +1,7 @@
 module.exports = {
 
 
-  friendlyName: 'Update Timeout',
+  friendlyName: 'Update output',
 
 
   description: '',
