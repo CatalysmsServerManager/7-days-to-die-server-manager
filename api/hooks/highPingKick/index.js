@@ -141,34 +141,18 @@ async function kickPlayer(player, server, reason) {
 
 function getPlayerFails(playerId) {
   return new Promise(async (resolve, reject) => {
-
-    sails.getDatastore('cache').leaseConnection(function during(redisConnection, proceed) {
-      redisConnection.get(`player:${playerId}:failedPingChecks`, (err, reply) => {
-        if (err) return proceed(err);
-
-        return proceed(undefined, reply)
-      })
-    }).exec((err, result) => {
-      if (err) return reject(err);
-      resolve(parseInt(result));
-    })
-  })
+    sails.helpers.redis.get(`player:${playerId}:failedPingChecks`).then(failedChecks => {
+      if (!failedChecks) {
+        resolve(0);
+      } else {
+        resolve(parseInt(failedChecks));
+      }
+    }).catch(reject);
+  });
 }
 
 function setPlayerFails(playerId, failedChecks) {
   return new Promise(async (resolve, reject) => {
-
-    sails.getDatastore('cache').leaseConnection(function during(redisConnection, proceed) {
-      redisConnection.set(`player:${playerId}:failedPingChecks`, failedChecks, (err, reply) => {
-        if (err) return proceed(err);
-
-        return proceed(undefined, reply)
-      })
-    }).exec((err, result) => {
-      if (err) return reject(err);
-      resolve(result)
-    })
-
-
-  })
+    sails.helpers.redis.set(`player:${playerId}:failedPingChecks`, failedChecks).then(resolve).catch(reject);
+  });
 }
