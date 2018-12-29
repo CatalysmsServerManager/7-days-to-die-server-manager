@@ -15,7 +15,8 @@ module.exports = {
 
         newCost: {
             type: 'number',
-            min: 0
+            min: 0,
+            required: true
         },
 
     },

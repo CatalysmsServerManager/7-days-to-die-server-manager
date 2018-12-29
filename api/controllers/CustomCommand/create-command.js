@@ -70,7 +70,7 @@ module.exports = {
       });
 
       if (commandsWithSameName.length > 0) {
-        return exits.badName('Invalid name! Please choose another one.')
+        return exits.badName('Invalid name! Please choose another one.');
       }
 
 

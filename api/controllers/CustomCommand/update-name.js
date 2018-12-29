@@ -29,7 +29,6 @@ module.exports = {
 
 
     exits: {
-        success: {},
 
         badName: {
             responseType: 'badRequest'
@@ -59,7 +58,7 @@ module.exports = {
                 id: inputs.commandId,
             }, {
                 name: inputs.newName
-            })
+            });
             return exits.success();
 
         } catch (error) {
