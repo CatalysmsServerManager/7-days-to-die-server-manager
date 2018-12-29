@@ -15,6 +15,7 @@ module.exports = {
 
     newOutput: {
       type: 'boolean',
+      required: true
     },
 
   },
