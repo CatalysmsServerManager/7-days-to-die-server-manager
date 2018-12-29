@@ -41,6 +41,14 @@
         </div>
 
         <div class="form-group">
+          <label for="custom-command-<%= command.id %>-modal-edit-description">Description</label>
+          <input type="text" class="form-control" name="custom-command-<%= command.id %>-modal-edit-description" id="custom-command-<%= command.id %>-modal-edit-description"
+            aria-describedby="custom-command-<%= command.id %>-modal-edit-description-help" value="<%= command.description %>">
+          <small id="custom-command-<%= command.id %>-modal-edit-description-help" class="form-text text-muted"> What
+            is shown to players when they use the help command </small>
+        </div>
+
+        <div class="form-group">
           <label for="custom-command-<%= command.id %>-modal-edit-cost">Cost to execute</label>
           <input type="text" class="form-control" name="custom-command-<%= command.id %>-modal-edit-cost" id="custom-command-<%= command.id %>-modal-edit-cost"
             aria-describedby="custom-command-<%= command.id %>-modal-edit-cost-help" value="<%= command.costToExecute %>">
@@ -233,7 +241,7 @@
       let newEnabled = $('#custom-command-<%= command.id %>-modal-edit-enabled').prop('checked');
       let newOutput = $('#custom-command-<%= command.id %>-modal-edit-output').prop('checked');
       let newLevel = $("#custom-command-<%= command.id %>-modal-edit-role-level").val();
-
+      let newDescription = $("#custom-command-<%= command.id %>-modal-edit-description").val();
 
       $('#custom-command-<%= command.id %>-modal-edit-status').html(`<i class="fas fa-sync"></i> Saving`)
       let errored = false;
@@ -246,6 +254,28 @@
             _csrf: window.SAILS_LOCALS._csrf,
             commandId: currentConfig.id,
             newName: newName,
+            serverId: window.SAILS_LOCALS.server.id
+          },
+          success: (data, status, xhr) => {
+            console.log(data)
+          },
+          error: function (xhr, status, error) {
+            errored = true;
+            displayAjaxToSupportData(xhr, this);
+            $('#custom-command-<%= command.id %>-modal-edit-status').text(
+              `${xhr.responseJSON.message ? xhr.responseJSON.message : xhr.responseJSON}`)
+          }
+        })
+      }
+
+      if (newDescription != currentConfig.description) {
+        $.ajax({
+          url: '/api/sdtdserver/commands/custom/description',
+          method: 'POST',
+          data: {
+            _csrf: window.SAILS_LOCALS._csrf,
+            commandId: currentConfig.id,
+            description: newDescription,
             serverId: window.SAILS_LOCALS.server.id
           },
           success: (data, status, xhr) => {

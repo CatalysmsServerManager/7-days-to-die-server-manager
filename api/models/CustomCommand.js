@@ -18,6 +18,7 @@ module.exports = {
 
       description: {
         type: 'string',
+        defaultsTo: "No information given"
       },
 
       // Separated by ";"
