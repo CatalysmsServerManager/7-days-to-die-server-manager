@@ -52,14 +52,14 @@ module.exports = {
         player = updatedPlayer[0];
         player.static = false;
       } else {
-        player.static = true
+        player.static = true;
       }
 
 
       const hhmmss = require('@streammedev/hhmmss')
       Object.defineProperty(player, 'playtimeHHMMSS', {
         value: hhmmss(player.playtime)
-      })
+      });
 
       let bans = await BanEntry.find({
         steamId: player.steamId

@@ -1,3 +1,5 @@
+const hhmmss = require('@streammedev/hhmmss');
+
 module.exports = {
 
 
@@ -40,6 +42,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
+    const defaultRole = await sails.helpers.roles.getDefaultRole(inputs.serverId);
     
     let server = await SdtdServer.findOne(inputs.serverId);
 
@@ -53,14 +56,20 @@ module.exports = {
       return exits.notAuthorized({
         role: permCheck.role,
         requiredPerm: 'managePlayers'
-      })
+      });
     }
 
     try {
       let players = await Player.find({server: server.id}).populate('role');
 
       players.map(player => {
-        const hhmmss = require('@streammedev/hhmmss')
+
+        if (!player.role) {
+          player.role = defaultRole;
+        }
+
+        // Convert playtime to human readable format
+
         let newPlaytime = hhmmss(player.playtime);
         player.playtimeHHMMSS = newPlaytime;
         return player;

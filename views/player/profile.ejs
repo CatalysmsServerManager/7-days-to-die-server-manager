@@ -73,6 +73,9 @@
                   </div>
 
                   <button type="button" id="set-role-btn" class="btn btn-primary">Set</button>
+                  <small>Note that if a player does not explicitly have a role set, CSMM will use the default role (or
+                    the highest level role) for every permission check. When a player does not need any special
+                    privileges, it is better to not assign a role and let the system use the default role.</small>
 
                 </div>
               </div>
@@ -425,6 +428,7 @@
       }, roles => {
         $("#player-role-select").empty();
         roles = _.sortBy(roles, ["level"]);
+        const defaultRole = roles.filter(r => r.isDefault)[0];
         let playerHasRole = false;
         for (const role of roles) {
           let content
@@ -439,9 +443,9 @@
         }
 
         if (!playerHasRole) {
-          $("#player-role-select").append("<option selected>None</option>");
+          $("#player-role-select").append("<option selected>None assigned</option>");
         } else {
-          $("#player-role-select").append("<option>None</option>");
+          $("#player-role-select").append("<option>None assigned</option>");
         }
       })
 
