@@ -16,6 +16,9 @@ class LoggingObject extends EventEmitter {
     this.intervalTime = intervalTime;
     this.requestInterval;
     this.failed = false;
+    // Keep track of how many times we receive an empty response.
+    // If we get too many empty responses, we force a recheck of lastLogLine 
+    this.emptyResponses = 0;
     this.lastLogLine;
     // Keeps track of wheter a request is happening already. This is to block the interval from queueing massive amounts of requests.
     this.handlingRequest = false;
@@ -114,10 +117,22 @@ class LoggingObject extends EventEmitter {
       sails.log.debug(`SdtdLogs - DEBUG MESSAGE - found ${newLogs.entries.length} new logs for server ${this.server.id}. Latest line: ${this.lastLogLine} First line ${newLogs.entries[0].time}, last line ${newLogs.entries[newLogs.entries.length - 1].time}`);
     }
 
+    if (newLogs.entries.length === 0) {
+      this.emptyResponses++;
+
+      if (this.emptyResponses > 5) {
+        this._getLatestLogLine();
+        if (this.debug) {
+          sails.log.debug(`SdtdLogs - DEBUG MESSAGE - server ${this.server.id} --- Too many empty responses received, rechecking log line #. Current lastLogLine: ${this.lastLogLine}`);
+        }
+        this.emptyResponses = 0;
+      }
+    }
+
     _.each(newLogs.entries, async line => {
       this.emit('logLine', line);
       if (this.debug) {
-        sails.log.verbose(`SdtdLogs - DEBUG MESSAGE - server ${this.server.id} --- ${line.msg}`)
+        sails.log.verbose(`SdtdLogs - DEBUG MESSAGE - server ${this.server.id} --- ${line.msg}`);
       }
 
       let parsedLogLine = handleLogLine(line);
@@ -139,11 +154,11 @@ class LoggingObject extends EventEmitter {
       let currentDate = Date.now();
       let lastMemUpdate = this.lastMemUpdate;
       if (currentDate < lastMemUpdate + 25000) {
-        
+
         if (this.debug) {
           sails.log.debug(`SdtdLogs - DEBUG MESSAGE - Detected memUpdate happening too soon for server ${this.server.id} - discarding event at ${line.date} ${line.time}`);
         }
-        
+
         return true;
       } else {
         this.lastMemUpdate = currentDate;
