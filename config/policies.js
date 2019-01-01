@@ -33,6 +33,7 @@ let policyObject = {
     'economy/*': ['isLoggedIn', 'roles/manageEconomy'],
     'historicalData/*': ['isLoggedIn', 'roles/viewAnalytics'],
     "view-tracking": ['isLoggedIn', 'roles/useTracking'],
+    "load-land-claims": ['isLoggedIn', 'roles/useTracking'],
     "execute-command": ['isLoggedIn', 'roles/useCommands'],
     "send-message": ['isLoggedIn', 'roles/useChat'],
     "get-players": ['isLoggedIn', 'roles/hasAccess'],
