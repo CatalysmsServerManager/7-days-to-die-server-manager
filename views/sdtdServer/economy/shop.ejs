@@ -257,7 +257,7 @@
                   <div class="form-group">
                     <label for="edit-<%= listing.id %>-name">Item name</label>
                     <input type="text" class="form-control" name="edit-<%= listing.id %>-name" id="edit-<%= listing.id %>-name"
-                      aria-describedby="edit-<%=listing.id%>-name-help" placeholder="<%= listing.name %>">
+                      aria-describedby="edit-<%=listing.id%>-name-help" value="<%= listing.name %>">
                     <small id="edit-<%=listing.id%>-name-help" class="form-text text-muted">The name of the ingame
                       item. Make sure this is spelled 100% correctly.</small>
                   </div>
@@ -265,7 +265,7 @@
                   <div class="form-group">
                     <label for="edit-<%= listing.id %>-friendlyName">Item friendly name</label>
                     <input type="text" class="form-control" name="edit-<%= listing.id %>-friendlyName" id="edit-<%= listing.id %>-friendlyName"
-                      aria-describedby="edit-<%=listing.id%>-friendlyName-help" placeholder="<%= listing.friendlyName %>">
+                      aria-describedby="edit-<%=listing.id%>-friendlyName-help" value="<%= listing.friendlyName %>">
                     <small id="edit-<%=listing.id%>-friendlyName-help" class="form-text text-muted">This will be shown
                       large to your players and should be used to differentiate the listings</small>
                   </div>
@@ -273,7 +273,7 @@
                   <div class="form-group">
                     <label for="edit-<%= listing.id %>-amount">Amount</label>
                     <input type="text" class="form-control" name="edit-<%= listing.id %>-amount" id="edit-<%= listing.id %>-amount"
-                      aria-describedby="edit-<%=listing.id%>-amount-help" placeholder="<%= listing.amount %>">
+                      aria-describedby="edit-<%=listing.id%>-amount-help" value="<%= listing.amount %>">
                     <small id="edit-<%=listing.id%>-amount-help" class="form-text text-muted">The amount of this item
                       that will be given to the player when this listing is bought.
                     </small>
@@ -282,7 +282,7 @@
                   <div class="form-group">
                     <label for="edit-<%= listing.id %>-quality">Quality</label>
                     <input type="text" class="form-control" name="edit-<%= listing.id %>-quality" id="edit-<%= listing.id %>-quality"
-                      aria-describedby="edit-<%=listing.id%>-quality-help" placeholder="<%= listing.quality %>">
+                      aria-describedby="edit-<%=listing.id%>-quality-help" value="<%= listing.quality %>">
                     <small id="edit-<%=listing.id%>-quality-help" class="form-text text-muted">Quality of the item. If
                       amount is larger than one, you cannot set this.
                     </small>
@@ -291,7 +291,7 @@
                   <div class="form-group">
                     <label for="edit-<%= listing.id %>-price">Price</label>
                     <input type="text" class="form-control" name="edit-<%= listing.id %>-price" id="edit-<%= listing.id %>-price"
-                      aria-describedby="edit-<%=listing.id%>-price-help" placeholder="<%= listing.price %>">
+                      aria-describedby="edit-<%=listing.id%>-price-help" value="<%= listing.price %>">
                     <small id="edit-<%=listing.id%>-price-help" class="form-text text-muted">How much players pay to
                       buy this listing</small>
                   </div>
