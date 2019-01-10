@@ -42,7 +42,7 @@ let policyObject = {
   gblController: {
     '*': 'isLoggedIn',
     'set-note': ["isLoggedIn"], // Permission check is handled inside the action
-    'delete-ban': ["IsLoggedIn", "roles/managePlayers"],
+    'delete-ban': ["IsLoggedIn", "roles/manageGbl"],
   },
 
   roleController: {
