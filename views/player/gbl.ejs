@@ -96,18 +96,41 @@
 
   <div id="ban-note">
 
-    <p id="ban-note-text" class="text-center lead">Center aligned text on all viewport sizes.</p>
+    <p id="ban-note-text" class="text-center lead"></p>
 
     <div class="text-center">
       <!-- Button trigger modal -->
       <button id="modal-set-note-btn" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal-set-note">
         Set message
       </button>
+      <button id="delete-ban" type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#modal-delete-ban">
+        Delete ban
+      </button>
     </div>
 
+    <!-- Delete ban Modal -->
+    <div class="modal fade" id="modal-delete-ban" tabindex="-1" role="dialog" aria-labelledby="modal-delete-ban"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="modal-delete-ban">Delete this ban?</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Are you sure?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+            <button type="button" class="btn btn-danger" id="modal-delete-ban-confirm">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-
-    <!-- Modal -->
+    <!-- Set note Modal -->
     <div class="modal fade" id="modal-set-note" tabindex="-1" role="dialog" aria-labelledby="modal-set-note"
       aria-hidden="true">
       <div class="modal-dialog" role="document">
@@ -273,9 +296,11 @@
 
       checkUserPermission(loggedInUserId, selectedBan.server.id, 'manageGbl').then(result => {
         if (result) {
-          $("#modal-set-note-btn").show()
+          $("#modal-set-note-btn").show();
+          $("#delete-ban").show();
         } else {
-          $("#modal-set-note-btn").hide()
+          $("#modal-set-note-btn").hide();
+          $("#delete-ban").hide();
         }
 
       })
@@ -288,6 +313,28 @@
     $("#modal-set-note").on('show.bs.modal', e => {
       $("#modal-set-note-input").val(selectedBan.note);
     });
+    
+
+    $("#modal-delete-ban-confirm").click(e => {
+      $.ajax({
+        url: "/api/gbl",
+        type: 'DELETE',
+        data: {
+          _csrf: csrfToken,
+          banId: selectedBan.id,
+          serverId: selectedBan.server,
+        },
+        success: (data, status, xhr) => {
+          window.location.reload();
+        },
+        error: function (xhr, status, error) {
+          $("#modal-delete-ban").modal('hide');
+          showErrorModal(`Error while processing an API request. ${xhr.responseText}`)
+          displayAjaxToSupportData(xhr, this);
+
+        }
+      })
+    })
 
     $("#modal-set-note-confirm").click(e => {
       let newNote = $("#modal-set-note-input").val();
@@ -323,8 +370,6 @@
 
         }
       })
-
-
     })
 
     // Toggle hearts listener
