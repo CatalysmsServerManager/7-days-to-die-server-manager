@@ -348,6 +348,8 @@ module.exports.routes = {
   // Player teleports 
 
   'get /api/sdtdserver/playerteleports': "player-teleport.get-teleports",
+  'post /api/teleport': 'player-teleport.edit-teleport',
+  'delete /api/teleport': 'player-teleport.delete-teleport',
 
   // MOTD
   'post /api/sdtdserver/togglemotd': 'SdtdServerController/motd.motd-toggle',
