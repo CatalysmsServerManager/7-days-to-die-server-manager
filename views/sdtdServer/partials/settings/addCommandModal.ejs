@@ -82,7 +82,7 @@
           _csrf: window.SAILS_LOCALS._csrf,
           serverId: window.SAILS_LOCALS.server.id,
           commandName: commandName,
-          commandsToExecute: commandsToExecute
+          commandsToExecute: _.trim(commandsToExecute)
         },
         success: data => {
           location.reload()

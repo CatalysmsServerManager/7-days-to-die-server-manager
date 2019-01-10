@@ -38,10 +38,10 @@ class CustomCommand extends SdtdCommand {
 
 
       options.commandsToExecute = replaceAllInString(options.commandsToExecute, `\${${argument.key}}`, valueToFill)
+      argumentIterator++
     }
 
 
-    argumentIterator++
 
 
     // Check if the player has exceeded the configured timeout

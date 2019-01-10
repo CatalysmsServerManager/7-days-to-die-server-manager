@@ -34,7 +34,7 @@
           <textarea class="form-control" class="form-control" name="custom-command-<%= command.id %>-modal-edit-commands"
             id="custom-command-<%= command.id %>-modal-edit-commands" aria-describedby="custom-command-<%= command.id %>-modal-edit-commands-help"
             rows="5">
-              <%= command.commandsToExecute %>
+              <%= _.trim(command.commandsToExecute) %>
             </textarea>
           <small id="custom-command-<%= command.id %>-modal-edit-commands-help" class="form-text text-muted"> Example:
             "sayplayer ${entityId} Boo!" </small>
@@ -381,7 +381,7 @@
           data: {
             _csrf: window.SAILS_LOCALS._csrf,
             commandId: currentConfig.id,
-            newCommandsToExecute: newCommandsToExecute,
+            newCommandsToExecute: _.trim(newCommandsToExecute),
             serverId: window.SAILS_LOCALS.server.id
           },
           success: (data, status, xhr) => {},
