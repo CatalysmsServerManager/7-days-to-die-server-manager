@@ -13,7 +13,7 @@ module.exports = {
     name: {
       type: 'string',
       maxLength: 50,
-      minLength: 1
+      minLength: 2
     },
 
     x: {
