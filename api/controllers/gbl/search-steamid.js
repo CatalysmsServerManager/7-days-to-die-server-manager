@@ -32,12 +32,6 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    let loggedInUser = this.req.session.user;
-
-    if (_.isUndefined(loggedInUser)) {
-      return exits.badRequest();
-    }
-
     let foundBans = await BanEntry.find({
       steamId: inputs.steamId
     }).populate('server').populate('comments');

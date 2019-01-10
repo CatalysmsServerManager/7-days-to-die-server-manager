@@ -132,6 +132,8 @@ module.exports.routes = {
   'post /api/gbl/load' : 'gbl.load-bans',
   'post /api/gbl/note' : 'gbl.set-note',
 
+  'delete /api/gbl': 'gbl.delete-ban',
+
   'get /api/gbl/comment': 'gbl-comment.get-comment',
   'post /api/gbl/comment': 'gbl-comment.place-comment',
   'patch /api/gbl/comment': 'gbl-comment.edit-comment',
