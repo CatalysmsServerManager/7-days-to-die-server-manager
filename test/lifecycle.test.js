@@ -35,7 +35,7 @@ before(function (done) {
     }
 
     let testUser = await User.create({
-      steamId: faker.random.number(0),
+      steamId: faker.random.number({min: 0, max: 9999999999999}),
       username: faker.internet.userName()
     }).fetch();
 
