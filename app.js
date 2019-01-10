@@ -47,7 +47,7 @@ try {
 } //-•
 
 process.on('unhandledRejection', (reason, p) => {
-  console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+  sails.log.error('Unhandled Rejection at: Promise', p, 'reason:', reason);
 });
 
 process.on('SIGINT', function () {
@@ -63,6 +63,7 @@ process.on('SIGINT', function () {
   );
 
 });
+
 
 
 // Start server
