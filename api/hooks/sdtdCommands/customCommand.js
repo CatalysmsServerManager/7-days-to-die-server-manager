@@ -101,22 +101,21 @@ class CustomCommand extends SdtdCommand {
 
         for (const command of commandsToExecute) {
 
-          if (command.includes("wait(")) {
-            let secondsToWaitStr = command.replace('wait(', '').replace(')', '');
-            let secondsToWait;
+          let result = await sails.customFunctions.parseCommand(command, {
+            chatMessage: chatMessage,
+            player: player,
+            server: server
+          });
 
-            secondsToWait = parseInt(secondsToWaitStr);
-
-            if (secondsToWait < 1) {
-              return chatMessage.reply(`Cannot wait for a negative or 0 amount of seconds`);
+          if (result) {
+            commandsExecuted.push(result.result);
+            // Something went wrong
+            if (!result.status) {
+              chatMessage.reply(result.friendlyMessage);
             }
-
-            if (isNaN(secondsToWait)) {
-              return chatMessage.reply(`Invalid wait() syntax! example: wait(5)`);
-            }
-
-            await delaySeconds(secondsToWait);
-          } else {
+          }
+          // if it is not, we default to parsing it as a 7d2d command
+          else {
             let commandInfoFilledIn = await sails.helpers.sdtd.fillPlayerVariables(command, player);
             let commandResult = await executeCommand(server, commandInfoFilledIn);
             commandsExecuted.push(commandResult);
