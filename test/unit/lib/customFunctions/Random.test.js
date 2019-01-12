@@ -95,7 +95,7 @@ describe('CLASS - Customfunction Random', () => {
         }
 
         if (_.isNumber(arguments.max)) {
-          expect(result.result).to.be.lessThan(arguments.max);
+          expect(result.result).to.be.lessThan(arguments.max + 1);
         }
 
       });
