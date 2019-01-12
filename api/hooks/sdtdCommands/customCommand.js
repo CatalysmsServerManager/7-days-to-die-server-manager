@@ -103,7 +103,6 @@ class CustomCommand extends SdtdCommand {
           let commandToExec = command;
           // Check if this contains a custom function & execute the function
           commandToExec = await sails.customFunctions.parseCommand(commandToExec, {
-            chatMessage: chatMessage,
             player: player,
             server: server
           });

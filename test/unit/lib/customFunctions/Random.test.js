@@ -6,25 +6,8 @@ chai.use(chaiAsPromised);
 
 const Random = require('../../../../api/lib/customFunctions/functions/Random');
 
-const validArgs = [
-  ['testRandom'],
-  ['💩'],
-  ['testRandom', 1],
-  ['testRandom', -8],
-  ['testRandom', 1, 8],
-  ['testRandom', -8, -4],
-  ['testRandom', -8, 2],
-];
-
-const invalidArgs = [
-  7,
-  'invalid',
-  [false],
-  ['testRandom', "test"],
-  ['testRandom', "test", 'test'],
-  ['testRandom', false, 'test'],
-  ['testRandom', "test", false],
-]
+const validArgs = require('../../../inputs.js').customFunctions.valid.random;
+const invalidArgs = require('../../../inputs.js').customFunctions.invalid.random;
 
 describe('CLASS - Customfunction Random', () => {
   describe('Random#validateArgument', function () {
@@ -86,7 +69,7 @@ describe('CLASS - Customfunction Random', () => {
 
     for (const validArg of validArgs) {
       it(`returns a correct random number for args: ${validArg.toString()}`, async function () {
-        let result = await Random.execute(undefined, sails.testPlayer, sails.testServer, validArg);
+        let result = await Random.execute(sails.testPlayer, sails.testServer, validArg);
 
         expect(result.status).to.be.true;
         expect(result.result).to.be.a('number');

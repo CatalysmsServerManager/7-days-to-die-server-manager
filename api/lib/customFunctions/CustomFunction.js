@@ -42,7 +42,7 @@ class CustomFunction {
    * @param {*} args 
    */
 
-  async execute(chatMessage, player, server, args) {
+  async execute(player, server, args) {
 
     const resultObject = {
       // Shows if execution was successful

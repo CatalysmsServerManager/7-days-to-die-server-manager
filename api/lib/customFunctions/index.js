@@ -42,7 +42,6 @@ class CustomFunctions {
   }
 
   async parseCommand(command, {
-    chatMessage,
     player,
     server
   }) {
@@ -62,7 +61,7 @@ class CustomFunctions {
       };
 
       const argumentsArray = functionString.replace(functionToExec.key + "(", '').replace(')', '').split(',');
-      result = await functionToExec.execute(chatMessage, player, server, argumentsArray);
+      result = await functionToExec.execute(player, server, argumentsArray);
       if (result.status) {
         if (_.isUndefined(result.result)) {
           commandString = commandString.replace(functionString, "");

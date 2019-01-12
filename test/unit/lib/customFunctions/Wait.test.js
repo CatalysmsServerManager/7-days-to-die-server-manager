@@ -5,19 +5,8 @@ const chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
 
 const Wait = require('../../../../api/lib/customFunctions/functions/Wait');
-
-const validArgs = [
-  [1],
-  ["1"]
-];
-
-const invalidArgs = [
-  [0],
-  [-1],
-  1,
-  ["notANumber"],
-  ["💩"]
-];
+const validArgs = require('../../../inputs.js').customFunctions.valid.wait;
+const invalidArgs = require('../../../inputs.js').customFunctions.invalid.wait;
 
 describe('CLASS - Customfunction Wait', () => {
 
@@ -65,7 +54,7 @@ describe('CLASS - Customfunction Wait', () => {
   describe('Wait#execute', function () {
     it('returns after x seconds', async function () {
       let dateStarted = Date.now();
-      let result = await Wait.execute(undefined, undefined, undefined, [1]);
+      let result = await Wait.execute(sails.testPlayer, sails.testServer, validArgs[0]);
       let dateEnded = Date.now();
 
       expect(dateEnded - dateStarted).to.be.greaterThan(999);
@@ -75,7 +64,7 @@ describe('CLASS - Customfunction Wait', () => {
 
     it('returns falsewhen invalid args given', async function () {
 
-      let result = await Wait.execute(undefined, undefined, undefined, 1);
+      let result = await Wait.execute(sails.testPlayer, sails.testServer, invalidArgs[0]);
       expect(result.status).to.be.false;
       expect(result.friendlyMessage).to.be.not.empty;
     });
