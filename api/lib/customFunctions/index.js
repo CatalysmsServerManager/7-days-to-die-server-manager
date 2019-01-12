@@ -35,6 +35,12 @@ class CustomFunctions {
     return foundFunctions;
   }
 
+  _getFunctionStringFromCommand(commandString, functionToExec) {
+    const startFunctionIndex = commandString.indexOf(functionToExec.key + "(");
+    const endFunctionIndex = commandString.indexOf(")", startFunctionIndex);
+    return commandString.slice(startFunctionIndex, endFunctionIndex + 1);
+  }
+
   async parseCommand(command, {
     chatMessage,
     player,
@@ -44,26 +50,27 @@ class CustomFunctions {
     let functionsToExec = this.findFunctions(command);
 
     for (const functionToExec of functionsToExec) {
-      const startFunctionIndex = commandString.indexOf(functionToExec.key + "(");
-      const endFunctionIndex = commandString.indexOf(")", startFunctionIndex);
-      const functionString = commandString.slice(startFunctionIndex, endFunctionIndex + 1);
+      let functionString = this._getFunctionStringFromCommand(commandString, functionToExec);
       let result;
-      if (functionString.startsWith(functionToExec.key + "(") && functionString.endsWith(')')) {
-        const argumentsArray = functionString.replace(functionToExec.key + "(", '').replace(')', '').split(',');
-        result = await functionToExec.execute(chatMessage, player, server, argumentsArray);
-        if (result.status) {
-          if (_.isUndefined(result.result)) {
-            commandString = commandString.replace(functionString, "");
-          } else {
-            commandString = commandString.replace(functionString, result.result);
-          }
-        } else {
-          commandString = `say "${result.friendlyMessage}"`;
-        }
-      } else {
+
+
+      if (!functionString.startsWith(functionToExec.key + "(") && functionString.endsWith(')')) {
         sails.log.warn(`Unexpected invalid function syntax - ${functionString}`, {
           command: command
         });
+        return commandString;
+      };
+
+      const argumentsArray = functionString.replace(functionToExec.key + "(", '').replace(')', '').split(',');
+      result = await functionToExec.execute(chatMessage, player, server, argumentsArray);
+      if (result.status) {
+        if (_.isUndefined(result.result)) {
+          commandString = commandString.replace(functionString, "");
+        } else {
+          commandString = commandString.replace(functionString, result.result);
+        }
+      } else {
+        commandString = `say "${result.friendlyMessage}"`;
       }
     }
 
