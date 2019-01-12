@@ -23,27 +23,51 @@ class CustomFunctions {
   /**
    * 
    * @param {string} stringToTest 
-   * @returns {CustomFunction}
+   * @returns {[CustomFunction]}
    */
-  findFunction(stringToTest) {
+  findFunctions(stringToTest) {
+    const foundFunctions = [];
     for (const customFunction of this.functions) {
       if (stringToTest.includes(customFunction.key + "(")) {
-        return customFunction;
+        foundFunctions.push(customFunction);
       }
     }
+    return foundFunctions;
   }
 
-  async parseCommand(command, {chatMessage, player, server}) {
-    let functionToExec = this.findFunction(command);
+  async parseCommand(command, {
+    chatMessage,
+    player,
+    server
+  }) {
+    let commandString = String(command);
+    let functionsToExec = this.findFunctions(command);
 
-    if (functionToExec) {
-      let argumentsArray = command.replace(functionToExec.key + "(", '').replace(')', '').split(',');
-      return functionToExec.execute(chatMessage, player, server, argumentsArray);
+    for (const functionToExec of functionsToExec) {
+      const startFunctionIndex = commandString.indexOf(functionToExec.key + "(");
+      const endFunctionIndex = commandString.indexOf(")", startFunctionIndex);
+      const functionString = commandString.slice(startFunctionIndex, endFunctionIndex + 1);
+      let result;
+      if (functionString.startsWith(functionToExec.key + "(") && functionString.endsWith(')')) {
+        const argumentsArray = functionString.replace(functionToExec.key + "(", '').replace(')', '').split(',');
+        result = await functionToExec.execute(chatMessage, player, server, argumentsArray);
+        if (result.status) {
+          if (_.isUndefined(result.result)) {
+            commandString = commandString.replace(functionString, "");
+          } else {
+            commandString = commandString.replace(functionString, result.result);
+          }
+        } else {
+          commandString = `say "${result.friendlyMessage}"`;
+        }
+      } else {
+        sails.log.warn(`Unexpected invalid function syntax - ${functionString}`, {
+          command: command
+        });
+      }
     }
 
-    return;
-
-
+    return commandString;
   }
 
 }

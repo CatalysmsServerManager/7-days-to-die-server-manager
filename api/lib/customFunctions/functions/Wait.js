@@ -9,7 +9,7 @@ class Wait extends CustomFunction {
   }
 
   validateArgument(seconds) {
-    if (!_.isNumber(seconds)) {
+    if (!_.isFinite(seconds)) {
       return false;
     }
 
@@ -21,10 +21,11 @@ class Wait extends CustomFunction {
   }
 
   parseArguments(args) {
-    if (!this.validateArgument(args[0])) {
+    args = parseInt(args[0]);
+    if (!this.validateArgument(args)) {
       return false;
     }
-    return parseInt(args[0]);
+    return args;
   }
 
   async run(seconds, server, player) {

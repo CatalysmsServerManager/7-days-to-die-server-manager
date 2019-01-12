@@ -115,7 +115,7 @@ class CommandHandler {
           try {
             await commandToRun.run(chatMessage, player, server, args, commandToRun.options);
             let dateEnded = Date.now();
-            sails.log.info(`HOOK SdtdCommands - command ran by player ${player.name} on server ${server.name}. Took ${dateEnded - dateStarted} ms - ${chatMessage.messageText}`)
+            sails.log.debug(`HOOK SdtdCommands - command ran by player ${player.name} on server ${server.name}. Took ${dateEnded - dateStarted} ms - ${chatMessage.messageText}`)
             return;
           } catch (error) {
             sails.log.error(error)

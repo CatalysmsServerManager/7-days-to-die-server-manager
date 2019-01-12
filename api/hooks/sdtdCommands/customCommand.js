@@ -100,39 +100,33 @@ class CustomCommand extends SdtdCommand {
         let commandsToExecute = sails.helpers.sdtd.parseCommandsString(options.commandsToExecute);
 
         for (const command of commandsToExecute) {
-
-          let result = await sails.customFunctions.parseCommand(command, {
+          let commandToExec = command;
+          // Check if this contains a custom function & execute the function
+          commandToExec = await sails.customFunctions.parseCommand(commandToExec, {
             chatMessage: chatMessage,
             player: player,
             server: server
           });
 
-          if (result) {
-            commandsExecuted.push(result.result);
-            // Something went wrong
-            if (!result.status) {
-              chatMessage.reply(result.friendlyMessage);
-            }
-          }
-          // if it is not, we default to parsing it as a 7d2d command
-          else {
-            let commandInfoFilledIn = await sails.helpers.sdtd.fillPlayerVariables(command, player);
+          // if the command string is empty, the command consisted only of custom functions
+          if (!_.isEmpty(commandToExec)) {
+            // Fill in custom variables like ${steamId}
+            let commandInfoFilledIn = await sails.helpers.sdtd.fillPlayerVariables(commandToExec, player);
+            // Afterwards we execute it as a 7d2d command
             let commandResult = await executeCommand(server, commandInfoFilledIn);
             commandsExecuted.push(commandResult);
-
-            if (options.sendOutput) {
-              await chatMessage.reply(commandResult.result);
-            }
           }
 
-
+          if (options.sendOutput) {
+            await chatMessage.reply(`${commandToExec} - ${commandResult.result}`);
+          }
         }
         sails.log.debug(`HOOK SdtdCommands - custom command ran by player ${player.name} on server ${server.name} - ${chatMessage.messageText}`, chatMessage, commandsExecuted);
 
 
       } catch (error) {
         sails.log.error(`Custom command error - ${server.name} - ${chatMessage.messageText} - ${error}`)
-        chatMessage.reply(`Error! Contact your server admin with this message: ${error.replace(/\"/g,"")}`)
+        chatMessage.reply(`Error! Contact your server admin with this message: ${error.toString()}`);
       }
     }
   }

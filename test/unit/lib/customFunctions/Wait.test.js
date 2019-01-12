@@ -6,37 +6,49 @@ chai.use(chaiAsPromised);
 
 const Wait = require('../../../../api/lib/customFunctions/functions/Wait');
 
+const validArgs = [
+  [1],
+  ["1"]
+];
+
+const invalidArgs = [
+  [0],
+  [-1],
+  1,
+  ["notANumber"],
+  ["💩"]
+];
+
 describe('CLASS - Customfunction Wait', () => {
+
   describe('Wait#validateArgument', function () {
-    it('Takes a number as argument', async () => {
-      expect(Wait.validateArgument(3)).to.be.eq(true);
-    });
 
-    it('Returns false when given a string', async () => {
-      expect(Wait.validateArgument("blabla")).to.be.eq(false);
-    });
+    for (const validArg of validArgs) {
+      it(`Takes a number as argument  - ${validArg.toString()}`, async () => {
+        expect(Wait.validateArgument(Wait.parseArguments(validArg))).to.be.eq(true);
+      });
+    }
 
-    it('Returns false when given a number smaller than 1', async () => {
-      expect(Wait.validateArgument(0)).to.be.eq(false);
-      expect(Wait.validateArgument(-5)).to.be.eq(false);
-    });
-
-    it('Returns false when given a number string', async () => {
-      expect(Wait.validateArgument("3")).to.be.eq(false);
-    });
-    it('Returns false when given a boolean', async () => {
-      expect(Wait.validateArgument(true)).to.be.eq(false);
-    });
+    for (const invalidArg of invalidArgs) {
+      it(`Correctly detects invalid arguments - ${invalidArg.toString()}`, async () => {
+        expect(Wait.validateArgument(Wait.parseArguments(invalidArg))).to.be.eq(false);
+      });
+    }
   });
 
   describe('Wait#parseArgument', function () {
-    it('returns false when not an array is given', function () {
-      expect(Wait.parseArguments(3)).to.be.eq(false);
-    });
 
-    it('returns number when an array with a number is given', function () {
-      expect(Wait.parseArguments([3])).to.be.eq(3);
-    });
+    for (const validArg of validArgs) {
+      it(`Returns a number with valid args  - ${validArg.toString()}`, async () => {
+        expect(Wait.parseArguments(validArg)).to.be.eq(parseInt(validArg[0]));
+      });
+    }
+
+    for (const invalidArg of invalidArgs) {
+      it(`Returns false for invalid arguments - ${invalidArg.toString()}`, async () => {
+        expect(Wait.parseArguments(invalidArg)).to.be.eq(false);
+      });
+    }
   });
 
   describe('Wait#run', function () {

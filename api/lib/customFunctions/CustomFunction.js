@@ -52,12 +52,12 @@ class CustomFunction {
       // A friendly message which can be shown to the user
       friendlyMessage: new String(),
     };
-
     let parsedArguments = await this.parseArguments(args);
     let validArg = await this.validateArgument(parsedArguments);
     if (!validArg) {
       resultObject.friendlyMessage = `You have provided an invalid argument! Please contact your server administrator if you think this is a mistake.`;
       resultObject.result = parsedArguments;
+      sails.log.debug(`CustomFunction - Invalid arguments given to ${this.key}.`, args);
       return resultObject;
     }
 
@@ -69,8 +69,10 @@ class CustomFunction {
       resultObject.result = error;
       resultObject.friendlyMessage = `An internal error occurred. Please contact support. ${sails.config.custom.supportLink}`;
     }
-    
-    sails.log.debug(`Executed custom function ${this.key} - status: ${resultObject.status}. | msg: ${resultObject.friendlyMessage}`)
+
+    sails.log.debug(`Executed custom function ${this.key} - status: ${resultObject.status}. | msg: ${resultObject.friendlyMessage}`, {
+      result: resultObject.result
+    });
     return resultObject;
   }
 

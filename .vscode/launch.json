@@ -1,6 +1,14 @@
 {
     "version": "0.2.0",
     "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Start app",
+            "program": "${workspaceFolder}/app.js",
+            "console": "internalConsole",
+            "internalConsoleOptions": "neverOpen"
+        },
       {
           "type": "node",
           "request": "launch",
@@ -13,7 +21,7 @@
               "${workspaceFolder}/test",
               "--exit"
           ],
-          "console": "integratedTerminal",
+          "console": "internalConsole",
           "internalConsoleOptions": "neverOpen"
       },
       {
@@ -28,7 +36,7 @@
               "${file}",
               "--exit"
           ],
-          "console": "integratedTerminal",
+          "console": "internalConsole",
           "internalConsoleOptions": "neverOpen"
       }
     ]

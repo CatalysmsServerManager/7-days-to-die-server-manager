@@ -8,6 +8,7 @@ const Random = require('../../../../api/lib/customFunctions/functions/Random');
 
 const validArgs = [
   ['testRandom'],
+  ['💩'],
   ['testRandom', 1],
   ['testRandom', -8],
   ['testRandom', 1, 8],
@@ -28,12 +29,12 @@ const invalidArgs = [
 describe('CLASS - Customfunction Random', () => {
   describe('Random#validateArgument', function () {
     for (const validArg of validArgs) {
-      it(`Takes a name, min and max as arguments - ${validArg.toString()}`, async () => {
+      it(`Takes a name, min and max as arguments for args: ${validArg.toString()}`, async () => {
         expect(Random.validateArgument(Random.parseArguments(validArg))).to.be.eq(true);
       });
     }
     for (const invalidArg of invalidArgs) {
-      it(`Correctly detects invalid arguments - ${invalidArg.toString()}`, async () => {
+      it(`Correctly detects invalid arguments for args: ${invalidArg.toString()}`, async () => {
         expect(Random.validateArgument(Random.parseArguments(invalidArg))).to.be.eq(false);
       });
     }
@@ -41,12 +42,12 @@ describe('CLASS - Customfunction Random', () => {
 
   describe('Random#parseArgument', function () {
     for (const invalidArg of invalidArgs) {
-      it(`returns false when invalid args are given - ${invalidArg.toString()}`, function () {
+      it(`returns false when invalid args are given for args: ${invalidArg.toString()}`, function () {
         expect(Random.parseArguments(invalidArg)).to.be.eq(false);
       });
     }
     for (const validArg of validArgs) {
-      it(`returns correct data when valid args are given - ${validArg.toString()}`, async function () {
+      it(`returns correct data when valid args are given for args: ${validArg.toString()}`, async function () {
         let result = Random.parseArguments(validArg);
         expect(result).to.not.be.false;
         if (!_.isUndefined(validArg[1])) {
@@ -63,7 +64,7 @@ describe('CLASS - Customfunction Random', () => {
 
   describe('Random#run', function () {
     for (const validArg of validArgs) {
-      it(`returns a correct random number - ${validArg.toString()}`, async function () {
+      it(`returns a correct random number for args: ${validArg.toString()}`, async function () {
         let arguments = Random.parseArguments(validArg);
         let result = await Random.run(arguments);
 
@@ -74,7 +75,7 @@ describe('CLASS - Customfunction Random', () => {
         }
 
         if (_.isNumber(arguments.max)) {
-          expect(result).to.be.lessThan(arguments.max);
+          expect(result).to.be.lessThan(arguments.max + 1);
         }
 
       });
@@ -84,7 +85,7 @@ describe('CLASS - Customfunction Random', () => {
   describe('Random#execute', function () {
 
     for (const validArg of validArgs) {
-      it(`returns a correct random number - ${validArg.toString()}`, async function () {
+      it(`returns a correct random number for args: ${validArg.toString()}`, async function () {
         let result = await Random.execute(undefined, sails.testPlayer, sails.testServer, validArg);
 
         expect(result.status).to.be.true;
