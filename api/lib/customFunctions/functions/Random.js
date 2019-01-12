@@ -8,47 +8,35 @@ class Random extends CustomFunction {
     });
   }
 
+  _namecheck(name) {
+    if (_.isEmpty(name)) {
+      return false;
+    }
+
+    if (_.isString(name)) {
+      return true;
+    }
+    return false;
+  }
+
+  _minMaxCheck(number) {
+    if (_.isUndefined(number)) {
+      return true;
+    }
+    if (_.isInteger(number)) {
+      return true;
+    };
+    return false;
+  }
+
   validateArgument(args) {
-
-    let namecheck = (name) => {
-      if (_.isEmpty(name)) {
-        return false;
-      }
-
-      if (_.isString(name)) {
-        return true;
-      }
-      return false;
-    };
-
-    let minCheck = (min) => {
-      if (_.isUndefined(min)) {
-        return true;
-      }
-      if (_.isInteger(min)) {
-        return true;
-      };
-      return false;
-    };
-
-    let maxCheck = (max) => {
-      if (_.isUndefined(max)) {
-        return true;
-      }
-      if (_.isInteger(max)) {
-        return true;
-      };
-      return false;
-    };
-
-
     if (args.min > args.max) {
       return false;
     }
 
-    let validName = namecheck(args.name);
-    let validMin = minCheck(args.min)
-    let validMax = maxCheck(args.max)
+    let validName = this._namecheck(args.name);
+    let validMin = this._minMaxCheck(args.min);
+    let validMax = this._minMaxCheck(args.max);
 
     if (validName && validMin && validMax) {
       return true;
