@@ -97,15 +97,15 @@ class CustomCommand extends SdtdCommand {
     async function runCustomCommand(chatMessage, player, server, args, options) {
       let commandsExecuted = new Array();
       try {
-        let commandsToExecute = sails.helpers.sdtd.parseCommandsString(options.commandsToExecute);
+        // Check if this contains a custom function & execute the function
+        let commandsToExecute = await sails.customFunctions.parseCommand(options.commandsToExecute, {
+          player: player,
+          server: server
+        });
+        commandsToExecute = sails.helpers.sdtd.parseCommandsString(options.commandsToExecute);
 
         for (const command of commandsToExecute) {
           let commandToExec = command;
-          // Check if this contains a custom function & execute the function
-          commandToExec = await sails.customFunctions.parseCommand(commandToExec, {
-            player: player,
-            server: server
-          });
 
           // if the command string is empty, the command consisted only of custom functions
           if (!_.isEmpty(commandToExec)) {

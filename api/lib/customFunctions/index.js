@@ -23,16 +23,18 @@ class CustomFunctions {
   /**
    * 
    * @param {string} stringToTest 
-   * @returns {[CustomFunction]}
+   * @returns {[ {customFunction: CustomFunction, functionString: String}]}
    */
   findFunctions(stringToTest) {
     const foundFunctions = [];
     for (const customFunction of this.functions) {
-      if (stringToTest.includes(customFunction.key + "(")) {
-        foundFunctions.push(customFunction);
+      for (const command of stringToTest) {
+
+        let functionString = this._getFunctionStringFromCommand(command, customFunction);
+        foundFunctions.push({customFunction: customFunction, functionString: functionString});
       }
     }
-    return foundFunctions;
+    return _.uniqBy(foundFunctions, 'functionString');
   }
 
   _getFunctionStringFromCommand(commandString, functionToExec) {
@@ -48,25 +50,23 @@ class CustomFunctions {
     let commandString = String(command);
     let functionsToExec = this.findFunctions(command);
 
-    for (const functionToExec of functionsToExec) {
-      let functionString = this._getFunctionStringFromCommand(commandString, functionToExec);
+    for (const {customFunction, functionString} of functionsToExec) {
       let result;
 
-
-      if (!functionString.startsWith(functionToExec.key + "(") && functionString.endsWith(')')) {
+      if (!functionString.startsWith(customFunction.key + "(") && functionString.endsWith(')')) {
         sails.log.warn(`Unexpected invalid function syntax - ${functionString}`, {
           command: command
         });
         return commandString;
       };
 
-      const argumentsArray = functionString.replace(functionToExec.key + "(", '').replace(')', '').split(',');
-      result = await functionToExec.execute(player, server, argumentsArray);
+      const argumentsArray = functionString.replace(customFunction.key + "(", '').replace(')', '').split(',');
+      result = await customFunction.execute(player, server, argumentsArray);
       if (result.status) {
         if (_.isUndefined(result.result)) {
-          commandString = commandString.replace(functionString, "");
+          commandString = commandString.split(functionString).join("");
         } else {
-          commandString = commandString.replace(functionString, result.result);
+          commandString = commandString.split(functionString).join(result.result);
         }
       } else {
         commandString = `say "${result.friendlyMessage}"`;

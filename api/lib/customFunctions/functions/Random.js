@@ -6,6 +6,9 @@ class Random extends CustomFunction {
     super({
       key: "random"
     });
+
+    // Keeps track of generated numbers for reuse in commands.
+    this.numbers = new Map();
   }
 
   _namecheck(name) {
