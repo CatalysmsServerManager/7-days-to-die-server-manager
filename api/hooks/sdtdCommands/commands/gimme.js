@@ -6,7 +6,8 @@ class Gimme extends SdtdCommand {
     super(serverId, {
       name: 'gimme',
       description: "Get some random item. GIMME GIMME",
-      extendedDescription: "Get a random item, entity or command. An admin must configure possible items via the webinterface before you can use this command."
+      extendedDescription: "Get a random item, entity or command. An admin must configure possible items via the webinterface before you can use this command.",
+      aliases: ["gimmie"]
     });
     this.serverId = serverId;
   }
