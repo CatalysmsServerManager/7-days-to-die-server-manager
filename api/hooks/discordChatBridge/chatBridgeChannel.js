@@ -145,11 +145,11 @@ class ChatBridgeChannel {
 
   async sendRichDisconnectedMessageToDiscord(disconnectedMsg) {
     let disconnectedPlayer = await Player.find({
-      entityId: disconnectedMsg.entityID,
+      steamId: disconnectedMsg.steamID,
       server: this.sdtdServer.id
-    })
+    });
 
-    disconnectedPlayer = disconnectedPlayer[0]
+    disconnectedPlayer = disconnectedPlayer[0];
     let gblBans = await BanEntry.find({steamId: disconnectedPlayer.steamId});
 
     let embed = new this.channel.client.customEmbed();

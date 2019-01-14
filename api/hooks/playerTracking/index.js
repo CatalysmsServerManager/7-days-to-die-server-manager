@@ -39,9 +39,9 @@ module.exports = function definePlayerTrackingHook(sails) {
         let dateStarted = new Date();
 
         let server = await SdtdServer.findOne(memUpdate.server).populate('config');
-        
+
         if (_.isUndefined(server)) {
-          return sails.log.warn(`memUpdate - Could not find server info during tracking!` {memUpdate: memUpdate})
+          return sails.log.warn(`memUpdate - Could not find server info during tracking!`, {memUpdate: memUpdate});
         }
 
         let onlinePlayers = await sails.helpers.sdtd.getOnlinePlayers(server.id);
