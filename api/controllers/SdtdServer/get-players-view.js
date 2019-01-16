@@ -62,13 +62,12 @@ module.exports = {
     try {
       let players = await Player.find({server: server.id}).populate('role');
 
-      players.map(player => {
+      players = players.map(player => {
         if (!player.role) {
           player.role = defaultRole;
         }
-        return player;
+        return _.omit(player, 'inventory');
       });
-
       sails.log.info(`VIEW - SdtdServer:players - Showing players for ${server.name} - ${players.length} players`);
 
       exits.success({
