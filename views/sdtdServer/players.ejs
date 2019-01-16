@@ -122,7 +122,7 @@
         {
           data: 'playtime',
           render: function (data, type, row, meta) {
-            return `${row.playtimeHHMMSS}`
+            return hhmmss(row.playtime);
           }
         },
         {

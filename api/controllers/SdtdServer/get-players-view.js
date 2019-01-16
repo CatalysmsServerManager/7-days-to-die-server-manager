@@ -63,15 +63,9 @@ module.exports = {
       let players = await Player.find({server: server.id}).populate('role');
 
       players.map(player => {
-
         if (!player.role) {
           player.role = defaultRole;
         }
-
-        // Convert playtime to human readable format
-
-        let newPlaytime = hhmmss(player.playtime);
-        player.playtimeHHMMSS = newPlaytime;
         return player;
       });
 
