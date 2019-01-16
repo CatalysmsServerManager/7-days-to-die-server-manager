@@ -20,18 +20,6 @@
 
     <h1>Player overview</h1>
 
-    <% if(players === 0) { %>
-    <div class="row">
-      <div class="col-12">
-        <div class="alert alert-warning" role="alert">
-          <strong>No players detected! CSMM will load player data continually. As players log in and out, execute
-            commands,
-            ... you will see their data pop up here</strong>
-        </div>
-      </div>
-    </div>
-    <% } %>
-
     <br>
 
     <%- include('./partials/deletePlayersButton') %>
@@ -150,25 +138,12 @@
 
       ]
     });
-
-    $.ajax({
-      url: '/api/sdtdserver/players',
-      method: 'GET',
-      data: {
-        serverId: window.SAILS_LOCALS.server.id,
-        onlyOnline: false,
-        staticOnly: true
-      },
-      success: (data, status, xhr) => {
-        players = data;
-        playerDataTable.rows.add(players);
-        playerDataTable.draw();
-        $('#loading-indicator').hide();
-      },
-      error: function (xhr, status, error) {
-        displayAjaxToSupportData(xhr, this);;
-        showErrorModal(`${error} - ${xhr.responseText}`, xhr);
-      }
+    
+    io.socket.get(`/api/sdtdserver/players?serverId=${window.SAILS_LOCALS.server.id}&staticOnly=true`, data => {
+      players = data;
+      playerDataTable.rows.add(players);
+      playerDataTable.draw();
+      $('#loading-indicator').hide();
     })
 
     $("#load-all-player-data-btn").click(e => {

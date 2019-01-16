@@ -44,13 +44,9 @@ module.exports = {
     const defaultRole = await sails.helpers.roles.getDefaultRole(inputs.serverId);
     let server = await SdtdServer.findOne(inputs.serverId);
     try {
-      let players = await Player.count({
-        server: server.id
-      });
-      sails.log.info(`VIEW - SdtdServer:players - Showing players for ${server.name} - ${players} players`);
+      sails.log.info(`VIEW - SdtdServer:players - Showing players for ${server.name}`);
 
       exits.success({
-        players: players,
         server: server,
         defaultRole: defaultRole
       });
