@@ -32,15 +32,15 @@ passport.use(new SteamStrategy({
     let foundUser = await User.findOrCreate({
       steamId: profile._json.steamid
     }, {
-        steamId: profile._json.steamid,
-        username: profile._json.personaname
-      })
+      steamId: profile._json.steamid,
+      username: profile._json.personaname
+    })
     let updatedUser = await User.update({
       id: foundUser.id
     }, {
-        username: profile._json.personaname,
-        avatar: profile._json.avatarfull
-      }).fetch()
+      username: profile._json.personaname,
+      avatar: profile._json.avatarfull
+    }).fetch()
     foundUser.steamProfile = profile;
     return done(null, foundUser);
   } catch (error) {
@@ -66,7 +66,7 @@ if (process.env.DISCORDCLIENTID && process.env.DISCORDCLIENTSECRET && process.en
       sails.log.error(`Discord auth error! ${error}`)
     }
   }));
-  
+
 } else {
   console.log(`No Discord client ID and/or client secret given in dotenv. Discarding Discord passport configuration`);
 }
@@ -88,6 +88,7 @@ passport.deserializeUser(function (steamId, done) {
 
 module.exports.http = {
 
+
   /****************************************************************************
    *                                                                           *
    * Sails/Express middleware to run for every HTTP request.                   *
@@ -102,6 +103,12 @@ module.exports.http = {
     passportInit: require('passport').initialize(),
     passportSession: require('passport').session(),
     xframe: require('lusca').xframe('SAMEORIGIN'),
+    // Logs each request to the console
+    requestLogger: function (req, res, next) {
+      sails.log.verbose("Requested :: ", req.method, req.url);
+      return next();
+    },
+
 
     /***************************************************************************
      *                                                                          *
@@ -113,6 +120,7 @@ module.exports.http = {
     order: [
       'cookieParser',
       'session',
+      'requestLogger',
       'passportInit',
       'passportSession',
       'xframe',
