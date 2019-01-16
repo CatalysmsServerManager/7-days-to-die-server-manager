@@ -52,8 +52,8 @@ module.exports = {
 
       if (inputs.staticOnly) {
 
-        let players = await Player.find({server: server.id});
-        return exits.success(players)
+        let players = await Player.find({server: server.id}).populate('role');
+        return exits.success(players);
         
       } else {
         sails.helpers.sdtd.loadPlayerData.with({serverId: inputs.serverId, onlyOnline: inputs.onlyOnline === false ? false : true})

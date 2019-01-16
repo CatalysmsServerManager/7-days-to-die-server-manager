@@ -20,7 +20,7 @@
 
     <h1>Player overview</h1>
 
-    <% if(players.length === 0) { %>
+    <% if(players === 0) { %>
     <div class="row">
       <div class="col-12">
         <div class="alert alert-warning" role="alert">
@@ -71,7 +71,8 @@
 
 <script>
   $(document).ready(function () {
-    $('#loading-indicator').hide();
+
+    let players = [];
 
     let playerDataTable = $('#players-overview').DataTable({
       data: window.SAILS_LOCALS.players,
@@ -97,7 +98,7 @@
           data: 'role',
           render: function (data, type, row, meta) {
             if (_.isNull(data)) {
-              return 'None assigned'
+              return SAILS_LOCALS.defaultRole.name
             } else {
               return data.name
             }
@@ -150,6 +151,26 @@
       ]
     });
 
+    $.ajax({
+      url: '/api/sdtdserver/players',
+      method: 'GET',
+      data: {
+        serverId: window.SAILS_LOCALS.server.id,
+        onlyOnline: false,
+        staticOnly: true
+      },
+      success: (data, status, xhr) => {
+        players = data;
+        playerDataTable.rows.add(players);
+        playerDataTable.draw();
+        $('#loading-indicator').hide();
+      },
+      error: function (xhr, status, error) {
+        displayAjaxToSupportData(xhr, this);;
+        showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+      }
+    })
+
     $("#load-all-player-data-btn").click(e => {
 
       $("#load-all-player-data-btn").hide();
@@ -158,7 +179,6 @@
         url: '/api/sdtdserver/players/all',
         method: 'GET',
         data: {
-          _csrf: window.SAILS_LOCALS._csrf,
           serverId: window.SAILS_LOCALS.server.id,
         },
         success: (data, status, xhr) => {

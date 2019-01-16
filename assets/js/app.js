@@ -104,7 +104,6 @@ function displayAjaxToSupportData(xhr, ajaxRequest) {
 }
 
 function hhmmss(seconds) {
-  console.log('here ' + seconds);
   var d = ifNanZero(Number(seconds))
   var h = ifNanZero(Math.floor(d / 3600))
   var m = ifNanZero(Math.floor(d % 3600 / 60))

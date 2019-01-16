@@ -41,38 +41,18 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-
     const defaultRole = await sails.helpers.roles.getDefaultRole(inputs.serverId);
-    
     let server = await SdtdServer.findOne(inputs.serverId);
-
-    let permCheck = await sails.helpers.roles.checkPermission.with({
-      userId: this.req.session.userId,
-      serverId: inputs.serverId,
-      permission: 'managePlayers'
-    });
-
-    if (!permCheck.hasPermission) {
-      return exits.notAuthorized({
-        role: permCheck.role,
-        requiredPerm: 'managePlayers'
-      });
-    }
-
     try {
-      let players = await Player.find({server: server.id}).populate('role');
-
-      players = players.map(player => {
-        if (!player.role) {
-          player.role = defaultRole;
-        }
-        return _.omit(player, 'inventory');
+      let players = await Player.count({
+        server: server.id
       });
-      sails.log.info(`VIEW - SdtdServer:players - Showing players for ${server.name} - ${players.length} players`);
+      sails.log.info(`VIEW - SdtdServer:players - Showing players for ${server.name} - ${players} players`);
 
       exits.success({
         players: players,
-        server: server
+        server: server,
+        defaultRole: defaultRole
       });
     } catch (error) {
       sails.log.error(`VIEW - SdtdServer:players - ${error}`);
