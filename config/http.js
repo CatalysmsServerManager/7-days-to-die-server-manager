@@ -16,6 +16,9 @@
 var passport = require('passport');
 var SteamStrategy = require('passport-steam');
 var DiscordStrategy = require('passport-discord').Strategy;
+const Sentry = require('@sentry/node');
+Sentry.init({ dsn: process.env.SENTRY_DSN });
+
 
 var maxAge = 900;
 /**
@@ -108,6 +111,8 @@ module.exports.http = {
       sails.log.verbose("Requested :: ", req.method, req.url);
       return next();
     },
+    sentryRequest: Sentry.Handlers.requestHandler(),
+    sentryError: Sentry.Handlers.errorHandler(),
 
 
     /***************************************************************************
@@ -118,6 +123,8 @@ module.exports.http = {
      ***************************************************************************/
 
     order: [
+      'sentryRequest',
+      'sentryError',
       'cookieParser',
       'session',
       'requestLogger',
