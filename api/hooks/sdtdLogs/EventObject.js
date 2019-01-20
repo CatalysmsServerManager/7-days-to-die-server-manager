@@ -27,7 +27,7 @@ class EventObject extends EventEmitter {
       this.emit(data.type, data.data);
 
       if (this.debug) {
-        sails.log.debug(`SdtdLogs - DEBUG MESSAGE - ${JSON.stringify(data)}`);
+        sails.log.debug(`SdtdLogs - DEBUG MESSAGE - EventType: ${data.type} - data: ${JSON.stringify(data)}`);
       }
     }
   }
