@@ -1,4 +1,4 @@
-const sevenDays = require('machinepack-7daystodiewebapi');
+const sevenDays = require('7daystodie-api-wrapper');
 
 module.exports = {
 
@@ -37,7 +37,8 @@ module.exports = {
 
       let commandsToExecute = foundJob.command.split(';');
       let responses = new Array();
-
+      const dateStarted = Date.now();
+      sails.log.debug(`Executing a cron job for server ${foundJob.server.name}`, _.omit(foundJob, 'server'));
       for (const commandToExec of commandsToExecute) {
 
 
@@ -65,9 +66,9 @@ module.exports = {
 
       }
 
-      sails.log.debug(`Executed a cron job for server ${foundJob.server.name}`, _.omit(foundJob, 'server'));
-
       foundJob.responses = responses;
+      const dateEnded = Date.now();
+      sails.log.debug(`Executed a cron job for server ${foundJob.server.name} - took ${dateEnded - dateStarted} ms`, _.omit(foundJob, 'server'));
 
       if (foundJob.notificationEnabled) {
         await sails.hooks.discordnotifications.sendNotification({
@@ -90,22 +91,13 @@ module.exports = {
 };
 
 async function execCmd(job, command) {
-  return new Promise((resolve, reject) => {
-    sevenDays.executeCommand({
-      ip: job.server.ip,
-      port: job.server.webPort,
-      authName: job.server.authName,
-      authToken: job.server.authToken,
-      command: command.trim()
-    }).exec({
-      success: async (data) => {
-        resolve(data)
-      },
-      error: err => {
-        reject(err)
-      }
-    })
-  })
+  let response = sevenDays.executeConsoleCommand({
+    ip: job.server.ip,
+    port: job.server.webPort,
+    adminUser: job.server.authName,
+    adminToken: job.server.authToken,
+  }, command.trim());
+  return response;
 }
 
 
