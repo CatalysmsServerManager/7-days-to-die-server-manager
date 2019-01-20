@@ -1,6 +1,5 @@
 var sevenDays = require('machinepack-7daystodiewebapi');
-const LoggingObject = require('./LoggingObject');
-const EventEmitter = require('events');
+const LoggingObject = require('./EventObject');
 
 /**
  * @module 7dtdLoggingHook
@@ -40,6 +39,12 @@ module.exports = function sdtdLogs(sails) {
           sails.log.error(`HOOKS - sdtdLogs - ${error}`);
         }
       });
+
+      sails.on('lifted', async() => {
+        sails.log.info('Initializing custom hook (`sdtdLogs`)');
+          
+      });
+
     },
 
     /**
@@ -144,7 +149,7 @@ module.exports = function sdtdLogs(sails) {
 
     let server = await SdtdServer.findOne(serverID);
 
-    let eventEmitter = new LoggingObject(server.ip, server.webPort, server.authName, server.authToken, serverID);
+    let eventEmitter = new LoggingObject(serverID);
 
     eventEmitter.on('logLine', function (logLine) {
       logLine.server = _.omit(server, "authName", "authToken");
