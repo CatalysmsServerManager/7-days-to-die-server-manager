@@ -138,13 +138,26 @@
 
       ]
     });
-    
-    io.socket.get(`/api/sdtdserver/players?serverId=${window.SAILS_LOCALS.server.id}&staticOnly=true`, data => {
-      players = data;
-      playerDataTable.rows.add(players);
-      playerDataTable.draw();
-      $('#loading-indicator').hide();
+
+    $.ajax({
+      url: '/api/sdtdserver/players',
+      method: 'GET',
+      data: {
+        serverId: window.SAILS_LOCALS.server.id,
+        staticOnly: true
+      },
+      success: (data, status, xhr) => {
+        players = data;
+        playerDataTable.rows.add(players);
+        playerDataTable.draw();
+        $('#loading-indicator').hide();
+      },
+      error: function (xhr, status, error) {
+        displayAjaxToSupportData(xhr, this);;
+        showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+      }
     })
+
 
     $("#load-all-player-data-btn").click(e => {
 
