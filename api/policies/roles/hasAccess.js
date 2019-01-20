@@ -9,12 +9,18 @@ module.exports = async function manageEconomy(req, res, next) {
   }
 
   let serverId = _.isUndefined(req.param('serverId')) ? req.query.serverId : req.param('serverId');
+  let server = await SdtdServer.findOne(serverId);
   let user = req.session.user;
 
-  let role = await sails.helpers.roles.getUserRole(user.id, serverId)
+  let role = await sails.helpers.roles.getUserRole(user.id, serverId);
 
+  let ownerCheck;
 
-  if (role.manageServer || role.manageEconomy || role.managePlayers || role.manageRoles || role.manage || role.viewDashboard || role.useTracking || role.viewAnalytics || role.manageTickets || user.steamId === sails.config.custom.adminSteamId) {
+  if (server.owner === user.id) {
+    ownerCheck = true;
+  }
+
+  if (role.manageServer || role.manageEconomy || role.managePlayers || role.manageRoles || role.manage || role.viewDashboard || role.useTracking || role.viewAnalytics || role.manageTickets || user.steamId === sails.config.custom.adminSteamId || ownerCheck) {
     next()
   } else {
     if (req.wantsJSON) {
