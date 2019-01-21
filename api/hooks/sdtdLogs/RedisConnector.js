@@ -49,7 +49,7 @@ class RedisConnector {
   async getEventFromQueue() {
     let eventData = await this.client.lpop('eventDaemon:eventQueue');
     sails.log.verbose(`Popped event from event queue ${JSON.stringify(eventData)}`);
-    return eventData;
+    return JSON.parse(eventData);
   }
 
   /**

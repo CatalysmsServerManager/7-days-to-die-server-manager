@@ -39,12 +39,6 @@ module.exports = function sdtdLogs(sails) {
           sails.log.error(`HOOKS - sdtdLogs - ${error}`);
         }
       });
-
-      sails.on('lifted', async() => {
-        sails.log.info('Initializing custom hook (`sdtdLogs`)');
-          
-      });
-
     },
 
     /**

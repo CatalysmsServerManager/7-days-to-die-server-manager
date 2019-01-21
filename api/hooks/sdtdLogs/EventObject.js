@@ -12,7 +12,6 @@ class EventObject extends EventEmitter {
     this.redisEmitter = redis.getEmitter();
 
     this.redisEmitter.on('event', (data) => {
-      data = JSON.parse(data);
       this._listener(data);
     });
   }
