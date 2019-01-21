@@ -1,7 +1,7 @@
 const SdtdApi = require('7daystodie-api-wrapper');
 const EventEmitter = require('events');
 const handleLogLine = require('./handleLogLine');
-const redis = require('./RedisConnector');
+const redis = require('../../RedisConnector');
 
 class EventObject extends EventEmitter {
 

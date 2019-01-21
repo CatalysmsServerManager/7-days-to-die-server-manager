@@ -26,6 +26,37 @@ class RedisConnector {
     return this.emitter;
   }
 
+  /**
+   * A servers data was updated
+   * @param {Object} server 
+   */
+  async serverUpdate(server) {
+    let dataObject = {
+      type: 'update',
+      id: server.id,
+      name: server.name,
+      ip: server.ip,
+      webPort: server.webPort,
+      authName: server.authName,
+      authToken: server.authToken
+    };
+    let result = await this.client.publish(`serverUpdate`, JSON.stringify(dataObject));
+    return result;
+  }
+
+    /**
+   * A servers data was deleted
+   * @param {Object} server 
+   */
+  async serverDelete(server) {
+    let dataObject = {
+      type: 'delete',
+      id: server.id,
+    };
+    let result = await this.client.publish(`serverUpdate`, JSON.stringify(dataObject));
+    return result;
+  }
+
   async getQueueLength() {
     let result = await this.client.llen('eventDaemon:eventQueue');
     return result;

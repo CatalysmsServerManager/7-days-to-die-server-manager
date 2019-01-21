@@ -103,7 +103,7 @@ module.exports = {
       });
       await SdtdServer.destroy({
         id: server.id
-      });
+      }).fetch();
 
       sevenDays.executeCommand({
         ip: server.ip,

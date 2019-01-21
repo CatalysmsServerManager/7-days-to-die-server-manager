@@ -88,7 +88,7 @@ module.exports = {
 
       await SdtdServer.update({
         id: inputs.serverId
-      }, updateObject);
+      }, updateObject).fetch();
 
       let loggingObject = sails.hooks.sdtdlogs.getLoggingObject(inputs.serverId);
 
@@ -96,9 +96,6 @@ module.exports = {
       loggingObject.port = _.isUndefined(inputs.webPort) ? loggingObject.port : inputs.webPort;
       loggingObject.adminUser = _.isUndefined(inputs.authName) ? loggingObject.adminUser : inputs.authName;
       loggingObject.adminToken = _.isUndefined(inputs.authToken) ? loggingObject.adminToken : inputs.authToken;
-
-      // Make sure we are on the correct log line.
-      loggingObject._getLatestLogLine();
 
       sails.log.info(`API - SdtdServer:update-connection-info - Updated connection info for server ${inputs.serverId}`, _.omit(inputs, ["authName", "authToken"]));
       return exits.success();

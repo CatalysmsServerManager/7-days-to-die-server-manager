@@ -1,3 +1,4 @@
+const redis = require('../RedisConnector');
 /**
  * SdtdServer.js
  *
@@ -9,6 +10,25 @@ module.exports = {
 
   customToJSON: function () {
     return _.omit(this, ['authToken', 'authName', 'telnetPort']);
+  },
+
+  afterCreate: function (data, proceed) {
+    redis.serverUpdate(data).then(() => {
+      proceed();
+    });
+  },
+
+  afterUpdate: function (data, proceed) {
+    sails.log.debug(data);
+    redis.serverUpdate(data).then(() => {
+      proceed();
+    });
+  },
+
+  afterDestroy: function (data, proceed) {
+    redis.serverDelete(data).then(() => {
+      proceed();
+    });
   },
 
   attributes: {
