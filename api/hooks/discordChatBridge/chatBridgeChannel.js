@@ -145,7 +145,7 @@ class ChatBridgeChannel {
 
   async sendRichDisconnectedMessageToDiscord(disconnectedMsg) {
     let disconnectedPlayer = await Player.find({
-      steamId: disconnectedMsg.steamID,
+      steamId: disconnectedMsg.ownerID,
       server: this.sdtdServer.id
     });
 
