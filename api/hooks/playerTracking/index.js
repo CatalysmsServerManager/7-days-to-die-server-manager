@@ -101,7 +101,7 @@ module.exports = function definePlayerTrackingHook(sails) {
 
         if (currentCycles >= sails.config.custom.trackingCyclesBeforeDelete) {
           await deleteLocationData(server);
-          await deleteInventoryData(server);
+          //await deleteInventoryData(server);
           await sails.helpers.redis.set(`server:${serverId}:trackingCyclesCompleted`, 0);
         } else {
           await sails.helpers.redis.set(`server:${serverId}:trackingCyclesCompleted`, currentCycles + 1);
