@@ -45,11 +45,11 @@ module.exports.custom = {
 
   // TRACKING
 
-  trackingCyclesBeforeDelete: 10,
+  trackingCyclesBeforeDelete: 25,
 
   // Economy
 
-  economyActionsBeforeDelete: 50,
+  economyActionsBeforeDelete: 100,
 
   // DONORS
   donorConfig: {
