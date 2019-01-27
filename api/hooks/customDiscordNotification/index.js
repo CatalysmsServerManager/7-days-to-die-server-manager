@@ -70,7 +70,6 @@ async function sendNotification(logLine, server, customNotif) {
 
     embed.setTitle(`Custom notification for ${server.name}`)
     .addField('Time', logLine.time, true)
-    .addField('Uptime', logLine.uptime, true)
     .addField('Message', logLine.msg)
     .addField('Triggered by', customNotif.stringToSearchFor)
     channel.send(embed);
