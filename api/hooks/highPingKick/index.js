@@ -101,6 +101,10 @@ async function handlePingCheck(memUpdate) {
         server: server.id
       });
 
+      if (_.isUndefined(playerRecord)) {
+        sails.log.warn(`Did not find player data for ${JSON.stringify(onlinePlayer)}`);
+      }
+
       let whiteListIdx = pingWhitelist.indexOf(playerRecord.steamId);
 
       if (onlinePlayer.ping > config.maxPing && whiteListIdx === -1) {
