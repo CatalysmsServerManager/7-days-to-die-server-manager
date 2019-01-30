@@ -53,7 +53,6 @@ module.exports = {
 
       let whereObject = {
         server: inputs.serverId,
-        type: 'memUpdate',
         createdAt: {
           '>': inputs.beginDate,
           '<': inputs.endDate,
@@ -61,7 +60,7 @@ module.exports = {
       }
 
     try {
-      let dataToSend = await HistoricalInfo.find({
+      let dataToSend = await Analytics.find({
         where: whereObject,
         sort: 'createdAt DESC',
         limit: inputs.limit
