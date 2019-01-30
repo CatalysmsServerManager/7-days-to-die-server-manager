@@ -75,7 +75,6 @@ async function clearOldInfo(server, config) {
       createdAt: {
         '<': borderDate.valueOf()
       },
-      type: 'memUpdate',
       server: server.id
     });
 
