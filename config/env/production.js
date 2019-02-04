@@ -90,8 +90,15 @@ let production = {
      *                                                                          *
      ***************************************************************************/
     default: {
+      adapter: 'sails-mysql',
       url: process.env.DBSTRING
     },
+
+    cache: {
+      adapter: 'sails-redis',
+      url: process.env.REDISSTRING,
+    },
+
 
   },
 
@@ -185,7 +192,7 @@ let production = {
    *                                                                          *
    ***************************************************************************/
   session: {
-
+    adapter: '@sailshq/connect-redis',
     /***************************************************************************
      *                                                                          *
      * Production session store configuration.                                  *
@@ -201,6 +208,7 @@ let production = {
      *                                                                          *
      ***************************************************************************/
 
+    url: useRedis ? process.env.REDISSTRING : undefined,
 
 
     /***************************************************************************
@@ -225,7 +233,7 @@ let production = {
      *                                                                          *
      ***************************************************************************/
     cookie: {
-      secure: false,
+      secure: true,
       maxAge: 24 * 60 * 60 * 1000 * 7, // 1 week
     },
 
@@ -394,14 +402,5 @@ let production = {
 
   },
 };
-
-if (process.env.REDISSTRING) {
-  production.datastores.cache = {
-    adapter: 'sails-redis',
-    url: process.env.REDISSTRING
-  }
-  production.session.adapter = "@sailshq/connect-redis"
-  production.session.url = process.env.REDISSTRING
-}
 
 module.exports = production;
