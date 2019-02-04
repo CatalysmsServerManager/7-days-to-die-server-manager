@@ -53,7 +53,7 @@ module.exports = {
     if (!_.isUndefined(inputs.userId)) {
       try {
         let user = await User.findOne(inputs.userId);
-        foundUser = await developerGuild.fetchMember(server.owner.discordId);
+        foundUser = await developerGuild.fetchMember(user.discordId);
         if (!_.isUndefined(foundUser)) {
           discordUser = foundUser
         }
