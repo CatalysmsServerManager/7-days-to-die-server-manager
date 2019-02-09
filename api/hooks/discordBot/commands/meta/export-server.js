@@ -137,7 +137,7 @@ class Export extends Commando.Command {
     for (const player of players) {
       databaseString += "\r\n";
       databaseString += `INSERT INTO player (createdAt, updatedAt, id, steamId, entityId, ip, country, currency, avatarUrl, name, positionX, positionY, positionZ, inventory, playtime, lastOnline, banned, deaths, zombieKills, playerKills, score, level, lastTeleportTime, server, user, role) \r\n
-      VALUES ('${player.createdAt}', '${player.updatedAt}', '${player.id}', '${player.steamId}', '${player.entityId}', '${player.ip}', '${player.country}', '${player.currency}','${player.avatarUrl}','${player.name}','${player.positionX}','${player.positionY}','${player.positionZ}','${JSON.stringify(player.inventory)}','${player.playtime}','${player.lastOnline}','${player.banned ? 1 : 0}','${player.deaths}','${player.zombieKills}','${player.playerKills}','${player.score}','${player.level}','${player.lastTeleportTime}','${player.server}', ${player.user ? player.user : "NULL"},'${player.role}'); \r\n`; 
+      VALUES ('${player.createdAt}', '${player.updatedAt}', '${player.id}', '${player.steamId}', '${player.entityId}', '${player.ip}', '${player.country}', '${player.currency}','${player.avatarUrl}','${player.name}','${player.positionX}','${player.positionY}','${player.positionZ}','${JSON.stringify(player.inventory)}','${player.playtime}','${player.lastOnline}','${player.banned ? 1 : 0}','${player.deaths}','${player.zombieKills}','${player.playerKills}','${player.score}','${player.level}','${player.lastTeleportTime}','${player.server}', ${player.user ? player.user : "NULL"}, ${player.role ? player.role : "NULL"}); \r\n`; 
     }
 
     for (const claimItem of playerClaimItems) {
