@@ -105,7 +105,8 @@ module.exports = {
         id: server.id
       });
 
-      sevenDays.executeCommand({
+      // TODO: make this an optional flag
+/*       sevenDays.executeCommand({
         ip: server.ip,
         port: server.webPort,
         authName: server.authName,
@@ -117,7 +118,7 @@ module.exports = {
         error: error => {
           sails.log.warn(`VIEW - SdtdServer:delete- Error while trying to delete token - ${error}`);
         }
-      })
+      }) */
 
       exits.success();
 

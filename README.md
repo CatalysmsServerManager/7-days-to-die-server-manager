@@ -52,17 +52,17 @@ Experience running Node.js apps is recommended. CSMM is tested on and developed 
    
     Fill in the info you've gathered so far. For the DBSTRING, a special syntax is used. You should replace anything in [] with your personal database values.
 
-```
-DBSTRING=mysql2://[USER]:[PASSWORD]@localhost:3306/[DATABASE_NAME]
-```
+    ```
+    DBSTRING=mysql2://[USER]:[PASSWORD]@localhost:3306/[DATABASE_NAME]
+    ```
 
-CSMM_HOSTNAME is used to generate links, CORS and other things. You should set this to the ip/domain you will access CSMM from. For example `CSMM_HOSTNAME=http://localhost:1337` or `CSMM_HOSTNAME=https://csmm.yourserver.com` **DO NOT ADD A TRAILING SLASH**
+    CSMM_HOSTNAME is used to generate links, CORS and other things. You should set this to the ip/domain you will access CSMM from. For example `CSMM_HOSTNAME=http://localhost:1337` or `CSMM_HOSTNAME=https://csmm.yourserver.com` 
 
-You are now ready to start the application! 🎉 Run `node app.js` to start it.
+4. Add redis support
 
 ### Optional: Add redis support
 
-[Redis](https://redis.io/) is used for caching values and storing sessions. To enable redis support, add `REDISSTRING=redis://localhost:6379` to your env file.
+5. Put the app in production mode. This is done by setting the env variable NODE_ENV=production
 
 
 ## Documentation

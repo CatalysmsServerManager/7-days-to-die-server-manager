@@ -38,16 +38,6 @@ module.exports = {
 
     /**
      * @memberof SdtdServer
-     * @var {number} gamePort
-     * @description Port used by players to join the game
-     */
-
-    gamePort: {
-      type: 'number'
-    },
-
-    /**
-     * @memberof SdtdServer
      * @var {number} webPort
      * @description Port provided by Alloc's webserver
      */
