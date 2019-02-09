@@ -154,3 +154,4 @@ test/output/*
 .env
 .nyc_output/*
 coverage/*
+assets/images/sdtdIcons
