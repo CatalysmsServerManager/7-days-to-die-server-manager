@@ -39,12 +39,13 @@
     "winston": "^2.4.3"
   },
   "scripts": {
-    "start": "npm run build-docs && node app.js --prod",
+    "start": "NODE_ENV=production & node app.js",
     "test": "nyc --report-dir ./coverage node_modules/mocha/bin/_mocha --reporter mochawesome --reporter-options reportDir=./test/output/mochawesome --exit",
     "build-docs": "./node_modules/.bin/jsdoc -c ./.jsdoc.json",
     "dev": "nodemon",
     "debug": "node debug app.js",
-    "coverage": "nyc report --reporter=text-lcov | codecov"
+    "coverage": "nyc report --reporter=text-lcov | codecov",
+    "itemIcons:update": "bash ./scripts/itemIconsUpdate.sh"
   },
   "main": "app.js",
   "repository": {
