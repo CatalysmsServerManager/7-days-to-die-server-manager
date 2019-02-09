@@ -154,20 +154,6 @@ module.exports = {
       defaultsTo: '$'
     },
 
-    /**
-     * @memberof SdtdConfig
-     * @var {json} enabledCommands
-     * @description json of enabled commands
-     */
-
-    enabledCommands: {
-      type: 'json',
-      defaultsTo: {
-        sayHi: true,
-        callAdmin: true
-      }
-    },
-
     enabledCallAdmin: {
       type: 'boolean',
       defaultsTo: false
@@ -225,17 +211,6 @@ module.exports = {
 
     /**
      * @memberof SdtdServer
-     * @var {string} discordCommandsChannelId
-     * @description A specific discord channel to use for this server
-     */
-
-    discordCommandsChannelId: {
-      type: 'string'
-    },
-
-
-    /**
-     * @memberof SdtdServer
      * @var {string} discordGuildId
      * @description Id of the disccord guild this server is associated with
      */
@@ -275,17 +250,6 @@ module.exports = {
       type: 'json',
       defaultsTo: new Array("/", "!")
     },
-
-    /**
-     * @memberof SdtdServer
-     * @var {string} notificationChannelId
-     * @description Id of the discord channel for notifications
-     */
-
-    notificationChannelId: {
-      type: 'string'
-    },
-
 
     discordNotificationConfig: {
       type: 'json',
@@ -351,11 +315,6 @@ module.exports = {
     // |  __  | / __| __/ _ \| '__| |/ __/ _` | | | | '_ \|  _/ _ \ 
     // | |  | | \__ \ || (_) | |  | | (_| (_| | | | | | | | || (_) |
     // |_|  |_|_|___/\__\___/|_|  |_|\___\__,_|_| |_|_| |_|_| \___/ 
-
-    daysToKeepData: {
-      type: 'number',
-      defaultsTo: 1
-    },
 
     memUpdateInfoEnabled: {
       type: 'boolean',
