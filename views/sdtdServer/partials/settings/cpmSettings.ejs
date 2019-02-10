@@ -46,72 +46,6 @@
       aria-describedby="settings-cpm-serverChatName-help" placeholder="">
     <small id="settings-cpm-serverChatName-help" class="form-text text-muted">Set server chatname globally.</small>
   </div>
-
-  <hr>
-
-  <div class="form-check">
-    <label class="form-check-label">
-      <input type="checkbox" class="form-check-input" name="settings-cpm-announceNightTime-enabled" id="settings-cpm-announceNightTime-enabled">
-      Announce night time
-    </label>
-  </div>
-
-  <div class="form-group">
-    <label for="settings-cpm-announceNightTime-bloodMoonCycle">Blood moon cycle</label>
-    <input type="text" class="form-control" name="settings-cpm-announceNightTime-bloodMoonCycle" id="settings-cpm-announceNightTime-bloodMoonCycle"
-      aria-describedby="settings-cpm-announceNightTime-bloodMoonCycle-help" placeholder="">
-    <small id="settings-cpm-announceNightTime-bloodMoonCycle-help" class="form-text text-muted">Configure the bloodmoon
-      cycle in days.</small>
-  </div>
-
-  <div class="form-group">
-    <label for="settings-cpm-announceNightTime-warnHours">Hours before warning</label>
-    <input type="text" class="form-control" name="settings-cpm-announceNightTime-warnHours" id="settings-cpm-announceNightTime-warnHours"
-      aria-describedby="settings-cpm-announceNightTime-warnHours-help" placeholder="">
-    <small id="settings-cpm-announceNightTime-warnHours-help" class="form-text text-muted">Set the number of hours
-      before 22:00 warning.</small>
-  </div>
-
-  <div class="form-group">
-    <label for="settings-cpm-announceNightTime-announcer">Announcer</label>
-    <input type="text" class="form-control" name="settings-cpm-announceNightTime-announcer" id="settings-cpm-announceNightTime-announcer"
-      aria-describedby="settings-cpm-announceNightTime-announcer-help" placeholder="">
-    <small id="settings-cpm-announceNightTime-announcer-help" class="form-text text-muted">Set the name of the
-      announcer.</small>
-  </div>
-
-  <div class="form-group">
-    <label for="settings-cpm-announceNightTime-nightTimeText">Night time text</label>
-    <input type="text" class="form-control" name="settings-cpm-announceNightTime-nightTimeText" id="settings-cpm-announceNightTime-nightTimeText"
-      aria-describedby="settings-cpm-announceNightTime-nightTimeText-help" placeholder="">
-    <small id="settings-cpm-announceNightTime-nightTimeText-help" class="form-text text-muted">Set the text for
-      nighttime warning. {hours} will be replaced by the warnhours setting.</small>
-  </div>
-
-  <div class="form-group">
-    <label for="settings-cpm-announceNightTime-bloodDayText">Blood day text</label>
-    <input type="text" class="form-control" name="settings-cpm-announceNightTime-bloodDayText" id="settings-cpm-announceNightTime-bloodDayText"
-      aria-describedby="settings-cpm-announceNightTime-bloodDayText-help" placeholder="">
-    <small id="settings-cpm-announceNightTime-bloodDayText-help" class="form-text text-muted">Set the text for
-      announcing bloodmoon is tonight.</small>
-  </div>
-
-  <div class="form-group">
-    <label for="settings-cpm-announceNightTime-bloodDayTomorrowText">Blood day tomorrow text</label>
-    <input type="text" class="form-control" name="settings-cpm-announceNightTime-bloodDayTomorrowText" id="settings-cpm-announceNightTime-bloodDayTomorrowText"
-      aria-describedby="settings-cpm-announceNightTime-bloodDayTomorrowText-help" placeholder="">
-    <small id="settings-cpm-announceNightTime-bloodDayTomorrowText-help" class="form-text text-muted">Set the text for
-      announcing bloodmoon is tomorrow.</small>
-  </div>
-
-  <div class="form-group">
-    <label for="settings-cpm-announceNightTime-counterDayText">Bloodmoon counter text</label>
-    <input type="text" class="form-control" name="settings-cpm-announceNightTime-counterDayText" id="settings-cpm-announceNightTime-counterDayText"
-      aria-describedby="settings-cpm-announceNightTime-counterDayText-help" placeholder="">
-    <small id="settings-cpm-announceNightTime-counterDayText-help" class="form-text text-muted">Set the text for normal
-      bloodmoon counter text. {daysleft} will be replaced by remaining days.</small>
-  </div>
-
   <hr>
 
   <div class="form-check">
@@ -196,7 +130,7 @@
 </div>
 
 <script>
-  const CPMSettings = ["prefix", "hidePrefix", "serverChatName", "announceNightTime", "locTrack",
+  const CPMSettings = ["prefix", "hidePrefix", "serverChatName", "locTrack",
     "preventFallingBlocks", "blockUTF8"
   ];
 
@@ -231,17 +165,6 @@
       setSetting('hidePrefix', $("#settings-cpm-hideChatcommand").val());
 
       setSetting('serverChatName', $("#settings-cpm-serverChatName").val());
-
-      setSetting('announceNightTime', $("#settings-cpm-announceNightTime-enabled").prop('checked'), "enabled");
-      setSetting('announceNightTime', $("#settings-cpm-announceNightTime-bloodMoonCycle").val(), "hordecycle");
-      setSetting('announceNightTime', $("#settings-cpm-announceNightTime-warnHours").val(), "warnhours");
-      setSetting('announceNightTime', $("#settings-cpm-announceNightTime-announcer").val(), "announcer");
-      setSetting('announceNightTime', $("#settings-cpm-announceNightTime-nightTimeText").val(), "nighttimetext");
-      setSetting('announceNightTime', $("#settings-cpm-announceNightTime-bloodDayText").val(), "blooddaytext");
-      setSetting('announceNightTime', $("#settings-cpm-announceNightTime-bloodDayTomorrowText").val(),
-        "blooddaytomorrowtext");
-      setSetting('announceNightTime', $("#settings-cpm-announceNightTime-counterDayText").val(),
-        "counterdaytext ");
 
       setSetting('locTrack', $("#settings-cpm-locTrack-enabled").prop('checked'), "enabled");
       setSetting('locTrack', $("#settings-cpm-locTrack-command-enabled").prop('checked'), "commandenabled");
@@ -296,17 +219,6 @@
         break;
       case "serverChatName":
         $("#settings-cpm-serverChatName").val(data.value);
-        break;
-      case "announceNightTime":
-
-        $("#settings-cpm-announceNightTime-enabled").prop('checked', data.enabled);
-        $("#settings-cpm-announceNightTime-bloodMoonCycle").val(data.config.bloodMoonCycle);
-        $("#settings-cpm-announceNightTime-warnHours").val(data.config.warnHours);
-        $("#settings-cpm-announceNightTime-announcer").val(data.config.announcer);
-        $("#settings-cpm-announceNightTime-nightTimeText").val(data.config.nightTimeText);
-        $("#settings-cpm-announceNightTime-bloodDayText").val(data.config.bloodDayText);
-        $("#settings-cpm-announceNightTime-bloodDayTomorrowText").val(data.config.bloodDayTomorrowText);
-        $("#settings-cpm-announceNightTime-counterDayText").val(data.config.counterDayText);
         break;
       case "locTrack":
 
