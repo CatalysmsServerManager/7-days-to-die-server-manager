@@ -58,7 +58,8 @@ class Export extends Commando.Command {
       server: server.id
     });
     const playerClaimItems = await PlayerClaimItem.find({
-      player: players.map(p => p.id)
+      player: players.map(p => p.id),
+      claimed: false
     });
     const playerTeleports = await PlayerTeleport.find({
       player: players.map(p => p.id)
@@ -76,7 +77,30 @@ class Export extends Commando.Command {
       server: server.id
     });
 
-    databaseString += "\r\n";
+    server.toJSON = undefined;
+
+    const exportData = {
+      server: server,
+      config: sdtdConfig,
+      cronJobs: cronJobs,
+      customCommands: customCommands,
+      customArgs: customCommandArguments,
+      customDiscordNotifications: customDiscordNotifications,
+      banEntries: banEntries,
+      gblComments: gblComments,
+      gimmeItems: gimmeItems,
+      players: players,
+      playerClaimItems: playerClaimItems,
+      playerTeleports: playerTeleports,
+      playerUsedCommands: playerUsedCommands,
+      playerUsedGimmes: playerUsedGimmes,
+      roles: roles,
+      shopListings: shopListings
+    };
+
+    Object.getOwnPropertyNames(exportData).map(e => omitDates(e));
+
+   /*  databaseString += "\r\n";
     databaseString += `INSERT INTO sdtdserver (createdAt, updatedAt, id, name, ip, webPort, authName, authToken, owner) \r\n
     VALUES ('${server.createdAt}', '${server.updatedAt}', '${server.id}', '${server.name}', '${server.ip}', '${server.webPort}', '${server.authName}', '${server.authToken}', OWNERID);\r\n`;
 
@@ -113,7 +137,7 @@ class Export extends Commando.Command {
     for (const ban of banEntries) {
       databaseString += "\r\n";
       databaseString += `INSERT INTO banentry (createdAt, updatedAt, id, steamId, note, bannedUntil, reason, unbanned, server) \r\n
-      VALUES ('${ban.createdAt}', '${ban.updatedAt}', '${ban.id}', '${ban.steamId}', '${ban.note}', '${ban.bannedUntil}', '${ban.reason}', '${ban.unbanned}', '${ban.server}'); \r\n`; 
+      VALUES ('${ban.createdAt}', '${ban.updatedAt}', '${ban.id}', '${ban.steamId}', '${ban.note}', '${ban.bannedUntil}', '${ban.reason}', '${ban.unbanned ? 1 : 0}', '${ban.server}'); \r\n`; 
     }
 
     for (const comment of gblComments) {
@@ -137,7 +161,7 @@ class Export extends Commando.Command {
     for (const claimItem of playerClaimItems) {
       databaseString += "\r\n";
       databaseString += `INSERT INTO playerclaimitem (createdAt, updatedAt, id, name, amount, quality, claimed, player) \r\n
-      VALUES ('${claimItem.createdAt}', '${claimItem.updatedAt}', '${claimItem.id}', '${claimItem.name}', '${claimItem.amount}', '${claimItem.quality}', '${claimItem.claimed}', '${claimItem.player ? claimItem.player : "NULL"}'); \r\n`; 
+      VALUES ('${claimItem.createdAt}', '${claimItem.updatedAt}', '${claimItem.id}', '${claimItem.name}', '${claimItem.amount}', '${claimItem.quality}', '${claimItem.claimed}', ${claimItem.player ? claimItem.player : "NULL"}); \r\n`; 
     }
 
     for (const teleport of playerTeleports) {
@@ -168,23 +192,32 @@ class Export extends Commando.Command {
     for (const listing of shopListings) {
       databaseString += "\r\n";
       databaseString += `INSERT INTO shoplisting (createdAt, updatedAt, id, name, friendlyName, amount, quality, price, timesBought, server, createdBy) \r\n
-      VALUES ('${listing.createdAt}', '${listing.updatedAt}', '${listing.id}', '${listing.name}', '${listing.friendlyName}', '${listing.amount}', '${listing.quality}', '${listing.price}', '${listing.timesBought}', '${listing.server}', '${listing.createdBy ? listing.createdBy : "NULL"}'); \r\n`; 
-    }
+      VALUES ('${listing.createdAt}', '${listing.updatedAt}', '${listing.id}', '${listing.name}', '${listing.friendlyName}', '${listing.amount}', '${listing.quality}', '${listing.price}', '${listing.timesBought}', '${listing.server}', ${listing.createdBy ? listing.createdBy : "NULL"}); \r\n`; 
+    } */
 
 
-    fs.writeFileSync(`${server.name}_export.txt`, databaseString);
-
-    await msg.channel.send({
-      files: [{
-        attachment: `${server.name}_export.txt`,
-        name: `${server.name}_export.txt`
-      }]
+    fs.writeFile(`${server.name}_export.json`, JSON.stringify(exportData), async function () {
+      await msg.channel.send({
+        files: [{
+          attachment: `${server.name}_export.json`,
+          name: `${server.name}_export.json`
+        }]
+      });
+  
+      fs.unlinkSync(`${server.name}_export.json`);
     });
 
-    fs.unlinkSync(`${server.name}_export.txt`);
   }
 
 }
 
 
 module.exports = Export;
+
+function omitDates(object) {
+  if (_.isArray(object)) {
+    return object.map(e => _.omit(e, 'createdAt', 'updatedAt'))
+  } else {
+    return _.omit(object, 'createdAt', 'updatedAt');
+  }
+}
