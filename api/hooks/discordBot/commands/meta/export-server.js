@@ -72,14 +72,8 @@ class Export extends Commando.Command {
     const roles = await Role.find({
       server: server.id
     });
-    const tickets = await SdtdTicket.find({
-      server: server.id
-    });
     const shopListings = await ShopListing.find({
       server: server.id
-    });
-    const ticketComments = await TicketComment.find({
-      ticket: tickets.map(t => t.id)
     });
 
     databaseString += "\r\n";
@@ -124,7 +118,7 @@ class Export extends Commando.Command {
 
     for (const comment of gblComments) {
       databaseString += "\r\n";
-      databaseString += `INSERT INTO gblComment (createdAt, updatedAt, id, content, deleted, user, ban) \r\n
+      databaseString += `INSERT INTO gblcomment (createdAt, updatedAt, id, content, deleted, user, ban) \r\n
       VALUES ('${comment.createdAt}', '${comment.updatedAt}', '${comment.id}', '${comment.content}', '${comment.deleted}', '${comment.user}', '${comment.ban}'); \r\n`; 
     }
 
@@ -137,24 +131,24 @@ class Export extends Commando.Command {
     for (const player of players) {
       databaseString += "\r\n";
       databaseString += `INSERT INTO player (createdAt, updatedAt, id, steamId, entityId, ip, country, currency, avatarUrl, name, positionX, positionY, positionZ, inventory, playtime, lastOnline, banned, deaths, zombieKills, playerKills, score, level, lastTeleportTime, server, user, role) \r\n
-      VALUES ('${player.createdAt}', '${player.updatedAt}', '${player.id}', '${player.steamId}', '${player.entityId}', '${player.ip}', '${player.country}', '${player.currency}','${player.avatarUrl}','${player.name}','${player.positionX}','${player.positionY}','${player.positionZ}','${JSON.stringify(player.inventory)}','${player.playtime}','${player.lastOnline}','${player.banned ? 1 : 0}','${player.deaths}','${player.zombieKills}','${player.playerKills}','${player.score}','${player.level}','${player.lastTeleportTime}','${player.server}', ${player.user ? player.user : "NULL"}, ${player.role ? player.role : "NULL"}); \r\n`; 
+      VALUES ('${player.createdAt}', '${player.updatedAt}', '${player.id}', '${player.steamId}', '${player.entityId}', '${player.ip}', '${player.country}', '${player.currency}','${player.avatarUrl}','${player.name}','${player.positionX}','${player.positionY}','${player.positionZ}','${JSON.stringify(player.inventory)}','${player.playtime}','${player.lastOnline}','${player.banned ? 1 : 0}','${player.deaths}','${player.zombieKills}','${player.playerKills}','${player.score}','${player.level}','${player.lastTeleportTime}','${player.server}', NULL, ${player.role ? player.role : "NULL"}); \r\n`; 
     }
 
     for (const claimItem of playerClaimItems) {
       databaseString += "\r\n";
-      databaseString += `INSERT INTO playerclaimitem (createdAt, updatedAt, id, name, amount, quality, claimed, server) \r\n
-      VALUES ('${claimItem.createdAt}', '${claimItem.updatedAt}', '${claimItem.id}', '${claimItem.name}', '${claimItem.amount}', '${claimItem.quality}', '${claimItem.claimed}', '${claimItem.server}'); \r\n`; 
+      databaseString += `INSERT INTO playerclaimitem (createdAt, updatedAt, id, name, amount, quality, claimed, player) \r\n
+      VALUES ('${claimItem.createdAt}', '${claimItem.updatedAt}', '${claimItem.id}', '${claimItem.name}', '${claimItem.amount}', '${claimItem.quality}', '${claimItem.claimed}', '${claimItem.player ? claimItem.player : "NULL"}'); \r\n`; 
     }
 
     for (const teleport of playerTeleports) {
       databaseString += "\r\n";
       databaseString += `INSERT INTO playerteleport (createdAt, updatedAt, id, name, x, y, z, public, timesUsed, player) \r\n
-      VALUES ('${teleport.createdAt}', '${teleport.updatedAt}', '${teleport.id}', '${teleport.name}', '${teleport.x}', '${teleport.y}', '${teleport.z}', '${teleport.public}', '${teleport.timesUsed}', '${teleport.player}'); \r\n`; 
+      VALUES ('${teleport.createdAt}', '${teleport.updatedAt}', '${teleport.id}', '${teleport.name}', '${teleport.x}', '${teleport.y}', '${teleport.z}', '${teleport.public ? 1 : 0}', '${teleport.timesUsed}', '${teleport.player}'); \r\n`; 
     }
 
     for (const usedCmd of playerUsedCommands) {
       databaseString += "\r\n";
-      databaseString += `INSERT INTO playerusedcommand (createdAt, updatedAt, id, command, player, ) \r\n
+      databaseString += `INSERT INTO playerusedcommand (createdAt, updatedAt, id, command, player) \r\n
       VALUES ('${usedCmd.createdAt}', '${usedCmd.updatedAt}', '${usedCmd.id}', '${usedCmd.command}', '${usedCmd.player}'); \r\n`; 
     }
 
@@ -171,23 +165,12 @@ class Export extends Commando.Command {
       VALUES ('${role.createdAt}', '${role.updatedAt}', '${role.id}', '${role.name}', '${role.level}', '${role.isDefault ? 1 : 0}', '${role.amountOfTeleports}', '${role.radiusAllowedToExplore}','${role.economyGiveMultiplier}', '${role.economyDeductMultiplier}','${role.discordRole}','${role.manageServer ? 1 : 0}','${role.manageEconomy ? 1 : 0}','${role.managePlayers ? 1 : 0}','${role.manageTickets ? 1 : 0}','${role.viewAnalytics ? 1 : 0}','${role.viewDashboard ? 1 : 0}','${role.useTracking ? 1 : 0}','${role.useChat ? 1 : 0}','${role.useCommands ? 1 : 0}','${role.manageGbl ? 1 : 0}','${role.discordExec ? 1 : 0}','${role.discordLookup ? 1 : 0}','${role.server}'); \r\n`; 
     }
 
-    for (const ticket of tickets) {
-      databaseString += "\r\n";
-      databaseString += `INSERT INTO sdtdticket (createdAt, updatedAt, id, description, title, status, playerInfo, server, player) \r\n
-      VALUES ('${ticket.createdAt}', '${ticket.updatedAt}', '${ticket.id}', '${ticket.description}', '${ticket.title}', '${ticket.status}', '${JSON.stringify(ticket.playerInfo)}', '${ticket.server}', '${ticket.player}', '${ticket.player}'); \r\n`; 
-    }
-
     for (const listing of shopListings) {
       databaseString += "\r\n";
       databaseString += `INSERT INTO shoplisting (createdAt, updatedAt, id, name, friendlyName, amount, quality, price, timesBought, server, createdBy) \r\n
-      VALUES ('${listing.createdAt}', '${listing.updatedAt}', '${listing.id}', '${listing.name}', '${listing.friendlyName}', '${listing.amount}', '${listing.quality}', '${listing.price}', '${listing.timesBought}', '${listing.player}', '${listing.server}', '${listing.createdBy}'); \r\n`; 
+      VALUES ('${listing.createdAt}', '${listing.updatedAt}', '${listing.id}', '${listing.name}', '${listing.friendlyName}', '${listing.amount}', '${listing.quality}', '${listing.price}', '${listing.timesBought}', '${listing.server}', '${listing.createdBy ? listing.createdBy : "NULL"}'); \r\n`; 
     }
 
-    for (const comment of ticketComments) {
-      databaseString += "\r\n";
-      databaseString += `INSERT INTO ticketcomment (createdAt, updatedAt, id, commentText, ticket, userThatPlacedTheComment) \r\n
-      VALUES ('${comment.createdAt}', '${comment.updatedAt}', '${comment.id}', '${comment.commentText}', '${comment.ticket}', ${comment.userThatPlacedTheComment}); \r\n`; 
-    }
 
     fs.writeFileSync(`${server.name}_export.txt`, databaseString);
 
