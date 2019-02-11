@@ -66,7 +66,6 @@ module.exports = {
         config.commandsEnabled = false;
       }
 
-      await sails.hooks.sdtdcommands.updateConfig(inputs.serverId, config);
       let status = sails.hooks.sdtdcommands.getStatus(inputs.serverId);
 
       sails.log.debug(`API - SdtdServer:commands-toggle - New status for server ${inputs.serverId} is ${status}`);
