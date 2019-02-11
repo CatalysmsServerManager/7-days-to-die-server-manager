@@ -113,6 +113,10 @@ module.exports = function sdtdLogs(sails) {
 
     getLoggingObject: function (serverId) {
       let obj = loggingInfoMap.get(String(serverId));
+
+      if (_.isUndefined(obj)) {
+        return new EventEmitter();
+      }
       return obj;
     },
 
