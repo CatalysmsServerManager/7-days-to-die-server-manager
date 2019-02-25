@@ -123,36 +123,7 @@ class Gimme extends SdtdCommand {
 
         let parsedCommands = sails.helpers.sdtd.parseCommandsString(itemToUse.value);
 
-        for (const cmdToExec of parsedCommands) {
-          try {
-            let commandInfoFilledIn = await sails.helpers.sdtd.fillPlayerVariables(cmdToExec, player);
-            if (cmdToExec.includes("wait(")) {
-              let secondsToWaitStr = cmdToExec.replace('wait(', '').replace(')', '');
-              let secondsToWait;
-
-              secondsToWait = parseInt(secondsToWaitStr);
-
-              if (secondsToWait < 1) {
-                return chatMessage.reply(`Cannot wait for a negative or 0 amount of seconds`);
-              }
-
-              if (isNaN(secondsToWait)) {
-                return chatMessage.reply(`Invalid wait() syntax! example: wait(5)`);
-              }
-
-              await delaySeconds(secondsToWait);
-            } else {
-              let response = await SdtdApi.executeConsoleCommand({
-                ip: server.ip,
-                port: server.webPort,
-                adminUser: server.authName,
-                adminToken: server.authToken
-              }, commandInfoFilledIn);
-            }
-          } catch (error) {
-            chatMessage.reply(`Error while executing a command! Please report this to a server admin - ${error}`);
-          }
-        }
+        await sails.helpers.sdtd.executeCustomCmd(server, parsedCommands, player);
 
         break;
 
