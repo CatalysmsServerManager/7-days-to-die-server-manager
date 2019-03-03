@@ -6,6 +6,10 @@
   box-sizing: border-box;
 }
 
+table {
+  word-break: break-all;
+}
+
 body {
   background: #dee1e3;
   background-color: #dee1e3;
