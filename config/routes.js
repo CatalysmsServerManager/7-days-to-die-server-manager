@@ -184,6 +184,13 @@ module.exports.routes = {
 
   'post /api/role/player' : "roleController/add-player",
   'delete /api/role/player': "roleController/remove-player",
+
+  // Custom hooks
+
+  'get /api/sdtdserver/hook' : 'CustomHookController/get-custom-hook',
+  'post /api/sdtdserver/hook' : 'CustomHookController/add-custom-hook',
+  'patch /api/sdtdserver/hook' : 'CustomHookController/edit-custom-hook',
+  'delete /api/sdtdserver/hook' : 'CustomHookController/delete-custom-hook',
   
   // Economy
 
