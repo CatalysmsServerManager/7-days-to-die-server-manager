@@ -6,7 +6,7 @@ module.exports = {
     event: {
       required: true,
       type: 'string',
-      isIn: ['playerConnected', 'playerDisconnected', 'chatMessage']
+      isIn: sails.config.custom.supportedHooks
     },
 
     commandsToExecute: {

@@ -182,6 +182,16 @@ module.exports = function sdtdLogs(sails) {
       sails.log.verbose(`Detected a player connected`, connectedMsg);
     });
 
+    
+    eventEmitter.on('playerJoined', async function (joinMsg) {
+      joinMsg.server = _.omit(server, "authName", "authToken");
+      let playerData = await sails.helpers.sdtd.loadPlayerData(server.id, joinMsg.steamId);
+      joinMsg.player = playerData[0];
+
+      sails.sockets.broadcast(server.id, 'playerJoined', joinMsg);
+      sails.log.verbose(`Detected a player joined`, joinMsg);
+    });
+
     eventEmitter.on('playerDisconnected', async function (disconnectedMsg) {
       disconnectedMsg.server = _.omit(server, "authName", "authToken");
       let playerData = await sails.helpers.sdtd.loadPlayerData(server.id, disconnectedMsg.playerID);

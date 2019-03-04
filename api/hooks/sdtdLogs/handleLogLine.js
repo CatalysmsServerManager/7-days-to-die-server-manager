@@ -177,8 +177,40 @@ module.exports = (logLine) => {
 
     returnValue.type = "playerConnected";
     returnValue.data = connectedMsg;
+  }
+
+  // New player connects
+  if (_.startsWith(logLine.msg, 'PlayerSpawnedInWorld (reason: EnterMultiplayer')) {
+    /*
+    {
+      "date": "2019-03-04",
+      "time": "14:50:25",
+      "uptime": "109.802",
+      "msg": "PlayerSpawnedInWorld (reason: EnterMultiplayer, position: -81, 61, -10): EntityID=531, PlayerID='76561198028175941', OwnerID='76561198028175941', PlayerName='Catalysm'",
+      "trace": "",
+      "type": "Log"
+    }
+    */
+
+   let date = logLine.date;
+   let time = logLine.time;
+   let logMsg = logLine.msg.split(",");
+
+   let steamId = logMsg[4].replace("PlayerID=", "").split("\'").join('').trim();
+   let playerName = logMsg[6].replace('PlayerName=', '').split("\'").join('').trim();
+
+   let joinMsg = {
+    steamId,
+    playerName,
+    date,
+    time
+  };
+
+  returnValue.type = "playerJoined";
+  returnValue.data = joinMsg;
 
   }
+
   if (_.startsWith(logLine.msg, 'Player disconnected:')) {
     /*
     {
@@ -228,7 +260,7 @@ module.exports = (logLine) => {
     }
     */
     let deathMessage = logLine.msg.split(" ")
-    let playerName = deathMessage.slice(2, deathMessage.length - 1).join(" ").replace("/'", "")
+    let playerName = deathMessage.slice(2, deathMessage.length - 1).join(" ").split("\'").join("")
     let date = logLine.date
     let time = logLine.time
     deathMessage = {
