@@ -95,7 +95,7 @@ class CustomCommand extends SdtdCommand {
       let commandsExecuted = new Array();
       try {
 
-        let executedCmds = await sails.helpers.sdtd.executeCustomCmd(server, options.commandsToExecute.split(';'), player);
+        let executedCmds = await sails.helpers.sdtd.executeCustomCmd(server, options.commandsToExecute.split(';'), {player: player});
 
         if (options.sendOutput) {
 

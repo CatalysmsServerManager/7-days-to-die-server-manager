@@ -241,4 +241,20 @@
         </div>
 
       </div>
+
+          <!-- Custom hook settings -->
+
+    <div class="card">
+      <div class="card-header" id="settings-heading-customHooks">
+        <h5 class="mb-0">
+          <button class="btn btn-link" data-toggle="collapse" data-target="#settings-collapse-customHooks">
+            <i class="fas fa-code fa-lg"></i> Custom hooks
+          </button>
+        </h5>
+      </div>
+
+      <div id="settings-collapse-customHooks" class="collapse">
+        <%- include('./partials/settings/customHooks', {server: server, config: config, user: user}) %>
+      </div>
+    </div>
   </div>
