@@ -1,6 +1,7 @@
 const SdtdApi = require('7daystodie-api-wrapper');
 const EventEmitter = require('events');
 const handleLogLine = require('./handleLogLine');
+const enrichEventData = require('./enrichEventData');
 
 class LoggingObject extends EventEmitter {
 
@@ -137,6 +138,12 @@ class LoggingObject extends EventEmitter {
 
       let parsedLogLine = handleLogLine(line);
       if (parsedLogLine) {
+        parsedLogLine.server = this.server;
+        try {
+          parsedLogLine.data = await enrichEventData(parsedLogLine);
+        } catch (error) {
+          sails.log.error(error);
+        }
 
         if (!this._checkDuplicateMemUpdate(parsedLogLine, line)) {
           this.emit(parsedLogLine.type, parsedLogLine.data);

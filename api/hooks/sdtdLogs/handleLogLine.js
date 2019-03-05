@@ -338,5 +338,30 @@ module.exports = (logLine) => {
     returnValue.data = killMessage;
   }
 
+  if (logLine.msg.startsWith("GMSG: Player") && logLine.msg.includes("killed")) {
+    /*
+    {
+      "date": "2017-11-14",
+      "time": "14:50:49",
+      "uptime": "133.559",
+      "msg": "GMSG: Player 'Tricia' killed by 'Catalysm'",
+      "trace": "",
+      "type": "Log"
+    }
+    */
+    let killMessage = logLine.msg.split("\'");
+
+    let victimName = killMessage[1];
+    let killerName = killMessage[3];
+
+    killMessage = {
+      victimName: victimName,
+      killerName: killerName
+    };
+    
+    returnValue.type = "playerKill";
+    returnValue.data = killMessage;
+  }
+
   return returnValue;
 };
