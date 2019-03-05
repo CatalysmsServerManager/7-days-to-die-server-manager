@@ -273,5 +273,35 @@ module.exports = (logLine) => {
     returnValue.data = deathMessage;
   }
 
+  if (logLine.msg.startsWith("[CSMM_Patrons]playerLeveled:")) {
+    /*
+    {
+      "date": "2017-11-14",
+      "time": "14:50:49",
+      "uptime": "133.559",
+      "msg": "[CSMM_Patrons]playerLeveled: Catalysm (76561198028175941) made level 6 (was 5)",
+      "trace": "",
+      "type": "Log"
+    }
+    */
+    let lvlMessage = logLine.msg.split("(");
+
+    let steamId = lvlMessage[1].split(')')[0].trim();
+    let newLvl = lvlMessage[1].split('level')[1].trim();
+    let oldLvl = lvlMessage[2].replace('was ', '').replace(')', '').trim();
+
+    newLvl = parseInt(newLvl);
+    oldLvl = parseInt(oldLvl);
+
+    lvlMessage = {
+      steamId: steamId,
+      newLvl: newLvl,
+      oldLvl: oldLvl
+    };
+
+    returnValue.type = "playerLevel";
+    returnValue.data = lvlMessage;
+  }
+
   return returnValue;
 };

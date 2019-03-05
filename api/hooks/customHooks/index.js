@@ -41,7 +41,7 @@ module.exports = function defineCustomHooksHook(sails) {
           });
 
           for (const hookToExec of configuredHooks) {
-            executeHook(eventData, hookToExec);
+            executeHook(eventData, hookToExec, serverId);
           }
         });
       }
@@ -50,9 +50,9 @@ module.exports = function defineCustomHooksHook(sails) {
 
   };
 
-  async function executeHook(eventData, hookToExec) {
+  async function executeHook(eventData, hookToExec, serverId) {
     try {
-      let server = await SdtdServer.findOne(eventData.server.id);
+      let server = await SdtdServer.findOne(serverId);
 
       let player = await enrichPlayerData(eventData, server);
 

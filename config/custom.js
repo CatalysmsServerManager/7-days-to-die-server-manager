@@ -53,7 +53,7 @@ module.exports.custom = {
 
   // Custom hooks
 
-  supportedHooks: ['playerConnected', 'playerDisconnected', 'chatMessage', 'playerDeath', 'playerJoined'],
+  supportedHooks: ['playerConnected', 'playerDisconnected', 'chatMessage', 'playerDeath', 'playerJoined', 'playerLevel'],
 
   // DONORS
   donorConfig: {
