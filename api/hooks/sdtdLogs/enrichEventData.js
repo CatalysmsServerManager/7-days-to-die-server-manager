@@ -1,5 +1,4 @@
 module.exports = async function enrichEventData(event) {
-    sails.log.debug(event)
   let newData = event.data;
 
   switch (event.type) {
