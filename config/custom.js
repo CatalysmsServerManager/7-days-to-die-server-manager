@@ -51,6 +51,10 @@ module.exports.custom = {
 
   economyActionsBeforeDelete: 100,
 
+  // Custom hooks
+
+  supportedHooks: ['playerConnected', 'playerDisconnected', 'chatMessage', 'playerDeath', 'playerJoined', 'playerLevel', 'zombieKilled', 'animalKilled', 'playerKilled'],
+
   // DONORS
   donorConfig: {
     devDiscordServer: '336821518250147850',

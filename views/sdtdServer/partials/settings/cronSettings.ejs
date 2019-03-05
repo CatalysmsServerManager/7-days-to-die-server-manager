@@ -385,7 +385,7 @@
             jobId: cronJob.id,
           },
           error: function (xhr, status, error) {
-            displayAjaxToSupportData(xhr, this);;
+            displayAjaxToSupportData(xhr, this);
             showErrorModal(`${error} - ${xhr.responseText}`, xhr);
           },
           success: (data, status, xhr) => {}

@@ -1,0 +1,295 @@
+<div>
+  <div class="container">
+
+    <table class="table" id="hooks-table">
+      <thead>
+        <tr>
+          <th>Event</th>
+          <th>Commands to execute</th>
+          <th>Edit</th>
+          <th>Delete</th>
+
+        </tr>
+      </thead>
+      <tbody>
+
+      </tbody>
+    </table>
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary btn" data-toggle="modal" data-target="#hooks-new-modal">
+      Add new hook
+    </button>
+
+    <!-- Add hook Modal -->
+    <div class="modal fade" id="hooks-new-modal" tabindex="-1" role="dialog" aria-labelledby="hooks-new-modal"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Add new hook</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="hooks-new-event">Event</label>
+              <input type="text" class="form-control" name="hooks-new-event" id="hooks-new-event" aria-describedby="hooks-new-event-help"
+                placeholder="">
+              <small id="hooks-new-event-help" class="form-text text-muted">Which event will trigger this hook.</small>
+            </div>
+
+            <div class="form-group">
+              <label for="hooks-new-commands">Commands</label>
+              <textarea class="form-control" name="hooks-new-commands" id="hooks-new-commands" aria-describedby="hooks-new-commands-help"
+                placeholder="" rows="10"></textarea>
+              <small id="hooks-new-commands-help" class="form-text text-muted">Which commands to execute when this hook
+                is triggered.</small>
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" id="hooks-new-submit" class="btn btn-primary">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit hook Modal -->
+    <div class="modal fade" id="hooks-edit-modal" tabindex="-1" role="dialog" aria-labelledby="hooks-edit-modal-help"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Edit hook</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="hooks-edit-event">Event</label>
+              <input type="text" class="form-control" name="hooks-edit-event" id="hooks-edit-event" aria-describedby="hooks-edit-event-help"
+                placeholder="">
+              <small id="hooks-edit-event-help" class="form-text text-muted">Which event will trigger this hook.</small>
+            </div>
+
+            <div class="form-group">
+              <label for="hooks-edit-commands">Commands</label>
+              <textarea class="form-control" name="hooks-edit-commands" id="hooks-edit-commands" aria-describedby="hooks-edit-commands-help"
+                placeholder="" rows="10"></textarea>
+              <small id="hooks-edit-commands-help" class="form-text text-muted">Which commands to execute when this
+                hook
+                is triggered.</small>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" id="edit-hook-save" class="btn btn-primary">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete hook Modal -->
+    <div class="modal fade" id="hooks-delete-modal" tabindex="-1" role="dialog" aria-labelledby="hooks-delete-modal"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Are you sure?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-danger" id="delete-hook-save">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+
+</div>
+
+
+<script>
+  $(document).ready(() => {
+
+    const hooks = new Array();
+    let activeHookId = undefined;
+
+    const dataTable = $('#hooks-table').DataTable({
+      autoWidth: false,
+      dom: 'Bfrtip',
+      fixedHeader: true,
+      responsive: true,
+      buttons: [
+
+      ],
+      columns: [{
+          data: "event",
+        },
+        {
+          data: 'commandsToExecute',
+          width: '70%'
+        },
+        {
+          render: function (data, type, row, meta) {
+            return `<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#hooks-edit-modal" data-event="${row.event}" data-commands='${row.commandsToExecute.replace("'", "&apos")}' data-hookid="${row.id}">Edit</button>`;
+          }
+        },
+        {
+          render: function (data, type, row, meta) {
+            return `<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#hooks-delete-modal" data-hookid="${row.id}">Delete</button>`;
+          }
+        },
+      ]
+    });
+
+    getHooks().then(data => {
+      drawDataTable(data, dataTable);
+    }).catch(error => {
+      console.log(error);
+      showErrorModal(`Error while loading custom hooks - ${error}`);
+    })
+
+    // Create new hook
+    $("#hooks-new-submit").click(e => {
+      let event = $("#hooks-new-event").val();
+      let commandsToExec = $("#hooks-new-commands").val();
+
+      $.ajax({
+        url: "/api/sdtdserver/hook",
+        method: "POST",
+        data: {
+          commandsToExecute: commandsToExec,
+          event: event,
+          serverId: window.SAILS_LOCALS.server.id,
+          _csrf: window.SAILS_LOCALS._csrf,
+        },
+        success: (data, status, xhr) => {
+          dataTable.row.add(data);
+          dataTable.draw();
+          $('#hooks-new-modal').modal('hide');
+        },
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      })
+    });
+
+    // Fill relevant values in the edit hook modal when it is opened
+    $('#hooks-edit-modal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget);
+      var event = button.data('event');
+      var commandsToExecute = button.data('commands');
+      activeHookId = button.data('hookid')
+      var modal = $(this);
+      modal.find('#hooks-edit-event').val(event);
+      modal.find('#hooks-edit-commands').val(commandsToExecute.replace('&apos', "'"));
+    })
+
+    $("#edit-hook-save").click(e => {
+      e.preventDefault()
+      let event = $("#hooks-edit-event").val();
+      let commandsToExec = $("#hooks-edit-commands").val();
+
+      $.ajax({
+        url: "/api/sdtdserver/hook",
+        method: "PATCH",
+        data: {
+          commandsToExecute: commandsToExec,
+          event: event,
+          hookId: activeHookId,
+          _csrf: window.SAILS_LOCALS._csrf,
+        },
+        success: (data, status, xhr) => {
+          getHooks().then(data => {
+            drawDataTable(data, dataTable);
+          }).catch(error => {
+            console.log(error);
+            showErrorModal(`Error while loading custom hooks - ${error}`);
+          });
+          $('#hooks-edit-modal').modal('hide');
+        },
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      })
+    });
+
+    // Fill relevant values in the delete hook modal when it is opened
+    $('#hooks-delete-modal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget);
+      activeHookId = button.data('hookid')
+    });
+
+    $("#delete-hook-save").click(e => {
+      e.preventDefault()
+
+      $.ajax({
+        url: "/api/sdtdserver/hook",
+        method: "DELETE",
+        data: {
+          hookId: activeHookId,
+          _csrf: window.SAILS_LOCALS._csrf,
+        },
+        success: (data, status, xhr) => {
+          getHooks().then(data => {
+            drawDataTable(data, dataTable);
+          }).catch(error => {
+            console.log(error);
+            showErrorModal(`Error while loading custom hooks - ${error}`);
+          });
+          $('#hooks-delete-modal').modal('hide');
+        },
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      })
+    });
+
+  });
+
+
+  function getHooks() {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: "/api/sdtdserver/hook",
+        method: "GET",
+        data: {
+          serverId: window.SAILS_LOCALS.server.id,
+          _csrf: window.SAILS_LOCALS._csrf,
+        },
+        success: (data, status, xhr) => {
+          resolve(data);
+        },
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+          reject();
+        }
+      })
+    })
+  }
+
+  function drawDataTable(data, table) {
+    table.clear();
+    for (const row of data) {
+      table.row.add(row);
+    }
+    table.draw();
+
+  }
+
+</script>

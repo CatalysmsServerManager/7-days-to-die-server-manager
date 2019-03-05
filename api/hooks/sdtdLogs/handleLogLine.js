@@ -3,8 +3,8 @@ const geoip = require('geoip-ultralight');
 module.exports = (logLine) => {
 
   let returnValue = {
-    type: undefined,
-    data: undefined
+    type: 'logLine',
+    data: logLine
   }
 
   if (_.startsWith(logLine.msg, 'Time:')) {
@@ -177,8 +177,40 @@ module.exports = (logLine) => {
 
     returnValue.type = "playerConnected";
     returnValue.data = connectedMsg;
+  }
+
+  // New player connects
+  if (_.startsWith(logLine.msg, 'PlayerSpawnedInWorld (reason: EnterMultiplayer')) {
+    /*
+    {
+      "date": "2019-03-04",
+      "time": "14:50:25",
+      "uptime": "109.802",
+      "msg": "PlayerSpawnedInWorld (reason: EnterMultiplayer, position: -81, 61, -10): EntityID=531, PlayerID='76561198028175941', OwnerID='76561198028175941', PlayerName='Catalysm'",
+      "trace": "",
+      "type": "Log"
+    }
+    */
+
+   let date = logLine.date;
+   let time = logLine.time;
+   let logMsg = logLine.msg.split(",");
+
+   let steamId = logMsg[4].replace("PlayerID=", "").split("\'").join('').trim();
+   let playerName = logMsg[6].replace('PlayerName=', '').split("\'").join('').trim();
+
+   let joinMsg = {
+    steamId,
+    playerName,
+    date,
+    time
+  };
+
+  returnValue.type = "playerJoined";
+  returnValue.data = joinMsg;
 
   }
+
   if (_.startsWith(logLine.msg, 'Player disconnected:')) {
     /*
     {
@@ -228,7 +260,7 @@ module.exports = (logLine) => {
     }
     */
     let deathMessage = logLine.msg.split(" ")
-    let playerName = deathMessage.slice(2, deathMessage.length - 1).join(" ").replace("/'", "")
+    let playerName = deathMessage.slice(2, deathMessage.length - 1).join(" ").split("\'").join("")
     let date = logLine.date
     let time = logLine.time
     deathMessage = {
@@ -239,6 +271,96 @@ module.exports = (logLine) => {
 
     returnValue.type = "playerDeath";
     returnValue.data = deathMessage;
+  }
+
+  if (logLine.msg.startsWith("[CSMM_Patrons]playerLeveled:")) {
+    /*
+    {
+      "date": "2017-11-14",
+      "time": "14:50:49",
+      "uptime": "133.559",
+      "msg": "[CSMM_Patrons]playerLeveled: Catalysm (76561198028175941) made level 6 (was 5)",
+      "trace": "",
+      "type": "Log"
+    }
+    */
+    let lvlMessage = logLine.msg.split("(");
+
+    let steamId = lvlMessage[1].split(')')[0].trim();
+    let newLvl = lvlMessage[1].split('level')[1].trim();
+    let oldLvl = lvlMessage[2].replace('was ', '').replace(')', '').trim();
+
+    newLvl = parseInt(newLvl);
+    oldLvl = parseInt(oldLvl);
+
+    lvlMessage = {
+      steamId: steamId,
+      newLvl: newLvl,
+      oldLvl: oldLvl
+    };
+
+    returnValue.type = "playerLevel";
+    returnValue.data = lvlMessage;
+  }
+
+  if (logLine.msg.startsWith("[CSMM_Patrons]entityKilled:")) {
+    /*
+    {
+      "date": "2017-11-14",
+      "time": "14:50:49",
+      "uptime": "133.559",
+      "msg": "[CSMM_Patrons]entityKilled: Catalysm (76561198028175941) killed zombie zombieBoe",
+      "trace": "",
+      "type": "Log"
+    }
+    */
+    let killMessage = logLine.msg.split("(");
+
+    let steamId = killMessage[1].split(')')[0].trim();
+    let victimInfo = killMessage[1].split('killed ')[1].split(' ');
+    let entityClass = victimInfo[0];
+    let entityName = victimInfo[1];
+
+    killMessage = {
+      steamId: steamId,
+      entityClass: entityClass,
+      entityName: entityName
+    };
+
+    if (entityClass === "zombie") {
+      returnValue.type = "zombieKilled";
+    }
+    
+    if (entityClass === "animal") {
+      returnValue.type = "animalKilled";
+    }
+
+    returnValue.data = killMessage;
+  }
+
+  if (logLine.msg.startsWith("GMSG: Player") && logLine.msg.includes("killed")) {
+    /*
+    {
+      "date": "2017-11-14",
+      "time": "14:50:49",
+      "uptime": "133.559",
+      "msg": "GMSG: Player 'Tricia' killed by 'Catalysm'",
+      "trace": "",
+      "type": "Log"
+    }
+    */
+    let killMessage = logLine.msg.split("\'");
+
+    let victimName = killMessage[1];
+    let killerName = killMessage[3];
+
+    killMessage = {
+      victimName: victimName,
+      killerName: killerName
+    };
+    
+    returnValue.type = "playerKilled";
+    returnValue.data = killMessage;
   }
 
   return returnValue;

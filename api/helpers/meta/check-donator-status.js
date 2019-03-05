@@ -41,6 +41,11 @@ module.exports = {
     if (!_.isUndefined(inputs.serverId)) {
       try {
         let server = await SdtdServer.findOne(inputs.serverId).populate('owner');
+
+        if (_.isUndefined(server.owner.discordId)) {
+          return exits.success('free');
+        }
+
         foundUser = await developerGuild.fetchMember(server.owner.discordId);
         if (!_.isUndefined(foundUser)) {
           discordUser = foundUser

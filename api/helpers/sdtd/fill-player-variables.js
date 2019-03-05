@@ -1,3 +1,16 @@
+/**
+  _____                                _           _ 
+ |  __ \                              | |         | |
+ | |  | | ___ _ __  _ __ ___  ___ __ _| |_ ___  __| |
+ | |  | |/ _ \ '_ \| '__/ _ \/ __/ _` | __/ _ \/ _` |
+ | |__| |  __/ |_) | | |  __/ (_| (_| | ||  __/ (_| |
+ |_____/ \___| .__/|_|  \___|\___\__,_|\__\___|\__,_|
+             | |                                     
+             |_|                                     
+
+  This method is replaced with fill-custom-variables and is only kept for compatibility purposes.
+ */
+
 module.exports = {
 
 
