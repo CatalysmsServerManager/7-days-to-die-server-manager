@@ -38,7 +38,7 @@ module.exports = async function enrichEventData(event) {
     if (!_.isEmpty(event.data.playerName)) {
       player = await Player.findOne({
         name: event.data.playerName,
-        server: server.id
+        server: event.server.id
       });
     }
   }
