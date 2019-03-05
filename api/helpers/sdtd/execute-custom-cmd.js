@@ -70,7 +70,7 @@ module.exports = {
         if (!_.isUndefined(inputs.data.player)) {
           commandToExec = await sails.helpers.sdtd.fillPlayerVariables(command, inputs.data.player);
         }
-        commandToExec = await sails.helpers.sdtd.fillCustomVariables(command, inputs.data);
+        commandToExec = await sails.helpers.sdtd.fillCustomVariables(commandToExec, inputs.data);
         let commandResult = await executeCommand(inputs.server, commandToExec);
         commandsExecuted.push(commandResult);
       }
