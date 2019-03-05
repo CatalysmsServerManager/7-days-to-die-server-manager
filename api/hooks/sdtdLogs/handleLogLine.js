@@ -3,8 +3,8 @@ const geoip = require('geoip-ultralight');
 module.exports = (logLine) => {
 
   let returnValue = {
-    type: undefined,
-    data: undefined
+    type: 'logLine',
+    data: logLine
   }
 
   if (_.startsWith(logLine.msg, 'Time:')) {

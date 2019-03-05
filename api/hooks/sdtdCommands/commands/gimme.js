@@ -123,7 +123,7 @@ class Gimme extends SdtdCommand {
 
         let parsedCommands = sails.helpers.sdtd.parseCommandsString(itemToUse.value);
 
-        await sails.helpers.sdtd.executeCustomCmd(server, parsedCommands, player);
+        await sails.helpers.sdtd.executeCustomCmd(server, parsedCommands, {player: player});
 
         break;
 

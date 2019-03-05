@@ -131,13 +131,12 @@ class LoggingObject extends EventEmitter {
     }
 
     _.each(newLogs.entries, async line => {
-      this.emit('logLine', line);
       if (this.debug) {
         sails.log.verbose(`SdtdLogs - DEBUG MESSAGE - server ${this.server.id} --- ${line.msg}`);
       }
 
       let parsedLogLine = handleLogLine(line);
-      if (parsedLogLine) {
+      if (!_.isUndefined(parsedLogLine)) {
         parsedLogLine.server = this.server;
         try {
           parsedLogLine.data = await enrichEventData(parsedLogLine);

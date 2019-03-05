@@ -54,9 +54,7 @@ module.exports = function defineCustomHooksHook(sails) {
     try {
       let server = await SdtdServer.findOne(serverId);
 
-      let player = await enrichPlayerData(eventData, server);
-
-      let results = await sails.helpers.sdtd.executeCustomCmd(server, hookToExec.commandsToExecute.split(';'), player);
+      let results = await sails.helpers.sdtd.executeCustomCmd(server, hookToExec.commandsToExecute.split(';'), eventData);
       sails.log.debug(`Executed a custom hook for server ${eventData.server.id}`, {
         hook: hookToExec,
         event: eventData,
@@ -65,38 +63,6 @@ module.exports = function defineCustomHooksHook(sails) {
     } catch (error) {
       sails.log.error(error);
     }
-  }
-
-  // Take data from the log event (steamId, playerName, ...) and get the appropriate database record.
-  async function enrichPlayerData(eventData, server) {
-    let player;
-    if (!_.isEmpty(eventData.steamId)) {
-      player = await sails.helpers.sdtd.loadPlayerData.with({
-        serverId: server.id,
-        steamId: eventData.steamId
-      });
-      player = player[0];
-    }
-
-    if (!_.isEmpty(eventData.steamID)) {
-      player = await sails.helpers.sdtd.loadPlayerData.with({
-        serverId: server.id,
-        steamId: eventData.steamID
-      });
-      player = player[0];
-    }
-
-    // If we do not find the player via steamId, we try via name.
-    if (_.isUndefined(player)) {
-      if (!_.isEmpty(eventData.playerName)) {
-        player = await Player.findOne({
-          name: eventData.playerName,
-          server: server.id
-        });
-      }
-    }
-
-    return player;
   }
 
 };
