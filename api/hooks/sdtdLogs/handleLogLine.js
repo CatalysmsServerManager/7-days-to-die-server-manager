@@ -303,5 +303,40 @@ module.exports = (logLine) => {
     returnValue.data = lvlMessage;
   }
 
+  if (logLine.msg.startsWith("[CSMM_Patrons]entityKilled:")) {
+    /*
+    {
+      "date": "2017-11-14",
+      "time": "14:50:49",
+      "uptime": "133.559",
+      "msg": "[CSMM_Patrons]entityKilled: Catalysm (76561198028175941) killed zombie zombieBoe",
+      "trace": "",
+      "type": "Log"
+    }
+    */
+    let killMessage = logLine.msg.split("(");
+
+    let steamId = killMessage[1].split(')')[0].trim();
+    let victimInfo = killMessage[1].split('killed ')[1].split(' ');
+    let entityClass = victimInfo[0];
+    let entityName = victimInfo[1];
+
+    killMessage = {
+      steamId: steamId,
+      entityClass: entityClass,
+      entityName: entityName
+    };
+
+    if (entityClass === "zombie") {
+      returnValue.type = "zombieKilled";
+    }
+    
+    if (entityClass === "animal") {
+      returnValue.type = "animalKilled";
+    }
+
+    returnValue.data = killMessage;
+  }
+
   return returnValue;
 };
