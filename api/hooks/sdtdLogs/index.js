@@ -166,8 +166,8 @@ module.exports = function sdtdLogs(sails) {
       await sails.hooks.discordnotifications.sendNotification({
         serverId: server.id,
         notificationType: 'playerConnected',
-        player: playerData[0]
-      })
+        player: connectedMsg.player
+      });
       if (connectedMsg.country != null) {
         await Player.update({
           server: server.id,
@@ -193,8 +193,8 @@ module.exports = function sdtdLogs(sails) {
       await sails.hooks.discordnotifications.sendNotification({
         serverId: server.id,
         notificationType: 'playerDisconnected',
-        player: playerData[0]
-      })
+        player: disconnectedMsg.player
+      });
       sails.sockets.broadcast(server.id, 'playerDisconnected', disconnectedMsg);
       sails.log.verbose(`Detected a player disconnected`, disconnectedMsg);
     });
