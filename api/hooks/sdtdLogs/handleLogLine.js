@@ -359,7 +359,7 @@ module.exports = (logLine) => {
       killerName: killerName
     };
     
-    returnValue.type = "playerKill";
+    returnValue.type = "playerKilled";
     returnValue.data = killMessage;
   }
 
