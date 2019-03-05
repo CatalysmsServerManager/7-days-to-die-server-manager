@@ -67,10 +67,12 @@ module.exports = {
         });
       } else {
         let commandToExec = command;
-        if (!_.isUndefined(inputs.data.player)) {
-          commandToExec = await sails.helpers.sdtd.fillPlayerVariables(command, inputs.data.player);
+        if (!_.isUndefined(inputs.data)) {
+          if (!_.isUndefined(inputs.data.player)) {
+            commandToExec = await sails.helpers.sdtd.fillPlayerVariables(command, inputs.data.player);
+          }
+          commandToExec = await sails.helpers.sdtd.fillCustomVariables(commandToExec, inputs.data);
         }
-        commandToExec = await sails.helpers.sdtd.fillCustomVariables(commandToExec, inputs.data);
         let commandResult = await executeCommand(inputs.server, commandToExec);
         commandsExecuted.push(commandResult);
       }
