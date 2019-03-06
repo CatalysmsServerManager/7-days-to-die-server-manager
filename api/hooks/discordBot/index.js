@@ -30,7 +30,7 @@ module.exports = function discordBot(sails) {
           owner: sails.config.custom.botOwners,
           unknownCommandResponse: false
         });
-        
+
         sails.discordBotClient = client;
         cb();
 
@@ -63,8 +63,23 @@ module.exports = function discordBot(sails) {
         });
 
         client.on('error', error => {
-          sails.log.warn('DISCORD ERROR!');
-          sails.log.error(error.message);
+          sails.log.error(`DISCORD ERROR - ${error.message}`);
+        });
+
+        client.on('disconnect', e => {
+          sails.log.error(`Discord disconnected with code ${e.code} - ${e.reason}`)
+        });
+
+        client.on('reconnecting', () => {
+          sails.log.warn(`Discord reconnecting to webhook`);
+        });
+
+        client.on('warn', (msg) => {
+          sails.log.warn(`Discord bot warning: ${msg}`);
+        })
+
+        client.on('rateLimit', info => {
+          sails.log.warn(`Discord API rateLimit reached! ${info.requestLimit} max requests allowed to ${info.method}`);
         });
 
         client.on('guildMemberUpdate', (oldMember, newMember) => {
