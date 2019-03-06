@@ -38,8 +38,9 @@ customLogger = new winston.Logger({
       tailable: true,
       maxsize: 10000000,
       maxFiles: 3,
-      json: false,
-      colorize: true
+      json: true,
+      colorize: false,
+      stringify: (obj) => JSON.stringify(obj),
     }),
     new winston.transports.File({
       level: 'debug',
