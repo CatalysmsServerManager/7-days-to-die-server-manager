@@ -44,7 +44,7 @@ const winston = require('winston');
 
 
 module.exports.log = {
-  level: 'debug'
+  level: 'verbose'
   // Pass in our custom logger, and pass all log levels through.
   // custom: customLogger,
 
