@@ -55,7 +55,7 @@ module.exports = function defineCustomHooksHook(sails) {
       let server = await SdtdServer.findOne(serverId);
 
       let results = await sails.helpers.sdtd.executeCustomCmd(server, hookToExec.commandsToExecute.split(';'), eventData);
-      sails.log.debug(`Executed a custom hook for server ${eventData.server.id}`, {
+      sails.log.debug(`Executed a custom hook for server ${serverId}`, {
         hook: hookToExec,
         event: eventData,
         results: results
