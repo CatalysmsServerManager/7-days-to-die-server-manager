@@ -16,7 +16,8 @@ class ChatBridgeChannel {
     this.sdtdServer = sdtdServer;
     this.config;
     this.loggingObject = sails.hooks.sdtdlogs.getLoggingObject(this.sdtdServer.id);
-    this.start()
+    this.donorStatus;
+    this.start();
   }
 
   async start() {
@@ -26,6 +27,7 @@ class ChatBridgeChannel {
         server: this.sdtdServer.id
       }).limit(1);
       this.config = this.config[0];
+      this.donorStatus = await sails.helpers.meta.checkDonatorStatus(this.sdtdServer.id);
       // Bind 'this' to sendMessage functions
       this.sendChatMessageToDiscord = this.sendChatMessageToDiscord.bind(this);
       this.sendConnectedMessageToDiscord = this.sendConnectedMessageToDiscord.bind(this);
@@ -33,7 +35,7 @@ class ChatBridgeChannel {
       this.sendDeathMessageToDiscord = this.sendDeathMessageToDiscord.bind(this);
       this.sendDisconnectedMessageToDiscord = this.sendDisconnectedMessageToDiscord.bind(this);
       this.sendRichDisconnectedMessageToDiscord = this.sendRichDisconnectedMessageToDiscord.bind(this);
-      this.sendMessageToGame = this.sendMessageToGame.bind(this)
+      this.sendMessageToGame = this.sendMessageToGame.bind(this);
 
       if (!_.isUndefined(this.loggingObject) && this.config.chatChannelId) {
 
@@ -76,7 +78,7 @@ class ChatBridgeChannel {
     this.channel.send(embed);
   }
 
-  sendChatMessageToDiscord(chatMessage) {
+  async sendChatMessageToDiscord(chatMessage) {
     let blockedPrefixes = this.config.chatChannelBlockedPrefixes;
 
     let messageStartsWithABlockedPrefix = (message) => {
@@ -90,14 +92,23 @@ class ChatBridgeChannel {
     }
 
     if (messageStartsWithABlockedPrefix(chatMessage.messageText)) {
-      return
+      return;
     }
 
-    if (chatMessage.playerName == 'Server') {
-      this.channel.send(`\`${chatMessage.messageText}\``);
+    // If the server is not a donator, we cache messages and send a bunch at once to limit discord API hits
+    if (this.donorStatus === "free") {
+      await this.addMessageToQueue(`${chatMessage.time} - ${chatMessage.playerName}: ${chatMessage.messageText}`);
+      let currentQueue = await this.getQueue();
+
+      if (currentQueue.length > 9 || currentQueue.join('\n').length > 1500) {
+        await this.channel.send(currentQueue.join('\n'));
+        await this.clearQueue();
+      }
     } else {
-      this.channel.send(`${chatMessage.playerName}: ${chatMessage.messageText}`);
+      await this.channel.send(`${chatMessage.playerName}: ${chatMessage.messageText}`);
     }
+
+
   }
 
   sendDeathMessageToDiscord(deathMessage) {
@@ -119,7 +130,9 @@ class ChatBridgeChannel {
       server: this.sdtdServer.id
     });
 
-    let gblBans = await BanEntry.find({steamId: connectedMsg.steamID});
+    let gblBans = await BanEntry.find({
+      steamId: connectedMsg.steamID
+    });
 
     connectedPlayer = connectedPlayer[0]
     let embed = new this.channel.client.customEmbed();
@@ -150,7 +163,9 @@ class ChatBridgeChannel {
     });
 
     disconnectedPlayer = disconnectedPlayer[0];
-    let gblBans = await BanEntry.find({steamId: disconnectedPlayer.steamId});
+    let gblBans = await BanEntry.find({
+      steamId: disconnectedPlayer.steamId
+    });
 
     let embed = new this.channel.client.customEmbed();
     embed.setTitle(`${disconnectedMsg.playerName} disconnected`)
@@ -185,13 +200,26 @@ class ChatBridgeChannel {
         },
         success: () => {
           return true;
-        },
-        connectionRefused: () => {
-          message.react("⚠")
         }
       });
     }
   }
+
+  async addMessageToQueue(message) {
+    await sails.helpers.redis.rpush(`server:${this.sdtdServer.id}:chatBridge:queue`, message);
+    return;
+  }
+
+  async getQueue() {
+    let result = await sails.helpers.redis.lrange(`server:${this.sdtdServer.id}:chatBridge:queue`);
+    return result;
+  }
+
+  async clearQueue() {
+    await sails.helpers.redis.del(`server:${this.sdtdServer.id}:chatBridge:queue`);
+    return;
+  }
+
 }
 
 module.exports = ChatBridgeChannel;
