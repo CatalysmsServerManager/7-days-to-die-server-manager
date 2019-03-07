@@ -123,7 +123,6 @@ module.exports = function SdtdDiscordChatBridge(sails) {
       }
 
       if (_.isUndefined(textChannel)) {
-        sails.log.error(`Tried starting chatbridge for an unknown Discord text channel ${textChannel}`);
         return;
       }
 
