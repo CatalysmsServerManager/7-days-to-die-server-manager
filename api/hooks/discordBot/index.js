@@ -79,7 +79,7 @@ module.exports = function discordBot(sails) {
         })
 
         client.on('rateLimit', info => {
-          sails.log.warn(`Discord API rateLimit reached! ${info.requestLimit} max requests allowed to ${info.method}`);
+          sails.log.warn(`Discord API rateLimit reached! ${info.requestLimit} max requests allowed to ${info.method} ${info.path}`);
         });
 
         client.on('guildMemberUpdate', (oldMember, newMember) => {
