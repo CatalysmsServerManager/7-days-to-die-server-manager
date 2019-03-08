@@ -125,10 +125,7 @@ class ChatBridgeChannel {
 
 
   async sendRichConnectedMessageToDiscord(connectedMsg) {
-    let connectedPlayer = await Player.find({
-      steamId: connectedMsg.steamID,
-      server: this.sdtdServer.id
-    });
+    let connectedPlayer = connectedMsg.player;
 
     let gblBans = await BanEntry.find({
       steamId: connectedMsg.steamID
@@ -157,10 +154,7 @@ class ChatBridgeChannel {
   }
 
   async sendRichDisconnectedMessageToDiscord(disconnectedMsg) {
-    let disconnectedPlayer = await Player.find({
-      steamId: disconnectedMsg.ownerID,
-      server: this.sdtdServer.id
-    });
+    let disconnectedPlayer = disconnectedMsg.player;
 
     disconnectedPlayer = disconnectedPlayer[0];
     let gblBans = await BanEntry.find({

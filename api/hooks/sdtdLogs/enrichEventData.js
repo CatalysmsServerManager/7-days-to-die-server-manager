@@ -16,6 +16,10 @@ module.exports = async function enrichEventData(event) {
       break;
   }
 
+  if (!_.isEmpty(newData.playerID)) {
+    newData.steamId = newData.playerID;
+  }
+
   let player;
   if (!_.isEmpty(event.data.steamId)) {
     player = await sails.helpers.sdtd.loadPlayerData.with({
