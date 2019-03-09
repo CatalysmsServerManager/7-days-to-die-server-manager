@@ -1,12 +1,11 @@
 let SdtdCommand = require('../command.js');
-const sevenDays = require('machinepack-7daystodiewebapi');
-
 class Balance extends SdtdCommand {
   constructor(serverId) {
     super(serverId, {
       name: 'balance',
       description: "See your current balance",
-      extendedDescription: "How much money is in your bankaccount!"
+      extendedDescription: "How much money is in your bankaccount!",
+      aliases: ['bal', 'wallet']
     });
     this.serverId = serverId;
   }
