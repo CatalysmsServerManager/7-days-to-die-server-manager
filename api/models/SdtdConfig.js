@@ -22,11 +22,15 @@ module.exports = {
       sails.log.error(e);
       return cb(e);
     });
-
-
   },
 
   attributes: {
+
+    //When a server does not respond to requests for a long time, it is set to inactive.
+    inactive: {
+      type: 'boolean',
+      defaultsTo: false
+    },
 
 
     //  _______             _    _
