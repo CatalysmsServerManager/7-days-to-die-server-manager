@@ -114,7 +114,6 @@ module.exports = {
     let addedServer = await addServerToDb(sdtdServer);
 
     if (addedServer) {
-      await sails.hooks.historicalinfo.start(addedServer.id, 'memUpdate');
       sails.log.warn(`${userProfile.username} added a new server - ${addedServer.name}`);
       await sails.helpers.sdtd.loadAllPlayerData(addedServer.id);
       errorResponse.server = addedServer;
@@ -268,7 +267,6 @@ async function addServerToDb(sdtdServerToAdd) {
 
   let createdConfig = await SdtdConfig.create({
     server: createdServer.id
-  });
-  await sails.hooks.sdtdlogs.start(createdServer.id);
+  }).fetch();
   return createdServer
 }

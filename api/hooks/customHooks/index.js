@@ -46,6 +46,8 @@ module.exports = function defineCustomHooksHook(sails) {
         });
       }
 
+      sails.log.debug(`Started customHooks module for server ${serverId}`)
+
     },
 
   };

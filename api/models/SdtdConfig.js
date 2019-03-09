@@ -7,17 +7,36 @@
 
 module.exports = {
 
+  afterCreate(newConfig, cb) {
+
+    sails.hooks.sdtdlogs.start(newConfig.server).then(r => {
+
+      let modules = [];
+      modules.push(sails.hooks.customhooks.start(newConfig.server));
+      modules.push(sails.hooks.historicalinfo.start(newConfig.server, 'memUpdate'));
+      Promise.all(modules).then(r => {
+        cb(undefined, r);
+      }).catch(e => cb(e));
+
+    }).catch(e => {
+      sails.log.error(e);
+      return cb(e);
+    });
+
+
+  },
+
   attributes: {
 
 
-    // _______             _    _             
-    // |__   __|           | |  (_)            
-    //    | |_ __ __ _  ___| | ___ _ __   __ _ 
+    //  _______             _    _
+    // |__   __|           | |  (_)
+    //    | |_ __ __ _  ___| | ___ _ __   __ _
     //    | | '__/ _` |/ __| |/ / | '_ \ / _` |
     //    | | | | (_| | (__|   <| | | | | (_| |
     //    |_|_|  \__,_|\___|_|\_\_|_| |_|\__, |
     //                                    __/ |
-    //                                   |___/ 
+    //                                   |___/
 
 
     inventoryTracking: {
@@ -230,10 +249,10 @@ module.exports = {
     },
 
     /**
- * @memberof SdtdServer
- * @var {string} chatChannelRichMessages
- * @description Whether to use rich messages for (dis)connect messages
- */
+     * @memberof SdtdServer
+     * @var {string} chatChannelRichMessages
+     * @description Whether to use rich messages for (dis)connect messages
+     */
 
     chatChannelRichMessages: {
       type: 'boolean',
@@ -241,10 +260,10 @@ module.exports = {
     },
 
     /**
-* @memberof SdtdServer
-* @var {string} chatChannelBlockedPrefixes
-* @description Block messages starting with a certain prefix from chat bridge
-*/
+     * @memberof SdtdServer
+     * @var {string} chatChannelBlockedPrefixes
+     * @description Block messages starting with a certain prefix from chat bridge
+     */
 
     chatChannelBlockedPrefixes: {
       type: 'json',
@@ -263,30 +282,30 @@ module.exports = {
     },
 
 
-  //   _____ ____  _      
-  //   / ____|  _ \| |     
-  //  | |  __| |_) | |     
-  //  | | |_ |  _ <| |     
-  //  | |__| | |_) | |____ 
-  //   \_____|____/|______|
-                 
-  // How many bans a player must have before triggering the discord notification
-  gblNotificationBans: {
-    type: 'number',
-    defaultsTo: 3
-  },
+    //   _____ ____  _      
+    //   / ____|  _ \| |     
+    //  | |  __| |_) | |     
+    //  | | |_ |  _ <| |     
+    //  | |__| | |_) | |____ 
+    //   \_____|____/|______|
 
-  gblAutoBanEnabled: {
-    type: 'boolean',
-    defaultsTo: false
-  },
+    // How many bans a player must have before triggering the discord notification
+    gblNotificationBans: {
+      type: 'number',
+      defaultsTo: 3
+    },
 
-  // How many bans a player must have before triggering the auto ban
-  gblAutoBanBans: {
-    type: 'number',
-    defaultsTo: 5
-  },
-                        
+    gblAutoBanEnabled: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
+    // How many bans a player must have before triggering the auto ban
+    gblAutoBanBans: {
+      type: 'number',
+      defaultsTo: 5
+    },
+
 
     //   _                       _
     //  | |                     (_)
@@ -398,14 +417,14 @@ module.exports = {
       defaultsTo: 20
     },
 
-/*   _____ _               _    _      _    
-    |  __ (_)             | |  (_)    | |   
-    | |__) | _ __   __ _  | | ___  ___| | __
-    |  ___/ | '_ \ / _` | | |/ / |/ __| |/ /
-    | |   | | | | | (_| | |   <| | (__|   < 
-    |_|   |_|_| |_|\__, | |_|\_\_|\___|_|\_\
-                    __/ |                   
-                   |___/                     */
+    /*   _____ _               _    _      _    
+        |  __ (_)             | |  (_)    | |   
+        | |__) | _ __   __ _  | | ___  ___| | __
+        |  ___/ | '_ \ / _` | | |/ / |/ __| |/ /
+        | |   | | | | | (_| | |   <| | (__|   < 
+        |_|   |_|_| |_|\__, | |_|\_\_|\___|_|\_\
+                        __/ |                   
+                       |___/                     */
 
 
     pingKickEnabled: {
@@ -418,7 +437,7 @@ module.exports = {
       min: 1,
       defaultsTo: 150
     },
-    
+
     pingChecksToFail: {
       type: 'number',
       min: 1,
