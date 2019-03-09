@@ -45,13 +45,6 @@ module.exports.routes = {
     }
   },
 
-  '/sponsors/ldh': {
-    view: 'meta/sponsors/letsdohosting',
-    locals: {
-      layout: 'layouts/homepageLayout'
-    }
-  },
-
   '/stats': {
     view: 'meta/stats',
     locals: {
