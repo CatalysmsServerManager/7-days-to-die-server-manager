@@ -95,20 +95,7 @@ class ChatBridgeChannel {
       return;
     }
 
-    // If the server is not a donator, we cache messages and send a bunch at once to limit discord API hits
-    if (this.donorStatus === "free") {
-      await this.addMessageToQueue(`${chatMessage.time} - ${chatMessage.playerName}: ${chatMessage.messageText}`);
-      let currentQueue = await this.getQueue();
-
-      if (currentQueue.length > 9 || currentQueue.join('\n').length > 1500) {
-        await this.channel.send(currentQueue.join('\n'));
-        await this.clearQueue();
-      }
-    } else {
-      await this.channel.send(`${chatMessage.playerName}: ${chatMessage.messageText}`);
-    }
-
-
+    await this.channel.send(`${chatMessage.playerName}: ${chatMessage.messageText}`);
   }
 
   sendDeathMessageToDiscord(deathMessage) {
@@ -204,22 +191,6 @@ class ChatBridgeChannel {
       });
     }
   }
-
-  async addMessageToQueue(message) {
-    await sails.helpers.redis.rpush(`server:${this.sdtdServer.id}:chatBridge:queue`, message);
-    return;
-  }
-
-  async getQueue() {
-    let result = await sails.helpers.redis.lrange(`server:${this.sdtdServer.id}:chatBridge:queue`);
-    return result;
-  }
-
-  async clearQueue() {
-    await sails.helpers.redis.del(`server:${this.sdtdServer.id}:chatBridge:queue`);
-    return;
-  }
-
 }
 
 module.exports = ChatBridgeChannel;
