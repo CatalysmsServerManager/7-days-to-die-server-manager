@@ -29,7 +29,8 @@ module.exports = function sdtdLogs(sails) {
 
         try {
           let enabledServers = await SdtdConfig.find({
-            loggingEnabled: true
+            loggingEnabled: true,
+            inactive: false,
           });
           for (let config of enabledServers) {
             await this.start(config.server)

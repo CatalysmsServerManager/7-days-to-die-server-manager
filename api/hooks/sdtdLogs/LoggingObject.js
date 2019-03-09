@@ -25,13 +25,18 @@ class LoggingObject extends EventEmitter {
     this.handlingRequest = false;
     this.lastMemUpdate = Date.now();
     // Set this to true to view detailed info about logs for a server. (protip: use discord bot eval command to set this to true in production instances)
-    this.debug = false;
+    this.debug = true;
     this.init();
   }
 
   async init() {
-
     await this._getLatestLogLine();
+
+    // If the server does not have a value for lastSuccess, we initialize it to now.
+    let lastSuccess = await sails.helpers.redis.get(`sdtdserver:${this.server.id}:sdtdLogs:lastSuccess`);
+    if (_.isNull(lastSuccess)) {
+      await sails.helpers.redis.set(`sdtdserver:${this.server.id}:sdtdLogs:lastSuccess`, Date.now());
+    }
 
     // Get new logs in a timed interval
     this.requestInterval = setInterval(this._intervalFunction.bind(this), this.intervalTime);
@@ -80,9 +85,8 @@ class LoggingObject extends EventEmitter {
       }
 
       this.lastLogLine = parseInt(webUIUpdate.newlogs) + 1;
-
     } catch (error) {
-      this.failed = true;
+      await this._failedHandler();
       if (this.debug) {
         sails.log.debug(`Error when getting latest log line for server with ip ${this.server.ip} - ${error}`);
       }
@@ -103,15 +107,15 @@ class LoggingObject extends EventEmitter {
       await this._getLatestLogLine();
     }
 
-
-
     try {
       this.handlingRequest = true;
       newLogs = await SdtdApi.getLog(this.server, this.lastLogLine);
       this.lastLogLine = this.lastLogLine + newLogs.entries.length;
       this.failed = false;
+      await sails.helpers.redis.set(`sdtdserver:${this.server.id}:sdtdLogs:lastSuccess`, Date.now());
+      await sails.helpers.redis.del(`sdtdserver:${this.server.id}:sdtdLogs:failedCounter`);
     } catch (error) {
-      this.failed = true;
+      await this._failedHandler();
       newLogs.entries = [];
     }
     if (this.debug && newLogs.entries.length > 0) {
@@ -152,6 +156,33 @@ class LoggingObject extends EventEmitter {
 
     this.lastLogLine = newLogs.lastLine;
     this.handlingRequest = false;
+  }
+
+  // Called when a request to a server fails for whatever reason
+  async _failedHandler() {
+    const oneDayInMs = 1000 * 60 * 60 * 24;
+    this.failed = true;
+    let counter = await sails.helpers.redis.incr(`sdtdserver:${this.server.id}:sdtdLogs:failedCounter`);
+    let lastSuccess = await sails.helpers.redis.get(`sdtdserver:${this.server.id}:sdtdLogs:lastSuccess`);
+    lastSuccess = parseInt(lastSuccess);
+    if (counter > 100) {
+      let prettyLastSuccess = new Date(lastSuccess);
+      sails.log.info(`SdtdLogs - Server ${this.server.id} has failed ${counter} times. Changing interval time. Server was last successful on ${prettyLastSuccess.toLocaleDateString()} ${prettyLastSuccess.toLocaleTimeString()}`);
+      this.stop();
+      
+      if (lastSuccess + oneDayInMs < Date.now()) {
+        sails.log.warn(`SdtdLogs - server ${this.server.id} has not responded in over 24 hours, setting to inactive`);
+        await SdtdConfig.update({
+          server: this.server.id
+        }, {
+          inactive: true
+        });
+      } else {
+        this.intervalTime = 60000;
+        this.init();
+      }
+    }
+
   }
 
 
