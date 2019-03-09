@@ -102,6 +102,10 @@ let policyObject = {
     "*": ["isLoggedIn", 'roles/manageServer']
   },
 
+  customHookController: {
+    '*': ["isLoggedIn", 'roles/manageServer'],
+  },
+
 };
 
 
