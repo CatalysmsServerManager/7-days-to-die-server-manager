@@ -14,6 +14,14 @@ module.exports = {
       type: 'string'
     },
 
+    searchString: {
+      type:'string'
+    },
+
+    regex: {
+      type: 'string'
+    },
+
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
