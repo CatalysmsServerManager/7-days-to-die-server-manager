@@ -92,10 +92,10 @@ module.exports = {
 
       let loggingObject = sails.hooks.sdtdlogs.getLoggingObject(inputs.serverId);
 
-      loggingObject.ip = _.isUndefined(inputs.serverIp) ? loggingObject.ip : inputs.serverIp;
-      loggingObject.port = _.isUndefined(inputs.webPort) ? loggingObject.port : inputs.webPort;
-      loggingObject.adminUser = _.isUndefined(inputs.authName) ? loggingObject.adminUser : inputs.authName;
-      loggingObject.adminToken = _.isUndefined(inputs.authToken) ? loggingObject.adminToken : inputs.authToken;
+      loggingObject.server.ip = _.isUndefined(inputs.serverIp) ? loggingObject.server.ip : inputs.serverIp;
+      loggingObject.server.port = _.isUndefined(inputs.webPort) ? loggingObject.server.port : inputs.webPort;
+      loggingObject.server.adminUser = _.isUndefined(inputs.authName) ? loggingObject.server.adminUser : inputs.authName;
+      loggingObject.server.adminToken = _.isUndefined(inputs.authToken) ? loggingObject.server.adminToken : inputs.authToken;
 
       // Make sure we are on the correct log line.
       loggingObject._getLatestLogLine();
