@@ -75,7 +75,6 @@ function findVariables(command) {
 
 // Input a string like "player.name" and returns the value for that (nested) property from inputs.data
 function getVariableValue(variableString, data) {
-
   let propertyArray = variableString.split('.');
 
   if (propertyArray.length === 1) {

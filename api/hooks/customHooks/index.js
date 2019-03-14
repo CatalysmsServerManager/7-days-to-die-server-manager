@@ -1,4 +1,5 @@
 const sevenDays = require('7daystodie-api-wrapper');
+const steam64Regex = new RegExp('[0-9]{17}');
 
 module.exports = function defineCustomHooksHook(sails) {
 
@@ -105,7 +106,13 @@ module.exports = function defineCustomHooksHook(sails) {
 
     if (stringFound) {
       let server = await SdtdServer.findOne(serverId);
-
+      // Try to find a steamID64 in the log message that we can link to a player.
+      let possibleIds = findSteamIdFromString(eventData.msg);
+      let players = await Player.find({
+        server: serverId,
+        steamId: possibleIds[0]
+      });
+      eventData.player = players[0];
       let results = await sails.helpers.sdtd.executeCustomCmd(server, hookToExec.commandsToExecute.split(';'), eventData);
       sails.log.debug(`Executed a custom logLine hook for server ${serverId}`, {
         hook: hookToExec,
@@ -135,3 +142,11 @@ module.exports = function defineCustomHooksHook(sails) {
     }
   }
 };
+
+/**
+ * @param {String} logLineMessage
+ * @returns {Array} An array of strings that matches the steam64 regex
+ */
+function findSteamIdFromString(logLineMessage) {
+  return steam64Regex.exec(logLineMessage);
+}
