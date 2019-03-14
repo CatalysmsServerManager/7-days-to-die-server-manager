@@ -34,6 +34,12 @@ module.exports = {
       type: 'string',
     },
 
+    cooldown: {
+      type: 'number',
+      min: 0,
+      defaultsTo: 0
+    },
+
 
   },
 
@@ -63,7 +69,8 @@ module.exports = {
       commandsToExecute: inputs.commandsToExecute,
       event: inputs.event,
       searchString: inputs.searchString,
-      regex: inputs.regex
+      regex: inputs.regex,
+      cooldown: inputs.cooldown,
     }).fetch();
     return exits.success();
 

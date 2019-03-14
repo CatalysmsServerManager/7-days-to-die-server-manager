@@ -12,6 +12,7 @@
         <th>Commands to execute</th>
         <th>Search string</th>
         <th>Regex</th>
+        <th>Cooldown</th>
         <th>Edit</th>
         <th>Delete</th>
 
@@ -48,6 +49,21 @@
               placeholder="" rows="10"></textarea>
             <small id="hooks-new-commands-help" class="form-text text-muted">Which commands to execute when this hook
               is triggered.</small>
+          </div>
+
+          <label for="hooks-new-cooldown">Cooldown</label>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" name="hooks-new-cooldown" id="hooks-new-cooldown" aria-describedby="hooks-new-cooldown-help"
+              placeholder="">
+            <select class="form-control" name="hooks-new-cooldown-unit" id="hooks-new-cooldown-unit">
+              <option value="ms">Ms</option>
+              <option value="seconds">Seconds</option>
+              <option value="minutes">Minutes</option>
+              <option value="hours">Hours</option>
+              <option value="days">Days</option>
+            </select>
+            <small id="hooks-new-cooldown-help" class="form-text text-muted"> When a hook is fired, it can only be
+              fired again after the cooldown has ended. </small>
           </div>
 
           <div class="hooks-logLine-settings">
@@ -116,6 +132,21 @@
               is triggered.</small>
           </div>
 
+          <label for="hooks-edit-cooldown">Cooldown</label>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" name="hooks-edit-cooldown" id="hooks-edit-cooldown"
+              aria-describedby="hooks-edit-cooldown-help" placeholder="">
+            <select class="form-control" name="hooks-edit-cooldown-unit" id="hooks-edit-cooldown-unit">
+              <option value="ms">Ms</option>
+              <option value="seconds">Seconds</option>
+              <option value="minutes">Minutes</option>
+              <option value="hours">Hours</option>
+              <option value="days">Days</option>
+            </select>
+            <small id="hooks-edit-cooldown-help" class="form-text text-muted"> When a hook is fired, it can only be
+              fired again after the cooldown has ended. </small>
+          </div>
+
           <div class="hooks-logLine-settings">
             <hr>
 
@@ -178,6 +209,10 @@
 
 <script>
   $(document).ready(() => {
+    const secondsInMs = 1000;
+    const minutesInMs = 60000;
+    const hoursInMs = 3600000;
+    const daysInMs = 86400000;
 
     const hooks = new Array();
     let activeHookId = undefined;
@@ -201,6 +236,34 @@
           data: "searchString",
         }, {
           data: "regex",
+        },
+        {
+          data: 'cooldown',
+          render: function (data, type, row, meta) {
+            let string = `${row.cooldown} ms`
+            // Set the cooldown select to the right unit
+            if (!(row.cooldown % daysInMs)) {
+              string = `${row.cooldown / daysInMs} days`
+            }
+
+            if (!(row.cooldown % hoursInMs)) {
+              string = `${row.cooldown / hoursInMs} hours`
+            }
+
+            if (!(row.cooldown % minutesInMs)) {
+              string = `${row.cooldown / minutesInMs} minutes`
+            }
+
+            if (!(row.cooldown % secondsInMs)) {
+              string = `${row.cooldown / secondsInMs} seconds`
+            }
+
+            if (row.cooldown === 0) {
+              string = '/'
+            }
+
+            return string;
+          }
         },
         {
           render: function (data, type, row, meta) {
@@ -228,6 +291,23 @@
       let commandsToExec = $("#hooks-new-commands").val();
       let searchString = $("#hooks-new-searchString").val();
       let regex = $("#hooks-new-regex").val();
+      let cooldown = $("#hooks-new-cooldown").val();
+      let cooldownUnit = $("#hooks-new-cooldown-unit").val();
+
+      switch (cooldownUnit) {
+        case 'seconds':
+          cooldown = cooldown * secondsInMs
+          break;
+        case 'minutes':
+          cooldown = cooldown * minutesInMs
+          break;
+        case 'hours':
+          cooldown = cooldown * hoursInMs
+          break;
+        case 'days':
+          cooldown = cooldown * daysInMs
+          break;
+      }
 
       $.ajax({
         url: "/api/sdtdserver/hook",
@@ -238,6 +318,7 @@
           serverId: window.SAILS_LOCALS.server.id,
           searchString: searchString,
           regex: regex,
+          cooldown: cooldown,
           _csrf: window.SAILS_LOCALS._csrf,
         },
         success: (data, status, xhr) => {
@@ -262,6 +343,29 @@
         modal.find('#hooks-edit-commands').val(data.commandsToExecute.replace('&apos', "'"));
         modal.find('#hooks-edit-searchString').val(data.searchString);
         modal.find('#hooks-edit-regex').val(data.regex);
+
+        // Set the cooldown select to the right unit
+        if (!(data.cooldown % secondsInMs)) {
+          modal.find('#hooks-edit-cooldown').val(data.cooldown / secondsInMs);
+          $("#hooks-edit-cooldown-unit").val("seconds");
+        }
+
+        if (!(data.cooldown % minutesInMs)) {
+          modal.find('#hooks-edit-cooldown').val(data.cooldown / minutesInMs);
+          $("#hooks-edit-cooldown-unit").val("minutes");
+        }
+
+        if (!(data.cooldown % hoursInMs)) {
+          modal.find('#hooks-edit-cooldown').val(data.cooldown / hoursInMs);
+          $("#hooks-edit-cooldown-unit").val("hours");
+        }
+
+        if (!(data.cooldown % daysInMs)) {
+          modal.find('#hooks-edit-cooldown').val(data.cooldown / daysInMs);
+          $("#hooks-edit-cooldown-unit").val("days");
+        }
+
+
       }).catch(e => {
         console.log(e);
       })
@@ -273,6 +377,24 @@
       let commandsToExec = $("#hooks-edit-commands").val();
       let searchString = $("#hooks-edit-searchString").val();
       let regex = $("#hooks-edit-regex").val();
+      let cooldown = $("#hooks-edit-cooldown").val();
+
+      let cooldownUnit = $("#hooks-edit-cooldown-unit").val();
+
+      switch (cooldownUnit) {
+        case 'seconds':
+          cooldown = cooldown * secondsInMs
+          break;
+        case 'minutes':
+          cooldown = cooldown * minutesInMs
+          break;
+        case 'hours':
+          cooldown = cooldown * hoursInMs
+          break;
+        case 'days':
+          cooldown = cooldown * daysInMs
+          break;
+      }
 
       $.ajax({
         url: "/api/sdtdserver/hook",
@@ -284,6 +406,7 @@
           serverId: window.SAILS_LOCALS.server.id,
           searchString: searchString,
           regex: regex,
+          cooldown: cooldown,
           _csrf: window.SAILS_LOCALS._csrf,
         },
         success: (data, status, xhr) => {

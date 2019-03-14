@@ -37,7 +37,7 @@ module.exports = {
     return cb();
   },
 
-  beforeDestroy: function(deletedHook, cb) {
+  beforeDestroy: function (deletedHook, cb) {
 
     if (deletedHook.event === 'logLine') {
       let currentHooks = sails.hooks.customhooks.logLineHooks.get(deletedHook.server);
@@ -71,6 +71,12 @@ module.exports = {
 
     regex: {
       type: 'string'
+    },
+
+    cooldown: {
+      type: 'number',
+      min: 0,
+      defaultsTo: 0
     },
 
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
