@@ -51,6 +51,11 @@ module.exports = function defineCustomHooksHook(sails) {
 
           if (eventType === 'logLine') {
             let serverLogLineHooks = this.logLineHooks.get(String(serverId));
+
+            if (_.isUndefined(serverLogLineHooks)) {
+              serverLogLineHooks = [];
+            }
+
             for (const serverLogLineHook of serverLogLineHooks) {
               await executeLogLineHook(eventData, serverLogLineHook, serverId);
             }
