@@ -1,122 +1,179 @@
 <div>
-  <div class="container">
-
-    <table class="table" id="hooks-table">
-      <thead>
-        <tr>
-          <th>Event</th>
-          <th>Commands to execute</th>
-          <th>Edit</th>
-          <th>Delete</th>
-
-        </tr>
-      </thead>
-      <tbody>
-
-      </tbody>
-    </table>
-
+  <div class="row">
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary btn" data-toggle="modal" data-target="#hooks-new-modal">
+    <button type="button" class="btn btn-primary btn" data-toggle="modal" data-target="#hooks-new-modal" style="margin: 1%">
       Add new hook
     </button>
+  </div>
+  <table class="table" id="hooks-table">
+    <thead>
+      <tr>
+        <th>Event</th>
+        <th>Commands to execute</th>
+        <th>Search string</th>
+        <th>Regex</th>
+        <th>Edit</th>
+        <th>Delete</th>
 
-    <!-- Add hook Modal -->
-    <div class="modal fade" id="hooks-new-modal" tabindex="-1" role="dialog" aria-labelledby="hooks-new-modal"
-      aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Add new hook</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
+      </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+  </table>
+
+
+  <!-- Add hook Modal -->
+  <div class="modal fade" id="hooks-new-modal" tabindex="-1" role="dialog" aria-labelledby="hooks-new-modal"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add new hook</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="hooks-new-event">Event</label>
+            <input type="text" class="form-control" name="hooks-new-event" id="hooks-new-event" aria-describedby="hooks-new-event-help"
+              placeholder="">
+            <small id="hooks-new-event-help" class="form-text text-muted">Which event will trigger this hook.</small>
           </div>
-          <div class="modal-body">
+
+          <div class="form-group">
+            <label for="hooks-new-commands">Commands</label>
+            <textarea class="form-control" name="hooks-new-commands" id="hooks-new-commands" aria-describedby="hooks-new-commands-help"
+              placeholder="" rows="10"></textarea>
+            <small id="hooks-new-commands-help" class="form-text text-muted">Which commands to execute when this hook
+              is triggered.</small>
+          </div>
+
+          <div class="hooks-logLine-settings">
+            <hr>
+
+            <h6>Custom log line hooks</h6>
+
+            <p>
+              Other than the built-in events, you can also execute hooks for log lines with a certain string in them.
+              To use this, select the event 'logLine'.
+            </p>
+
+
             <div class="form-group">
-              <label for="hooks-new-event">Event</label>
-              <input type="text" class="form-control" name="hooks-new-event" id="hooks-new-event" aria-describedby="hooks-new-event-help"
+              <label for="hooks-new-searchString">Search string</label>
+              <input type="text" class="form-control" name="hooks-new-searchString" id="hooks-new-searchString"
+                aria-describedby="hooks-new-searchString-help" placeholder="">
+              <small id="hooks-new-searchString-help" class="form-text text-muted">The string to search for in a log
+                line
+                that will trigger this hook.</small>
+            </div>
+
+            <div class="form-group">
+              <label for="hooks-new-regex">Regex</label>
+              <input type="text" class="form-control" name="hooks-new-regex" id="hooks-new-regex" aria-describedby="hooks-new-regex-help"
                 placeholder="">
-              <small id="hooks-new-event-help" class="form-text text-muted">Which event will trigger this hook.</small>
+              <small id="hooks-new-regex-help" class="form-text text-muted">Advanced! a <a href="https://en.wikipedia.org/wiki/Regular_expression"
+                  target="_blank">regex</a> can also be used to test a log line for a match. </small>
             </div>
-
-            <div class="form-group">
-              <label for="hooks-new-commands">Commands</label>
-              <textarea class="form-control" name="hooks-new-commands" id="hooks-new-commands" aria-describedby="hooks-new-commands-help"
-                placeholder="" rows="10"></textarea>
-              <small id="hooks-new-commands-help" class="form-text text-muted">Which commands to execute when this hook
-                is triggered.</small>
-            </div>
-
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" id="hooks-new-submit" class="btn btn-primary">Save</button>
-          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" id="hooks-new-submit" class="btn btn-primary">Save</button>
         </div>
       </div>
     </div>
-
-    <!-- Edit hook Modal -->
-    <div class="modal fade" id="hooks-edit-modal" tabindex="-1" role="dialog" aria-labelledby="hooks-edit-modal-help"
-      aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Edit hook</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="form-group">
-              <label for="hooks-edit-event">Event</label>
-              <input type="text" class="form-control" name="hooks-edit-event" id="hooks-edit-event" aria-describedby="hooks-edit-event-help"
-                placeholder="">
-              <small id="hooks-edit-event-help" class="form-text text-muted">Which event will trigger this hook.</small>
-            </div>
-
-            <div class="form-group">
-              <label for="hooks-edit-commands">Commands</label>
-              <textarea class="form-control" name="hooks-edit-commands" id="hooks-edit-commands" aria-describedby="hooks-edit-commands-help"
-                placeholder="" rows="10"></textarea>
-              <small id="hooks-edit-commands-help" class="form-text text-muted">Which commands to execute when this
-                hook
-                is triggered.</small>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" id="edit-hook-save" class="btn btn-primary">Save</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Delete hook Modal -->
-    <div class="modal fade" id="hooks-delete-modal" tabindex="-1" role="dialog" aria-labelledby="hooks-delete-modal"
-      aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Are you sure?</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-danger" id="delete-hook-save">Yes</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
   </div>
 
+  <!-- Edit hook Modal -->
+  <div class="modal fade" id="hooks-edit-modal" tabindex="-1" role="dialog" aria-labelledby="hooks-edit-modal-help"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit hook</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="hooks-edit-event">Event</label>
+            <input type="text" class="form-control" name="hooks-edit-event" id="hooks-edit-event" aria-describedby="hooks-edit-event-help"
+              placeholder="">
+            <small id="hooks-edit-event-help" class="form-text text-muted">Which event will trigger this hook.</small>
+          </div>
 
+          <div class="form-group">
+            <label for="hooks-edit-commands">Commands</label>
+            <textarea class="form-control" name="hooks-edit-commands" id="hooks-edit-commands" aria-describedby="hooks-edit-commands-help"
+              placeholder="" rows="10"></textarea>
+            <small id="hooks-edit-commands-help" class="form-text text-muted">Which commands to execute when this
+              hook
+              is triggered.</small>
+          </div>
+
+          <div class="hooks-logLine-settings">
+            <hr>
+
+            <h6>Custom log line hooks</h6>
+
+            <p>
+              Other than the built-in events, you can also execute hooks for log lines with a certain string in them.
+              To use this, select the event 'logLine'.
+            </p>
+
+            <div class="form-group">
+              <label for="hooks-edit-searchString">Search string</label>
+              <input type="text" class="form-control" name="hooks-edit-searchString" id="hooks-edit-searchString"
+                aria-describedby="hooks-edit-searchString-help" placeholder="">
+              <small id="hooks-edit-searchString-help" class="form-text text-muted">The string to search for in a log
+                line
+                that will trigger this hook.</small>
+            </div>
+
+            <div class="form-group">
+              <label for="hooks-edit-regex">Regex</label>
+              <input type="text" class="form-control" name="hooks-edit-regex" id="hooks-edit-regex" aria-describedby="hooks-edit-regex-help"
+                placeholder="">
+              <small id="hooks-edit-regex-help" class="form-text text-muted">Advanced! a <a href="https://en.wikipedia.org/wiki/Regular_expression"
+                  target="_blank">regex</a> can also be used to test a log line for a match. </small>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" id="edit-hook-save" class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete hook Modal -->
+  <div class="modal fade" id="hooks-delete-modal" tabindex="-1" role="dialog" aria-labelledby="hooks-delete-modal"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Are you sure?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-danger" id="delete-hook-save">Yes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </div>
+
 
 
 <script>
@@ -138,16 +195,21 @@
         },
         {
           data: 'commandsToExecute',
-          width: '70%'
+          width: '50%'
+        },
+        {
+          data: "searchString",
+        }, {
+          data: "regex",
         },
         {
           render: function (data, type, row, meta) {
-            return `<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#hooks-edit-modal" data-event="${row.event}" data-commands='${row.commandsToExecute.replace("'", "&apos")}' data-hookid="${row.id}">Edit</button>`;
+            return `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#hooks-edit-modal" data-event="${row.event}" data-commands='${row.commandsToExecute.replace("'", "&apos")}' data-searchstring="${row.searchString}" data-hookid="${row.id}">Edit</button>`;
           }
         },
         {
           render: function (data, type, row, meta) {
-            return `<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#hooks-delete-modal" data-hookid="${row.id}">Delete</button>`;
+            return `<button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#hooks-delete-modal" data-hookid="${row.id}">Delete</button>`;
           }
         },
       ]
@@ -164,6 +226,8 @@
     $("#hooks-new-submit").click(e => {
       let event = $("#hooks-new-event").val();
       let commandsToExec = $("#hooks-new-commands").val();
+      let searchString = $("#hooks-new-searchString").val();
+      let regex = $("#hooks-new-regex").val();
 
       $.ajax({
         url: "/api/sdtdserver/hook",
@@ -172,6 +236,8 @@
           commandsToExecute: commandsToExec,
           event: event,
           serverId: window.SAILS_LOCALS.server.id,
+          searchString: searchString,
+          regex: regex,
           _csrf: window.SAILS_LOCALS._csrf,
         },
         success: (data, status, xhr) => {
@@ -189,18 +255,24 @@
     // Fill relevant values in the edit hook modal when it is opened
     $('#hooks-edit-modal').on('show.bs.modal', function (event) {
       var button = $(event.relatedTarget);
-      var event = button.data('event');
-      var commandsToExecute = button.data('commands');
       activeHookId = button.data('hookid')
-      var modal = $(this);
-      modal.find('#hooks-edit-event').val(event);
-      modal.find('#hooks-edit-commands').val(commandsToExecute.replace('&apos', "'"));
+      getHooks(activeHookId).then(data => {
+        var modal = $(this);
+        modal.find('#hooks-edit-event').val(data.event);
+        modal.find('#hooks-edit-commands').val(data.commandsToExecute.replace('&apos', "'"));
+        modal.find('#hooks-edit-searchString').val(data.searchString);
+        modal.find('#hooks-edit-regex').val(data.regex);
+      }).catch(e => {
+        console.log(e);
+      })
     })
 
     $("#edit-hook-save").click(e => {
       e.preventDefault()
       let event = $("#hooks-edit-event").val();
       let commandsToExec = $("#hooks-edit-commands").val();
+      let searchString = $("#hooks-edit-searchString").val();
+      let regex = $("#hooks-edit-regex").val();
 
       $.ajax({
         url: "/api/sdtdserver/hook",
@@ -209,6 +281,9 @@
           commandsToExecute: commandsToExec,
           event: event,
           hookId: activeHookId,
+          serverId: window.SAILS_LOCALS.server.id,
+          searchString: searchString,
+          regex: regex,
           _csrf: window.SAILS_LOCALS._csrf,
         },
         success: (data, status, xhr) => {
@@ -242,6 +317,7 @@
         data: {
           hookId: activeHookId,
           _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
         },
         success: (data, status, xhr) => {
           getHooks().then(data => {
@@ -262,7 +338,7 @@
   });
 
 
-  function getHooks() {
+  function getHooks(hookId) {
     return new Promise((resolve, reject) => {
       $.ajax({
         url: "/api/sdtdserver/hook",
@@ -270,6 +346,7 @@
         data: {
           serverId: window.SAILS_LOCALS.server.id,
           _csrf: window.SAILS_LOCALS._csrf,
+          hookId: hookId,
         },
         success: (data, status, xhr) => {
           resolve(data);
