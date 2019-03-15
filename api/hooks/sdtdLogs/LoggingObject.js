@@ -42,6 +42,12 @@ class LoggingObject extends EventEmitter {
     this.requestInterval = setInterval(this._intervalFunction.bind(this), this.intervalTime);
   }
 
+  destroy() {
+    this.stop();
+    this.removeAllListeners();
+    return;
+  }
+
 
   stop() {
     clearInterval(this.requestInterval);
@@ -172,11 +178,7 @@ class LoggingObject extends EventEmitter {
       
       if (lastSuccess + oneDayInMs < Date.now()) {
         sails.log.warn(`SdtdLogs - server ${this.server.id} has not responded in over 24 hours, setting to inactive`);
-        await SdtdConfig.update({
-          server: this.server.id
-        }, {
-          inactive: true
-        });
+        await sails.helpers.meta.setServerInactive(this.server.id);
       } else {
         this.intervalTime = 60000;
         this.init();

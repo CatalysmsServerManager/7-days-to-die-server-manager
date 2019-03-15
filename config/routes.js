@@ -264,6 +264,7 @@ module.exports.routes = {
 
   'post /api/sdtdserver/updateConnectionInfo': 'SdtdServerController.update-connection-info',
   'post /api/sdtdserver/toggleLogging': 'SdtdServerController.logging-toggle',
+  'post /api/sdtdserver/inactive': 'SdtdServerController.set-active-status',
 
   // CPM Settings
 

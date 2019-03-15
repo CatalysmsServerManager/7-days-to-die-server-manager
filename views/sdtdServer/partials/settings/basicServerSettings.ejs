@@ -7,6 +7,15 @@
   </div>
   <br>
 
+  <div class="form-check">
+    <label class="form-check-label">
+      <input type="checkbox" class="form-check-input" name="input-settings-server-inactive" id="input-settings-server-inactive"
+        value="true">
+      Enable CSMM features. <p> <small>If you disable this, CSMM will not interact with your server anymore but you
+          will not lose any configuration or data.</small></p>
+    </label>
+  </div>
+
   <label for="input-settings-server-servername">Server name</label>
   <input type="text" class="form-control" id="input-settings-server-servername" value="<%= server.name %>">
 
@@ -31,6 +40,8 @@
     <i class="fas fa-sync-alt"></i> Apply changes
   </button>
 
+  <div id="basic-settings-result"></div>
+
   </ul>
 
 
@@ -41,9 +52,29 @@
 <script>
   $(document).ready(function () {
 
+    if (!window.SAILS_LOCALS.config.inactive) {
+      $("#input-settings-server-inactive").prop('checked', true)
+    }
+
     $('#input-settings-server-update').click((event) => {
       event.preventDefault();
 
+      handleConnectionInfo().then(() => {
+        handleActiveStatus().then(() => {
+          $("#basic-settings-result").text('Changes saved.')
+        }).catch(e => {
+          $("#basic-settings-result").text('An error occured!.')
+        })
+      }).catch(e => {
+        $("#basic-settings-result").text('An error occured!.')
+      })
+
+    })
+  })
+
+
+  function handleConnectionInfo() {
+    return new Promise((resolve, reject) => {
       let ip = $("#input-settings-server-ip").val();
       let webPort = $("#input-settings-server-webPort").val()
       let serverName = $('#input-settings-server-servername').val();
@@ -75,7 +106,7 @@
         type: 'POST',
         data: {
           _csrf: window.SAILS_LOCALS._csrf,
-          serverId: <%= server.id %>,
+          serverId: window.SAILS_LOCALS.server.id,
           serverIp: ip,
           webPort: webPort,
           serverName: serverName,
@@ -83,14 +114,47 @@
           authToken: authToken
         },
         success: (data, status, xhr) => {
-          location.reload();
+          resolve()
         },
         error: function (xhr, status, error) {
           displayAjaxToSupportData(xhr, this);;
           showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+          reject();
         }
       });
+
     })
-  })
+  }
+
+  function handleActiveStatus() {
+    return new Promise((resolve, reject) => {
+      let activeStatus = $("#input-settings-server-inactive").prop('checked');
+
+      if (activeStatus !== window.SAILS_LOCALS.config.inactive) {
+        return resolve();
+      }
+
+      window.SAILS_LOCALS.config.inactive = !activeStatus;
+      $.ajax({
+        url: `/api/sdtdserver/inactive`,
+        type: 'POST',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+          inactive: !activeStatus
+        },
+        success: (data, status, xhr) => {
+          resolve();
+        },
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+          reject();
+        }
+      });
+
+    })
+
+  }
 
 </script>
