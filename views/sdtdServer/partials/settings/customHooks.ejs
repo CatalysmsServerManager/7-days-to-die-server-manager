@@ -208,6 +208,7 @@
         data: {
           commandsToExecute: commandsToExec,
           event: event,
+          serverId: window.SAILS_LOCALS.server.id,
           hookId: activeHookId,
           _csrf: window.SAILS_LOCALS._csrf,
         },
@@ -241,6 +242,7 @@
         method: "DELETE",
         data: {
           hookId: activeHookId,
+          serverId: window.SAILS_LOCALS.server.id,
           _csrf: window.SAILS_LOCALS._csrf,
         },
         success: (data, status, xhr) => {
