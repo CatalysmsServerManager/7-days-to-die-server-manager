@@ -28,8 +28,17 @@ module.exports = {
     if (_.isUndefined(server)) {
       return exits.error('Unknown server ID');
     }
-    
+    const cronJobs = await CronJob.find({server: server.id, enabled: true});
+
     await sails.hooks.countryban.stop(server.id);
+
+    for (const jobToStop of cronJobs) {
+      try {
+        await sails.hooks.cron.stop(jobToStop.id);
+      } catch (error) {
+        sails.log.error(`Error initializing cronjob ${jobToStop.id} - ${error}`)               
+      }
+    }
 
     await sails.hooks.sdtdlogs.stop(server.id);
 
