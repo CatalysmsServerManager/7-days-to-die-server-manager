@@ -72,6 +72,11 @@ module.exports = {
       await sails.hooks.economy.start(server.id, 'killEarner');
     }
 
+    // High ping kick
+    if (config.pingKickEnabled) {
+      await sails.hooks.highpingkick.start(server.id);
+    }
+
     await SdtdConfig.update({
       server: server.id
     }, {

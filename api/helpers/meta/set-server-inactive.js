@@ -28,7 +28,7 @@ module.exports = {
     if (_.isUndefined(server)) {
       return exits.error('Unknown server ID');
     }
-    
+
     const config = server.config[0];
     
     // Countryban
@@ -61,6 +61,8 @@ module.exports = {
       await sails.hooks.economy.stop(server.id, 'killEarner');
     }
 
+    // High ping kick
+    await sails.hooks.highpingkick.stop(server.id);
 
     // Logs
     await sails.hooks.sdtdlogs.stop(server.id);
