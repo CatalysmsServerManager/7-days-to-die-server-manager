@@ -23,10 +23,17 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    const server = await SdtdServer.findOne(inputs.serverId);
+    const server = await SdtdServer.findOne(inputs.serverId).populate('config');
     if (_.isUndefined(server)) {
       return exits.error('Unknown server ID');
     }
+
+    await sails.hooks.sdtdlogs.start(server.id);
+
+    if (server.config[0].countryBanConfig.enabled) {
+      await sails.hooks.countryban.start(server.id);
+    }
+
 
     await SdtdConfig.update({
       server: server.id

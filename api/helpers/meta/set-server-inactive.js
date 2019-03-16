@@ -28,10 +28,10 @@ module.exports = {
     if (_.isUndefined(server)) {
       return exits.error('Unknown server ID');
     }
+    
+    await sails.hooks.countryban.stop(server.id);
 
-    sails.hooks.countryban.stop(server.id);
-
-    sails.hooks.sdtdlogs.stop(server.id);
+    await sails.hooks.sdtdlogs.stop(server.id);
 
     await SdtdConfig.update({
       server: server.id

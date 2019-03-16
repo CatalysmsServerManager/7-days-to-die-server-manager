@@ -40,20 +40,29 @@ module.exports = {
 
     try {
       sails.log.debug(`API - SdtdServer:country-ban-toggle - Toggling country ban for server ${inputs.serverId}`);
-      let server = await SdtdServer.findOne({
+      const server = await SdtdServer.findOne({
         id: inputs.serverId
-      });
+      }).populate('config');
       if (_.isUndefined(server)) {
         return exits.notFound();
       }
 
+      let currentConfig = server.config[0].countryBanConfig;
       let countryBanStatus = sails.hooks.countryban.getStatus(inputs.serverId);
 
       if (_.isUndefined(countryBanStatus)) {
+        currentConfig.enabled = true;
         await sails.hooks.countryban.start(inputs.serverId);
       } else {
+        currentConfig.enabled = false;
         await sails.hooks.countryban.stop(inputs.serverId);
       }
+
+      await SdtdConfig.update({
+        server: inputs.serverId
+      }, {
+        countryBanConfig: currentConfig
+      });
       let status = await sails.hooks.countryban.getStatus(inputs.serverId);
 
       sails.log.debug(`API - SdtdServer:country-ban-toggle - New status for server ${inputs.serverId} is ${status}`);
