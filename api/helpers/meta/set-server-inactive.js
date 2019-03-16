@@ -64,6 +64,9 @@ module.exports = {
     // High ping kick
     await sails.hooks.highpingkick.stop(server.id);
 
+    // Historical info (aka analytics)
+    await sails.hooks.historicalinfo.stop(server.id, 'memUpdate');
+
     // Logs
     await sails.hooks.sdtdlogs.stop(server.id);
 

@@ -77,6 +77,9 @@ module.exports = {
       await sails.hooks.highpingkick.start(server.id);
     }
 
+    // Historical info (aka analytics)
+    await sails.hooks.historicalinfo.start(server.id, 'memUpdate');
+
     await SdtdConfig.update({
       server: server.id
     }, {
