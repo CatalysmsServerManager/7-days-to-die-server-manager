@@ -40,6 +40,8 @@ module.exports = {
       }
     }
 
+    await sails.hooks.discordchatbridge.stop(server.id);
+
     await sails.hooks.sdtdlogs.stop(server.id);
 
     await SdtdConfig.update({

@@ -27,12 +27,16 @@ module.exports = {
     if (_.isUndefined(server)) {
       return exits.error('Unknown server ID');
     }
-    const cronJobs = await CronJob.find({server: server.id, enabled: true});
+    const config = server.config[0];
+    const cronJobs = await CronJob.find({
+      server: server.id,
+      enabled: true
+    });
 
 
     await sails.hooks.sdtdlogs.start(server.id);
 
-    if (server.config[0].countryBanConfig.enabled) {
+    if (config.countryBanConfig.enabled) {
       await sails.hooks.countryban.start(server.id);
     }
 
@@ -40,8 +44,12 @@ module.exports = {
       try {
         await sails.hooks.cron.start(jobToStart.id);
       } catch (error) {
-        sails.log.error(`Error initializing cronjob ${jobToStart.id} - ${error}`)               
+        sails.log.error(`Error initializing cronjob ${jobToStart.id} - ${error}`)
       }
+    }
+
+    if (config.chatChannelId) {
+      await sails.hooks.discordchatbridge.start(server.id);
     }
 
     await sails.hooks.customhooks.start(server.id);
