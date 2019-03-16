@@ -28,25 +28,26 @@ module.exports = function sdtdCommands(sails) {
      * @description Initializes the ingame command listener(s)
      */
     initialize: async function (cb) {
-        sails.on('hook:sdtdlogs:loaded', async function () {
-          sails.log.info('Initializing custom hook (`sdtdCommands`)');
-          cb();
-          try {
-            let enabledServers = await SdtdConfig.find({
-              commandsEnabled: true
-            });
+      sails.on('hook:sdtdlogs:loaded', async function () {
+        sails.log.info('Initializing custom hook (`sdtdCommands`)');
+        cb();
+        try {
+          let enabledServers = await SdtdConfig.find({
+            commandsEnabled: true,
+            inactive: false,
+          });
 
-            for (const config of enabledServers) {
-              await start(config.server);
-            }
-
-            sails.log.info(`HOOK SdtdCommands - initialized ${commandInfoMap.size} ingame command listeners`);
-          } catch (error) {
-            sails.log.error(`HOOK SdtdCommands:initialize - ${error}`);
+          for (const config of enabledServers) {
+            await start(config.server);
           }
-          return
-        });
-  
+
+          sails.log.info(`HOOK SdtdCommands - initialized ${commandInfoMap.size} ingame command listeners`);
+        } catch (error) {
+          sails.log.error(`HOOK SdtdCommands:initialize - ${error}`);
+        }
+        return
+      });
+
     },
 
     /**
@@ -79,7 +80,7 @@ module.exports = function sdtdCommands(sails) {
       return commandInfoMap.has(String(serverId));
     },
 
-    getAmount: function() {
+    getAmount: function () {
       return commandInfoMap.size;
     },
 
@@ -94,7 +95,9 @@ module.exports = function sdtdCommands(sails) {
       try {
         sails.log.debug(`HOOK sdtdCommands:reload - Reloading commands config for server ${serverId}`);
 
-        let newConfig = await SdtdConfig.findOne({server: serverId});
+        let newConfig = await SdtdConfig.findOne({
+          server: serverId
+        });
 
         if (newConfig.commandsEnabled) {
           this.start(serverId);

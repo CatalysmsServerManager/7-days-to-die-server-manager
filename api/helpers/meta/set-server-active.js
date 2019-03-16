@@ -83,6 +83,9 @@ module.exports = {
     // Player tracking
     await sails.hooks.playertracking.start(server.id);
 
+    // SdtdCommands
+    await sails.hooks.sdtdcommands.start(server.id);
+
     await SdtdConfig.update({
       server: server.id
     }, {

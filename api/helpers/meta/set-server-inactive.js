@@ -24,24 +24,27 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     const server = await SdtdServer.findOne(inputs.serverId).populate('config');
-    
+
     if (_.isUndefined(server)) {
       return exits.error('Unknown server ID');
     }
 
     const config = server.config[0];
-    
+
     // Countryban
     await sails.hooks.countryban.stop(server.id);
 
     //Cron
-    const cronJobs = await CronJob.find({server: server.id, enabled: true});
+    const cronJobs = await CronJob.find({
+      server: server.id,
+      enabled: true
+    });
 
     for (const jobToStop of cronJobs) {
       try {
         await sails.hooks.cron.stop(jobToStop.id);
       } catch (error) {
-        sails.log.error(`Error initializing cronjob ${jobToStop.id} - ${error}`)               
+        sails.log.error(`Error initializing cronjob ${jobToStop.id} - ${error}`)
       }
     }
 
@@ -66,6 +69,9 @@ module.exports = {
 
     // Historical info (aka analytics)
     await sails.hooks.historicalinfo.stop(server.id, 'memUpdate');
+
+    // SdtdCommands
+    await sails.hooks.sdtdcommands.stop(server.id);
 
     // Logs
     await sails.hooks.sdtdlogs.stop(server.id);
