@@ -153,6 +153,7 @@ module.exports.routes = {
   'get /api/sdtdserver/fps': 'SdtdServerController.get-fps',
   'get /api/sdtdserver/allowedCommands': 'CustomCommandController.get-allowed-commands',
   'get /api/sdtdserver/donatorStatus': 'SdtdServerController.check-donator',
+  'get /api/sdtdserver/failedstatus': 'SdtdServerController.get-failed-status',
 
   'get /api/sdtdserver/resetRegions': 'SdtdServerController/resetRegions.get-reset-regions',
 
@@ -257,6 +258,7 @@ module.exports.routes = {
 
   'post /api/sdtdserver/updateConnectionInfo': 'SdtdServerController.update-connection-info',
   'post /api/sdtdserver/toggleLogging': 'SdtdServerController.logging-toggle',
+  'post /api/sdtdserver/inactive': 'SdtdServerController.set-active-status',
 
   // CPM Settings
 

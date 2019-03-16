@@ -29,6 +29,10 @@ module.exports = (logLine) => {
     let rssIdx = splitLogLine.indexOf('RSS:');
 
     let memUpdate = {
+      date: logLine.date,
+      time: logLine.time,
+      uptime: logLine.uptime,
+      msg: logLine.msg,
       fps: fpsIdx === -1 ? '' : splitLogLine[fpsIdx + 1],
       heap: heapIdx === -1 ? '' : splitLogLine[heapIdx + 1],
       chunks: chunksIdx === -1 ? '' : splitLogLine[chunksIdx + 1],
@@ -65,7 +69,10 @@ module.exports = (logLine) => {
     }
 
     let data = {
+      date: logLine.date,
       time: logLine.time,
+      uptime: logLine.uptime,
+      msg: logLine.msg,
       steamId: splitMessage[1],
       entityId: splitMessage[3],
       channel: splitMessage[5],
@@ -101,8 +108,6 @@ module.exports = (logLine) => {
     let playerName = logLine.msg.slice(firstIdx + 1, secondIdx)
     let messageText = logLine.msg.slice(secondIdx + 3, logLine.msg.length)
 
-    let date = logLine.date
-    let time = logLine.time
     let type = "chat"
     if (playerName == 'Server') {
       type = "server"
@@ -133,8 +138,10 @@ module.exports = (logLine) => {
       playerName,
       messageText,
       type,
-      date,
-      time
+      date: logLine.date,
+      time: logLine.time,
+      uptime: logLine.uptime,
+      msg: logLine.msg,
     };
 
     returnValue.type = 'chatMessage';
@@ -153,8 +160,6 @@ module.exports = (logLine) => {
             }
     */
 
-    let date = logLine.date
-    let time = logLine.time
     let logMsg = logLine.msg.split(",")
 
     let entityID = logMsg[1].replace("entityid=", "").trim()
@@ -171,8 +176,10 @@ module.exports = (logLine) => {
       steamOwner,
       ip,
       country,
-      date,
-      time
+      date: logLine.date,
+      time: logLine.time,
+      uptime: logLine.uptime,
+      msg: logLine.msg,
     };
 
     returnValue.type = "playerConnected";
@@ -192,8 +199,6 @@ module.exports = (logLine) => {
     }
     */
 
-   let date = logLine.date;
-   let time = logLine.time;
    let logMsg = logLine.msg.split(",");
 
    let steamId = logMsg[4].replace("PlayerID=", "").split("\'").join('').trim();
@@ -202,8 +207,10 @@ module.exports = (logLine) => {
    let joinMsg = {
     steamId,
     playerName,
-    date,
-    time
+    date: logLine.date,
+    time: logLine.time,
+    uptime: logLine.uptime,
+    msg: logLine.msg,
   };
 
   returnValue.type = "playerJoined";
@@ -222,8 +229,6 @@ module.exports = (logLine) => {
       "type": "Log"
     }
     */
-    let date = logLine.date
-    let time = logLine.time
     let logMsg = logLine.msg
     logMsg = logMsg.replace("Player disconnected", "")
     logMsg = logMsg.split(",")
@@ -239,8 +244,10 @@ module.exports = (logLine) => {
       playerName,
       ownerID,
       playerID,
-      date,
-      time
+      date: logLine.date,
+      time: logLine.time,
+      uptime: logLine.uptime,
+      msg: logLine.msg,
     };
 
     returnValue.type = "playerDisconnected";
@@ -261,13 +268,13 @@ module.exports = (logLine) => {
     */
     let deathMessage = logLine.msg.split(" ")
     let playerName = deathMessage.slice(2, deathMessage.length - 1).join(" ").split("\'").join("")
-    let date = logLine.date
-    let time = logLine.time
     deathMessage = {
+      date: logLine.date,
+      time: logLine.time,
+      uptime: logLine.uptime,
+      msg: logLine.msg,
       playerName,
-      date,
-      time
-    }
+    };
 
     returnValue.type = "playerDeath";
     returnValue.data = deathMessage;
@@ -294,6 +301,10 @@ module.exports = (logLine) => {
     oldLvl = parseInt(oldLvl);
 
     lvlMessage = {
+      date: logLine.date,
+      time: logLine.time,
+      uptime: logLine.uptime,
+      msg: logLine.msg,
       steamId: steamId,
       newLvl: newLvl,
       oldLvl: oldLvl
@@ -322,6 +333,10 @@ module.exports = (logLine) => {
     let entityName = victimInfo[1];
 
     killMessage = {
+      date: logLine.date,
+      time: logLine.time,
+      uptime: logLine.uptime,
+      msg: logLine.msg,
       steamId: steamId,
       entityClass: entityClass,
       entityName: entityName
@@ -355,6 +370,10 @@ module.exports = (logLine) => {
     let killerName = killMessage[3];
 
     killMessage = {
+      date: logLine.date,
+      time: logLine.time,
+      uptime: logLine.uptime,
+      msg: logLine.msg,
       victimName: victimName,
       killerName: killerName
     };

@@ -29,7 +29,8 @@ module.exports = function sdtdLogs(sails) {
 
         try {
           let enabledServers = await SdtdConfig.find({
-            loggingEnabled: true
+            loggingEnabled: true,
+            inactive: false,
           });
           for (let config of enabledServers) {
             await this.start(config.server)
@@ -55,16 +56,11 @@ module.exports = function sdtdLogs(sails) {
       try {
         if (!loggingInfoMap.has(serverID)) {
           sails.log.debug(`HOOKS - sdtdLogs - starting logging for server ${serverID}`);
-          await SdtdConfig.update({
-            server: serverID
-          }, {
-            loggingEnabled: true
-          });
           let loggingObj = await createLogObject(serverID);
           loggingInfoMap.set(serverID, loggingObj);
           sails.hooks.playertracking.start(serverID);
           sails.hooks.customdiscordnotification.start(serverID);
-          return
+          return;
         } else {
           throw new Error(`Tried to start logging for a server that already had it enabled`);
         }
@@ -82,19 +78,15 @@ module.exports = function sdtdLogs(sails) {
      * @method
      */
 
-    stop: async function (serverID) {
+    stop: function (serverID) {
       serverID = String(serverID);
       try {
         if (loggingInfoMap.has(serverID)) {
           sails.log.debug(`HOOKS - sdtdLogs - stopping logging for server ${serverID}`);
-          await SdtdConfig.update({
-            server: serverID
-          }, {
-            loggingEnabled: false
-          });
           let loggingObj = loggingInfoMap.get(serverID);
           loggingInfoMap.delete(serverID);
-          return loggingObj.stop();
+          loggingObj.destroy();
+          return;
         }
       } catch (error) {
         sails.log.error(`HOOKS - sdtdLogs - ${error}`);
@@ -177,6 +169,7 @@ module.exports = function sdtdLogs(sails) {
         })
       }
       sails.sockets.broadcast(server.id, 'playerConnected', connectedMsg);
+      connectedMsg.player = _.omit(connectedMsg.player, 'inventory');
       sails.log.verbose(`Detected a player connected`, connectedMsg);
     });
 
@@ -185,6 +178,7 @@ module.exports = function sdtdLogs(sails) {
       joinMsg.server = _.omit(server, "authName", "authToken");
 
       sails.sockets.broadcast(server.id, 'playerJoined', joinMsg);
+      joinMsg.player = _.omit(joinMsg.player, 'inventory');
       sails.log.verbose(`Detected a player joined`, joinMsg);
     });
 
@@ -196,6 +190,7 @@ module.exports = function sdtdLogs(sails) {
         player: disconnectedMsg.player
       });
       sails.sockets.broadcast(server.id, 'playerDisconnected', disconnectedMsg);
+      disconnectedMsg.player = _.omit(disconnectedMsg.player, 'inventory');
       sails.log.verbose(`Detected a player disconnected`, disconnectedMsg);
     });
 
