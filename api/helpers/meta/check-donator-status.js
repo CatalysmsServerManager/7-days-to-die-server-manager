@@ -16,6 +16,11 @@ module.exports = {
       type: 'number'
     },
 
+    reload: {
+      type: 'boolean',
+      defaultsTo: false,
+    },
+
   },
 
 
@@ -26,78 +31,34 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    let discordClient = sails.hooks.discordbot.getClient();
-    let developerGuild = discordClient.guilds.get(sails.config.custom.donorConfig.devDiscordServer);
-    let discordUser = undefined;
-
-    if (_.isUndefined(developerGuild)) {
-      return exits.success('free');
-    }
+    let donorStatus = "free";
 
     if (_.isUndefined(inputs.serverId) && _.isUndefined(inputs.userId)) {
-      throw new Error(`Usage error! Must give atleast one of the arguments`);
+      return exits.error(`Must provide serverId OR userId parameter.`);
     }
 
     if (!_.isUndefined(inputs.serverId)) {
-      try {
-        let server = await SdtdServer.findOne(inputs.serverId).populate('owner');
+      let currentStatus = await sails.helpers.redis.get(`server:${inputs.serverId}:donorStatus`);
 
-        if (_.isEmpty(server.owner.discordId)) {
-          return exits.success('free');
-        }
-
-        foundUser = await developerGuild.fetchMember(server.owner.discordId);
-        discordUser = foundUser;
-
-      } catch (error) {
-        sails.log.error(error)
+      if (_.isNull(currentStatus) || inputs.reload) {
+        currentStatus = await sails.helpers.meta.getDonatorStatus(inputs.serverId);
       }
+      await sails.helpers.redis.set(`server:${inputs.serverId}:donorStatus`, currentStatus);
+      donorStatus = currentStatus;
+      
     }
 
     if (!_.isUndefined(inputs.userId)) {
-      try {
-        let user = await User.findOne(inputs.userId);
+      let currentStatus = await sails.helpers.redis.get(`user:${inputs.userId}:donorStatus`);
 
-        if (_.isEmpty(user.discordId)) {
-          return exits.success('free');
-        }
-
-        foundUser = await developerGuild.fetchMember(user.discordId);
-        if (!_.isUndefined(foundUser)) {
-          discordUser = foundUser
-        }
-      } catch (error) {
-        sails.log.error(error)
+      if (_.isNull(currentStatus) || inputs.reload) {
+        currentStatus = await sails.helpers.meta.getDonatorStatus(inputs.userId);
       }
+      await sails.helpers.redis.set(`server:${inputs.userId}:donorStatus`, currentStatus);
+      donorStatus = currentStatus;
     }
 
-    if (_.isUndefined(discordUser)) {
-      return exits.success('free')
-    }
-
-    let patronRole = await developerGuild.roles.get("410545564913238027");
-    let donatorRole = await developerGuild.roles.get("434462571978948608");
-    let contributorRole = await developerGuild.roles.get("434462681068470272");
-    let sponsorRole = await developerGuild.roles.get("434462786962325504");
-
-    if (discordUser.roles.has(sponsorRole.id)) {
-      return exits.success('sponsor')
-    }
-
-    if (discordUser.roles.has(contributorRole.id)) {
-      return exits.success('contributor')
-    }
-
-    if (discordUser.roles.has(donatorRole.id)) {
-      return exits.success('donator')
-    }
-
-    if (discordUser.roles.has(patronRole.id)) {
-      return exits.success('patron')
-    }
-
-    return exits.success('free')
-
+    return exits.success(donorStatus);
   }
 
 

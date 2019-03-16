@@ -1,25 +1,41 @@
 module.exports = {
 
-    friendlyName: 'Check donator',
+  friendlyName: 'Check donator',
 
-    description: 'Check if a server is donator or not',
+  description: 'Check if a server is donator or not',
 
-    inputs: {
-        serverId: {
-            type: 'number',
-            required: true
-        }
+  inputs: {
+    serverId: {
+      type: 'string',
     },
 
-    exits: {
-        success: {
-        },
+    userId: {
+      type: 'string'
     },
 
-
-    fn: async function (inputs, exits) {
-        let donatorStatus = await sails.helpers.meta.checkDonatorStatus(inputs.serverId);
-        return exits.success(donatorStatus);
-
+    reload: {
+      type: 'boolean',
+      defaultsTo: false,
     }
+  },
+
+  exits: {
+    success: {},
+    badInput: {
+      responseType: 'badRequest'
+    }
+  },
+
+
+  fn: async function (inputs, exits) {
+
+
+    if (_.isUndefined(inputs.serverId) && _.isUndefined(inputs.userId)) {
+      return exits.badInput(`Must provide serverId OR userId parameter.`);
+    }
+
+    let donatorStatus = await sails.helpers.meta.checkDonatorStatus(inputs.serverId, inputs.userId, inputs.reload);
+    return exits.success(donatorStatus);
+
+  }
 };

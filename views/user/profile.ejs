@@ -1,111 +1,148 @@
-<h1>
+<%- exposeLocalsToBrowser() %>
+
+<div class="container">
+
+
+  <h1>
     <%= user.username %>
-</h1>
+  </h1>
 
 
-<table class="table table-bordered">
+  <table class="table table-bordered">
     <tbody>
-        <tr>
-            <td>Steam ID</td>
-            <td>
-                <%= user.steamId %>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <a class="btn btn-sm btn-primary" href="/auth/discord">
-                    <p>
-                        <i class="fab fa-discord"></i> Update Discord ID</p>
-                </a>
-            </td>
+      <tr>
+        <td>Steam ID</td>
+        <td>
+          <%= user.steamId %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <a class="btn btn-sm btn-primary" href="/auth/discord">
+            <p>
+              <i class="fab fa-discord"></i> Update Discord ID</p>
+          </a>
+        </td>
 
-            <td>
-                <%= user.discordId %>
+        <td>
+          <%= user.discordId %>
 
-            </td>
-        </tr>
+        </td>
+      </tr>
+      <tr>
+        <td>Donator status</td>
+        <td><span id="donatorStatus"></span></td>
+      </tr>
     </tbody>
-</table>
+  </table>
 
 
-<h3>Owned server(s)</h3>
+  <h3>Owned server(s)</h3>
 
-<table class="table table-bordered">
+  <table class="table table-bordered">
     <thead>
-        <td>#</td>
-        <td>Name</td>
-        <td>Players</td>
+      <td>ID</td>
+      <td>Name</td>
     </thead>
     <tbody>
-        <% servers.forEach(server => { %>
-            <tr>
-                <td>
-                    <%= server.id %>
-                </td>
-                <td>
-                    <%= server.name %>
-                </td>
-            </tr>
-            <% }) %>
+      <% servers.forEach(server => { %>
+      <tr>
+        <td>
+          <%= server.id %>
+        </td>
+        <td>
+          <%= server.name %>
+        </td>
+      </tr>
+      <% }) %>
     </tbody>
-</table>
+  </table>
 
-<h3>Open tickets</h3>
+  <h3>Open tickets</h3>
 
-<table class="table table-bordered">
+  <table class="table table-bordered">
     <thead>
-        <td>Title</td>
-        <td>Created on </td>
+      <td>Title</td>
+      <td>Created on </td>
     </thead>
     <tbody>
-        <% players.forEach(player => { %>
-            <% player.tickets.forEach(ticket => {  %>
-                <% if (ticket.status) { %>
-                    <% let createdAt = new Date(ticket.createdAt) %>
-                        <% let updatedAt = new Date(ticket.updatedAt) %>
-                            <tr>
-                                <td>
-                                    <% let ticketLink = `/sdtdticket/${ticket.id}` %>
-                                        <a href='<%= ticketLink %>'>
-                                            <%= ticket.title %>
-                                        </a>
-                                </td>
-                                <td>
-                                    <%= createdAt.toDateString() %>
-                                </td>
-                            </tr>
-                            <% } %>
-                                <% }) %>
-                                    <% }) %>
+      <% players.forEach(player => { %>
+      <% player.tickets.forEach(ticket => {  %>
+      <% if (ticket.status) { %>
+      <% let createdAt = new Date(ticket.createdAt) %>
+      <% let updatedAt = new Date(ticket.updatedAt) %>
+      <tr>
+        <td>
+          <% let ticketLink = `/sdtdticket/${ticket.id}` %>
+          <a href='<%= ticketLink %>'>
+            <%= ticket.title %>
+          </a>
+        </td>
+        <td>
+          <%= createdAt.toDateString() %>
+        </td>
+      </tr>
+      <% } %>
+      <% }) %>
+      <% }) %>
     </tbody>
-</table>
+  </table>
 
 
-<h3>Player profile(s)</h3>
+  <h3>Player profile(s)</h3>
 
-<table class="table table-bordered">
+  <table class="table table-bordered">
     <thead>
-        <td>Name</td>
-        <td>Playtime</td>
-        <td>Server </td>
-        <td>Tickets</td>
+      <td>Name</td>
+      <td>Playtime</td>
+      <td>Server </td>
+      <td>Tickets</td>
     </thead>
     <tbody>
-        <% players.forEach(player => { %>
-            <tr>
-                <td>
-                    <%= player.name %>
-                </td>
-                <td>
-                    <%= player.playtime %>
-                </td>
-                <td>
-                    <%= player.server.name %>
-                </td>
-                <td>
-                    <%= player.tickets.length %>
-                </td>
-            </tr>
-            <% }) %>
+      <% players.forEach(player => { %>
+      <tr>
+        <td>
+          <%= player.name %>
+        </td>
+        <td>
+          <%= player.playtime %>
+        </td>
+        <td>
+          <%= player.server.name %>
+        </td>
+        <td>
+          <%= player.tickets.length %>
+        </td>
+      </tr>
+      <% }) %>
     </tbody>
-</table>
+  </table>
+
+
+</div>
+<script>
+  $(document).ready(function () {
+
+    loadDonatorStatus();
+
+  });
+
+  function loadDonatorStatus() {
+    $.ajax({
+      url: `/api/sdtdserver/donatorStatus`,
+      type: 'GET',
+      data: {
+        userId: window.SAILS_LOCALS.user.id,
+        reload: true,
+      },
+      success: (data, status, xhr) => {
+        $("#donatorStatus").text(data);
+      },
+      error: function (xhr, status, error) {
+        displayAjaxToSupportData(xhr, this);;
+        showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+      }
+    });
+  }
+
+</script>

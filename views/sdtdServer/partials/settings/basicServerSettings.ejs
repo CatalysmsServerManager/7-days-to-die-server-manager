@@ -5,6 +5,9 @@
   <div>Detected CPM version
     <%= cpmVersion %>
   </div>
+
+  <div>Server donator status: <span id="donatorStatus"></span></div>
+
   <br>
 
   <div class="form-check">
@@ -51,6 +54,8 @@
 
 <script>
   $(document).ready(function () {
+
+    loadDonatorStatus();
 
     if (!window.SAILS_LOCALS.config.inactive) {
       $("#input-settings-server-inactive").prop('checked', true)
@@ -157,4 +162,21 @@
 
   }
 
+  function loadDonatorStatus() {
+    $.ajax({
+        url: `/api/sdtdserver/donatorStatus`,
+        type: 'GET',
+        data: {
+          serverId: window.SAILS_LOCALS.server.id,
+          reload: true,
+        },
+        success: (data, status, xhr) => {
+          $("#donatorStatus").text(data);
+        },
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      });
+  }
 </script>
