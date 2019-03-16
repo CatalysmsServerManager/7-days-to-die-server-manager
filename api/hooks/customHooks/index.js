@@ -79,8 +79,10 @@ module.exports = function defineCustomHooksHook(sails) {
           for (const hookToExec of configuredHooks) {
             const isNotOnCooldown = await handleCooldown(hookToExec);
             const stringFound = checkLogLine(eventData.msg, hookToExec);
-            if (isNotOnCooldown && stringFound) {
-              await executeHook(eventData, hookToExec, serverId);
+            if (stringFound) {
+              if (isNotOnCooldown) {
+                await executeHook(eventData, hookToExec, serverId);
+              }
             }
           }
         });
