@@ -3,9 +3,12 @@ const EventEmitter = require('events');
 const handleLogLine = require('./handleLogLine');
 const enrichEventData = require('./enrichEventData');
 
+const defaultIntervalMs = 2000;
+const slowModeIntervalms = 300000;
+
 class LoggingObject extends EventEmitter {
 
-  constructor(ip, port, authName, authToken, serverId, intervalTime = 2000) {
+  constructor(ip, port, authName, authToken, serverId, intervalTime = defaultIntervalMs) {
     super();
     this.server = {
       id: serverId,
@@ -26,6 +29,8 @@ class LoggingObject extends EventEmitter {
     this.lastMemUpdate = Date.now();
     // Set this to true to view detailed info about logs for a server. (protip: use discord bot eval command to set this to true in production instances)
     this.debug = false;
+    // If this is enabled, it means the server is in a failed state and the interval has been made slower
+    this.slowmode = false;
     this.init();
   }
 
@@ -117,9 +122,20 @@ class LoggingObject extends EventEmitter {
       this.handlingRequest = true;
       newLogs = await SdtdApi.getLog(this.server, this.lastLogLine);
       this.lastLogLine = this.lastLogLine + newLogs.entries.length;
+
+      // Got logs successfully, reset failed status
       this.failed = false;
       await sails.helpers.redis.set(`sdtdserver:${this.server.id}:sdtdLogs:lastSuccess`, Date.now());
       await sails.helpers.redis.del(`sdtdserver:${this.server.id}:sdtdLogs:failedCounter`);
+
+      if (this.slowmode) {
+        sails.log.info(`SdtdLogs - Server ${this.server.id} was revived! Successful log collection. `);
+        this.slowmode = false;
+        this.stop();
+        this.intervalTime = defaultIntervalMs;
+        this.init();
+      }
+
     } catch (error) {
       await this._failedHandler();
       newLogs.entries = [];
@@ -173,15 +189,18 @@ class LoggingObject extends EventEmitter {
     lastSuccess = parseInt(lastSuccess);
     if (counter > 100) {
       let prettyLastSuccess = new Date(lastSuccess);
-      sails.log.info(`SdtdLogs - Server ${this.server.id} has failed ${counter} times. Changing interval time. Server was last successful on ${prettyLastSuccess.toLocaleDateString()} ${prettyLastSuccess.toLocaleTimeString()}`);
-      this.stop();
-      
+
+      if (!this.slowmode) {
+        sails.log.info(`SdtdLogs - Server ${this.server.id} has failed ${counter} times. Changing interval time. Server was last successful on ${prettyLastSuccess.toLocaleDateString()} ${prettyLastSuccess.toLocaleTimeString()}`);
+        this.slowmode = true;
+        this.stop();
+        this.intervalTime = slowModeIntervalms;
+        this.init();
+      }
+
       if (lastSuccess + oneDayInMs < Date.now()) {
         sails.log.warn(`SdtdLogs - server ${this.server.id} has not responded in over 24 hours, setting to inactive`);
         await sails.helpers.meta.setServerInactive(this.server.id);
-      } else {
-        this.intervalTime = 60000;
-        this.init();
       }
     }
 
