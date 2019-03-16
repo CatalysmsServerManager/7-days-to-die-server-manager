@@ -19,6 +19,15 @@
     </label>
   </div>
 
+  <div class="alert alert-warning invisible" id="failedStatus" role="alert">
+    <strong>Connection issue: </strong>CSMM was last able to detect events on your server on <span id="failedStatus-lastSuccess"></span>
+    and has failed <span id="failedStatus-counter"></span> times since. If your server is offline for an extended time,
+    CSMM will disable features. When you have fixed the connection problem, you can re-enable all features with the
+    checkbox above.
+  </div>
+
+  <hr>
+
   <label for="input-settings-server-servername">Server name</label>
   <input type="text" class="form-control" id="input-settings-server-servername" value="<%= server.name %>">
 
@@ -56,6 +65,7 @@
   $(document).ready(function () {
 
     loadDonatorStatus();
+    displayFailedStatus();
 
     if (!window.SAILS_LOCALS.config.inactive) {
       $("#input-settings-server-inactive").prop('checked', true)
@@ -164,19 +174,50 @@
 
   function loadDonatorStatus() {
     $.ajax({
-        url: `/api/sdtdserver/donatorStatus`,
+      url: `/api/sdtdserver/donatorStatus`,
+      type: 'GET',
+      data: {
+        serverId: window.SAILS_LOCALS.server.id,
+        reload: true,
+      },
+      success: (data, status, xhr) => {
+        $("#donatorStatus").text(data);
+      },
+      error: function (xhr, status, error) {
+        displayAjaxToSupportData(xhr, this);;
+        showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+      }
+    });
+  }
+
+  function loadFailedStatus() {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `/api/sdtdserver/failedStatus`,
         type: 'GET',
         data: {
           serverId: window.SAILS_LOCALS.server.id,
           reload: true,
         },
         success: (data, status, xhr) => {
-          $("#donatorStatus").text(data);
+          resolve(data);
         },
         error: function (xhr, status, error) {
           displayAjaxToSupportData(xhr, this);;
           showErrorModal(`${error} - ${xhr.responseText}`, xhr);
         }
       });
+    })
   }
+
+  async function displayFailedStatus() {
+    let status = await loadFailedStatus();
+    if (status.timesFailed > 0) {
+      const lastSuccess = new Date(status.lastSuccess);
+      $("#failedStatus-counter").text(status.timesFailed);
+      $("#failedStatus-lastSuccess").text(`${lastSuccess.toLocaleDateString()} ${lastSuccess.toLocaleTimeString()}`);
+      $("#failedStatus").removeClass('invisible');
+    }
+  }
+
 </script>
