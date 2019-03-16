@@ -44,6 +44,7 @@ module.exports = {
       }
     }
 
+    await sails.hooks.customhooks.start(server.id);
 
     await SdtdConfig.update({
       server: server.id
