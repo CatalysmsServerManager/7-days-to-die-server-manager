@@ -116,7 +116,7 @@ module.exports = function historicalInfo(sails) {
     }
   }
 
-  function deleteMap(serverId, updateObject) {
+  function deleteMap(server, updateObject) {
     switch (updateObject.type) {
       case 'memUpdate':
         return memUpdateMap.delete(String(server.id ? server.id : server), updateObject);
