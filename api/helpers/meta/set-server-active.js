@@ -36,10 +36,12 @@ module.exports = {
 
     await sails.hooks.sdtdlogs.start(server.id);
 
+    // Country ban
     if (config.countryBanConfig.enabled) {
       await sails.hooks.countryban.start(server.id);
     }
 
+    // Cron
     for (const jobToStart of cronJobs) {
       try {
         await sails.hooks.cron.start(jobToStart.id);
@@ -48,11 +50,27 @@ module.exports = {
       }
     }
 
+    // Chatbridge
     if (config.chatChannelId) {
       await sails.hooks.discordchatbridge.start(server.id);
     }
 
+    // Custom hooks
     await sails.hooks.customhooks.start(server.id);
+
+    // Economy  
+
+    if (config.playtimeEarnerEnabled) {
+      await sails.hooks.economy.start(server.id, 'playtimeEarner');
+    }
+
+    if (config.discordTextEarnerEnabled) {
+      await sails.hooks.economy.start(server.id, 'discordTextEarner');
+    }
+
+    if (config.killEarnerEnabled) {
+      await sails.hooks.economy.start(server.id, 'killEarner');
+    }
 
     await SdtdConfig.update({
       server: server.id

@@ -21,7 +21,8 @@ module.exports = function economy(sails) {
         discordMessageEmitter = new DiscordMessageHandler()
 
         let economyEnabledServers = await SdtdConfig.find({
-          economyEnabled: true
+          economyEnabled: true,
+          inactive: false,
         });
 
         sails.log.info(`HOOK: economy - Initializing ${economyEnabledServers.length} servers`);

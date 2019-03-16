@@ -23,14 +23,19 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-
-    const server = await SdtdServer.findOne(inputs.serverId);
+    const server = await SdtdServer.findOne(inputs.serverId).populate('config');
+    
     if (_.isUndefined(server)) {
       return exits.error('Unknown server ID');
     }
-    const cronJobs = await CronJob.find({server: server.id, enabled: true});
-
+    
+    const config = server.config[0];
+    
+    // Countryban
     await sails.hooks.countryban.stop(server.id);
+
+    //Cron
+    const cronJobs = await CronJob.find({server: server.id, enabled: true});
 
     for (const jobToStop of cronJobs) {
       try {
@@ -40,8 +45,24 @@ module.exports = {
       }
     }
 
+    // Chatbridge
     await sails.hooks.discordchatbridge.stop(server.id);
 
+    // Economy
+    if (config.playtimeEarnerEnabled) {
+      await sails.hooks.economy.stop(server.id, 'playtimeEarner');
+    }
+
+    if (config.discordTextEarnerEnabled) {
+      await sails.hooks.economy.stop(server.id, 'discordTextEarner');
+    }
+
+    if (config.killEarnerEnabled) {
+      await sails.hooks.economy.stop(server.id, 'killEarner');
+    }
+
+
+    // Logs
     await sails.hooks.sdtdlogs.stop(server.id);
 
     await SdtdConfig.update({
