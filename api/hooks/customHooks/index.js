@@ -64,7 +64,14 @@ module.exports = function defineCustomHooksHook(sails) {
               if (stringFound) {
                 let isNotOnCooldown = await handleCooldown(serverLogLineHook);
                 if (isNotOnCooldown) {
-                  await executeLogLineHook(eventData, serverLogLineHook, serverId);
+                  try {
+                    await executeLogLineHook(eventData, serverLogLineHook, serverId);
+                  } catch (error) {
+                    sails.log.warn(`Error while executing a custom hook - ${error}`, {
+                      eventData,
+                      serverLogLineHook
+                    });
+                  }
                 }
               }
             }
@@ -81,7 +88,14 @@ module.exports = function defineCustomHooksHook(sails) {
             const stringFound = checkLogLine(eventData.msg, hookToExec);
             if (stringFound) {
               if (isNotOnCooldown) {
-                await executeHook(eventData, hookToExec, serverId);
+                try {
+                  await executeHook(eventData, hookToExec, serverId);
+                } catch (error) {
+                  sails.log.warn(`Error while executing a custom hook - ${error}`, {
+                    eventData,
+                    hookToExec
+                  });
+                }
               }
             }
           }
