@@ -33,13 +33,13 @@ module.exports = {
 
     let amountOfCustomCommands = await CustomCommand.count();
     let amountOfCustomCommandsExecuted = await PlayerUsedCommand.count();
+    let amountOfCustomHooks = await CustomHook.count();
 
     let uptime = hhmmss(process.uptime())
 
     let amountOfChatBridges = sails.hooks.discordchatbridge.getAmount();
     let amountOfCountryBans = sails.hooks.countryban.getAmount();
     let amountOfIngameCommandHandlers = sails.hooks.sdtdcommands.getAmount();
-    let amountOfMotdHandlers = sails.hooks.sdtdmotd.getAmount();
 
     let currencyTotal = await Player.sum('currency');
     let currencyAvg = await Player.avg('currency');
@@ -71,7 +71,7 @@ module.exports = {
       chatBridges: amountOfChatBridges,
       countryBans: amountOfCountryBans,
       sdtdCommands: amountOfIngameCommandHandlers,
-      sdtdMotds: amountOfMotdHandlers,
+      customHooks: amountOfCustomHooks,
       amountOfTimesTeleported: amountOfTimesTeleported,
       amountOfTeleports: amountOfTeleports,
       amountOfCustomCommands: amountOfCustomCommands,
