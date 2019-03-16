@@ -32,6 +32,7 @@ module.exports = function SdtdDiscordChatBridge(sails) {
         discordClient.on('ready', async () => {
           try {
             let enabledServers = await SdtdConfig.find({
+              inactive: false,
               or: [{
                 chatChannelId: {
                   '!=': ''

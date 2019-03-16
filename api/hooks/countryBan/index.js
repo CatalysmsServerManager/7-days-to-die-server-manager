@@ -277,9 +277,7 @@ module.exports = function sdtdCountryBan(sails) {
     initialize: function (cb) {
       sails.on('hook:sdtdlogs:loaded', async function () {
         try {
-          let configs = await SdtdConfig.find();
-
-
+          let configs = await SdtdConfig.find({inactive: false});
 
           for (const config of configs) {
             if (config.countryBanConfig.enabled) {
@@ -325,19 +323,6 @@ module.exports = function sdtdCountryBan(sails) {
       sails.log.debug(`HOOK:countryBan Stopping countryBan for server ${serverId} `);
 
       let loggingObj = sails.hooks.sdtdlogs.getLoggingObject(serverId);
-
-      let currentConfig = countryBanInfoMap.get(String(serverId));
-
-      if (_.isUndefined(currentConfig)) {
-        return;
-      }
-
-      currentConfig.enabled = false;
-      await SdtdConfig.update({
-        server: serverId
-      }, {
-        countryBanConfig: currentConfig
-      });
 
       if (_.isUndefined(loggingObj)) {
         throw new Error('Could not find logging object for server');
@@ -410,7 +395,6 @@ module.exports = function sdtdCountryBan(sails) {
     let country = connectedMessage.country;
     let steamId = connectedMessage.steamID;
     let serverId = this.server.id;
-    console.log(this);
     try {
       let server = await SdtdServer.findOne(serverId)
 
@@ -497,19 +481,10 @@ module.exports = function sdtdCountryBan(sails) {
 
   async function startCountryBan(serverId) {
     try {
-      let server = await SdtdServer.findOne(serverId);
       let config = await SdtdConfig.findOne({
         server: serverId
       });
-
       currentConfig = config.countryBanConfig;
-      currentConfig.enabled = true;
-
-      await SdtdConfig.update({
-        server: serverId
-      }, {
-        countryBanConfig: currentConfig
-      });
 
       let loggingObj = sails.hooks.sdtdlogs.getLoggingObject(serverId);
       if (_.isUndefined(loggingObj)) {

@@ -23,8 +23,8 @@ module.exports = function defineCronHook(sails) {
 
         sails.log.info('Initializing custom hook (`cron`)');
         done();
-
-        let enabledJobs = await CronJob.find({ enabled: true });
+        let activeServers = await SdtdConfig.find({inactive: false});
+        let enabledJobs = await CronJob.find({ enabled: true, server: activeServers.map(c => c.server) });
 
         for (const jobToStart of enabledJobs) {
           try {

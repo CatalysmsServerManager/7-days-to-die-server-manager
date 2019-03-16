@@ -19,7 +19,8 @@ module.exports = function defineCustomHooksHook(sails) {
         sails.log.info('Initializing custom hooks');
 
         let enabledServers = await SdtdConfig.find({
-          loggingEnabled: true
+          loggingEnabled: true,
+          inactive: false,
         });
 
         let logLineHooks = await CustomHook.find({
