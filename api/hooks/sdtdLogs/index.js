@@ -169,6 +169,7 @@ module.exports = function sdtdLogs(sails) {
         })
       }
       sails.sockets.broadcast(server.id, 'playerConnected', connectedMsg);
+      connectedMsg.player = _.omit(connectedMsg.player, 'inventory');
       sails.log.verbose(`Detected a player connected`, connectedMsg);
     });
 
@@ -177,6 +178,7 @@ module.exports = function sdtdLogs(sails) {
       joinMsg.server = _.omit(server, "authName", "authToken");
 
       sails.sockets.broadcast(server.id, 'playerJoined', joinMsg);
+      joinMsg.player = _.omit(joinMsg.player, 'inventory');
       sails.log.verbose(`Detected a player joined`, joinMsg);
     });
 
@@ -188,6 +190,7 @@ module.exports = function sdtdLogs(sails) {
         player: disconnectedMsg.player
       });
       sails.sockets.broadcast(server.id, 'playerDisconnected', disconnectedMsg);
+      disconnectedMsg.player = _.omit(disconnectedMsg.player, 'inventory');
       sails.log.verbose(`Detected a player disconnected`, disconnectedMsg);
     });
 
