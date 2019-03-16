@@ -77,8 +77,9 @@ module.exports = function defineCustomHooksHook(sails) {
           });
 
           for (const hookToExec of configuredHooks) {
-            let isNotOnCooldown = await handleCooldown(hookToExec);
-            if (isNotOnCooldown) {
+            const isNotOnCooldown = await handleCooldown(hookToExec);
+            const stringFound = checkLogLine(eventData.msg, hookToExec);
+            if (isNotOnCooldown && stringFound) {
               await executeHook(eventData, hookToExec, serverId);
             }
           }
@@ -148,22 +149,18 @@ function findSteamIdFromString(logLineMessage) {
 
 // Checks if the logline matches the searchString or regex
 function checkLogLine(logLine, hook) {
+  let logLineMatchesSearch = true;
 
-  let useSearchString;
 
   if (!_.isEmpty(hook.searchString)) {
-    useSearchString = true;
+    logLineMatchesSearch = logLine.includes(hook.searchString)
   }
 
   if (!_.isEmpty(hook.regex)) {
-    useSearchString = false;
+    logLineMatchesSearch = (new RegExp(hook.regex)).test(logLine)
   }
 
-  if (useSearchString) {
-    return logLine.includes(hook.searchString);
-  } else {
-    return (new RegExp(hook.regex)).test(logLine);
-  }
+  return logLineMatchesSearch;
 }
 
 /**

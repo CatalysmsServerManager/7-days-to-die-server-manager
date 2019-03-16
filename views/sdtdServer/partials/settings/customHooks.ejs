@@ -54,7 +54,7 @@
           <label for="hooks-new-cooldown">Cooldown</label>
           <div class="input-group mb-3">
             <input type="text" class="form-control" name="hooks-new-cooldown" id="hooks-new-cooldown" aria-describedby="hooks-new-cooldown-help"
-              placeholder="">
+              value="0">
             <select class="form-control" name="hooks-new-cooldown-unit" id="hooks-new-cooldown-unit">
               <option value="ms">Ms</option>
               <option value="seconds">Seconds</option>
@@ -69,11 +69,12 @@
           <div class="hooks-logLine-settings">
             <hr>
 
-            <h6>Custom log line hooks</h6>
+            <h6>String filtering</h6>
 
             <p>
-              Other than the built-in events, you can also execute hooks for log lines with a certain string in them.
-              To use this, select the event 'logLine'.
+              In order to filter hooks, you can use a search string or a regex. This is useful if you want a hook to
+              fire for certain chat messages but not for all. Note that for the 'logLine' event, you <strong>must</strong>
+              provide either a search string or a regex.
             </p>
 
 
@@ -135,7 +136,7 @@
           <label for="hooks-edit-cooldown">Cooldown</label>
           <div class="input-group mb-3">
             <input type="text" class="form-control" name="hooks-edit-cooldown" id="hooks-edit-cooldown"
-              aria-describedby="hooks-edit-cooldown-help" placeholder="">
+              aria-describedby="hooks-edit-cooldown-help" value="0">
             <select class="form-control" name="hooks-edit-cooldown-unit" id="hooks-edit-cooldown-unit">
               <option value="ms">Ms</option>
               <option value="seconds">Seconds</option>
@@ -150,11 +151,12 @@
           <div class="hooks-logLine-settings">
             <hr>
 
-            <h6>Custom log line hooks</h6>
+            <h6>String filtering</h6>
 
             <p>
-              Other than the built-in events, you can also execute hooks for log lines with a certain string in them.
-              To use this, select the event 'logLine'.
+              In order to filter hooks, you can use a search string or a regex. This is useful if you want a hook to
+              fire for certain chat messages but not for all. Note that for the 'logLine' event, you <strong>must</strong>
+              provide either a search string or a regex.
             </p>
 
             <div class="form-group">
