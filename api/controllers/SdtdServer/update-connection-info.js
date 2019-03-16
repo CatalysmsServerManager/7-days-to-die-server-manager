@@ -92,17 +92,17 @@ module.exports = {
 
       let loggingObject = sails.hooks.sdtdlogs.getLoggingObject(inputs.serverId);
 
-      if (!_.isUndefined(loggingObject)) {
-      loggingObject.server.ip = _.isUndefined(inputs.serverIp) ? loggingObject.server.ip : inputs.serverIp;
-      loggingObject.server.port = _.isUndefined(inputs.webPort) ? loggingObject.server.port : inputs.webPort;
-      loggingObject.server.adminUser = _.isUndefined(inputs.authName) ? loggingObject.server.adminUser : inputs.authName;
-      loggingObject.server.adminToken = _.isUndefined(inputs.authToken) ? loggingObject.server.adminToken : inputs.authToken;
+      if (!_.isUndefined(loggingObject) && !_.isUndefined(loggingObject.server)) {
+        loggingObject.server.ip = _.isUndefined(inputs.serverIp) ? loggingObject.server.ip : inputs.serverIp;
+        loggingObject.server.port = _.isUndefined(inputs.webPort) ? loggingObject.server.port : inputs.webPort;
+        loggingObject.server.adminUser = _.isUndefined(inputs.authName) ? loggingObject.server.adminUser : inputs.authName;
+        loggingObject.server.adminToken = _.isUndefined(inputs.authToken) ? loggingObject.server.adminToken : inputs.authToken;
 
         if (!_.isUndefined(loggingObject._getLatestLogLine)) {
           // Make sure we are on the correct log line.
           loggingObject._getLatestLogLine();
         }
-        
+
       }
 
       sails.log.info(`API - SdtdServer:update-connection-info - Updated connection info for server ${inputs.serverId}`, _.omit(inputs, ["authName", "authToken"]));

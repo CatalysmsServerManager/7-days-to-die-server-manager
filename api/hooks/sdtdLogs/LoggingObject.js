@@ -25,7 +25,7 @@ class LoggingObject extends EventEmitter {
     this.handlingRequest = false;
     this.lastMemUpdate = Date.now();
     // Set this to true to view detailed info about logs for a server. (protip: use discord bot eval command to set this to true in production instances)
-    this.debug = true;
+    this.debug = false;
     this.init();
   }
 
