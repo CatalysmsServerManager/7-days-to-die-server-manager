@@ -15,7 +15,9 @@ module.exports = {
 
     command: {
       required: true,
-      type: 'string'
+      type: 'string',
+      minLength: 5,
+      maxLength: 50000,
     },
 
     temporalValue: {
