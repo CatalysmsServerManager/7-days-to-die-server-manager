@@ -205,8 +205,9 @@
       let command = $("#add-new-cron-command").val();
       let temporalValue = $('#add-new-cron-temporalValue').val();
       let statusDiv = $("#add-new-cron-status");
-      let unit = $("#add-new-cron-unit").val()
-      let duration = $("#add-new-cron-duration").val()
+      let unit = $("#add-new-cron-unit").val();
+      let duration = $("#add-new-cron-duration").val();
+
 
       let requestData = {
         _csrf: window.SAILS_LOCALS._csrf,
@@ -265,7 +266,9 @@
         },
         success: (data, status, xhr) => {
           statusDiv.text('Success!')
-          addNewJobToTable(data)
+          addNewJobToTable(data);
+          $("#add-new-cron-command").val("");
+          $('#add-new-cron-temporalValue').val("");
         }
       })
     })

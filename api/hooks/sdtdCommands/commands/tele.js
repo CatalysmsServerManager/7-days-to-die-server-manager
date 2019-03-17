@@ -19,11 +19,16 @@ class tele extends SdtdCommand {
   async run(chatMessage, player, server, args) {
     let publicTeleports = new Array();
 
-    let publicTelesByPlayer = await PlayerTeleport.find({ player: server.players.map(player => player.id), publicEnabled: true });
+    let publicTelesByPlayer = await PlayerTeleport.find({
+      player: server.players.map(player => player.id),
+      publicEnabled: true
+    });
     publicTeleports = publicTeleports.concat(publicTelesByPlayer);
 
 
-    let playerTeleports = await PlayerTeleport.find({ player: player.id });
+    let playerTeleports = await PlayerTeleport.find({
+      player: player.id
+    });
 
     let serverTeleportsFound = playerTeleports.concat(publicTeleports);
     // Remove duplicates
@@ -52,15 +57,9 @@ class tele extends SdtdCommand {
     }
 
     if (server.config.economyEnabled && server.config.costToTeleport) {
-      let notEnoughMoney = false
-      let result = await sails.helpers.economy.deductFromPlayer.with({
-        playerId: player.id,
-        amountToDeduct: server.config.costToTeleport,
-        message: `COMMAND - ${this.name}`
-      }).tolerate('notEnoughCurrency', totalNeeded => {
-        notEnoughMoney = true;
-      })
-      if (notEnoughMoney) {
+      let playerBalance = await sails.helpers.economy.getPlayerBalance(player.id);
+
+      if (playerBalance < server.config.costToTeleport) {
         return chatMessage.reply(`You do not have enough money to do that! This action costs ${server.config.costToTeleport} ${server.config.currencyName}`)
       }
     }
@@ -76,8 +75,23 @@ class tele extends SdtdCommand {
       }).exec({
         success: async (response) => {
           chatMessage.reply(`Woosh! Welcome to ${teleportFound.name}`);
-          await Player.update({ id: player.id }, { lastTeleportTime: new Date() })
-          await PlayerTeleport.update({ id: teleportFound.id }, { timesUsed: teleportFound.timesUsed + 1 });
+          await Player.update({
+            id: player.id
+          }, {
+            lastTeleportTime: new Date()
+          })
+          await PlayerTeleport.update({
+            id: teleportFound.id
+          }, {
+            timesUsed: teleportFound.timesUsed + 1
+          });
+          if (server.config.economyEnabled && server.config.costToTeleport) {
+            await sails.helpers.economy.deductFromPlayer.with({
+              playerId: player.id,
+              amountToDeduct: server.config.costToTeleport,
+              message: `COMMAND - ${this.name}`
+            });
+          }
           return;
         },
         error: (error) => {
