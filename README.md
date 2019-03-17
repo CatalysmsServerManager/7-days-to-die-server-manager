@@ -22,7 +22,7 @@
 
 ## Installation
 
-Experience running Node.js apps is recommended. CSMM is tested on and developed for Linux. It will *probably* also work on Windows.
+The commands here assume you are running a Debian based Linux distro. Installation steps for other distros or Windows will be similar but keep that in mind.
 
 ### Prerequisites
 
@@ -56,13 +56,12 @@ Experience running Node.js apps is recommended. CSMM is tested on and developed 
     DBSTRING=mysql2://[USER]:[PASSWORD]@localhost:3306/[DATABASE_NAME]
     ```
 
-    CSMM_HOSTNAME is used to generate links, CORS and other things. You should set this to the ip/domain you will access CSMM from. For example `CSMM_HOSTNAME=http://localhost:1337` or `CSMM_HOSTNAME=https://csmm.yourserver.com` 
+    CSMM_HOSTNAME is used to generate links, CORS and other things. You should set this to the ip/domain you will access CSMM from. For example `CSMM_HOSTNAME=http://localhost:1337` or `CSMM_HOSTNAME=https://csmm.example.com` 
 
-4. Add redis support
+    Redis configuration uses a similar system to the MySQL connection string
+    `REDISSTRING=redis://127.0.0.1:6379`
 
-### Optional: Add redis support
-
-5. Put the app in production mode. This is done by setting the env variable NODE_ENV=production
+4. Put the app in production mode. This is done by setting the env variable NODE_ENV=production
 
 
 ## Documentation
