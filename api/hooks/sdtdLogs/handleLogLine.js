@@ -199,22 +199,22 @@ module.exports = (logLine) => {
     }
     */
 
-   let logMsg = logLine.msg.split(",");
+    let logMsg = logLine.msg.split(",");
 
-   let steamId = logMsg[4].replace("PlayerID=", "").split("\'").join('').trim();
-   let playerName = logMsg[6].replace('PlayerName=', '').split("\'").join('').trim();
+    let steamId = logMsg[4].replace("PlayerID=", "").split("\'").join('').trim();
+    let playerName = logMsg[6].replace('PlayerName=', '').split("\'").join('').trim();
 
-   let joinMsg = {
-    steamId,
-    playerName,
-    date: logLine.date,
-    time: logLine.time,
-    uptime: logLine.uptime,
-    msg: logLine.msg,
-  };
+    let joinMsg = {
+      steamId,
+      playerName,
+      date: logLine.date,
+      time: logLine.time,
+      uptime: logLine.uptime,
+      msg: logLine.msg,
+    };
 
-  returnValue.type = "playerJoined";
-  returnValue.data = joinMsg;
+    returnValue.type = "playerJoined";
+    returnValue.data = joinMsg;
 
   }
 
@@ -345,7 +345,7 @@ module.exports = (logLine) => {
     if (entityClass === "zombie") {
       returnValue.type = "zombieKilled";
     }
-    
+
     if (entityClass === "animal") {
       returnValue.type = "animalKilled";
     }
@@ -366,21 +366,34 @@ module.exports = (logLine) => {
     */
     let killMessage = logLine.msg.split("\'");
 
-    let victimName = killMessage[1];
-    let killerName = killMessage[3];
+    let victimName = killMessage[1].trim();
+    let killerName = killMessage[3].trim();
 
-    killMessage = {
-      date: logLine.date,
-      time: logLine.time,
-      uptime: logLine.uptime,
-      msg: logLine.msg,
-      victimName: victimName,
-      killerName: killerName
-    };
-    
-    returnValue.type = "playerKilled";
-    returnValue.data = killMessage;
+    if (victimName === killerName) {
+      suicideMessage = {
+        date: logLine.date,
+        time: logLine.time,
+        uptime: logLine.uptime,
+        msg: logLine.msg,
+        playerName: victimName,
+      };
+
+      returnValue.type = "playerSuicide";
+      returnValue.data = suicideMessage;
+    } else {
+      killMessage = {
+        date: logLine.date,
+        time: logLine.time,
+        uptime: logLine.uptime,
+        msg: logLine.msg,
+        victimName: victimName,
+        killerName: killerName
+      };
+
+      returnValue.type = "playerKilled";
+      returnValue.data = killMessage;
+    }
+
   }
-
   return returnValue;
 };
