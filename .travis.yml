@@ -3,6 +3,7 @@ node_js:
   - 10
 services:
   - mysql
+  - redis-server
 before_install:
   - mysql -e 'CREATE DATABASE csmm;'
 install:
