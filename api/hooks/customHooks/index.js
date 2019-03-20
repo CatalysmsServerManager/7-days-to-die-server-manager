@@ -59,7 +59,7 @@ module.exports = function defineCustomHooksHook(sails) {
             }
 
             for (const serverLogLineHook of serverLogLineHooks) {
-              let stringFound = checkLogLine(eventData.msg, serverLogLineHook);
+              let stringFound = checkLogLine(`${eventData.time} ${eventData.date} ${eventData.msg}`, serverLogLineHook);
 
               if (stringFound) {
                 let isNotOnCooldown = await handleCooldown(serverLogLineHook);
@@ -85,7 +85,7 @@ module.exports = function defineCustomHooksHook(sails) {
 
           for (const hookToExec of configuredHooks) {
             const isNotOnCooldown = await handleCooldown(hookToExec);
-            const stringFound = checkLogLine(eventData.msg, hookToExec);
+            const stringFound = checkLogLine(`${eventData.time} ${eventData.date} ${eventData.msg}`, hookToExec);
             if (stringFound) {
               if (isNotOnCooldown) {
                 try {
@@ -166,7 +166,6 @@ function findSteamIdFromString(logLineMessage) {
 // Checks if the logline matches the searchString or regex
 function checkLogLine(logLine, hook) {
   let logLineMatchesSearch = true;
-
 
   if (!_.isEmpty(hook.searchString)) {
     logLineMatchesSearch = logLine.includes(hook.searchString)
