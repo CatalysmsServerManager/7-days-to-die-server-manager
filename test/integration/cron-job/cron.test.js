@@ -9,7 +9,7 @@ describe('POST /api/sdtdserver/cron', function () {
       .send({
         serverId: 1,
         command: 'help',
-        temporalValue: '0 */5 * * *'
+        temporalValue: '0 */6 * * *'
       })
       .expect('Content-Type', /json/)
       .expect(200, done);
@@ -19,7 +19,7 @@ describe('POST /api/sdtdserver/cron', function () {
       .post('/api/sdtdserver/cron')
       .send({
         serverId: 1,
-        temporalValue: '0 */5 * * *'
+        temporalValue: '0 */6 * * *'
       })
       .expect(400);
 
@@ -51,7 +51,7 @@ describe('PATCH /api/sdtdserver/cron', function () {
       .send({
         jobId: 1,
         command: 'help',
-        temporalValue: '0 */5 * * *'
+        temporalValue: '0 */6 * * *'
       })
       .expect('Content-Type', /json/)
       .expect(200, done);
@@ -61,7 +61,7 @@ describe('PATCH /api/sdtdserver/cron', function () {
       .patch('/api/sdtdserver/cron')
       .send({
         jobId: 1,
-        temporalValue: '0 */5 * * *'
+        temporalValue: '0 */6 * * *'
       })
       .expect(400);
 

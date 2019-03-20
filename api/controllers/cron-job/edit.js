@@ -16,7 +16,7 @@ module.exports = {
     command: {
       required: true,
       type: 'string',
-      minLength: 5,
+      minLength: 3,
       maxLength: 50000,
     },
 

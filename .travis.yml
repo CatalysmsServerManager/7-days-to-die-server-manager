@@ -1,8 +1,14 @@
 language: node_js
 node_js:
+  - node
+  - lts/*
+  - 8
+  - 9
   - 10
+cache: npm
 services:
   - mysql
+  - redis-server
 before_install:
   - mysql -e 'CREATE DATABASE csmm;'
 install:

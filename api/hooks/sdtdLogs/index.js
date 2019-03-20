@@ -149,6 +149,8 @@ module.exports = function sdtdLogs(sails) {
 
     eventEmitter.on('chatMessage', function (chatMessage) {
       chatMessage.server = _.omit(server, "authName", "authToken");
+      chatMessage.player = _.omit(chatMessage.player, 'inventory');
+
       sails.sockets.broadcast(server.id, 'chatMessage', chatMessage);
       sails.log.verbose(`Detected a chat message`, chatMessage);
     });
@@ -176,9 +178,9 @@ module.exports = function sdtdLogs(sails) {
     
     eventEmitter.on('playerJoined', async function (joinMsg) {
       joinMsg.server = _.omit(server, "authName", "authToken");
+      joinMsg.player = _.omit(joinMsg.player, 'inventory');
 
       sails.sockets.broadcast(server.id, 'playerJoined', joinMsg);
-      joinMsg.player = _.omit(joinMsg.player, 'inventory');
       sails.log.verbose(`Detected a player joined`, joinMsg);
     });
 
