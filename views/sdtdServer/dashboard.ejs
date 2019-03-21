@@ -14,12 +14,19 @@
 <% if (allocsVersion.installedAllocs < allocsVersion.supportedAllocs) { %>
 
 <div class="alert alert-danger" role="alert">
+
+  <% if (allocsVersion.installedAllocs !== 0) { %>
+
   <strong>You are using an older version of Allocs fixes! Please consider updating to the latest version</strong>
   <br>
   Installed version:
   <%= allocsVersion.installedAllocs %> <br>
   Supported version:
   <%= allocsVersion.supportedAllocs %>
+
+  <% } else { %>
+  <strong>Error connecting to your server or Allocs is not installed!</strong>
+  <% } %>
 </div>
 
 <% } %>
