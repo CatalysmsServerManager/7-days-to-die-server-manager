@@ -354,10 +354,6 @@ module.exports.routes = {
   'post /api/teleport': 'player-teleport.edit-teleport',
   'delete /api/teleport': 'player-teleport.delete-teleport',
 
-  // MOTD
-  'post /api/sdtdserver/togglemotd': 'SdtdServerController/motd.motd-toggle',
-  'post /api/sdtdserver/reloadmotd': 'SdtdServerController/motd.motd-reload',
-
   //Discord
   'post /api/sdtdserver/setGuild': 'SdtdServerController/discordBot.set-discord-guild',
   'post /api/sdtdserver/setchatchannel': 'SdtdServerController/discordBot.set-chat-channel',

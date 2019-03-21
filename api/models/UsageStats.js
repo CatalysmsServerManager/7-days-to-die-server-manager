@@ -57,10 +57,6 @@ module.exports = {
       type: "number"
     },
 
-    motdHandlers: {
-      type: "number"
-    },
-
     gblEntries: {
       type: "number"
     },

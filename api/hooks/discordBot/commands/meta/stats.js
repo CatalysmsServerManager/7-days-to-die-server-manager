@@ -28,7 +28,6 @@ class Stats extends Commando.Command {
       .addField(`Memory usage`, `${Math.round(memUsage.heapUsed / 1024 / 1024)} MB`, true)
       .addField('Modules', `Discord chat bridges: ${statsInfo.chatBridges}
 Country ban modules: ${statsInfo.countryBans}
-MOTD handlers: ${statsInfo.sdtdMotds}
 Ingame command handlers: ${statsInfo.sdtdCommands}`)
 .addField(`Players have teleported ${statsInfo.amountOfTimesTeleported} times`, `There are ${statsInfo.amountOfTeleports} teleport locations`)
 .addField(`Players have executed ${statsInfo.amountOfCustomCommandsExecuted} custom commands`, `There are ${statsInfo.amountOfCustomCommands} custom commands registered`)

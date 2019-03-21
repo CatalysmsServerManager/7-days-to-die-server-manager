@@ -43,7 +43,6 @@ module.exports = {
             chatBridges: currentStats.chatBridges,
             countryBans:currentStats.countryBans,
             ingameCommands: currentStats.guilds,
-            motdHandlers: currentStats.sdtdMotds,
             gblEntries: currentStats.gblEntries,
             cronJobs: currentStats.cronJobs,
             pingKickers: currentStats.pingKickers,
