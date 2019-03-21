@@ -261,11 +261,6 @@ module.exports.routes = {
   'post /api/sdtdserver/toggleLogging': 'SdtdServerController.logging-toggle',
   'post /api/sdtdserver/inactive': 'SdtdServerController.set-active-status',
 
-  // CPM Settings
-
-  'get /api/sdtdserver/cpm/setting': 'CpmController.cpm-get-setting',
-  'post /api/sdtdserver/cpm/setting': 'CpmController.cpm-set-setting',
-
   // Cron
 
   'get /api/sdtdserver/cron/export': 'cron-job.cron-export',
