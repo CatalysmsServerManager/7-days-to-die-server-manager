@@ -155,7 +155,7 @@ function getValueFromResponse(response, setting) {
         result.enabled = false;
       }
 
-      result.config.command = splitResult[2].replace('Command: ', '');
+      result.config.command = splitResult[2].replace('ChatCommand: ', '');
       result.config.commandEnabled = splitResult[3].replace('CommandEnabled: ', '').trim();
       if (result.config.commandEnabled === "True") {
         result.config.commandEnabled = true;
