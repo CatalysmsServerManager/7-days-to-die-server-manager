@@ -2,13 +2,7 @@
 
 <div class="container">
 
-  <h2>CPM version :
-    <% if(cpmVersion) { %>
-    <%= cpmVersion %>
-    <% } else { %>
-      <p>Not installed! Check <a href="https://confluence.catalysm.net/display/CPM" target="_blank">here</a> for more info </p> 
-    <% } %>
-  </h2>
+  <h2 id="cpmVersion"> </h2>
 
   <div>
 
@@ -18,7 +12,8 @@
     adding
     new commands and features.
 
-    For more info and install instructions, see the <a href="https://confluence.catalysm.net/display/CPM" target="_blank">CPM
+    For more info and install instructions, see the <a href="https://confluence.catalysm.net/display/CPM"
+      target="_blank">CPM
       documentation</a>
 
   </div>
@@ -27,9 +22,10 @@
 
   <div class="form-group">
     <label for="settings-cpm-prefix">CPM chat commands prefix</label>
-    <input type="text" class="form-control" name="settings-cpm-prefix" id="settings-cpm-prefix" aria-describedby="settings-cpm-prefix-help"
-      placeholder="">
-    <small id="settings-cpm-prefix-help" class="form-text text-muted">The prefix used to trigger CPM chat commands</small>
+    <input type="text" class="form-control" name="settings-cpm-prefix" id="settings-cpm-prefix"
+      aria-describedby="settings-cpm-prefix-help" placeholder="">
+    <small id="settings-cpm-prefix-help" class="form-text text-muted">The prefix used to trigger CPM chat
+      commands</small>
   </div>
 
   <div class="form-group">
@@ -50,7 +46,8 @@
 
   <div class="form-check">
     <label class="form-check-label">
-      <input type="checkbox" class="form-check-input" name="settings-cpm-locTrack-enabled" id="settings-cpm-locTrack-enabled">
+      <input type="checkbox" class="form-check-input" name="settings-cpm-locTrack-enabled"
+        id="settings-cpm-locTrack-enabled">
       CPM location tracking
     </label>
   </div>
@@ -65,7 +62,8 @@
 
   <div class="form-check">
     <label class="form-check-label">
-      <input type="checkbox" class="form-check-input" name="settings-cpm-locTrack-command-enabled" id="settings-cpm-locTrack-command-enabled">
+      <input type="checkbox" class="form-check-input" name="settings-cpm-locTrack-command-enabled"
+        id="settings-cpm-locTrack-command-enabled">
       Enable/Disable ingame
       chatcommand for querying databases.
     </label>
@@ -81,24 +79,25 @@
 
   <div class="form-group">
     <label for="settings-cpm-locTrack-maxAgeData">Data maximum age</label>
-    <input type="number" class="form-control" name="settings-cpm-locTrack-maxAgeData" id="settings-cpm-locTrack-maxAgeData"
-      aria-describedby="settings-cpm-locTrack-maxAgeData-help" placeholder="">
+    <input type="number" class="form-control" name="settings-cpm-locTrack-maxAgeData"
+      id="settings-cpm-locTrack-maxAgeData" aria-describedby="settings-cpm-locTrack-maxAgeData-help" placeholder="">
     <small id="settings-cpm-locTrack-maxAgeData-help" class="form-text text-muted">Set the maximum time the data stays
       in databases (hours)(0=forever).</small>
   </div>
 
   <div class="form-group">
     <label for="settings-cpm-locTrack-nearDistance">Near distance</label>
-    <input type="number" class="form-control" name="settings-cpm-locTrack-nearDistance" id="settings-cpm-locTrack-nearDistance"
-      aria-describedby="settings-cpm-locTrack-nearDistance-help" placeholder="">
+    <input type="number" class="form-control" name="settings-cpm-locTrack-nearDistance"
+      id="settings-cpm-locTrack-nearDistance" aria-describedby="settings-cpm-locTrack-nearDistance-help" placeholder="">
     <small id="settings-cpm-locTrack-nearDistance-help" class="form-text text-muted">Set the distance for use with
       chatcommand for reporting near live players.</small>
   </div>
 
   <div class="form-group">
     <label for="settings-cpm-locTrack-responseColor">Response color</label>
-    <input type="text" class="form-control" name="settings-cpm-locTrack-responseColor" id="settings-cpm-locTrack-responseColor"
-      aria-describedby="settings-cpm-locTrack-responseColor-help" placeholder="">
+    <input type="text" class="form-control" name="settings-cpm-locTrack-responseColor"
+      id="settings-cpm-locTrack-responseColor" aria-describedby="settings-cpm-locTrack-responseColor-help"
+      placeholder="">
     <small id="settings-cpm-locTrack-responseColor-help" class="form-text text-muted">Set the responsecolor for use
       with chatcommand. Has to be 6 long hexadecimal number.</small>
   </div>
@@ -107,8 +106,8 @@
 
   <div class="form-group">
     <label for="settings-cpm-preventFallingBlocks">Prevent falling blocks</label>
-    <input type="number" class="form-control" name="settings-cpm-preventFallingBlocks" id="settings-cpm-preventFallingBlocks"
-      aria-describedby="settings-cpm-preventFallingBlocks-help" placeholder="">
+    <input type="number" class="form-control" name="settings-cpm-preventFallingBlocks"
+      id="settings-cpm-preventFallingBlocks" aria-describedby="settings-cpm-preventFallingBlocks-help" placeholder="">
     <small id="settings-cpm-preventFallingBlocks-help" class="form-text text-muted">When a player (accidentally)
       collapses a structure, the falling blocks will be immediately removed, preventing lag and your server crashing. 0
       = disabled.</small>
@@ -118,14 +117,16 @@
 
   <div class="form-check">
     <label class="form-check-label">
-      <input type="checkbox" class="form-check-input" name="settings-cpm-blockUtf8Names" id="settings-cpm-blockUtf8Names">
+      <input type="checkbox" class="form-check-input" name="settings-cpm-blockUtf8Names"
+        id="settings-cpm-blockUtf8Names">
       Kick any players with UTF-8 characters in name at login
     </label>
   </div>
 
   <br>
 
-  <button type="button" name="settings-cpm-set" id="settings-cpm-set" class="btn btn-lg btn-primary" btn-lg btn-block">Set</button>
+  <button type="button" name="settings-cpm-set" id="settings-cpm-set" class="btn btn-lg btn-primary" btn-lg
+    btn-block">Set</button>
 
 </div>
 
@@ -135,28 +136,43 @@
   ];
 
   $(document).ready(function () {
-    if (window.SAILS_LOCALS.cpmVersion !== 0) {
-      for (const setting of CPMSettings) {
-        $.ajax({
-          url: `/api/sdtdserver/cpm/setting`,
-          type: 'GET',
-          data: {
-            _csrf: window.SAILS_LOCALS._csrf,
-            serverId: window.SAILS_LOCALS.server.id,
-            setting: setting
-          },
-          success: (data, status, xhr) => {
-            fillSettingField(data)
-          },
-          error: function (xhr, status, error) {
-            displayAjaxToSupportData(xhr, this);;
-            showErrorModal(`${error} - ${xhr.responseText}`, xhr);
-          }
-        });
-      };
-    }
 
 
+    getCPMVersion().then(cpmVersion => {
+      window.SAILS_LOCALS.cpmVersion = cpmVersion;
+
+      if (cpmVersion) {
+        $("#cpmVersion").text(`CPM version: ${cpmVersion}`);
+      } else {
+        $("#cpmVersion").html(
+          'CPM is not installed! Check <a href="https://confluence.catalysm.net/display/CPM" target="_blank">here</a> for more info'
+        );
+      }
+
+
+      if (window.SAILS_LOCALS.cpmVersion !== 0) {
+        for (const setting of CPMSettings) {
+          $.ajax({
+            url: `/api/sdtdserver/cpm/setting`,
+            type: 'GET',
+            data: {
+              _csrf: window.SAILS_LOCALS._csrf,
+              serverId: window.SAILS_LOCALS.server.id,
+              setting: setting
+            },
+            success: (data, status, xhr) => {
+              fillSettingField(data)
+            },
+            error: function (xhr, status, error) {
+              displayAjaxToSupportData(xhr, this);;
+              showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+            }
+          });
+        };
+      }
+    }).catch(e => {
+      console.error(e);
+    })
 
     $("#settings-cpm-set").click(e => {
 
@@ -181,6 +197,27 @@
     });
 
   });
+
+  function getCPMVersion() {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        type: "GET",
+        url: "/api/sdtdserver/mod",
+        data: {
+          serverId: window.SAILS_LOCALS.server.id,
+          mod: 'cpm'
+        },
+        success: function (response) {
+          resolve(response)
+        },
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+          reject(error);
+        }
+      });
+    })
+  }
 
   function setSetting(type, value, settingField) {
 

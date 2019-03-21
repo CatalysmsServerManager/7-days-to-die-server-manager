@@ -154,6 +154,7 @@ module.exports.routes = {
   'get /api/sdtdserver/allowedCommands': 'CustomCommandController.get-allowed-commands',
   'get /api/sdtdserver/donatorStatus': 'SdtdServerController.check-donator',
   'get /api/sdtdserver/failedstatus': 'SdtdServerController.get-failed-status',
+  'get /api/sdtdserver/mod': 'SdtdServerController.get-mod-version',
 
   'get /api/sdtdserver/resetRegions': 'SdtdServerController/resetRegions.get-reset-regions',
 
