@@ -54,10 +54,6 @@ let policyObject = {
     'check-permission': ["isLoggedIn"]
   },
 
-  CpmController: {
-    '*': ["isLoggedIn", 'roles/manageServer'],
-  },
-
   ShopController: {
     '*': ['isLoggedIn'],
     'listing-add': ["isLoggedIn", 'roles/manageEconomy'],

@@ -225,6 +225,8 @@ module.exports.routes = {
   "patch /api/shop/listing": "ShopController.listing-edit",
   "post /api/shop/listing/buy": "ShopController.listing-buy",
 
+  'delete /api/shop/claim': "ShopController.delete-claim",
+
   // Historical data
 
   'get /api/sdtdserver/data/memupdate': 'SdtdServerController/historicalData.get-mem-update',
