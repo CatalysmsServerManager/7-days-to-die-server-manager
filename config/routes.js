@@ -154,6 +154,7 @@ module.exports.routes = {
   'get /api/sdtdserver/allowedCommands': 'CustomCommandController.get-allowed-commands',
   'get /api/sdtdserver/donatorStatus': 'SdtdServerController.check-donator',
   'get /api/sdtdserver/failedstatus': 'SdtdServerController.get-failed-status',
+  'get /api/sdtdserver/mod': 'SdtdServerController.get-mod-version',
 
   'get /api/sdtdserver/resetRegions': 'SdtdServerController/resetRegions.get-reset-regions',
 
@@ -185,7 +186,10 @@ module.exports.routes = {
   'post /api/sdtdserver/hook' : 'CustomHookController/add-custom-hook',
   'patch /api/sdtdserver/hook' : 'CustomHookController/edit-custom-hook',
   'delete /api/sdtdserver/hook' : 'CustomHookController/delete-custom-hook',
-  
+
+  'post /api/sdtdserver/hook/variable' : 'CustomHookController/variable/add-hook-variable',
+  'delete /api/sdtdserver/hook/variable' : 'CustomHookController/variable/delete-hook-variable',
+
   // Economy
 
   'post /api/sdtdserver/economy': 'SdtdServerController/economy.enable-economy',
@@ -221,6 +225,8 @@ module.exports.routes = {
   "patch /api/shop/listing": "ShopController.listing-edit",
   "post /api/shop/listing/buy": "ShopController.listing-buy",
 
+  'delete /api/shop/claim': "ShopController.delete-claim",
+
   // Historical data
 
   'get /api/sdtdserver/data/memupdate': 'SdtdServerController/historicalData.get-mem-update',
@@ -250,20 +256,11 @@ module.exports.routes = {
   'post /api/sdtdserver/addserver': 'SdtdServerController/add-server',
   'post /api/sdtdserver/restartServer': 'SdtdServerController/restart-server',
 
-  'get /api/sdtdserver/admins': 'SdtdServerController.get-admins',
-  'post /api/sdtdserver/admin': 'SdtdServerController.add-admin',
-  'delete /api/sdtdserver/admin': 'SdtdServerController.remove-admin',
-
   // Sdtd settings
 
   'post /api/sdtdserver/updateConnectionInfo': 'SdtdServerController.update-connection-info',
   'post /api/sdtdserver/toggleLogging': 'SdtdServerController.logging-toggle',
   'post /api/sdtdserver/inactive': 'SdtdServerController.set-active-status',
-
-  // CPM Settings
-
-  'get /api/sdtdserver/cpm/setting': 'CpmController.cpm-get-setting',
-  'post /api/sdtdserver/cpm/setting': 'CpmController.cpm-set-setting',
 
   // Cron
 
@@ -352,10 +349,6 @@ module.exports.routes = {
   'get /api/sdtdserver/playerteleports': "player-teleport.get-teleports",
   'post /api/teleport': 'player-teleport.edit-teleport',
   'delete /api/teleport': 'player-teleport.delete-teleport',
-
-  // MOTD
-  'post /api/sdtdserver/togglemotd': 'SdtdServerController/motd.motd-toggle',
-  'post /api/sdtdserver/reloadmotd': 'SdtdServerController/motd.motd-reload',
 
   //Discord
   'post /api/sdtdserver/setGuild': 'SdtdServerController/discordBot.set-discord-guild',

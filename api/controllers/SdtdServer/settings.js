@@ -44,27 +44,6 @@ module.exports = {
     });
     let user = await User.findOne(this.req.session.userId);
 
-    let cpmVersion;
-
-    try {
-      cpmVersion = await sails.helpers.sdtd.checkCpmVersion(inputs.serverId, true);
-    } catch (error) {
-      cpmVersion = 0;
-    }
-
-    let permCheck = await sails.helpers.roles.checkPermission.with({
-      userId: this.req.session.userId,
-      serverId: inputs.serverId,
-      permission: 'manageServer'
-    });
-
-    if (!permCheck.hasPermission) {
-      return exits.notAuthorized({
-        role: permCheck.role,
-        requiredPerm: 'manageServer'
-      });
-    }
-
     let gimmeItems = await GimmeItem.find({server: server.id});
 
     try {
@@ -78,7 +57,6 @@ module.exports = {
         config: serverConfig,
         user: user,
         customCommands: customCommands,
-        cpmVersion: cpmVersion,
         gimmeItems: gimmeItems,
         serverTime: Date.now()
       });

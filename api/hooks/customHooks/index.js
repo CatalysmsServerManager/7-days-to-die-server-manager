@@ -1,4 +1,3 @@
-const sevenDays = require('7daystodie-api-wrapper');
 const steam64Regex = new RegExp('[0-9]{17}');
 
 module.exports = function defineCustomHooksHook(sails) {
@@ -65,6 +64,8 @@ module.exports = function defineCustomHooksHook(sails) {
                 let isNotOnCooldown = await handleCooldown(serverLogLineHook);
                 if (isNotOnCooldown) {
                   try {
+                    const variables = await getHookVariables(serverLogLineHook.id);
+                    serverLogLineHook.variables = variables;
                     await executeLogLineHook(eventData, serverLogLineHook, serverId);
                   } catch (error) {
                     sails.log.warn(`Error while executing a custom hook - ${error}`, {
@@ -89,6 +90,8 @@ module.exports = function defineCustomHooksHook(sails) {
             if (stringFound) {
               if (isNotOnCooldown) {
                 try {
+                  const variables = await getHookVariables(hookToExec.id);
+                  hookToExec.variables = variables;
                   await executeHook(eventData, hookToExec, serverId);
                 } catch (error) {
                   sails.log.warn(`Error while executing a custom hook - ${error}`, {
@@ -111,7 +114,7 @@ module.exports = function defineCustomHooksHook(sails) {
   async function executeHook(eventData, hookToExec, serverId) {
     try {
       let server = await SdtdServer.findOne(serverId);
-
+      eventData.custom = getVariablesValues(hookToExec.variables, eventData.msg);
       let results = await sails.helpers.sdtd.executeCustomCmd(server, hookToExec.commandsToExecute.split(';'), eventData);
       sails.log.debug(`Executed a custom hook for server ${serverId}`, {
         hook: hookToExec,
@@ -140,6 +143,7 @@ module.exports = function defineCustomHooksHook(sails) {
       });
       eventData.player = players[0];
     }
+    eventData.custom = getVariablesValues(hookToExec.variables, eventData.msg);
     let results = await sails.helpers.sdtd.executeCustomCmd(server, hookToExec.commandsToExecute.split(';'), eventData);
     sails.log.debug(`Executed a custom logLine hook for server ${serverId}`, {
       hook: hookToExec,
@@ -204,4 +208,21 @@ async function handleCooldown(hook) {
   } else {
     return true;
   }
+}
+
+
+async function getHookVariables(hookId) {
+  let variables = await HookVariable.find({hook: hookId});
+  return variables;
+}
+
+function getVariablesValues(variables, logMsg) {
+  const customVars = {};
+
+  for (const variable of variables) {
+    const regex = new RegExp(variable.regex);
+    customVars[variable.name] = logMsg.match(regex)[0]
+  }
+
+  return customVars;
 }

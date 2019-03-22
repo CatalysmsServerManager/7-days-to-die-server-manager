@@ -1,26 +1,22 @@
 <!-- BASIC SERVER SETTINGS -->
 
 <div class="container">
-
-  <div>Detected CPM version
-    <%= cpmVersion %>
-  </div>
-
   <div>Server donator status: <span id="donatorStatus"></span></div>
 
   <br>
 
   <div class="form-check">
     <label class="form-check-label">
-      <input type="checkbox" class="form-check-input" name="input-settings-server-inactive" id="input-settings-server-inactive"
-        value="true">
+      <input type="checkbox" class="form-check-input" name="input-settings-server-inactive"
+        id="input-settings-server-inactive" value="true">
       Enable CSMM features. <p> <small>If you disable this, CSMM will not interact with your server anymore but you
           will not lose any configuration or data.</small></p>
     </label>
   </div>
 
   <div class="alert alert-warning invisible" id="failedStatus" role="alert">
-    <strong>Connection issue: </strong>CSMM was last able to detect events on your server on <span id="failedStatus-lastSuccess"></span>
+    <strong>Connection issue: </strong>CSMM was last able to detect events on your server on <span
+      id="failedStatus-lastSuccess"></span>
     and has failed <span id="failedStatus-counter"></span> times since. If your server is offline for an extended time,
     CSMM will disable features. When you have fixed the connection problem, you can re-enable all features with the
     checkbox above.
