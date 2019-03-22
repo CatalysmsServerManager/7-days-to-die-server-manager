@@ -14,7 +14,7 @@ class PlayerDisconnected extends DiscordNotification {
     embed.setTitle(`Disconnected: ${event.player.name}`)
     .setColor("RED")
     .addField('Steam ID', `[${event.player.steamId}](https://steamidfinder.com/lookup/${event.player.steamId}/)`, true)
-    .addField('CSMM profile', `${process.env.CSMM_HOSTNAME}/player/${event.player.steamId}/profile`)
+    .addField('CSMM profile', `${process.env.CSMM_HOSTNAME}/player/${event.player.id}/profile`)
     .addField(`${gblBans.length} ban${gblBans.length === 1 ? "" : "s"} on the global ban list`, `[GBL profile page](${process.env.CSMM_HOSTNAME}/gbl/profile?steamId=${event.player.steamId})`)
     .addField("Role", event.player.role ? event.player.role : "None")
     .setFooter(`${event.server.name}`)
