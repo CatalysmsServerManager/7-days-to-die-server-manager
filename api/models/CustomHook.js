@@ -88,6 +88,11 @@ module.exports = {
       required: true
     },
 
+    variables: {
+      collection: 'hookvariable',
+      via: 'hook'
+    },
+
   },
 
 };

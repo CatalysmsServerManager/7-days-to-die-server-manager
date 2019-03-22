@@ -186,7 +186,10 @@ module.exports.routes = {
   'post /api/sdtdserver/hook' : 'CustomHookController/add-custom-hook',
   'patch /api/sdtdserver/hook' : 'CustomHookController/edit-custom-hook',
   'delete /api/sdtdserver/hook' : 'CustomHookController/delete-custom-hook',
-  
+
+  'post /api/sdtdserver/hook/variable' : 'CustomHookController/variable/add-hook-variable',
+  'delete /api/sdtdserver/hook/variable' : 'CustomHookController/variable/delete-hook-variable',
+
   // Economy
 
   'post /api/sdtdserver/economy': 'SdtdServerController/economy.enable-economy',
