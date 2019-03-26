@@ -1,5 +1,5 @@
 const sdtdApi = require('7daystodie-api-wrapper');
-const supportedFunctions = ['wait'];
+const supportedFunctions = ['wait', 'addCurrency'];
 
 module.exports = {
 
@@ -62,24 +62,46 @@ module.exports = {
       let customFunction = checkForCustomFunction(commandToExec);
       if (customFunction) {
 
-        switch (customFunction) {
-          case 'wait':
-            let secondsToWaitStr = commandToExec.replace('wait(', '').replace(')', '');
-            let secondsToWait;
+        try {
+          switch (customFunction) {
+            case 'wait':
+              let secondsToWaitStr = commandToExec.replace('wait(', '').replace(')', '');
+              let secondsToWait;
 
-            secondsToWait = parseInt(secondsToWaitStr);
+              secondsToWait = parseInt(secondsToWaitStr);
 
-            await sails.helpers.sdtd.customfunctions.wait(secondsToWait);
-            commandsExecuted.push({
-              result: `Waited for ${secondsToWait} seconds`
-            });
-            break;
+              await sails.helpers.sdtd.customfunctions.wait(secondsToWait);
+              commandsExecuted.push({
+                result: `Waited for ${secondsToWait} seconds`
+              });
+              break;
+            case 'addCurrency':
+              let argsString = commandToExec.replace('addCurrency(', '').replace(')', '');
+              let splitArgs = argsString.split(',');
+              let playerId = parseInt(splitArgs[0]);
+              let currency = parseInt(splitArgs[1]);
 
-          default:
-            break;
+              await sails.helpers.sdtd.customfunctions.addCurrency(playerId, currency);
+              commandsExecuted.push({
+                result: `Adjusted currency of players by ${currency}`
+              });
+              break;
+            default:
+              break;
+          }
+        } catch (error) {
+          let result;
+          if (_.isArray(error.problems)) {
+            result = error.problems.join(' ');
+          } else {
+            result = error.toString();
+          }
+          commandsExecuted.push({
+            result: result
+          });
         }
 
-      // If the command is not a custom function, execute it as a sdtd command
+        // If the command is not a custom function, execute it as a sdtd command
       } else {
 
         let commandResult = await executeCommand(inputs.server, commandToExec);
