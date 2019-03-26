@@ -218,6 +218,28 @@
 
           </div>
 
+          <hr>
+
+          <div id="last-result">
+
+            <h6>Last result</h6>
+
+            <p>Here you can find the results of the last time this hook fired. If something is not working as you
+              expect, use this table to inspect the commands CSMM ran</p>
+
+            <table class="table" id="last-result-table">
+              <thead>
+                <tr>
+                  <th>Command</th>
+                  <th>Parameters</th>
+                  <th>Result</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+
+          </div>
+
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -259,6 +281,23 @@
 
     const hooks = new Array();
     let activeHookId = undefined;
+
+    const lastResultTable = $("#last-result-table").DataTable({
+      autoWidth: false,
+      dom: 'Bfrtip',
+      fixedHeader: true,
+      responsive: true,
+      buttons: [],
+      columns: [{
+          data: "command",
+        }, {
+          data: "parameters",
+        },
+        {
+          data: 'result',
+        },
+      ]
+    })
 
     const variablesTable = $("#variables-table").DataTable({
       autoWidth: false,
@@ -403,8 +442,9 @@
         modal.find('#hooks-edit-commands').val(data.commandsToExecute.replace('&apos', "'"));
         modal.find('#hooks-edit-searchString').val(data.searchString);
         modal.find('#hooks-edit-regex').val(data.regex);
-
-        drawDataTable(data.variables, variablesTable)
+        console.log(data)
+        drawDataTable(data.variables, variablesTable);
+        drawDataTable(data.lastResult, lastResultTable);
 
         // Set the cooldown select to the right unit
         if (!(data.cooldown % secondsInMs)) {
@@ -603,8 +643,10 @@
 
   function drawDataTable(data, table) {
     table.clear();
-    for (const row of data) {
-      table.row.add(row);
+    if (!_.isNull(data)) {
+      for (const row of data) {
+        table.row.add(row);
+      }
     }
     table.draw();
 

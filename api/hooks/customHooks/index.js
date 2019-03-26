@@ -116,6 +116,7 @@ module.exports = function defineCustomHooksHook(sails) {
       let server = await SdtdServer.findOne(serverId);
       eventData.custom = getVariablesValues(hookToExec.variables, eventData.msg);
       let results = await sails.helpers.sdtd.executeCustomCmd(server, hookToExec.commandsToExecute.split(';'), eventData);
+      await saveResultsToRedis(hookToExec.id, results);
       sails.log.debug(`Executed a custom hook for server ${serverId}`, {
         hook: hookToExec,
         event: eventData,
@@ -145,6 +146,7 @@ module.exports = function defineCustomHooksHook(sails) {
     }
     eventData.custom = getVariablesValues(hookToExec.variables, eventData.msg);
     let results = await sails.helpers.sdtd.executeCustomCmd(server, hookToExec.commandsToExecute.split(';'), eventData);
+    await saveResultsToRedis(hookToExec.id, results);
     sails.log.debug(`Executed a custom logLine hook for server ${serverId}`, {
       hook: hookToExec,
       event: eventData,
@@ -225,4 +227,9 @@ function getVariablesValues(variables, logMsg) {
   }
 
   return customVars;
+}
+
+async function saveResultsToRedis(hookId, results) {
+  await sails.helpers.redis.set(`hooks:${hookId}:lastResult`, JSON.stringify(results));
+  return;
 }
