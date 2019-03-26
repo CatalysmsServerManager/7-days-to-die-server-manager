@@ -1,4 +1,5 @@
 const sdtdApi = require('7daystodie-api-wrapper');
+const supportedFunctions = ['wait'];
 
 module.exports = {
 
@@ -47,32 +48,40 @@ module.exports = {
     }
 
     for (const command of inputs.commands) {
-      if (command.includes("wait(")) {
-        let secondsToWaitStr = command.replace('wait(', '').replace(')', '');
-        let secondsToWait;
+      let commandToExec = command;
 
-        secondsToWait = parseInt(secondsToWaitStr);
+      // Fill any variables in the command
+      if (!_.isUndefined(inputs.data)) {
+        if (!_.isUndefined(inputs.data.player)) {
+          commandToExec = await sails.helpers.sdtd.fillPlayerVariables(commandToExec, inputs.data.player);
+        }
+        commandToExec = await sails.helpers.sdtd.fillCustomVariables(commandToExec, inputs.data);
+      }
 
-        if (secondsToWait < 1) {
-          return exits.error(`Cannot wait for a negative or 0 amount of seconds`);
+      // Check if the command matches any custom functions
+      let customFunction = checkForCustomFunction(commandToExec);
+      if (customFunction) {
+
+        switch (customFunction) {
+          case 'wait':
+            let secondsToWaitStr = commandToExec.replace('wait(', '').replace(')', '');
+            let secondsToWait;
+
+            secondsToWait = parseInt(secondsToWaitStr);
+
+            await sails.helpers.sdtd.customfunctions.wait(secondsToWait);
+            commandsExecuted.push({
+              result: `Waited for ${secondsToWait} seconds`
+            });
+            break;
+
+          default:
+            break;
         }
 
-        if (isNaN(secondsToWait)) {
-          return exits.error(`Invalid wait() syntax! example: wait(5)`);
-        }
-
-        await wait(secondsToWait);
-        commandsExecuted.push({
-          result: `Waited for ${secondsToWait} seconds`
-        });
+      // If the command is not a custom function, execute it as a sdtd command
       } else {
-        let commandToExec = command;
-        if (!_.isUndefined(inputs.data)) {
-          if (!_.isUndefined(inputs.data.player)) {
-            commandToExec = await sails.helpers.sdtd.fillPlayerVariables(command, inputs.data.player);
-          }
-          commandToExec = await sails.helpers.sdtd.fillCustomVariables(commandToExec, inputs.data);
-        }
+
         let commandResult = await executeCommand(inputs.server, commandToExec);
         commandsExecuted.push(commandResult);
       }
@@ -84,6 +93,15 @@ module.exports = {
 
 
 };
+
+function checkForCustomFunction(command) {
+  for (const fnc of supportedFunctions) {
+    if (command.includes(fnc + '(')) {
+      return fnc;
+    }
+  }
+  return false;
+}
 
 async function executeCommand(server, command) {
   try {
