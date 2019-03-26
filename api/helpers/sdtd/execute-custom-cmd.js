@@ -62,27 +62,37 @@ module.exports = {
       let customFunction = checkForCustomFunction(commandToExec);
       if (customFunction) {
 
+        // These variables are created so the error handler has access to more info about where the custom function failed
+        let command;
+        let parameters;
+
         try {
           switch (customFunction) {
             case 'wait':
-              let secondsToWaitStr = commandToExec.replace('wait(', '').replace(')', '');
+              command = 'wait';
+              parameters = commandToExec.replace('wait(', '').replace(')', '');
               let secondsToWait;
 
-              secondsToWait = parseInt(secondsToWaitStr);
+              secondsToWait = parseInt(parameters);
 
               await sails.helpers.sdtd.customfunctions.wait(secondsToWait);
               commandsExecuted.push({
+                command,
+                parameters,
                 result: `Waited for ${secondsToWait} seconds`
               });
               break;
             case 'addCurrency':
-              let argsString = commandToExec.replace('addCurrency(', '').replace(')', '');
-              let splitArgs = argsString.split(',');
+              command = 'addCurrency';
+              parameters = commandToExec.replace('addCurrency(', '').replace(')', '');
+              let splitArgs = parameters.split(',');
               let playerId = parseInt(splitArgs[0]);
               let currency = parseInt(splitArgs[1]);
 
               await sails.helpers.sdtd.customfunctions.addCurrency(playerId, currency);
               commandsExecuted.push({
+                command,
+                parameters,
                 result: `Adjusted currency of players by ${currency}`
               });
               break;
@@ -97,6 +107,8 @@ module.exports = {
             result = error.toString();
           }
           commandsExecuted.push({
+            command,
+            parameters,
             result: result
           });
         }
