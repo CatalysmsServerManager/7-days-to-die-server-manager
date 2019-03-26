@@ -2,7 +2,7 @@ module.exports = async function enrichEventData(event) {
   let newData = event.data;
 
   switch (event.type) {
-    case 'playerKill':
+    case 'playerKilled':
       newData.victim = await Player.findOne({
         server: event.server.id,
         name: event.data.victimName

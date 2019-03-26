@@ -50,13 +50,22 @@ module.exports = {
     for (const command of inputs.commands) {
       let commandToExec = command;
 
-      // Fill any variables in the command
-      if (!_.isUndefined(inputs.data)) {
-        if (!_.isUndefined(inputs.data.player)) {
-          commandToExec = await sails.helpers.sdtd.fillPlayerVariables(commandToExec, inputs.data.player);
+      try {
+        // Fill any variables in the command
+        if (!_.isUndefined(inputs.data)) {
+          if (!_.isUndefined(inputs.data.player)) {
+            commandToExec = await sails.helpers.sdtd.fillPlayerVariables(commandToExec, inputs.data.player);
+          }
+          commandToExec = await sails.helpers.sdtd.fillCustomVariables(commandToExec, inputs.data);
         }
-        commandToExec = await sails.helpers.sdtd.fillCustomVariables(commandToExec, inputs.data);
+      } catch (error) {
+        commandsExecuted.push({
+          command,
+          parameters: 'Filling in variables - please check your variable syntax',
+          result: error.toString()
+        });
       }
+
 
       // Check if the command matches any custom functions
       let customFunction = checkForCustomFunction(commandToExec);
