@@ -16,7 +16,9 @@ module.exports = {
 
     level: {
       type: 'number',
-      required: true
+      required: true,
+      min: 0,
+      max: 9999,
     },
 
     serverId: {

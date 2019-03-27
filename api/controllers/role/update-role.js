@@ -24,7 +24,8 @@ module.exports = {
 
     level: {
       type: 'number',
-      min: 0
+      min: 0,
+      max: 9999,
     },
 
     isDefault: {
