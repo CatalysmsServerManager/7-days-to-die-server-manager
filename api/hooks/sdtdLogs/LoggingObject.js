@@ -156,9 +156,17 @@ class LoggingObject extends EventEmitter {
       }
     }
 
+    let index = -1;
     _.each(newLogs.entries, async line => {
+      index++;
       if (this.debug) {
         sails.log.verbose(`SdtdLogs - DEBUG MESSAGE - server ${this.server.id} --- ${line.msg}`);
+      }
+      if (newLogs.entries[index + 1]) {
+        if (newLogs.entries[index + 1].msg.includes('handled by mod')) {
+          //Message is being handled by a mod, skip to the next line with possibly mod-controlled data
+          return;
+        }
       }
 
       let parsedLogLine = handleLogLine(line);
@@ -174,6 +182,7 @@ class LoggingObject extends EventEmitter {
           this.emit(parsedLogLine.type, parsedLogLine.data);
         }
       }
+
     });
 
     this.lastLogLine = newLogs.lastLine;

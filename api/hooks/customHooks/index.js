@@ -214,7 +214,9 @@ async function handleCooldown(hook) {
 
 
 async function getHookVariables(hookId) {
-  let variables = await HookVariable.find({hook: hookId});
+  let variables = await HookVariable.find({
+    hook: hookId
+  });
   return variables;
 }
 
@@ -223,7 +225,11 @@ function getVariablesValues(variables, logMsg) {
 
   for (const variable of variables) {
     const regex = new RegExp(variable.regex);
-    customVars[variable.name] = logMsg.match(regex)[0]
+    let matches = logMsg.match(regex);
+
+    if (!_.isNull(matches)) {
+      customVars[variable.name] = logMsg.match(regex)[0]
+    }
   }
 
   return customVars;
