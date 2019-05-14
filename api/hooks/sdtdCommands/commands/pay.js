@@ -58,13 +58,15 @@ class Pay extends SdtdCommand {
     await sails.helpers.economy.deductFromPlayer.with({
       playerId: player.id,
       amountToDeduct: amountToSend,
-      message: `COMMAND - ${this.name} to ${playerToSendTo[0].name}`
+      message: `COMMAND - ${this.name} to ${playerToSendTo[0].name}`,
+      useMultiplier: false,
     });
 
     await sails.helpers.economy.giveToPlayer.with({
       playerId: playerToSendTo[0].id,
       amountToGive: amountToSend,
-      message: `COMMAND - ${this.name} from ${player.name}`
+      message: `COMMAND - ${this.name} from ${player.name}`,
+      useMultiplier: false,
     });
 
     return chatMessage.reply(`Successfully sent ${amountToSend} ${server.config.currencyName} to ${playerToSendTo[0].name}`);
