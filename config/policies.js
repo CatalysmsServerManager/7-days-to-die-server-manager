@@ -49,7 +49,7 @@ let policyObject = {
 
   roleController: {
     '*': ["isLoggedIn", 'roles/manageServer'],
-    'add-player': ["isLoggedIn", 'roles/manageServer'],
+    'add-player': ["isLoggedIn", 'roles/managePlayers'],
     'get-role': ["isLoggedIn"],
     'check-permission': ["isLoggedIn"]
   },
