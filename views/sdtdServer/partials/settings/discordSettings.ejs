@@ -69,6 +69,20 @@
     </label>
   </div>
 
+  <div class="form-check">
+    <% if(config.chatChannelGlobalOnly) { %>
+    <input class="form-check-input" type="checkbox" value="" id="input-settings-discord-chatchannel-chatChannel-GlobalOnly"
+      checked>
+    <% } else { %>
+    <input class="form-check-input" type="checkbox" value="" id="input-settings-discord-chatchannel-chatChannel-GlobalOnly">
+    <% } %>
+    <label class="form-check-label" for="input-settings-discord-chatchannel-chatChannel-GlobalOnly">
+      <strong> Only global messages </strong>
+      <br>
+      <p> When checked, only messages sent in the global chat channel will be displayed. Thus excluding party chat. </p>
+    </label>
+  </div>
+
   <div class="form-group">
     <label for="input-settings-discord-chatchannel-blockedPrefixes">Blocked prefixes</label>
     <input type="text" class="form-control" name="input-settings-discord-chatchannel-blockedPrefixes" id="input-settings-discord-chatchannel-blockedPrefixes"
@@ -78,6 +92,7 @@
       if you have a public chatbridge. Type each prefix and seperate them with ','. So for example: /,!
     </small>
   </div>
+
 
   <button id="input-settings-discord-setchatchannel-btn" type="button" class="btn btn-primary">Set chat channel</button>
 
@@ -435,7 +450,8 @@
     $("#input-settings-discord-setchatchannel-btn").click(e => {
       e.preventDefault();
       let newChatChannelId = $('#input-settings-discord-chatchannel').val();
-      let newRichMessages
+      let newRichMessages;
+      let newChatChannelGlobalOnly;
       let blockedPrefixes = $("#input-settings-discord-chatchannel-blockedPrefixes").val();
 
       if (blockedPrefixes !== "") {
@@ -463,6 +479,13 @@
       } else {
         newRichMessages = false
       }
+
+      if ($('#input-settings-discord-chatchannel-chatChannel-GlobalOnly').is(":checked")) {
+        newChatChannelGlobalOnly = true
+      } else {
+        newChatChannelGlobalOnly = false
+      }
+
       if (!newChatChannelId) {
         return alert('Error! Make sure you have a guild set and are selecting a valid channel')
       }
@@ -473,6 +496,7 @@
           chatChannelId: newChatChannelId,
           serverId: "<%= server.id %>",
           richMessages: newRichMessages,
+          onlyGlobal: newChatChannelGlobalOnly,
           _csrf: window.SAILS_LOCALS._csrf
         },
         success: (data, status, xhr) => {

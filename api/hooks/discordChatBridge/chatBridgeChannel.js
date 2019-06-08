@@ -95,6 +95,10 @@ class ChatBridgeChannel {
       return;
     }
 
+    if (this.config.chatChannelGlobalOnly && chatMessage.channel !== "Global") {
+      return
+    }
+
     await this.channel.send(`${chatMessage.playerName}: ${chatMessage.messageText}`);
   }
 
@@ -112,6 +116,7 @@ class ChatBridgeChannel {
 
 
   async sendRichConnectedMessageToDiscord(connectedMsg) {
+
     let connectedPlayer = connectedMsg.player;
 
     let gblBans = await BanEntry.find({
