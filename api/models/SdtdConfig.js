@@ -265,6 +265,17 @@ module.exports = {
 
     /**
      * @memberof SdtdServer
+     * @var {string} chatChannelGlobalOnly
+     * @description Whether to only send messages sent in the global channel (excluding party chat)
+     */
+
+    chatChannelGlobalOnly: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
+    /**
+     * @memberof SdtdServer
      * @var {string} chatChannelBlockedPrefixes
      * @description Block messages starting with a certain prefix from chat bridge
      */

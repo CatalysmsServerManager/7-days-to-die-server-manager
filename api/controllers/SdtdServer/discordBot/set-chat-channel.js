@@ -16,6 +16,10 @@ module.exports = {
     richMessages: {
       required: true,
       type: 'boolean'
+    },
+    onlyGlobal: {
+      required: true,
+      type: 'boolean'
     }
   },
 
@@ -50,7 +54,8 @@ module.exports = {
         server: inputs.serverId
       }, {
           chatChannelId: inputs.chatChannelId,
-          chatChannelRichMessages: inputs.richMessages
+          chatChannelRichMessages: inputs.richMessages,
+          chatChannelGlobalOnly: inputs.onlyGlobal
         })
 
       if (chatBridgeHook.getStatus(inputs.serverId)) {
