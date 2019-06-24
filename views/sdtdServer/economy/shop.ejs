@@ -252,7 +252,7 @@
             </li>
             <% } %>
             <li class="list-group-item">Price:
-              <%= listing.price %>
+              <%= listing.price * player.role.economyDeductMultiplier %>
             </li>
           </ul>
         </div>
