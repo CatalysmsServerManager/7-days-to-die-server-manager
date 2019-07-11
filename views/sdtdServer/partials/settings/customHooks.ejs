@@ -38,9 +38,20 @@
         </div>
         <div class="modal-body">
           <div class="form-group">
-            <label for="hooks-new-event">Event</label>
-            <input type="text" class="form-control" name="hooks-new-event" id="hooks-new-event"
-              aria-describedby="hooks-new-event-help" placeholder="">
+            <label for="hooks-new-event">What event will trigger this hook</label>
+            <select class="form-control" name="hooks-new-event" id="hooks-new-event">
+              <option value="playerConnected"> Player connected </option>
+              <option value="playerDisconnected">Player disconnected</option>
+              <option value="chatMessage">Chat message</option>
+              <option value="playerDeath"> Player death</option>
+              <option value="playerJoined">Player first time join</option>
+              <option value="playerLevel">Level up</option>
+              <option value="zombieKilled">Player kills zombie</option>
+              <option value="animalKilled">Player kills animal</option>
+              <option value="playerKilled">Player kills player</option>
+              <option value="playerSuicide">Player suicide</option>
+              <option value="logLine">Log line</option>
+            </select>
             <small id="hooks-new-event-help" class="form-text text-muted">Which event will trigger this hook.</small>
           </div>
 
