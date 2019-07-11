@@ -11,39 +11,6 @@
   </ol>
 </nav>
 
-<% if (allocsVersion.installedAllocs < allocsVersion.supportedAllocs) { %>
-
-<div class="alert alert-danger" role="alert">
-
-  <% if (allocsVersion.installedAllocs !== 0) { %>
-
-  <strong>You are using an older version of Allocs fixes! Please consider updating to the latest version</strong>
-  <br>
-  Installed version:
-  <%= allocsVersion.installedAllocs %> <br>
-  Supported version:
-  <%= allocsVersion.supportedAllocs %>
-
-  <% } else { %>
-  <strong>Error connecting to your server or Allocs is not installed!</strong>
-  <% } %>
-</div>
-
-<% } %>
-
-<% if (cpmVersion.installedCpm < cpmVersion.supportedCpm && cpmVersion.installedCpm !== 0.00) { %>
-
-<div class="alert alert-info" role="alert">
-  <strong>You are using an older version of CPM mod! Please consider updating to the latest version</strong>
-  <br>
-  Installed version:
-  <%= cpmVersion.installedCpm.toFixed(2) %> <br>
-  Supported version:
-  <%= cpmVersion.supportedCpm %>
-</div>
-
-<% } %>
-
 <h1 id="server-name">
   <%= server.name %> Dashboard</h1>
 
@@ -216,7 +183,7 @@
 
 
     $.get('/api/sdtdserver/onlinestatus', {
-      serverId: <%= server.id %>
+      serverId: < %= server.id % >
     }, onlineStatus => {
       let elementToAdd =
         `<i class="${onlineStatus ? "fas fa-check-circle text-success" : "fas fa-times-circle text-danger"}"></i> `
