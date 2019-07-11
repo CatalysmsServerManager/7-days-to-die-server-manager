@@ -252,7 +252,7 @@
             </li>
             <% } %>
             <li class="list-group-item">Price:
-              <%= listing.price %>
+              <%= listing.price * player.role.economyDeductMultiplier %>
             </li>
           </ul>
         </div>
@@ -515,12 +515,10 @@
     })
 
 
-    $(".shop-buy").click(e => {
-
+    $('body').on('click', '.shop-buy', e => {
       let listingId = e.target.value;
       let amount = $(`#shop-buy-amount-${listingId}`).val();
       let playerId = window.SAILS_LOCALS.player.id;
-
       if (amount < 1) {
         return alert('You must buy at least one.')
       }

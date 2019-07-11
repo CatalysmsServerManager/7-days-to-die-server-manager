@@ -60,6 +60,8 @@ module.exports = {
                 return exits.notLoggedIn('Not a valid player profile. Make sure you have logged in to this server. You should also try logging out and back in to CSMM. If you think this message is a mistake, please report this issue.')
             }
 
+            player.role = await sails.helpers.sdtd.getPlayerRole(player.id);
+
             let unclaimedItems = await PlayerClaimItem.find({player: player.id, claimed: false});
 
             let isAdmin = false;
