@@ -92,21 +92,6 @@
 
 
   <% } %>
-
-  <div class="card">
-    <div class="card-header">
-      <i class="far fa-map"></i>
-      </i> Map
-    </div>
-    <div class="card-body">
-      <p class="card-text">
-        <%- include('./partials/map', {server: server}) %>
-      </p>
-    </div>
-  </div>
-
-
-
 </div>
 
 <hr>
@@ -142,9 +127,17 @@
   <% } %>
 </div>
 
-
+<div class="card">
+  <div class="card-header">
+    <i class="far fa-map"></i>
+    </i> Map
+  </div>
+  <div class="card-body">
+    <p class="card-text">
+      <%- include('./partials/map', {server: server}) %>
+    </p>
+  </div>
 </div>
-
 
 <style>
   .card {
