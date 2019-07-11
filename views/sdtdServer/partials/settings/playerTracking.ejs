@@ -10,14 +10,16 @@
         your server, all processing of this data is done on CSMM's side.</p>
       <div class="form-check">
         <label class="form-check-label">
-          <input type="checkbox" class="form-check-input" name="settings-tracking-location-check" id="settings-tracking-location-check">
+          <input type="checkbox" class="form-check-input" name="settings-tracking-location-check"
+            id="settings-tracking-location-check">
           Location tracking
         </label>
       </div>
 
       <div class="form-check">
         <label class="form-check-label">
-          <input type="checkbox" class="form-check-input" name="settings-tracking-inventory-check" id="settings-tracking-inventory-check">
+          <input type="checkbox" class="form-check-input" name="settings-tracking-inventory-check"
+            id="settings-tracking-inventory-check">
           Inventory tracking
         </label>
       </div>
@@ -38,13 +40,14 @@
 
 
       <!-- Button trigger modal -->
-      <button type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#settings-tracking-purge-btn">
+      <button type="button" class="btn btn-danger btn-lg" data-toggle="modal"
+        data-target="#settings-tracking-purge-btn">
         Purge data
       </button>
 
       <!-- Modal -->
-      <div class="modal fade" id="settings-tracking-purge-btn" tabindex="-1" role="dialog" aria-labelledby="settings-tracking-purge-title"
-        aria-hidden="true">
+      <div class="modal fade" id="settings-tracking-purge-btn" tabindex="-1" role="dialog"
+        aria-labelledby="settings-tracking-purge-title" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -79,7 +82,7 @@
       serverId: window.SAILS_LOCALS.server.id
     }, data => {
       if (data === "free") {
-        $('#settings-tracking-inventory-check').parent().hide();
+        $('#settings-tracking-inventory-check').attr('disabled', true);
       }
     })
 
