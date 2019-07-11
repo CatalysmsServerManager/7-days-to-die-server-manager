@@ -65,8 +65,17 @@
     let playerDataTable = $('#players-overview').DataTable({
       data: window.SAILS_LOCALS.players,
       dom: 'Bfrtip',
+      ajax: {
+        url: '/api/sdtdserver/players/datatable',
+        type: 'post',
+        data: {
+          serverId: window.SAILS_LOCALS.server.id,
+          _csrf: window.SAILS_LOCALS._csrf,
+        },
+      },
       fixedHeader: true,
       responsive: true,
+      serverSide: true,
       buttons: [
         'copy', 'excel', 'pdf', 'print'
       ],

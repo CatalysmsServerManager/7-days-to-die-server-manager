@@ -16,13 +16,13 @@ module.exports.routes = {
   //  ╚╩╝╚═╝╚═╝╩  ╩ ╩╚═╝╚═╝╚═╝
 
   /***************************************************************************
-     *                                                                          *
-     * Make the view located at `views/homepage.ejs` your home page.            *
-     *                                                                          *
-     * (Alternatively, remove this and add an `index.html` file in your         *
-     * `assets` directory)                                                      *
-     *                                                                          *
-     ***************************************************************************/
+   *                                                                          *
+   * Make the view located at `views/homepage.ejs` your home page.            *
+   *                                                                          *
+   * (Alternatively, remove this and add an `index.html` file in your         *
+   * `assets` directory)                                                      *
+   *                                                                          *
+   ***************************************************************************/
 
   '/': {
     view: 'index',
@@ -74,15 +74,15 @@ module.exports.routes = {
   '/auth/discord/return': 'AuthController.discordReturn',
 
   /***************************************************************************
-     *                                                                          *
-     * More custom routes here...                                               *
-     * (See https://sailsjs.com/config/routes for examples.)                    *
-     *                                                                          *
-     * If a request to a URL doesn't match any of the routes in this file, it   *
-     * is matched against "shadow routes" (e.g. blueprint routes).  If it does  *
-     * not match any of those, it is matched against static assets.             *
-     *                                                                          *
-     ***************************************************************************/
+   *                                                                          *
+   * More custom routes here...                                               *
+   * (See https://sailsjs.com/config/routes for examples.)                    *
+   *                                                                          *
+   * If a request to a URL doesn't match any of the routes in this file, it   *
+   * is matched against "shadow routes" (e.g. blueprint routes).  If it does  *
+   * not match any of those, it is matched against static assets.             *
+   *                                                                          *
+   ***************************************************************************/
 
   'get /sdtdserver/addserver': "SdtdServerController.add-server-view",
 
@@ -121,9 +121,9 @@ module.exports.routes = {
 
   // GBL
   'get /api/gbl/total': 'gbl.get-total-bans',
-  'get /api/gbl/find' : 'gbl.search-steamid',
-  'post /api/gbl/load' : 'gbl.load-bans',
-  'post /api/gbl/note' : 'gbl.set-note',
+  'get /api/gbl/find': 'gbl.search-steamid',
+  'post /api/gbl/load': 'gbl.load-bans',
+  'post /api/gbl/note': 'gbl.set-note',
 
   'delete /api/gbl': 'gbl.delete-ban',
 
@@ -134,9 +134,9 @@ module.exports.routes = {
 
   'post /api/gbl/comment/heart': 'gbl-comment.toggle-heart',
 
-  'post /api/sdtdserver/gbl/autoban' : 'gbl.set-autoban-status',
-  'post /api/sdtdserver/gbl/autoban/bans' : 'gbl.set-autoban-bans',
-  'post /api/sdtdserver/gbl/notification/bans' : 'gbl.set-notification-bans',
+  'post /api/sdtdserver/gbl/autoban': 'gbl.set-autoban-status',
+  'post /api/sdtdserver/gbl/autoban/bans': 'gbl.set-autoban-bans',
+  'post /api/sdtdserver/gbl/notification/bans': 'gbl.set-notification-bans',
 
 
   // SDTDSERVER
@@ -145,6 +145,8 @@ module.exports.routes = {
   'get /api/sdtdserver/sendMessage': 'SdtdServerController.send-message',
   'get /api/sdtdserver/loadServerInfo': 'SdtdServerController.load-server-info',
   'get /api/sdtdserver/players': 'SdtdServerController.get-players',
+  // This is a post because actions2 is stupid about query string parsing ¯\_(ツ)_/¯
+  'post /api/sdtdserver/players/datatable': 'SdtdServerController.get-players-datatable',
   'get /api/sdtdserver/players/all': 'SdtdServerController.load-all-players',
   'get /api/sdtdserver/info': 'SdtdServerController.load-server-info',
   'get /api/sdtdserver/availableItems': 'SdtdServerController.available-items',
@@ -158,37 +160,37 @@ module.exports.routes = {
 
   'get /api/sdtdserver/resetRegions': 'SdtdServerController/resetRegions.get-reset-regions',
 
-  'delete /api/sdtdserver/players' : 'SdtdServerController.delete-players',
+  'delete /api/sdtdserver/players': 'SdtdServerController.delete-players',
 
   // Ping kicker
 
-  'post /api/sdtdserver/pingkicker/status' : "SdtdServerController/pingKicker.set-pingKick-status",
-  'post /api/sdtdserver/pingkicker/message' : "SdtdServerController/pingKicker.set-pingKick-message",
-  'post /api/sdtdserver/pingkicker/maxping' : "SdtdServerController/pingKicker.set-pingKick-maxping",
-  'post /api/sdtdserver/pingkicker/checks' : "SdtdServerController/pingKicker.set-pingKick-checks",
-  'post /api/sdtdserver/pingkicker/whitelist' : "SdtdServerController/pingKicker.set-pingKick-whitelist",
+  'post /api/sdtdserver/pingkicker/status': "SdtdServerController/pingKicker.set-pingKick-status",
+  'post /api/sdtdserver/pingkicker/message': "SdtdServerController/pingKicker.set-pingKick-message",
+  'post /api/sdtdserver/pingkicker/maxping': "SdtdServerController/pingKicker.set-pingKick-maxping",
+  'post /api/sdtdserver/pingkicker/checks': "SdtdServerController/pingKicker.set-pingKick-checks",
+  'post /api/sdtdserver/pingkicker/whitelist': "SdtdServerController/pingKicker.set-pingKick-whitelist",
 
   // Roles
 
-  'get /api/role' : "roleController/get-role",
-  'delete /api/role' : "roleController/delete-role",
-  'post /api/role' : 'roleController/create-role',
+  'get /api/role': "roleController/get-role",
+  'delete /api/role': "roleController/delete-role",
+  'post /api/role': 'roleController/create-role',
   'patch /api/role': "roleController/update-role",
 
   'get /api/permission': 'roleController/check-permission',
 
-  'post /api/role/player' : "roleController/add-player",
+  'post /api/role/player': "roleController/add-player",
   'delete /api/role/player': "roleController/remove-player",
 
   // Custom hooks
 
-  'get /api/sdtdserver/hook' : 'CustomHookController/get-custom-hook',
-  'post /api/sdtdserver/hook' : 'CustomHookController/add-custom-hook',
-  'patch /api/sdtdserver/hook' : 'CustomHookController/edit-custom-hook',
-  'delete /api/sdtdserver/hook' : 'CustomHookController/delete-custom-hook',
+  'get /api/sdtdserver/hook': 'CustomHookController/get-custom-hook',
+  'post /api/sdtdserver/hook': 'CustomHookController/add-custom-hook',
+  'patch /api/sdtdserver/hook': 'CustomHookController/edit-custom-hook',
+  'delete /api/sdtdserver/hook': 'CustomHookController/delete-custom-hook',
 
-  'post /api/sdtdserver/hook/variable' : 'CustomHookController/variable/add-hook-variable',
-  'delete /api/sdtdserver/hook/variable' : 'CustomHookController/variable/delete-hook-variable',
+  'post /api/sdtdserver/hook/variable': 'CustomHookController/variable/add-hook-variable',
+  'delete /api/sdtdserver/hook/variable': 'CustomHookController/variable/delete-hook-variable',
 
   // Economy
 
@@ -235,14 +237,14 @@ module.exports.routes = {
 
   // Tracking
 
-  'post /api/sdtdserver/tracking/delete' : 'tracking-info.purge',
-  'post /api/sdtdserver/tracking/location' : 'tracking-info.set-location-tracking',
-  'post /api/sdtdserver/tracking/inventory' : 'tracking-info.set-inventory-tracking',
+  'post /api/sdtdserver/tracking/delete': 'tracking-info.purge',
+  'post /api/sdtdserver/tracking/location': 'tracking-info.set-location-tracking',
+  'post /api/sdtdserver/tracking/inventory': 'tracking-info.set-inventory-tracking',
 
   'get /api/sdtdserver/tracking/stats': 'tracking-info.get-tracking-stats',
-  'get /api/sdtdserver/tracking' : 'tracking-info.get-tracking-info',
-  'get /api/sdtdserver/tracking/location' : "tracking-info.get-tracking-info-by-location",
-  'get /api/sdtdserver/tracking/landClaims' : 'SdtdServerController.load-land-claims',
+  'get /api/sdtdserver/tracking': 'tracking-info.get-tracking-info',
+  'get /api/sdtdserver/tracking/location': "tracking-info.get-tracking-info-by-location",
+  'get /api/sdtdserver/tracking/landClaims': 'SdtdServerController.load-land-claims',
 
   // Tickets
 
@@ -316,9 +318,9 @@ module.exports.routes = {
   'post /api/sdtdserver/commands/custom/output': 'CustomCommandController/update-output',
   'post /api/sdtdserver/commands/custom/timeout': 'CustomCommandController/update-timeout',
   'post /api/sdtdserver/commands/custom/description': 'CustomCommandController/update-description',
-  'post /api/sdtdserver/commands/custom/argument' : "CustomCommandController/create-argument",
-  'delete /api/sdtdserver/commands/custom/argument' : "CustomCommandController/delete-argument",
-  'patch /api/sdtdserver/commands/custom/argument' : "CustomCommandController/edit-argument",
+  'post /api/sdtdserver/commands/custom/argument': "CustomCommandController/create-argument",
+  'delete /api/sdtdserver/commands/custom/argument': "CustomCommandController/delete-argument",
+  'patch /api/sdtdserver/commands/custom/argument': "CustomCommandController/edit-argument",
 
   'post /api/sdtdserver/commands/calladmin': "SdtdServerController/commands.enable-calladmin",
   'delete /api/sdtdserver/commands/calladmin': "SdtdServerController/commands.disable-calladmin",
@@ -356,15 +358,15 @@ module.exports.routes = {
   'post /api/sdtdserver/discord/chatbridge/blockedprefixes': 'SdtdServerController/discordBot.set-chat-channel-blocked-prefixes',
   'post /api/sdtdserver/setnotificationchannel': 'SdtdServerController/discordBot.set-notification-channel',
   'post /api/sdtdserver/discord/prefix': 'SdtdServerController/discordBot.set-prefix',
-  'get /api/sdtdserver/discord/findChannel' : "SdtdServerController/discordBot.find-channel-by-id",
+  'get /api/sdtdserver/discord/findChannel': "SdtdServerController/discordBot.find-channel-by-id",
   'get /api/sdtdserver/discord/roles': "SdtdServerController/discordBot.get-server-roles",
 
   // Custom notifications
 
-  'post /api/sdtdserver/discord/customNotification' : "SdtdServerController/discordBot.set-custom-notification",
-  'delete /api/sdtdserver/discord/customNotification' : "SdtdServerController/discordBot.delete-custom-notification",
-  'patch /api/sdtdserver/discord/customNotification' : "SdtdServerController/discordBot.update-custom-notification",
-  'get /api/sdtdserver/discord/customNotification' : "SdtdServerController/discordBot.get-custom-notifications",
+  'post /api/sdtdserver/discord/customNotification': "SdtdServerController/discordBot.set-custom-notification",
+  'delete /api/sdtdserver/discord/customNotification': "SdtdServerController/discordBot.delete-custom-notification",
+  'patch /api/sdtdserver/discord/customNotification': "SdtdServerController/discordBot.update-custom-notification",
+  'get /api/sdtdserver/discord/customNotification': "SdtdServerController/discordBot.get-custom-notifications",
 
   // PLAYER
 
@@ -376,7 +378,7 @@ module.exports.routes = {
   "post /api/player/giveitem": "player.give-item",
   "post /api/player/teleport": "player.teleport",
 
-  'delete /api/player' : 'player.delete',
+  'delete /api/player': 'player.delete',
 
   'get /api/user/info': 'User.get-user-info',
   'get /api/user/ownedServers': "User.get-owned-servers",
