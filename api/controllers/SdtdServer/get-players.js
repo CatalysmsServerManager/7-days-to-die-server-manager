@@ -13,7 +13,7 @@ module.exports = {
       example: 4
     },
     onlyOnline: {
-      example : true,
+      example: true,
       description: 'Only loads online player data, defaults to true'
     },
     staticOnly: {
@@ -52,16 +52,21 @@ module.exports = {
 
       if (inputs.staticOnly) {
 
-        let players = await Player.find({server: server.id}).populate('role');
-        return exits.success(players);
-        
+        let players = await Player.find({
+          server: server.id
+        }).populate('role');
+        return exits.success(players.map(p => _.omit(p, 'inventory')));
+
       } else {
-        sails.helpers.sdtd.loadPlayerData.with({serverId: inputs.serverId, onlyOnline: inputs.onlyOnline === false ? false : true})
+        sails.helpers.sdtd.loadPlayerData.with({
+            serverId: inputs.serverId,
+            onlyOnline: inputs.onlyOnline === false ? false : true
+          })
           .switch({
-            success: function(data) {
+            success: function (data) {
               return exits.success(data);
             },
-            error: function(error) {
+            error: function (error) {
               return exits.badRequest();
             }
           });
