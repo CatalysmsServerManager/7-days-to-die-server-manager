@@ -32,28 +32,11 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    try {
-      let user = await User.findOne(inputs.userId).populate('servers').populate('adminOf');
-      if (_.isUndefined(user)) {
-        return exits.notFound()
-      }
-      let ownedServers = user.servers.concat(user.adminOf)
-      let ownedServersWithInfo = new Array();
+    const objectToSend = await sails.helpers.user.getServersWithPermission(inputs.userId)
 
-      for (const server of ownedServers) {
-        let sdtdServerInfo = await sails.helpers.loadSdtdserverInfo(server.id);
-        if (!_.isUndefined(sdtdServerInfo)) {
-          ownedServersWithInfo.push(sdtdServerInfo)
-        }
-      }
-      sails.log.info(`VIEW - User:dashboard - User ${user.username} is on dashboard, ${ownedServersWithInfo.length} servers`, ownedServersWithInfo.map(server => server.name));
-      return exits.success({
-        user: user,
-        ownedServers: ownedServersWithInfo
-      })
-    } catch (error) {
-      sails.log.warn(`VIEW - User:dashboard - ${error}`)
-      return exits.error()
-    }
+    return exits.success({
+      ownedServers: objectToSend
+    })
+
   }
 };
