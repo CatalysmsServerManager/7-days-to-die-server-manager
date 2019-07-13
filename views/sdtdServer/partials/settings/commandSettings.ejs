@@ -23,8 +23,8 @@
 
     <input type="text" class="form-control" id="input-settings-commands-prefix" value="<%= config.commandPrefix %>">
 
-    <input name="input-settings-commands-prefix-set-btn" id="input-settings-commands-prefix-set-btn" class="btn btn-primary"
-      type="button" value="Set">
+    <input name="input-settings-commands-prefix-set-btn" id="input-settings-commands-prefix-set-btn"
+      class="btn btn-primary" type="button" value="Set">
   </div>
 
   <hr>
@@ -35,8 +35,8 @@
 
   <div class="form-check">
     <label class="form-check-label">
-      <input type="checkbox" class="form-check-input" name="input-settings-commands-calladmin-checkbox" id="input-settings-commands-calladmin-checkbox"
-        value="callAdmin"> Call admin
+      <input type="checkbox" class="form-check-input" name="input-settings-commands-calladmin-checkbox"
+        id="input-settings-commands-calladmin-checkbox" value="callAdmin"> Call admin
     </label>
     <p class="form-text text-muted">
       Lets players create support tickets ingame. You can view these from the website.
@@ -44,8 +44,8 @@
   </div>
   <div class="form-check">
     <label class="form-check-label">
-      <input type="checkbox" class="form-check-input" name="input-settings-commands-playerTeleports-checkbox" id="input-settings-commands-playerTeleports-checkbox"
-        value="playerTeleports"> Player teleports
+      <input type="checkbox" class="form-check-input" name="input-settings-commands-playerTeleports-checkbox"
+        id="input-settings-commands-playerTeleports-checkbox" value="playerTeleports"> Player teleports
     </label>
     <p class="form-text text-muted">
       CSMM's teleport system. Includes a suite of commands to set, remove, make public/private teleports.
@@ -54,7 +54,8 @@
 
   <div class="form-check">
     <label class="form-check-label">
-      <input type="checkbox" class="form-check-input" name="input-settings-commands-who-checkbox" id="input-settings-commands-who-checkbox">
+      <input type="checkbox" class="form-check-input" name="input-settings-commands-who-checkbox"
+        id="input-settings-commands-who-checkbox">
       Who
     </label>
     <p class="form-text text-muted">
@@ -65,7 +66,8 @@
 
   <div class="form-check">
     <label class="form-check-label">
-      <input type="checkbox" class="form-check-input" name="input-settings-commands-gimme-checkbox" id="input-settings-commands-gimme-checkbox">
+      <input type="checkbox" class="form-check-input" name="input-settings-commands-gimme-checkbox"
+        id="input-settings-commands-gimme-checkbox">
       Gimme
     </label>
     <p class="form-text text-muted">
@@ -78,6 +80,11 @@
     <%- include('./gimmeModal', gimmeItems) %>
   </div>
 
+  <div id="replySettings">
+    <hr>
+    <%- include('./commandReplies') %>
+  </div>
+
 
   <div id="player-teleport-settings">
 
@@ -87,27 +94,28 @@
 
     <div class="form-group">
       <label for="">Max locations that players can set</label>
-      <input type="text" class="form-control" name="inputs-settings-commands-playerteleports-maxlocations" id="inputs-settings-commands-playerteleports-maxlocations"
+      <input type="text" class="form-control" name="inputs-settings-commands-playerteleports-maxlocations"
+        id="inputs-settings-commands-playerteleports-maxlocations"
         placeholder="<%= config.maxPlayerTeleportLocations %>">
-      <input name="inputs-settings-playerteleports-maxlocations-btn" id="inputs-settings-playerteleports-maxlocations-btn"
-        class="btn btn-primary" type="button" value="Set">
+      <input name="inputs-settings-playerteleports-maxlocations-btn"
+        id="inputs-settings-playerteleports-maxlocations-btn" class="btn btn-primary" type="button" value="Set">
     </div>
 
     <div class="form-group">
       <label for="">Time (in seconds) that a player has to wait before teleporting again</label>
-      <input type="text" class="form-control" name="inputs-settings-commands-playerteleports-timeout" id="inputs-settings-commands-playerteleports-timeout"
-        placeholder="<%= config.playerTeleportTimeout %>">
-      <input name="inputs-settings-playerteleports-timeout-btn" id="inputs-settings-playerteleports-timeout-btn" class="btn btn-primary"
-        type="button" value="Set">
+      <input type="text" class="form-control" name="inputs-settings-commands-playerteleports-timeout"
+        id="inputs-settings-commands-playerteleports-timeout" placeholder="<%= config.playerTeleportTimeout %>">
+      <input name="inputs-settings-playerteleports-timeout-btn" id="inputs-settings-playerteleports-timeout-btn"
+        class="btn btn-primary" type="button" value="Set">
     </div>
 
     <div class="form-group">
       <label for="">Time (in seconds) that a teleport will be delayed. This makes sure players cannot use tele to
         escape a dire situation.</label>
-      <input type="text" class="form-control" name="inputs-settings-commands-playerteleports-delay" id="inputs-settings-commands-playerteleports-delay"
-        placeholder="<%= config.playerTeleportDelay %>">
-      <input name="inputs-settings-playerteleports-delay-btn" id="inputs-settings-playerteleports-delay-btn" class="btn btn-primary"
-        type="button" value="Set">
+      <input type="text" class="form-control" name="inputs-settings-commands-playerteleports-delay"
+        id="inputs-settings-commands-playerteleports-delay" placeholder="<%= config.playerTeleportDelay %>">
+      <input name="inputs-settings-playerteleports-delay-btn" id="inputs-settings-playerteleports-delay-btn"
+        class="btn btn-primary" type="button" value="Set">
     </div>
 
   </div>
@@ -135,8 +143,8 @@
   </button>
 
   <!-- Modal -->
-  <div class="modal fade" id="custom-commands-import-modal" tabindex="-1" role="dialog" aria-labelledby="custom-commands-import-modal-title"
-    aria-hidden="true">
+  <div class="modal fade" id="custom-commands-import-modal" tabindex="-1" role="dialog"
+    aria-labelledby="custom-commands-import-modal-title" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -157,7 +165,8 @@
 
             <div class="form-group">
               <label for="custom-commands-import-json">Custom commands JSON</label>
-              <textarea class="form-control" name="custom-commands-import-json" id="custom-commands-import-json" rows="10"></textarea>
+              <textarea class="form-control" name="custom-commands-import-json" id="custom-commands-import-json"
+                rows="10"></textarea>
             </div>
 
             <div id="custom-commands-import-problems" class="alert alert-warning invisible" role="alert">
@@ -174,8 +183,8 @@
     </div>
   </div>
 
-  <a name="export-customcommands" id="export-custom-commands" class="btn btn-secondary" href="/api/sdtdserver/commands/export?serverId=<%= server.id %>"
-    role="button">Export to file</a>
+  <a name="export-customcommands" id="export-custom-commands" class="btn btn-secondary"
+    href="/api/sdtdserver/commands/export?serverId=<%= server.id %>" role="button">Export to file</a>
 
   <%- include('../commandsHelpButton') %>
 
@@ -213,7 +222,7 @@
 
     function updateCommandsStatus() {
 
-      $("#input-settings-commands-who-checkbox").prop('checked', <%= config.enabledWho %>);
+      $("#input-settings-commands-who-checkbox").prop('checked', "<%= config.enabledWho %>");
 
       $.get('/api/sdtdserver/commands', {
         serverId: window.SAILS_LOCALS.server.id

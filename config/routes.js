@@ -346,6 +346,12 @@ module.exports.routes = {
   'delete /api/sdtdserver/commands/gimme/item': 'SdtdServerController/commands/gimme.delete-gimme-item',
   'patch /api/sdtdserver/commands/gimme/item': 'SdtdServerController/commands/gimme.edit-gimme-item',
 
+  // Command replies
+
+  'get /api/sdtdserver/commands/reply': 'CommandReplyController/get-reply',
+  'post /api/sdtdserver/commands/reply': 'CommandReplyController/add-reply',
+  'delete /api/sdtdserver/commands/reply': 'CommandReplyController/delete-reply',
+
   // Player teleports 
 
   'get /api/sdtdserver/playerteleports': "player-teleport.get-teleports",
