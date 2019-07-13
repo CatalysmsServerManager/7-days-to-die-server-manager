@@ -16,7 +16,8 @@
   </button>
 
   <!-- Create role Modal -->
-  <div class="modal fade" id="add-role-modal" tabindex="-1" role="dialog" aria-labelledby="add-role-modal" aria-hidden="true">
+  <div class="modal fade" id="add-role-modal" tabindex="-1" role="dialog" aria-labelledby="add-role-modal"
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -31,15 +32,15 @@
 
           <div class="form-group">
             <label for="add-role-name">Name</label>
-            <input type="text" class="form-control" name="add-role-name" id="add-role-name" aria-describedby="add-role-name-help"
-              placeholder="Donator">
+            <input type="text" class="form-control" name="add-role-name" id="add-role-name"
+              aria-describedby="add-role-name-help" placeholder="Donator">
             <small id="add-role-name-help" class="form-text text-muted">The name of the new role</small>
           </div>
 
           <div class="form-group">
             <label for="add-role-level">Level</label>
-            <input type="number" class="form-control" name="add-role-level" id="add-role-level" aria-describedby="add-role-level-help"
-              placeholder="2000">
+            <input type="number" class="form-control" name="add-role-level" id="add-role-level"
+              aria-describedby="add-role-level-help" placeholder="2000">
             <small id="add-role-level-help" class="form-text text-muted">The level of the new role. Defaults to 2000.
               Lower = more permissions</small>
           </div>
@@ -90,15 +91,15 @@
 
           <div class="form-group">
             <label for="edit-role-name">Name</label>
-            <input type="text" class="form-control" name="edit-role-name" id="edit-role-name" aria-describedby="edit-role-name-help"
-              placeholder="">
+            <input type="text" class="form-control" name="edit-role-name" id="edit-role-name"
+              aria-describedby="edit-role-name-help" placeholder="">
             <small id="edit-role-name-help" class="form-text text-muted">The name of the role</small>
           </div>
 
           <div class="form-group">
             <label for="edit-role-level">Level</label>
-            <input type="number" class="form-control" name="edit-role-level" id="edit-role-level" aria-describedby="edit-role-level-help"
-              placeholder="">
+            <input type="number" class="form-control" name="edit-role-level" id="edit-role-level"
+              aria-describedby="edit-role-level-help" placeholder="">
             <small id="edit-role-level-help" class="form-text text-muted">The level of the role. Defaults to 2000.
               Lower = more permissions</small>
           </div>
@@ -115,7 +116,8 @@
 
           <div class="form-check">
             <label class="form-check-label">
-              <input type="checkbox" class="form-check-input" name="edit-role-isDefault" id="edit-role-isDefault" value="true">
+              <input type="checkbox" class="form-check-input" name="edit-role-isDefault" id="edit-role-isDefault"
+                value="true">
               Default role
             </label>
           </div>
@@ -131,20 +133,22 @@
 
           <div class="form-group">
             <label for="edit-role-economy-give-multiplier">Economy give multiplier</label>
-            <input type="number" class="form-control" name="edit-role-economy-give-multiplier" id="edit-role-economy-give-multiplier"
-              aria-describedby="edit-role-economy-give-multiplier-help" placeholder="">
+            <input type="number" class="form-control" name="edit-role-economy-give-multiplier"
+              id="edit-role-economy-give-multiplier" aria-describedby="edit-role-economy-give-multiplier-help"
+              placeholder="">
             <small id="edit-role-economy-give-multiplier-help" class="form-text text-muted">Any time a player with this
               role gains currency, this multiplier will be applied. If this is 1, there is no difference. If this is 2
-              the player will earn double. Use , for decimals.</small>
+              the player will earn double.</small>
           </div>
 
           <div class="form-group">
             <label for="edit-role-economy-deduct-multiplier">Economy deduct multiplier</label>
-            <input type="number" class="form-control" name="edit-role-economy-deduct-multiplier" id="edit-role-economy-deduct-multiplier"
-              aria-describedby="edit-role-economy-deduct-multiplier-help" placeholder="">
+            <input type="number" class="form-control" name="edit-role-economy-deduct-multiplier"
+              id="edit-role-economy-deduct-multiplier" aria-describedby="edit-role-economy-deduct-multiplier-help"
+              placeholder="">
             <small id="edit-role-economy-deduct-multiplier-help" class="form-text text-muted">Any time a player with
               this role loses currency, this multiplier will be applied. If this is 1, there is no difference. If this
-              is 2 the player will pay double. Use , for decimals.</small>
+              is 2 the player will pay double.</small>
           </div>
 
           <div class="form-check">
@@ -159,8 +163,9 @@
 
           <div class="form-check">
             <label class="form-check-label">
-              <input type="checkbox" class="form-check-input" name="edit-role-manageEconomy" id="edit-role-manageEconomy"
-                aria-describedby="edit-role-manageEconomy-help" value="true"> Manage economy
+              <input type="checkbox" class="form-check-input" name="edit-role-manageEconomy"
+                id="edit-role-manageEconomy" aria-describedby="edit-role-manageEconomy-help" value="true"> Manage
+              economy
             </label>
             <small id="edit-role-manageEconomy-help" class="form-text text-muted">Allow a user to manage economy
               settings</small>
@@ -177,8 +182,9 @@
 
           <div class="form-check">
             <label class="form-check-label">
-              <input type="checkbox" class="form-check-input" name="edit-role-managePlayers" id="edit-role-managePlayers"
-                aria-describedby="edit-role-managePlayers-help" value="true"> Manage players
+              <input type="checkbox" class="form-check-input" name="edit-role-managePlayers"
+                id="edit-role-managePlayers" aria-describedby="edit-role-managePlayers-help" value="true"> Manage
+              players
             </label>
             <small id="edit-role-managePlayers-help" class="form-text text-muted">Allow a user to manage players.
               Includes giving items, deleting profiles, kicking and banning.</small>
@@ -186,8 +192,9 @@
 
           <div class="form-check">
             <label class="form-check-label">
-              <input type="checkbox" class="form-check-input" name="edit-role-manageTickets" id="edit-role-manageTickets"
-                aria-describedby="edit-role-manageTickets-help" value="true"> Manage support tickets
+              <input type="checkbox" class="form-check-input" name="edit-role-manageTickets"
+                id="edit-role-manageTickets" aria-describedby="edit-role-manageTickets-help" value="true"> Manage
+              support tickets
             </label>
             <small id="edit-role-manageTickets-help" class="form-text text-muted">Allow a user to manage support
               tickets for your server. This includes closing and commenting on tickets.</small>
@@ -195,8 +202,9 @@
 
           <div class="form-check">
             <label class="form-check-label">
-              <input type="checkbox" class="form-check-input" name="edit-role-viewAnalytics" id="edit-role-viewAnalytics"
-                aria-describedby="edit-role-viewAnalytics-help" value="true"> View analytics
+              <input type="checkbox" class="form-check-input" name="edit-role-viewAnalytics"
+                id="edit-role-viewAnalytics" aria-describedby="edit-role-viewAnalytics-help" value="true"> View
+              analytics
             </label>
             <small id="edit-role-viewAnalytics-help" class="form-text text-muted">Allow a user to view the analytics
               page of your server.</small>
@@ -204,8 +212,9 @@
 
           <div class="form-check">
             <label class="form-check-label">
-              <input type="checkbox" class="form-check-input" name="edit-role-viewDashboard" id="edit-role-viewDashboard"
-                aria-describedby="edit-role-viewDashboard-help" value="true"> View dashboard
+              <input type="checkbox" class="form-check-input" name="edit-role-viewDashboard"
+                id="edit-role-viewDashboard" aria-describedby="edit-role-viewDashboard-help" value="true"> View
+              dashboard
             </label>
             <small id="edit-role-viewDashboard-help" class="form-text text-muted">Allow a user to view your servers
               dashboard on CSMM.</small>
@@ -251,8 +260,9 @@
 
           <div class="form-check">
             <label class="form-check-label">
-              <input type="checkbox" class="form-check-input" name="edit-role-discordLookup" id="edit-role-discordLookup"
-                aria-describedby="edit-role-discordLookup-help" value="true"> Use the Discord command "Lookup"
+              <input type="checkbox" class="form-check-input" name="edit-role-discordLookup"
+                id="edit-role-discordLookup" aria-describedby="edit-role-discordLookup-help" value="true"> Use the
+              Discord command "Lookup"
             </label>
             <small id="edit-role-discordLookup-help" class="form-text text-muted">Allow a user to retrieve extra
               information about a player via Discord.</small>
