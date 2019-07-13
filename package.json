@@ -76,9 +76,10 @@
       "text-summary"
     ],
     "exclude": [
-      "assets/dependencies/**/*",
+      "assets/**/*",
       "tasks/**/*",
-      "confg/**/*"
+      "confg/**/*",
+      "views/**/*"
     ],
     "cache": true,
     "all": true,
