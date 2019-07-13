@@ -20,7 +20,9 @@ class Balance extends SdtdCommand {
     let playerBalance = await sails.helpers.economy.getPlayerBalance.with({
       playerId: player.id
     })
-    return chatMessage.reply(`Your balance is currently ${playerBalance} ${server.config.currencyName}`);
+    return chatMessage.reply("balanceReply", {
+      playerBalance: playerBalance
+    });
   }
 }
 

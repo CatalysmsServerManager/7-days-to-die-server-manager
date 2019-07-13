@@ -19,14 +19,16 @@ class renameTele extends SdtdCommand {
 
   async run(chatMessage, player, server, args) {
 
-    let playerTeleports = await PlayerTeleport.find({ player: player.id });
+    let playerTeleports = await PlayerTeleport.find({
+      player: player.id
+    });
 
     if (args.length == 0) {
-      return chatMessage.reply('Please provide a name for your teleport and a new name');
+      return chatMessage.reply('renameTeleMissingArgument');
     }
 
     if (args.length > 2) {
-      return chatMessage.reply(`Too many arguments! Just provide a teleport name and new name please.`)
+      return chatMessage.reply(`renameTeleTooManyArguments`)
     }
 
     let teleportFound = false
@@ -37,7 +39,7 @@ class renameTele extends SdtdCommand {
     })
 
     if (!teleportFound) {
-      return chatMessage.reply(`No teleport with that name found`)
+      return chatMessage.reply(`NoTeleportFound`)
     }
 
     let nameAlreadyInUse = false
@@ -48,16 +50,23 @@ class renameTele extends SdtdCommand {
     })
 
     if (nameAlreadyInUse) {
-      return chatMessage.reply(`That name is already in use! Pick another one please.`)
+      return chatMessage.reply(`renameTeleNameInUse`)
     }
 
     if (!validator.isAlphanumeric(args[1])) {
-      return chatMessage.reply(`Only alphanumeric values are allowed for teleport names.`)
+      return chatMessage.reply(`OnlyAlfaNumeric`)
     }
 
-    await PlayerTeleport.update({ id: teleportFound.id }, { name: args[1] });
+    await PlayerTeleport.update({
+      id: teleportFound.id
+    }, {
+      name: args[1]
+    });
 
-    return chatMessage.reply(`Your teleport ${teleportFound.name} was renamed to ${args[1]}`)
+    return chatMessage.reply(`renameTeleSuccess`, {
+      oldName: teleportFound.name,
+      newName: args[1]
+    })
   }
 }
 

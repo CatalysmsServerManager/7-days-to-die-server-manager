@@ -19,29 +19,35 @@ class setTele extends SdtdCommand {
 
   async run(chatMessage, player, server, args) {
 
-    let playerTeleports = await PlayerTeleport.find({ player: player.id });
+    let playerTeleports = await PlayerTeleport.find({
+      player: player.id
+    });
     let playerRole = await sails.helpers.sdtd.getPlayerRole(player.id);
 
-    let playersOnServer = await Player.find({ server: server.id });
+    let playersOnServer = await Player.find({
+      server: server.id
+    });
     let publicTeleports = await PlayerTeleport.find({
       player: playersOnServer.map(player => player.id),
       publicEnabled: true
     });
 
     if (args.length == 0) {
-      return chatMessage.reply('Please provide a name for your teleport');
+      return chatMessage.reply('setTeleMissingName');
     }
 
     if (args.length > 1) {
-      return chatMessage.reply('Too many arguments, please provide a name only.');
+      return chatMessage.reply('setTeleTooManyArguments');
     }
 
     if (playerTeleports.length >= server.config.maxPlayerTeleportLocations) {
-      return chatMessage.reply("You've set too many locations already, remove one before adding any more");
+      return chatMessage.reply("setTeleTooManyTeleports");
     }
 
     if (playerTeleports.length >= playerRole.amountOfTeleports) {
-      return chatMessage.reply(`Your role (${playerRole.name}) is only allowed to have ${playerRole.amountOfTeleports} teleport locations.`);
+      return chatMessage.reply(`setTeleTooManyTeleportsRole`, {
+        playerRole: playerRole
+      });
     }
 
 
@@ -58,11 +64,11 @@ class setTele extends SdtdCommand {
     })
 
     if (nameAlreadyInUse) {
-      return chatMessage.reply(`That name is already in use! Pick another one please.`);
+      return chatMessage.reply(`setTeleNameInUse`);
     }
 
     if (!validator.isAlphanumeric(args[0])) {
-      return chatMessage.reply(`Only alphanumeric values are allowed for teleport names.`);
+      return chatMessage.reply(`OnlyAlfaNumeric`);
     }
 
     if (server.config.economyEnabled && server.config.costToSetTeleport) {
@@ -75,7 +81,9 @@ class setTele extends SdtdCommand {
         notEnoughMoney = true;
       })
       if (notEnoughMoney) {
-        return chatMessage.reply(`You do not have enough money to do that! This action costs ${server.config.costToSetTeleport} ${server.config.currencyName}`)
+        return chatMessage.reply(`notEnoughMoney`, {
+          cost: server.config.costToSetTeleport
+        })
       }
     }
 
@@ -87,7 +95,9 @@ class setTele extends SdtdCommand {
       player: player.id
     }).fetch();
 
-    return chatMessage.reply(`Your teleport ${createdTeleport.name} has been made! (${createdTeleport.x},${createdTeleport.y},${createdTeleport.z})`);
+    return chatMessage.reply(`setTeleSuccess`, {
+      createdTeleport: createdTeleport
+    });
   }
 }
 

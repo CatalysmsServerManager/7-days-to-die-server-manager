@@ -1,0 +1,180 @@
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#command-replies">
+  Custom command replies
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="command-replies" tabindex="-1" role="dialog" aria-labelledby="command-replies"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Custom command replies</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <div class="form-group">
+          <label for="reply-type">Reply type</label>
+          <select class="form-control" name="reply-type" id="reply-type">
+            <% sails.hooks.sdtdcommands.replyTypes.forEach(reply => { %>
+            <option value="<%= reply.type %>"><%= reply.pretty %></option>
+            <% }) %>
+          </select>
+          <small class="form-text text-muted">What reply type is this for?</small>
+        </div>
+
+        <div class="form-group">
+          <label for="reply-response">Response</label>
+          <input type="text" class="form-control" name="reply-response" id="reply-response"
+            aria-describedby="reply-response-help" placeholder="">
+          <small id="reply-response-help" class="form-text text-muted">The text that will be used to reply</small>
+        </div>
+
+        <button id="add-reply" type="button" class="btn btn-success">Save</button>
+
+        <hr>
+
+        <table id="command-replies-table" class="table">
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Response</th>
+              <th></th>
+            </tr>
+          </thead>
+        </table>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  $(document).ready(function () {
+
+    const repliesTable = $('#command-replies-table').DataTable({
+      data: window.SAILS_LOCALS.players,
+      fixedHeader: true,
+      autoWidth: false,
+      //  responsive: true,
+      columns: [{
+          data: 'type'
+        },
+        {
+          data: 'reply'
+        },
+        {
+          data: 'deleteBtn',
+          width: '20%',
+          render: function (data, type, row, meta) {
+            return `<button type="button" class="btn btn-danger delete-reply" data-replyid="${row.id}">Delete</button>`
+          }
+        },
+
+      ]
+    });
+
+    getReplies();
+
+
+
+    // Event handlers
+
+    $("#reply-type").change(async () => {
+      const type = $("#reply-type").val();
+
+      const value = await getTypeValue(type);
+      $("#reply-response").val(value.reply);
+
+    });
+
+    $("#add-reply").click(e => {
+      e.preventDefault();
+
+      $.ajax({
+        url: '/api/sdtdserver/commands/reply',
+        method: 'POST',
+        data: {
+          serverId: window.SAILS_LOCALS.server.id,
+          type: $("#reply-type").val(),
+          reply: $("#reply-response").val(),
+          _csrf: window.SAILS_LOCALS._csrf,
+        },
+        success: (data, status, xhr) => {
+          getReplies();
+        },
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      });
+    });
+
+    $("#replySettings").on('click', '.delete-reply', function (e) {
+      $.ajax({
+        url: '/api/sdtdserver/commands/reply',
+        method: 'DELETE',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          replyId: $(e.target).data('replyid')
+        },
+        success: (data, status, xhr) => {
+          getReplies();
+        },
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      });
+    })
+
+    // Functions
+
+
+    // When a user selects a type from the dropdown, the current configured reply will be shown
+    function getTypeValue(type) {
+      return new Promise((resolve, reject) => {
+        $.ajax({
+          url: '/api/sdtdserver/commands/reply',
+          method: 'GET',
+          data: {
+            serverId: window.SAILS_LOCALS.server.id,
+            type: type,
+          },
+          success: (data, status, xhr) => {
+            return resolve(data[0]);
+          },
+          error: function (xhr, status, error) {
+            displayAjaxToSupportData(xhr, this);;
+            showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+            return reject(error);
+          }
+        });
+      })
+    }
+
+    function getReplies() {
+      repliesTable.clear();
+      $.ajax({
+        url: '/api/sdtdserver/commands/reply',
+        method: 'GET',
+        data: {
+          serverId: window.SAILS_LOCALS.server.id,
+        },
+        success: (data, status, xhr) => {
+          repliesTable.rows.add(data);
+          repliesTable.draw();
+        },
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      });
+    }
+  })
+
+</script>

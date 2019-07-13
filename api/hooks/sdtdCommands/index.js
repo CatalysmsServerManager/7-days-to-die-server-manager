@@ -21,6 +21,9 @@ module.exports = function sdtdCommands(sails) {
 
   return {
 
+    // Types of replies for each command with a pretty name
+    replyTypes: require('./replyTypes'),
+
     /**
      * @memberof module:SdtdCommandsHook
      * @method

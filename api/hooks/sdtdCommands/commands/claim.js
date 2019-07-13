@@ -24,9 +24,11 @@ class Claim extends SdtdCommand {
 
     if (args[0] === 'list') {
 
-      chatMessage.reply(`There are ${itemsToClaim.length} items for you to claim`);
+      chatMessage.reply("claimList", {
+        totalItems: itemsToClaim.length
+      });
       itemsToClaim.forEach(item => {
-        chatMessage.reply(`${item.amount}x ${item.name} of quality ${item.quality}`);
+        chatMessage.reply(`${item.amount}x ${item.name} - Quality: ${item.quality}`);
       });
 
       return;
@@ -34,11 +36,13 @@ class Claim extends SdtdCommand {
     const cpmVersion = await sails.helpers.sdtd.checkCpmVersion(this.serverId);
 
     if (itemsToClaim.length === 0) {
-      return chatMessage.reply(`You have no items to claim!`);
+      return chatMessage.reply("claimNoItems");
     }
 
     if (itemsToClaim.length > 10) {
-      chatMessage.reply('More than 10 items in queue, only the first 10 will be given.');
+      chatMessage.reply("claimFullQueue", {
+        totalItems: itemsToClaim.length
+      });
       itemsToClaim = itemsToClaim.slice(0, 10);
     }
 
@@ -62,17 +66,19 @@ class Claim extends SdtdCommand {
         }, cmdToExec);
 
         if (response.result.includes('ERR:')) {
-          return chatMessage.reply(`Error while giving item - ${response.result}`);
+          return chatMessage.reply("error");
         }
 
-        chatMessage.reply(`Gave ${item.amount}x ${item.name} of quality ${item.quality}.`);
+        chatMessage.reply("claimItemGiven", {
+          item: item
+        });
         await PlayerClaimItem.update({
           id: item.id
         }, {
           claimed: true
         });
       } catch (error) {
-        chatMessage.reply(`Something went wrong while trying to give ${item.name}. Please contact a server admin.`);
+        chatMessage.reply("error");
       }
 
     });

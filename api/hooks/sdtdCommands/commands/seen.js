@@ -18,7 +18,7 @@ class Seen extends SdtdCommand {
   async run(chatMessage, player, server, args) {
 
     if (!args[0]) {
-      return chatMessage.reply(`You must provide a name, entityId or steamId.`);
+      return chatMessage.reply(`seenMissingArguments`);
     }
 
     let foundPlayer = await sails.models.player.find({
@@ -38,11 +38,13 @@ class Seen extends SdtdCommand {
     });
 
     if (foundPlayer.length > 1) {
-      return chatMessage.reply(`Found ${foundPlayer.length} players for that query, please specify further or use ID.`)
+      return chatMessage.reply(`seenTooManyPlayers`, {
+        amount: foundPlayer.length
+      })
     }
 
     if (foundPlayer.length === 0) {
-      return chatMessage.reply(`No player found!`);
+      return chatMessage.reply(`seenNoPlayerFound`);
     }
 
     foundPlayer = foundPlayer[0];
@@ -51,9 +53,16 @@ class Seen extends SdtdCommand {
     let humanDuration = await sails.helpers.etc.humanizedTime(lastOnlineDate);
 
     if (humanDuration === "0 seconds ago") {
-      chatMessage.reply(`${foundPlayer.name} is online right now!`)
+      chatMessage.reply(`seenOnlineNow`, {
+        foundPlayer: foundPlayer
+      })
     } else {
-      chatMessage.reply(`${foundPlayer.name} was last seen on ${lastOnlineDate.toDateString()} at ${lastOnlineDate.toTimeString()}. That's ${humanDuration}`);
+      chatMessage.reply(`seenSuccess`, {
+        foundPlayer: foundPlayer,
+        date: lastOnlineDate.toDateString(),
+        time: lastOnlineDate.toTimeString(),
+        humanDuration: humanDuration
+      });
     }
 
   }

@@ -44,11 +44,14 @@ class Gimme extends SdtdCommand {
 
     if (previousUse.length > 0) {
       let coolDownRemainderMs = cooldownInMs - (dateNow - previousUse[0].createdAt);
-      return chatMessage.reply(`You need to wait ${Math.round(coolDownRemainderMs / 60000)} minutes more before executing this command again.`);
+      let coolDownRemainderMin = Math.round(coolDownRemainderMs / 60000)
+      return chatMessage.reply(gimmeCooldown, {
+        coolDownRemainderMin: coolDownRemainderMin
+      });
     }
 
     if (possibleGimmeItems.length === 0) {
-      return chatMessage.reply(`Found 0 configured items. An admin must configure some via the webinterface before this command will work!`);
+      return chatMessage.reply("gimmeNoConfig");
     }
 
 
@@ -62,7 +65,9 @@ class Gimme extends SdtdCommand {
         notEnoughMoney = true;
       });
       if (notEnoughMoney) {
-        return chatMessage.reply(`You do not have enough money to do that! This action costs ${server.config.costToUseGimme} ${server.config.currencyName}`);
+        return chatMessage.reply("notEnoughMoney", {
+          cost: server.config.costToUseGimme
+        });
       }
     }
 
@@ -91,10 +96,10 @@ class Gimme extends SdtdCommand {
             }, cmdToExec);
 
             if (response.result.includes("ERR:")) {
-              chatMessage.reply(`Error while giving an item! Please report this to a server admin - ${response.result}`);
+              chatMessage.reply("error");
             }
           } catch (error) {
-            chatMessage.reply(`Error while giving an item! Please report this to a server admin - ${error}`);
+            chatMessage.reply("error");
           }
         }
         break;
@@ -114,7 +119,7 @@ class Gimme extends SdtdCommand {
             }, cmdToExec);
 
           } catch (error) {
-            chatMessage.reply(`Error while spawning an entity! Please report this to a server admin - ${error}`);
+            chatMessage.reply("error");
           }
         }
         break;
@@ -123,7 +128,9 @@ class Gimme extends SdtdCommand {
 
         let parsedCommands = sails.helpers.sdtd.parseCommandsString(itemToUse.value);
 
-        await sails.helpers.sdtd.executeCustomCmd(server, parsedCommands, {player: player});
+        await sails.helpers.sdtd.executeCustomCmd(server, parsedCommands, {
+          player: player
+        });
 
         break;
 
@@ -144,13 +151,6 @@ class Gimme extends SdtdCommand {
 
 module.exports = Gimme;
 
-function parseCommand(commandString, player) {
-  let commandInfoFilled = replaceAllInString(commandString, "${steamId}", player.steamId);
-  commandInfoFilled = replaceAllInString(commandInfoFilled, "${entityId}", player.entityId);
-  commandInfoFilled = replaceAllInString(commandInfoFilled, "${playerName}", player.name);
-  return commandInfoFilled.split(";");
-}
-
 function parseEntity(value) {
   return value.split(";");
 }
@@ -158,15 +158,3 @@ function parseEntity(value) {
 function parseItem(value) {
   return value.split(';');
 }
-
-function replaceAllInString(string, search, replacement) {
-  return string.split(search).join(replacement);
-}
-
-function delaySeconds(seconds) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve()
-    }, seconds * 1000)
-  });
-};

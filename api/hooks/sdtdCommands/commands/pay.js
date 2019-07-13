@@ -19,7 +19,7 @@ class Pay extends SdtdCommand {
   async run(chatMessage, player, server, args) {
 
     if (args.length !== 2) {
-      return chatMessage.reply('Please provide a name or steam ID of the player you want to send money to and the amount.');
+      return chatMessage.reply('payMissingArguments');
     }
 
     const playerToSendTo = await Player.find({
@@ -36,15 +36,17 @@ class Pay extends SdtdCommand {
     const amountToSend = parseInt(args[1]);
 
     if (isNaN(amountToSend)) {
-      return chatMessage.reply(`Amount to send must be a valid integer. You provided ${args[1]}`);
+      return chatMessage.reply(`payInvalidAmount`, {
+        amount: args[1]
+      });
     }
 
     if (amountToSend < 1) {
-      return chatMessage.reply(`You must send at least 1 ${server.config.currencyName} to the other player`);
+      return chatMessage.reply("payMinimumAmount");
     }
 
     if (playerToSendTo.length === 0) {
-      return chatMessage.reply(`Did not find the player you want to send to. Try using the steam ID if you are unsure of the spelling of the name`);
+      return chatMessage.reply(`payPlayerNotFound`);
     };
 
     let playerBalance = await sails.helpers.economy.getPlayerBalance.with({
@@ -52,7 +54,9 @@ class Pay extends SdtdCommand {
     });
 
     if (playerBalance < amountToSend) {
-      return chatMessage.reply(`You do not have enough ${server.config.currencyName}! Your curreny balance is ${playerBalance} ${server.config.currencyName}.`);
+      return chatMessage.reply(`notEnoughMoney`, {
+        cost: amountToSend
+      });
     }
 
     await sails.helpers.economy.deductFromPlayer.with({
@@ -69,7 +73,10 @@ class Pay extends SdtdCommand {
       useMultiplier: false,
     });
 
-    return chatMessage.reply(`Successfully sent ${amountToSend} ${server.config.currencyName} to ${playerToSendTo[0].name}`);
+    return chatMessage.reply(`paySuccess`, {
+      amountToSend: amountToSend,
+      recipient: playerToSendTo[0].name
+    });
   }
 }
 
