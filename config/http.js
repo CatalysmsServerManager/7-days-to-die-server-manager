@@ -17,7 +17,9 @@ var passport = require('passport');
 var SteamStrategy = require('passport-steam');
 var DiscordStrategy = require('passport-discord').Strategy;
 const Sentry = require('@sentry/node');
-Sentry.init({ dsn: process.env.SENTRY_DSN });
+Sentry.init({
+  dsn: process.env.SENTRY_DSN
+});
 
 
 var maxAge = 900;
@@ -106,11 +108,6 @@ module.exports.http = {
     passportInit: require('passport').initialize(),
     passportSession: require('passport').session(),
     xframe: require('lusca').xframe('SAMEORIGIN'),
-    // Logs each request to the console
-    requestLogger: function (req, res, next) {
-      sails.log.verbose("Requested :: ", req.method, req.url);
-      return next();
-    },
     sentryRequest: Sentry.Handlers.requestHandler(),
     sentryError: Sentry.Handlers.errorHandler(),
 
@@ -127,7 +124,6 @@ module.exports.http = {
       'sentryError',
       'cookieParser',
       'session',
-      'requestLogger',
       'passportInit',
       'passportSession',
       'xframe',

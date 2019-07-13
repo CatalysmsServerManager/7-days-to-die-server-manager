@@ -18,7 +18,8 @@ class MemUpdate {
   }
 
   async _updateListener(memUpdate) {
-    sails.log.silly(`Received a mem update for server ${this.server.name}`)
+    sails.log.silly(`Received a mem update for server ${this.server.name}`);
+    await sails.helpers.redis.set(`server:${this.server.id}:fps`, memUpdate.fps);
     await saveInfoToDatabase(this.server, memUpdate);
 
     let currentCycles = await sails.helpers.redis.get(`server:${this.server.id}:trackingCyclesCompleted`);
