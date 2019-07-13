@@ -6,6 +6,8 @@ async function getPlayersDataTable(req, res) {
     server: req.body.serverId
   }
 
+  const totalPlayers = await Player.count(whereObj)
+
   const queryObj = {
     where: whereObj,
     limit: parseInt(req.body.length),
@@ -30,7 +32,8 @@ async function getPlayersDataTable(req, res) {
 
   const result = {
     draw: parseInt(req.body.draw),
-    recordsTotal: players.length,
+    recordsFiltered: players.length,
+    recordsTotal: totalPlayers,
     data: players
   };
 

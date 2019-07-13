@@ -24,8 +24,6 @@
 
     <%- include('./partials/deletePlayersButton') %>
 
-    <button id="load-all-player-data-btn" type="button" class="btn btn-primary">Load ALL player data</button>
-
     <br>
 
     <div class="row">
@@ -165,32 +163,7 @@
         displayAjaxToSupportData(xhr, this);;
         showErrorModal(`${error} - ${xhr.responseText}`, xhr);
       }
-    })
-
-
-    $("#load-all-player-data-btn").click(e => {
-
-      $("#load-all-player-data-btn").hide();
-
-      $.ajax({
-        url: '/api/sdtdserver/players/all',
-        method: 'GET',
-        data: {
-          serverId: window.SAILS_LOCALS.server.id,
-        },
-        success: (data, status, xhr) => {
-          location.reload();
-        },
-        error: function (xhr, status, error) {
-          displayAjaxToSupportData(xhr, this);;
-          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
-        }
-      })
-
-      $("#load-all-player-data-btn").show();
-
-    })
-
+    });
   });
 
 </script>
