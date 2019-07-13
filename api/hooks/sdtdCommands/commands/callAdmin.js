@@ -21,11 +21,11 @@ class callAdmin extends SdtdCommand {
     try {
 
       if (args == '') {
-        return chatMessage.reply(`You must tell us what you're having trouble with!`);
+        return chatMessage.reply("callAdminMissingReason");
       }
 
-      if (args.length > 50000) {
-        return chatMessage.reply(`Your message is too long! A ticket title can hold maximum 50.000 characters.`);
+      if (args.join(' ').length > 100) {
+        return chatMessage.reply("callAdminTooLong");
       }
 
       let ticket = await sails.helpers.sdtd.createTicket(
@@ -34,10 +34,13 @@ class callAdmin extends SdtdCommand {
         args.join(' ')
       );
 
-      return chatMessage.reply(`Your ticket has been created, check the website to follow up!`);
+      return chatMessage.reply("callAdminSuccess", {
+        ticket: ticket
+      });
 
     } catch (error) {
       sails.log.error(`HOOK - SdtdCommands:callAdmin - ${error}`);
+      return chatMessage.reply("error");
     }
   }
 }

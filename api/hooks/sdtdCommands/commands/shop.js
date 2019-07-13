@@ -20,12 +20,14 @@ class Shop extends SdtdCommand {
     const cpmVersion = await sails.helpers.sdtd.checkCpmVersion(this.serverId);
     let cmdToExec;
 
-    
-    if (player.currency < listing.price) {
-        return chatMessage.reply(`You do not have enough ${server.config.currencyName} to buy this. You need ${listing.price - player.currency} more`);
-      }
 
-      await sails.helpers.economy.deductFromPlayer(player.id, listing.price, `SHOP - INGAME - bought ${listing.name}`);
+    if (player.currency < listing.price) {
+      return chatMessage.reply(`notEnoughMoney`, {
+        cost: listing.price
+      });
+    }
+
+    await sails.helpers.economy.deductFromPlayer(player.id, listing.price, `SHOP - INGAME - bought ${listing.name}`);
 
 
     if (cpmVersion >= 6.4) {
@@ -43,7 +45,7 @@ class Shop extends SdtdCommand {
       }, cmdToExec);
 
       if (response.result.includes('ERR:')) {
-        return chatMessage.reply(`Error while giving item - ${response.result}`);
+        return chatMessage.reply(`error`);
       }
 
       await ShopListing.update({
@@ -52,10 +54,10 @@ class Shop extends SdtdCommand {
         timesBought: listing.timesBought++
       });
 
-      return chatMessage.reply(`You have bought ${listing.friendlyName} for ${listing.price} ${server.config.currencyName}`)
+      return chatMessage.reply(`shopSuccess`)
     } catch (error) {
       sails.log.warn(error);
-      chatMessage.reply(`Something went wrong while trying to buy ${listing.friendlyName}. Please contact a server admin.`);
+      chatMessage.reply(`error`);
     }
   }
 
@@ -65,9 +67,9 @@ class Shop extends SdtdCommand {
     });
 
     if (args.length === 0) {
-        await chatMessage.reply(`To view items from page 1: '${server.config.commandPrefix}shop 1'`);
-        await chatMessage.reply(`To buy item #4 from page 1: '${server.config.commandPrefix}shop buy 1 4'`);
-        await chatMessage.reply(`Webshop: ${process.env.CSMM_HOSTNAME}/shop/${server.id}`);
+      await chatMessage.reply(`shopViewHelp`);
+      await chatMessage.reply(`shopBuyHelp`);
+      await chatMessage.reply(`${process.env.CSMM_HOSTNAME}/shop/${server.id}`);
     }
 
     if (args[0]) {
@@ -76,7 +78,7 @@ class Shop extends SdtdCommand {
         const itemNumber = parseInt(args[2]);
 
         if (!_.isFinite(page) || !_.isFinite(itemNumber)) {
-          return chatMessage.reply(`You have provided invalid arguments to buy an item. page: '${page}' item number: '${itemNumber}'`);
+          return chatMessage.reply(`shopInvalidArgs`);
         }
 
         const startIndex = (page - 1) * 10;
@@ -84,14 +86,14 @@ class Shop extends SdtdCommand {
         const listing = listingsToShow[itemNumber - 1];
 
         if (_.isUndefined(listing)) {
-          return chatMessage.reply(`No item found on page ${page} with number ${itemNumber}`);
+          return chatMessage.reply(`shopNoItemsFound`);
         }
 
         await this._buyItem(listing, player, server, chatMessage);
       } else {
         const page = parseInt(args[0]);
         if (!_.isFinite(page)) {
-          return chatMessage.reply(`You have provided an invalid shop page number. '${args[0]}'`);
+          return chatMessage.reply(`shopInvalidArgs`);
         }
         const startIndex = (page - 1) * 10;
         const listingsToShow = listings.slice(startIndex, startIndex + 10);
@@ -99,22 +101,23 @@ class Shop extends SdtdCommand {
         if (args[1]) {
           const itemNumber = parseInt(args[1]);
           if (!_.isFinite(itemNumber)) {
-            return chatMessage.reply(`You have provided an invalid shop item number. '${args[1]}'`);
+            return chatMessage.reply(`shopInvalidArgs`);
           }
           let listing = listingsToShow[itemNumber - 1];
 
           if (_.isUndefined(listing)) {
-            return chatMessage.reply(`No item found on page ${page} with number ${itemNumber}`);
+            return chatMessage.reply(`shopNoItemsFound`);
           }
 
-          await chatMessage.reply(`${listing.friendlyName} costs ${listing.price} ${server.config.currencyName}`);
-          await chatMessage.reply(`It consists of ${listing.amount}x ${listing.name} with quality ${listing.quality}`);
+          await chatMessage.reply(`shopItemInfo`, {
+            listing: listing
+          });
           return;
         }
 
-        
+
         if (listingsToShow.length === 0) {
-          return chatMessage.reply(`No items found on page ${page}!`);
+          return chatMessage.reply(`shopNoItemsFound`);
         }
 
         let listingCounter = 1;
