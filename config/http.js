@@ -9,6 +9,12 @@
  * https://sailsjs.com/config/http
  */
 
+const morgan = require('morgan');
+
+const {
+  customLogger
+} = require('./customLog');
+
 /**
  * PASSPORT CONFIGURATION
  */
@@ -91,6 +97,26 @@ passport.deserializeUser(function (steamId, done) {
   });
 });
 
+morgan.token('userId', function (req, res) {
+  if (req.session) {
+    return req.session.userId
+  } else {
+    return "Not logged in"
+  }
+})
+
+
+const morganLogger = morgan(':remote-addr - :userId - [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"', {
+  "stream": customLogger.stream,
+  skip: (req, res) => {
+    return !req.originalUrl.includes('api')
+  }
+});
+
+
+
+
+
 module.exports.http = {
 
 
@@ -110,7 +136,7 @@ module.exports.http = {
     xframe: require('lusca').xframe('SAMEORIGIN'),
     sentryRequest: Sentry.Handlers.requestHandler(),
     sentryError: Sentry.Handlers.errorHandler(),
-
+    morgan: morganLogger,
 
     /***************************************************************************
      *                                                                          *
@@ -127,6 +153,7 @@ module.exports.http = {
       'passportInit',
       'passportSession',
       'xframe',
+      'morgan',
       'bodyParser',
       'compress',
       'poweredBy',
