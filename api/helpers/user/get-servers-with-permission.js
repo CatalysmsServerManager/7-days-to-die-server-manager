@@ -37,7 +37,7 @@ module.exports = {
           ownerCheck = true;
         }
 
-        if (player.role.manageServer || player.role.manageEconomy || player.role.managePlayers || player.role.manage.Roles || player.role.manage || player.role.viewDashboard || player.role.useTracking || player.role.viewAnalytics || player.role.manageTickets || user.steamId === sails.config.custom.adminSteamId || ownerCheck) {
+        if (player.role.manageServer || player.role.manageEconomy || player.role.managePlayers || player.role.manageGbl || player.role.viewDashboard || player.role.useTracking || player.role.viewAnalytics || player.role.manageTickets || ownerCheck) {
           player.server.role = player.role;
           objectToSend.push(player.server);
         }
@@ -46,6 +46,25 @@ module.exports = {
         sails.log.error(error)
       }
     });
+
+    let ownedServers = await SdtdServer.find({
+      owner: inputs.userId
+    });
+
+    for (const server of ownedServers) {
+      let highestRole = await Role.find({
+        where: {
+          server: server.id
+        },
+        sort: 'level ASC',
+        limit: 1
+      });
+      if (highestRole.length > 0) {
+        highestRole = highestRole[0];
+        server.role = highestRole;
+        objectToSend.push(server)
+      }
+    }
 
     sails.log.debug(`API - User:getServersWithPermissions - Found ${objectToSend.length} servers for user ${inputs.userId}`);
     return exits.success(objectToSend);
