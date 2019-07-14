@@ -26,7 +26,7 @@ module.exports = {
       steamId: foundUser.steamId
     }).populate('role').populate('server');
 
-    const objectToSend = [];
+    let objectToSend = [];
 
     players.map(player => {
       try {
@@ -65,6 +65,8 @@ module.exports = {
         objectToSend.push(server)
       }
     }
+
+    objectToSend = _.uniqBy(ownedServers, 'id');
 
     sails.log.debug(`API - User:getServersWithPermissions - Found ${objectToSend.length} servers for user ${inputs.userId}`);
     return exits.success(objectToSend);
