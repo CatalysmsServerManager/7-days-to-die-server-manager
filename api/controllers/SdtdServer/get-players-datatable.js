@@ -16,9 +16,19 @@ async function getPlayersDataTable(req, res) {
   }
 
   if (!_.isEmpty(req.body.search.value)) {
-    whereObj.name = {
-      contains: req.body.search.value
-    }
+    whereObj.or = [{
+        name: {
+          contains: req.body.search.value
+        }
+      },
+      {
+        steamId: {
+          contains: req.body.search.value
+        }
+      }
+    ]
+
+
   }
 
   if (parseInt(req.body.order[0].column)) {
