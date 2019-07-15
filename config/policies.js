@@ -37,6 +37,7 @@ let policyObject = {
     "execute-command": ['isLoggedIn', 'roles/useCommands'],
     "send-message": ['isLoggedIn', 'roles/useChat'],
     "get-players": ['isLoggedIn', 'roles/hasAccess'],
+    "get-players-datatable": ['isLoggedIn', 'roles/managePlayers'],
     'server-info-view': ['isLoggedIn', 'roles/hasAccess'],
     'check-donator': 'isLoggedIn',
   },
