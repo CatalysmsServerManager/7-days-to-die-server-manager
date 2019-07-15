@@ -37,6 +37,8 @@ module.exports = {
           ownerCheck = true;
         }
 
+        console.log(player.role)
+
         if (player.role.manageServer || player.role.manageEconomy || player.role.managePlayers || player.role.manageGbl || player.role.viewDashboard || player.role.useTracking || player.role.viewAnalytics || player.role.manageTickets || ownerCheck) {
           player.server.role = player.role;
           objectToSend.push(player.server);
@@ -66,7 +68,7 @@ module.exports = {
       }
     }
 
-    objectToSend = _.uniqBy(ownedServers, 'id');
+    objectToSend = _.uniqBy(objectToSend, 'id');
 
     sails.log.debug(`API - User:getServersWithPermissions - Found ${objectToSend.length} servers for user ${inputs.userId}`);
     return exits.success(objectToSend);
