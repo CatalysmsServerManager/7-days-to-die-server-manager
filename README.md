@@ -64,9 +64,8 @@ The commands here assume you are running a Debian based Linux distro. Installati
 4. Put the app in production mode. This is done by setting the env variable NODE_ENV=production
 
 
-## Documentation
+## [Documentation](https://docs.csmm.app)
 
-[Confluence](https://confluence.catalysm.net/display/CSM) contains our knowledgebase of (advanced) configuration topics.
 
 ## Support
 

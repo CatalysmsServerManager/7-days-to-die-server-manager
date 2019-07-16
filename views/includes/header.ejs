@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <a class="navbar-brand" href="/">CSMM</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-    aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
@@ -18,59 +18,57 @@
           if (!_.isUndefined(req.session.userId)) {
             %>
 
-        <li class="nav-item">
-          <a id="user-dashboard-link" class="nav-link" href="/user/<%= req.session.userId %>/dashboard">
-            <i class="fas fa-list-ul"></i> Server overview
-          </a>
-        </li>
-
-
-        <li class="nav-item">
-          <a class="nav-link" href="/sdtdserver/addserver">
-            <i class="fas fa-plus"></i> Add a server
-          </a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="/user/<%= req.session.userId %>/profile">
-            <i class="fas fa-user-circle"></i> Your profile
-          </a>
-        </li>
-        <li class="nav-item">
-          <img id="steam-avatar" src="">
-        </li>
-        <a class="nav-link" id="logout-button" href="/auth/logout">
-          <i class="fas fa-sign-out-alt"></i> Logout
+      <li class="nav-item">
+        <a id="user-dashboard-link" class="nav-link" href="/user/<%= req.session.userId %>/dashboard">
+          <i class="fas fa-list-ul"></i> Server overview
         </a>
-        <% } else { %>
-          <a class="nav-item" id="steam-login-button" href="/auth/steam">
-            <img src="https://steamcommunity-a.akamaihd.net/public/images/signinthroughsteam/sits_01.png">
-          </a>
-          <% } %>
-            <% } %>
-              <li class="nav-item">
-                <a target="_blank" class="nav-link" href="https://confluence.catalysm.net/x/DgAF">
-                  <i class="fas fa-life-ring"></i> Documentation
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/donate">
-                  <i class="fas fa-donate"></i> Donate
-                </a>
-              </li>
-
-              <li class="nav-item">
-                <a class="nav-link" href="/stats">
-                  <i class="fas fa-chart-line"></i>
-                  </i> Stats
-                </a>
-              </li>
+      </li>
 
 
-              
+      <li class="nav-item">
+        <a class="nav-link" href="/sdtdserver/addserver">
+          <i class="fas fa-plus"></i> Add a server
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="/user/<%= req.session.userId %>/profile">
+          <i class="fas fa-user-circle"></i> Your profile
+        </a>
+      </li>
+      <li class="nav-item">
+        <img id="steam-avatar" src="">
+      </li>
+      <a class="nav-link" id="logout-button" href="/auth/logout">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </a>
+      <% } else { %>
+      <a class="nav-item" id="steam-login-button" href="/auth/steam">
+        <img src="https://steamcommunity-a.akamaihd.net/public/images/signinthroughsteam/sits_01.png">
+      </a>
+      <% } %>
+      <% } %>
+      <li class="nav-item">
+        <a target="_blank" class="nav-link" href="https://docs.csmm.app">
+          <i class="fas fa-life-ring"></i> Documentation
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/donate">
+          <i class="fas fa-donate"></i> Donate
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="/stats">
+          <i class="fas fa-chart-line"></i>
+          </i> Stats
+        </a>
+      </li>
+
+
+
     </ul>
 
   </div>
 </nav>
-
-

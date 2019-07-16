@@ -69,7 +69,7 @@ class help extends SdtdCommand {
       await chatMessage.reply(`${command.name} - ${command.description}`);
     }
 
-    await chatMessage.reply(`For more info see: https://confluence.catalysm.net/x/-wAR`)
+    await chatMessage.reply(`For more info see: https://docs.csmm.app`)
 
     return;
   }

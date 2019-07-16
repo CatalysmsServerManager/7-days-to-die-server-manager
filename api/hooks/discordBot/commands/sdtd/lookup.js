@@ -55,7 +55,7 @@ class Lookup extends Commando.Command {
       });
 
       if (usersWithDiscordId.length === 0) {
-        errorEmbed.addField(`No users with your discord ID ${msg.author.id} found!`, "[How to link your discord profile to CSMM](https://confluence.catalysm.net/x/AQER)")
+        errorEmbed.addField(`No users with your discord ID ${msg.author.id} found!`, "Link your Discord profile to CSMM first.")
       }
       return msg.channel.send(errorEmbed)
     }
