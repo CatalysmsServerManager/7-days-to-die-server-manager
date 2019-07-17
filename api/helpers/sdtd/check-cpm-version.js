@@ -35,7 +35,7 @@ module.exports = {
 
     if (!version || inputs.refresh) {
       let apiResponse = await sails.helpers.sdtd.checkModVersion('Mod CSMM Patrons', inputs.serverId);
-      await sails.helpers.redis.set(`server:${inputs.serverId}:cpm-version`, apiResponse);
+      await sails.helpers.redis.set(`server:${inputs.serverId}:cpm-version`, apiResponse, true, 600);
       version = apiResponse;
     }
     sails.log.debug(`Detected CPM version ${version} for server ${inputs.serverId}`);

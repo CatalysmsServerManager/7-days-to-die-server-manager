@@ -41,7 +41,7 @@ module.exports = {
 
       if (inputs.ex) {
         if (_.isUndefined(inputs.ttl)) {
-          return exits.error(`When settings ex true you must provide a TTL.`)
+          return exits.error(`When setting ex true you must provide a TTL.`)
         }
 
         sails.getDatastore('cache').leaseConnection(function during(redisConnection, proceed) {

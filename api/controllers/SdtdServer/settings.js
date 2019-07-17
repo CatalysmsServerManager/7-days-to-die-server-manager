@@ -38,13 +38,17 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    let server = await SdtdServer.findOne(inputs.serverId);
-    let serverConfig = await SdtdConfig.findOne({
+    const server = await SdtdServer.findOne(inputs.serverId);
+    const serverConfig = await SdtdConfig.findOne({
       server: server.id
     });
-    let user = await User.findOne(this.req.session.userId);
+    const user = await User.findOne(this.req.session.userId);
 
-    let gimmeItems = await GimmeItem.find({server: server.id});
+    const gimmeItems = await GimmeItem.find({
+      server: server.id
+    });
+    // Force a recheck of the CPM version in the cache
+    await sails.helpers.sdtd.checkCpmVersion(server.id, true);
 
     try {
 
