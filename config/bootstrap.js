@@ -9,7 +9,7 @@
  * https://sailsjs.com/config/bootstrap
  */
 
-module.exports.bootstrap = async function(done) {
+module.exports.bootstrap = async function (done) {
 
   await sails.helpers.meta.startUsageStatsGathering();
   sails.log.info(`Started the system stats gathering interval`);
@@ -17,6 +17,10 @@ module.exports.bootstrap = async function(done) {
     sails.log.warn(`Not using redis as cache. Defaulting to in-memory caching. Be aware that this is not ideal for production environments!`);
     sails.cache = new Object();
   }
+
+  setInterval(async () => {
+    await sails.helpers.meta.fixDuplicatePlayers()
+  }, 360000)
 
 
   // It's very important to trigger this callback method when you are finished
