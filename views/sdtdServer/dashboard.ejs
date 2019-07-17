@@ -176,7 +176,7 @@
 
 
     $.get('/api/sdtdserver/onlinestatus', {
-      serverId: < %= server.id % >
+      serverId: "<%= server.id %>"
     }, onlineStatus => {
       let elementToAdd =
         `<i class="${onlineStatus ? "fas fa-check-circle text-success" : "fas fa-times-circle text-danger"}"></i> `
