@@ -252,7 +252,12 @@
             </li>
             <% } %>
             <li class="list-group-item">Price:
-              <%= listing.price * player.role.economyDeductMultiplier %>
+              <% if(player.role.economyDeductMultiplier !== 1) { %>
+              <s><%= listing.price %></s> <%= listing.price * player.role.economyDeductMultiplier %>
+              <% } else { %>
+              <%= listing.price %>
+              <% } %>
+
             </li>
           </ul>
         </div>
@@ -446,7 +451,14 @@
           data: 'name'
         },
         {
-          data: 'price'
+          data: 'price',
+          render: function (data, type, row, meta) {
+            if (window.SAILS_LOCALS.player.role.economyDeductMultiplier !== 1) {
+              return `<s>${row.price} </s> ${row.price * window.SAILS_LOCALS.player.role.economyDeductMultiplier}`
+            } else {
+              return row.price
+            }
+          }
         },
         {
           data: 'amount'
