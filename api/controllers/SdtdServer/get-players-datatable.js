@@ -5,14 +5,14 @@ async function getPlayersDataTable(req, res) {
   const whereObj = {
     server: req.body.serverId
   }
-
+  console.log(req.body)
   const totalPlayers = await Player.count(whereObj)
 
   const queryObj = {
     where: whereObj,
-    limit: parseInt(req.body.length),
     select: req.body.columns.map(c => c.data),
     skip: parseInt(req.body.start),
+    limit: parseInt(req.body.length),
   }
 
   if (!_.isEmpty(req.body.search.value)) {
@@ -39,10 +39,11 @@ async function getPlayersDataTable(req, res) {
 
 
   const players = await Player.find(queryObj).populate('role');
+  const totalFilter = await Player.count(whereObj);
 
   const result = {
     draw: parseInt(req.body.draw),
-    recordsFiltered: players.length,
+    recordsFiltered: totalFilter,
     recordsTotal: totalPlayers,
     data: players
   };
