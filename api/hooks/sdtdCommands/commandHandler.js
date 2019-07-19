@@ -130,7 +130,7 @@ class CommandHandler {
             return;
           } catch (error) {
             sails.log.error(error)
-            chatMessage.reply(`Error`);
+            chatMessage.reply(`error`);
             return;
           }
         }
