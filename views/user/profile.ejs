@@ -96,7 +96,7 @@
       <td>Name</td>
       <td>Playtime</td>
       <td>Server </td>
-      <td>Tickets</td>
+      <td>Role</td>
     </thead>
     <tbody>
       <% players.forEach(player => { %>
@@ -111,7 +111,7 @@
           <%= player.server.name %>
         </td>
         <td>
-          <%= player.tickets.length %>
+          <%= player.role.name %>
         </td>
       </tr>
       <% }) %>
