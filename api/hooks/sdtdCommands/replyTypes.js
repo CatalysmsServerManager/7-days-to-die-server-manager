@@ -319,4 +319,16 @@ module.exports = [{
     type: 'whoSuccess',
     default: "${totalPlayers} players have been in a radius of ${size} blocks around your current location since ${date} ${time}",
   },
+  {
+    command: 'Vote',
+    pretty: 'Vote - Not voted',
+    type: 'notVoted',
+    default: "You have not voted yet! You can vote at https://7daystodie-servers.com/server/serverIdToBeFilledByAdmin/",
+  },
+  {
+    command: 'Vote',
+    pretty: 'Vote - alreadyClaimed',
+    type: 'alreadyClaimed',
+    default: "You have already claimed your reward today!",
+  },
 ];
