@@ -1,0 +1,95 @@
+<!-- Button trigger modal -->
+
+<h3>Vote settings</h3>
+
+<p>Let players vote for your server on <a href="https://7daystodie-servers.com">7daystodie-servers</a> and claim rewards
+  every day they vote.</p>
+
+<div class="form-check">
+  <label class="form-check-label">
+    <input type="checkbox" class="form-check-input" name="vote-enabled" id="vote-enabled"
+      <% if(config.votingEnabled) { %> checked <% } %>>
+    Enabled
+  </label>
+</div>
+
+<div class="form-group">
+  <label for="vote-apiKey">Vote API key</label>
+  <input type="text" class="form-control" name="vote-apiKey" id="vote-apiKey" aria-describedby="vote-apiKey-help"
+    value="<%= config.votingApiKey %>">
+  <small id="vote-apiKey-help" class="form-text text-muted">The API key for your server. You can get this from <a
+      href="https://7daystodie-servers.com">7daystodie-servers</a></small>
+</div>
+
+<div class="form-group">
+  <label for="vote-command">Vote command</label>
+  <input type="text" class="form-control" name="vote-command" id="vote-command" aria-describedby="vote-command-help"
+    value="<%= config.votingCommand %>">
+  <small id="vote-command-help" class="form-text text-muted">The command to be executed when someone claims their
+    vote.</small>
+</div>
+
+<button type="button" id="save-vote-settings" class="btn btn-primary">Save vote settings</button>
+
+
+<script>
+  $(document).ready(function () {
+
+    $("#save-vote-settings").click(e => {
+      // Set voting status
+      $.ajax({
+        url: "/api/sdtdserver/commands/vote/status",
+        type: 'POST',
+        data: {
+          serverId: "<%= server.id %>",
+          _csrf: window.SAILS_LOCALS._csrf,
+          status: $("#vote-enabled").is(":checked"),
+        },
+        success: (data, status, xhr) => {
+
+        },
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      });
+      // Set vote api key
+      $.ajax({
+        url: "/api/sdtdserver/commands/vote/apiKey",
+        type: 'POST',
+        data: {
+          serverId: "<%= server.id %>",
+          _csrf: window.SAILS_LOCALS._csrf,
+          apiKey: $("#vote-apiKey").val(),
+        },
+        success: (data, status, xhr) => {
+
+        },
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      });
+
+      // Set vote command
+      $.ajax({
+        url: "/api/sdtdserver/commands/vote/command",
+        type: 'POST',
+        data: {
+          serverId: "<%= server.id %>",
+          _csrf: window.SAILS_LOCALS._csrf,
+          command: $("#vote-command").val(),
+        },
+        success: (data, status, xhr) => {
+
+        },
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      });
+    });
+
+  });
+
+</script>

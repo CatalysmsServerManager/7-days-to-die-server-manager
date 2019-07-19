@@ -381,7 +381,7 @@ module.exports = {
         whiteListedSteamIds: []
       },
     },
-    
+
     /*   _____ _               _    _      _    
         |  __ (_)             | |  (_)    | |   
         | |__) | _ __   __ _  | | ___  ___| | __
@@ -417,6 +417,33 @@ module.exports = {
     pingWhitelist: {
       type: 'json',
       defaultsTo: "[]"
+    },
+
+
+    /*
+ __      __   _   _             
+ \ \    / /  | | (_)            
+  \ \  / /__ | |_ _ _ __   __ _ 
+   \ \/ / _ \| __| | '_ \ / _` |
+    \  / (_) | |_| | | | | (_| |
+     \/ \___/ \__|_|_| |_|\__, |
+                           __/ |
+                          |___/ 
+    */
+
+    votingApiKey: {
+      type: 'string',
+      defaultsTo: ''
+    },
+
+    votingEnabled: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
+    votingCommand: {
+      type: 'string',
+      defaultsTo: 'say "${player.name} has just voted and received 50 ${server.config.currencyName}!"; addCurrency(${player.id}, 50)'
     },
 
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
