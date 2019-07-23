@@ -17,7 +17,7 @@ module.exports = async function canSeeTicket(req, res, next) {
     let userRole = await sails.helpers.roles.getUserRole(user.id, server.id);
 
 
-    if (user.steamId == ticket.player.steamId || userRole.manageTickets) {
+    if (user.steamId == ticket.player.steamId || userRole.manageTickets || userRole.manageServer) {
       return next();
     } else {
       return res.view('meta/notauthorized', {

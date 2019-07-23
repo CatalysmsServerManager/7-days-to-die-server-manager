@@ -90,6 +90,9 @@ let policyObject = {
     'view-ticket': ["isLoggedIn", 'canSeeTicket'],
     'open-tickets': true,
     'server-tickets-view': ["isLoggedIn", 'roles/manageTickets'],
+    'add-comment': ["isLoggedIn", 'canSeeTicket'],
+    'edit-ticket': ["isLoggedIn", 'roles/manageTickets'],
+    'update-ticket-status': ["isLoggedIn", 'roles/manageTickets'],
   },
 
   "tracking-info": {
@@ -108,7 +111,7 @@ let policyObject = {
 
 
 if (process.env.IS_TEST) {
-  console.log(`Detected a testing environment, disabling policies. If you are NOT running test this is VERY VERY bad.`);
+  console.log(`Detected a testing environment, disabling policies. If you are NOT running tests this is VERY VERY bad.`);
   module.exports.policies = {
     '*': true
   };
