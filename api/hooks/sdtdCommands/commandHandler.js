@@ -1,6 +1,7 @@
 const sevenDays = require('machinepack-7daystodiewebapi');
 const CustomCommand = require('./customCommand.js');
 const he = require('he');
+const parseArgs = require('./parseArgs');
 
 /**
  * @memberof module:SdtdCommandsHook
@@ -73,11 +74,14 @@ class CommandHandler {
     try {
       if (chatMessage.messageText.startsWith(this.config.commandPrefix)) {
         // Cut out the prefix
-        let trimmedMsg = chatMessage.messageText.slice(this.config.commandPrefix.length, chatMessage.messageText.length);
+        const trimmedMsg = chatMessage.messageText.slice(this.config.commandPrefix.length, chatMessage.messageText.length);
 
-        let splitString = trimmedMsg.split(' ');
-        let commandName = splitString[0];
-        let args = splitString.splice(1, splitString.length);
+        const splitString = trimmedMsg.split(' ');
+        const commandName = splitString[0];
+        const splitArgs = parseArgs(trimmedMsg)
+        const args = splitArgs.splice(1, splitArgs.length);
+
+        console.log(args)
 
         if (chatMessage.playerName === "Server") {
           return
