@@ -58,37 +58,6 @@
     </tbody>
   </table>
 
-  <h3>Open tickets</h3>
-
-  <table class="table table-bordered">
-    <thead>
-      <td>Title</td>
-      <td>Created on </td>
-    </thead>
-    <tbody>
-      <% players.forEach(player => { %>
-      <% player.tickets.forEach(ticket => {  %>
-      <% if (ticket.status) { %>
-      <% let createdAt = new Date(ticket.createdAt) %>
-      <% let updatedAt = new Date(ticket.updatedAt) %>
-      <tr>
-        <td>
-          <% let ticketLink = `/sdtdticket/${ticket.id}` %>
-          <a href='<%= ticketLink %>'>
-            <%= ticket.title %>
-          </a>
-        </td>
-        <td>
-          <%= createdAt.toDateString() %>
-        </td>
-      </tr>
-      <% } %>
-      <% }) %>
-      <% }) %>
-    </tbody>
-  </table>
-
-
   <h3>Player profile(s)</h3>
 
   <table class="table table-bordered">

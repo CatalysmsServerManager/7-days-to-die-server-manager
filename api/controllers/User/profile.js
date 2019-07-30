@@ -40,7 +40,7 @@ module.exports = {
       });
       let players = await Player.find({
         steamId: user.steamId
-      }).populate('tickets').populate('server').populate('role');
+      }).populate('server').populate('role');
 
       return exits.success({
         user: user,
