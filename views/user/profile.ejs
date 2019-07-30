@@ -80,7 +80,11 @@
           <%= player.server.name %>
         </td>
         <td>
+          <% if(player.role) { %>
           <%= player.role.name %>
+          <% } else { %>
+          <%= "No role" %>
+          <% } %>
         </td>
       </tr>
       <% }) %>
