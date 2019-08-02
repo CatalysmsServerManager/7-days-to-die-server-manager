@@ -228,7 +228,7 @@
 
     function updateCommandsStatus() {
 
-      $("#input-settings-commands-who-checkbox").prop('checked', "<%= config.enabledWho %>");
+      $("#input-settings-commands-who-checkbox").prop('checked', window.SAILS_LOCALS.config.enabledWho);
 
       $.get('/api/sdtdserver/commands', {
         serverId: window.SAILS_LOCALS.server.id
