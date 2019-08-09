@@ -49,7 +49,7 @@ module.exports = {
     });
     try {
       // Force a recheck of the CPM version in the cache
-      await sails.helpers.sdtd.checkCpmVersion(server.id, true);
+      sails.helpers.sdtd.checkCpmVersion(server.id, true);
     } catch (e) {
       // Ignore error
     }
