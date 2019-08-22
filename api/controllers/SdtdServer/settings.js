@@ -47,13 +47,10 @@ module.exports = {
     const gimmeItems = await GimmeItem.find({
       server: server.id
     });
-    try {
-      // Force a recheck of the CPM version in the cache
-      sails.helpers.sdtd.checkCpmVersion(server.id, true);
-    } catch (e) {
-      // Ignore error
-    }
-
+    // Force a recheck of the CPM version in the cache
+    sails.helpers.sdtd.checkCpmVersion(server.id, true).then(r => {
+      // This is just to make sure the function is actually executed. Thanks sails
+    });
 
     try {
 

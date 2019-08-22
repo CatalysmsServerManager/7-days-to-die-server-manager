@@ -5,7 +5,7 @@
  * @docs        :: https://sailsjs.com/docs/concepts/extending-sails/hooks
  */
 
-const sevenDays = require('machinepack-7daystodiewebapi');
+const SdtdApi = require('7daystodie-api-wrapper');
 
 module.exports = function defineGblHook(sails) {
 
@@ -20,7 +20,7 @@ module.exports = function defineGblHook(sails) {
 
       // done before we start loading bans so it doesn't block the hook loading
       done();
-      
+
       sails.on('lifted', async () => {
 
         sails.log.info('Initializing custom hook (`gbl`)');
@@ -65,56 +65,45 @@ async function refreshBans() {
               '!=': connectedMsg.server.id
             }
           }
-        });
+        }).populate('server');
+
+        // Get unique bans by server owner
+        // This makes it so a ban on a network of servers is only counted once
+        foundBans = _.uniqBy(foundBans, (ban) => ban.server.owner);
+
+        sails.log.debug(`Found ${foundBans.length} total bans for player ${connectedMsg.steamID} on the GBL`);
+
         let config = await SdtdConfig.findOne({
           server: connectedMsg.server.id
         });
 
+        let playerAutoKicked = false;
+        let player = await Player.findOne({
+          server: connectedMsg.server.id,
+          steamId: connectedMsg.steamID
+        });
+
+        if (foundBans.length >= config.gblAutoBanBans && config.gblAutoBanEnabled) {
+          await SdtdApi.executeConsoleCommand({
+            ip: server.ip,
+            port: server.webPort,
+            adminUser: server.authName,
+            adminToken: server.authToken
+          }, `kick ${connectedMsg.steamID} "CSMM: You are listed ${foundBans.length} times on the global ban list."`);
+
+          playerAutoKicked = true;
+          sails.log.info(`Autobanned a player for being on GBL too often`, connectedMsg);
+        }
+
         if (foundBans.length >= config.gblNotificationBans && config.gblNotificationBans != 0) {
-          let player = await Player.findOne({
-            server: connectedMsg.server.id,
-            steamId: connectedMsg.steamID
-          });
           await sails.hooks.discordnotifications.sendNotification({
             serverId: connectedMsg.server.id,
             notificationType: 'gblmaxban',
             player: player,
-            bans: foundBans
+            bans: foundBans,
+            banned: playerAutoKicked
           })
         }
-
-        if (foundBans.length >= config.gblAutoBanBans && config.gblAutoBanEnabled) {
-          let player = await Player.findOne({
-            server: connectedMsg.server.id,
-            steamId: connectedMsg.steamID
-          });
-          sevenDays.banPlayer({
-            ip: server.ip,
-            port: server.webPort,
-            authName: server.authName,
-            authToken: server.authToken,
-            reason: `CSMM GBL autoban: you are listed ${foundBans.length} times on the global ban list.`,
-            duration: 100,
-            durationUnit: 'years',
-            playerId: connectedMsg.steamID
-          }).exec({
-            success: async (response) => {
-              await sails.hooks.discordnotifications.sendNotification({
-                serverId: connectedMsg.server.id,
-                notificationType: 'gblmaxban',
-                player: player,
-                bans: foundBans,
-                banned: true
-              })
-              sails.log.info(`Autobanned a player for being on GBL too often`, connectedMsg);
-            },
-            error: err => {
-              sails.log.warn(`Error auto banning a player in GBL hook - ${err}`);
-              sails.log.error(err)
-            }
-          })
-        }
-
       })
 
       await sails.helpers.sdtd.loadBans(server.id);

@@ -11,15 +11,16 @@
 
       <div class="form-check">
         <label class="form-check-label">
-          <input type="checkbox" class="form-check-input" name="settings-input-gbl-autoban-check" id="settings-input-gbl-autoban-check"
-            value="<%= config.gblAutobanEnabled %>"> Auto ban
+          <input type="checkbox" class="form-check-input" name="settings-input-gbl-autoban-check"
+            id="settings-input-gbl-autoban-check" value="<%= config.gblAutobanEnabled %>"> Auto kick
         </label>
       </div>
 
       <div class="form-group">
         <label for="settings-input-gbl-autoban-bans">Amount of bans to trigger autoban</label>
-        <input type="number" class="form-control" name="settings-input-gbl-autoban-bans" id="settings-input-gbl-autoban-bans"
-          aria-describedby="settings-input-gbl-autoban-bans" value="<%= config.gblAutoBanBans %>">
+        <input type="number" class="form-control" name="settings-input-gbl-autoban-bans"
+          id="settings-input-gbl-autoban-bans" aria-describedby="settings-input-gbl-autoban-bans"
+          value="<%= config.gblAutoBanBans %>">
         <small id="settings-input-gbl-autoban-bans" class="form-text text-muted">When a player joins with this amount
           of bans or more registered on the GBL, it will automatically ban
           the player.</small>
@@ -29,8 +30,9 @@
 
       <div class="form-group">
         <label for="settings-input-gbl-notifications-bans">Amount of bans to trigger notifications</label>
-        <input type="number" class="form-control" name="settings-input-gbl-notifications-bans" id="settings-input-gbl-notifications-bans"
-          aria-describedby="settings-input-gbl-notifications-bans" value="<%= config.gblNotificationBans %>">
+        <input type="number" class="form-control" name="settings-input-gbl-notifications-bans"
+          id="settings-input-gbl-notifications-bans" aria-describedby="settings-input-gbl-notifications-bans"
+          value="<%= config.gblNotificationBans %>">
         <small id="settings-input-gbl-notifications-bans" class="form-text text-muted">When a player joins with this
           amount of bans or more registered on the GBL, it will trigger a notification.
           Don't forget to set the channel in discord settings</small>
