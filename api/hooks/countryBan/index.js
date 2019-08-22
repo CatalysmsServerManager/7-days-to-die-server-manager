@@ -1,4 +1,4 @@
-var sevenDays = require('machinepack-7daystodiewebapi');
+const SdtdApi = require('7daystodie-api-wrapper');
 
 /**
  * @module 7dtdCountryBan
@@ -277,7 +277,9 @@ module.exports = function sdtdCountryBan(sails) {
     initialize: function (cb) {
       sails.on('hook:sdtdlogs:loaded', async function () {
         try {
-          let configs = await SdtdConfig.find({inactive: false});
+          let configs = await SdtdConfig.find({
+            inactive: false
+          });
 
           for (const config of configs) {
             if (config.countryBanConfig.enabled) {
@@ -422,52 +424,30 @@ module.exports = function sdtdCountryBan(sails) {
 
         if (countryBanConfig.ban) {
 
-          sevenDays.banPlayer({
+          await SdtdApi.executeConsoleCommand({
             ip: server.ip,
             port: server.webPort,
-            authName: server.authName,
-            authToken: server.authToken,
-            reason: `${countryBanConfig.kickMessage}`,
-            playerId: connectedMessage.steamID,
-            duration: 10,
-            durationUnit: 'years'
-          }).exec({
-            error: (error) => {
-              sails.log.warn(`HOOK:countryBan - Failed to kick player from server ${server.id} - ${error}`);
-            },
-            success: async () => {
+            adminUser: server.authName,
+            adminToken: server.authToken
+          }, `ban add ${connectedMessage.steamID} 100 years "CSMM: Players from your country (${country}) are not allowed to connect to this server."`)
 
-              await sails.hooks.discordnotifications.sendNotification({
-                serverId: server.id,
-                notificationType: 'countrybanKick',
-                player: connectedMessage
-              });
-            }
-          });
+
 
         } else {
-          sevenDays.kickPlayer({
+
+          await SdtdApi.executeConsoleCommand({
             ip: server.ip,
             port: server.webPort,
-            authName: server.authName,
-            authToken: server.authToken,
-            reason: `${countryBanConfig.kickMessage}`,
-            playerId: connectedMessage.steamID
-          }).exec({
-            error: (error) => {
-              sails.log.warn(`HOOK:countryBan - Failed to kick player from server ${server.id} - ${error}`);
-            },
-            success: async () => {
-
-              await sails.hooks.discordnotifications.sendNotification({
-                serverId: server.id,
-                notificationType: 'countrybanKick',
-                player: connectedMessage
-              })
-            }
-          });
+            adminUser: server.authName,
+            adminToken: server.authToken
+          }, `kick ${connectedMessage.steamID} "CSMM: Players from your country (${country}) are not allowed to connect to this server."`)
         }
 
+        await sails.hooks.discordnotifications.sendNotification({
+          serverId: server.id,
+          notificationType: 'countrybanKick',
+          player: connectedMessage
+        })
         sails.log.info(`HOOK:countryBan - Kicked player ${connectedMessage.playerName} from ${country} server ${server.name}`);
 
       }
