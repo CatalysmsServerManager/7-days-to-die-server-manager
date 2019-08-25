@@ -75,10 +75,20 @@ module.exports = {
       return exits.success('free')
     }
 
-    let patronRole = await developerGuild.roles.get("410545564913238027");
-    let donatorRole = await developerGuild.roles.get("434462571978948608");
-    let contributorRole = await developerGuild.roles.get("434462681068470272");
-    let sponsorRole = await developerGuild.roles.get("434462786962325504");
+    const patronRole = await developerGuild.roles.get("410545564913238027");
+    const donatorRole = await developerGuild.roles.get("434462571978948608");
+    const contributorRole = await developerGuild.roles.get("434462681068470272");
+    const sponsorRole = await developerGuild.roles.get("434462786962325504");
+    const premiumRole = await developerGuild.roles.get("615198219122507786");
+    const enterpriseRole = await developerGuild.roles.get("615198261069873154");
+
+    if (discordUser.roles.has(enterpriseRole.id)) {
+      return exits.success('enterprise')
+    }
+
+    if (discordUser.roles.has(premiumRole.id)) {
+      return exits.success('premium')
+    }
 
     if (discordUser.roles.has(sponsorRole.id)) {
       return exits.success('sponsor')

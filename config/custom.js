@@ -112,6 +112,28 @@ module.exports.custom = {
       playerTrackerKeepInventoryHours: 120,
       playerTrackerKeepLocationHours: 168,
       maxCustomNotifications: 50,
+    },
+    premium: {
+      memUpdateKeepDataHours: 336,
+      maxTeleports: 150,
+      maxServers: 10,
+      maxCustomCommands: 250,
+      economyKeepDataHours: 168,
+      maxCronJobs: 200,
+      playerTrackerKeepInventoryHours: 168,
+      playerTrackerKeepLocationHours: 240,
+      maxCustomNotifications: 100,
+    },
+    enterprise: {
+      memUpdateKeepDataHours: 720,
+      maxTeleports: 999999999,
+      maxServers: 20,
+      maxCustomCommands: 999999999,
+      economyKeepDataHours: 168,
+      maxCronJobs: 999999999,
+      playerTrackerKeepInventoryHours: 240,
+      playerTrackerKeepLocationHours: 336,
+      maxCustomNotifications: 999999999,
     }
   },
 };
