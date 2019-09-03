@@ -25,6 +25,11 @@ async function getPlayersDataTable(req, res) {
         steamId: {
           contains: req.body.search.value
         }
+      },
+      {
+        ip: {
+          contains: req.body.search.value
+        }
       }
     ]
 
