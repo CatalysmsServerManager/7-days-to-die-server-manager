@@ -5,7 +5,6 @@ async function getPlayersDataTable(req, res) {
   const whereObj = {
     server: req.body.serverId
   }
-  console.log(req.body)
   const totalPlayers = await Player.count(whereObj)
 
   const queryObj = {
