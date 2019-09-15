@@ -42,13 +42,13 @@ module.exports = {
     economyGiveMultiplier: {
       type: 'number',
       defaultsTo: 1,
-      min: 0.1
+      min: 0
     },
 
     economyDeductMultiplier: {
       type: 'number',
       defaultsTo: 1,
-      min: 0.1
+      min: 0
     },
 
     discordRole: {
@@ -100,7 +100,7 @@ module.exports = {
       type: 'boolean',
       defaultsTo: false
     },
-    
+
     manageGbl: {
       type: 'boolean',
       defaultsTo: false
