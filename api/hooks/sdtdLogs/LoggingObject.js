@@ -1,7 +1,5 @@
 const SdtdApi = require('7daystodie-api-wrapper');
 const EventEmitter = require('events');
-const handleLogLine = require('./handleLogLine');
-const enrichEventData = require('./enrichEventData');
 const Bull = require('bull');
 const path = require('path');
 const {
@@ -83,8 +81,7 @@ class LoggingObject extends EventEmitter {
     }
 
     for (const newLog of result.logs) {
-      const data = await enrichEventData(newLog);
-      loggingObject.emit(newLog.type, data);
+      loggingObject.emit(newLog.type, newLog.data);
     }
 
     // If the server is in slowmode and we receive data again, this shows the server is back online

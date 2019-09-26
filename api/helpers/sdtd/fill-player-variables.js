@@ -10,6 +10,7 @@
 
   This method is replaced with fill-custom-variables and is only kept for compatibility purposes.
  */
+const {inspect} = require('util');
 
 module.exports = {
 
@@ -33,6 +34,7 @@ module.exports = {
       required: true,
       custom: (value) => {
         if (!value.steamId || !value.entityId || !value.name || value.currency === undefined || value.positionX === undefined || value.positionY === undefined || value.positionZ === undefined) {
+          sails.log.error(`Invalid player data passed to fillPlayerVariables() - ${inspect(value)}`)
           return false;
         } else {
           return true;

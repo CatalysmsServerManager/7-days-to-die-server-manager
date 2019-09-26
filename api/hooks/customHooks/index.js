@@ -1,4 +1,4 @@
-const steam64Regex = new RegExp('[0-9]{17}');
+const enrichData = require('./enrichEventData');
 
 module.exports = function defineCustomHooksHook(sails) {
 
@@ -49,6 +49,7 @@ module.exports = function defineCustomHooksHook(sails) {
       for (const eventType of sails.config.custom.supportedHooks) {
 
         loggingObject.on(eventType, async eventData => {
+          eventData['type'] = eventType;
           // First we handle any 'logLine' events.
           if (eventType === 'logLine') {
             let serverLogLineHooks = this.logLineHooks.get(String(serverId));
@@ -114,6 +115,7 @@ module.exports = function defineCustomHooksHook(sails) {
   async function executeHook(eventData, hookToExec, serverId) {
     try {
       let server = await SdtdServer.findOne(serverId);
+      eventData = await enrichData(eventData);
       eventData.custom = getVariablesValues(hookToExec.variables, eventData.msg);
       let results = await sails.helpers.sdtd.executeCustomCmd(server, hookToExec.commandsToExecute.split(';'), eventData);
       await saveResultsToRedis(hookToExec.id, results);
@@ -135,15 +137,8 @@ module.exports = function defineCustomHooksHook(sails) {
     }
 
     let server = await SdtdServer.findOne(serverId);
-    // Try to find a steamID64 in the log message that we can link to a player.
-    let possibleIds = findSteamIdFromString(eventData.msg);
-    if (possibleIds.length === 1) {
-      let players = await Player.find({
-        server: serverId,
-        steamId: possibleIds[0]
-      });
-      eventData.player = players[0];
-    }
+
+    eventData = await enrichData(eventData);
     eventData.custom = getVariablesValues(hookToExec.variables, eventData.msg);
     let results = await sails.helpers.sdtd.executeCustomCmd(server, hookToExec.commandsToExecute.split(';'), eventData);
     await saveResultsToRedis(hookToExec.id, results);
@@ -155,19 +150,7 @@ module.exports = function defineCustomHooksHook(sails) {
   }
 };
 
-/**
- * @param {String} logLineMessage
- * @returns {Array} An array of strings that matches the steam64 regex
- */
-function findSteamIdFromString(logLineMessage) {
-  let possibleIds = steam64Regex.exec(logLineMessage);
 
-  if (!_.isArray(possibleIds)) {
-    possibleIds = [];
-  }
-
-  return possibleIds;
-}
 
 // Checks if the logline matches the searchString or regex
 function checkLogLine(logLine, hook) {
