@@ -115,6 +115,7 @@ module.exports = function defineCustomHooksHook(sails) {
   async function executeHook(eventData, hookToExec, serverId) {
     try {
       let server = await SdtdServer.findOne(serverId);
+      eventData.server = server;
       eventData = await enrichData(eventData);
       eventData.custom = getVariablesValues(hookToExec.variables, eventData.msg);
       let results = await sails.helpers.sdtd.executeCustomCmd(server, hookToExec.commandsToExecute.split(';'), eventData);
@@ -137,7 +138,7 @@ module.exports = function defineCustomHooksHook(sails) {
     }
 
     let server = await SdtdServer.findOne(serverId);
-
+    eventData.server = server;
     eventData = await enrichData(eventData);
     eventData.custom = getVariablesValues(hookToExec.variables, eventData.msg);
     let results = await sails.helpers.sdtd.executeCustomCmd(server, hookToExec.commandsToExecute.split(';'), eventData);
