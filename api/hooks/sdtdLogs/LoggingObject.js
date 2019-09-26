@@ -38,7 +38,6 @@ class LoggingObject extends EventEmitter {
   }
 
   async init(ms = 3000) {
-    sails.log.debug('START INIT');
     try {
       await this.setLastLogLine();
     } catch (error) {
@@ -55,7 +54,6 @@ class LoggingObject extends EventEmitter {
       removeOnComplete: 200,
       timeout: 4000,
     });
-    sails.log.debug('END INIT');
   }
 
   async handleError(error) {
@@ -70,7 +68,6 @@ class LoggingObject extends EventEmitter {
   }
 
   async handleCompletedJob(job, result, loggingObject) {
-    sails.log.debug(`Completed a job with ID ${job.id} - Found ${result.logs.length} new logs`);
 
     if (result.logs.length === 0) {
       this.emptyResponses++
@@ -108,7 +105,6 @@ class LoggingObject extends EventEmitter {
       sails.log.debug(inspect(job))
       await this.queue.removeRepeatableByKey(job.key)
     }
-    sails.log.debug('END STOP');
     return;
   }
 
