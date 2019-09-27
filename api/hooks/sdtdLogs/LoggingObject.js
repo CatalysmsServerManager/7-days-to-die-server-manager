@@ -1,7 +1,7 @@
 const SdtdApi = require('7daystodie-api-wrapper');
 const EventEmitter = require('events');
 const Bull = require('bull');
-const path = require('path');
+const logProcessor = require('./logProcessor');
 const {
   inspect
 } = require('util');
@@ -30,7 +30,7 @@ class LoggingObject extends EventEmitter {
     this.emptyResponses = 0;
     // Set this to true to view detailed info about logs for a server. (protip: use discord bot eval command to set this to true in production instances)
     this.debug = true;
-    this.queue.process(path.join(__dirname, 'logProcessor.js'));
+    this.queue.process(logProcessor);
     this.init();
     this.queue.on('completed', (job, result) => this.handleCompletedJob(job, result, this));
     this.queue.on('failed', (job, err) => this.handleFailedJob(job, err, this));
