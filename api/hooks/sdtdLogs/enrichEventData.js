@@ -1,5 +1,6 @@
+const steam64Regex = new RegExp('[0-9]{17}');
+
 module.exports = async function enrichEventData(event) {
-  let newData = event.data;
 
   switch (event.type) {
     case 'playerKilled':
@@ -16,11 +17,12 @@ module.exports = async function enrichEventData(event) {
       break;
   }
 
-  if (!_.isEmpty(newData.playerID)) {
-    newData.steamId = newData.playerID;
+  if (!_.isEmpty(event.data.playerID)) {
+    event.data.steamId = event.data.playerID;
   }
 
   let player;
+
   if (!_.isEmpty(event.data.steamId)) {
     player = await sails.helpers.sdtd.loadPlayerData.with({
       serverId: event.server.id,
@@ -46,10 +48,6 @@ module.exports = async function enrichEventData(event) {
       });
     }
   }
-  newData.player = player;
-
-
-
-  return newData;
-
+  event.data.player = player;
+  return event;
 };

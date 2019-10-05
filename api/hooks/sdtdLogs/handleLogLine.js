@@ -1,4 +1,6 @@
 const geoip = require('geoip-ultralight');
+const _ = require('lodash');
+
 
 module.exports = (logLine) => {
 
@@ -82,7 +84,6 @@ module.exports = (logLine) => {
 
     // Filter out chatmessages that have been handled by some API mod already
     if ((data.steamId === "-non-player-" && data.playerName !== 'Server') || data.entityId === "-1") {
-      sails.log.debug(`Discarding chat message because it's not from a player`, data);
       return;
     }
 

@@ -99,7 +99,7 @@ class ChatBridgeChannel {
       return
     }
 
-    await this.channel.send(`${chatMessage.playerName}: ${chatMessage.messageText}`);
+    await this.channel.send(`**${chatMessage.playerName}**: ${chatMessage.messageText}`);
   }
 
   sendDeathMessageToDiscord(deathMessage) {

@@ -37,8 +37,6 @@ module.exports = {
           ownerCheck = true;
         }
 
-        console.log(player.role)
-
         if (player.role.manageServer || player.role.manageEconomy || player.role.managePlayers || player.role.manageGbl || player.role.viewDashboard || player.role.useTracking || player.role.viewAnalytics || player.role.manageTickets || ownerCheck) {
           player.server.role = player.role;
           objectToSend.push(player.server);
