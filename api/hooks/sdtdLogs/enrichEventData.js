@@ -4,11 +4,11 @@ module.exports = async function enrichEventData(event) {
 
   switch (event.type) {
     case 'playerKilled':
-      newData.victim = await Player.findOne({
+      event.data.victim = await Player.findOne({
         server: event.server.id,
         name: event.data.victimName
       });
-      newData.killer = await Player.findOne({
+      event.data.killer = await Player.findOne({
         server: event.server.id,
         name: event.data.killerName
       });
