@@ -81,7 +81,7 @@ module.exports = function historicalInfo(sails) {
     try {
       let memUpdateObject = getMap(serverId, 'memUpdate');
       memUpdateObject.stop();
-      deleteMap(serverId, 'memUpdate');
+      deleteMap(serverId, memUpdateObject);
     } catch (error) {
       sails.log.error(`HOOK - historicalInfo - Error stopping memUpdate ${error}`)
       return false
