@@ -40,32 +40,12 @@ module.exports = {
      */
 
     fn: async function (inputs, exits) {
-        let server = await SdtdServer.findOne(inputs.serverId);
-
-        sevenDays.executeCommand({
-            ip: server.ip,
-            port: server.webPort,
-            authName: server.authName,
-            authToken: server.authToken,
-            command: 'mem'
-        }).exec({
-            success: function (data) {
-                try {
-                    var tempData = data.result.split(" ");
-                    var fpsIdx = tempData.findIndex(dataEntry => {
-                        return dataEntry == 'FPS:'
-                    });
-                    return exits.success(tempData[fpsIdx + 1])
-                } catch (error) {
-                    return exits.error(error)
-                }
-
-            },
-            error: err => {
-                return exits.error();
-            }
-        })
-
+        try {
+            let fps = await sails.helpers.redis.get(`server:${inputs.serverId}:fps`);
+            return exits.success(fps);
+          } catch (error) {
+            return exits.success(0)
+          }
     }
 
 

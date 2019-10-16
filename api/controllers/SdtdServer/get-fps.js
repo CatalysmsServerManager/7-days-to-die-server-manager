@@ -26,7 +26,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     try {
-      let fps = await sails.helpers.redis.get(`server:${inputs.serverId}:fps`);
+      let fps = await sails.helpers.sdtd.loadFps(inputs.serverId);
       return exits.success(fps);
     } catch (error) {
       return exits.success(0)
