@@ -105,31 +105,31 @@ module.exports = function economy(sails) {
       });
       switch (type) {
         case 'playtimeEarner':
-          if (config.discordTextEarnerEnabled) {
+          if (config.playtimeEarnerEnabled) {
             await stopPlaytimeEarner(serverId);
-            return startPlaytimeEarner(serverId);
+            return await startPlaytimeEarner(serverId);
           } else {
             await startPlaytimeEarner(serverId);
-            return stopPlaytimeEarner(serverId);
+            return await stopPlaytimeEarner(serverId);
           }
           break;
         case 'discordTextEarner':
           if (config.discordTextEarnerEnabled) {
             await stopDiscordTextEarner(serverId);
-            return startDiscordTextEarner(serverId);
+            return await startDiscordTextEarner(serverId);
           } else {
             await startDiscordTextEarner(serverId);
-            return stopDiscordTextEarner(serverId);
+            return await stopDiscordTextEarner(serverId);
           }
           break;
 
         case 'killEarner':
           if (config.killEarnerEnabled) {
             await stopKillEarner(serverId);
-            return startKillEarner(serverId);
+            return await startKillEarner(serverId);
           } else {
             await startKillEarner(serverId);
-            return stopKillEarner(serverId);
+            return await stopKillEarner(serverId);
           }
           break;
 
@@ -185,8 +185,7 @@ async function startPlaytimeEarner(serverId) {
 
     const server = await SdtdServer.findOne(serverId).populate('config');
     const config = server.config[0];
-    let loggingObject = await sails.hooks.sdtdlogs.getLoggingObject(server.id);
-    let playtimeEarnerObject = new PlaytimeEarner(server, config, loggingObject);
+    let playtimeEarnerObject = new PlaytimeEarner(server, config);
     await playtimeEarnerObject.start();
     setMap(server.id, playtimeEarnerObject);
     return true;

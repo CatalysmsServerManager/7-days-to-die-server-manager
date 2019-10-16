@@ -1,6 +1,5 @@
 class PlaytimeEarner {
-    constructor(server, config, loggingObject) {
-        this.loggingObject = loggingObject
+    constructor(server, config) {
         this.server = server
         this.config = config
         this.type = 'playtimeEarner'
