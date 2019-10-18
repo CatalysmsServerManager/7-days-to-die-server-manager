@@ -22,18 +22,8 @@ module.exports = function defineGblHook(sails) {
       done();
 
       sails.on('lifted', async () => {
-
         sails.log.info('Initializing custom hook (`gbl`)');
-
-        let sixHours = 21600000;
-
-
         refreshBans();
-
-        setInterval(async () => {
-          refreshBans();
-        }, sixHours * 2)
-
         return
 
       })
