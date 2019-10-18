@@ -1,3 +1,4 @@
+const he = require('he');
 /**
  * Player.js
  *
@@ -8,6 +9,11 @@
  */
 
 module.exports = {
+
+  customToJSON: function () {
+    this.name = he.decode(this.name);
+    return this;
+  },
 
   attributes: {
 
