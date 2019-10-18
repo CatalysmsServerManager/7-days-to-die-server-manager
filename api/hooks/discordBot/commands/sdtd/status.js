@@ -1,5 +1,6 @@
 const Commando = require('discord.js-commando');
 const findSdtdServer = require('../../util/findSdtdServer.js');
+const he = require('he');
 
 class Status extends Commando.Command {
   constructor(client) {
@@ -49,7 +50,7 @@ class Status extends Commando.Command {
     let onlinePlayersStringList = new String();
 
     playerInfo.forEach(player => {
-      onlinePlayersStringList += `${player.name}, `
+      onlinePlayersStringList += `${he.decode(player.name)}, `
     });
 
 
