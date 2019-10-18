@@ -92,7 +92,6 @@ class CustomCommand extends SdtdCommand {
     }, delayInMs)
 
     async function runCustomCommand(chatMessage, player, server, args, options) {
-      let commandsExecuted = new Array();
       try {
 
         let executedCmds = await sails.helpers.sdtd.executeCustomCmd(server, options.commandsToExecute.split(';'), {
@@ -109,7 +108,7 @@ class CustomCommand extends SdtdCommand {
           }
         }
 
-        sails.log.debug(`HOOK SdtdCommands - custom command ran by player ${player.name} on server ${server.name} - ${chatMessage.messageText}`, chatMessage, commandsExecuted);
+        sails.log.debug(`HOOK SdtdCommands - custom command ran by player ${player.name} on server ${server.name} - ${chatMessage.messageText}`, chatMessage, executedCmds);
 
 
       } catch (error) {
