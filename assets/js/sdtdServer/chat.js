@@ -9,7 +9,7 @@ class sdtdChat {
 
     io.socket.on('chatMessage', (chatMessage) => {
       if (chatMessage.server.id === this.serverId) {
-        addNewChatMessage(chatMessage);
+        this.addNewChatMessage(chatMessage);
       }
     });
     io.socket.on('playerConnected', (connectedMessage) => {
@@ -48,6 +48,22 @@ class sdtdChat {
       });
     });
   }
+
+  addNewChatMessage(chatMessage) {
+    chatMessage.messageText = _.escape(chatMessage.messageText);
+    chatMessage.playerName = _.escape(chatMessage.playerName);
+  
+    if (chatMessage.playerName == 'Server') {
+      $('.chat-window').append(`<li class=\"chat-message\">[${chatMessage.time}] ${chatMessage.messageText} </li>`);
+      addMessageToStorage(`[${chatMessage.time}] ${chatMessage.messageText}`, this.serverId)
+  
+    } else {
+      $('.chat-window').append(`<li class=\"chat-message\">[${chatMessage.time}] ${chatMessage.playerName}: ${chatMessage.messageText} </li>`);
+      addMessageToStorage(`[${chatMessage.time}] ${chatMessage.playerName}: ${chatMessage.messageText}`, this.serverId)
+    }
+    $('.chat-window').scrollTop($('.chat-window')[0].scrollHeight);
+  
+  }
 }
 
 function addPlayerConnectedMessage(connectedMessage) {
@@ -62,22 +78,6 @@ function addPlayerDisconnectedMessage(disconnectedMessage) {
   $('.chat-window').append(`<li class=\"chat-message\">${disconnectedMessage.playerName} left </li>`);
   $('.chat-window').scrollTop($('.chat-window')[0].scrollHeight);
   addMessageToStorage(`${disconnectedMessage.playerName} left`, this.serverId)
-}
-
-function addNewChatMessage(chatMessage) {
-  chatMessage.messageText = _.escape(chatMessage.messageText);
-  chatMessage.playerName = _.escape(chatMessage.playerName);
-
-  if (chatMessage.playerName == 'Server') {
-    $('.chat-window').append(`<li class=\"chat-message\">[${chatMessage.time}] ${chatMessage.messageText} </li>`);
-    addMessageToStorage(`[${chatMessage.time}] ${chatMessage.messageText}`, this.serverId)
-
-  } else {
-    $('.chat-window').append(`<li class=\"chat-message\">[${chatMessage.time}] ${chatMessage.playerName}: ${chatMessage.messageText} </li>`);
-    addMessageToStorage(`[${chatMessage.time}] ${chatMessage.playerName}: ${chatMessage.messageText}`, this.serverId)
-  }
-  $('.chat-window').scrollTop($('.chat-window')[0].scrollHeight);
-
 }
 
 function addMessageToStorage(newMessage, serverId) {

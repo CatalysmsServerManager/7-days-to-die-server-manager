@@ -24,6 +24,8 @@
       let chatMessageToSend = $("#chat-message-input").val();
       $("#chat-message-input").val('');
       sdtdChatWindow.sendMessage(chatMessageToSend, userName);
+      const now = new Date();
+      sdtdChatWindow.addNewChatMessage({messageText: chatMessageToSend, playerName: userName, time: now.toLocaleTimeString()})
     })
 
   })
