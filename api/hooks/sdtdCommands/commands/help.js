@@ -50,7 +50,8 @@ class help extends SdtdCommand {
         server: server.id,
         level: {
           '>=': player.role.level
-        }
+        },
+        enabled: true,
       }
     });
     await chatMessage.reply("Enabled commands:");
