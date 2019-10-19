@@ -130,7 +130,8 @@ module.exports = {
           playerProfile[0].online = true
         }
 
-        sails.log.verbose(`Loaded a player - ${playerProfile[0].id} - ${playerProfile[0].name} - server: ${server.name}`)
+        sails.log.verbose(`Loaded a player - ${playerProfile[0].id} - ${playerProfile[0].name} - server: ${server.name}`);
+        playerProfile[0].name = he.decode(playerProfile[0].name); 
         playersToSend.push(playerProfile[0]);
       }
       let dateEnded = new Date();
