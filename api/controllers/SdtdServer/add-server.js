@@ -208,7 +208,7 @@ async function checkStats(sdtdServer) {
         adminUser: sdtdServer.authName,
         adminToken: sdtdServer.authToken
       },
-      { timeout: 5000 }
+      { timeout: 10000 }
     );
     return response;
   } catch (error) {
@@ -226,8 +226,8 @@ async function checkCommand(sdtdServer) {
         adminUser: sdtdServer.authName,
         adminToken: sdtdServer.authToken
       },
-      "mem",
-      { timeout: 5000 }
+      "version",
+      { timeout: 10000 }
     );
     return response;
   } catch (error) {
