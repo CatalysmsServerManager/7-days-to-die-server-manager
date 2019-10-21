@@ -1,7 +1,7 @@
 <div align="center">
 
 [![codecov](https://codecov.io/gh/CatalysmsServerManager/7-days-to-die-server-manager/branch/master/graph/badge.svg)](https://codecov.io/gh/CatalysmsServerManager/7-days-to-die-server-manager)
-[![Build Status](https://travis-ci.org/CatalysmsServerManager/7-Days-to-Die-API-wrapper.svg?branch=master)](https://travis-ci.org/CatalysmsServerManager/7-Days-to-Die-API-wrapper)
+[![Build Status](https://travis-ci.org/CatalysmsServerManager/7-Days-to-Die-API-wrapper.svg?branch=master)](https://travis-ci.org/CatalysmsServerManager/7-days-to-die-server-manager)
 [![Discord](https://img.shields.io/discord/336821518250147850?label=Discord&logo=Discord)](http://catalysm.net/discord)
 
 ![Logo](assets/images/meta/CSMM_Blue-1.png)
