@@ -66,7 +66,7 @@ class Claim extends SdtdCommand {
         }, cmdToExec);
 
         if (response.result.includes('ERR:')) {
-          return chatMessage.reply("error");
+          return chatMessage.reply("error", {error: response.result});
         }
 
         chatMessage.reply("claimItemGiven", {
@@ -78,7 +78,7 @@ class Claim extends SdtdCommand {
           claimed: true
         });
       } catch (error) {
-        chatMessage.reply("error");
+        chatMessage.reply("error", {error: error});
       }
 
     });

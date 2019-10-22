@@ -6,7 +6,7 @@ module.exports = [{
     command: 'All',
     pretty: 'Error message',
     type: 'error',
-    default: 'Oh no, an error occurred! Please contact a server admin',
+    default: 'Oh no, an error occurred! Please contact a server admin. Error: ${error}',
   },
   {
     command: 'All',

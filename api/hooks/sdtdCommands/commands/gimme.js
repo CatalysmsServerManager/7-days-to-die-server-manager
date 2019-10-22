@@ -96,10 +96,10 @@ class Gimme extends SdtdCommand {
             }, cmdToExec);
 
             if (response.result.includes("ERR:")) {
-              chatMessage.reply("error");
+              chatMessage.reply("error", {error: response.result});
             }
           } catch (error) {
-            chatMessage.reply("error");
+            chatMessage.reply("error", {error: error});
           }
         }
         break;
@@ -119,7 +119,7 @@ class Gimme extends SdtdCommand {
             }, cmdToExec);
 
           } catch (error) {
-            chatMessage.reply("error");
+            chatMessage.reply("error", {error: error});
           }
         }
         break;
