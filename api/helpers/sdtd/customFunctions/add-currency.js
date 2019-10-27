@@ -40,11 +40,11 @@ module.exports = {
     }
 
     if (inputs.currencyToAdd > 0) {
-      await sails.helpers.economy.giveToPlayer(player.id, inputs.currencyToAdd, 'Function call from a custom command');
+      await sails.helpers.economy.giveToPlayer(player.id, inputs.currencyToAdd, 'Function call from a custom command - add');
     }
 
     if (inputs.currencyToAdd < 0) {
-      await sails.helpers.economy.deductFromPlayer(player.id, inputs.currencyToAdd, 'Function call from a custom command');
+      await sails.helpers.economy.deductFromPlayer(player.id, Math.abs(inputs.currencyToAdd), 'Function call from a custom command - deduct');
     }
 
     return exits.success();
