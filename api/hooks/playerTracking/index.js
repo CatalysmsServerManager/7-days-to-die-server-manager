@@ -38,7 +38,7 @@ module.exports = function definePlayerTrackingHook(sails) {
       loggingObject.on('memUpdate', async (memUpdate) => {
         let dateStarted = new Date();
 
-        let server = await SdtdServer.findOne(memUpdate.server).populate('config');
+        let server = await SdtdServer.findOne({id: memUpdate.server.id}).populate('config');
 
         if (_.isUndefined(server)) {
           return sails.log.warn(`memUpdate - Could not find server info during tracking!`, {memUpdate: memUpdate});

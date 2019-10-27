@@ -31,21 +31,25 @@ class LoggingObject extends EventEmitter {
     // If we get too many empty responses, we force a recheck of lastLogLine 
     this.emptyResponses = 0;
     // Set this to true to view detailed info about logs for a server. (protip: use discord bot eval command to set this to true in production instances)
-    this.debug = true;
+    this.debug = false;
     this.queue.process(logProcessor);
     this.init();
     this.queue.on('completed', (job, result) => this.handleCompletedJob(job, result, this));
     this.queue.on('failed', (job, err) => this.handleFailedJob(job, err, this));
     this.queue.on('error', this.handleError);
+    this.queue.on('cleaned', function(jobs, type) {
+      sails.log.debug('Cleaned %s %s jobs', jobs.length, type);
+    });
   }
 
   async init(ms = 3000) {
+
     try {
       await this.setLastLogLine();
     } catch (error) {
       // Fail silently
     }
-    await this.queue.add({
+    return await this.queue.add({
       server: this.server,
       lastLogLine: this.lastLogLine
     }, {
@@ -56,6 +60,12 @@ class LoggingObject extends EventEmitter {
       removeOnComplete: 200,
       timeout: 4000,
     });
+  }
+
+  async reload() {
+    await this.stop();
+    // If no timeout here, some race condition happens. This is "good enough".
+    setTimeout(() => this.init(), 2000);
   }
 
   async handleError(error) {
@@ -107,12 +117,9 @@ class LoggingObject extends EventEmitter {
 
   async stop() {
     await this.queue.empty();
-    const jobs = await this.queue.getRepeatableJobs();
-    for (const job of jobs) {
-      sails.log.debug(inspect(job))
-      await this.queue.removeRepeatableByKey(job.key)
-    }
-    return;
+    await this.queue.clean(0, 'completed');
+    await this.queue.clean(0, 'failed');
+    return
   }
 
   _toggleDebug() {

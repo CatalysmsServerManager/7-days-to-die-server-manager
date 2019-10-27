@@ -97,16 +97,13 @@ module.exports = {
         loggingObject.server.port = _.isUndefined(inputs.webPort) ? loggingObject.server.port : inputs.webPort;
         loggingObject.server.adminUser = _.isUndefined(inputs.authName) ? loggingObject.server.adminUser : inputs.authName;
         loggingObject.server.adminToken = _.isUndefined(inputs.authToken) ? loggingObject.server.adminToken : inputs.authToken;
-
-        if (!_.isUndefined(loggingObject._getLatestLogLine)) {
-          // Make sure we are on the correct log line.
-          loggingObject._getLatestLogLine();
-        }
-
       }
+
+      loggingObject.reload();
 
       sails.log.info(`API - SdtdServer:update-connection-info - Updated connection info for server ${inputs.serverId}`, _.omit(inputs, ["authName", "authToken"]));
       return exits.success();
+      
     } catch (error) {
       sails.log.error(`API - SdtdServer:update-connection-info - ${error}`);
       return exits.error(error);
