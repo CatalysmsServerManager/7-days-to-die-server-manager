@@ -43,7 +43,7 @@ class LoggingObject extends EventEmitter {
     });
   }
 
-  async init(ms = 1000) {
+  async init(ms = 2000) {
 
     // Make sure there are no lingering jobs
     await this.stop();
@@ -62,7 +62,7 @@ class LoggingObject extends EventEmitter {
       },
       removeOnFail: 50,
       removeOnComplete: 200,
-      timeout: 2000,
+      timeout: 5000,
     });
   }
 
