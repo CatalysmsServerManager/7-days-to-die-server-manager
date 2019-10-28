@@ -17,7 +17,6 @@ redisClient.get = promisify(redisClient.get);
 redisClient.set = promisify(redisClient.set);
 
 module.exports = async function (job) {
-  const startTime = Date.now();
   const resultLogs = [];
   // Get latest log line from Redis
   let lastLogLine = parseInt(await redisClient.get(`sdtdserver:${job.data.server.id}:sdtdLogs:lastLogLine`));
@@ -29,9 +28,7 @@ module.exports = async function (job) {
   }
 
   // Get new logs from the server
-  const newLogs = await SdtdApi.getLog(job.data.server, lastLogLine, 100);
-
-  const timeToLogRequest = Date.now();
+  const newLogs = await SdtdApi.getLog(job.data.server, lastLogLine, 50);
 
   // Adjust latest log line based on new logs we got
   lastLogLine = lastLogLine + newLogs.entries.length;
@@ -59,14 +56,6 @@ module.exports = async function (job) {
 
   // Set last success date in Redis
   await redisClient.set(`sdtdserver:${job.data.server.id}:sdtdLogs:lastSuccess`, Date.now());
-
-  const timeToHandleLogs = Date.now();
-
-  await redisClient.lpush("logRequestTimes", timeToLogRequest - startTime);
-  await redisClient.lpush("logHandleTimes", timeToHandleLogs - timeToLogRequest);
-
-  await redisClient.ltrim("logRequestTimes", 0, 1000);
-  await redisClient.ltrim("logHandleTimes", 0, 1000);
 
   return Promise.resolve({
     lastLogLine,
