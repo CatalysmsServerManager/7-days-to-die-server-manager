@@ -28,7 +28,7 @@ module.exports = async function (job) {
   }
 
   // Get new logs from the server
-  const newLogs = await SdtdApi.getLog(job.data.server, lastLogLine);
+  const newLogs = await SdtdApi.getLog(job.data.server, lastLogLine, 1000);
 
   // Adjust latest log line based on new logs we got
   lastLogLine = lastLogLine + newLogs.entries.length;

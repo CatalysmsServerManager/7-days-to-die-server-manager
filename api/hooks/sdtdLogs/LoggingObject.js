@@ -23,6 +23,7 @@ class LoggingObject extends EventEmitter {
       adminToken: authToken,
     };
 
+    this.active = true;
     this.queue = new Bull(`sdtdserver:${serverId}:logs`, process.env.REDISSTRING);
     this.intervalTime = intervalTime;
     this.requestInterval;
@@ -42,8 +43,11 @@ class LoggingObject extends EventEmitter {
     });
   }
 
-  async init(ms = 3000) {
+  async init(ms = 1000) {
 
+    // Make sure there are no lingering jobs
+    await this.stop();
+    
     try {
       await this.setLastLogLine();
     } catch (error) {
@@ -58,7 +62,7 @@ class LoggingObject extends EventEmitter {
       },
       removeOnFail: 50,
       removeOnComplete: 200,
-      timeout: 4000,
+      timeout: 2000,
     });
   }
 
