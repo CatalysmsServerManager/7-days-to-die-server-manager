@@ -29,7 +29,7 @@ module.exports = async function (job) {
   }
 
   // Get new logs from the server
-  const newLogs = await SdtdApi.getLog(job.data.server, lastLogLine, 1000);
+  const newLogs = await SdtdApi.getLog(job.data.server, lastLogLine, 100);
 
   const timeToLogRequest = Date.now();
 
