@@ -39,7 +39,7 @@
 </div>
 <div align="center">
 
-## [Installation](https://docs.csmm.app/en/CSMM/self-hosting.html)
+## [Installation](https://docs.csmm.app/en/CSMM/self-host/installation.html)
 ## [Documentation](https://docs.csmm.app)
 
 
