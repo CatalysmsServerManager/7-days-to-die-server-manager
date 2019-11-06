@@ -4,7 +4,7 @@ module.exports = {
   description: "Set a players role in CSMM",
 
   inputs: {
-    playerSteamId: {
+    playerId: {
       type: "string",
       required: true
     },
@@ -13,7 +13,7 @@ module.exports = {
       type: "string",
       required: true
     },
-    
+
     server: {
       type: "ref",
       required: true
@@ -28,15 +28,24 @@ module.exports = {
   },
 
   fn: async function(inputs, exits) {
-    const player = await Player.findOne({
-      where: {
-        steamId: inputs.playerSteamId,
-        server: inputs.server.id
-      }
+    let idAsInt = parseInt(inputs.playerId);
+
+    if (isNaN(idAsInt)) {
+      idAsInt = 0;
+    }
+
+    let player = await Player.find({
+      or: [
+        { id: idAsInt },
+        { steamId: inputs.playerId, server: inputs.serverId },
+        { name: inputs.playerId, server: inputs.serverId }
+      ]
     });
 
+    player = player[0];
+
     if (_.isUndefined(player)) {
-      return exits.error(`Unknown player`);
+      return exits.error(new Error(`Unknown player`));
     }
 
     const role = await Role.findOne({
@@ -46,10 +55,7 @@ module.exports = {
       }
     });
 
-    await Player.update(
-      { id: player.id },
-      { role: role.id }
-    );
+    await Player.update({ id: player.id }, { role: role.id });
 
     return exits.success();
   }
