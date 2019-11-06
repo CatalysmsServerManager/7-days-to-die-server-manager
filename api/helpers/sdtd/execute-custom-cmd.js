@@ -69,7 +69,7 @@ module.exports = {
         let command;
         let parameters;
         let splitArgs;
-        let playerId
+        let playerId;
 
         try {
           switch (customFunction) {
@@ -93,12 +93,13 @@ module.exports = {
                 .replace("addCurrency(", "")
                 .replace(")", "");
               splitArgs = parameters.split(",");
-              playerId = parseInt(splitArgs[0]);
+              playerId = splitArgs[0].trim();
               let currency = parseInt(splitArgs[1]);
 
               await sails.helpers.sdtd.customfunctions.addCurrency(
                 playerId,
-                currency
+                currency,
+                inputs.server.id
               );
               commandsExecuted.push({
                 command,
@@ -114,7 +115,11 @@ module.exports = {
               splitArgs = parameters.split(",");
               playerId = splitArgs[0].trim();
               let role = splitArgs[1].trim();
-              await sails.helpers.sdtd.customfunctions.setRole(playerId, role, inputs.server);
+              await sails.helpers.sdtd.customfunctions.setRole(
+                playerId,
+                role,
+                inputs.server
+              );
               commandsExecuted.push({
                 command,
                 parameters,
