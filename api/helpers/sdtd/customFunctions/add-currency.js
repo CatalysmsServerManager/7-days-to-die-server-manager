@@ -27,10 +27,17 @@ module.exports = {
   },
 
   fn: async function(inputs, exits) {
+    let idAsInt = parseInt(inputs.playerId);
+
+    if (isNaN(idAsInt)) {
+      idAsInt = 0;
+    }
+
     let player = await Player.find({
       or: [
-        { id: parseInt(inputs.playerId) },
-        { steamId: inputs.playerId, server: inputs.serverId }
+        { id: idAsInt },
+        { steamId: inputs.playerId, server: inputs.serverId },
+        { name: inputs.playerId, server: inputs.serverId }
       ]
     });
 
