@@ -107,6 +107,26 @@
 
   </div>
 
+    <!-- Banned items list settings -->
+
+  <div class="card">
+    <div class="card-header" id="settings-heading-bannedItemList">
+      <h5 class="mb-0">
+        <button class="btn btn-link" data-toggle="collapse" data-target="#settings-collapse-bannedItemList">
+          <i class="fas fa-cube"></i> Banned items
+        </button>
+      </h5>
+    </div>
+
+    <div id="settings-collapse-bannedItemList" class="collapse">
+      <div class="card-body">
+
+        <%- include('./partials/settings/bannedItemList', {server: server, config: config}) %>
+      </div>
+    </div>
+
+  </div>
+
   <!-- Max ping kicker settings -->
 
   <div class="card">
