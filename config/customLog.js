@@ -1,6 +1,10 @@
 const winston = require("winston");
 
-const logLevel = process.env.CSMM_LOGLEVEL;
+let logLevel = process.env.CSMM_LOGLEVEL;
+
+if (!logLevel) {
+  logLevel = "debug";
+}
 
 if (logLevel !== "debug" && logLevel !== "info") {
   throw new Error(`Invalid log level given, please select "debug" or "info"`);
