@@ -1,0 +1,268 @@
+<div>
+  <p>
+    This module allows you to specify a list of items that players are not
+    allowed to have. Once a player is found with one of these items in their
+    inventory, the command is executed to punish the player.
+    <strong
+      >Please note that this requires inventory tracking to be enabled</strong
+    >
+  </p>
+
+  <div class="form-check">
+    <label class="form-check-label">
+      <input type="checkbox" class="form-check-input"
+      name="banned-items-enabled" id="banned-items-enabled" value="true" <%=
+      config.bannedItemsEnabled ? "checked" : "" %> /> Enabled
+    </label>
+
+    <div class="form-group">
+      <label for="banned-items-command">Command</label>
+      <input
+        type="text"
+        class="form-control"
+        name="banned-items-command"
+        id="banned-items-command"
+        aria-describedby="banned-items-command-help"
+        value="<%= config.bannedItemsCommand %>"
+      />
+      <small id="banned-items-command-help" class="form-text text-muted"
+        >The command to execute when a player is detected with a banned
+        item</small
+      >
+      <button
+        type="button"
+        id="set-bannedItems-command"
+        class="btn btn-primary"
+      >
+        Set
+      </button>
+    </div>
+
+    <table class="table" id="bannedItems">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <span>
+      <div class="form-group">
+        <input
+          type="text"
+          class="form-control"
+          name="bannedItems-new-item"
+          id="bannedItems-new-item"
+          aria-describedby="bannedItems-new-item-help"
+          placeholder=""
+        />
+        <small id="bannedItems-new-item-help" class="form-text text-muted"
+          >Item name to add to the list, this has to be exact!</small
+        >
+      </div>
+      <button type="button" id="bannedItems-add" class="btn btn-success">
+        Add
+      </button>
+      <div id="possible-items"></div>
+    </span>
+  </div>
+</div>
+
+<script>
+  $(document).ready(() => {
+    let availableitems = [];
+    getAvailableItems().then(data => {
+      availableitems = data;
+    });
+
+    const bannedItemsTable = $("#bannedItems").DataTable({
+      autoWidth: false,
+      dom: "Bfrtip",
+      fixedHeader: true,
+      responsive: true,
+      buttons: [],
+      columns: [
+        {
+          data: "name"
+        },
+        {
+          render: function(data, type, row, meta) {
+            return `<button type="button" class="btn btn-sm btn-danger delete-item" data-itemname="${row.name}">Delete</button>`;
+          }
+        }
+      ]
+    });
+
+    getBannedItems().then(data => drawItemsTable(data, bannedItemsTable));
+
+    $("#set-bannedItems-command").click(() => {
+      const command = $("#banned-items-command").val();
+      setCommand(command);
+    });
+
+    $("#banned-items-enabled").click(() => {
+      const checkbox = $("#banned-items-enabled");
+      setStatus(checkbox.prop("checked"));
+    });
+
+    $("#bannedItems-add").click(async () => {
+      const inputBox = $("#bannedItems-new-item");
+      await addNewItem(inputBox.val());
+      getBannedItems().then(data => drawItemsTable(data, bannedItemsTable));
+    });
+
+    $("#bannedItems-new-item").on("input", () => {
+      const inputBox = $("#bannedItems-new-item");
+      const possibleItemsDiv = $("#possible-items");
+      possibleItemsDiv.text(
+        availableitems.filter(e =>
+          e.toLowerCase().includes(inputBox.val().toLowerCase())
+        )
+      );
+    });
+
+    $("#bannedItems").on("click", ".delete-item", async e => {
+      await removeItem($(e.target).attr("data-itemname"));
+      getBannedItems().then(data => drawItemsTable(data, bannedItemsTable));
+    });
+
+    function setCommand(command) {
+      return new Promise((resolve, reject) => {
+        $.ajax({
+          url: "/api/sdtdserver/bannedItems/command",
+          method: "POST",
+          data: {
+            serverId: window.SAILS_LOCALS.server.id,
+            _csrf: window.SAILS_LOCALS._csrf,
+            command: command
+          },
+          success: (data, status, xhr) => {
+            resolve(data);
+          },
+          error: function(xhr, status, error) {
+            displayAjaxToSupportData(xhr, this);
+            showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+            reject();
+          }
+        });
+      });
+    }
+
+    function removeItem(bannedItem) {
+      return new Promise((resolve, reject) => {
+        $.ajax({
+          url: "/api/sdtdserver/bannedItems/item",
+          method: "DELETE",
+          data: {
+            serverId: window.SAILS_LOCALS.server.id,
+            _csrf: window.SAILS_LOCALS._csrf,
+            bannedItem: bannedItem
+          },
+          success: (data, status, xhr) => {
+            resolve(data);
+          },
+          error: function(xhr, status, error) {
+            displayAjaxToSupportData(xhr, this);
+            showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+            reject();
+          }
+        });
+      });
+    }
+
+    function addNewItem(bannedItem) {
+      return new Promise((resolve, reject) => {
+        $.ajax({
+          url: "/api/sdtdserver/bannedItems/item",
+          method: "POST",
+          data: {
+            serverId: window.SAILS_LOCALS.server.id,
+            _csrf: window.SAILS_LOCALS._csrf,
+            bannedItem: bannedItem
+          },
+          success: (data, status, xhr) => {
+            resolve(data);
+          },
+          error: function(xhr, status, error) {
+            displayAjaxToSupportData(xhr, this);
+            showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+            reject();
+          }
+        });
+      });
+    }
+
+    function drawItemsTable(data, table) {
+      table.clear();
+      if (!_.isNull(data)) {
+        for (const row of data) {
+          table.row.add({ name: row });
+        }
+      }
+      table.draw();
+    }
+
+    function setStatus(status) {
+      return new Promise((resolve, reject) => {
+        $.ajax({
+          url: "/api/sdtdserver/bannedItems/status",
+          method: "POST",
+          data: {
+            serverId: window.SAILS_LOCALS.server.id,
+            _csrf: window.SAILS_LOCALS._csrf,
+            status: status
+          },
+          success: (data, status, xhr) => {
+            resolve(data);
+          },
+          error: function(xhr, status, error) {
+            displayAjaxToSupportData(xhr, this);
+            showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+            reject();
+          }
+        });
+      });
+    }
+
+    function getBannedItems() {
+      return new Promise((resolve, reject) => {
+        $.ajax({
+          url: "/api/sdtdserver/bannedItems",
+          method: "GET",
+          data: {
+            serverId: window.SAILS_LOCALS.server.id
+          },
+          success: (data, status, xhr) => {
+            resolve(data);
+          },
+          error: function(xhr, status, error) {
+            displayAjaxToSupportData(xhr, this);
+            showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+            reject();
+          }
+        });
+      });
+    }
+
+    function getAvailableItems() {
+      return new Promise((resolve, reject) => {
+        $.ajax({
+          url: `/api/sdtdserver/availableitems`,
+          data: {
+            serverId: window.SAILS_LOCALS.server.id,
+            item: "*"
+          },
+          success: (data, status, xhr) => {
+            resolve(data);
+          },
+          error: function(xhr, status, error) {
+            displayAjaxToSupportData(xhr, this);
+            showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+          }
+        });
+      });
+    }
+  });
+</script>

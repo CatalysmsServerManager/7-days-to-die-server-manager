@@ -111,7 +111,7 @@
             </select>
             <small id="edit-role-level-help" class="form-text text-muted">Link a Discord role to this CSMM role. CSMM
               will sync users' roles. For this to work, a player will need to link
-              his discord profile to his csmm profile!</small>
+              his discord profile to his CSMM profile!</small>
           </div>
 
           <div class="form-check">
@@ -247,6 +247,14 @@
               on your servers dashboard.</small>
           </div>
 
+          <div class="form-check">
+            <label class="form-check-label">
+              <input type="checkbox" class="form-check-input" name="edit-role-immuneToBannedItemsList" id="edit-role-immuneToBannedItemsList"
+                aria-describedby="edit-role-immuneToBannedItemsList-help" value="true"> Immune to banned items module
+            </label>
+            <small id="edit-role-immuneToBannedItemsList-help" class="form-text text-muted">Allow a user to carry items from the banned items list without being punished for it.</small>
+          </div>
+
           <hr>
 
           <div class="form-check">
@@ -346,6 +354,7 @@
       let discordExec = $("#edit-role-discordExec").prop('checked');
       let discordLookup = $("#edit-role-discordLookup").prop('checked');
       let isDefault = $("#edit-role-isDefault").prop('checked');
+      let immuneToBannedItem = $("#edit-role-immuneToBannedItemsList").prop('checked');
 
       $.ajax({
         url: "/api/role",
@@ -372,7 +381,8 @@
           manageGbl: manageGbl,
           discordExec: discordExec,
           discordLookup: discordLookup,
-          isDefault: isDefault
+          isDefault: isDefault,
+          immuneToBannedItemsList: immuneToBannedItemsList,
         },
         success: (data, status, xhr) => {
           drawRolesTable();
@@ -414,6 +424,7 @@
       $("#edit-role-discordExec").prop('checked', currentRole.discordExec);
       $("#edit-role-discordLookup").prop('checked', currentRole.discordLookup);
       $("#edit-role-isDefault").prop('checked', currentRole.isDefault);
+      $("#edit-role-immuneToBannedItemsList").prop('checked', currentRole.immuneToBannedItemsList);
     });
 
   });

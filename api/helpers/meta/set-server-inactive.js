@@ -73,6 +73,8 @@ module.exports = {
     // SdtdCommands
     await sails.hooks.sdtdcommands.stop(server.id);
 
+    sails.hooks.banneditems.stop(server.id);
+
     // Logs
     await sails.hooks.sdtdlogs.stop(server.id);
 

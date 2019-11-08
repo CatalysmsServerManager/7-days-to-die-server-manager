@@ -6,32 +6,33 @@
  */
 
 module.exports = {
-
   afterCreate(newConfig, cb) {
-
-    sails.hooks.sdtdlogs.start(newConfig.server).then(r => {
-
-      let modules = [];
-      modules.push(sails.hooks.customhooks.start(newConfig.server));
-      modules.push(sails.hooks.historicalinfo.start(newConfig.server, 'memUpdate'));
-      Promise.all(modules).then(r => {
-        cb(undefined, r);
-      }).catch(e => cb(e));
-
-    }).catch(e => {
-      sails.log.error(e);
-      return cb(e);
-    });
+    sails.hooks.sdtdlogs
+      .start(newConfig.server)
+      .then(r => {
+        let modules = [];
+        modules.push(sails.hooks.customhooks.start(newConfig.server));
+        modules.push(
+          sails.hooks.historicalinfo.start(newConfig.server, "memUpdate")
+        );
+        Promise.all(modules)
+          .then(r => {
+            cb(undefined, r);
+          })
+          .catch(e => cb(e));
+      })
+      .catch(e => {
+        sails.log.error(e);
+        return cb(e);
+      });
   },
 
   attributes: {
-
     //When a server does not respond to requests for a long time, it is set to inactive.
     inactive: {
-      type: 'boolean',
+      type: "boolean",
       defaultsTo: false
     },
-
 
     //  _______             _    _
     // |__   __|           | |  (_)
@@ -42,107 +43,105 @@ module.exports = {
     //                                    __/ |
     //                                   |___/
 
-
     inventoryTracking: {
-      type: 'boolean',
+      type: "boolean",
       defaultsTo: false
     },
 
     locationTracking: {
-      type: 'boolean',
+      type: "boolean",
       defaultsTo: false
     },
 
-
-    // ______                                      
-    // |  ____|                                     
-    // | |__   ___ ___  _ __   ___  _ __ ___  _   _ 
+    // ______
+    // |  ____|
+    // | |__   ___ ___  _ __   ___  _ __ ___  _   _
     // |  __| / __/ _ \| '_ \ / _ \| '_ ` _ \| | | |
     // | |___| (_| (_) | | | | (_) | | | | | | |_| |
     // |______\___\___/|_| |_|\___/|_| |_| |_|\__, |
     //                                         __/ |
-    //                                        |___/ 
+    //                                        |___/
 
     economyEnabled: {
-      type: 'boolean',
+      type: "boolean",
       defaultsTo: false
     },
 
     currencyName: {
-      type: 'string',
-      defaultsTo: 'dolla dolla billz'
+      type: "string",
+      defaultsTo: "dolla dolla billz"
     },
 
     killEarnerEnabled: {
-      type: 'boolean',
+      type: "boolean",
       defaultsTo: false
     },
 
     zombieKillReward: {
-      type: 'number',
+      type: "number",
       min: 0,
       defaultsTo: 1
     },
 
     playerKillReward: {
-      type: 'number',
+      type: "number",
       min: 0,
       defaultsTo: 20
     },
 
     playtimeEarnerEnabled: {
-      type: 'boolean',
+      type: "boolean",
       defaultsTo: false
     },
 
     playtimeEarnerInterval: {
-      type: 'number',
+      type: "number",
       defaultsTo: 5
     },
 
     playtimeEarnerAmount: {
-      type: 'number',
+      type: "number",
       defaultsTo: 1
     },
 
     discordTextEarnerEnabled: {
-      type: 'boolean',
+      type: "boolean",
       defaultsTo: false
     },
 
     discordTextEarnerAmountPerMessage: {
-      type: 'number',
-      defaultsTo: 0.10
+      type: "number",
+      defaultsTo: 0.1
     },
 
     // How much seconds have to be between messages for a player to get rewarded
     discordTextEarnerTimeout: {
-      type: 'number',
+      type: "number",
       defaultsTo: 3
     },
 
     discordTextEarnerIgnoredChannels: {
-      type: 'json',
+      type: "json",
       defaultsTo: "[]"
     },
 
     costToTeleport: {
-      type: 'number',
+      type: "number",
       defaultsTo: 1
     },
 
     costToSetTeleport: {
-      type: 'number',
+      type: "number",
       defaultsTo: 15
     },
 
     costToMakeTeleportPublic: {
-      type: 'number',
+      type: "number",
       defaultsTo: 25
     },
 
     costToUseGimme: {
-      type: 'number',
+      type: "number",
       defaultsTo: 50
     },
 
@@ -161,10 +160,9 @@ module.exports = {
      */
 
     commandsEnabled: {
-      type: 'boolean',
+      type: "boolean",
       defaultsTo: false
     },
-
 
     /**
      * @memberof SdtdConfig
@@ -173,54 +171,54 @@ module.exports = {
      */
 
     commandPrefix: {
-      type: 'string',
-      defaultsTo: '$'
+      type: "string",
+      defaultsTo: "$"
     },
 
     enabledCallAdmin: {
-      type: 'boolean',
+      type: "boolean",
       defaultsTo: false
     },
 
     enabledPlayerTeleports: {
-      type: 'boolean',
+      type: "boolean",
       defaultsTo: true
     },
 
     enabledWho: {
-      type: 'boolean',
+      type: "boolean",
       defaultsTo: false
     },
 
     enabledGimme: {
-      type: 'boolean',
+      type: "boolean",
       defaultsTo: false
     },
 
     maxPlayerTeleportLocations: {
-      type: 'number',
+      type: "number",
       defaultsTo: 3
     },
 
     playerTeleportDelay: {
-      type: 'number',
+      type: "number",
       defaultsTo: 15,
-      min: 0,
+      min: 0
     },
 
     playerTeleportTimeout: {
-      type: 'number',
+      type: "number",
       defaultsTo: 60,
       min: 0
     },
 
     gimmeCooldown: {
-      type: 'number',
+      type: "number",
       defaultsTo: 30,
       min: 0
     },
 
-    // _____  _                       _ 
+    // _____  _                       _
     // |  __ \(_)                     | |
     // | |  | |_ ___  ___ ___  _ __ __| |
     // | |  | | / __|/ __/ _ \| '__/ _` |
@@ -228,7 +226,7 @@ module.exports = {
     // |_____/|_|___/\___\___/|_|  \__,_|
 
     discordPrefix: {
-      type: 'string',
+      type: "string",
       defaultsTo: "$"
     },
 
@@ -239,7 +237,7 @@ module.exports = {
      */
 
     discordGuildId: {
-      type: 'string'
+      type: "string"
     },
 
     /**
@@ -249,7 +247,7 @@ module.exports = {
      */
 
     chatChannelId: {
-      type: 'string'
+      type: "string"
     },
 
     /**
@@ -259,7 +257,7 @@ module.exports = {
      */
 
     chatChannelRichMessages: {
-      type: 'boolean',
+      type: "boolean",
       defaultsTo: true
     },
 
@@ -270,7 +268,7 @@ module.exports = {
      */
 
     chatChannelGlobalOnly: {
-      type: 'boolean',
+      type: "boolean",
       defaultsTo: false
     },
 
@@ -281,46 +279,44 @@ module.exports = {
      */
 
     chatChannelBlockedPrefixes: {
-      type: 'json',
+      type: "json",
       defaultsTo: new Array("/", "!")
     },
 
     discordNotificationConfig: {
-      type: 'json',
+      type: "json",
       defaultsTo: {
-        systemboot: '',
-        playerConnected: '',
-        playerDisconnected: '',
-        connectionLost: '',
-        connected: '',
-      },
+        systemboot: "",
+        playerConnected: "",
+        playerDisconnected: "",
+        connectionLost: "",
+        connected: ""
+      }
     },
 
-
-    //   _____ ____  _      
-    //   / ____|  _ \| |     
-    //  | |  __| |_) | |     
-    //  | | |_ |  _ <| |     
-    //  | |__| | |_) | |____ 
+    //   _____ ____  _
+    //   / ____|  _ \| |
+    //  | |  __| |_) | |
+    //  | | |_ |  _ <| |
+    //  | |__| | |_) | |____
     //   \_____|____/|______|
 
     // How many bans a player must have before triggering the discord notification
     gblNotificationBans: {
-      type: 'number',
+      type: "number",
       defaultsTo: 3
     },
 
     gblAutoBanEnabled: {
-      type: 'boolean',
+      type: "boolean",
       defaultsTo: false
     },
 
     // How many bans a player must have before triggering the auto ban
     gblAutoBanBans: {
-      type: 'number',
+      type: "number",
       defaultsTo: 5
     },
-
 
     //   _                       _
     //  | |                     (_)
@@ -339,19 +335,19 @@ module.exports = {
      */
 
     loggingEnabled: {
-      type: 'boolean',
+      type: "boolean",
       defaultsTo: true
     },
 
-    //  _    _ _     _             _           _   _        __      
-    // | |  | (_)   | |           (_)         | | (_)      / _|     
-    // | |__| |_ ___| |_ ___  _ __ _  ___ __ _| |  _ _ __ | |_ ___  
-    // |  __  | / __| __/ _ \| '__| |/ __/ _` | | | | '_ \|  _/ _ \ 
+    //  _    _ _     _             _           _   _        __
+    // | |  | (_)   | |           (_)         | | (_)      / _|
+    // | |__| |_ ___| |_ ___  _ __ _  ___ __ _| |  _ _ __ | |_ ___
+    // |  __  | / __| __/ _ \| '__| |/ __/ _` | | | | '_ \|  _/ _ \
     // | |  | | \__ \ || (_) | |  | | (_| (_| | | | | | | | || (_) |
-    // |_|  |_|_|___/\__\___/|_|  |_|\___\__,_|_| |_|_| |_|_| \___/ 
+    // |_|  |_|_|___/\__\___/|_|  |_|\___\__,_|_| |_|_| |_|_| \___/
 
     memUpdateInfoEnabled: {
-      type: 'boolean',
+      type: "boolean",
       defaultsTo: true
     },
 
@@ -371,15 +367,15 @@ module.exports = {
      */
 
     countryBanConfig: {
-      type: 'json',
+      type: "json",
       defaultsTo: {
         enabled: false,
         ban: false,
         bannedCountries: [],
-        kickMessage: 'Your country has been blocked on this server.',
+        kickMessage: "Your country has been blocked on this server.",
         allowNull: true,
         whiteListedSteamIds: []
-      },
+      }
     },
 
     /*   _____ _               _    _      _    
@@ -391,34 +387,32 @@ module.exports = {
                         __/ |                   
                        |___/                     */
 
-
     pingKickEnabled: {
-      type: 'boolean',
+      type: "boolean",
       defaultsTo: false
     },
 
     maxPing: {
-      type: 'number',
+      type: "number",
       min: 1,
       defaultsTo: 150
     },
 
     pingChecksToFail: {
-      type: 'number',
+      type: "number",
       min: 1,
       defaultsTo: 3
     },
 
     pingKickMessage: {
-      type: 'string',
+      type: "string",
       defaultsTo: "Your ping is too high! Please check your connection."
     },
 
     pingWhitelist: {
-      type: 'json',
+      type: "json",
       defaultsTo: "[]"
     },
-
 
     /*
  __      __   _   _             
@@ -432,18 +426,46 @@ module.exports = {
     */
 
     votingApiKey: {
-      type: 'string',
-      defaultsTo: ''
+      type: "string",
+      defaultsTo: ""
     },
 
     votingEnabled: {
-      type: 'boolean',
+      type: "boolean",
       defaultsTo: false
     },
 
     votingCommand: {
-      type: 'string',
-      defaultsTo: 'say "${player.name} has just voted and received 50 ${server.config.currencyName}!"; addCurrency(${player.id}, 50)'
+      type: "string",
+      defaultsTo:
+        'say "${player.name} has just voted and received 50 ${server.config.currencyName}!"; addCurrency(${player.id}, 50)'
+    },
+
+    /*
+
+     ____                             _   _ _                     
+    |  _ \                           | | (_) |                    
+    | |_) | __ _ _ __  _ __   ___  __| |  _| |_ ___ _ __ ___  ___ 
+    |  _ < / _` | '_ \| '_ \ / _ \/ _` | | | __/ _ \ '_ ` _ \/ __|
+    | |_) | (_| | | | | | | |  __/ (_| | | | ||  __/ | | | | \__ \
+    |____/ \__,_|_| |_|_| |_|\___|\__,_| |_|\__\___|_| |_| |_|___/
+                                                               
+    */
+
+    bannedItemsEnabled: {
+      type: "boolean",
+      defaultsTo: false
+    },
+
+    bannedItems: {
+      type: "json",
+      defaultsTo: []
+    },
+
+    bannedItemsCommand: {
+      type: "string",
+      defaultsTo:
+        'kick ${player.steamId} "Unauthorized item detected in inventory"'
     },
 
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
@@ -459,9 +481,7 @@ module.exports = {
     server: {
       required: true,
       //    unique: true,
-      model: 'sdtdserver',
-    },
-
-  },
-
+      model: "sdtdserver"
+    }
+  }
 };
