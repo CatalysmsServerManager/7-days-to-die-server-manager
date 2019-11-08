@@ -12,7 +12,7 @@ services:
 before_install:
   - mysql -e 'CREATE DATABASE csmm;'
 install:
-  -  npm install
+  - npm install
 script:
   - npm test
   - npm run coverage
@@ -23,8 +23,7 @@ after_failure:
 deploy:
   provider: releases
   skip_cleanup: true
-  file_glob: true
-  file: "dist/cpm-map-*.tgz"
+  draft: true
   api_key: $GITHUB_TOKEN
   on:
     branch: master
