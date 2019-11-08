@@ -87,6 +87,7 @@ module.exports = function definePlayerTrackingHook(sails) {
             } catch (error) {
               sails.log.error(error);
             }
+            loggingObject.emit('trackingUpdate', {server, trackingInfo: initialValues});
           }
           await TrackingInfo.createEach(initialValues);
 

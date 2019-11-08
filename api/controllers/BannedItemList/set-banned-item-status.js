@@ -22,6 +22,13 @@ module.exports = {
       { server: inputs.serverId },
       { bannedItemsEnabled: inputs.status }
     );
+
+    if (inputs.status) {
+      sails.hooks.banneditems.start(inputs.serverId);
+    } else {
+      sails.hooks.banneditems.stop(inputs.serverId);
+    }
+
     return exits.success();
   }
 };

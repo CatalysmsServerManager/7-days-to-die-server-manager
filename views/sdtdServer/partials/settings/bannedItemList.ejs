@@ -1,4 +1,13 @@
 <div>
+  <p>
+    This module allows you to specify a list of items that players are not
+    allowed to have. Once a player is found with one of these items in their
+    inventory, the command is executed to punish the player.
+    <strong
+      >Please note that this requires inventory tracking to be enabled</strong
+    >
+  </p>
+
   <div class="form-check">
     <label class="form-check-label">
       <input type="checkbox" class="form-check-input"
@@ -95,7 +104,7 @@
 
     $("#banned-items-enabled").click(() => {
       const checkbox = $("#banned-items-enabled");
-      setStatus(!checkbox.checked);
+      setStatus(checkbox.prop("checked"));
     });
 
     $("#bannedItems-add").click(async () => {
