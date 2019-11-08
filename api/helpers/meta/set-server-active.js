@@ -1,38 +1,28 @@
 module.exports = {
+  friendlyName: "Set server active",
 
-
-  friendlyName: 'Set server active',
-
-
-  description: 'Starts all hooks, timers, modules for a server that was inactive',
-
+  description:
+    "Starts all hooks, timers, modules for a server that was inactive",
 
   inputs: {
-
     serverId: {
-      type: 'string',
-      required: true,
+      type: "string",
+      required: true
     }
-
   },
 
+  exits: {},
 
-  exits: {
-
-  },
-
-
-  fn: async function (inputs, exits) {
-    const server = await SdtdServer.findOne(inputs.serverId).populate('config');
+  fn: async function(inputs, exits) {
+    const server = await SdtdServer.findOne(inputs.serverId).populate("config");
     if (_.isUndefined(server)) {
-      return exits.error('Unknown server ID');
+      return exits.error("Unknown server ID");
     }
     const config = server.config[0];
     const cronJobs = await CronJob.find({
       server: server.id,
       enabled: true
     });
-
 
     await sails.hooks.sdtdlogs.start(server.id);
 
@@ -46,7 +36,9 @@ module.exports = {
       try {
         await sails.hooks.cron.start(jobToStart.id);
       } catch (error) {
-        sails.log.error(`Error initializing cronjob ${jobToStart.id} - ${error}`)
+        sails.log.error(
+          `Error initializing cronjob ${jobToStart.id} - ${error}`
+        );
       }
     }
 
@@ -58,18 +50,18 @@ module.exports = {
     // Custom hooks
     await sails.hooks.customhooks.start(server.id);
 
-    // Economy  
+    // Economy
 
     if (config.playtimeEarnerEnabled) {
-      await sails.hooks.economy.start(server.id, 'playtimeEarner');
+      await sails.hooks.economy.start(server.id, "playtimeEarner");
     }
 
     if (config.discordTextEarnerEnabled) {
-      await sails.hooks.economy.start(server.id, 'discordTextEarner');
+      await sails.hooks.economy.start(server.id, "discordTextEarner");
     }
 
     if (config.killEarnerEnabled) {
-      await sails.hooks.economy.start(server.id, 'killEarner');
+      await sails.hooks.economy.start(server.id, "killEarner");
     }
 
     // High ping kick
@@ -77,8 +69,12 @@ module.exports = {
       await sails.hooks.highpingkick.start(server.id);
     }
 
+    if (config.bannedItemsEnabled) {
+      sails.hooks.banneditems.start(inputs.serverId);
+    }
+
     // Historical info (aka analytics)
-    await sails.hooks.historicalinfo.start(server.id, 'memUpdate');
+    await sails.hooks.historicalinfo.start(server.id, "memUpdate");
 
     // Player tracking
     await sails.hooks.playertracking.start(server.id);
@@ -86,15 +82,19 @@ module.exports = {
     // SdtdCommands
     await sails.hooks.sdtdcommands.start(server.id);
 
-    await SdtdConfig.update({
-      server: server.id
-    }, {
-      inactive: false
-    });
-    sails.log.info(`Server has been marked as active.`, _.omit(server, 'authName', 'authToken'));
+    await SdtdConfig.update(
+      {
+        server: server.id
+      },
+      {
+        inactive: false
+      }
+    );
+    sails.log.info(
+      `Server has been marked as active.`,
+      _.omit(server, "authName", "authToken")
+    );
 
     return exits.success();
   }
-
-
 };
