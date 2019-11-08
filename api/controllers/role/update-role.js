@@ -99,6 +99,10 @@ module.exports = {
       type: 'boolean',
     },
 
+    immuneToBannedItemsList: {
+      type: 'boolean',
+    }
+
   },
 
 
@@ -143,6 +147,7 @@ module.exports = {
       discordExec: inputs.discordExec,
       discordLookup: inputs.discordLookup,
       isDefault: inputs.isDefault,
+      immuneToBannedItemsList: inputs.immuneToBannedItemsList,
     };
 
     let updatedRole = await Role.update({

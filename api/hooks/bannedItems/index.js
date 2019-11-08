@@ -54,10 +54,18 @@ module.exports = function banneditems(sails) {
       const playerItemsSet = new Set(onlinePlayer.inventory.map(e => e.name));
       const unionOfSets = intersection(playerItemsSet, bannedItemsSet);
       if (unionOfSets.size) {
-        sails.log.info(
-          `Detected banned item(s) on player ${onlinePlayer.player} from server ${onlinePlayer.server}`
-        );
-        executePunishment(onlinePlayer.player, server, config);
+        const isImmune = await sails.helpers.roles.checkPermission.with({
+          serverId: server.id,
+          playerId: onlinePlayer.player,
+          permission: "immuneToBannedItemsList"
+        });
+
+        if (!isImmune.hasPermission) {
+          sails.log.info(
+            `Detected banned item(s) on player ${onlinePlayer.player} from server ${onlinePlayer.server}`
+          );
+          executePunishment(onlinePlayer.player, server, config);
+        }
       }
     }
   }
