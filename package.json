@@ -1,6 +1,6 @@
 {
-  "name": "Catalysm-server-manager",
-  "version": "0.7.0",
+  "name": "csmm",
+  "version": "1.11.0",
   "description": "A 7dtd server manager made with Sails.js",
   "keywords": [],
   "dependencies": {
