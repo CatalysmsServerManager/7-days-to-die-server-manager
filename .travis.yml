@@ -20,3 +20,12 @@ after_failure:
   - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
   - chmod +x send.sh
   - ./send.sh failure $WEBHOOK_URL
+deploy:
+  provider: releases
+  skip_cleanup: true
+  file_glob: true
+  file: "dist/cpm-map-*.tgz"
+  api_key: $GITHUB_TOKEN
+  on:
+    branch: master
+    tags: true
