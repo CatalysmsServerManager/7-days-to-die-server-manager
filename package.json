@@ -48,7 +48,8 @@
     "dev": "nodemon",
     "debug": "node debug app.js",
     "coverage": "nyc report --reporter=text-lcov | codecov",
-    "itemIcons:update": "bash ./scripts/itemIconsUpdate.sh"
+    "itemIcons:update": "bash ./scripts/itemIconsUpdate.sh",
+    "postinstall": "npm run itemIcons:update"
   },
   "main": "app.js",
   "repository": {
