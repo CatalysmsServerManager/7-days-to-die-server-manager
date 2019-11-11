@@ -1,6 +1,7 @@
 const Commando = require("discord.js-commando");
 const RichEmbed = require("discord.js").RichEmbed;
 const fs = require("fs");
+const request = require("request-promise-native");
 
 let statusMessage;
 let statusEmbed = new RichEmbed();
@@ -19,7 +20,13 @@ class Import extends Commando.Command {
   }
 
   async run(msg, args) {
+    const fileUrl = msg.attachments.first().url;
+    await this.downloadFile(fileUrl);
     let data = require("../../../../../import.json");
+
+    // Without this, it fails sometimes. Idk why :)
+    console.log(data);
+
     const importedRoles = new Array();
 
     embedDescription = new String();
@@ -191,6 +198,12 @@ class Import extends Commando.Command {
       statusEmbed.setFooter(`All tables loaded, yay!`);
       statusEmbed.setColor("GREEN");
       this.addDescriptionLine(`Finished import of server ${server.name}`);
+
+      try {
+        fs.unlinkSync("import.json");
+      } catch (error) {
+        sails.log.error("Error deleting import file");
+      }
     } catch (error) {
       sails.log.error(error);
       this.addDescriptionLine(`An error occured! Check logs for more info`);
@@ -219,6 +232,22 @@ class Import extends Commando.Command {
     statusEmbed.setDescription(embedDescription);
     statusMessage = await statusMessage.edit(undefined, statusEmbed);
     return statusMessage;
+  }
+
+  downloadFile(url) {
+    let file = fs.createWriteStream("import.json");
+    return new Promise((resolve, reject) => {
+      const stream = request(url)
+        .pipe(file)
+        .on("finish", () => {
+          sails.log.info(`Finished downloading file for import`);
+          resolve();
+        })
+        .on("error", error => {
+          sails.log.error(error);
+          reject(error);
+        });
+    });
   }
 }
 
