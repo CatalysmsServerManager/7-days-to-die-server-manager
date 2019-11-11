@@ -1,28 +1,31 @@
-const Commando = require('discord.js-commando');
-const fs = require('fs');
+const Commando = require("discord.js-commando");
+const fs = require("fs");
 
 class Export extends Commando.Command {
   constructor(client) {
     super(client, {
-      name: 'export',
-      group: 'meta',
-      memberName: 'export',
-      description: 'Export server database rows',
+      name: "export",
+      group: "meta",
+      memberName: "export",
+      description: "Export server database rows",
       hidden: true,
       ownerOnly: true,
-      args: [{
-        key: 'serverId',
-        label: 'ID of the server, duh',
-        required: true,
-        type: 'string',
-        prompt: 'I need the server ID, dummy.'
-      }]
+      args: [
+        {
+          key: "serverId",
+          label: "ID of the server, duh",
+          required: true,
+          type: "string",
+          prompt: "I need the server ID, dummy."
+        }
+      ]
     });
   }
 
   async run(msg, args) {
-
-    let databaseString = new String(`DONT FORGET TO FILL ADDITIONAL VALUES LIKE THE OWNER ID!!\r\n`);
+    let databaseString = new String(
+      `DONT FORGET TO FILL ADDITIONAL VALUES LIKE THE OWNER ID!!\r\n`
+    );
 
     const server = await SdtdServer.findOne(args.serverId);
 
@@ -77,6 +80,10 @@ class Export extends Commando.Command {
       server: server.id
     });
 
+    const customHooks = await CustomHook.find({
+      server: server.id
+    });
+
     server.toJSON = undefined;
 
     const exportData = {
@@ -95,33 +102,37 @@ class Export extends Commando.Command {
       playerUsedCommands: playerUsedCommands,
       playerUsedGimmes: playerUsedGimmes,
       roles: roles,
-      shopListings: shopListings
+      shopListings: shopListings,
+      customHooks: customHooks
     };
 
     Object.getOwnPropertyNames(exportData).map(e => omitDates(e));
 
-    fs.writeFile(`${server.name}_export.json`, JSON.stringify(exportData), async function () {
-      await msg.channel.send({
-        files: [{
-          attachment: `${server.name}_export.json`,
-          name: `${server.name}_export.json`
-        }]
-      });
-  
-      fs.unlinkSync(`${server.name}_export.json`);
-    });
+    fs.writeFile(
+      `${server.name}_export.json`,
+      JSON.stringify(exportData),
+      async function() {
+        await msg.channel.send({
+          files: [
+            {
+              attachment: `${server.name}_export.json`,
+              name: `${server.name}_export.json`
+            }
+          ]
+        });
 
+        fs.unlinkSync(`${server.name}_export.json`);
+      }
+    );
   }
-
 }
-
 
 module.exports = Export;
 
 function omitDates(object) {
   if (_.isArray(object)) {
-    return object.map(e => _.omit(e, 'createdAt', 'updatedAt'))
+    return object.map(e => _.omit(e, "createdAt", "updatedAt"));
   } else {
-    return _.omit(object, 'createdAt', 'updatedAt');
+    return _.omit(object, "createdAt", "updatedAt");
   }
 }

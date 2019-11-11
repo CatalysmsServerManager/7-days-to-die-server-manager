@@ -1,6 +1,6 @@
-const Commando = require('discord.js-commando');
-const RichEmbed = require('discord.js').RichEmbed;
-const fs = require('fs');
+const Commando = require("discord.js-commando");
+const RichEmbed = require("discord.js").RichEmbed;
+const fs = require("fs");
 
 let statusMessage;
 let statusEmbed = new RichEmbed();
@@ -9,12 +9,12 @@ let embedDescription = new String();
 class Import extends Commando.Command {
   constructor(client) {
     super(client, {
-      name: 'import',
-      group: 'meta',
-      memberName: 'import',
-      description: 'import server database rows',
+      name: "import",
+      group: "meta",
+      memberName: "import",
+      description: "import server database rows",
       hidden: true,
-      ownerOnly: true,
+      ownerOnly: true
     });
   }
 
@@ -27,9 +27,11 @@ class Import extends Commando.Command {
 
     statusEmbed.setFooter(`0/${Object.keys(data).length} tables loaded`);
     statusEmbed.setTitle(`Import status for ${data.server.name}`);
-    statusEmbed.setColor('ORANGE');
+    statusEmbed.setColor("ORANGE");
     statusMessage = await msg.channel.send(statusEmbed);
-    this.addDescriptionLine('Importing server connection data and configuration');
+    this.addDescriptionLine(
+      "Importing server connection data and configuration"
+    );
 
     try {
       const server = await SdtdServer.create(this.omitId(data.server)).fetch();
@@ -46,41 +48,58 @@ class Import extends Commando.Command {
       }
 
       statusEmbed.setFooter(`3/${Object.keys(data).length} tables loaded`);
-      this.addDescriptionLine(`Importing ${data.customCommands.length} custom commands with ${data.customArgs.length} custom arguments`);
+      this.addDescriptionLine(
+        `Importing ${data.customCommands.length} custom commands with ${data.customArgs.length} custom arguments`
+      );
 
-      data.customCommands = this.setServerIdForArray(data.customCommands, server.id);
+      data.customCommands = this.setServerIdForArray(
+        data.customCommands,
+        server.id
+      );
 
       for (const customCmd of data.customCommands) {
-        let createdCmd = await CustomCommand.create(this.omitId(customCmd)).fetch();
-        let customArgs = data.customArgs.filter(arg => arg.command.toString() === customCmd.id.toString()).map(arg => {
-          arg.command = createdCmd.id;
-          return arg;
-        });
+        let createdCmd = await CustomCommand.create(
+          this.omitId(customCmd)
+        ).fetch();
+        let customArgs = data.customArgs
+          .filter(arg => arg.command.toString() === customCmd.id.toString())
+          .map(arg => {
+            arg.command = createdCmd.id;
+            return arg;
+          });
 
         for (const arg of customArgs) {
           await CustomCommandArgument.create(this.omitId(arg));
         }
-
       }
 
       statusEmbed.setFooter(`5/${Object.keys(data).length} tables loaded`);
-      this.addDescriptionLine(`Importing ${data.customDiscordNotifications.length} custom discord notifications.`);
+      this.addDescriptionLine(
+        `Importing ${data.customDiscordNotifications.length} custom discord notifications.`
+      );
 
-      data.customDiscordNotifications = this.setServerIdForArray(data.customDiscordNotifications, server.id);
+      data.customDiscordNotifications = this.setServerIdForArray(
+        data.customDiscordNotifications,
+        server.id
+      );
       for (const notification of data.customDiscordNotifications) {
         await CustomDiscordNotification.create(this.omitId(notification));
       }
 
       statusEmbed.setFooter(`6/${Object.keys(data).length} tables loaded`);
-      this.addDescriptionLine(`Importing ${data.banEntries.length} GBL entries with ${data.gblComments.length} comments.`);
+      this.addDescriptionLine(
+        `Importing ${data.banEntries.length} GBL entries with ${data.gblComments.length} comments.`
+      );
 
       data.banEntries = this.setServerIdForArray(data.banEntries, server.id);
       for (const gblEntry of data.banEntries) {
         let createdEntry = await BanEntry.create(this.omitId(gblEntry)).fetch();
-        let entryComments = data.gblComments.filter(comment => comment.ban.toString() === gblEntry.id.toString()).map(comment => {
-          comment.ban = createdEntry.id;
-          return comment;
-        });
+        let entryComments = data.gblComments
+          .filter(comment => comment.ban.toString() === gblEntry.id.toString())
+          .map(comment => {
+            comment.ban = createdEntry.id;
+            return comment;
+          });
 
         for (const comment of entryComments) {
           await GblComment.create(this.omitId(comment));
@@ -88,7 +107,9 @@ class Import extends Commando.Command {
       }
 
       statusEmbed.setFooter(`8/${Object.keys(data).length} tables loaded`);
-      this.addDescriptionLine(`Importing ${data.gimmeItems.length} gimme objects`);
+      this.addDescriptionLine(
+        `Importing ${data.gimmeItems.length} gimme objects`
+      );
 
       data.gimmeItems = this.setServerIdForArray(data.gimmeItems, server.id);
 
@@ -106,16 +127,21 @@ class Import extends Commando.Command {
       }
 
       statusEmbed.setFooter(`10/${Object.keys(data).length} tables loaded`);
-      this.addDescriptionLine(`Importing ${data.players.length} players - ${data.playerTeleports.length} teleport locations`);
+      this.addDescriptionLine(
+        `Importing ${data.players.length} players - ${data.playerTeleports.length} teleport locations`
+      );
 
       data.players = this.setServerIdForArray(data.players, server.id);
 
       for (const player of data.players) {
-
         if (player.role) {
-          let oldRole = data.roles.filter(r => r.id.toString() === player.role.toString())[0];
+          let oldRole = data.roles.filter(
+            r => r.id.toString() === player.role.toString()
+          )[0];
           if (!_.isUndefined(oldRole)) {
-            let newRole = importedRoles.filter(r => r.level.toString() === oldRole.level.toString())[0];
+            let newRole = importedRoles.filter(
+              r => r.level.toString() === oldRole.level.toString()
+            )[0];
             player.role = newRole.id;
           } else {
             player.role = null;
@@ -123,10 +149,14 @@ class Import extends Commando.Command {
         }
 
         let createdEntry = await Player.create(this.omitId(player)).fetch();
-        let teleports = data.playerTeleports.filter(teleport => teleport.player.toString() === player.id.toString()).map(teleport => {
-          teleport.player = createdEntry.id;
-          return teleport;
-        });
+        let teleports = data.playerTeleports
+          .filter(
+            teleport => teleport.player.toString() === player.id.toString()
+          )
+          .map(teleport => {
+            teleport.player = createdEntry.id;
+            return teleport;
+          });
 
         for (const teleport of teleports) {
           await PlayerTeleport.create(this.omitId(teleport));
@@ -134,18 +164,33 @@ class Import extends Commando.Command {
       }
 
       statusEmbed.setFooter(`11/${Object.keys(data).length} tables loaded`);
-      this.addDescriptionLine(`Importing ${data.shopListings.length} shop listings`);
+      this.addDescriptionLine(
+        `Importing ${data.shopListings.length} shop listings`
+      );
 
-      data.shopListings = this.setServerIdForArray(data.shopListings, server.id);
+      data.shopListings = this.setServerIdForArray(
+        data.shopListings,
+        server.id
+      );
 
       for (const listing of data.shopListings) {
         await ShopListing.create(this.omitId(listing));
       }
 
-      statusEmbed.setFooter(`All tables loaded, yay!`);
-      statusEmbed.setColor('GREEN');
-      this.addDescriptionLine(`Finished import of server ${server.name}`);
+      statusEmbed.setFooter(`12/${Object.keys(data).length} tables loaded`);
+      this.addDescriptionLine(
+        `Importing ${data.customHooks.length} custom hooks`
+      );
 
+      data.customHooks = this.setServerIdForArray(data.customHooks, server.id);
+
+      for (const hook of data.customHooks) {
+        await CustomHook.create(this.omitId(hook));
+      }
+
+      statusEmbed.setFooter(`All tables loaded, yay!`);
+      statusEmbed.setColor("GREEN");
+      this.addDescriptionLine(`Finished import of server ${server.name}`);
     } catch (error) {
       sails.log.error(error);
       this.addDescriptionLine(`An error occured! Check logs for more info`);
@@ -167,17 +212,14 @@ class Import extends Commando.Command {
   }
 
   omitId(object) {
-    return _.omit(object, 'id');
+    return _.omit(object, "id");
   }
-
 
   async updateStatusMessage() {
     statusEmbed.setDescription(embedDescription);
     statusMessage = await statusMessage.edit(undefined, statusEmbed);
     return statusMessage;
   }
-
 }
-
 
 module.exports = Import;
