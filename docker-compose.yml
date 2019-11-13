@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 
 services:
   csmm:
@@ -20,15 +20,16 @@ services:
     restart: unless-stopped
   cache:
     image: redis
-  db:
-    image: mysql:5.7
     volumes:
-       - db-data:/var/lib/mysql/data
+      - ./redis-data:/data
+  db:
+    image: mariadb
+    volumes:
+      - ./db-data:/var/lib/mysql
     environment:
       MYSQL_DATABASE: "csmm"
       MYSQL_USER: "csmm"
       MYSQL_PASSWORD: "mysecretpasswordissosecure"
       MYSQL_RANDOM_ROOT_PASSWORD: "true"
-
 volumes:
   db-data:
