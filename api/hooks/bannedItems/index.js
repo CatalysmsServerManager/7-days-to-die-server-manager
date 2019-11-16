@@ -51,7 +51,11 @@ module.exports = function banneditems(sails) {
     const bannedItemsSet = new Set(JSON.parse(bannedItems));
 
     for (const onlinePlayer of trackingInfo) {
-      if (onlinePlayer.inventory && Array.isArray(onlinePlayer.inventory)) {
+      if (onlinePlayer.inventory) {
+        if (!Array.isArray(onlinePlayer.inventory)) {
+          onlinePlayer.inventory = JSON.parse(onlinePlayer.inventory);
+        }
+
         const playerItemsSet = new Set(onlinePlayer.inventory.map(e => e.name));
         const unionOfSets = intersection(playerItemsSet, bannedItemsSet);
         if (unionOfSets.size) {
@@ -74,6 +78,9 @@ module.exports = function banneditems(sails) {
 
   async function executePunishment(playerId, server, config) {
     const player = await Player.findOne(playerId);
+    sails.log.info(
+      `Punishing ${player.name} with id ${player.id} for having a bad item in inventory.`
+    );
     await sails.helpers.sdtd.executeCustomCmd(
       server,
       config.bannedItemsCommand.split(";"),
