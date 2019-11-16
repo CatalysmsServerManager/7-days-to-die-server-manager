@@ -51,7 +51,7 @@ module.exports = function banneditems(sails) {
     const bannedItemsSet = new Set(JSON.parse(bannedItems));
 
     for (const onlinePlayer of trackingInfo) {
-      if (onlinePlayer.inventory) {
+      if (onlinePlayer.inventory && Array.isArray(onlinePlayer.inventory)) {
         const playerItemsSet = new Set(onlinePlayer.inventory.map(e => e.name));
         const unionOfSets = intersection(playerItemsSet, bannedItemsSet);
         if (unionOfSets.size) {
