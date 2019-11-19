@@ -161,13 +161,13 @@ module.exports = logLine => {
     returnValue.data = data;
   }
 
-  if (_.startsWith(logLine.msg, "Player connected,")) {
+  if (_.startsWith(logLine.msg, "PlayerSpawnedInWorld (reason: JoinMultiplayer")) {
     /*
             {
               "date": "2017-11-14",
               "time": "14:50:25",
               "uptime": "109.802",
-              "msg": "Player connected, entityid=171, name=Catalysm, steamid=76561198028175941, steamOwner=76561198028175941, ip=::ffff:192.168.1.52",
+              "msg": "PlayerSpawnedInWorld (reason: JoinMultiplayer, position: -81, 61, -10): EntityID=531, PlayerID='76561198028175941', OwnerID='76561198028175941', PlayerName='Catalysm'",
               "trace": "",
               "type": "Log"
             }
@@ -175,20 +175,20 @@ module.exports = logLine => {
 
     let logMsg = logLine.msg.split(",");
 
-    let entityID = logMsg[1].replace("entityid=", "").trim();
-    let playerName = logMsg[2].replace("name=", "").trim();
-    let steamID = logMsg[3].replace("steamid=", "").trim();
-    let steamOwner = logMsg[4].replace("steamOwner=", "").trim();
-    let ip = logMsg[5].replace("ip=", "").trim();
-    let country = geoip.lookupCountry(ip);
+    let steamId = logMsg[4]
+      .replace("PlayerID=", "")
+      .split("'")
+      .join("")
+      .trim();
+    let playerName = logMsg[6]
+      .replace("PlayerName=", "")
+      .split("'")
+      .join("")
+      .trim();
 
-    let connectedMsg = {
-      entityID,
+    let joinMsg = {
+      steamId,
       playerName,
-      steamID,
-      steamOwner,
-      ip,
-      country,
       date: logLine.date,
       time: logLine.time,
       uptime: logLine.uptime,
@@ -196,7 +196,7 @@ module.exports = logLine => {
     };
 
     returnValue.type = "playerConnected";
-    returnValue.data = connectedMsg;
+    returnValue.data = joinMsg;
   }
 
   // New player connects
