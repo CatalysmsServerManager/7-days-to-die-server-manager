@@ -30,6 +30,7 @@ process.chdir(__dirname);
 var sails;
 var rc;
 try {
+  console.log(`CSMM version: ${require('./package.json').version}`)
   require('dotenv').config();
   sails = require('sails');
   rc = require('sails/accessible/rc');
