@@ -242,10 +242,10 @@
       <div style="text-align: center" class="card">
         <% if(listing.iconName) { %>
         <img class="card-img-top" src="/images/sdtdIcons/<%= listing.iconName %>.png" alt="<%= listing.name %>"
-          style="width: 25%">
+          style="max-width: 25%; max-height: 25%;">
         <% } else { %>
         <img class="card-img-top" src="/images/sdtdIcons/<%= listing.name %>.png" alt="<%= listing.name %>"
-          style="width: 25%">
+          style="max-width: 25%; max-height: 25%;">
         <% } %>
         <div class="card-body">
           <h4 class="card-title">
@@ -707,3 +707,9 @@
   })
 
 </script>
+
+<style>
+  .card-columns {
+    column-count: 4;
+  }
+</style>
