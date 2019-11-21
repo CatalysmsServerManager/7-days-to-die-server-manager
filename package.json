@@ -18,7 +18,7 @@
     "geoip-ultralight": "^0.1.5",
     "grunt": "1.0.3",
     "he": "^1.2.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.13",
     "lusca": "^1.6.1",
     "machinepack-7daystodiewebapi": "^0.3.2",
     "minimist": "^1.2.0",
