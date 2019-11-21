@@ -43,7 +43,10 @@ module.exports = {
       min: 0
     },
 
-
+    customIcon: {
+      type: 'string',
+      defaultsTo: ''
+    }
 
 
   },
@@ -79,7 +82,8 @@ module.exports = {
         amount: inputs.amount,
         quality: inputs.quality,
         price: inputs.price,
-        server: inputs.serverId
+        server: inputs.serverId,
+        iconName: inputs.customIcon,
       }).fetch()
 
       sails.log.info(`Created a new listing for server ${inputs.serverId}`, createdListing);
