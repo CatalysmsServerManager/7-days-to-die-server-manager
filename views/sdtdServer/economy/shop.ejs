@@ -152,6 +152,14 @@
               <small id="add-price-help" class="form-text text-muted">How much players pay to buy this listing</small>
             </div>
 
+            <div class="form-group">
+              <label for="add-customIcon">Custom icon</label>
+              <input type="text" class="form-control" name="add-customIcon" id="add-customIcon"
+                aria-describedby="add-customIcon-help">
+              <small id="add-customIcon-help" class="form-text text-muted">Use a different icon than the default item
+                name.</small>
+            </div>
+
           </div>
           <div class="modal-footer">
             <div id="add-listing-status"></div>
@@ -232,8 +240,13 @@
     <div class="card-columns">
       <% listings.forEach(listing => { %>
       <div style="text-align: center" class="card">
+        <% if(listing.iconName) { %>
+        <img class="card-img-top" src="/images/sdtdIcons/<%= listing.iconName %>.png" alt="<%= listing.name %>"
+          style="width: 25%">
+        <% } else { %>
         <img class="card-img-top" src="/images/sdtdIcons/<%= listing.name %>.png" alt="<%= listing.name %>"
           style="width: 25%">
+        <% } %>
         <div class="card-body">
           <h4 class="card-title">
             <%=  listing.friendlyName ?  listing.friendlyName : listing.name%>
@@ -342,6 +355,15 @@
                       buy this listing</small>
                   </div>
 
+                  <div class="form-group">
+                    <label for="edit-<%= listing.id %>-customIcon">Custom icon</label>
+                    <input type="text" class="form-control" name="edit-<%= listing.id %>-customIcon"
+                      id="edit-<%= listing.id %>-customIcon" aria-describedby="edit-<%=listing.id%>-customIcon-help"
+                      value="<%= listing.customIcon %>">
+                    <small id="edit-<%=listing.id%>-customIcon-help" class="form-text text-muted">Use a different icon
+                      than the default item name.</small>
+                  </div>
+
                 </div>
                 <div class="modal-footer">
                   <div id="edit-<%= listing.id %>-status"></div>
@@ -445,37 +467,37 @@
         [0, 'desc']
       ],
       columns: [{
-          data: "friendlyName",
-        },
-        {
-          data: 'name'
-        },
-        {
-          data: 'price',
-          render: function (data, type, row, meta) {
-            if (window.SAILS_LOCALS.player.role.economyDeductMultiplier !== 1) {
-              return `<s>${row.price} </s> ${row.price * window.SAILS_LOCALS.player.role.economyDeductMultiplier}`
-            } else {
-              return row.price
-            }
-          }
-        },
-        {
-          data: 'amount'
-        },
-        {
-          data: 'quality',
-        },
-        {
-          data: 'timesBought',
-        },
-        {
-          data: 'id',
-          render: function (data, type, row, meta) {
-            return `      <button class="btn shop-buy btn-success" value="${data}">
-                Buy</button>`
+        data: "friendlyName",
+      },
+      {
+        data: 'name'
+      },
+      {
+        data: 'price',
+        render: function (data, type, row, meta) {
+          if (window.SAILS_LOCALS.player.role.economyDeductMultiplier !== 1) {
+            return `<s>${row.price} </s> ${row.price * window.SAILS_LOCALS.player.role.economyDeductMultiplier}`
+          } else {
+            return row.price
           }
         }
+      },
+      {
+        data: 'amount'
+      },
+      {
+        data: 'quality',
+      },
+      {
+        data: 'timesBought',
+      },
+      {
+        data: 'id',
+        render: function (data, type, row, meta) {
+          return `      <button class="btn shop-buy btn-success" value="${data}">
+                Buy</button>`
+        }
+      }
       ]
     })
 
@@ -498,6 +520,7 @@
       let amount = emptyStringToUndefined($(`#add-amount`).val());
       let quality = emptyStringToUndefined($(`#add-quality`).val());
       let price = emptyStringToUndefined($(`#add-price`).val());
+      let customIcon = emptyStringToUndefined($(`#add-customIcon`).val());
 
       if (!name && !amount && !price) {
         return $(`#add-listing-status`).text("Name amount and price are required values");
@@ -514,7 +537,8 @@
           friendlyName: friendlyName,
           amount: amount,
           quality: quality,
-          price: price
+          price: price,
+          customIcon: customIcon
         },
         success: (data, status, xhr) => {
           location.reload();
@@ -579,6 +603,7 @@
       let amount = emptyStringToUndefined($(`#edit-${listingId}-amount`).val());
       let quality = emptyStringToUndefined($(`#edit-${listingId}-quality`).val());
       let price = emptyStringToUndefined($(`#edit-${listingId}-price`).val());
+      let customIcon = emptyStringToUndefined($(`#edit-${listingId}-customIcon`).val());
 
       if (!name && !friendlyName && !amount && !quality && !price) {
         return $(`#edit-${listingId}-status`).text("You must change atleast one of the values!")
@@ -595,7 +620,8 @@
           friendlyName: friendlyName,
           amount: amount,
           quality: quality,
-          price: price
+          price: price,
+          customIcon: customIcon,
         },
         success: (data, status, xhr) => {
           location.reload();

@@ -24,6 +24,11 @@ module.exports = {
             type: 'string',
         },
 
+        iconName: {
+            type: 'string',
+            defaultsTo: ''
+        },
+
         /**
          * @var amount
          * @description amount of the item to buy.

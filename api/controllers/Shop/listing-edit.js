@@ -39,6 +39,10 @@ module.exports = {
             type: 'number',
             min: 0
         },
+
+        customIcon: {
+            type: 'string',
+        }
     },
 
 
@@ -86,12 +90,13 @@ module.exports = {
             updateObject.amount = !_.isUndefined(inputs.amount) ? inputs.amount : originalListing.amount
             updateObject.quality = !_.isUndefined(inputs.quality) ? inputs.quality : originalListing.quality
             updateObject.price = !_.isUndefined(inputs.price) ? inputs.price : originalListing.price
+            updateObject.iconName = !_.isUndefined(inputs.customIcon) ? inputs.customIcon : originalListing.customIcon
 
             if (updateObject.quality && updateObject.amount > 1) {
                 return exits.invalidItem('When setting quality, amount cannot be more than 1');
             }
 
-            let updatedListing = await ShopListing.update({id: inputs.listingId},updateObject).fetch()
+            let updatedListing = await ShopListing.update({ id: inputs.listingId }, updateObject).fetch()
 
             return exits.success(updatedListing);
         } catch (error) {
