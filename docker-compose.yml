@@ -2,7 +2,8 @@ version: "3.7"
 
 services:
   csmm:
-    image: catalysm/csmm
+    build: .
+    #image: catalysm/csmm
     depends_on:
       - cache
       - db
@@ -15,6 +16,7 @@ services:
       DISCORDBOTTOKEN: ""
       DISCORDCLIENTSECRET: ""
       DISCORDCLIENTID: ""
+      CSMM_ADMINS: ""
     ports:
       - 8000:8000
     restart: unless-stopped
