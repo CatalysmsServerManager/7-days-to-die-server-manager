@@ -9,16 +9,16 @@
 <div class="container">
 
   <div class="card text-center">
-    <img class="card-img-top" src="holder.js/100px180/" alt="">
     <div class="card-body">
       <h4 class="card-title">Search</h4>
       <p class="card-text">
 
         <div class="form-group">
           <label for="gbl-steamid-input">Steam ID</label>
-          <input type="text" class="form-control" name="gbl-steamid-input" id="gbl-steamid-input" aria-describedby="gbl-steamid-input-help"
-            placeholder="">
-          <small id="gbl-steamid-input-help" class="form-text text-muted">Steam ID of the player you want to search for</small>
+          <input type="text" class="form-control" name="gbl-steamid-input" id="gbl-steamid-input"
+            aria-describedby="gbl-steamid-input-help" placeholder="">
+          <small id="gbl-steamid-input-help" class="form-text text-muted">Steam ID of the player you want to search
+            for</small>
         </div>
 
         <div class="text-center">
@@ -65,7 +65,7 @@
         steamId: steamId
       }, banEntries => {
 
-        
+
         if (banEntries.length > 0) {
           $("#gbl-search-result").text('Found player! Redirecting you to profile page.');
           return window.location.replace(`/gbl/profile?steamId=${banEntries[0].steamId}`)
