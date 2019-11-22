@@ -52,9 +52,9 @@ class Claim extends SdtdCommand {
       let cmdToExec;
 
       if (cpmVersion >= 6.4) {
-        cmdToExec = `giveplus ${player.steamId} ${item.name} ${item.amount} ${item.quality ? item.quality + " 0" : ''}`;
+        cmdToExec = `giveplus ${player.steamId} "${item.name}" ${item.amount} ${item.quality ? item.quality + " 0" : ''}`;
       } else {
-        cmdToExec = `give ${player.entityId} ${item.name} ${item.amount} ${item.quality ? item.quality : ''}`;
+        cmdToExec = `give ${player.entityId} "${item.name}" ${item.amount} ${item.quality ? item.quality : ''}`;
       }
 
       try {
