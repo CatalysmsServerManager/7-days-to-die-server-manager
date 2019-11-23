@@ -35,13 +35,13 @@ module.exports = function definePlayerTrackingHook(sails) {
         return;
       }
 
-      loggingObject.on('memUpdate', async (memUpdate) => {
+      setInterval(async () => {
         let dateStarted = new Date();
 
-        let server = await SdtdServer.findOne({id: memUpdate.server.id}).populate('config');
+        let server = await SdtdServer.findOne({ id: serverId }).populate('config');
 
         if (_.isUndefined(server)) {
-          return sails.log.warn(`memUpdate - Could not find server info during tracking!`, {memUpdate: memUpdate});
+          return sails.log.warn(`Player tracking - Could not find server info during tracking!`, { serverId });
         }
 
         let onlinePlayers = await sails.helpers.sdtd.getOnlinePlayers(server.id);
@@ -87,7 +87,7 @@ module.exports = function definePlayerTrackingHook(sails) {
             } catch (error) {
               sails.log.error(error);
             }
-            loggingObject.emit('trackingUpdate', {server, trackingInfo: initialValues});
+            loggingObject.emit('trackingUpdate', { server, trackingInfo: initialValues });
           }
           await TrackingInfo.createEach(initialValues);
 
@@ -109,8 +109,11 @@ module.exports = function definePlayerTrackingHook(sails) {
         }
 
         let dateEnded = new Date();
-        sails.log.debug(`Received memUpdate - Performed tracking for server ${server.name} - ${playerRecords.length} players online - ${currentCycles}/${sails.config.custom.trackingCyclesBeforeDelete} tracking cycles - took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`);
-      });
+        sails.log.debug(`Player tracking - Performed tracking for server ${server.name} - ${playerRecords.length} players online - ${currentCycles}/${sails.config.custom.trackingCyclesBeforeDelete} tracking cycles - took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`);
+
+      }, 30000)
+
+
 
     },
 
