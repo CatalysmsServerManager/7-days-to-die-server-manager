@@ -1,12 +1,13 @@
-let SdtdCommand = require('../command.js');
-const SdtdApi = require('7daystodie-api-wrapper');
+let SdtdCommand = require("../command.js");
+const SdtdApi = require("7daystodie-api-wrapper");
 
 class Gimme extends SdtdCommand {
   constructor(serverId) {
     super(serverId, {
-      name: 'gimme',
+      name: "gimme",
       description: "Get some random item. GIMME GIMME",
-      extendedDescription: "Get a random item, entity or command. An admin must configure possible items via the webinterface before you can use this command.",
+      extendedDescription:
+        "Get a random item, entity or command. An admin must configure possible items via the webinterface before you can use this command.",
       aliases: ["gimmie"]
     });
     this.serverId = serverId;
@@ -16,15 +17,16 @@ class Gimme extends SdtdCommand {
     return server.config.enabledGimme;
   }
 
-
   async run(chatMessage, player, server, args) {
-
     const cpmVersion = await sails.helpers.sdtd.checkCpmVersion(this.serverId);
     const possibleGimmeItems = await GimmeItem.find({
       server: server.id
     });
 
-    let itemToUseIndex = await sails.helpers.etc.randomNumber(0, possibleGimmeItems.length - 1);
+    let itemToUseIndex = await sails.helpers.etc.randomNumber(
+      0,
+      possibleGimmeItems.length - 1
+    );
     let itemToUse = possibleGimmeItems[itemToUseIndex];
 
     let dateNow = Date.now();
@@ -35,7 +37,7 @@ class Gimme extends SdtdCommand {
       where: {
         player: player.id,
         createdAt: {
-          '>': borderDate.valueOf()
+          ">": borderDate.valueOf()
         }
       },
       sort: "createdAt DESC",
@@ -43,9 +45,10 @@ class Gimme extends SdtdCommand {
     });
 
     if (previousUse.length > 0) {
-      let coolDownRemainderMs = cooldownInMs - (dateNow - previousUse[0].createdAt);
-      let coolDownRemainderMin = Math.round(coolDownRemainderMs / 60000)
-      return chatMessage.reply(gimmeCooldown, {
+      let coolDownRemainderMs =
+        cooldownInMs - (dateNow - previousUse[0].createdAt);
+      let coolDownRemainderMin = Math.round(coolDownRemainderMs / 60000);
+      return chatMessage.reply("gimmeCooldown", {
         coolDownRemainderMin: coolDownRemainderMin
       });
     }
@@ -54,16 +57,17 @@ class Gimme extends SdtdCommand {
       return chatMessage.reply("gimmeNoConfig");
     }
 
-
     if (server.config.economyEnabled && server.config.costToUseGimme) {
-      let notEnoughMoney = false
-      await sails.helpers.economy.deductFromPlayer.with({
-        playerId: player.id,
-        amountToDeduct: server.config.costToUseGimme,
-        message: `COMMAND - ${this.name}`
-      }).tolerate('notEnoughCurrency', totalNeeded => {
-        notEnoughMoney = true;
-      });
+      let notEnoughMoney = false;
+      await sails.helpers.economy.deductFromPlayer
+        .with({
+          playerId: player.id,
+          amountToDeduct: server.config.costToUseGimme,
+          message: `COMMAND - ${this.name}`
+        })
+        .tolerate("notEnoughCurrency", totalNeeded => {
+          notEnoughMoney = true;
+        });
       if (notEnoughMoney) {
         return chatMessage.reply("notEnoughMoney", {
           cost: server.config.costToUseGimme
@@ -71,12 +75,8 @@ class Gimme extends SdtdCommand {
       }
     }
 
-
-
     switch (itemToUse.type) {
-
       case "item":
-
         let parsedItems = parseItem(itemToUse.value);
         for (const itemToGive of parsedItems) {
           let cmdToExec;
@@ -88,45 +88,50 @@ class Gimme extends SdtdCommand {
           }
 
           try {
-            let response = await SdtdApi.executeConsoleCommand({
-              ip: server.ip,
-              port: server.webPort,
-              adminUser: server.authName,
-              adminToken: server.authToken
-            }, cmdToExec);
+            let response = await SdtdApi.executeConsoleCommand(
+              {
+                ip: server.ip,
+                port: server.webPort,
+                adminUser: server.authName,
+                adminToken: server.authToken
+              },
+              cmdToExec
+            );
 
             if (response.result.includes("ERR:")) {
-              chatMessage.reply("error", {error: response.result});
+              chatMessage.reply("error", { error: response.result });
             }
           } catch (error) {
-            chatMessage.reply("error", {error: error});
+            chatMessage.reply("error", { error: error });
           }
         }
         break;
 
       case "entity":
-
         let parsedEntities = parseEntity(itemToUse.value);
         for (const entity of parsedEntities) {
           let cmdToExec = `spawnentity ${player.entityId} ${entity}`;
 
           try {
-            let response = await SdtdApi.executeConsoleCommand({
-              ip: server.ip,
-              port: server.webPort,
-              adminUser: server.authName,
-              adminToken: server.authToken
-            }, cmdToExec);
-
+            let response = await SdtdApi.executeConsoleCommand(
+              {
+                ip: server.ip,
+                port: server.webPort,
+                adminUser: server.authName,
+                adminToken: server.authToken
+              },
+              cmdToExec
+            );
           } catch (error) {
-            chatMessage.reply("error", {error: error});
+            chatMessage.reply("error", { error: error });
           }
         }
         break;
 
       case "command":
-
-        let parsedCommands = sails.helpers.sdtd.parseCommandsString(itemToUse.value);
+        let parsedCommands = sails.helpers.sdtd.parseCommandsString(
+          itemToUse.value
+        );
 
         await sails.helpers.sdtd.executeCustomCmd(server, parsedCommands, {
           player: player
@@ -144,9 +149,7 @@ class Gimme extends SdtdCommand {
       item: itemToUse.id,
       player: player.id
     });
-
   }
-
 }
 
 module.exports = Gimme;
@@ -156,5 +159,5 @@ function parseEntity(value) {
 }
 
 function parseItem(value) {
-  return value.split(';');
+  return value.split(";");
 }
