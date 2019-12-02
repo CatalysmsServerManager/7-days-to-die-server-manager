@@ -112,7 +112,11 @@ class LoggingObject extends EventEmitter {
       if (newLog.type !== "logLine") {
         enrichedLog = await enrichData(newLog);
       }
-
+      if (this.debug) {
+        sails.log.debug(
+          `Log line for server ${this.server.id} - ${newLog.type} - ${newLog.data.msg}`
+        );
+      }
       loggingObject.emit(newLog.type, enrichedLog.data);
     }
 
