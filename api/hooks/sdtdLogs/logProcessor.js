@@ -26,12 +26,14 @@ module.exports = async function(job) {
   );
 
   // If latest log line is not found, get it from the server
-  const webUIUpdate = await SdtdApi.getWebUIUpdates(job.data.server);
   if (!lastLogLine) {
+    const webUIUpdate = await SdtdApi.getWebUIUpdates(job.data.server);
     lastLogLine = parseInt(webUIUpdate.newlogs) + 1;
   }
 
-  const count = parseInt(webUIUpdate.newlogs) + 1 - lastLogLine;
+  const count = process.env.CSMM_LOG_COUNT
+    ? parseInt(process.env.CSMM_LOG_COUNT)
+    : 50;
 
   // Get new logs from the server
   const newLogs = await SdtdApi.getLog(job.data.server, lastLogLine, count);
