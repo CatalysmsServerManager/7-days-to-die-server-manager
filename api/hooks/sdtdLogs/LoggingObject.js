@@ -76,7 +76,7 @@ class LoggingObject extends EventEmitter {
         },
         removeOnFail: 50,
         removeOnComplete: 200,
-        timeout: 5000
+        timeout: 10000
       }
     );
   }
