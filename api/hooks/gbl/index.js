@@ -5,35 +5,27 @@
  * @docs        :: https://sailsjs.com/docs/concepts/extending-sails/hooks
  */
 
-const SdtdApi = require('7daystodie-api-wrapper');
+const SdtdApi = require("7daystodie-api-wrapper");
 
 module.exports = function defineGblHook(sails) {
-
   return {
-
     /**
      * Runs when a Sails app loads/lifts.
      *
      * @param {Function} done
      */
-    initialize: async function (done) {
-
+    initialize: async function(done) {
       // done before we start loading bans so it doesn't block the hook loading
       done();
 
-      sails.on('lifted', async () => {
-        sails.log.info('Initializing custom hook (`gbl`)');
+      sails.on("lifted", async () => {
+        sails.log.info("Initializing custom hook (`gbl`)");
         refreshBans();
-        return
-
-      })
-
+        return;
+      });
     }
-
   };
-
 };
-
 
 async function refreshBans() {
   let dateStarted = new Date();
@@ -41,27 +33,30 @@ async function refreshBans() {
   let sdtdServers = await SdtdServer.find({});
 
   for (const server of sdtdServers) {
-
     try {
-
       let loggingObj = sails.hooks.sdtdlogs.getLoggingObject(server.id);
 
-      loggingObj.on('playerConnected', async (connectedMsg) => {
+      loggingObj.on("playerConnected", async connectedMsg => {
+        if (!connectedMsg.steamID) {
+          return;
+        }
 
         let foundBans = await BanEntry.find({
           where: {
             steamId: connectedMsg.steamID,
             server: {
-              '!=': connectedMsg.server.id
+              "!=": connectedMsg.server.id
             }
           }
-        }).populate('server');
+        }).populate("server");
 
         // Get unique bans by server owner
         // This makes it so a ban on a network of servers is only counted once
-        foundBans = _.uniqBy(foundBans, (ban) => ban.server.owner);
+        foundBans = _.uniqBy(foundBans, ban => ban.server.owner);
 
-        sails.log.debug(`Found ${foundBans.length} total bans for player ${connectedMsg.steamID} on the GBL`);
+        sails.log.debug(
+          `Found ${foundBans.length} total bans for player ${connectedMsg.steamID} on the GBL`
+        );
 
         let config = await SdtdConfig.findOne({
           server: connectedMsg.server.id
@@ -73,39 +68,54 @@ async function refreshBans() {
           steamId: connectedMsg.steamID
         });
 
-        if (foundBans.length >= config.gblAutoBanBans && config.gblAutoBanEnabled) {
-          await SdtdApi.executeConsoleCommand({
-            ip: server.ip,
-            port: server.webPort,
-            adminUser: server.authName,
-            adminToken: server.authToken
-          }, `kick ${connectedMsg.steamID} "CSMM: You are listed ${foundBans.length} times on the global ban list."`);
+        if (
+          foundBans.length >= config.gblAutoBanBans &&
+          config.gblAutoBanEnabled
+        ) {
+          await SdtdApi.executeConsoleCommand(
+            {
+              ip: server.ip,
+              port: server.webPort,
+              adminUser: server.authName,
+              adminToken: server.authToken
+            },
+            `kick ${connectedMsg.steamID} "CSMM: You are listed ${foundBans.length} times on the global ban list."`
+          );
 
           playerAutoKicked = true;
-          sails.log.info(`Autobanned a player for being on GBL too often`, connectedMsg);
+          sails.log.info(
+            `Autobanned a player for being on GBL too often`,
+            connectedMsg
+          );
         }
 
-        if (foundBans.length >= config.gblNotificationBans && config.gblNotificationBans != 0) {
+        if (
+          foundBans.length >= config.gblNotificationBans &&
+          config.gblNotificationBans != 0
+        ) {
           await sails.hooks.discordnotifications.sendNotification({
             serverId: connectedMsg.server.id,
-            notificationType: 'gblmaxban',
+            notificationType: "gblmaxban",
             player: player,
             bans: foundBans,
             banned: playerAutoKicked
-          })
+          });
         }
-      })
+      });
 
       await sails.helpers.sdtd.loadBans(server.id);
-
-
     } catch (error) {
-      sails.log.warn(`Error refreshing ban info for server ${server.name}`, error)
+      sails.log.warn(
+        `Error refreshing ban info for server ${server.name}`,
+        error
+      );
     }
-
-
   }
 
   let dateEnded = new Date();
-  sails.log.info(`Reloaded bans for ${sdtdServers.length} servers! - Took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`)
+  sails.log.info(
+    `Reloaded bans for ${
+      sdtdServers.length
+    } servers! - Took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`
+  );
 }
