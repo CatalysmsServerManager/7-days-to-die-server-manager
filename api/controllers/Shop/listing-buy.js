@@ -1,53 +1,49 @@
 module.exports = {
+  friendlyName: "listing buy",
 
-
-  friendlyName: 'listing buy',
-
-
-  description: 'Player buys a listing',
-
+  description: "Player buys a listing",
 
   inputs: {
     listingId: {
-      type: 'number',
+      type: "number",
       required: true
     },
 
     playerId: {
-      type: 'number',
+      type: "number",
       required: true
     },
 
     amount: {
-      type: 'number',
-      min: 1,
+      type: "number",
+      min: 1
     }
   },
-
 
   exits: {
     success: {},
 
     invalidId: {
       description: "The given ID was not found in the DB",
-      responseType: 'badRequest',
+      responseType: "badRequest",
       statusCode: 400
     },
 
     notEnoughCurrency: {
-      description: "The player does not have enough money to play for the listing",
-      responseType: 'badRequest',
+      description:
+        "The player does not have enough money to play for the listing",
+      responseType: "badRequest",
       statusCode: 400
     }
   },
 
-
-  fn: async function (inputs, exits) {
-
+  fn: async function(inputs, exits) {
     try {
-
       let player = await Player.findOne(inputs.playerId);
       let listing = await ShopListing.findOne(inputs.listingId);
+      const playerRole = await sails.helpers.sdtd.getPlayerRole(
+        inputs.playerId
+      );
       inputs.amount = inputs.amount ? inputs.amount : 1;
       let totalCost = listing.price * inputs.amount;
 
@@ -56,17 +52,24 @@ module.exports = {
       }
 
       if (_.isUndefined(listing)) {
-        return exits.invalidId('Invalid listing ID');
+        return exits.invalidId("Invalid listing ID");
       }
 
+      totalCost = totalCost * playerRole.economyDeductMultiplier;
 
       if (player.currency < totalCost) {
-        return exits.notEnoughCurrency("You do not have enough money to buy this!")
+        return exits.notEnoughCurrency(
+          "You do not have enough money to buy this!"
+        );
       }
 
-      await sails.helpers.economy.deductFromPlayer(player.id, totalCost, `SHOP - bought ${inputs.amount}x ${listing.name}`);
+      await sails.helpers.economy.deductFromPlayer(
+        player.id,
+        totalCost,
+        `SHOP - bought ${inputs.amount}x ${listing.name}`
+      );
 
-      let itemClaim
+      let itemClaim;
       for (let index = 0; index < inputs.amount; index++) {
         itemClaim = await PlayerClaimItem.create({
           name: listing.name,
@@ -76,20 +79,23 @@ module.exports = {
         }).fetch();
       }
 
-      await ShopListing.update({
-        id: inputs.listingId
-      }, {
-        timesBought: listing.timesBought + inputs.amount
-      });
+      await ShopListing.update(
+        {
+          id: inputs.listingId
+        },
+        {
+          timesBought: listing.timesBought + inputs.amount
+        }
+      );
 
-      sails.log.info(`${player.name} has purchased ${inputs.amount} of a listing from shop.`, listing);
-      return exits.success(itemClaim)
+      sails.log.info(
+        `${player.name} has purchased ${inputs.amount} of a listing from shop.`,
+        listing
+      );
+      return exits.success(itemClaim);
     } catch (error) {
       sails.log.error(error);
-      return exits.error(error)
+      return exits.error(error);
     }
-
   }
-
-
 };
