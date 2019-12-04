@@ -7,6 +7,12 @@ module.exports = logLine => {
   const deathRegex = /(PlayerSpawnedInWorld \(reason: Died, position:)/g;
   const deathValuesRegex = /([A-Za-z_]*)=(?:'([^']*)'|(\d*))/gm;
 
+  const connectedRegex = /(PlayerSpawnedInWorld \(reason: JoinMultiplayer, position:)/g;
+  const connectedValuesRegex = /([A-Za-z_]*)=(?:'([^']*)'|(\d*))/gm;
+
+  const joinedRegex = /(PlayerSpawnedInWorld \(reason: EnterMultiplayer, position:)/g;
+  const joinedValuesRegex = /([A-Za-z_]*)=(?:'([^']*)'|(\d*))/gm;
+
   let returnValue = {
     type: "logLine",
     data: logLine
@@ -161,7 +167,7 @@ module.exports = logLine => {
     returnValue.data = data;
   }
 
-  if (_.startsWith(logLine.msg, "PlayerSpawnedInWorld (reason: JoinMultiplayer")) {
+  if (connectedRegex.test(logLine.msg)) {
     /*
             {
               "date": "2017-11-14",
@@ -173,22 +179,11 @@ module.exports = logLine => {
             }
     */
 
-    let logMsg = logLine.msg.split(",");
-
-    let steamId = logMsg[4]
-      .replace("PlayerID=", "")
-      .split("'")
-      .join("")
-      .trim();
-    let playerName = logMsg[6]
-      .replace("PlayerName=", "")
-      .split("'")
-      .join("")
-      .trim();
-
+    const connectedArray = logLine.msg.match(connectedValuesRegex);
     let joinMsg = {
-      steamId,
-      playerName,
+      steamId: replaceQuotes(connectedArray[2].replace("OwnerID=", "")),
+      playerName: replaceQuotes(connectedArray[3].replace("PlayerName=", "")),
+      entityId: connectedArray[0].replace("EntityID=", ""),
       date: logLine.date,
       time: logLine.time,
       uptime: logLine.uptime,
@@ -200,9 +195,7 @@ module.exports = logLine => {
   }
 
   // New player connects
-  if (
-    _.startsWith(logLine.msg, "PlayerSpawnedInWorld (reason: EnterMultiplayer")
-  ) {
+  if (joinedRegex.test(logLine.msg)) {
     /*
     {
       "date": "2019-03-04",
@@ -214,22 +207,12 @@ module.exports = logLine => {
     }
     */
 
-    let logMsg = logLine.msg.split(",");
-
-    let steamId = logMsg[4]
-      .replace("PlayerID=", "")
-      .split("'")
-      .join("")
-      .trim();
-    let playerName = logMsg[6]
-      .replace("PlayerName=", "")
-      .split("'")
-      .join("")
-      .trim();
+    const joinedArray = logLine.msg.match(joinedValuesRegex);
 
     let joinMsg = {
-      steamId,
-      playerName,
+      steamId: replaceQuotes(joinedArray[2].replace("OwnerID=", "")),
+      playerName: replaceQuotes(joinedArray[3].replace("PlayerName=", "")),
+      entityId: joinedArray[0].replace("EntityID=", ""),
       date: logLine.date,
       time: logLine.time,
       uptime: logLine.uptime,
