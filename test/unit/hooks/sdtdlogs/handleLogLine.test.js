@@ -22,4 +22,42 @@ describe("sdtdLogs#handleLogLine", () => {
     expect(result.data.steamId).to.eq("76561198028175941");
     expect(result.data.entityId).to.eq("6454");
   });
+
+  it("Correctly detects a playerConnected event", () => {
+    const logLine = {
+      date: "2017-11-14",
+      time: "14:50:25",
+      uptime: "109.802",
+      msg:
+        "PlayerSpawnedInWorld (reason: JoinMultiplayer, position: -81, 61, -10): EntityID=531, PlayerID='76561198028175941', OwnerID='76561198028175941', PlayerName='Catalysm'",
+      trace: "",
+      type: "Log"
+    };
+
+    const result = handleLogLine(logLine);
+
+    expect(result.type).to.eq("playerConnected");
+    expect(result.data.playerName).to.eq("Catalysm");
+    expect(result.data.steamId).to.eq("76561198028175941");
+    expect(result.data.entityId).to.eq("531");
+  });
+
+  it("Correctly detects a playerJoined event", () => {
+    const logLine = {
+      date: "2017-11-14",
+      time: "14:50:25",
+      uptime: "109.802",
+      msg:
+        "PlayerSpawnedInWorld (reason: EnterMultiplayer, position: -81, 61, -10): EntityID=531, PlayerID='76561198028175941', OwnerID='76561198028175941', PlayerName='Catalysm'",
+      trace: "",
+      type: "Log"
+    };
+
+    const result = handleLogLine(logLine);
+
+    expect(result.type).to.eq("playerJoined");
+    expect(result.data.playerName).to.eq("Catalysm");
+    expect(result.data.steamId).to.eq("76561198028175941");
+    expect(result.data.entityId).to.eq("531");
+  });
 });
