@@ -47,7 +47,8 @@ async function refreshBans() {
             server: {
               "!=": connectedMsg.server.id
             }
-          }
+          },
+          limit: 100
         }).populate("server");
 
         // Get unique bans by server owner
