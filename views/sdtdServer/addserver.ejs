@@ -144,6 +144,13 @@
         return showErrorModal(`Authentication info cannot be empty.`);
       }
 
+      if (authName.length < 2) {
+        return showErrorModal(`Authentication name must be at least 2 characters.`);
+      }
+      if (authToken.length < 10) {
+        return showErrorModal(`Authentication token must be at least 10 characters.`);
+      }
+
       $("#loading").show();
       $("#back-to-form").hide();
       $("#addserver-input").fadeOut();
