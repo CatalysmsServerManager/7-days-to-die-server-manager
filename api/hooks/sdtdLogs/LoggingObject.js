@@ -128,6 +128,7 @@ class LoggingObject extends EventEmitter {
     }
 
     await this.setFailedToZero();
+    await this.setLastLogLine();
   }
 
   async destroy() {
