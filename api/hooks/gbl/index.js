@@ -35,7 +35,6 @@ async function refreshBans() {
   for (const server of sdtdServers) {
     try {
       let loggingObj = sails.hooks.sdtdlogs.getLoggingObject(server.id);
-
       loggingObj.on("playerConnected", async connectedMsg => {
         if (!connectedMsg.steamID) {
           return;

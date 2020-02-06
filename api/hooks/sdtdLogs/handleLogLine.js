@@ -1,4 +1,4 @@
-const geoip = require("geoip-ultralight");
+const geoip = require("geoip-country");
 const _ = require("lodash");
 
 const replaceQuotes = string => string.substring(1, string.length - 1);
@@ -7,8 +7,7 @@ module.exports = logLine => {
   const deathRegex = /(PlayerSpawnedInWorld \(reason: Died, position:)/g;
   const deathValuesRegex = /([A-Za-z_]*)=(?:'([^']*)'|(\d*))/gm;
 
-  const connectedRegex = /(PlayerSpawnedInWorld \(reason: JoinMultiplayer, position:)/g;
-  const connectedValuesRegex = /([A-Za-z_]*)=(?:'([^']*)'|(\d*))/gm;
+  const connectedRegex = /(Player connected,)/g;
 
   const joinedRegex = /(PlayerSpawnedInWorld \(reason: EnterMultiplayer, position:)/g;
   const joinedValuesRegex = /([A-Za-z_]*)=(?:'([^']*)'|(\d*))/gm;
@@ -168,28 +167,22 @@ module.exports = logLine => {
   }
 
   if (connectedRegex.test(logLine.msg)) {
-    /*
-            {
-              "date": "2017-11-14",
-              "time": "14:50:25",
-              "uptime": "109.802",
-              "msg": "PlayerSpawnedInWorld (reason: JoinMultiplayer, position: -81, 61, -10): EntityID=531, PlayerID='76561198028175941', OwnerID='76561198028175941', PlayerName='Catalysm'",
-              "trace": "",
-              "type": "Log"
-            }
-    */
-
-    const connectedArray = logLine.msg.match(connectedValuesRegex);
+    const connectedArray = logLine.msg.split(",");
+    console.log(connectedArray);
     let joinMsg = {
-      steamId: replaceQuotes(connectedArray[2].replace("OwnerID=", "")),
-      playerName: replaceQuotes(connectedArray[3].replace("PlayerName=", "")),
-      entityId: connectedArray[0].replace("EntityID=", ""),
+      steamId: connectedArray.find(e => e.includes("steamid")).split("=")[1],
+      playerName: connectedArray.find(e => e.includes("name")).split("=")[1],
+      entityId: connectedArray.find(e => e.includes("entityid")).split("=")[1],
+      ip: connectedArray.find(e => e.includes("ip")).split("=")[1],
       date: logLine.date,
       time: logLine.time,
       uptime: logLine.uptime,
       msg: logLine.msg
     };
 
+    joinMsg.country = geoip.lookup(joinMsg.ip).country;
+
+    console.log(joinMsg);
     returnValue.type = "playerConnected";
     returnValue.data = joinMsg;
   }
