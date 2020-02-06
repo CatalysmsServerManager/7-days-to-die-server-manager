@@ -168,7 +168,6 @@ module.exports = logLine => {
 
   if (connectedRegex.test(logLine.msg)) {
     const connectedArray = logLine.msg.split(",");
-    console.log(connectedArray);
     let joinMsg = {
       steamId: connectedArray.find(e => e.includes("steamid")).split("=")[1],
       playerName: connectedArray.find(e => e.includes("name")).split("=")[1],
@@ -180,9 +179,9 @@ module.exports = logLine => {
       msg: logLine.msg
     };
 
-    joinMsg.country = geoip.lookup(joinMsg.ip).country;
+    const geoIpLookup = geoip.lookup(joinMsg.ip);
+    joinMsg.country = geoIpLookup ? geoIpLookup.country : null;
 
-    console.log(joinMsg);
     returnValue.type = "playerConnected";
     returnValue.data = joinMsg;
   }

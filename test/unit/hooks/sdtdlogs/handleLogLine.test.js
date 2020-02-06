@@ -29,7 +29,7 @@ describe("sdtdLogs#handleLogLine", () => {
       time: "14:50:25",
       uptime: "109.802",
       msg:
-        "PlayerSpawnedInWorld (reason: JoinMultiplayer, position: -81, 61, -10): EntityID=531, PlayerID='76561198028175941', OwnerID='76561198028175941', PlayerName='Catalysm'",
+        "Player connected, entityid=3667, name=Catalysm, steamid=76561198028175941, steamOwner=76561198028175941, ip=192.168.1.100",
       trace: "",
       type: "Log"
     };
@@ -39,7 +39,7 @@ describe("sdtdLogs#handleLogLine", () => {
     expect(result.type).to.eq("playerConnected");
     expect(result.data.playerName).to.eq("Catalysm");
     expect(result.data.steamId).to.eq("76561198028175941");
-    expect(result.data.entityId).to.eq("531");
+    expect(result.data.entityId).to.eq("3667");
   });
 
   it("Correctly detects a playerJoined event", () => {
