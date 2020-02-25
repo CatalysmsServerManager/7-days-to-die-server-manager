@@ -35,7 +35,7 @@ module.exports = {
     },
     serverName: {
       type: "string",
-      minLength: 6,
+      minLength: 5,
       maxLength: 200
     }
   },
