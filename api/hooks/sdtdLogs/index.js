@@ -162,7 +162,7 @@ module.exports = function sdtdLogs(sails) {
         notificationType: 'playerConnected',
         player: connectedMsg.player
       });
-      if (connectedMsg.country != null) {
+      if (connectedMsg.country != null && connectedMsg.steamID) {
         await Player.update({
           server: server.id,
           steamId: connectedMsg.steamID
@@ -175,7 +175,7 @@ module.exports = function sdtdLogs(sails) {
       sails.log.verbose(`Detected a player connected`, connectedMsg);
     });
 
-    
+
     eventEmitter.on('playerJoined', async function (joinMsg) {
       joinMsg.server = _.omit(server, "authName", "authToken");
       joinMsg.player = _.omit(joinMsg.player, 'inventory');
