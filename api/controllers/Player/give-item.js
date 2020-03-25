@@ -26,7 +26,7 @@ module.exports = {
     quality: {
       type: 'number',
       min: 0,
-      max: 6
+      max: 500
     }
   },
 
@@ -74,7 +74,7 @@ module.exports = {
         return exits.badRequest(`Error while giving item - ${response.result}`);
       }
 
-      
+
       await SdtdApi.executeConsoleCommand({
         ip: server.ip,
         port: server.webPort,
