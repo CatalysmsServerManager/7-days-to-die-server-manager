@@ -158,6 +158,7 @@ module.exports.routes = {
   "get /api/sdtdserver/mod": "SdtdServerController.get-mod-version",
 
   "delete /api/sdtdserver/players": "SdtdServerController.delete-players",
+  "delete /api/sdtdserver/players/teleports": "SdtdServerController.wipe-teleports",
   "delete /api/sdtdserver/players/currency": "SdtdServerController.wipe-currency",
 
   // Ping kicker
