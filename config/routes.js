@@ -161,6 +161,7 @@ module.exports.routes = {
     "SdtdServerController/resetRegions.get-reset-regions",
 
   "delete /api/sdtdserver/players": "SdtdServerController.delete-players",
+  "delete /api/sdtdserver/players/teleports": "SdtdServerController.wipe-teleports",
 
   // Ping kicker
 

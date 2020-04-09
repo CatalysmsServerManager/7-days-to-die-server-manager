@@ -1,13 +1,13 @@
 <%- exposeLocalsToBrowser() %>
 
 <body>
-
   <div class="container-fluid">
-
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
-          <a href="<%= '/user/' + req.session.userId + '/dashboard' %>"> Dashboard </a>
+          <a href="<%= '/user/' + req.session.userId + '/dashboard' %>">
+            Dashboard
+          </a>
         </li>
         <li class="breadcrumb-item">
           <a href="<%= '/sdtdserver/' + server.id + '/dashboard' %>">
@@ -20,16 +20,19 @@
 
     <h1>Player overview</h1>
 
-    <br>
+    <br />
 
-    <%- include('./partials/deletePlayersButton') %>
+    <%- include('./partials/deletePlayersButton') %> <%-
+    include('./partials/wipeTeleports') %>
 
-    <br>
+    <br />
 
     <div class="row">
       <div class="col-md-12">
-
-        <table id='players-overview' class="table table-striped table-bordered dataTable no-footer">
+        <table
+          id="players-overview"
+          class="table table-striped table-bordered dataTable no-footer"
+        >
           <thead>
             <tr>
               <th>Name</th>
@@ -54,18 +57,16 @@
   </div>
 </body>
 
-
 <script>
   $(document).ready(function () {
-
     let players = [];
 
-    let playerDataTable = $('#players-overview').DataTable({
+    let playerDataTable = $("#players-overview").DataTable({
       data: window.SAILS_LOCALS.players,
-      dom: 'Bfrtip',
+      dom: "Bfrtip",
       ajax: {
-        url: '/api/sdtdserver/players/datatable',
-        type: 'post',
+        url: "/api/sdtdserver/players/datatable",
+        type: "post",
         data: {
           serverId: window.SAILS_LOCALS.server.id,
           _csrf: window.SAILS_LOCALS._csrf,
@@ -74,78 +75,73 @@
       fixedHeader: true,
       responsive: true,
       serverSide: true,
-      buttons: [
-        'copy', 'excel', 'pdf', 'print'
-      ],
-      columns: [{
+      buttons: ["copy", "excel", "pdf", "print"],
+      columns: [
+        {
           data: "name",
           render: function (data, type, row, meta) {
             return `<a href="/player/${row.id}/profile">${data}</a>`;
-          }
+          },
         },
         {
-          data: 'entityId'
+          data: "entityId",
         },
         {
-          data: 'steamId'
+          data: "steamId",
         },
         {
-          data: 'role',
+          data: "role",
           render: function (data, type, row, meta) {
             if (_.isNull(data)) {
-              return SAILS_LOCALS.defaultRole.name
+              return SAILS_LOCALS.defaultRole.name;
             } else {
-              return data.name
+              return data.name;
             }
-
           },
           orderable: false,
         },
         {
-          data: 'ip'
+          data: "ip",
         },
         {
-          data: 'country',
+          data: "country",
           render: function (data, type, row, meta) {
             if (row.country) {
-              let flagImg =
-                `<img src="../../images/flags/blank.gif" class="flag flag-${row.country.toLowerCase()}"/>`
+              let flagImg = `<img src="../../images/flags/blank.gif" class="flag flag-${row.country.toLowerCase()}"/>`;
               return `${flagImg} ${row.country}`;
             } else {
-              return `Unknown`
+              return `Unknown`;
             }
-          }
+          },
         },
         {
-          data: 'playtime',
+          data: "playtime",
           render: function (data, type, row, meta) {
             return hhmmss(row.playtime);
-          }
+          },
         },
         {
-          data: 'lastOnline',
+          data: "lastOnline",
         },
         {
-          data: 'level'
+          data: "level",
         },
         {
-          data: 'currency'
+          data: "currency",
         },
         {
-          data: 'score'
+          data: "score",
         },
         {
-          data: 'deaths'
+          data: "deaths",
         },
         {
-          data: 'playerKills'
+          data: "playerKills",
         },
         {
-          data: 'zombieKills'
-        }
-
-      ]
+          data: "zombieKills",
+        },
+      ],
     });
   });
-
 </script>
