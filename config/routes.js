@@ -157,10 +157,8 @@ module.exports.routes = {
   "get /api/sdtdserver/failedstatus": "SdtdServerController.get-failed-status",
   "get /api/sdtdserver/mod": "SdtdServerController.get-mod-version",
 
-  "get /api/sdtdserver/resetRegions":
-    "SdtdServerController/resetRegions.get-reset-regions",
-
   "delete /api/sdtdserver/players": "SdtdServerController.delete-players",
+  "delete /api/sdtdserver/players/currency": "SdtdServerController.wipe-currency",
 
   // Ping kicker
 
