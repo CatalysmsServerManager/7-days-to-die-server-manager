@@ -1,5 +1,4 @@
-let SdtdCommand = require('../command.js');
-const sevenDays = require('machinepack-7daystodiewebapi');
+const SdtdCommand = require('../command.js');
 
 class Pay extends SdtdCommand {
   constructor(serverId) {
@@ -29,6 +28,7 @@ class Pay extends SdtdCommand {
         }, {
           name: args[0]
         }],
+        server: server.id,
       },
       limit: 1
     });
