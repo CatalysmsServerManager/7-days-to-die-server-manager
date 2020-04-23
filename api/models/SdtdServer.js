@@ -138,3 +138,13 @@ module.exports = {
   },
 
 };
+
+module.exports.getAPIConfig = function getAPIConfig(server) {
+  return {
+    ip: server.ip,
+    port: server.webPort,
+    forceHttps: server.forceHttps,
+    adminUser: server.authName,
+    adminToken: server.authToken,
+  }
+}
