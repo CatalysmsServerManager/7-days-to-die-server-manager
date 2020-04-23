@@ -33,7 +33,7 @@ class sdtdMap {
 
     }
 
-    // Radius a bit of a misnomer here 
+    // Radius a bit of a misnomer here
     drawRectangle(x, z, radius, extraOptions) {
         let rectangle = L.rectangle([[x - radius, z - radius], [x + radius, z + radius]], extraOptions);
         rectangle.addTo(this.layerGroup)
@@ -206,14 +206,13 @@ class sdtdMap {
     GetSdtdTileLayer(mapinfo, initTime, isMiniMap) {
         if (typeof isMiniMap == 'undefined') isMiniMap = false;
 
-        var tileLayer = L.tileLayer(`http://${server.ip}:${server.webPort}/map/{z}/{x}/{y}.png?adminuser={adminuser}&admintoken={admintoken}`, {
+        var tileLayer = L.tileLayer("/api/sdtdserver/{serverid}/tile/{z}/{x}/{y}/.png", {
             maxZoom: mapinfo.maxzoom + 1,
             minZoom: Math.max(0, mapinfo.maxzoom - 5),
             maxNativeZoom: mapinfo.maxzoom,
             minNativeZoom: 0,
             tileSize: mapinfo.tilesize,
-            adminuser: `${server.authName}`,
-            admintoken: `${server.authToken}`
+            serverid: `${server.id}`,
         })
 
 
