@@ -73,12 +73,7 @@ async function refreshBans() {
           config.gblAutoBanEnabled
         ) {
           await SdtdApi.executeConsoleCommand(
-            {
-              ip: server.ip,
-              port: server.webPort,
-              adminUser: server.authName,
-              adminToken: server.authToken
-            },
+            SdtdServer.getAPIConfig(server),
             `kick ${connectedMsg.steamID} "CSMM: You are listed ${foundBans.length} times on the global ban list."`
           );
 

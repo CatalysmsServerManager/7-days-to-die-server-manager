@@ -7,8 +7,8 @@ module.exports = {
   description: 'Execute a message on a 7 Days to Die server',
 
   inputs: {
-    serverId: {
-      description: 'The ID of the server to look up.',
+    server: {
+      description: 'server to send to.',
       type: 'number',
       required: true
     },
@@ -28,7 +28,6 @@ module.exports = {
     },
     notFound: {
       description: 'No server/player with the specified ID was found in the database.',
-      responseType: 'notFound'
     }
   },
 
@@ -43,15 +42,16 @@ module.exports = {
    */
 
   fn: async function (inputs, exits) {
+    let server = await SdtdServer.findOne({ id: inputs.serverId });
+
     sails.log.debug(`API - SdtdServer:send message - sending a message on server ${inputs.serverId} to player: ${inputs.destinationPlayer}`);
     try {
-      let server = await SdtdServer.findOne(inputs.serverId);
-      await sails.helpers.commands.sendMessage.with({
-        serverId: server.id,
-        message: "foo",
-        destinationPlayer: 1234
-      });
-      return exits.success();
+      if (inputs.destinationPlayer) {
+        await sevenDays.executeConsoleCommand(SdtdServer.getAPIConfig(server), `pm ${inputs.destinationPlayer} ${inputs.message}`);
+      } else {
+        await sevenDays.executeConsoleCommand(SdtdServer.getAPIConfig(server), `say ${inputs.message}`);
+      }
+      return exits.success(response);
     } catch (error) {
       sails.log.error(`API - SdtdServer:sendMessage`, error);
       return exits.error(error);

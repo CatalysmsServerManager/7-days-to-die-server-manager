@@ -5,9 +5,9 @@ module.exports = {
   description: 'Loads data about all players associated with a server',
 
   inputs: {
-    serverId: {
-      required: true,
-      example: 4
+    server: {
+      type: 'ref',
+      required: true
     }
 
   },
@@ -15,15 +15,8 @@ module.exports = {
   exits: {},
 
   fn: async function (inputs, exits) {
-    let sdtdServer = await SdtdServer.findOne(inputs.serverId);
-
-    if (_.isUndefined(sdtdServer)) {
-      return exits.error(new Error(`Did not find a server with id ${inputs.serverId}`));
-    }
-
-    try {
-
-      let players = await sails.helpers.sdtd.loadAllPlayerData(sdtdServer.id);
+     try {
+      let players = await sails.helpers.sdtd.loadAllPlayerData(inputs.server);
       return exits.success(players);
 
     } catch (error) {

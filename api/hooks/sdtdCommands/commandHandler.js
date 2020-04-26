@@ -1,4 +1,4 @@
-const sevenDays = require('machinepack-7daystodiewebapi');
+const sevenDays = require('7daystodie-api-wrapper');
 const CustomCommand = require('./customCommand.js');
 const he = require('he');
 const parseArgs = require('./parseArgs');
@@ -226,23 +226,17 @@ async function sendReplyToPlayer(server, player, type, data) {
     }
 
 
-    function sendMsg(message) {
-      return sevenDays.sendMessage({
-        ip: server.ip,
-        port: server.webPort,
-        authName: server.authName,
-        authToken: server.authToken,
-        message: `${message}`,
-        playerId: player.steamId
-      }).exec({
-        error: (error) => {
-          sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
-          reject(error)
-        },
-        success: (result) => {
-          resolve(result)
+    async function sendMsg(message) {
+      try {
+        if (player.steamId) {
+          await sevenDays.executeConsoleCommand(SdtdServer.getAPIConfig(server), `pm ${player.steamId} ${message}`);
+        } else {
+          await sevenDays.executeConsoleCommand(SdtdServer.getAPIConfig(server), `say ${message}`);
         }
-      });
+      } catch (error) {
+        sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`, error);
+        throw error;
+      }
     }
 
 

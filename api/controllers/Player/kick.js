@@ -1,4 +1,4 @@
-var sevenDays = require('machinepack-7daystodiewebapi');
+var sevenDays = require('7daystodie-api-wrapper');
 
 module.exports = {
 
@@ -37,29 +37,21 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     try {
+      let player = await Player.findOne(inputs.playerId).populate('server');;
 
-      let player = await Player.findOne(inputs.playerId).populate('server');
-      let server = await SdtdServer.findOne(player.server.id);
-      return sevenDays.kickPlayer({
-        ip: server.ip,
-        port: server.webPort,
-        authName: server.authName,
-        authToken: server.authToken,
-        playerId: player.steamId,
-        reason: inputs.reason
-      }).exec({
-        error: function (error) {
-          return exits.error(error);
-        },
-        unknownPlayer: function () {
-          return exits.notFound('Cannot kick player, invalid ID given!');
-        },
-        success: function (response) {
-          sails.log.info(`API - Player:kick - Kicking player from server ${inputs.serverId}`, player);
-          return exits.success(response);
-        }
-      });
+      if (!player) {
+        return exits.notFound('Cannot kick player, invalid ID given!');
+      }
 
+      let server = await SdtdServer.findOne(player.server);
+
+      await sevenDays.executeConsoleCommand(
+        SdtdServer.getAPIConfig(server),
+        `kick ${player.id} "${inputs.reason}"`
+      );
+
+      sails.log.info(`API - Player:kick - Kicking player from server ${inputs.serverId}`, player);
+      return exits.success(response);
     } catch (error) {
       sails.log.error(`API - Player:kick - ${error}`);
       return exits.error(error);

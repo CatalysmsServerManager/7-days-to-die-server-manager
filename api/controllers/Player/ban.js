@@ -1,4 +1,4 @@
-var sevenDays = require('machinepack-7daystodiewebapi');
+var sevenDays = require('7daystodie-api-wrapper');
 
 module.exports = {
 
@@ -45,34 +45,22 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     try {
-
-
       let player = await Player.findOne(inputs.playerId);
-      let server = await SdtdServer.findOne(player.server);
-      return sevenDays.banPlayer({
-        ip: server.ip,
-        port: server.webPort,
-        authName: server.authName,
-        authToken: server.authToken,
-        playerId: player.steamId,
-        reason: inputs.reason,
-        duration: inputs.duration,
-        durationUnit: inputs.durationUnit.toLowerCase()
-      }).exec({
-        error: function (error) {
-          return exits.error(error);
-        },
-        unknownPlayer: function () {
-          return exits.notFound('Cannot ban player, invalid ID given!');
-        },
-        success: function (response) {
-          sails.log.info(`API - Player:ban - banned player on server ${inputs.serverId}`, player);
-          return exits.success(response);
-        }
-      });
 
+      if (!player) {
+        return exits.notFound('Cannot ban player, invalid ID given!');
+      }
+
+      let server = await SdtdServer.findOne(player.server);
+
+      await sevenDays.executeConsoleCommand(
+        SdtdServer.getAPIConfig(server),
+        `ban add ${player.id} ${inputs.duration} ${inputs.durationUnit.toLowerCase()} "${inputs.reason}"`
+      );
+      sails.log.info(`API - Player:ban - banned player on server ${inputs.serverId}`, player);
+      return exits.success(response);
     } catch (error) {
-      sails.log.error(`API - Player:ban - ${error}`);
+      sails.log.error(`API - Player:ban - `, error);
       return exits.error(error);
     }
 

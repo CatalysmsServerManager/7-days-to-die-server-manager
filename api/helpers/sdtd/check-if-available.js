@@ -1,4 +1,4 @@
-var sevenDays = require('machinepack-7daystodiewebapi');
+var sevenDays = require('7daystodie-api-wrapper');
 
 module.exports = {
 
@@ -67,48 +67,22 @@ module.exports = {
 };
 
 async function checkStats(sdtdServer) {
-  return new Promise(resolve => {
-    let statsResponse = sevenDays.getStats({
-      ip: sdtdServer.ip,
-      port: sdtdServer.webPort,
-      authName: sdtdServer.authName,
-      authToken: sdtdServer.authToken
-    }).exec({
-      success: (response) => {
-        if (response.gametime) {
-          resolve(true);
-        } else {
-          resolve(false)
-        }
-      },
-      error: (error) => {
-        resolve(false);
-      },
-      connectionRefused: error => {
-        resolve(false);
-      }
-    });
-  })
+  try {
+    const response = await sevenDays.getStats(SdtdServer.getAPIConfig(sdtdServer))
+    if (response.gametime) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    return false;
+  }
 }
 
 async function checkCommand(sdtdServer) {
-  return new Promise(resolve => {
-    let statsResponse = sevenDays.executeCommand({
-      ip: sdtdServer.ip,
-      port: sdtdServer.webPort,
-      authName: sdtdServer.authName,
-      authToken: sdtdServer.authToken,
-      command: 'help'
-    }).exec({
-      success: (response) => {
-        resolve(true);
-      },
-      error: (error) => {
-        resolve(false);
-      },
-      connectionRefused: error => {
-        resolve(false)
-      }
-    });
-  });
+  try {
+    let statsResponse = await sevenDays.executeConsoleCommand(SdtdServer.getAPIConfig(sdtdServer), 'help');
+    return true;
+  } catch (error) {
+    return false;
+  }
 }

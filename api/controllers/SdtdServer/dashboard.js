@@ -1,3 +1,5 @@
+const sevenDaysAPI = require("7daystodie-api-wrapper");
+
 module.exports = {
 
   friendlyName: 'Dashboard',
@@ -53,7 +55,7 @@ module.exports = {
       if (!_.isUndefined(sdtdServerInfo)) {
         sdtdServer = sdtdServerInfo;
       }
-
+      sdtdServer.baseUrl = sevenDaysAPI.getBaseUrl(sdtdServer);
       let userRole = await sails.helpers.roles.getUserRole(this.req.session.user.id, sdtdServer.id);
 
       sails.log.info(`VIEW - SdtdServer:dashboard - Showing dashboard for ${sdtdServer.name} to user ${this.req.session.userId}`);

@@ -1,4 +1,4 @@
-const sevenDays = require('machinepack-7daystodiewebapi');
+const sevenDays = require('7daystodie-api-wrapper');
 
 let detectedVersion
 
@@ -67,30 +67,16 @@ module.exports = {
 };
 
 
-function checkIfRunningAlloc26(sdtdServer) {
-  return new Promise((resolve, reject) => {
-    sevenDays.executeCommand({
-      ip: sdtdServer.ip,
-      port: sdtdServer.webPort,
-      authName: sdtdServer.authName,
-      authToken: sdtdServer.authToken,
-      command: 'version'
-    }).exec({
-      success: (response) => {
-        let splitResult = response.result.split('\n');
-        let mapRenderingEntry = _.find(splitResult, (versionLine) => {
-          return versionLine.startsWith('Mod Allocs MapRendering and Webinterface:')
-        })
-        detectedVersion = parseInt(mapRenderingEntry.replace('Mod Allocs MapRendering and Webinterface: ', '').replace('\r', '').replace('\n', ''));
-        resolve(detectedVersion > 26)
-      },
-      unknownCommand: (error) => {
-        resolve(false);
-      },
-      error: (error) => {
-        resolve(false);
-      }
-    });
-
-  })
+async function checkIfRunningAlloc26(sdtdServer) {
+  try {
+    const response = await sevenDays.executeConsoleCommand(SdtdServer.getAPIConfig(sdtdServer), 'version');
+    let splitResult = response.result.split('\n');
+    let mapRenderingEntry = _.find(splitResult, (versionLine) => {
+      return versionLine.startsWith('Mod Allocs MapRendering and Webinterface:')
+    })
+    detectedVersion = parseInt(mapRenderingEntry.replace('Mod Allocs MapRendering and Webinterface: ', '').replace('\r', '').replace('\n', ''));
+    return detectedVersion > 26;
+  } catch (error) {
+    return false;
+  }
 }

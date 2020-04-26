@@ -1,5 +1,5 @@
 let SdtdCommand = require('./command.js');
-const sevenDays = require('machinepack-7daystodiewebapi');
+const sevenDays = require('7daystodie-api-wrapper');
 
 class CustomCommand extends SdtdCommand {
   constructor(serverId, command) {
@@ -120,29 +120,6 @@ class CustomCommand extends SdtdCommand {
 }
 
 module.exports = CustomCommand;
-
-
-function executeCommand(server, command) {
-  return new Promise((resolve, reject) => {
-    sevenDays.executeCommand({
-      ip: server.ip,
-      port: server.webPort,
-      authName: server.authName,
-      authToken: server.authToken,
-      command: command
-    }).exec({
-      success: (response) => {
-        resolve(response);
-      },
-      unknownCommand: (error) => {
-        reject(error)
-      },
-      error: (error) => {
-        reject(error)
-      }
-    });
-  })
-}
 
 function replaceAllInString(string, search, replacement) {
   return string.split(search).join(replacement);

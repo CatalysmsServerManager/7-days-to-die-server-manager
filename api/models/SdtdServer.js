@@ -1,3 +1,5 @@
+const sevenDaysAPI = require("7daystodie-api-wrapper");
+
 /**
  * SdtdServer.js
  *
@@ -6,11 +8,6 @@
  */
 
 module.exports = {
-
-  customToJSON: function () {
-    return _.omit(this, ['authToken', 'authName', 'telnetPort']);
-  },
-
   attributes: {
 
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
@@ -37,14 +34,31 @@ module.exports = {
     },
 
     /**
+     * @var {string} forceHttps
      * @memberof SdtdServer
-     * @var {number} webPort
+     * @description Should we speak to the server using http (false), https (true) or detect based on port
+     */
+
+    forceHttps: {
+      type: 'json',
+      required: false
+    },
+
+    /**
+     * @memberof SdtdServer
+     * @var {number} port
      * @description Port provided by Alloc's webserver
      */
 
     webPort: {
-      type: 'number'
+      type: 'number',
     },
+
+    /**
+     * @memberof SdtdServer
+     * @var {number} port
+     * @description (alias) Port provided by Alloc's webserver
+     */
 
     /**
      * @memberof SdtdServer
@@ -65,8 +79,6 @@ module.exports = {
     authToken: {
       type: 'string'
     },
-
-
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
@@ -134,7 +146,7 @@ module.exports = {
     cronJobs: {
       collection: 'CronJob',
       via: 'server'
-    }
+    },
   },
 
 };

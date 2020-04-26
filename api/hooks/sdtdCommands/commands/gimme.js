@@ -89,12 +89,7 @@ class Gimme extends SdtdCommand {
 
           try {
             let response = await SdtdApi.executeConsoleCommand(
-              {
-                ip: server.ip,
-                port: server.webPort,
-                adminUser: server.authName,
-                adminToken: server.authToken
-              },
+              SdtdServer.getAPIConfig(server),
               cmdToExec
             );
 
@@ -114,12 +109,7 @@ class Gimme extends SdtdCommand {
 
           try {
             let response = await SdtdApi.executeConsoleCommand(
-              {
-                ip: server.ip,
-                port: server.webPort,
-                adminUser: server.authName,
-                adminToken: server.authToken
-              },
+              SdtdServer.getAPIConfig(server),
               cmdToExec
             );
           } catch (error) {

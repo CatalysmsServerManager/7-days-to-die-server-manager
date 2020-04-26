@@ -1,4 +1,4 @@
-var sevenDays = require('machinepack-7daystodiewebapi');
+var sevenDays = require('7daystodie-api-wrapper');
 const LoggingObject = require('./LoggingObject');
 const EventEmitter = require('events');
 
@@ -38,7 +38,7 @@ module.exports = function sdtdLogs(sails) {
           sails.log.info(`HOOK: Sdtdlogs - Initialized ${loggingInfoMap.size} logging instances`);
           return cb();
         } catch (error) {
-          sails.log.error(`HOOKS - sdtdLogs - ${error}`);
+          sails.log.error(`HOOKS - sdtdLogs -`, error);
         }
       });
     },
@@ -66,7 +66,7 @@ module.exports = function sdtdLogs(sails) {
         }
 
       } catch (error) {
-        sails.log.error(`HOOKS - sdtdLogs - ${error}`);
+        sails.log.error(`HOOKS - sdtdLogs -`, error);
       }
     },
 
@@ -89,7 +89,7 @@ module.exports = function sdtdLogs(sails) {
           return;
         }
       } catch (error) {
-        sails.log.error(`HOOKS - sdtdLogs - ${error}`);
+        sails.log.error(`HOOKS - sdtdLogs -`, error);
       }
 
 
@@ -140,7 +140,7 @@ module.exports = function sdtdLogs(sails) {
 
     let server = await SdtdServer.findOne(serverID);
 
-    let eventEmitter = new LoggingObject(server.ip, server.webPort, server.authName, server.authToken, serverID);
+    let eventEmitter = new LoggingObject(server);
 
     eventEmitter.on('logLine', function (logLine) {
       logLine.server = _.omit(server, "authName", "authToken");

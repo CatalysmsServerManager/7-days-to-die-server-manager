@@ -1,4 +1,4 @@
-var sevenDays = require('machinepack-7daystodiewebapi');
+var sevenDays = require('7daystodie-api-wrapper');
 
 module.exports = {
 
@@ -35,26 +35,22 @@ module.exports = {
     try {
 
       sails.log.debug(`API - Player:unban - unbanning player ${inputs.playerId}`);
-      let player = await Player.findOne(inputs.playerId).populate('server');
-      let server = await SdtdServer.findOne(player.server.id);
-      return sevenDays.unbanPlayer({
-        ip: server.ip,
-        port: server.webPort,
-        authName: server.authName,
-        authToken: server.authToken,
-        playerId: player.steamId,
-      }).exec({
-        error: function (error) {
-          return exits.error(error);
-        },
-        unknownPlayer: function () {
-          return exits.notFound('Cannot unban player, invalid ID given!');
-        },
-        success: function (response) {
-          return exits.success(response);
-        }
-      });
 
+      let player = await Player.findOne(inputs.playerId).populate('server');;
+
+      if (!player) {
+        return exits.notFound('Cannot unban player, invalid ID given!');
+      }
+
+      let server = await SdtdServer.findOne(player.server);
+
+      await sevenDays.executeConsoleCommand(
+        SdtdServer.getAPIConfig(server),
+        `ban remove ${player.id}`
+      );
+
+      sails.log.info(`API - Player:unban - unbanning player from ${inputs.serverId}`, player);
+      return exits.success(response);
     } catch (error) {
       sails.log.error(`API - Player:unban - ${error}`);
       return exits.error(error);

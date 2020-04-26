@@ -1,5 +1,5 @@
 let SdtdCommand = require('../command.js');
-const sevenDays = require('machinepack-7daystodiewebapi');
+const sevenDays = require('7daystodie-api-wrapper');
 
 class tele extends SdtdCommand {
   constructor(serverId) {
@@ -69,47 +69,36 @@ class tele extends SdtdCommand {
     }
 
     setTimeout(function () {
-      sevenDays.teleportPlayer({
-        ip: server.ip,
-        port: server.webPort,
-        authName: server.authName,
-        authToken: server.authToken,
-        playerId: player.steamId,
-        coordinates: `${teleportFound.x} ${teleportFound.y} ${teleportFound.z}`
-      }).exec({
-        success: async (response) => {
-          chatMessage.reply(`teleSuccess`, {
-            teleport: teleportFound
+      try {
+        const response = await sails.helpers.commands.executeCommand(`tele ${player.steamId} ${teleportFound.x} ${teleportFound.y} ${teleportFound.z}`);
+
+        chatMessage.reply(`teleSuccess`, {
+          teleport: teleportFound
+        });
+        await Player.update({
+          id: player.id
+        }, {
+          lastTeleportTime: new Date()
+        })
+        await PlayerTeleport.update({
+          id: teleportFound.id
+        }, {
+          timesUsed: teleportFound.timesUsed + 1
+        });
+        if (server.config.economyEnabled && server.config.costToTeleport) {
+          await sails.helpers.economy.deductFromPlayer.with({
+            playerId: player.id,
+            amountToDeduct: server.config.costToTeleport,
+            message: `COMMAND - ${this.name}`
           });
-          await Player.update({
-            id: player.id
-          }, {
-            lastTeleportTime: new Date()
-          })
-          await PlayerTeleport.update({
-            id: teleportFound.id
-          }, {
-            timesUsed: teleportFound.timesUsed + 1
-          });
-          if (server.config.economyEnabled && server.config.costToTeleport) {
-            await sails.helpers.economy.deductFromPlayer.with({
-              playerId: player.id,
-              amountToDeduct: server.config.costToTeleport,
-              message: `COMMAND - ${this.name}`
-            });
-          }
-          return;
-        },
-        error: (error) => {
-          sails.log.warn(`Hook - sdtdCommands:teleport - ${error}`);
-          sails.log.error(error)
-          chatMessage.reply(`error`);
         }
-      });
+        return;
+      } catch (error) {
+        sails.log.warn(`Hook - sdtdCommands:teleport - `, error);
+        sails.log.error(error)
+        chatMessage.reply(`error`);
+      }
     }, server.config.playerTeleportDelay * 1000)
-
-
-
   }
 }
 

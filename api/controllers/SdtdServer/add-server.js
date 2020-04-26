@@ -1,4 +1,3 @@
-const sevenDays = require("machinepack-7daystodiewebapi");
 const sevenDaysAPI = require("7daystodie-api-wrapper");
 
 module.exports = {
@@ -18,6 +17,11 @@ module.exports = {
       required: true
     },
 
+    forceHttps: {
+      type: "string",
+      required: false
+    },
+
     authName: {
       type: "string",
       minLength: 2,
@@ -35,7 +39,7 @@ module.exports = {
     serverName: {
       type: "string",
       required: true
-    }
+    },
   },
 
   exits: {
@@ -54,6 +58,9 @@ module.exports = {
     let userProfile = await User.findOne(this.req.session.userId).populate(
       "servers"
     );
+    if (!userProfile) {
+      return existsCheck.badRequest(`Your user is not found. Please relogin`);
+    }
     let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({
       userId: userProfile.id
     });
@@ -61,6 +68,7 @@ module.exports = {
 
     let sdtdServer = {
       ip: inputs.serverIp,
+      forceHttps: sails.helpers.stringToBool(inputs.forceHttps),
       webPort: inputs.webPort,
       authName: inputs.authName,
       authToken: inputs.authToken,
@@ -207,12 +215,7 @@ async function checkServerResponse(sdtdServer) {
 async function checkStats(sdtdServer) {
   try {
     let response = await sevenDaysAPI.getStats(
-      {
-        ip: sdtdServer.ip,
-        port: sdtdServer.webPort,
-        adminUser: sdtdServer.authName,
-        adminToken: sdtdServer.authToken
-      },
+      SdtdServer.getAPIConfig(sdtdServer),
       { timeout: 10000 }
     );
     return response;
@@ -225,12 +228,7 @@ async function checkStats(sdtdServer) {
 async function checkCommand(sdtdServer) {
   try {
     let response = await sevenDaysAPI.executeConsoleCommand(
-      {
-        ip: sdtdServer.ip,
-        port: sdtdServer.webPort,
-        adminUser: sdtdServer.authName,
-        adminToken: sdtdServer.authToken
-      },
+      SdtdServer.getAPIConfig(sdtdServer),
       "version",
       { timeout: 10000 }
     );
@@ -242,10 +240,7 @@ async function checkCommand(sdtdServer) {
 }
 
 async function checkIfServerExists(sdtdServerToAdd) {
-  let existingServers = await SdtdServer.find({
-    ip: sdtdServerToAdd.ip,
-    webPort: sdtdServerToAdd.webPort
-  });
+  let existingServers = await SdtdServer.find(sdtdServerToAdd);
 
   if (existingServers && existingServers.length > 0) {
     return true;
@@ -258,6 +253,7 @@ async function addServerToDb(sdtdServerToAdd) {
   let createdServer = await SdtdServer.create({
     ip: sdtdServerToAdd.ip,
     webPort: sdtdServerToAdd.webPort,
+    forceHttps: sdtdServerToAdd.forceHttps,
     authName: sdtdServerToAdd.authName,
     authToken: sdtdServerToAdd.authToken,
     name: sdtdServerToAdd.name,

@@ -84,12 +84,7 @@ async function handlePingCheck(memUpdate) {
     return sails.log.error(`Error parsing ping whitelist entries for ${server.name}`);
   }
 
-  let onlinePlayers = await SdtdApi.getOnlinePlayers({
-    ip: server.ip,
-    port: server.webPort,
-    adminToken: server.authToken,
-    adminUser: server.authName
-  });
+  let onlinePlayers = await SdtdApi.getOnlinePlayers(SdtdServer.getAPIConfig(server));
 
   let failedChecksForServer = 0;
 
@@ -132,12 +127,7 @@ async function handlePingCheck(memUpdate) {
 }
 
 async function kickPlayer(player, server, reason) {
-  await SdtdApi.executeConsoleCommand({
-    ip: server.ip,
-    port: server.webPort,
-    adminToken: server.authToken,
-    adminUser: server.authName,
-  }, `kick ${player.steamId} "${reason}"`);
+  await SdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(server), `kick ${player.steamId} "${reason}"`);
 }
 
 

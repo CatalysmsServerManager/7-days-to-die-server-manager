@@ -1,4 +1,4 @@
-const sevenDays = require('machinepack-7daystodiewebapi');
+const sevenDays = require('7daystodie-api-wrapper');
 const SdtdApi = require('7daystodie-api-wrapper');
 
 /**
@@ -218,17 +218,10 @@ module.exports = function definePlayerTrackingHook(sails) {
     let dateStarted = new Date();
     let inventories = new Array();
     try {
-      inventories = await SdtdApi.getPlayerInventories({
-        ip: server.ip,
-        port: server.webPort,
-        adminUser: server.authName,
-        adminToken: server.authToken,
-      });
+      inventories = await SdtdApi.getPlayerInventories(SdtdServer.getAPIConfig(server));
     } catch (error) {
-
       sails.log.warn(`${server.name} Errored during inventory tracking - ${error}.`);
     }
-
 
     for (const onlinePlayer of playerList) {
       let playerRecord = playerRecords.filter(player => onlinePlayer.steamid === player.steamId);

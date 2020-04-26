@@ -1,4 +1,4 @@
-var sevenDays = require('machinepack-7daystodiewebapi');
+var sevenDays = require('7daystodie-api-wrapper');
 
 module.exports = {
 
@@ -55,49 +55,26 @@ module.exports = {
     }
 
 
-    function loadStats(server) {
-      return new Promise((resolve, reject) => {
-        sevenDays.getStats({
-          ip: server.ip,
-          port: server.webPort,
-          authName: server.authName,
-          authToken: server.authToken
-        }).exec({
-          error: error => {
-            resolve(undefined);
-          },
-          success: data => {
-            resolve(data);
-          }
-        });
-      });
+    async function loadStats(server) {
+      try {
+        return sevenDays.getStats(SdtdServer.getAPIConfig(server));
+      } catch (error) {
+        return undefined;
+      }
     }
 
-    function loadServerInfo(server) {
-      return new Promise((resolve, reject) => {
-        sevenDays.getServerInfo({
-          ip: server.ip,
-          port: server.webPort,
-          authName: server.authName,
-          authToken: server.authToken
-        }).exec({
-          error: error => {
-            resolve(undefined);
-          },
-          success: data => {
-            for (const dataPoint in data) {
-              if (data.hasOwnProperty(dataPoint)) {
-                data[dataPoint] = data[dataPoint].value;
-              }
-            }
-            resolve(data);
+    async function loadServerInfo(server) {
+      try {
+        let data = await sevenDays.getServerInfo(SdtdServer.getAPIConfig(server))
+        for (const dataPoint in data) {
+          if (data.hasOwnProperty(dataPoint)) {
+            data[dataPoint] = data[dataPoint].value;
           }
-        });
-      });
+        }
+        return data;
+      } catch (error) {
+        return undefined;
+      }
     }
-
-
   }
-
-
 };

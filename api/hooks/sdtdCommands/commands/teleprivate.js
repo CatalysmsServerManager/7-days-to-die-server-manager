@@ -1,5 +1,5 @@
 let SdtdCommand = require('../command.js');
-const sevenDays = require('machinepack-7daystodiewebapi');
+const sevenDays = require('7daystodie-api-wrapper');
 
 class telePrivate extends SdtdCommand {
   constructor(serverId) {

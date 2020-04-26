@@ -1,4 +1,4 @@
-const sevenDays = require('machinepack-7daystodiewebapi');
+const sevenDays = require('7daystodie-api-wrapper');
 
 module.exports = {
 
@@ -34,7 +34,11 @@ module.exports = {
     notFound: {
       description: 'No player with the specified ID was found in the database.',
       responseType: 'notFound'
-    }
+    },
+    unknownPlayer: {
+      description: "The given player id is not valid",
+      responseType: 'ok'
+    },
   },
 
   /**
@@ -56,32 +60,15 @@ module.exports = {
       let player = await Player.findOne(inputs.playerId).populate('server');
       let server = player.server;
 
-      sevenDays.teleportPlayer({
-        ip: server.ip,
-        port: server.webPort,
-        authName: server.authName,
-        authToken: server.authToken,
-        playerId: player.steamId,
-        coordinates: `${inputs.coordX} ${inputs.coordY} ${inputs.coordZ}`
-      }).exec({
-        success: (response) => {
-          sails.log.debug(`API - Player:teleport - Successfully teleported player ${inputs.playerId} to ${inputs.coordX} ${inputs.coordY} ${inputs.coordZ}`);
-          return exits.success();
-        },
-        error: (error) => {
-          sails.log.error(`API - Player:teleport - ${error}`);
-          return exits.error(error);
-        }
-      });
-
-
+      const response = await sevenDays.executeConsoleCommand(SdtdServer.getAPIConfig(server),  `tele ${player.steamId} ${inputs.coordX} ${inputs.coordY} ${inputs.coordZ}`)
+      if (response.result.includes('Playername or entity/steamid id not found.')) {
+        return exits.unknownPlayer("Playername or entity/steamid id not found.")
+      }
+      sails.log.debug(`API - Player:teleport - Successfully teleported player ${inputs.playerId} to ${inputs.coordX} ${inputs.coordY} ${inputs.coordZ}`);
+      return exits.success();
     } catch (error) {
-      sails.log.error(`API - Player:teleport - ${error}`);
+      sails.log.error(`API - Player:teleport`, error);
       return exits.error(error);
     }
-
-
-
-
   }
 };

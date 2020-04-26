@@ -1,4 +1,4 @@
-const sevenDays = require('machinepack-7daystodiewebapi');
+const sevenDays = require('7daystodie-api-wrapper');
 
 module.exports = {
 
@@ -51,23 +51,18 @@ module.exports = {
         return exits.notFound();
       }
 
-      sevenDays.listItems({
-        ip: server.ip,
-        port: server.webPort,
-        authName: server.authName,
-        authToken: server.authToken,
-        itemToSearch: inputs.item
-      }).exec({
-        success: (response) => {
-          return exits.success(response);
-        },
-        unknownCommand: (error) => {
-          return exits.commandError(error);
-        },
-        error: (error) => {
-          return exits.error(error);
-        }
-      });
+      const response = await sevenDays.executeConsoleCommand(SdtdServer.getAPIConfig(server), `listitems ${inputs.item || '*'}`);
+
+      let items = new Array();
+
+      let splitResult = response.result.split(/\r?\n/)
+
+      splitResult.forEach((element) => {
+        element = element.trim()
+        items.push(element);
+      })
+      items = items.slice(0, items.length-2);
+      return exits.success(items);
 
     } catch (error) {
       sails.log.error(`API - SdtdServer:available-items - ${error}`);

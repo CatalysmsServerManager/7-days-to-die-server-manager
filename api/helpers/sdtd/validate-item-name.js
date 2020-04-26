@@ -1,16 +1,11 @@
-var sevenDays = require('machinepack-7daystodiewebapi');
+var sevenDays = require('7daystodie-api-wrapper');
 
 module.exports = {
-
-
     friendlyName: 'Validate item name',
-
 
     description: 'checks if a given item name is valid for a server',
 
-
     inputs: {
-
         serverId: {
             type: 'number',
             description: 'Id of the server',
@@ -22,7 +17,6 @@ module.exports = {
             description: 'Name of the item to check',
             required: true
         }
-
     },
 
 
@@ -31,11 +25,7 @@ module.exports = {
             outputFriendlyName: 'Success',
             outputType: 'boolean'
         },
-
-
     },
-
-
 
     fn: async function (inputs, exits) {
 
@@ -45,32 +35,18 @@ module.exports = {
             return exits.success(false);
         }
 
-        sevenDays.listItems({
-            ip: server.ip,
-            port: server.webPort,
-            authName: server.authName,
-            authToken: server.authToken,
-            itemToSearch: inputs.item
-        }).exec({
-            success: (response) => {
-                let foundItem = false
+        const response = await sevenDays.executeConsoleCommand(SdtdServer.getAPIConfig(server), `listitems ${inputs.itemName}`);
 
-                response.map(itemName => {
+        let items = new Array();
 
-                    if (itemName === inputs.itemName) {
-                        foundItem = true
-                    }
-                })
+        let splitResult = response.result.split(/\r?\n/)
 
-                return exits.success(foundItem)
-            },
-            error: (error) => {
-                return exits.success(false)
-            }
-        });
+        splitResult.forEach((element) => {
+          element = element.trim()
+          items.push(element);
+        })
+        items = items.slice(0, items.length-2);
 
-
+        return exits.success(!!response.find(itemName => itemName === inputs.itemName));
     }
-
-
 };

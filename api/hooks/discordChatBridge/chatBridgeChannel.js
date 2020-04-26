@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const sevenDays = require("machinepack-7daystodiewebapi");
+const sevenDays = require("7daystodie-api-wrapper");
 const hhmmss = require("@streammedev/hhmmss");
 
 /**
@@ -251,32 +251,20 @@ class ChatBridgeChannel {
     this.channel.send(embed);
   }
 
-  sendMessageToGame(message) {
+  async sendMessageToGame(message) {
     if (
       !message.author.bot &&
       message.channel.id === this.channel.id &&
       message.author.id != message.client.user.id &&
       !message.content.startsWith(message.guild.commandPrefix)
     ) {
-      sevenDays
-        .sendMessage({
-          ip: this.sdtdServer.ip,
-          port: this.sdtdServer.webPort,
-          authName: this.sdtdServer.authName,
-          authToken: this.sdtdServer.authToken,
-          message: `[${message.author.username}]: ${message.cleanContent}`
-        })
-        .exec({
-          error: error => {
-            sails.log.error(
-              `HOOK discordBot:chatBridgeChannel - sending discord message to game ${error}`
-            );
-            message.react("⚠");
-          },
-          success: () => {
-            return true;
-          }
-        });
+      try {
+        await sails.helpers.commands.sendMessage(`[${message.author.username}]: ${message.cleanContent}`)
+        return true;
+      } catch {
+        sails.log.error(`HOOK discordBot:chatBridgeChannel - sending discord message to game`, error);
+        message.react("⚠");
+      }
     }
   }
 }

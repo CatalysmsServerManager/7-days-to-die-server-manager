@@ -1,4 +1,4 @@
-var sevenDays = require('machinepack-7daystodiewebapi');
+var sevenDays = require('7daystodie-api-wrapper');
 
 module.exports = {
 
@@ -33,31 +33,13 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-
-    sevenDays.getAllowedCommands({
-      ip: inputs.server.ip,
-      port: inputs.server.webPort,
-      authName: inputs.server.authName,
-      authToken: inputs.server.authToken
-    }).exec({
-      error: error => {
-        return exits.error(error);
-      },
-      success: response => {
-        let allowedCommands = new Array();
-        response.commands.forEach(command => {
-          allowedCommands.push(command.command)
-        })
-
-        return exits.success(allowedCommands);
-      }
-    })
-
-
-
-
+    try {
+      const response = await sevenDays.getAllowedCommands(SdtdServer.getAPIConfig(inputs.server));
+      const allowedCommands = response.commands.map(command => command.command);
+      return exits.success(allowedCommands);
+    } catch (error) {
+      return exits.error(error);
+    }
   }
-
-
 };
 

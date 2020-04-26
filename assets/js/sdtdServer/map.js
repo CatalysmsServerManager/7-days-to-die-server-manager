@@ -1,3 +1,4 @@
+
 class sdtdMap {
     constructor(mapElement, server) {
         this.mapElement = mapElement;
@@ -213,8 +214,7 @@ class sdtdMap {
             minNativeZoom: 0,
             tileSize: mapinfo.tilesize,
             serverid: `${server.id}`,
-        })
-
+        });
 
         tileLayer.getTileUrl = function (coords) {
             coords.y = (-coords.y) - 1;

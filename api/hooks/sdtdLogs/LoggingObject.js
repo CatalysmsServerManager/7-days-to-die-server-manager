@@ -11,25 +11,15 @@ const slowModeIntervalms = 300000;
 
 class LoggingObject extends EventEmitter {
   constructor(
-    ip,
-    port,
-    authName,
-    authToken,
-    serverId,
+    server,
     intervalTime = defaultIntervalMs
   ) {
     super();
-    this.server = {
-      id: serverId,
-      ip: ip,
-      port: port,
-      adminUser: authName,
-      adminToken: authToken
-    };
+    this.server = server;
 
     this.active = true;
     this.queue = new Bull(
-      `sdtdserver:${serverId}:logs`,
+      `sdtdserver:${server.id}:logs`,
       process.env.REDISSTRING
     );
     this.intervalTime = intervalTime;
@@ -156,7 +146,7 @@ class LoggingObject extends EventEmitter {
   }
 
   async setLastLogLine() {
-    const webUIUpdate = await SdtdApi.getWebUIUpdates(this.server);
+    const webUIUpdate = await SdtdApi.getWebUIUpdates(SdtdServer.getAPIConfig(this.server));
     const lastLogLine = parseInt(webUIUpdate.newlogs) + 1;
     await sails.helpers.redis.set(
       `sdtdserver:${this.server.id}:sdtdLogs:lastLogLine`,

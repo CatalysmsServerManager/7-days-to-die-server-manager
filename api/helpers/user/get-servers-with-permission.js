@@ -22,14 +22,18 @@ module.exports = {
       id: inputs.userId
     });
 
+    if (!foundUser) {
+      return exits.error(new Error(`Couldn't find userid with ${inputs.userId}`));
+    }
+
     const players = await Player.find({
       steamId: foundUser.steamId
     }).populate('role').populate('server');
 
     let objectToSend = [];
 
-    players.map(player => {
-      try {
+    for (const player of players) {
+       try {
 
         let ownerCheck;
 
@@ -45,7 +49,7 @@ module.exports = {
       } catch (error) {
         sails.log.error(error)
       }
-    });
+    }
 
     let ownedServers = await SdtdServer.find({
       owner: inputs.userId

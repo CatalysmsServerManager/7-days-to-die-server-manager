@@ -165,16 +165,7 @@ function checkForCustomFunction(command) {
 
 async function executeCommand(server, command) {
   try {
-    let result = await sdtdApi.executeConsoleCommand(
-      {
-        ip: server.ip,
-        port: server.webPort,
-        adminToken: server.authToken,
-        adminUser: server.authName
-      },
-      _.trim(command)
-    );
-    return result;
+    return await sails.helpers.commands.executeCommand(command.trim());
   } catch (error) {
     return {
       result: error.toString()

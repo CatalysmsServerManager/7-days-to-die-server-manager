@@ -22,17 +22,12 @@ module.exports = {
 
     let dateStarted = new Date();
 
-    let server = await SdtdServer.findOne(inputs.serverId);
+    let server = await SdtdServer.findOne({ id: inputs.serverId });
     let currentPlayers = await Player.find({
       server: server.id
     });
 
-    let apiResult = await SdtdApi.getPlayerList({
-      ip: server.ip,
-      port: server.webPort,
-      adminUser: server.authName,
-      adminToken: server.authToken
-    }, 100000000);
+    let apiResult = await SdtdApi.getPlayerList(SdtdServer.getAPIConfig(server), 100000000);
 
     let newPlayers = new Array();
 
@@ -57,7 +52,7 @@ module.exports = {
           server: server.id
         }
         newPlayers.push(newPlayerData)
-      }    
+      }
 
     }
 

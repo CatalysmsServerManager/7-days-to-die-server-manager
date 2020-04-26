@@ -1,13 +1,6 @@
-const hhmmss = require('@streammedev/hhmmss');
-
 module.exports = {
-
-
   friendlyName: 'Get players view',
-
-
   description: 'Load the player overview view',
-
 
   inputs: {
     serverId: {
@@ -15,7 +8,6 @@ module.exports = {
       example: 4
     }
   },
-
 
   exits: {
     success: {
@@ -42,7 +34,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     const defaultRole = await sails.helpers.roles.getDefaultRole(inputs.serverId);
-    let server = await SdtdServer.findOne(inputs.serverId);
+    const server = await SdtdServer.findOne(inputs.serverId);
     try {
       sails.log.info(`VIEW - SdtdServer:players - Showing players for ${server.name}`);
 

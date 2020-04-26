@@ -1,4 +1,4 @@
-const sevenDays = require('machinepack-7daystodiewebapi');
+const sevenDays = require('7daystodie-api-wrapper');
 
 module.exports = {
 
@@ -28,7 +28,11 @@ module.exports = {
     commandError: {
       description: 'Error executing the command',
       responseType: 'badRequest'
-    }
+    },
+    unknownPlayer: {
+      variableName: 'error',
+      description: "The given player id is not valid"
+    },
   },
 
   /**
@@ -41,40 +45,36 @@ module.exports = {
    */
 
   fn: async function (inputs, exits) {
-
-
+    const sdtdServer = await SdtdServer.findOne(inputs.serverId);
+    if (_.isUndefined(sdtdServer)) {
+      return exits.notFound();
+    }
     try {
-      let sdtdServer = await SdtdServer.findOne(inputs.serverId);
-      if (_.isUndefined(sdtdServer)) {
-        return exits.notFound();
+      const response = await sevenDays.executeConsoleCommand(SdtdServer.getAPIConfig(sdtdServer), inputs.command);
+      if (response.result.includes('Playername or entity/steamid id not found.')) {
+        return exits.unknownPlayer("Playername or entity/steamid id not found.")
       }
-      sevenDays.executeCommand({
-        ip: sdtdServer.ip,
-        port: sdtdServer.webPort,
-        authName: sdtdServer.authName,
-        authToken: sdtdServer.authToken,
-        command: inputs.command
-      }).exec({
-        success: (response) => {
-          let logLine = {
-            msg: response.result,
-            date: new Date(),
-            type: 'commandResponse'
-          };
-          sails.log.info(`API - Executing a command on ${sdtdServer.name} by user ${this.req.session.userId} - ${inputs.command}`);
-          return exits.success(logLine);
-        },
-        unknownCommand: (error) => {
-          return exits.commandError(error);
-        },
-        error: (error) => {
-          return exits.error(error);
-        }
-      });
-
+      const logLine = {
+        msg: response.result,
+        date: new Date(),
+        type: 'commandResponse'
+      };
+      sails.log.info(`API - Executing a command on ${sdtdServer.name} by user ${this.req.session.userId} - ${inputs.command}`);
+      return exits.success(logLine);
     } catch (error) {
-      sails.log.error(`API - SdtdServer:executeCommand - ${error}`);
-      return exits.error(error);
+      console.log('error', error);
+      if (error.message === 'Not Found') {
+        const logLine = {
+          msg: 'Command not found',
+          date: new Date(),
+          type: 'commandResponse'
+        };
+        sails.log.info(`API - Executing a command on ${sdtdServer.name} by user ${this.req.session.userId} - ${inputs.command}`);
+        return exits.success(logLine);
+      } else {
+        sails.log.error(`API - SdtdServer:executeCommand`, error);
+        return exits.error(error);
+      }
     }
 
   }

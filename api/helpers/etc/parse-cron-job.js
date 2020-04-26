@@ -65,12 +65,7 @@ module.exports = {
 };
 
 async function execCmd(job, command) {
-  let response = sevenDays.executeConsoleCommand({
-    ip: job.server.ip,
-    port: job.server.webPort,
-    adminUser: job.server.authName,
-    adminToken: job.server.authToken,
-  }, command.trim());
+  let response = sevenDays.executeConsoleCommand(SdtdServer.getAPIConfig(server), command.trim());
   return response;
 }
 

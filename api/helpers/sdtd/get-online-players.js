@@ -1,4 +1,4 @@
-var sevenDays = require('machinepack-7daystodiewebapi');
+var sevenDays = require('7daystodie-api-wrapper');
 const validator = require('validator');
 
 module.exports = {
@@ -29,25 +29,13 @@ module.exports = {
 
     fn: async function (inputs, exits) {
         let server = await SdtdServer.findOne({ id: inputs.serverId });
-        let response = new Array();
-
-        sevenDays.getOnlinePlayers({
-            ip: server.ip,
-            port: server.webPort,
-            authName: server.authName,
-            authToken: server.authToken,
-        }).exec({
-            success: response => {
-                return exits.success(response)
-            },
-            error: err => {
-                sails.log.warn(`Error getting online players for server ${server.name} - ${err}`)
-                return exits.success([]);
-            }
-        })
-
-
-
+        try {
+          response = await sevenDays.getOnlinePlayers(SdtdServer.getAPIConfig(server))
+          return exits.success(response);
+        } catch (err) {
+          sails.log.warn(`Error getting online players for server ${server.name}`, err)
+          return exits.success([]);
+        }
     }
 
 

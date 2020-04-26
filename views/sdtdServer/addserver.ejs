@@ -25,6 +25,15 @@
             </small>
           </div>
           <div class="form-group">
+            <label for="forceHttps">Force HTTPS?</label>
+            <select id="forceHttps" class="form-control">
+              <option selected>Autodetect</option>
+              <option value="true">Force HTTPS</option>
+              <option value="false">Force HTTP</option>
+            </select>
+            <small>Does your server speak HTTPS? When in doubt select autodetect</small>
+          </div>
+          <div class="form-group">
             <label for="webport">Web API port</label>
             <input type="number" class="form-control" id="webport" aria-describedby="webportHelp"
               placeholder="ex. 8082">
@@ -111,6 +120,7 @@
         authName = $("#authName").val(),
         authToken = $("#authToken").val(),
         servername = $("#servername").val()
+        forceHttps = $("#forceHttps").val()
 
       if (servername === '') {
         return showErrorModal(
@@ -165,7 +175,8 @@
           serverIp: serverip,
           webPort: webport,
           authName: authName,
-          authToken: authToken
+          authToken: authToken,
+          forceHttps: forceHttps
         },
         success: (data, status, xhr) => {
           $("#loading").hide();
@@ -204,9 +215,9 @@
             if (response.statsResponse) {
               responseString +=
                 `${successIcon} <p>CSMM was able to retrieve basic stats of your server. This means you have entered the correct IP and port (unless there are multiple servers running on the ip address in question.)
-                  
+
                   Your server is on day ${response.statsResponse.gametime.days}, hour ${response.statsResponse.gametime.hours} and minute ${response.statsResponse.gametime.minutes}. There ${response.statsResponse.players === 1 ? "is" : "are"} ${response.statsResponse.players} player${response.statsResponse.players === 1 ? "" : "s"} online.
-                  
+
                   </p>`
             } else {
               responseString +=
@@ -223,7 +234,7 @@
             if (!response.commandResponse) {
               responseString +=
                 `${errorIcon}</i> <p>CSMM could not execute the 'mem' command on your server. This is most likely an authentication issue. Make sure you have set up an authorization token and name (you can do this via telnet commands or by editing an xml)
-                
+
                   <a href="https://docs.csmm.app/en/CSMM/installation.html" target="_blank">More info</a></p>`
               return testResponseElement.html(responseString);
             } else {

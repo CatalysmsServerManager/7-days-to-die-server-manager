@@ -439,22 +439,12 @@ module.exports = function sdtdCountryBan(sails) {
 
         if (countryBanConfig.ban) {
           await SdtdApi.executeConsoleCommand(
-            {
-              ip: server.ip,
-              port: server.webPort,
-              adminUser: server.authName,
-              adminToken: server.authToken
-            },
+            SdtdServer.getAPIConfig(server),
             `ban add ${connectedMessage.steamId} 100 years "CSMM: Players from your country (${country}) are not allowed to connect to this server."`
           );
         } else {
           await SdtdApi.executeConsoleCommand(
-            {
-              ip: server.ip,
-              port: server.webPort,
-              adminUser: server.authName,
-              adminToken: server.authToken
-            },
+            SdtdServer.getAPIConfig(server),
             `kick ${connectedMessage.steamId} "CSMM: Players from your country (${country}) are not allowed to connect to this server."`
           );
         }

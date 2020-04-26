@@ -1,4 +1,4 @@
-const sevenDays = require("machinepack-7daystodiewebapi");
+const sevenDays = require("7daystodie-api-wrapper");
 
 module.exports = {
   friendlyName: "Update connection info",
@@ -10,16 +10,22 @@ module.exports = {
       required: true,
       type: "string"
     },
+
     serverIp: {
       type: "string",
       minLength: 2,
       maxLength: 100
     },
 
-    webPort: {
+    port: {
       type: "number",
       min: 50,
       max: 100000
+    },
+
+    forceHttps: {
+      type: "string",
+      required: false
     },
 
     authName: {
@@ -55,7 +61,7 @@ module.exports = {
    * @description Updates basic connection info for a server in the DB
    * @param {string} serverId
    * @param {string} serverIp
-   * @param {number} webPort
+   * @param {number} port
    * @param {string} authName
    * @param {string} authToken
    */
@@ -70,7 +76,8 @@ module.exports = {
 
       let updateObject = {
         ip: _.isUndefined(inputs.serverIp) ? undefined : inputs.serverIp,
-        webPort: _.isUndefined(inputs.webPort) ? undefined : inputs.webPort,
+        port: _.isUndefined(inputs.webPort) ? undefined : inputs.webPort,
+        forceHttps: sails.helpers.stringToBool(forceHttps),
         authName: _.isUndefined(inputs.authName) ? undefined : inputs.authName,
         authToken: _.isUndefined(inputs.authToken)
           ? undefined
@@ -96,8 +103,11 @@ module.exports = {
         loggingObject.server.ip = _.isUndefined(inputs.serverIp)
           ? loggingObject.server.ip
           : inputs.serverIp;
-        loggingObject.server.port = _.isUndefined(inputs.webPort)
-          ? loggingObject.server.port
+        loggingObject.server.forceHttps = _.isUndefined(inputs.forceHttps)
+          ? loggingObject.server.forceHttps
+          : inputs.forceHttps;
+        loggingObject.server.webPort = _.isUndefined(inputs.webPort)
+          ? loggingObject.server.webPort
           : inputs.webPort;
         loggingObject.server.adminUser = _.isUndefined(inputs.authName)
           ? loggingObject.server.adminUser

@@ -1,4 +1,4 @@
-const sevenDays = require('machinepack-7daystodiewebapi');
+const sevenDays = require('7daystodie-api-wrapper');
 
 module.exports = {
 
@@ -106,19 +106,9 @@ module.exports = {
       });
 
       // TODO: make this an optional flag
-/*       sevenDays.executeCommand({
-        ip: server.ip,
-        port: server.webPort,
-        authName: server.authName,
-        authToken: server.authToken,
-        command: `webtokens remove ${server.authName}`
-      }).exec({
-        success: result => {
-        },
-        error: error => {
-          sails.log.warn(`VIEW - SdtdServer:delete- Error while trying to delete token - ${error}`);
-        }
-      }) */
+      // await sevenDays.executeConsoleCommand(SdtdServer.getAPIConfig(server), `webtokens remove ${server.authName}`).catch(err => {;
+      //     sails.log.warn(`VIEW - SdtdServer:delete- Error while trying to delete token - ${error}`);
+      // });
 
       exits.success();
 

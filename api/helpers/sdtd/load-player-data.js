@@ -1,4 +1,4 @@
-var sevenDays = require('machinepack-7daystodiewebapi');
+var sevenDays = require('7daystodie-api-wrapper');
 var he = require('he');
 
 module.exports = {
@@ -131,7 +131,7 @@ module.exports = {
         }
 
         sails.log.verbose(`Loaded a player - ${playerProfile[0].id} - ${playerProfile[0].name} - server: ${server.name}`);
-        playerProfile[0].name = he.decode(playerProfile[0].name); 
+        playerProfile[0].name = he.decode(playerProfile[0].name);
         playersToSend.push(playerProfile[0]);
       }
       let dateEnded = new Date();
@@ -153,23 +153,11 @@ module.exports = {
 };
 
 async function getPlayerList(server) {
-  return new Promise((resolve, reject) => {
-    sevenDays.getPlayerList({
-      ip: server.ip,
-      port: server.webPort,
-      authName: server.authName,
-      authToken: server.authToken
-    }).exec({
-      error: function (err) {
-        resolve({
-          players: []
-        });
-      },
-      success: function (playerList) {
-        resolve(playerList);
-      }
-    });
-  });
+  try {
+    return sevenDays.getPlayerList(SdtdServer.getAPIConfig(server));
+  } catch (err) {
+    return { players: [] };
+  }
 }
 
 
@@ -199,24 +187,13 @@ async function findOrCreatePlayer(player, serverId) {
   }
 }
 
-function loadPlayerInventory(steamId, server) {
-  return new Promise((resolve, reject) => {
-    sevenDays.getPlayerInventory({
-      ip: server.ip,
-      port: server.webPort,
-      authName: server.authName,
-      authToken: server.authToken,
-      steamId: steamId
-    }).exec({
-      error: function (err) {
-        sails.log.error(`HELPER - loadPlayerData:loadPlayerInventory ${err}`);
-        resolve(undefined);
-      },
-      success: function (data) {
-        resolve(data)
-      }
-    });
-  })
+async function loadPlayerInventory(steamId, server) {
+  try {
+    return sevenDays.getPlayerInventory(SdtdServer.getAPIConfig(server), steamId);
+  } catch(err) {
+    sails.log.error(`HELPER - loadPlayerData:loadPlayerInventory`, err);
+    return undefined;
+  }
 }
 
 function loadSteamAvatar(steamId) {

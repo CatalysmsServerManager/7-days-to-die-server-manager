@@ -41,6 +41,9 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     let foundUser = await User.findOne(inputs.userId);
+    if (!foundUser) {
+      return exits.error(new Error(`Couldn't find userid with ${inputs.userId}`));
+    }
     let foundPlayer = await Player.findOne({
       where: {
         steamId: foundUser.steamId,

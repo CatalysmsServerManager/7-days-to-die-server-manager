@@ -1,4 +1,4 @@
-var sevenDays = require('machinepack-7daystodiewebapi');
+var sevenDays = require('7daystodie-api-wrapper');
 
 module.exports = {
 
@@ -46,22 +46,13 @@ module.exports = {
 
       let server = await SdtdServer.findOne(inputs.serverId);
 
-      setTimeout(() => {
-        sevenDays.executeCommand({
-          ip: server.ip,
-          port: server.webPort,
-          authName: server.authName,
-          authToken: server.authToken,
-          command: `shutdown`
-        }).exec({
-          error: (error) => {
-            sails.log.error(`API - SdtdServer:restart-server - ${error}`);
-          },
-          success: (response) => {
-            sails.log.info(`API - SdtdServer:restart-server - Successful restart for server ${inputs.serverId} in ${inputs.delay} ${inputs.delay > 1 ? "minutes" : "minute"}`);
-
-          }
-        });
+      setTimeout(async () => {
+        try {
+          await sevenDays.executeConsoleCommand(SdtdServer.getAPIConfig(server), `shutdown`);
+          sails.log.info(`API - SdtdServer:restart-server - Successful restart for server ${inputs.serverId} in ${inputs.delay} ${inputs.delay > 1 ? "minutes" : "minute"}`);
+        } catch (error) {
+          sails.log.error(`API - SdtdServer:restart-server - ${error}`);
+        }
       }, inputs.delay * 60 * 1000);
 
 
@@ -95,25 +86,11 @@ module.exports = {
  * @returns {number} Amount of minutes left after message (eg input - 1)
  */
 
-function sendXMinutesUntilRestartToServer(minutesLeft, server) {
-  return new Promise((resolve, reject) => {
-    if (isNaN(minutesLeft)) {
-      reject(new Error(`Did not supply a number`));
-    }
+async function sendXMinutesUntilRestartToServer(minutesLeft, server) {
+  if (isNaN(minutesLeft)) {
+    throw new Error(`Did not supply a number`);
+  }
 
-    sevenDays.sendMessage({
-      ip: server.ip,
-      port: server.webPort,
-      authName: server.authName,
-      authToken: server.authToken,
-      message: `Restarting the server in ${minutesLeft} minute(s)`
-    }).exec({
-      error: (error) => {
-        reject(error);
-      },
-      success: (response) => {
-        resolve(minutesLeft - 1);
-      }
-    });
-  });
+  await sevenDays.executeConsoleCommand(SdtdServer.getAPIConfig(server), `say Restarting the server in ${minutesLeft} minute(s)`);
+  return minutesLeft - 1;
 }

@@ -16,7 +16,7 @@ const redisClient = Redis.createClient({
 redisClient.get = promisify(redisClient.get);
 redisClient.set = promisify(redisClient.set);
 
-module.exports = async function(job) {
+async function logProcessor(job) {
   const resultLogs = [];
   // Get latest log line from Redis
   let lastLogLine = parseInt(
@@ -27,7 +27,7 @@ module.exports = async function(job) {
 
   // If latest log line is not found, get it from the server
   if (!lastLogLine) {
-    const webUIUpdate = await SdtdApi.getWebUIUpdates(job.data.server);
+    const webUIUpdate = await SdtdApi.getWebUIUpdates(SdtdServer.getAPIConfig(job.data.server));
     lastLogLine = parseInt(webUIUpdate.newlogs) + 1;
   }
 
@@ -36,7 +36,7 @@ module.exports = async function(job) {
     : 50;
 
   // Get new logs from the server
-  const newLogs = await SdtdApi.getLog(job.data.server, lastLogLine, count);
+  const newLogs = await SdtdApi.getLog(SdtdServer.getAPIConfig(job.data.server), lastLogLine, count);
 
   // Adjust latest log line based on new logs we got
   lastLogLine = lastLogLine + newLogs.entries.length;
@@ -49,7 +49,7 @@ module.exports = async function(job) {
 
   // Parse these logs into usable data
   let index = -1;
-  _.each(newLogs.entries, async line => {
+  for (const line of newLogs.entries) {
     index++;
     if (newLogs.entries[index + 1]) {
       if (newLogs.entries[index + 1].msg.includes("handled by mod")) {
@@ -63,7 +63,7 @@ module.exports = async function(job) {
       parsedLogLine.server = job.data.server;
       resultLogs.push(parsedLogLine);
     }
-  });
+  }
 
   // Set last success date in Redis
   await redisClient.set(
@@ -71,8 +71,10 @@ module.exports = async function(job) {
     Date.now()
   );
 
-  return Promise.resolve({
+  return {
     lastLogLine,
     logs: resultLogs
-  });
+  };
 };
+
+module.exports = logProcessor;

@@ -58,12 +58,7 @@ class Claim extends SdtdCommand {
       }
 
       try {
-        let response = await SdtdApi.executeConsoleCommand({
-          ip: server.ip,
-          port: server.webPort,
-          adminUser: server.authName,
-          adminToken: server.authToken
-        }, cmdToExec);
+        let response = await SdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(server), cmdToExec);
 
         if (response.result.includes('ERR:')) {
           return chatMessage.reply("error", {error: response.result});

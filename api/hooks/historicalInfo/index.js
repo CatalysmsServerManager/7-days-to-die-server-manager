@@ -1,4 +1,4 @@
-var sevenDays = require('machinepack-7daystodiewebapi');
+var sevenDays = require('7daystodie-api-wrapper');
 let MemUpdate = require('./objects/memUpdate');
 
 module.exports = function historicalInfo(sails) {
@@ -72,7 +72,7 @@ module.exports = function historicalInfo(sails) {
       setMap(server, memUpdateObject);
       return true
     } catch (error) {
-      sails.log.error(`HOOK - historicalInfo - Error starting memUpdate ${error}`)
+      sails.log.error(`HOOK - historicalInfo - Error starting memUpdate`, error)
       return false
     }
   }
@@ -83,7 +83,7 @@ module.exports = function historicalInfo(sails) {
       memUpdateObject.stop();
       deleteMap(serverId, memUpdateObject);
     } catch (error) {
-      sails.log.error(`HOOK - historicalInfo - Error stopping memUpdate ${error}`)
+      sails.log.error(`HOOK - historicalInfo - Error stopping memUpdate`, error)
       return false
     }
   }
