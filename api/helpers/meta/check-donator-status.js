@@ -31,7 +31,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    let donorStatus = "free";
+    let donorStatus;
 
     if (_.isUndefined(inputs.serverId) && _.isUndefined(inputs.userId)) {
       return exits.error(`Must provide serverId OR userId parameter.`);
@@ -42,10 +42,9 @@ module.exports = {
 
       if (_.isNull(currentStatus) || inputs.reload) {
         currentStatus = await sails.helpers.meta.getDonatorStatus(inputs.serverId);
+        await sails.helpers.redis.set(`server:${inputs.serverId}:donorStatus`, currentStatus);
       }
-      await sails.helpers.redis.set(`server:${inputs.serverId}:donorStatus`, currentStatus);
       donorStatus = currentStatus;
-      
     }
 
     if (!_.isUndefined(inputs.userId)) {
@@ -53,12 +52,12 @@ module.exports = {
 
       if (_.isNull(currentStatus) || inputs.reload) {
         currentStatus = await sails.helpers.meta.getDonatorStatus(undefined, inputs.userId);
+        await sails.helpers.redis.set(`server:${inputs.userId}:donorStatus`, currentStatus);
       }
-      await sails.helpers.redis.set(`server:${inputs.userId}:donorStatus`, currentStatus);
       donorStatus = currentStatus;
     }
 
-    return exits.success(donorStatus);
+    return exits.success(donorStatus || "free");
   }
 
 
