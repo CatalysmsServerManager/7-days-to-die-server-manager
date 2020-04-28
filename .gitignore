@@ -150,8 +150,8 @@ nbproject
 dump.rdb
 
 config/datastores.js
-test/output/*
 .env
 .nyc_output/*
-coverage/*
+coverage
 assets/images/sdtdIcons
+db-data/

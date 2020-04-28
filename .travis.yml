@@ -12,7 +12,7 @@ install:
   - npm install
 script:
   - npm test
-  - npm run coverage
+  - npm run codecov
 after_failure:
   - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
   - chmod +x send.sh
