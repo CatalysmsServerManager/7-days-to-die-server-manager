@@ -10,10 +10,14 @@
  */
 
 module.exports.bootstrap = async function (done) {
+  if (process.env.IS_TEST) {
+    sails.cache = new Object();
+    return done();
+  }
 
   await sails.helpers.meta.startUsageStatsGathering();
   sails.log.info(`Started the system stats gathering interval`);
-  if (process.env.REDISSTRING === "" || process.env.REDISSTRING === undefined) {
+  if (!process.env.REDISSTRING) {
     sails.log.warn(`Not using redis as cache. Defaulting to in-memory caching. Be aware that this is not ideal for production environments!`);
     sails.cache = new Object();
   }

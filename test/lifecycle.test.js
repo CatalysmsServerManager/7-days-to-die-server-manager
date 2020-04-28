@@ -1,7 +1,11 @@
-var sails = require('sails');
+const sails = require('sails');
 const faker = require('faker');
 
 process.env.IS_TEST = true;
+process.env.NODE_ENV = 'test';
+process.env.CSMM_DONATOR_TIER = 'patron';
+delete process.env.REDISSTRING;
+
 // Before running any tests...
 before(function (done) {
 
@@ -22,7 +26,8 @@ before(function (done) {
 
     datastores: {
       testDB: {
-        adapter: 'sails-disk'
+        adapter: 'sails-disk',
+        inMemoryOnly: true
       }
     },
     models: {
@@ -66,21 +71,6 @@ before(function (done) {
 
 // After all tests have finished...
 after(function (done) {
-  const fs = require('fs');
-  const path = require('path');
-
-  let diskDatabaseDir = __dirname + '/../.tmp/localDiskDb';
-
-  fs.readdir(diskDatabaseDir, (err, files) => {
-    if (err) throw err;
-  
-    for (const file of files) {
-      fs.unlink(path.join(diskDatabaseDir, file), err => {
-        if (err) throw err;
-      });
-    }
-  });
-
   sails.lower(done);
-
 });
+
