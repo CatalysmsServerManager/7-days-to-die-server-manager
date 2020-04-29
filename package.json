@@ -114,8 +114,10 @@
       "db-data/**/*",
       "redis-data/**/*",
       "assets/**/*",
+      "config/**/*",
+      "coverage/**/*",
       "tasks/**/*",
-      "confg/**/*",
+      ".tmp/**/*",
       "views/**/*"
     ],
     "cache": true,
