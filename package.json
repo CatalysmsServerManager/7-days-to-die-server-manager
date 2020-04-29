@@ -48,7 +48,6 @@
     "build-docs": "./node_modules/.bin/jsdoc -c ./.jsdoc.json",
     "dev": "nodemon",
     "debug": "node debug app.js",
-    "codecov": "npm run cover && cat coverage/lcov.info | codecov",
     "cover": "nyc npm run test",
     "itemIcons:update": "bash ./scripts/itemIconsUpdate.sh"
   },
