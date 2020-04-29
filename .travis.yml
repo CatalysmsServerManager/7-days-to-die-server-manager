@@ -13,6 +13,7 @@ install:
 script:
   - npm test
   - npm run codecov
+after_script: "cat coverage/lcov.info | node_modules/coveralls/bin/coveralls.js"
 after_failure:
   - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
   - chmod +x send.sh
