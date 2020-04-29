@@ -44,11 +44,11 @@
   },
   "scripts": {
     "start": "NODE_ENV=production & node app.js",
-    "test": "nyc --report-dir ./coverage node_modules/mocha/bin/_mocha --reporter mochawesome --reporter-options reportDir=./test/output/mochawesome --exit",
+    "test": "mocha test",
     "build-docs": "./node_modules/.bin/jsdoc -c ./.jsdoc.json",
     "dev": "nodemon",
     "debug": "node debug app.js",
-    "coverage": "nyc report --reporter=text-lcov | codecov",
+    "cover": "nyc npm run test",
     "itemIcons:update": "bash ./scripts/itemIconsUpdate.sh"
   },
   "main": "app.js",
@@ -66,25 +66,58 @@
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "codecov": "^3.1.0",
+    "coveralls": "^3.1.0",
     "faker": "^4.1.0",
     "grunt-bower-task": "^0.5.0",
-    "mocha": "^5.2.0",
-    "mocha-junit-reporter": "^1.18.0",
+    "mocha": "^7.1.2",
+    "mocha-junit-reporter": "^1.23.3",
     "mocha-lcov-reporter": "^1.3.0",
-    "mochawesome": "^3.1.1",
+    "mochawesome": "^6.1.1",
     "nodemon": "^2.0.3",
-    "nyc": "^13.1.0",
+    "nyc": "^15.0.1",
     "supertest": "^3.3.0"
+  },
+  "mocha": {
+    "reporter": "mochawesome",
+    "exit": true,
+    "recursive": true,
+    "reporter-options": [
+      "reportDir=coverage/mochawesome",
+      "reportFilename=index"
+    ],
+    "file": [
+      "./test/lifecycle.test.js"
+    ],
+    "watch-files": [
+      "api/**/*",
+      "assets/**/*s",
+      "config/**/*.js",
+      "test/**/*.test.js",
+      "scripts/**/*s",
+      "tasks/**/*s",
+      "views/**/*"
+    ],
+    "watch-ignore": [
+      "db-data",
+      "redis-data",
+      "coverage",
+      "logs"
+    ]
   },
   "nyc": {
     "reporter": [
       "lcov",
-      "text-summary"
+      "text-summary",
+      "html"
     ],
     "exclude": [
+      "db-data/**/*",
+      "redis-data/**/*",
       "assets/**/*",
+      "config/**/*",
+      "coverage/**/*",
       "tasks/**/*",
-      "confg/**/*",
+      ".tmp/**/*",
       "views/**/*"
     ],
     "cache": true,

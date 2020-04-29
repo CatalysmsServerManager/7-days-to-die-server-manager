@@ -26,6 +26,9 @@ module.exports = {
 
   exits: {
     success: {},
+    brokenDonator: {
+      responseType: 'badRequest'
+    },
     badCommand: {
       responseType: 'badRequest'
     },
@@ -53,6 +56,11 @@ module.exports = {
       let amountOfExistingCommands = await CustomCommand.count({
         server: server.id
       });
+      if (!sails.config.custom.donorConfig[donatorRole]) {
+        const err = new Error(`Donator status of ${donatorRole} is unmanaged, contact an admin`);
+        sails.log.error(err);
+        return exists.brokenDonator(err.message);
+      }
       let maxCustomCommands = sails.config.custom.donorConfig[donatorRole].maxCustomCommands;
 
       if (amountOfExistingCommands >= maxCustomCommands) {

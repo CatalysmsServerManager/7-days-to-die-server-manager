@@ -1,8 +1,7 @@
 const Redis = require("redis");
 const dotenv = require("dotenv");
-const promisify = require("util").promisify;
+const {promisify} = require("util");
 const SdtdApi = require("7daystodie-api-wrapper");
-const _ = require("lodash");
 
 const handleLogLine = require("./handleLogLine");
 
@@ -10,17 +9,17 @@ const handleLogLine = require("./handleLogLine");
  * Set up Redis functionality
  */
 dotenv.config();
-const redisClient = Redis.createClient({
-  url: process.env.REDISSTRING
-});
-redisClient.get = promisify(redisClient.get);
-redisClient.set = promisify(redisClient.set);
+Redis.RedisClient.prototype.getAsync = promisify(Redis.RedisClient.prototype.get);
+Redis.RedisClient.prototype.setAsync = promisify(Redis.RedisClient.prototype.set);
 
 module.exports = async function(job) {
+  const redisClient = Redis.createClient({
+    url: process.env.REDISSTRING
+  });
   const resultLogs = [];
   // Get latest log line from Redis
   let lastLogLine = parseInt(
-    await redisClient.get(
+    await redisClient.getAsync(
       `sdtdserver:${job.data.server.id}:sdtdLogs:lastLogLine`
     )
   );
@@ -42,31 +41,31 @@ module.exports = async function(job) {
   lastLogLine = lastLogLine + newLogs.entries.length;
 
   // Set latest log line in Redis
-  await redisClient.set(
+  await redisClient.setAsync(
     `sdtdserver:${job.data.server.id}:sdtdLogs:lastLogLine`,
     lastLogLine
   );
 
   // Parse these logs into usable data
   let index = -1;
-  _.each(newLogs.entries, async line => {
+  for (const line of newLogs.entries) {
     index++;
     if (newLogs.entries[index + 1]) {
       if (newLogs.entries[index + 1].msg.includes("handled by mod")) {
         //Message is being handled by a mod, skip to the next line with possibly mod-controlled data
-        return;
+        continue;
       }
     }
 
     let parsedLogLine = handleLogLine(line);
-    if (!_.isUndefined(parsedLogLine)) {
+    if (!parsedLogLine) {
       parsedLogLine.server = job.data.server;
       resultLogs.push(parsedLogLine);
     }
-  });
+  }
 
   // Set last success date in Redis
-  await redisClient.set(
+  await redisClient.setAsync(
     `sdtdserver:${job.data.server.id}:sdtdLogs:lastSuccess`,
     Date.now()
   );

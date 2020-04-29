@@ -11,8 +11,10 @@ before_install:
 install:
   - npm install
 script:
-  - npm test
-  - npm run coverage
+  - npm run cover
+after_script:
+  - cat coverage/lcov.info | node_modules/.bin/coveralls
+  - cat coverage/lcov.info | node_modules/.bin/codecov
 after_failure:
   - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
   - chmod +x send.sh

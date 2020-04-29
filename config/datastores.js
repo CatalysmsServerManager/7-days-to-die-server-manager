@@ -48,18 +48,13 @@ let datastores = {
      *    (See https://sailsjs.com/config/datastores for help.)                 *
      *                                                                          *
      ***************************************************************************/
-    adapter: require('sails-mysql'),
-    url: process.env.DBSTRING
-
+    adapter: 'sails-disk',
+    inMemoryOnly: true
   },
-
+  cache: {
+    adapter: 'sails-disk',
+    inMemoryOnly: true
+  },
 };
-
-if (process.env.REDISSTRING) {
-  datastores.cache = {
-    adapter: 'sails-redis',
-    url: process.env.REDISSTRING
-  }
-}
 
 module.exports.datastores = datastores;

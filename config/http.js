@@ -109,6 +109,7 @@ morgan.token('userId', function (req, res) {
 const morganLogger = morgan(':remote-addr - :userId - [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"', {
   "stream": customLogger.stream,
   skip: (req, res) => {
+    if (process.env.IS_TEST) { return true; }
     return !req.originalUrl.includes('api')
   }
 });
