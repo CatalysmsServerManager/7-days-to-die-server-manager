@@ -3,9 +3,16 @@ node_js:
   - node
   - lts/*
 cache: npm
+env:
+  global:
+    - CC_TEST_REPORTER_ID=60858e4981c4a2b71600ef66b26dcbff099fa8f5dff907a973d548764d4b6051
 services:
   - mysql
   - redis-server
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
 before_install:
   - mysql -e 'CREATE DATABASE csmm;'
 install:
@@ -15,6 +22,7 @@ script:
 after_script:
   - cat coverage/lcov.info | node_modules/.bin/coveralls
   - cat coverage/lcov.info | node_modules/.bin/codecov
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 after_failure:
   - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
   - chmod +x send.sh
