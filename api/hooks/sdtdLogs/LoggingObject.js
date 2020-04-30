@@ -1,6 +1,5 @@
 const SdtdApi = require("7daystodie-api-wrapper");
 const EventEmitter = require("events");
-const Bull = require("bull");
 const logProcessor = require("./logProcessor");
 const enrichData = require("./enrichEventData");
 
@@ -28,10 +27,7 @@ class LoggingObject extends EventEmitter {
     };
 
     this.active = true;
-    this.queue = new Bull(
-      `sdtdserver:${serverId}:logs`,
-      process.env.REDISSTRING
-    );
+    this.queue = sails.helpers.getQueueObject(serverId);
     this.intervalTime = intervalTime;
     this.requestInterval;
     this.failed = false;

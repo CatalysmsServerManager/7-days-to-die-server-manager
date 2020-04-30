@@ -60,10 +60,16 @@ before(function (done) {
       name: faker.internet.userName(),
     }).fetch();
 
+    let testServerConfig = await SdtdConfig.create({
+      server: testServer.id,
+      inactive: true
+    }).fetch();
+
 
     sails.testUser = testUser;
     sails.testServer = testServer;
     sails.testPlayer = testPlayer;
+    sails.testServerConfig = testServerConfig;
 
     return done();
   });
