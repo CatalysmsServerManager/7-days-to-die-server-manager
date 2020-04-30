@@ -1,4 +1,3 @@
-const Redis = require("redis");
 const dotenv = require("dotenv");
 const {promisify} = require("util");
 const SdtdApi = require("7daystodie-api-wrapper");
@@ -9,17 +8,12 @@ const handleLogLine = require("./handleLogLine");
  * Set up Redis functionality
  */
 dotenv.config();
-Redis.RedisClient.prototype.getAsync = promisify(Redis.RedisClient.prototype.get);
-Redis.RedisClient.prototype.setAsync = promisify(Redis.RedisClient.prototype.set);
 
 module.exports = async function(job) {
-  const redisClient = Redis.createClient({
-    url: process.env.REDISSTRING
-  });
   const resultLogs = [];
   // Get latest log line from Redis
   let lastLogLine = parseInt(
-    await redisClient.getAsync(
+    await sails.helpers.redis.get(
       `sdtdserver:${job.data.server.id}:sdtdLogs:lastLogLine`
     )
   );
@@ -41,7 +35,7 @@ module.exports = async function(job) {
   lastLogLine = lastLogLine + newLogs.entries.length;
 
   // Set latest log line in Redis
-  await redisClient.setAsync(
+  await sails.helpers.redis.set(
     `sdtdserver:${job.data.server.id}:sdtdLogs:lastLogLine`,
     lastLogLine
   );
@@ -65,7 +59,7 @@ module.exports = async function(job) {
   }
 
   // Set last success date in Redis
-  await redisClient.setAsync(
+  await sails.helpers.redis.set(
     `sdtdserver:${job.data.server.id}:sdtdLogs:lastSuccess`,
     Date.now()
   );
