@@ -1,11 +1,15 @@
 const sails = require('sails');
 const faker = require('faker');
+const MockDate = require('mockdate');
 
 process.env.IS_TEST = true;
 process.env.NODE_ENV = 'test';
 process.env.CSMM_DONATOR_TIER = 'patron';
 delete process.env.REDISSTRING;
 
+beforeEach(function() {
+  MockDate.set('2020-05-01T01:20:05+0000');
+});
 // Before running any tests...
 before(function (done) {
 
@@ -80,3 +84,17 @@ after(function (done) {
   sails.lower(done);
 });
 
+beforeEach(function(done) {
+  destroyFuncs = [];
+  for (modelName in sails.models) {
+    destroyFuncs.push(function(callback) {
+      sails.models[modelName].destroy({})
+      .exec(function(err) {
+        callback(null, err)
+      });
+    })
+  }
+  async.parallel(destroyFuncs, function(err, results) {
+    done(err);
+  })
+});

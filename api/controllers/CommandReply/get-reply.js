@@ -6,6 +6,7 @@ module.exports = {
 
     serverId: {
       type: 'string',
+      required: true,
     },
 
     type: {
@@ -29,10 +30,6 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     let response;
-
-    if (_.isEmpty(inputs.serverId) && _.isEmpty(inputs.type)) {
-      return exits.badRequest('You must provide either a server ID or a type');
-    }
 
     response = await CommandReply.find({
       type: inputs.type,
