@@ -84,3 +84,17 @@ after(function (done) {
   sails.lower(done);
 });
 
+beforeEach(function(done) {
+  destroyFuncs = [];
+  for (modelName in sails.models) {
+    destroyFuncs.push(function(callback) {
+      sails.models[modelName].destroy({})
+      .exec(function(err) {
+        callback(null, err)
+      });
+    })
+  }
+  async.parallel(destroyFuncs, function(err, results) {
+    done(err);
+  })
+});
