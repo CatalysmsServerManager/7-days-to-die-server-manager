@@ -1,11 +1,15 @@
 const sails = require('sails');
 const faker = require('faker');
+const MockDate = require('mockdate');
 
 process.env.IS_TEST = true;
 process.env.NODE_ENV = 'test';
 process.env.CSMM_DONATOR_TIER = 'patron';
 delete process.env.REDISSTRING;
 
+beforeEach(function() {
+  MockDate.set('2020-05-01T01:20:05+0000');
+});
 // Before running any tests...
 before(function (done) {
 
