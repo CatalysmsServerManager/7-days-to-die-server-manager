@@ -7,7 +7,13 @@ const origGetLog = logProcessor.getLog;
 describe('logProcessor', function () {
   beforeEach(() => {
     sails.cache = {};
+    if (!logProcessor.getWebUIUpdates) {
+      throw new Error('Fix test, function is undefined');
+    }
     logProcessor.getWebUIUpdates = origGetWebUIUpdates;
+    if (!logProcessor.getLog) {
+      throw new Error('Fix test, function is undefined');
+    }
     logProcessor.getLog = origGetLog;
   });
   it('should return an  array', async function () {
