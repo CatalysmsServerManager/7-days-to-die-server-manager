@@ -52,7 +52,7 @@ module.exports = async function(job) {
     }
 
     let parsedLogLine = handleLogLine(line);
-    if (!parsedLogLine) {
+    if (parsedLogLine) {
       parsedLogLine.server = job.data.server;
       resultLogs.push(parsedLogLine);
     }
