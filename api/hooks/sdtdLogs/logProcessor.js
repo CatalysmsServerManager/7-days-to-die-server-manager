@@ -9,6 +9,9 @@ const handleLogLine = require("./handleLogLine");
  */
 dotenv.config();
 
+module.exports.getWebUIUpdates = SdtdApi.getWebUIUpdates;
+module.exports.getLog = SdtdApi.getLog;
+
 module.exports = async function(job) {
   const resultLogs = [];
   // Get latest log line from Redis
@@ -20,7 +23,7 @@ module.exports = async function(job) {
 
   // If latest log line is not found, get it from the server
   if (!lastLogLine) {
-    const webUIUpdate = await SdtdApi.getWebUIUpdates(job.data.server);
+    const webUIUpdate = await module.exports.getWebUIUpdates(job.data.server);
     lastLogLine = parseInt(webUIUpdate.newlogs) + 1;
   }
 
@@ -29,7 +32,7 @@ module.exports = async function(job) {
     : 50;
 
   // Get new logs from the server
-  const newLogs = await SdtdApi.getLog(job.data.server, lastLogLine, count);
+  const newLogs = await module.exports.getLog(job.data.server, lastLogLine, count);
 
   // Adjust latest log line based on new logs we got
   lastLogLine = lastLogLine + newLogs.entries.length;
