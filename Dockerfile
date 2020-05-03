@@ -13,14 +13,11 @@ COPY package*.json ./
 RUN npm ci --only=production
 
 # Bundle app source
-COPY . .
+COPY --chown=node:node . .
+
 
 # Install 7d2d item icons
-USER root
-RUN chmod +x /usr/src/app/scripts/itemIconsUpdate.sh
-RUN /usr/src/app/scripts/itemIconsUpdate.sh
-RUN chown -R node:node /usr/src/app
-USER node
+RUN bash /usr/src/app/scripts/itemIconsUpdate.sh
 
 EXPOSE 1337
 CMD [ "node", "app.js" ]
