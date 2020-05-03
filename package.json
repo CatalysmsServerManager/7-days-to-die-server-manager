@@ -121,7 +121,8 @@
       "coverage/**/*",
       "tasks/**/*",
       ".tmp/**/*",
-      "views/**/*"
+      "views/**/*",
+      "test/**/*"
     ],
     "cache": true,
     "all": true,
