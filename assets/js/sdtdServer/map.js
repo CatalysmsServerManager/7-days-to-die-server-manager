@@ -206,13 +206,15 @@ class sdtdMap {
     GetSdtdTileLayer(mapinfo, initTime, isMiniMap) {
         if (typeof isMiniMap == 'undefined') isMiniMap = false;
 
-        var tileLayer = L.tileLayer("/api/sdtdserver/{serverid}/tile/{z}/{x}/{y}/.png", {
+        var tileLayer = L.tileLayer(`http://${server.ip}:${server.webPort}/map/{z}/{x}/{y}.png?adminuser={adminuser}&admintoken={admintoken}`, {
             maxZoom: mapinfo.maxzoom + 1,
             minZoom: Math.max(0, mapinfo.maxzoom - 5),
             maxNativeZoom: mapinfo.maxzoom,
             minNativeZoom: 0,
             tileSize: mapinfo.tilesize,
             serverid: `${server.id}`,
+            adminuser: `${server.authName}`,
+            admintoken: `${server.authToken}`
         })
 
 
