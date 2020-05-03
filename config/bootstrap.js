@@ -1,3 +1,4 @@
+const SdtdApi = require("7daystodie-api-wrapper");
 /**
  * Bootstrap
  * (sails.config.bootstrap)
@@ -10,6 +11,11 @@
  */
 
 module.exports.bootstrap = async function (done) {
+  sails.helpers.sdtdApi = {};
+  for (const func of Object.keys(SdtdApi)) {
+    sails.helpers.sdtdApi[func] = SdtdApi[func];
+  }
+
   if (process.env.IS_TEST) {
     sails.cache = new Object();
     return done();

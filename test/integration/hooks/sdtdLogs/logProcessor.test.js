@@ -1,29 +1,16 @@
 const expect = require("chai").expect;
+const sinon = require('sinon');
 const logProcessor = require("../../../../api/hooks/sdtdLogs/logProcessor");
 
-const origGetWebUIUpdates = logProcessor.getWebUIUpdates;
-const origGetLog = logProcessor.getLog;
-
 describe('logProcessor', function () {
-  beforeEach(() => {
-    sails.cache = {};
-    if (!logProcessor.getWebUIUpdates) {
-      throw new Error('Fix test, function is undefined');
-    }
-    logProcessor.getWebUIUpdates = origGetWebUIUpdates;
-    if (!logProcessor.getLog) {
-      throw new Error('Fix test, function is undefined');
-    }
-    logProcessor.getLog = origGetLog;
-  });
-  it('should return an  array', async function () {
+  it('Confirm able to fetch log messages', async function () {
     sails.cache[`sdtdserver:${sails.testServer.id}:sdtdLogs:lastLogLine`] = 1100;
-    logProcessor.getWebUIUpdates = async function() {
+    sinon.stub(sails.helpers.sdtdApi, "getWebUIUpdates").callsFake(async function() {
       return {
         newlogs: 1100
       }
-    };
-    logProcessor.getLog = async function() {
+    });
+    sinon.stub(sails.helpers.sdtdApi, "getLog").callsFake(async function() {
       return {
         firstLine: 1100,
         lastLine: 1150,
@@ -46,7 +33,7 @@ describe('logProcessor', function () {
           }
         ],
       }
-    };
+    });
     const ret = await logProcessor({
       data: {
         server: {

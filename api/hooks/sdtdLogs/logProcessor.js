@@ -20,7 +20,7 @@ module.exports = async function(job) {
 
   // If latest log line is not found, get it from the server
   if (!lastLogLine) {
-    const webUIUpdate = await module.exports.getWebUIUpdates(job.data.server);
+    const webUIUpdate = await sails.helpers.sdtdApi.getWebUIUpdates(job.data.server);
     lastLogLine = parseInt(webUIUpdate.newlogs) + 1;
   }
 
@@ -29,7 +29,7 @@ module.exports = async function(job) {
     : 50;
 
   // Get new logs from the server
-  const newLogs = await module.exports.getLog(job.data.server, lastLogLine, count);
+  const newLogs = await sails.helpers.sdtdApi.getLog(job.data.server, lastLogLine, count);
 
   // Adjust latest log line based on new logs we got
   lastLogLine = lastLogLine + newLogs.entries.length;
@@ -69,6 +69,3 @@ module.exports = async function(job) {
     logs: resultLogs
   });
 };
-module.exports.getWebUIUpdates = SdtdApi.getWebUIUpdates;
-module.exports.getLog = SdtdApi.getLog;
-
