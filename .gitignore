@@ -155,3 +155,4 @@ config/datastores.js
 coverage
 assets/images/sdtdIcons
 db-data/
+test/output
