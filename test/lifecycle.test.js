@@ -1,6 +1,7 @@
 const sails = require('sails');
 const faker = require('faker');
 const MockDate = require('mockdate');
+const sinon = require('sinon')
 
 process.env.IS_TEST = true;
 process.env.NODE_ENV = 'test';
@@ -9,6 +10,15 @@ delete process.env.REDISSTRING;
 
 beforeEach(function() {
   MockDate.set('2020-05-01T01:20:05+0000');
+});
+before(() => {
+  global.sandbox = sinon.createSandbox()
+})
+beforeEach(() => {
+  global.sandbox.restore()
+})
+beforeEach(() => {
+  sails.cache = {};
 });
 // Before running any tests...
 before(function (done) {
