@@ -43,7 +43,7 @@ class LoggingObject extends EventEmitter {
     );
     this.queue.on("failed", (job, err) => this.handleFailedJob(job, err, this));
     this.queue.on("error", this.handleError);
-    this.queue.on("cleaned", function(jobs, type) {
+    this.queue.on("cleaned", function (jobs, type) {
       sails.log.debug("Cleaned %s %s jobs", jobs.length, type);
     });
   }
@@ -107,6 +107,8 @@ class LoggingObject extends EventEmitter {
       let enrichedLog = newLog;
       if (newLog.type !== "logLine") {
         enrichedLog = await enrichData(newLog);
+        // We still want to emit these events as log lines aswell (for modules like hooks, discord notifications)
+        loggingObject.emit('logLine', enrichedLog.data);
       }
       if (this.debug) {
         sails.log.debug(
@@ -179,7 +181,7 @@ class LoggingObject extends EventEmitter {
       if (!this.slowmode) {
         sails.log.info(
           `SdtdLogs - Server ${
-            this.server.id
+          this.server.id
           } has failed ${counter} times. Changing interval time. Server was last successful on ${prettyLastSuccess.toLocaleDateString()} ${prettyLastSuccess.toLocaleTimeString()}`
         );
         this.slowmode = true;
