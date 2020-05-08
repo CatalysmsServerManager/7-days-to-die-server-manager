@@ -12,7 +12,7 @@ module.exports = function Sentry(sails) {
       __configKey__: {
         dsn: process.env.SENTRY_DSN,
         environment: process.env.NODE_ENV || 'development',
-        serverName: os.hostname(),
+        serverName: process.env.CSMM_HOSTNAME || os.hostname(),
         release: require('../../package.json').version,
       }
     },
