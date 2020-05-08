@@ -49,7 +49,8 @@
     "dev": "nodemon",
     "debug": "node debug app.js",
     "cover": "nyc npm run test",
-    "itemIcons:update": "bash ./scripts/itemIconsUpdate.sh"
+    "itemIcons:update": "bash ./scripts/itemIconsUpdate.sh",
+    "postversion": "git push && git push --tags"
   },
   "main": "app.js",
   "repository": {
