@@ -23,10 +23,6 @@ var passport = require('passport');
 var SteamStrategy = require('passport-steam');
 var DiscordStrategy = require('passport-discord').Strategy;
 const Sentry = require('@sentry/node');
-Sentry.init({
-  dsn: process.env.SENTRY_DSN
-});
-
 
 var maxAge = 900;
 /**

@@ -1,3 +1,5 @@
+const Sentry = require('@sentry/node');
+
 module.exports = function banneditems(sails) {
   return {
     initialize: function(cb) {
@@ -46,33 +48,40 @@ module.exports = function banneditems(sails) {
 
   async function handleItemTrackerUpdate(data) {
     const { server, trackingInfo } = data;
-    const config = server.config[0];
+    const config = server.config[0] || {};
     const { bannedItems, bannedItemsCommand } = config;
-    const bannedItemsSet = new Set(JSON.parse(bannedItems));
 
-    for (const onlinePlayer of trackingInfo) {
-      if (onlinePlayer.inventory) {
-        if (!Array.isArray(onlinePlayer.inventory)) {
-          onlinePlayer.inventory = JSON.parse(onlinePlayer.inventory);
-        }
+    try {
+      const bannedItemsSet = new Set(JSON.parse(bannedItems));
+      for (const onlinePlayer of trackingInfo) {
+        if (onlinePlayer.inventory) {
+          if (!Array.isArray(onlinePlayer.inventory)) {
+            onlinePlayer.inventory = JSON.parse(onlinePlayer.inventory);
+          }
 
-        const playerItemsSet = new Set(onlinePlayer.inventory.map(e => e.name));
-        const unionOfSets = intersection(playerItemsSet, bannedItemsSet);
-        if (unionOfSets.size) {
-          const isImmune = await sails.helpers.roles.checkPermission.with({
-            serverId: server.id,
-            playerId: onlinePlayer.player,
-            permission: "immuneToBannedItemsList"
-          });
+          const playerItemsSet = new Set(onlinePlayer.inventory.map(e => e.name));
+          const unionOfSets = intersection(playerItemsSet, bannedItemsSet);
+          if (unionOfSets.size) {
+            const isImmune = await sails.helpers.roles.checkPermission.with({
+              serverId: server.id,
+              playerId: onlinePlayer.player,
+              permission: "immuneToBannedItemsList"
+            });
 
-          if (!isImmune.hasPermission) {
-            sails.log.info(
-              `Detected banned item(s) on player ${onlinePlayer.player} from server ${onlinePlayer.server}`
-            );
-            executePunishment(onlinePlayer.player, server, config);
+            if (!isImmune.hasPermission) {
+              sails.log.info(
+                `Detected banned item(s) on player ${onlinePlayer.player} from server ${onlinePlayer.server}`
+              );
+              executePunishment(onlinePlayer.player, server, config);
+            }
           }
         }
       }
+    } catch (e) {
+      Sentry.withScope(function(scope) {
+        scope.setTag('serverId', server.id);
+        Sentry.captureMessage(e);
+      });
     }
   }
 
