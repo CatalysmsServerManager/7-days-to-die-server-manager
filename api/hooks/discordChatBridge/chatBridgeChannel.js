@@ -166,6 +166,10 @@ class ChatBridgeChannel {
   async sendRichConnectedMessageToDiscord(connectedMsg) {
     let connectedPlayer = connectedMsg.player;
 
+    if (!connectedPlayer) {
+      return;
+    }
+
     let gblBans = await BanEntry.find({
       steamId: connectedPlayer.steamId
     });
