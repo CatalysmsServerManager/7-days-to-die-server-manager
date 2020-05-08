@@ -1,3 +1,4 @@
+const os = require('os');
 module.exports = function Sentry(sails) {
   return {
     /**
@@ -10,9 +11,9 @@ module.exports = function Sentry(sails) {
     defaults: {
       __configKey__: {
         dsn: process.env.SENTRY_DSN,
-        options: {
-          environment: process.env.NODE_ENV || 'development'
-        }
+        environment: process.env.NODE_ENV || 'development',
+        serverName: os.hostname(),
+        release: require('../../package.json').version,
       }
     },
 
