@@ -9,7 +9,7 @@ const options = {
     host : "localhost",
     port : "1337",
     timeout : 2000,
-    path: '/api/stats/fqsfqs'
+    path: '/api/stats/'
 };
 
 const request = http.request(options, (res) => {  

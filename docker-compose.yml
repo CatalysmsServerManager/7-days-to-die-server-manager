@@ -1,3 +1,5 @@
+# This is an example on how to run CSMM with Docker compose.
+# This is **not** a production ready deployment template, you must configure a web server, security, ... yourself
 version: "3.7"
 
 services:
@@ -8,22 +10,23 @@ services:
       - cache
       - db
     environment:
-      NODE_ENV: ${NODE_ENV:-production}
+      NODE_ENV: ${NODE_ENV:-development}
       REDISSTRING: "redis://cache:6379"
       DBSTRING: "mysql2://csmm:mysecretpasswordissosecure@db:3306/csmm"
-      CSMM_HOSTNAME: "https://csmm.example.com"
+      CSMM_HOSTNAME: "http://localhost:30005"
       API_KEY_STEAM: ""
       DISCORDBOTTOKEN: ""
       DISCORDCLIENTSECRET: ""
       DISCORDCLIENTID: ""
       CSMM_ADMINS: ""
     ports:
-      - 8000:8000
+      - 127.0.0.1:30005:8000
     restart: unless-stopped
   cache:
     image: redis
     volumes:
       - ./redis-data:/data
+    restart: unless-stopped
   db:
     image: mariadb
     volumes:
@@ -33,5 +36,4 @@ services:
       MYSQL_USER: "csmm"
       MYSQL_PASSWORD: "mysecretpasswordissosecure"
       MYSQL_RANDOM_ROOT_PASSWORD: "true"
-volumes:
-  db-data:
+    restart: unless-stopped
