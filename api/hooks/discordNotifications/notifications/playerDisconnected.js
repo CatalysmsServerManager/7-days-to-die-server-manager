@@ -9,6 +9,9 @@ class PlayerDisconnected extends DiscordNotification {
     let client = sails.hooks.discordbot.getClient();
     let embed = new client.customEmbed();
 
+    if (!event.player) {
+      return null
+    }
     let gblBans = await BanEntry.find({ steamId: event.player.steamId });
 
     embed

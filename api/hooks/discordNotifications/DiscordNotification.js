@@ -10,17 +10,22 @@ class DiscordNotification {
     throw new Error(`makeEmbed has to be implemented.`)
   }
 
+  async getDiscordChannel(channel) {
+    let discordClient = sails.hooks.discordbot.getClient();
+    return discordClient.channels.get(channel);
+  }
+
   async sendNotification(notificationOptions) {
     let enrichedOptions = await this.enrichEvent(notificationOptions);
     let embedToSend = await this.makeEmbed(enrichedOptions);
+    if (!embedToSend) { return; }
     embedToSend.setFooter(`CSMM notification for ${enrichedOptions.server.name}`)
 
     try {
-        let discordClient = sails.hooks.discordbot.getClient();
-        let discordChannel = await discordClient.channels.get(enrichedOptions.server.config.discordNotificationConfig[notificationOptions.notificationType]);
-        if (discordChannel) {
-            discordChannel.send(embedToSend);
-        }
+      const discordChannel = await this.getDiscordChannel(enrichedOptions.server.config.discordNotificationConfig[notificationOptions.notificationType]);
+      if (discordChannel) {
+        discordChannel.send(embedToSend);
+      }
     } catch (error) {
         sails.log.error(`HOOK - discordNotification:DiscordNotification - ${error}`)
     }
