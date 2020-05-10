@@ -20,7 +20,7 @@ services:
       DISCORDCLIENTID: ""
       CSMM_ADMINS: ""
     ports:
-      - 127.0.0.1:30005:8000
+      - 127.0.0.1:30005:1337
     restart: unless-stopped
   cache:
     image: redis
