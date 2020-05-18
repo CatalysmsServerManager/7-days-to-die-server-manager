@@ -107,10 +107,6 @@ module.exports = {
           : inputs.authToken;
       }
 
-      if (loggingObject.active) {
-        loggingObject.reload();
-      }
-
       sails.log.info(
         `API - SdtdServer:update-connection-info - Updated connection info for server ${inputs.serverId}`,
         _.omit(inputs, ["authName", "authToken"])

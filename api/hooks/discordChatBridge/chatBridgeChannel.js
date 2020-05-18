@@ -83,7 +83,7 @@ class ChatBridgeChannel {
       }
     } catch (error) {
       sails.log.error(
-        `HOOK discordChatBridge:chatBridgeChannel:start - ${error}`
+        `HOOK discordChatBridge:chatBridgeChannel:start`, error
       );
     }
   }

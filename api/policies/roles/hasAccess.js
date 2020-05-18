@@ -20,7 +20,7 @@ module.exports = async function manageEconomy(req, res, next) {
     ownerCheck = true;
   }
 
-  if (role.manageServer || role.manageEconomy || role.managePlayers || role.manageRoles || role.manage || role.viewDashboard || role.useTracking || role.viewAnalytics || role.manageTickets || user.steamId === sails.config.custom.adminSteamId || ownerCheck) {
+  if (role.manageServer || role.manageEconomy || role.managePlayers || role.manageRoles || role.manage || role.viewDashboard || role.useTracking || role.viewAnalytics || role.manageTickets || sails.config.custom.adminSteamIds.includes(user.steamId) || ownerCheck) {
     next()
   } else {
     if (req.wantsJSON) {

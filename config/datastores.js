@@ -58,3 +58,15 @@ let datastores = {
 };
 
 module.exports.datastores = datastores;
+if (process.env.DBSTRING) {
+  datastores.default = {
+    adapter: 'sails-mysql',
+    url: process.env.DBSTRING
+  };
+}
+if (process.env.REDISSTRING) {
+  datastores.cache = {
+    adapter: 'sails-redis',
+    url: process.env.REDISSTRING,
+  };
+}

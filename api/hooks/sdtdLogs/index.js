@@ -38,7 +38,7 @@ module.exports = function sdtdLogs(sails) {
           sails.log.info(`HOOK: Sdtdlogs - Initialized ${loggingInfoMap.size} logging instances`);
           return cb();
         } catch (error) {
-          sails.log.error(`HOOKS - sdtdLogs - ${error}`);
+          sails.log.error(`HOOKS - sdtdLogs`, error);
         }
       });
     },
@@ -66,7 +66,7 @@ module.exports = function sdtdLogs(sails) {
         }
 
       } catch (error) {
-        sails.log.error(`HOOKS - sdtdLogs - ${error}`);
+        sails.log.error(`HOOKS - sdtdLogs`, error);
       }
     },
 
@@ -89,7 +89,7 @@ module.exports = function sdtdLogs(sails) {
           return;
         }
       } catch (error) {
-        sails.log.error(`HOOKS - sdtdLogs - ${error}`);
+        sails.log.error(`HOOKS - sdtdLogs`, error);
       }
 
 
