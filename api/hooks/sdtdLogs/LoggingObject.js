@@ -81,6 +81,10 @@ class LoggingObject extends EventEmitter {
     if (typeof result === 'string') {
       result = JSON.parse(result);
     }
+    if (result.serverId !== this.serverId) {
+      // not one of ours
+      return;
+    }
     if (result.logs.length === 0) {
       this.emptyResponses++;
     }

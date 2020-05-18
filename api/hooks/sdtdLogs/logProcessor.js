@@ -53,6 +53,7 @@ module.exports = async function(job) {
   );
 
   return Promise.resolve({
+    serverId: job.data.server.id,
     lastLogLine,
     logs: resultLogs
   });
