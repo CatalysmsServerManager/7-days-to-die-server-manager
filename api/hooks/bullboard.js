@@ -1,7 +1,7 @@
 const { UI, setQueues } = require('bull-board')
 const path = require('path');
 
-module.exports = function Sentry(sails) {
+module.exports = function BullBoard(sails) {
   return {
     /**
      * Default configuration
