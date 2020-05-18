@@ -29,6 +29,10 @@ const configOverrides = {
     bullboard: false,
     countryban: false,
   },
+  models: {
+    // never do migrations in the worker
+    migrate: 'safe',
+  },
 };
 
 const logProcessor = require("./api/hooks/sdtdLogs/logProcessor");
