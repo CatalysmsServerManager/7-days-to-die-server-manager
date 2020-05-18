@@ -34,14 +34,15 @@ module.exports = function Sentry(sails) {
             if (path.resolve(req.originalUrl).startsWith('/admin/queues/static/')) {
               return next();
             }
-            return sails.hooks.policies.middleware.isloggedin(req, res, next);
+            return sails.hooks.policies.middleware.iscsmmadmin(req, res, next);
           },
           UI
         );
 
-        // We're done initializing.
-        return cb();
       });
+      // We're done initializing.
+      // we don't actually need to wait for the above. It'll happen when it happens
+      return cb();
     }
   };
 };
