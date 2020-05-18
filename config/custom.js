@@ -24,6 +24,8 @@ module.exports.custom = {
   // mailgunApiKey: 'key-testkeyb183848139913858e8abd9a3',
   // stripeSecret: 'sk_test_Zzd814nldl91104qor5911gjald',
 
+  logCheckInterval: parseInt(process.env.CSMM_LOG_CHECK_INTERVAL || '3000'),
+  logCount: parseInt(process.env.CSMM_LOG_COUNT || '30'),
 
   // Discord bot config
   botOwners: ['220554523561820160', '252369082991509514', "250381843482935308"],

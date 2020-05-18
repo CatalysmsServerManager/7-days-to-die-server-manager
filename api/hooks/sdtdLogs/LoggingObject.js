@@ -1,6 +1,5 @@
 const SdtdApi = require("7daystodie-api-wrapper");
 const EventEmitter = require("events");
-const logProcessor = require("./logProcessor");
 const enrichData = require("./enrichEventData");
 
 const { inspect } = require("util");
@@ -18,16 +17,10 @@ class LoggingObject extends EventEmitter {
     intervalTime = defaultIntervalMs
   ) {
     super();
-    this.server = {
-      id: serverId,
-      ip: ip,
-      port: port,
-      adminUser: authName,
-      adminToken: authToken
-    };
+    this.serverId = serverId;
 
     this.active = true;
-    this.queue = sails.helpers.getQueueObject(serverId);
+    this.queue = sails.helpers.getQueueObject('logs');
     this.intervalTime = intervalTime;
     this.requestInterval;
     this.failed = false;
@@ -35,20 +28,17 @@ class LoggingObject extends EventEmitter {
     // If we get too many empty responses, we force a recheck of lastLogLine
     this.emptyResponses = 0;
     // Set this to true to view detailed info about logs for a server. (protip: use discord bot eval command to set this to true in production instances)
-    this.debug = false;
-    this.queue.process(logProcessor);
+    this.debug = true;
     this.init();
-    this.queue.on("completed", (job, result) =>
-      this.handleCompletedJob(job, result, this)
-    );
-    this.queue.on("failed", (job, err) => this.handleFailedJob(job, err, this));
-    this.queue.on("error", this.handleError);
-    this.queue.on("cleaned", function (jobs, type) {
+    this.queue.on("global:completed", this.handleCompletedJob.bind(this));
+    this.queue.on("global:failed", this.handleFailedJob.bind(this));
+    this.queue.on("global:error", this.handleError.bind(this));
+    this.queue.on("global:cleaned", function (jobs, type) {
       sails.log.debug("Cleaned %s %s jobs", jobs.length, type);
     });
   }
 
-  async init(ms = parseInt(process.env.CSMM_LOG_CHECK_INTERVAL)) {
+  async init(ms = sails.config.custom.logCheckInterval) {
     if (!ms) {
       ms = 3000;
     }
@@ -61,40 +51,36 @@ class LoggingObject extends EventEmitter {
     } catch (error) {
       // Fail silently
     }
-    return await this.queue.add(
-      {
-        server: this.server,
-        lastLogLine: this.lastLogLine
-      },
-      {
-        repeat: {
-          every: ms
+    const addFetchJob = async () => {
+      this.queue.add(
+        {
+          serverId: this.serverId,
+          lastLogLine: this.lastLogLine // FIXME - currently ignored
         },
-        removeOnFail: 50,
-        removeOnComplete: 200,
-        timeout: 10000
-      }
-    );
-  }
-
-  async reload() {
-    await this.stop();
-    // If no timeout here, some race condition happens. This is "good enough".
-    setTimeout(() => this.init(), 2000);
+        {
+          timeout: 10000
+        }
+      );
+    };
+    this.interval = setInterval(addFetchJob, ms);
+    await addFetchJob()
   }
 
   async handleError(error) {
     sails.log.error(inspect(error));
   }
 
-  async handleFailedJob(job, err, loggingObject) {
+  async handleFailedJob(job, err) {
     // A job failed with reason `err`!
     sails.log.error(`Queue error: ${inspect(err)}`);
-    await loggingObject._failedHandler();
+    await this._failedHandler();
     return;
   }
 
-  async handleCompletedJob(job, result, loggingObject) {
+  async handleCompletedJob(job, result) {
+    if (typeof result === 'string') {
+      result = JSON.parse(result);
+    }
     if (result.logs.length === 0) {
       this.emptyResponses++;
     }
@@ -108,14 +94,14 @@ class LoggingObject extends EventEmitter {
       if (newLog.type !== "logLine") {
         enrichedLog = await enrichData(newLog);
         // We still want to emit these events as log lines aswell (for modules like hooks, discord notifications)
-        loggingObject.emit('logLine', enrichedLog.data);
+        this.emit('logLine', enrichedLog.data);
       }
       if (this.debug) {
         sails.log.debug(
-          `Log line for server ${this.server.id} - ${newLog.type} - ${newLog.data.msg}`
+          `Log line for server ${this.serverId} - ${newLog.type} - ${newLog.data.msg}`
         );
       }
-      loggingObject.emit(newLog.type, enrichedLog.data);
+      this.emit(newLog.type, enrichedLog.data);
     }
 
     // If the server is in slowmode and we receive data again, this shows the server is back online
@@ -136,9 +122,7 @@ class LoggingObject extends EventEmitter {
   }
 
   async stop() {
-    await this.queue.empty();
-    await this.queue.clean(0, "completed");
-    await this.queue.clean(0, "failed");
+    clearInterval(this.interval);
     return;
   }
 
@@ -148,16 +132,17 @@ class LoggingObject extends EventEmitter {
 
   async setFailedToZero() {
     await sails.helpers.redis.set(
-      `sdtdserver:${this.server.id}:sdtdLogs:failedCounter`,
+      `sdtdserver:${this.serverId}:sdtdLogs:failedCounter`,
       0
     );
   }
 
   async setLastLogLine() {
-    const webUIUpdate = await SdtdApi.getWebUIUpdates(this.server);
+    const server = await SdtdServer.findOne(this.serverId)
+    const webUIUpdate = await SdtdApi.getWebUIUpdates(SdtdServer.getAPIConfig(server));
     const lastLogLine = parseInt(webUIUpdate.newlogs) + 1;
     await sails.helpers.redis.set(
-      `sdtdserver:${this.server.id}:sdtdLogs:lastLogLine`,
+      `sdtdserver:${this.serverId}:sdtdLogs:lastLogLine`,
       lastLogLine
     );
     this.emptyResponses = 0;
@@ -169,10 +154,10 @@ class LoggingObject extends EventEmitter {
     const threeDaysInMs = 1000 * 60 * 60 * 24 * 3;
     this.failed = true;
     let counter = await sails.helpers.redis.incr(
-      `sdtdserver:${this.server.id}:sdtdLogs:failedCounter`
+      `sdtdserver:${this.serverId}:sdtdLogs:failedCounter`
     );
     let lastSuccess = await sails.helpers.redis.get(
-      `sdtdserver:${this.server.id}:sdtdLogs:lastSuccess`
+      `sdtdserver:${this.serverId}:sdtdLogs:lastSuccess`
     );
     lastSuccess = parseInt(lastSuccess);
     if (counter > 100) {
@@ -181,7 +166,7 @@ class LoggingObject extends EventEmitter {
       if (!this.slowmode) {
         sails.log.info(
           `SdtdLogs - Server ${
-          this.server.id
+          this.serverId
           } has failed ${counter} times. Changing interval time. Server was last successful on ${prettyLastSuccess.toLocaleDateString()} ${prettyLastSuccess.toLocaleTimeString()}`
         );
         this.slowmode = true;
@@ -191,9 +176,9 @@ class LoggingObject extends EventEmitter {
 
       if (lastSuccess + threeDaysInMs < Date.now()) {
         sails.log.warn(
-          `SdtdLogs - server ${this.server.id} has not responded in over 3 days, setting to inactive`
+          `SdtdLogs - server ${this.serverId} has not responded in over 3 days, setting to inactive`
         );
-        await sails.helpers.meta.setServerInactive(this.server.id);
+        await sails.helpers.meta.setServerInactive(this.serverId);
       }
     }
   }

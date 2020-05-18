@@ -1,13 +1,5 @@
-const dotenv = require("dotenv");
 const {promisify} = require("util");
-const SdtdApi = require("7daystodie-api-wrapper");
-
 const handleLogLine = require("./handleLogLine");
-
-/**
- * Set up Redis functionality
- */
-dotenv.config();
 
 module.exports = async function(job) {
   const resultLogs = [];
@@ -20,16 +12,12 @@ module.exports = async function(job) {
 
   // If latest log line is not found, get it from the server
   if (!lastLogLine) {
-    const webUIUpdate = await sails.helpers.sdtdApi.getWebUIUpdates(job.data.server);
+    const webUIUpdate = await sails.helpers.sdtdApi.getWebUIUpdates(SdtdServer.getAPIConfig(job.data.server));
     lastLogLine = parseInt(webUIUpdate.newlogs) + 1;
   }
 
-  const count = process.env.CSMM_LOG_COUNT
-    ? parseInt(process.env.CSMM_LOG_COUNT)
-    : 50;
-
   // Get new logs from the server
-  const newLogs = await sails.helpers.sdtdApi.getLog(job.data.server, lastLogLine, count);
+  const newLogs = await sails.helpers.sdtdApi.getLog(SdtdServer.getAPIConfig(job.data.server), lastLogLine, sails.config.custom.logCount);
 
   // Adjust latest log line based on new logs we got
   lastLogLine = lastLogLine + newLogs.entries.length;

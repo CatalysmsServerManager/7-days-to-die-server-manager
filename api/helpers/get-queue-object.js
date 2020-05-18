@@ -3,10 +3,10 @@ const Bull = require("bull");
 module.exports = {
   friendlyName: 'Returns a bull queue object',
   inputs: {
-    serverId: {
-      friendlyName: 'Server ID',
+    queueName: {
+      friendlyName: 'what queue is this for',
       required: true,
-      example: 1
+      example: 'logs'
     }
   },
   sync: true,
@@ -23,7 +23,7 @@ module.exports = {
       });
     }
     const queue = new Bull(
-      `sdtdserver:${inputs.serverId}:logs`,
+      `sdtdserver:${inputs.queueName}`,
       process.env.REDISSTRING
     );
     return exits.success(queue);
