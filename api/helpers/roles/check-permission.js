@@ -85,7 +85,7 @@ module.exports = {
       let foundUser = await User.findOne(inputs.userId);
 
       // Override permission check when user is a system admin
-      if (foundUser.steamId === sails.config.custom.adminSteamId) {
+      if (sails.config.custom.adminSteamIds.includes(foundUser.steamId)) {
         foundRole = await Role.find({
           where: {
             server: inputs.serverId
