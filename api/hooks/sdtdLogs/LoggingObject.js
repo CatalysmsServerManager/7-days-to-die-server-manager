@@ -81,7 +81,9 @@ class LoggingObject extends EventEmitter {
     if (typeof result === 'string') {
       result = JSON.parse(result);
     }
-    if (result.serverId !== this.serverId) {
+
+
+    if (result.serverId.toString() !== this.serverId) {
       // not one of ours
       return;
     }
@@ -105,6 +107,7 @@ class LoggingObject extends EventEmitter {
           `Log line for server ${this.serverId} - ${newLog.type} - ${newLog.data.msg}`
         );
       }
+
       this.emit(newLog.type, enrichedLog.data);
     }
 
