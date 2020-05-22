@@ -81,8 +81,6 @@ class CommandHandler {
         const splitArgs = parseArgs(trimmedMsg)
         const args = splitArgs.splice(1, splitArgs.length);
 
-        console.log(args)
-
         if (chatMessage.playerName === "Server") {
           return
         }
