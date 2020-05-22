@@ -43,7 +43,7 @@ class LoggingObject extends EventEmitter {
     // Clean queue periodically
     setInterval(() => {
       this.queue.clean(3600 * 1000)
-    }, 1000)
+    }, 1000 * 60)
 
     if (!ms) {
       ms = 3000;
