@@ -39,6 +39,12 @@ class LoggingObject extends EventEmitter {
   }
 
   async init(ms = sails.config.custom.logCheckInterval) {
+
+    // Clean queue periodically
+    setInterval(() => {
+      this.queue.clean(3600 * 1000)
+    }, 1000)
+
     if (!ms) {
       ms = 3000;
     }
