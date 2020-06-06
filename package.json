@@ -44,6 +44,7 @@
   },
   "scripts": {
     "start": "NODE_ENV=production & node app.js",
+    "db:migrate": "node create_tables.js",
     "test": "mocha test",
     "build-docs": "./node_modules/.bin/jsdoc -c ./.jsdoc.json",
     "dev": "nodemon",
