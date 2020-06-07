@@ -49,6 +49,7 @@
     "start": "cross-env NODE_ENV=production run-p start:*",
     "start:app": "node app.js",
     "start:worker": "node worker.js",
+    "db:migrate": "node create_tables.js",
     "test": "mocha test",
     "build-docs": "./node_modules/.bin/jsdoc -c ./.jsdoc.json",
     "dev": "nodemon",

@@ -54,7 +54,7 @@ class Shop extends SdtdCommand {
         timesBought: listing.timesBought++
       });
 
-      return chatMessage.reply(`shopSuccess`)
+      return chatMessage.reply(`shopSuccess`, { listing })
     } catch (error) {
       sails.log.warn(error);
       chatMessage.reply(`error`);
