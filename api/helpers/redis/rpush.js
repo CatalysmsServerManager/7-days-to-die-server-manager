@@ -29,15 +29,21 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    sails.getDatastore('cache').leaseConnection(function during(redisConnection, proceed) {
-      redisConnection.rpush(inputs.keyString, inputs.value, (err, reply) => {
-        if (err) return proceed(err);
-        return proceed(undefined, reply)
-      });
-    }).exec((err, result) => {
-      if (err) return exits.error(err);
+    const datastore = sails.getDatastore('cache');
+    if (datastore.adapter === 'sails-redis') {
+      sails.getDatastore('cache').leaseConnection(function during(redisConnection, proceed) {
+        redisConnection.rpush(inputs.keyString, inputs.value, (err, reply) => {
+          if (err) return proceed(err);
+          return proceed(undefined, reply)
+        });
+      }).exec((err, result) => {
+        if (err) return exits.error(err);
 
-      return exits.success(result);
-    });
+        return exits.success(result);
+      });
+    } else {
+      sails.cache[inputs.keyString].push(inputs.value);
+      return exits.success(sails.cache[inputs.keyString]);
+    }
   }
 };

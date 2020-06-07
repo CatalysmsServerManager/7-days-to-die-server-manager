@@ -36,9 +36,8 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-
-    if (process.env.REDISSTRING) {
-
+    const datastore = sails.getDatastore('cache');
+    if (datastore.adapter === 'sails-redis') {
       if (inputs.ex) {
         if (_.isUndefined(inputs.ttl)) {
           return exits.error(`When setting ex true you must provide a TTL.`)
@@ -71,6 +70,9 @@ module.exports = {
         })
       }
     } else {
+      if (!sails.cache) {
+        sails.cache = {};
+      }
       sails.cache[inputs.keyString] = inputs.value;
       return exits.success();
     }

@@ -1,3 +1,4 @@
+const replyTypes = require('../../../api/hooks/sdtdCommands/replyTypes.js')
 module.exports = {
   friendlyName: 'Add reply',
   description: '',
@@ -11,7 +12,7 @@ module.exports = {
     type: {
       type: 'string',
       required: true,
-      isIn: sails.hooks.sdtdcommands.replyTypes.map(r => r.type),
+      isIn: replyTypes.map(r => r.type),
     },
 
     reply: {

@@ -22,4 +22,4 @@ HEALTHCHECK --interval=10s --timeout=2s --start-period=10s --retries=3 CMD [ "no
 RUN bash /usr/src/app/scripts/itemIconsUpdate.sh
 
 EXPOSE 1337
-CMD [ "node", "app.js" ]
+CMD [ "npm", "run", "start" ]

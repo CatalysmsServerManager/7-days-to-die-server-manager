@@ -5,12 +5,12 @@ const logProcessor = require("../../../../api/hooks/sdtdLogs/logProcessor");
 describe('logProcessor', function () {
   it('Confirm able to fetch log messages', async function () {
     sails.cache[`sdtdserver:${sails.testServer.id}:sdtdLogs:lastLogLine`] = 1100;
-    sinon.stub(sails.helpers.sdtdApi, "getWebUIUpdates").callsFake(async function() {
+    sinon.stub(sails.helpers.sdtdApi, "getWebUIUpdates").callsFake(async function () {
       return {
         newlogs: 1100
       }
     });
-    sinon.stub(sails.helpers.sdtdApi, "getLog").callsFake(async function() {
+    sinon.stub(sails.helpers.sdtdApi, "getLog").callsFake(async function () {
       return {
         firstLine: 1100,
         lastLine: 1150,
@@ -41,7 +41,9 @@ describe('logProcessor', function () {
         }
       }
     });
+
     expect(ret).to.deep.equal({
+      "serverId": 1,
       "lastLogLine": 1102,
       "logs": [
         {
