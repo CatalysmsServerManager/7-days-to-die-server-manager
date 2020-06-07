@@ -52,5 +52,5 @@ sails.load(configOverrides, async function (err) {
     }),
   ]);
 
-  return exits.success();
+  return;
 });
