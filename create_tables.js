@@ -1,11 +1,19 @@
 const dotenv = require("dotenv");
 const sails = require('sails');
 
+dotenv.load();
+
 // disable discord bot
 process.env.DISCORDBOTTOKEN = '';
+process.env.NODE_ENV = 'development';
 
-const configOverrides = {
-  hookTimeout: 2000,
+const configOverrides = Object.assign({}, require('./config/env/production.js'), {
+  hookTimeout: 4000,
+  log: {
+    level: 'error',
+    custom: null,
+    inspect: true
+  },
   hooks: {
     /* This should get shared somewhere */
     views: false,
@@ -13,6 +21,8 @@ const configOverrides = {
     pubsub: false,
     grunt: false,
     http: false,
+    blueprints: false,
+    router: false,
 
     cron: false,
     banneditems: false,
@@ -33,12 +43,17 @@ const configOverrides = {
     // always do migrations!
     migrate: 'alter',
   },
-};
+  security: {
+    csrf: false
+  },
+});
+
+sails.on('hook:orm:loaded', async () => {
+  console.log('done creating tables');
+  process.exit(0);
+});
 
 sails.load(configOverrides, function (err) {
-  sails.on('hook:orm:loaded', () => {
-    console.log('done creating tables');
-    process.exit(0);
-  });
+  if (err) { console.error(err); process.exit(1); }
 });
 
