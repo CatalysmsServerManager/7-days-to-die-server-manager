@@ -8,7 +8,7 @@ process.env.DISCORDBOTTOKEN = '';
 process.env.NODE_ENV = 'development';
 
 const configOverrides = Object.assign({}, require('./config/env/production.js'), {
-  hookTimeout: 4000,
+  hookTimeout: 60000,
   log: {
     level: 'error',
     custom: null,
