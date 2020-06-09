@@ -13,12 +13,11 @@
 // Load env vars
 require('dotenv').config();
 
-
-customLogger = require('./customLog').customLogger;
-
 module.exports.log = {
+  level: process.env.CSMM_LOGLEVEL || 'info',
+
   // Pass in our custom logger, and pass all log levels through.
-  custom: customLogger,
+  custom: require('./customLog').customLogger,
 
   //  Disable captain's log so it doesn't prefix or stringify our meta data.
   inspect: false
