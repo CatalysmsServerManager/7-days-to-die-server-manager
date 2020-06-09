@@ -36,7 +36,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     const datastore = sails.getDatastore('cache');
-    if (datastore.adapter === 'sails-redis') {
+    if (datastore.config.adapter === 'sails-redis') {
       sails.getDatastore('cache').leaseConnection(function during(redisConnection, proceed) {
         redisConnection.lrange(inputs.keyString, inputs.startIndex, inputs.endIndex, (err, reply) => {
           if (err) return proceed(err);
