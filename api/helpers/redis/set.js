@@ -37,7 +37,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     const datastore = sails.getDatastore('cache');
-    if (datastore.adapter === 'sails-redis') {
+    if (datastore.config.adapter === 'sails-redis') {
       if (inputs.ex) {
         if (_.isUndefined(inputs.ttl)) {
           return exits.error(`When setting ex true you must provide a TTL.`)
