@@ -52,7 +52,7 @@ module.exports = {
 
       if (_.isNull(currentStatus) || inputs.reload) {
         currentStatus = await sails.helpers.meta.getDonatorStatus(undefined, inputs.userId);
-        await sails.helpers.redis.set(`server:${inputs.userId}:donorStatus`, currentStatus);
+        await sails.helpers.redis.set(`user:${inputs.userId}:donorStatus`, currentStatus);
       }
       donorStatus = currentStatus;
     }
