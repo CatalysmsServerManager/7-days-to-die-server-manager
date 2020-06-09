@@ -1,14 +1,8 @@
 const winston = require("winston");
 
-let logLevel = process.env.CSMM_LOGLEVEL;
+const logLevel = process.env.CSMM_LOGLEVEL || 'info';
 
-if (!logLevel) {
-  logLevel = "debug";
-}
-
-if (logLevel !== "debug" && logLevel !== "info") {
-  throw new Error(`Invalid log level given, please select "debug" or "info"`);
-}
+const infoAndAbove = ['info', 'warn', 'blank', 'crit'];
 
 const transports = [
   new winston.transports.File({
@@ -25,10 +19,10 @@ const transports = [
   })
 ];
 
-if (logLevel === "debug") {
+if (!infoAndAbove.includes(logLevel)) {
   transports.push(
     new winston.transports.Console({
-      level: "debug",
+      level: logLevel,
       colorize: true,
       timestamp: true,
       humanReadableUnhandledException: true
@@ -36,7 +30,7 @@ if (logLevel === "debug") {
   );
   transports.push(
     new winston.transports.File({
-      level: "debug",
+      level: logLevel,
       name: "debuglog",
       timestamp: true,
       humanReadableUnhandledException: true,
