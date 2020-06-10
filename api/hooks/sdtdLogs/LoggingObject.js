@@ -60,7 +60,9 @@ class LoggingObject extends EventEmitter {
         },
         {
           timeout: 10000,
-          removeOnComplete: true
+          removeOnComplete: true,
+          removeOnFail: true,
+          attempts: 1
         }
       );
     };
