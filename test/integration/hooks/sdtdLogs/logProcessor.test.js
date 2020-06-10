@@ -7,7 +7,7 @@ describe('logProcessor', function () {
     sails.cache[`sdtdserver:${sails.testServer.id}:sdtdLogs:lastLogLine`] = 1100;
     sinon.stub(sails.helpers.sdtdApi, "getWebUIUpdates").callsFake(async function () {
       return {
-        newlogs: 1100
+        newlogs: 1099
       }
     });
     sinon.stub(sails.helpers.sdtdApi, "getLog").callsFake(async function () {
