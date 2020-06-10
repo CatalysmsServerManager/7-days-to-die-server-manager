@@ -28,6 +28,9 @@ module.exports = function sdtdLogs(sails) {
         sails.log.info('Initializing custom hook (`sdtdLogs`)');
 
         try {
+          // Make sure there are no lingering jobs
+          // TODO: Once we scale this to multiple processes, this should happen differently
+          await sails.helpers.getQueueObject('logs').empty();
           let enabledServers = await SdtdConfig.find({
             loggingEnabled: true,
             inactive: false,
