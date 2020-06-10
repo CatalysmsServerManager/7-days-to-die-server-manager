@@ -19,7 +19,8 @@ module.exports = {
     if (process.env.IS_TEST) {
       return exits.success({
         on: function() {},
-        process: function() {}
+        process: function() {},
+        add: function() {}
       });
     }
     const queue = new Bull(
