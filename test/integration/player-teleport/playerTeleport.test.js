@@ -47,19 +47,16 @@ describe('Player teleports', function () {
       newTeleport = _.omit(newTeleport, 'id');
       let requestOptions = newTeleport;
       requestOptions.id = testTeleports[0].id;
-      return supertest(sails.hooks.http.app)
-        .post('/api/teleport')
-        .send(requestOptions)
-        .expect(async function (res) {
-          let record = await PlayerTeleport.findOne(testTeleports[0]);
-          return expect(record).to.be.eq(requestOptions);
-        })
-        .expect(200)
-        .expect('Content-Type', /json/);
+      const res = await supertest(sails.hooks.http.app).post('/api/teleport').send(requestOptions);
+      expect(res.statusCode).to.equal(200);
+      expect(res.headers['content-type']).to.include('json');
+
+      let record = await PlayerTeleport.findOne(testTeleports[0].id);
+      expect(record).to.eql(requestOptions);
     });
 
-    it('should return 400 when id is not given', function () {
-      return supertest(sails.hooks.http.app)
+    it('should return 400 when id is not given', async function () {
+      await supertest(sails.hooks.http.app)
         .post('/api/teleport')
         .expect(400);
     });
