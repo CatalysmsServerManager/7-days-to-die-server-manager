@@ -4,7 +4,6 @@ const logProcessor = require("../../../../api/hooks/sdtdLogs/logProcessor");
 
 describe('logProcessor', function () {
   it('Confirm able to fetch log messages', async function () {
-    sails.cache[`sdtdserver:${sails.testServer.id}:sdtdLogs:lastLogLine`] = 1100;
     sinon.stub(sails.helpers.sdtdApi, "getWebUIUpdates").callsFake(async function () {
       return {
         newlogs: 1099
