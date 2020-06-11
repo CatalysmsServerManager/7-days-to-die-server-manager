@@ -3,13 +3,7 @@ const handleLogLine = require("./handleLogLine");
 
 module.exports = async function(job) {
   const resultLogs = [];
-  // Get latest log line from Redis
-  let lastLogLine = parseInt(
-    await sails.helpers.redis.get(
-      `sdtdserver:${job.data.server.id}:sdtdLogs:lastLogLine`
-    )
-  );
-
+  let lastLogLine = job.data.lastLogLine;
   // If latest log line is not found, get it from the server
   if (!lastLogLine) {
     const webUIUpdate = await sails.helpers.sdtdApi.getWebUIUpdates(SdtdServer.getAPIConfig(job.data.server));
@@ -21,12 +15,6 @@ module.exports = async function(job) {
 
   // Adjust latest log line based on new logs we got
   lastLogLine = lastLogLine + newLogs.entries.length;
-
-  // Set latest log line in Redis
-  await sails.helpers.redis.set(
-    `sdtdserver:${job.data.server.id}:sdtdLogs:lastLogLine`,
-    lastLogLine
-  );
 
   // Parse these logs into usable data
   let index = -1;
@@ -45,12 +33,6 @@ module.exports = async function(job) {
       resultLogs.push(parsedLogLine);
     }
   }
-
-  // Set last success date in Redis
-  await sails.helpers.redis.set(
-    `sdtdserver:${job.data.server.id}:sdtdLogs:lastSuccess`,
-    Date.now()
-  );
 
   return Promise.resolve({
     serverId: job.data.server.id,
