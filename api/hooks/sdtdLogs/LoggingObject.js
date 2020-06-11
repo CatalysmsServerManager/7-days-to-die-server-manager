@@ -38,10 +38,28 @@ class LoggingObject extends EventEmitter {
     });
   }
 
+  async addFetchJob() {
+    this.queue.add(
+      {
+        serverId: this.serverId,
+        lastLogLine: this.lastLogLine // FIXME - currently ignored
+      },
+      {
+        timeout: 5000,
+        removeOnComplete: 100,
+        removeOnFail: 100,
+        attempts: 1,
+        delay: this.intervalTime
+      }
+    );
+  };
+
   async init(ms = sails.config.custom.logCheckInterval) {
     if (!ms) {
       ms = 3000;
     }
+
+    this.intervalTime = ms;
 
     // Make sure there are no lingering jobs
     await this.stop();
@@ -51,20 +69,8 @@ class LoggingObject extends EventEmitter {
     } catch (error) {
       // Fail silently
     }
-    const addFetchJob = async () => {
-      this.queue.add(
-        {
-          serverId: this.serverId,
-          lastLogLine: this.lastLogLine
-        },
-        {
-          timeout: 10000,
-          removeOnComplete: true
-        }
-      );
-    };
-    this.interval = setInterval(addFetchJob, ms);
-    await addFetchJob()
+
+    await this.addFetchJob()
   }
 
   async handleError(error) {
@@ -75,6 +81,7 @@ class LoggingObject extends EventEmitter {
     // A job failed with reason `err`!
     sails.log.error(`Queue error: ${inspect(err)}`);
     await this._failedHandler();
+    await this.addFetchJob();
     return;
   }
 
@@ -120,6 +127,7 @@ class LoggingObject extends EventEmitter {
 
     await this.setFailedToZero();
     await this.setLastLogLine(result.lastLogLine);
+    await this.addFetchJob();
   }
 
   async destroy() {
@@ -170,7 +178,7 @@ class LoggingObject extends EventEmitter {
       `sdtdserver:${this.serverId}:sdtdLogs:lastSuccess`
     );
     lastSuccess = parseInt(lastSuccess);
-    if (counter > 100) {
+    if (counter > 25) {
       let prettyLastSuccess = new Date(lastSuccess);
 
       if (!this.slowmode) {
