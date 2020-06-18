@@ -120,7 +120,11 @@ class LoggingObject extends EventEmitter {
       this.emit(newLog.type, enrichedLog.data);
     }
 
-    await this.setFailedToZero();
+    if (this.failed) {
+      await this.setFailedToZero();
+      this.failed = false;
+    }
+
     // If the server is in slowmode and we receive data again, this shows the server is back online
     if (this.slowmode) {
       this.slowmode = false;
