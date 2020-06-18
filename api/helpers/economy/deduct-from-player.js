@@ -71,11 +71,7 @@ module.exports = {
         economyAction: 'deduct'
       })
 
-      let actionsCompleted = await sails.helpers.redis.get(`server:${playerToDeductFrom.server}:economyActionsCompleted`);
-      if (!actionsCompleted) {
-        actionsCompleted = 1
-      }
-      await sails.helpers.redis.set(`server:${playerToDeductFrom.server}:economyActionsCompleted`, parseInt(actionsCompleted) + 1);
+      await sails.helpers.redis.incr(`server:${playerToDeductFrom.server}:economyActionsCompleted`);
       await sails.helpers.economy.deleteOldData(playerToDeductFrom.server);
 
       return exits.success();
