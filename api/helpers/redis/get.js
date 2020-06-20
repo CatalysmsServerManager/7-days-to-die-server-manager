@@ -24,9 +24,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    if (!sails.cache) {
-      sails.cache = {};
-    }
+    await sails.helpers.redis.ensureCacheExists();
 
     return exits.success(sails.cache[inputs.keyString] ? sails.cache[inputs.keyString] : null);
   }

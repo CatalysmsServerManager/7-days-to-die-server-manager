@@ -39,7 +39,7 @@ class LoggingObject extends EventEmitter {
   }
 
   async addFetchJob() {
-    sails.log.debug("Adding new fetch job")
+    sails.log.debug(`Adding new fetch job for server ${this.serverId}`);
     this.queue.add(
       {
         serverId: this.serverId,
