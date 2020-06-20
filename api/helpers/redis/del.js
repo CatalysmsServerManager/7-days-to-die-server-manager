@@ -24,9 +24,25 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    await sails.helpers.redis.ensureCacheExists();
+    const datastore = sails.getDatastore('cache');
+    if (datastore.config.adapter === 'sails-redis') {
+      sails.getDatastore('cache').leaseConnection(function during(redisConnection, proceed) {
+        redisConnection.del(inputs.keyString, (err, reply) => {
+          if (err) return proceed(err);
 
-    sails.cache[inputs.keyString] = null;
-    return exits.success();
+          return proceed(undefined, reply)
+        });
+      }).exec((err, result) => {
+        if (err) return exits.error(err);
+
+        return exits.success(result);
+      });
+    } else {
+      sails.cache[inputs.keyString] = null;
+      return exits.success();
+    }
+
+
+
   }
 };
