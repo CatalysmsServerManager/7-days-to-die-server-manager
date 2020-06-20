@@ -20,7 +20,8 @@ module.exports = {
       return exits.success({
         on: function () { },
         process: function () { },
-        empty: function () { }
+        empty: function () { },
+        add: function() {}
       });
     }
     const queue = new Bull(

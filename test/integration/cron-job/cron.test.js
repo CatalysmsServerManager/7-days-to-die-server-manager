@@ -3,16 +3,16 @@ var expect = require("chai").expect;
 
 describe('POST /api/sdtdserver/cron', function () {
 
-  it('should return 200 with valid info', function (done) {
-    supertest(sails.hooks.http.app)
+  it('should return 200 with valid info', async function () {
+    const response = await supertest(sails.hooks.http.app)
       .post('/api/sdtdserver/cron')
       .send({
         serverId: 1,
         command: 'help',
         temporalValue: '0 */6 * * *'
       })
-      .expect('Content-Type', /json/)
-      .expect(200, done);
+    expect(response.statusCode).to.be.eql(200);
+    expect(response.header['content-type']).to.include('json');
   });
   it('should return 400 when command or temporal value is not given', function (done) {
     supertest(sails.hooks.http.app)

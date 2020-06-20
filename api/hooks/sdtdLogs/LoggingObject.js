@@ -56,7 +56,6 @@ class LoggingObject extends EventEmitter {
   };
 
   async init(ms = sails.config.custom.logCheckInterval) {
-
     if (!ms) {
       ms = 3000;
     }
@@ -166,14 +165,17 @@ class LoggingObject extends EventEmitter {
     );
   }
 
-  async setLastLogLine() {
+  async setLastLogLine(lastLogLine) {
     const server = await SdtdServer.findOne(this.serverId)
-    const webUIUpdate = await SdtdApi.getWebUIUpdates(SdtdServer.getAPIConfig(server));
-    const lastLogLine = parseInt(webUIUpdate.newlogs) + 1;
+    if (!lastLogLine && lastLogLine !== 0) {
+      const webUIUpdate = await SdtdApi.getWebUIUpdates(SdtdServer.getAPIConfig(server));
+      lastLogLine = parseInt(webUIUpdate.newlogs) + 1;
+    }
     await sails.helpers.redis.set(
       `sdtdserver:${this.serverId}:sdtdLogs:lastLogLine`,
       lastLogLine
     );
+    this.lastLogLine = lastLogLine;
     this.emptyResponses = 0;
     return lastLogLine;
   }
