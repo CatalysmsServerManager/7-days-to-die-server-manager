@@ -38,8 +38,8 @@ class LoggingObject extends EventEmitter {
     });
   }
 
-  async addFetchJob() {
-    sails.log.debug(`Adding new fetch job for server ${this.serverId}`);
+  async addFetchJob(origin) {
+    sails.log.debug(`Adding new fetch job for server ${this.serverId} - from ${origin}`);
     this.queue.add(
       {
         serverId: this.serverId,
@@ -72,7 +72,7 @@ class LoggingObject extends EventEmitter {
       // Fail silently
     }
 
-    await this.addFetchJob()
+    await this.addFetchJob("init")
   }
 
   async handleError(error) {
@@ -133,7 +133,7 @@ class LoggingObject extends EventEmitter {
       return
     }
 
-    await this.addFetchJob();
+    await this.addFetchJob("completedHandler");
   }
 
   async destroy() {
@@ -203,7 +203,7 @@ class LoggingObject extends EventEmitter {
         await sails.helpers.meta.setServerInactive(this.serverId);
       }
     }
-    await this.addFetchJob();
+    await this.addFetchJob("failedHandler");
   }
 }
 
