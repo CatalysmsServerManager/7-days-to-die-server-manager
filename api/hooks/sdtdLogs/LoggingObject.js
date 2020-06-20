@@ -79,7 +79,15 @@ class LoggingObject extends EventEmitter {
     sails.log.error(inspect(error));
   }
 
-  async handleFailedJob(job, err) {
+  async handleFailedJob(jobId, err) {
+    const job = await this.queue.getJob(jobId);
+
+
+    if (job.data.serverId != this.serverId) {
+      // not one of ours
+      return;
+    }
+
     // A job failed with reason `err`!
     sails.log.error(`Queue error: ${inspect(err)}`);
     await this._failedHandler();
@@ -92,7 +100,7 @@ class LoggingObject extends EventEmitter {
     }
 
 
-    if (result.serverId.toString() !== this.serverId) {
+    if (result.serverId != this.serverId) {
       // not one of ours
       return;
     }
