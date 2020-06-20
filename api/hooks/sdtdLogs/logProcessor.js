@@ -1,7 +1,6 @@
-const {promisify} = require("util");
 const handleLogLine = require("./handleLogLine");
 
-module.exports = async function(job) {
+module.exports = async function (job) {
   const resultLogs = [];
   let lastLogLine = job.data.lastLogLine;
   // If latest log line is not found, get it from the server

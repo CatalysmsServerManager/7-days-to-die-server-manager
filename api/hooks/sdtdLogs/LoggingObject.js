@@ -38,12 +38,12 @@ class LoggingObject extends EventEmitter {
     });
   }
 
-  async addFetchJob(origin) {
-    sails.log.debug(`Adding new fetch job for server ${this.serverId} - from ${origin}`);
+  async addFetchJob() {
+    sails.log.debug(`Adding new fetch job for server ${this.serverId} - last log line: ${this.lastLogLine}`);
     this.queue.add(
       {
         serverId: this.serverId,
-        lastLogLine: this.lastLogLine // FIXME - currently ignored
+        lastLogLine: this.lastLogLine
       },
       {
         timeout: 5000,
@@ -140,6 +140,7 @@ class LoggingObject extends EventEmitter {
       return
     }
 
+    await this.setLastLogLine();
     await this.addFetchJob("completedHandler");
   }
 
