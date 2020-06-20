@@ -36,47 +36,10 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    const datastore = sails.getDatastore('cache');
-    if (datastore.config.adapter === 'sails-redis') {
-      if (inputs.ex) {
-        if (_.isUndefined(inputs.ttl)) {
-          return exits.error(`When setting ex true you must provide a TTL.`)
-        }
+    await sails.helpers.redis.ensureCacheExists();
 
-        sails.getDatastore('cache').leaseConnection(function during(redisConnection, proceed) {
-          redisConnection.set(inputs.keyString, inputs.value, 'EX', inputs.ttl, (err, reply) => {
-            if (err) return proceed(err);
-
-            return proceed(undefined, reply)
-          })
-        }).exec((err, result) => {
-          if (err) return exits.error(err);
-
-          return exits.success(result);
-        })
-
-      } else {
-
-        sails.getDatastore('cache').leaseConnection(function during(redisConnection, proceed) {
-          redisConnection.set(inputs.keyString, inputs.value, (err, reply) => {
-            if (err) return proceed(err);
-
-            return proceed(undefined, reply)
-          })
-        }).exec((err, result) => {
-          if (err) return exits.error(err);
-
-          return exits.success(result);
-        })
-      }
-    } else {
-      if (!sails.cache) {
-        sails.cache = {};
-      }
-      sails.cache[inputs.keyString] = inputs.value;
-      return exits.success();
-    }
-
+    sails.cache[inputs.keyString] = inputs.value;
+    return exits.success();
   }
 
 };

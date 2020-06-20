@@ -39,16 +39,17 @@ class LoggingObject extends EventEmitter {
   }
 
   async addFetchJob() {
+    sails.log.debug(`Adding new fetch job for server ${this.serverId} - last log line: ${this.lastLogLine}`);
     this.queue.add(
       {
         serverId: this.serverId,
-        lastLogLine: this.lastLogLine // FIXME - currently ignored
+        lastLogLine: this.lastLogLine
       },
       {
         timeout: 5000,
         removeOnComplete: 100,
         removeOnFail: 100,
-        attempts: 1,
+        attempts: 0,
         delay: this.intervalTime
       }
     );
@@ -70,18 +71,25 @@ class LoggingObject extends EventEmitter {
       // Fail silently
     }
 
-    await this.addFetchJob()
+    await this.addFetchJob("init")
   }
 
   async handleError(error) {
     sails.log.error(inspect(error));
   }
 
-  async handleFailedJob(job, err) {
+  async handleFailedJob(jobId, err) {
+    const job = await this.queue.getJob(jobId);
+
+
+    if (job.data.serverId != this.serverId) {
+      // not one of ours
+      return;
+    }
+
     // A job failed with reason `err`!
     sails.log.error(`Queue error: ${inspect(err)}`);
     await this._failedHandler();
-    await this.addFetchJob();
     return;
   }
 
@@ -90,7 +98,8 @@ class LoggingObject extends EventEmitter {
       result = JSON.parse(result);
     }
 
-    if (result.serverId.toString() !== this.serverId) {
+
+    if (result.serverId != this.serverId) {
       // not one of ours
       return;
     }
@@ -118,16 +127,21 @@ class LoggingObject extends EventEmitter {
       this.emit(newLog.type, enrichedLog.data);
     }
 
+    if (this.failed) {
+      await this.setFailedToZero();
+      this.failed = false;
+    }
+
     // If the server is in slowmode and we receive data again, this shows the server is back online
     if (this.slowmode) {
       this.slowmode = false;
       await this.stop();
       await this.init();
+      return
     }
 
-    await this.setFailedToZero();
-    await this.setLastLogLine(result.lastLogLine);
-    await this.addFetchJob();
+    await this.setLastLogLine();
+    await this.addFetchJob("completedHandler");
   }
 
   async destroy() {
@@ -178,7 +192,7 @@ class LoggingObject extends EventEmitter {
       `sdtdserver:${this.serverId}:sdtdLogs:lastSuccess`
     );
     lastSuccess = parseInt(lastSuccess);
-    if (counter > 25) {
+    if (counter > 100) {
       let prettyLastSuccess = new Date(lastSuccess);
 
       if (!this.slowmode) {
@@ -190,6 +204,7 @@ class LoggingObject extends EventEmitter {
         this.slowmode = true;
         await this.stop();
         await this.init(300000);
+        return
       }
 
       if (lastSuccess + threeDaysInMs < Date.now()) {
@@ -199,6 +214,7 @@ class LoggingObject extends EventEmitter {
         await sails.helpers.meta.setServerInactive(this.serverId);
       }
     }
+    await this.addFetchJob("failedHandler");
   }
 }
 

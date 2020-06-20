@@ -18,8 +18,9 @@ module.exports = {
   fn: function (inputs, exits) {
     if (process.env.IS_TEST) {
       return exits.success({
-        on: function() {},
-        process: function() {},
+        on: function () { },
+        process: function () { },
+        empty: function () { },
         add: function() {}
       });
     }

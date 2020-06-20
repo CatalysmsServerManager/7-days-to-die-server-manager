@@ -105,7 +105,7 @@ module.exports = function definePlayerTrackingHook(sails) {
           //await deleteInventoryData(server);
           await sails.helpers.redis.set(`server:${serverId}:trackingCyclesCompleted`, 0);
         } else {
-          await sails.helpers.redis.set(`server:${serverId}:trackingCyclesCompleted`, currentCycles + 1);
+          await sails.helpers.redis.incr(`server:${serverId}:trackingCyclesCompleted`);
         }
 
         let dateEnded = new Date();
