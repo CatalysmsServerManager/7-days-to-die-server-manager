@@ -140,8 +140,8 @@ class LoggingObject extends EventEmitter {
       return
     }
 
-    await this.setLastLogLine();
-    await this.addFetchJob("completedHandler");
+    this.lastLogLine += result.logs.length;
+    await this.addFetchJob();
   }
 
   async destroy() {
@@ -214,7 +214,7 @@ class LoggingObject extends EventEmitter {
         await sails.helpers.meta.setServerInactive(this.serverId);
       }
     }
-    await this.addFetchJob("failedHandler");
+    await this.addFetchJob();
   }
 }
 
