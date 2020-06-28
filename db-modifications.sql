@@ -2,9 +2,9 @@
 If you are running a CSMM instance with many servers or have high data throughput these commands can help you out. */
 
 --- Indexes
-ALTER TABLE sdtdconfig ADD INDEX IDX_sdtdconfig_server (`server` ASC);
+ALTER TABLE sdtdconfig ADD UNIQUE INDEX IDX_sdtdconfig_server (`server` ASC);
 ALTER TABLE historicalinfo ADD INDEX IDX_historicalinfo_createdAt (`createdAt` ASC);
-ALTER TABLE player ADD INDEX IDX_player_steamId_server (`steamId` ASC, `server` ASC);
+ALTER TABLE player ADD UNIQUE INDEX IDX_player_steamId_server (`steamId` ASC, `server` ASC);
 ALTER TABLE analytics ADD INDEX IDX_analytics_createdAt_server (`createdAt` ASC, `server` ASC);
 ALTER TABLE trackinginfo ADD INDEX createdAt (createdAt ASC);
 ALTER TABLE trackinginfo ADD INDEX server (server ASC);
