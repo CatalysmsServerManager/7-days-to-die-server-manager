@@ -50,7 +50,7 @@ module.exports = {
     // Force a recheck of the CPM version in the cache
     sails.helpers.sdtd.checkCpmVersion(server.id, true).then(r => {
       // This is just to make sure the function is actually executed. Thanks sails
-    });
+    }).catch();
 
     try {
 

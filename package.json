@@ -23,7 +23,7 @@
     "he": "^1.2.0",
     "lodash": "^4.17.13",
     "lusca": "^1.6.1",
-    "machinepack-7daystodiewebapi": "^0.3.2",
+    "machinepack-7daystodiewebapi": "^0.3.4",
     "minimist": "^1.2.0",
     "moment": "^2.22.2",
     "morgan": "^1.9.1",

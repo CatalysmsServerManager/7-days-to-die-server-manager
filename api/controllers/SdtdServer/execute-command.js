@@ -56,6 +56,11 @@ module.exports = {
         command: inputs.command
       }).exec({
         success: (response) => {
+
+          if (!response) {
+            return exits.error();
+          }
+
           let logLine = {
             msg: response.result,
             date: new Date(),

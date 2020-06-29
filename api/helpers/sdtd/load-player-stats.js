@@ -47,6 +47,11 @@ module.exports = {
                 exits.error(error)
             },
             success: data => {
+
+                if (!data) {
+                    return exits.error();
+                }
+
                 let playerSplitResult = data.result.split('\n');
                 playerSplitResult = _.drop(playerSplitResult, 2);
                 playerSplitResult.forEach(async playerInfo => {

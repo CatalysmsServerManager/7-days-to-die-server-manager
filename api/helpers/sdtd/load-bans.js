@@ -47,6 +47,11 @@ module.exports = {
       command: 'ban list'
     }).exec({
       success: async (response) => {
+
+        if (!response) {
+          return exits.error()
+        }
+
         let result = response.result;
 
         let banRows = result.split("\n");

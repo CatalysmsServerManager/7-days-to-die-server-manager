@@ -37,12 +37,22 @@ module.exports = {
       return exits.error(new Error('No server found'))
     }
 
-    let versionResult = await SdtdApi.executeConsoleCommand({
-      ip: server.ip,
-      port: server.webPort,
-      adminToken: server.authToken,
-      adminUser: server.authName
-    }, 'version');
+    let versionResult
+    try {
+      versionResult = await SdtdApi.executeConsoleCommand({
+        ip: server.ip,
+        port: server.webPort,
+        adminToken: server.authToken,
+        adminUser: server.authName
+      }, 'version');
+
+    } catch (e) {
+      return exits.error(e);
+    }
+
+    if (!versionResult) {
+      return exits.error();
+    }
 
     let modsArray = versionResult.result.replace('\r', '').split('\n');
 
