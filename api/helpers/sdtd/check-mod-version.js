@@ -50,6 +50,10 @@ module.exports = {
       return exits.error(e);
     }
 
+    if (!versionResult) {
+      return exits.error();
+    }
+
     let modsArray = versionResult.result.replace('\r', '').split('\n');
 
     let versionToFindLine = new String();

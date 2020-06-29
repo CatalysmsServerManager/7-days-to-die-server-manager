@@ -77,6 +77,11 @@ function checkIfRunningAlloc26(sdtdServer) {
       command: 'version'
     }).exec({
       success: (response) => {
+
+        if (!response) {
+          return reject();
+        }
+
         let splitResult = response.result.split('\n');
         let mapRenderingEntry = _.find(splitResult, (versionLine) => {
           return versionLine.startsWith('Mod Allocs MapRendering and Webinterface:')
