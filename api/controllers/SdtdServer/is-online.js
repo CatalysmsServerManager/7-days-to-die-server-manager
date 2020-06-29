@@ -39,7 +39,7 @@ module.exports = {
             return exits.success(false)
         }
 
-        let statsResponse = sevenDays.getStats({
+        sevenDays.getStats({
             ip: sdtdServer.ip,
             port: sdtdServer.webPort,
             authName: sdtdServer.authName,
