@@ -46,6 +46,9 @@ module.exports = {
             authToken: sdtdServer.authToken
         }).exec({
             success: (response) => {
+                if (!response) {
+                    return exits.success(false);
+                }
                 if (response.gametime) {
                     return exits.success(true);
                 } else {
