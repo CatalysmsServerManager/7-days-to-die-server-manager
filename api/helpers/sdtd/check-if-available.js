@@ -68,24 +68,29 @@ module.exports = {
 
 async function checkStats(sdtdServer) {
   return new Promise(resolve => {
-    let statsResponse = sevenDays.getStats({
+    sevenDays.getStats({
       ip: sdtdServer.ip,
       port: sdtdServer.webPort,
       authName: sdtdServer.authName,
       authToken: sdtdServer.authToken
     }).exec({
       success: (response) => {
+
+        if (!response) {
+          return resolve(false);
+        }
+
         if (response.gametime) {
-          resolve(true);
+          return resolve(true);
         } else {
-          resolve(false)
+          return resolve(false)
         }
       },
       error: (error) => {
-        resolve(false);
+        return resolve(false);
       },
       connectionRefused: error => {
-        resolve(false);
+        return resolve(false);
       }
     });
   })
