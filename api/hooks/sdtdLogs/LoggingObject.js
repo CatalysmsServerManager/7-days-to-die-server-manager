@@ -9,17 +9,14 @@ const slowModeIntervalms = 300000;
 
 class LoggingObject extends EventEmitter {
   constructor(
-    ip,
-    port,
-    authName,
-    authToken,
-    serverId,
+    server,
     intervalTime = defaultIntervalMs
   ) {
     super();
-    this.serverId = serverId;
+    this.serverId = server.id;
 
     this.active = true;
+    this.lastLogLine = 0;
     this.queue = sails.helpers.getQueueObject('logs');
     this.intervalTime = intervalTime;
     this.requestInterval;
@@ -29,7 +26,6 @@ class LoggingObject extends EventEmitter {
     this.emptyResponses = 0;
     // Set this to true to view detailed info about logs for a server. (protip: use discord bot eval command to set this to true in production instances)
     this.debug = true;
-    this.init();
     this.queue.on("global:completed", this.handleCompletedJob.bind(this));
     this.queue.on("global:failed", this.handleFailedJob.bind(this));
     this.queue.on("global:error", this.handleError.bind(this));
@@ -65,6 +61,7 @@ class LoggingObject extends EventEmitter {
     this.active = true;
     this.intervalTime = ms;
 
+<<<<<<< HEAD
     try {
       await this.setLastLogLine();
     } catch (error) {
@@ -72,6 +69,12 @@ class LoggingObject extends EventEmitter {
     }
 
     await this.addFetchJob()
+=======
+    // Make sure there are no lingering jobs
+    await this.stop();
+
+    await this.addFetchJob("init")
+>>>>>>> Simplify and add tets
   }
 
   async handleError(error) {
@@ -106,10 +109,13 @@ class LoggingObject extends EventEmitter {
 
     if (result.logs.length === 0) {
       this.emptyResponses++;
-    }
-
-    if (this.emptyResponses > 5) {
-      await this.setLastLogLine();
+      if (this.emptyResponses > 5) {
+        // havn't found any responses in a while, so reset to 0 and try again from scratch
+        await this.setLastLogLine(0);
+      }
+    } else {
+      // save the log line we found
+      await this.setLastLogLine(result.lastLogLine + 1);
     }
 
     for (const newLog of result.logs) {
@@ -141,7 +147,6 @@ class LoggingObject extends EventEmitter {
       return
     }
 
-    this.lastLogLine = result.lastLogLine + 1;
     await sails.helpers.redis.set(`sdtdserver:${this.serverId}:sdtdLogs:lastSuccess`, Date.now());
     await this.addFetchJob();
   }
@@ -170,15 +175,11 @@ class LoggingObject extends EventEmitter {
 
   async setLastLogLine(lastLogLine) {
     const server = await SdtdServer.findOne(this.serverId)
-    if (!lastLogLine && lastLogLine !== 0) {
-      const webUIUpdate = await SdtdApi.getWebUIUpdates(SdtdServer.getAPIConfig(server));
-      lastLogLine = parseInt(webUIUpdate.newlogs) + 1;
-    }
     await sails.helpers.redis.set(
       `sdtdserver:${this.serverId}:sdtdLogs:lastLogLine`,
       lastLogLine
     );
-    this.lastLogLine = lastLogLine;
+    this.lastLogLine = lastLogLine || 0;
     this.emptyResponses = 0;
     return lastLogLine;
   }
