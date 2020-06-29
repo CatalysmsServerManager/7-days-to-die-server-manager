@@ -39,13 +39,16 @@ module.exports = {
             return exits.success(false)
         }
 
-        let statsResponse = sevenDays.getStats({
+        sevenDays.getStats({
             ip: sdtdServer.ip,
             port: sdtdServer.webPort,
             authName: sdtdServer.authName,
             authToken: sdtdServer.authToken
         }).exec({
             success: (response) => {
+                if (!response) {
+                    return exits.success(false);
+                }
                 if (response.gametime) {
                     return exits.success(true);
                 } else {
