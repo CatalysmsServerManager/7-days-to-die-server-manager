@@ -59,6 +59,9 @@ module.exports = {
         itemToSearch: inputs.item
       }).exec({
         success: (response) => {
+          if (!response) {
+            return exits.success(false)
+          }
           return exits.success(response);
         },
         unknownCommand: (error) => {

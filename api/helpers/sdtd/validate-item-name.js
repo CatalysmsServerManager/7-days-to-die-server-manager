@@ -53,6 +53,9 @@ module.exports = {
             itemToSearch: inputs.item
         }).exec({
             success: (response) => {
+                if (!response) {
+                    return exits.success(false)
+                }
                 let foundItem = false
 
                 response.map(itemName => {
