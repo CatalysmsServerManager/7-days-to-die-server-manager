@@ -1,5 +1,3 @@
-const SdtdApi = require('7daystodie-api-wrapper');
-
 module.exports = {
 
 
@@ -30,7 +28,6 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-
     let server = await SdtdServer.findOne(inputs.serverId);
 
     if (_.isUndefined(server)) {
@@ -39,13 +36,12 @@ module.exports = {
 
     let versionResult
     try {
-      versionResult = await SdtdApi.executeConsoleCommand({
+      versionResult = await sails.helpers.sdtdApi.executeConsoleCommand({
         ip: server.ip,
         port: server.webPort,
         adminToken: server.authToken,
         adminUser: server.authName
       }, 'version');
-
     } catch (e) {
       return exits.error(e);
     }
@@ -66,7 +62,7 @@ module.exports = {
     let splitVersionLine = versionToFindLine.split(":");
 
     if (inputs.modName === "Game version") {
-      return exits.success(_.trim(splitVersionLine[splitVersionLine.length - 1]))
+      return exits.success(_.trim(splitVersionLine[splitVersionLine.length - 1]));
     }
 
     let versionNumber = _.trim(splitVersionLine[splitVersionLine.length - 1]);
