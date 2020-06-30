@@ -39,20 +39,22 @@ class LoggingObject extends EventEmitter {
   }
 
   async addFetchJob() {
-    sails.log.debug(`Adding new fetch job for server ${this.serverId} - last log line: ${this.lastLogLine}`);
-    this.queue.add(
-      {
-        serverId: this.serverId,
-        lastLogLine: this.lastLogLine
-      },
-      {
-        timeout: 5000,
-        removeOnComplete: 100,
-        removeOnFail: 100,
-        attempts: 0,
-        delay: this.intervalTime
-      }
-    );
+    if (this.active) {
+      sails.log.debug(`Adding new fetch job for server ${this.serverId} - last log line: ${this.lastLogLine}`);
+      this.queue.add(
+        {
+          serverId: this.serverId,
+          lastLogLine: this.lastLogLine
+        },
+        {
+          timeout: 5000,
+          removeOnComplete: 100,
+          removeOnFail: 100,
+          attempts: 0,
+          delay: this.intervalTime
+        }
+      );
+    }
   };
 
   async init(ms = sails.config.custom.logCheckInterval) {
@@ -60,10 +62,8 @@ class LoggingObject extends EventEmitter {
       ms = 3000;
     }
 
+    this.active = true;
     this.intervalTime = ms;
-
-    // Make sure there are no lingering jobs
-    await this.stop();
 
     try {
       await this.setLastLogLine();
@@ -71,7 +71,7 @@ class LoggingObject extends EventEmitter {
       // Fail silently
     }
 
-    await this.addFetchJob("init")
+    await this.addFetchJob()
   }
 
   async handleError(error) {
@@ -152,7 +152,7 @@ class LoggingObject extends EventEmitter {
   }
 
   async stop() {
-    clearInterval(this.interval);
+    this.active = false;
     return;
   }
 
