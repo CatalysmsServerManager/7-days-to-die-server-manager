@@ -1,6 +1,6 @@
 describe('HELPER sdtd/check-mod-version', () => {
   it('returns 33.2 for newer versions', async () => {
-    sails.helpers.sdtdApi.executeConsoleCommand = sinon.stub().callsFake(async function() {
+    sandbox.stub(sails.helpers.sdtdApi, "executeConsoleCommand").callsFake(async function() {
       return {
         command: 'version',
         parameters: '',

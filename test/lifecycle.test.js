@@ -20,7 +20,6 @@ beforeEach(function() {
 });
 before(() => {
   global.sandbox = sinon.createSandbox();
-  global.sinon = sinon;
   global.expect = chai.expect;
 })
 beforeEach(() => {
