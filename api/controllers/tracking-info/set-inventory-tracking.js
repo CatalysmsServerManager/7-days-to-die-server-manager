@@ -45,7 +45,6 @@ module.exports = {
       if (!server) {
         return exits.error(new Error('Missing server'));
       }
-      let runningPatch
       const version = await sails.helpers.sdtd.checkModVersion('Mod Allocs MapRendering and Webinterface', inputs.serverId);
       if (version < 26) {
         return exits.notRunningPatch(`You must run Allocs webmap version greater than (or equal) 26!`)
