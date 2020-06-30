@@ -103,6 +103,7 @@ class LoggingObject extends EventEmitter {
       // not one of ours
       return;
     }
+
     if (result.logs.length === 0) {
       this.emptyResponses++;
     }
@@ -140,7 +141,7 @@ class LoggingObject extends EventEmitter {
       return
     }
 
-    this.lastLogLine += result.logs.length;
+    this.lastLogLine = result.lastLogLine + 1;
     await sails.helpers.redis.set(`sdtdserver:${this.serverId}:sdtdLogs:lastSuccess`, Date.now());
     await this.addFetchJob();
   }
