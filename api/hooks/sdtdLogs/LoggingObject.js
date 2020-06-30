@@ -141,6 +141,7 @@ class LoggingObject extends EventEmitter {
     }
 
     this.lastLogLine += result.logs.length;
+    await sails.helpers.redis.set(`sdtdserver:${this.serverId}:sdtdLogs:lastSuccess`, Date.now());
     await this.addFetchJob();
   }
 
