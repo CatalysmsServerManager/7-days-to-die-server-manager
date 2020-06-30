@@ -37,7 +37,7 @@ module.exports = {
       inputs.mod = 'Mod Allocs MapRendering and Webinterface';
     }
     let apiResponse;
-    
+
     try {
       apiResponse = await sails.helpers.sdtd.checkModVersion(inputs.mod, inputs.serverId);
     } catch (error) {

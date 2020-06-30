@@ -1,11 +1,9 @@
-const expect = require("chai").expect;
-const sinon = require('sinon');
 const PlayerDisconnected = require('../../../../../api/hooks/discordNotifications/notifications/playerDisconnected.js');
 
 describe('PlayerDisconnected', function () {
   beforeEach(function() {
     this.channel = {
-      send: sinon.fake()
+      send: sandbox.fake()
     };
 
     this.notification = new PlayerDisconnected();

@@ -1,15 +1,14 @@
 const expect = require("chai").expect;
-const sinon = require('sinon');
 const logProcessor = require("../../../../api/hooks/sdtdLogs/logProcessor");
 
 describe('logProcessor', function () {
   it('Confirm able to fetch log messages', async function () {
-    sinon.stub(sails.helpers.sdtdApi, "getWebUIUpdates").callsFake(async function () {
+    sandbox.stub(sails.helpers.sdtdApi, "getWebUIUpdates").callsFake(async function () {
       return {
         newlogs: 1099
       }
     });
-    sinon.stub(sails.helpers.sdtdApi, "getLog").callsFake(async function () {
+    sandbox.stub(sails.helpers.sdtdApi, "getLog").callsFake(async function () {
       return {
         firstLine: 1100,
         lastLine: 1150,

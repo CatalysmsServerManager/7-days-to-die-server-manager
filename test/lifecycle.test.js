@@ -1,18 +1,26 @@
 const sails = require('sails');
 const faker = require('faker');
 const MockDate = require('mockdate');
-const sinon = require('sinon')
+const sinon = require('sinon');
+const chai = require("chai");
+const sinonChai = require("sinon-chai");
+const chaiAsPromised = require("chai-as-promised");
+
+chai.use(chaiAsPromised);
+chai.use(sinonChai);
 
 process.env.IS_TEST = true;
 process.env.NODE_ENV = 'test';
 process.env.CSMM_DONATOR_TIER = 'patron';
 delete process.env.REDISSTRING;
+delete process.env.PORT;
 
 beforeEach(function() {
   MockDate.set('2020-05-01T01:20:05+0000');
 });
 before(() => {
-  global.sandbox = sinon.createSandbox()
+  global.sandbox = sinon.createSandbox();
+  global.expect = chai.expect;
 })
 beforeEach(() => {
   global.sandbox.restore()
@@ -23,34 +31,9 @@ beforeEach(() => {
 // Before running any tests...
 before(function (done) {
 
-  // Increase the Mocha timeout so that Sails has enough time to lift
-  this.timeout(50000);
-  require('dotenv').config();
-  sails.lift({
-    // Your sails app's configuration files will be loaded automatically,
-    // but you can also specify any other special overrides here for testing purposes.
-
-    hooks: {
-      grunt: false
-    },
-    log: { level: 'warn' },
-    security: {
-      csrf: false
-    },
-
-    datastores: {
-      testDB: {
-        adapter: 'sails-disk',
-        inMemoryOnly: true
-      }
-    },
-    models: {
-      connection: 'testDB',
-    },
-
-  }, async function (err) {
+  async function onComplete (err) {
     if (err) {
-      return done(err);
+      throw err;
     }
 
     let testUser = await User.create({
@@ -79,14 +62,47 @@ before(function (done) {
       inactive: true
     }).fetch();
 
-
     sails.testUser = testUser;
     sails.testServer = testServer;
     sails.testPlayer = testPlayer;
     sails.testServerConfig = testServerConfig;
+  }
 
-    return done();
-  });
+  // Increase the Mocha timeout so that Sails has enough time to lift
+  this.timeout(50000);
+  sails.lift({
+    // Your sails app's configuration files will be loaded automatically,
+    // but you can also specify any other special overrides here for testing purposes.
+    hookTimeout: this.timeout() - 1000,
+    hooks: {
+      grunt: false,
+
+      playerTracking: false,
+    },
+    log: { level: process.env.CSMM_LOGLEVEL || 'info' },
+    security: {
+      csrf: false
+    },
+
+    datastores: {
+      default: {
+        adapter: 'sails-disk',
+        inMemoryOnly: true
+      },
+      cache: {
+        adapter: 'sails-disk',
+        inMemoryOnly: true
+      },
+      testDB: {
+        adapter: 'sails-disk',
+        inMemoryOnly: true
+      }
+    },
+    models: {
+      datastore: 'testDB',
+    },
+
+  }, (err) => { onComplete(err).then(done, done); });
 });
 
 // After all tests have finished...
