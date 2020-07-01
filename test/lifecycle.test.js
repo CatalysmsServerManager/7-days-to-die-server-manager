@@ -15,7 +15,7 @@ process.env.CSMM_DONATOR_TIER = 'patron';
 delete process.env.REDISSTRING;
 delete process.env.PORT;
 
-beforeEach(function() {
+beforeEach(function () {
   MockDate.set('2020-05-01T01:20:05+0000');
 });
 before(() => {
@@ -31,13 +31,13 @@ beforeEach(() => {
 // Before running any tests...
 before(function (done) {
 
-  async function onComplete (err) {
+  async function onComplete(err) {
     if (err) {
       throw err;
     }
 
     let testUser = await User.create({
-      steamId: faker.random.number({min: 0, max: 9999999999999}),
+      steamId: faker.random.number({ min: 0, max: 9999999999999 }),
       username: faker.internet.userName()
     }).fetch();
 
@@ -84,6 +84,10 @@ before(function (done) {
       csrf: false
     },
 
+
+    port: process.env.CSMM_PORT || 8500,
+
+
     datastores: {
       default: {
         adapter: 'sails-disk',
@@ -110,17 +114,17 @@ after(function (done) {
   sails.lower(done);
 });
 
-beforeEach(function(done) {
+beforeEach(function (done) {
   destroyFuncs = [];
   for (modelName in sails.models) {
-    destroyFuncs.push(function(callback) {
+    destroyFuncs.push(function (callback) {
       sails.models[modelName].destroy({})
-      .exec(function(err) {
-        callback(null, err)
-      });
+        .exec(function (err) {
+          callback(null, err)
+        });
     })
   }
-  async.parallel(destroyFuncs, function(err, results) {
+  async.parallel(destroyFuncs, function (err, results) {
     done(err);
   })
 });

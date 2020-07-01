@@ -2,7 +2,8 @@ const handleLogLine = require("./handleLogLine");
 
 module.exports = async function (job) {
   const resultLogs = [];
-  let lastLogLine = job.data.lastLogLine;
+  let lastLogLine = parseInt(job.data.lastLogLine, 10);
+
   // If latest log line is not found, get it from the server
   if (!lastLogLine) {
     const webUIUpdate = await sails.helpers.sdtdApi.getWebUIUpdates(SdtdServer.getAPIConfig(job.data.server));
