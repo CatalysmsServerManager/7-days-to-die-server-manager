@@ -167,7 +167,7 @@ describe('LoggingObject', function () {
         const emitSpy = sandbox.spy(loggingObject, 'emit');
 
         await loggingObject.handleCompletedJob(job, JSON.stringify(result));
-        expect(loggingObject.lastLogLine).to.equal(111);
+        expect(loggingObject.lastLogLine).to.equal(110);
         expect(loggingObject.emptyResponses).to.equal(0);
         expect(loggingObject.failed).to.equal(false);
         expect(loggingObject.slowmode).to.equal(false);
@@ -193,7 +193,7 @@ describe('LoggingObject', function () {
         const emitSpy = sandbox.spy(loggingObject, 'emit');
 
         await loggingObject.handleCompletedJob(job, JSON.stringify(result));
-        expect(loggingObject.lastLogLine).to.equal(111);
+        expect(loggingObject.lastLogLine).to.equal(110);
         expect(loggingObject.emptyResponses).to.equal(0);
         expect(loggingObject.failed).to.equal(false);
         expect(loggingObject.slowmode).to.equal(false);
@@ -219,7 +219,7 @@ describe('LoggingObject', function () {
         const emitSpy = sandbox.spy(loggingObject, 'emit');
 
         await loggingObject.handleCompletedJob(job, JSON.stringify(result));
-        expect(loggingObject.lastLogLine).to.equal(111);
+        expect(loggingObject.lastLogLine).to.equal(110);
         expect(loggingObject.emptyResponses).to.equal(0);
         expect(loggingObject.failed).to.equal(false);
         expect(loggingObject.slowmode).to.equal(false);
