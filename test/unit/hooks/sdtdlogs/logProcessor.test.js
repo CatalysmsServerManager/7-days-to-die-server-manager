@@ -9,11 +9,13 @@ describe('logProcessor', function () {
         sails.helpers.sdtdApi.getLog = sandbox.stub().returns({ entries: [] });
     });
 
-    it('resets lastLogLine if job.data.lastLogLine is falsey', async function () {
+    it('resets lastLogLine if job.data.lastLogLine is 0', async function () {
         await logProcessor({ data: { lastLogLine: 0, server: sails.testServer } });
         expect(sails.helpers.sdtdApi.getWebUIUpdates).to.have.been.callCount(1);
+    });
 
+    it('resets lastLogLine if job.data.lastLogLine is "0"', async function () {
         await logProcessor({ data: { lastLogLine: "0", server: sails.testServer } });
-        expect(sails.helpers.sdtdApi.getWebUIUpdates).to.have.been.callCount(2);
+        expect(sails.helpers.sdtdApi.getWebUIUpdates).to.have.been.callCount(1);
     });
 });
