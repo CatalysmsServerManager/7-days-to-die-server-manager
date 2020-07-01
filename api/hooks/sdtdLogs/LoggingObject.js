@@ -103,7 +103,7 @@ class LoggingObject extends EventEmitter {
 
     if (result.lastLogLine) {
       // save the log line we found
-      await this.setLastLogLine(result.lastLogLine + 1);
+      await this.setLastLogLine(result.lastLogLine);
     }
 
     for (const newLog of result.logs) {
