@@ -71,7 +71,6 @@ class LoggingObject extends EventEmitter {
   async handleFailedJob(jobId, err) {
     const job = await this.queue.getJob(jobId);
 
-
     if (job.data.serverId != this.serverId) {
       // not one of ours
       return;

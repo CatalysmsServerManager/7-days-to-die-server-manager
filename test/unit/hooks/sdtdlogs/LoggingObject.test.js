@@ -49,31 +49,34 @@ describe('LoggingObject', function () {
   let loggingObject;
   let originalLastLogLine;
   let originalEmptyResponse;
+  let jobData;
   beforeEach(() => {
     loggingObject = new LoggingObject(
       sails.testServer
     );
+    jobData = {
+      data: {
+        serverId: loggingObject.serverId
+      }
+    };
     loggingObject.lastLogLine = 10;
     originalLastLogLine = loggingObject.lastLogLine;
     originalEmptyResponse = loggingObject.emptyResponses;
-    loggingObject.queue = {
-      getJob: sandbox.stub(),
-      add: sandbox.stub()
-    };
+    loggingObject.queue = {};
     loggingObject.addFetchJob = sandbox.stub();
+    loggingObject.queue.add = sandbox.stub();
+    loggingObject.queue.getJob = sandbox.stub().returns(jobData);
   });
   describe('handleFailedJob', () => {
-    it('does a thing', async () => {
-      const job =  {
-        data: {
-          serverId: loggingObject.serverId
-        }
-      };
-      const result = {};
-
-      loggingObject.queue.getJob = sandbox.stub().returns(job);
-      loggingObject.addFetchJob = sandbox.stub();
-      await loggingObject.handleFailedJob('jobId', result);
+    it('ignores messages for other servers', async () => {
+      jobData.data.serverId = -1;
+      await loggingObject.handleFailedJob('jobId', new Error('The error that happened'));
+      expect(loggingObject.lastLogLine).to.equal(originalLastLogLine);
+      expect(loggingObject.emptyResponses).to.equal(originalEmptyResponse);
+      expect(loggingObject.addFetchJob).not.to.have.been.called;
+    });
+    it('handles errors', async () => {
+      await loggingObject.handleFailedJob('jobId', new Error('The error that happened'));
       expect(loggingObject.addFetchJob).to.have.been.called;
       expect(loggingObject.lastLogLine).to.equal(originalLastLogLine);
       expect(loggingObject.emptyResponses).to.equal(originalEmptyResponse);
