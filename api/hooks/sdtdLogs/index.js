@@ -143,7 +143,8 @@ module.exports = function sdtdLogs(sails) {
 
     let server = await SdtdServer.findOne(serverID);
 
-    let eventEmitter = new LoggingObject(server.ip, server.webPort, server.authName, server.authToken, serverID);
+    let eventEmitter = new LoggingObject(server);
+    eventEmitter.init();
 
     eventEmitter.on('logLine', function (logLine) {
       logLine.server = _.omit(server, "authName", "authToken");
