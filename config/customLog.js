@@ -16,18 +16,16 @@ const transports = [
     maxFiles: 3,
     json: false,
     colorize: false
+  }),
+  new winston.transports.Console({
+    level: logLevel,
+    colorize: true,
+    timestamp: true,
+    humanReadableUnhandledException: true
   })
 ];
 
 if (!infoAndAbove.includes(logLevel)) {
-  transports.push(
-    new winston.transports.Console({
-      level: logLevel,
-      colorize: true,
-      timestamp: true,
-      humanReadableUnhandledException: true
-    })
-  );
   transports.push(
     new winston.transports.File({
       level: logLevel,
@@ -49,7 +47,7 @@ const customLogger = new winston.Logger({
 });
 
 customLogger.stream = {
-  write: function(message) {
+  write: function (message) {
     customLogger.info(message);
   }
 };
