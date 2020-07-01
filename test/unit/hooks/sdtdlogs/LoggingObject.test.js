@@ -55,7 +55,6 @@ describe('LoggingObject', function () {
     originalLastLogLine = loggingObject.lastLogLine;
     originalEmptyResponse = loggingObject.emptyResponses;
     loggingObject.queue = {};
-    loggingObject.addFetchJob = sandbox.stub();
     loggingObject.queue.add = sandbox.stub();
   });
   describe('handleFailedJob', () => {
@@ -73,11 +72,11 @@ describe('LoggingObject', function () {
       await loggingObject.handleFailedJob('jobId', new Error('The error that happened'));
       expect(loggingObject.lastLogLine).to.equal(originalLastLogLine);
       expect(loggingObject.emptyResponses).to.equal(originalEmptyResponse);
-      expect(loggingObject.addFetchJob).not.to.have.been.called;
+      expect(loggingObject.queue.add).not.to.have.been.called;
     });
     it('handles errors', async () => {
       await loggingObject.handleFailedJob('jobId', new Error('The error that happened'));
-      expect(loggingObject.addFetchJob).to.have.been.called;
+      expect(loggingObject.queue.add).to.have.been.called;
       expect(loggingObject.lastLogLine).to.equal(originalLastLogLine);
       expect(loggingObject.emptyResponses).to.equal(originalEmptyResponse);
     });
@@ -91,7 +90,7 @@ describe('LoggingObject', function () {
       await loggingObject.handleCompletedJob(job, JSON.stringify(result));
       expect(loggingObject.lastLogLine).to.equal(originalLastLogLine);
       expect(loggingObject.emptyResponses).to.equal(originalEmptyResponse);
-      expect(loggingObject.addFetchJob).not.to.have.been.called;
+      expect(loggingObject.queue.add).not.to.have.been.called;
     });
 
     it('empty response should increase empty response ', async () => {
@@ -103,7 +102,7 @@ describe('LoggingObject', function () {
       await loggingObject.handleCompletedJob(job, JSON.stringify(result));
       expect(loggingObject.lastLogLine).to.equal(10);
       expect(loggingObject.emptyResponses).to.equal(1);
-      expect(loggingObject.addFetchJob).to.have.been.called;
+      expect(loggingObject.queue.add).to.have.been.called;
     });
 
     it('fifth empty response should reset log last log line and empty response', async () => {
@@ -116,38 +115,38 @@ describe('LoggingObject', function () {
       await loggingObject.handleCompletedJob(job, JSON.stringify(result));
       expect(loggingObject.lastLogLine).to.equal(100);
       expect(loggingObject.emptyResponses).to.equal(1);
-      expect(loggingObject.addFetchJob).to.have.been.called;
-      loggingObject.addFetchJob.resetHistory();
+      expect(loggingObject.queue.add).to.have.been.called;
+      loggingObject.queue.add.resetHistory();
 
       await loggingObject.handleCompletedJob(job, JSON.stringify(result));
       expect(loggingObject.lastLogLine).to.equal(100);
       expect(loggingObject.emptyResponses).to.equal(2);
-      expect(loggingObject.addFetchJob).to.have.been.called;
-      loggingObject.addFetchJob.resetHistory();
+      expect(loggingObject.queue.add).to.have.been.called;
+      loggingObject.queue.add.resetHistory();
 
       await loggingObject.handleCompletedJob(job, JSON.stringify(result));
       expect(loggingObject.lastLogLine).to.equal(100);
       expect(loggingObject.emptyResponses).to.equal(3);
-      expect(loggingObject.addFetchJob).to.have.been.called;
-      loggingObject.addFetchJob.resetHistory();
+      expect(loggingObject.queue.add).to.have.been.called;
+      loggingObject.queue.add.resetHistory();
 
       await loggingObject.handleCompletedJob(job, JSON.stringify(result));
       expect(loggingObject.lastLogLine).to.equal(100);
       expect(loggingObject.emptyResponses).to.equal(4);
-      expect(loggingObject.addFetchJob).to.have.been.called;
-      loggingObject.addFetchJob.resetHistory();
+      expect(loggingObject.queue.add).to.have.been.called;
+      loggingObject.queue.add.resetHistory();
 
       await loggingObject.handleCompletedJob(job, JSON.stringify(result));
       expect(loggingObject.lastLogLine).to.equal(100);
       expect(loggingObject.emptyResponses).to.equal(5);
-      expect(loggingObject.addFetchJob).to.have.been.called;
-      loggingObject.addFetchJob.resetHistory();
+      expect(loggingObject.queue.add).to.have.been.called;
+      loggingObject.queue.add.resetHistory();
 
       await loggingObject.handleCompletedJob(job, JSON.stringify(result));
       expect(loggingObject.lastLogLine).to.equal(0);
       expect(loggingObject.emptyResponses).to.equal(0);
-      expect(loggingObject.addFetchJob).to.have.been.called;
-      loggingObject.addFetchJob.resetHistory();
+      expect(loggingObject.queue.add).to.have.been.called;
+      loggingObject.queue.add.resetHistory();
     });
 
     describe('success with various log types', () => {
@@ -172,7 +171,7 @@ describe('LoggingObject', function () {
         expect(loggingObject.emptyResponses).to.equal(0);
         expect(loggingObject.failed).to.equal(false);
         expect(loggingObject.slowmode).to.equal(false);
-        expect(loggingObject.addFetchJob).to.have.been.called;
+        expect(loggingObject.queue.add).to.have.been.called;
         expect(emitSpy).to.have.been.callCount(2);
         expect(emitSpy).to.have.been.calledWith('logLine', sandbox.match.defined);
         expect(emitSpy).to.have.been.calledWith('chatMessage', sandbox.match.defined);
@@ -198,7 +197,7 @@ describe('LoggingObject', function () {
         expect(loggingObject.emptyResponses).to.equal(0);
         expect(loggingObject.failed).to.equal(false);
         expect(loggingObject.slowmode).to.equal(false);
-        expect(loggingObject.addFetchJob).to.have.been.called;
+        expect(loggingObject.queue.add).to.have.been.called;
         expect(emitSpy).to.have.been.callCount(2);
         expect(emitSpy).to.have.been.calledWith('logLine', sandbox.match.defined);
         expect(emitSpy).to.have.been.calledWith('memUpdate', sandbox.match.defined);
@@ -224,7 +223,7 @@ describe('LoggingObject', function () {
         expect(loggingObject.emptyResponses).to.equal(0);
         expect(loggingObject.failed).to.equal(false);
         expect(loggingObject.slowmode).to.equal(false);
-        expect(loggingObject.addFetchJob).to.have.been.called;
+        expect(loggingObject.queue.add).to.have.been.called;
         expect(emitSpy).to.have.been.callCount(1);
         expect(emitSpy).to.have.been.calledWith('logLine', sandbox.match.defined);
       });
