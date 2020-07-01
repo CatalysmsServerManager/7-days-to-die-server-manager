@@ -93,15 +93,19 @@ class LoggingObject extends EventEmitter {
       return;
     }
 
+
     if (result.logs.length === 0) {
       this.emptyResponses++;
       if (this.emptyResponses > 5) {
-        // havn't found any responses in a while, so reset to 0 and try again from scratch
+        // haven't found any responses in a while, so reset to 0 and try again from scratch
         await this.setLastLogLine(0);
+        this.emptyResponses = 0;
       }
-    } else {
+    }
+
+    if (result.lastLogLine) {
       // save the log line we found
-      await this.setLastLogLine(result.lastLogLine + 1);
+      await this.setLastLogLine(result.lastLogLine);
     }
 
     for (const newLog of result.logs) {
@@ -165,7 +169,6 @@ class LoggingObject extends EventEmitter {
       lastLogLine
     );
     this.lastLogLine = lastLogLine || 0;
-    this.emptyResponses = 0;
     return lastLogLine;
   }
 
