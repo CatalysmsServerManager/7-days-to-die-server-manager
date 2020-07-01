@@ -49,25 +49,25 @@ describe('LoggingObject', function () {
   let loggingObject;
   let originalLastLogLine;
   let originalEmptyResponse;
-  let jobData;
   beforeEach(() => {
-    loggingObject = new LoggingObject(
-      sails.testServer
-    );
-    jobData = {
-      data: {
-        serverId: loggingObject.serverId
-      }
-    };
+    loggingObject = new LoggingObject(sails.testServer);
     loggingObject.lastLogLine = 10;
     originalLastLogLine = loggingObject.lastLogLine;
     originalEmptyResponse = loggingObject.emptyResponses;
     loggingObject.queue = {};
     loggingObject.addFetchJob = sandbox.stub();
     loggingObject.queue.add = sandbox.stub();
-    loggingObject.queue.getJob = sandbox.stub().returns(jobData);
   });
   describe('handleFailedJob', () => {
+    let jobData;
+    beforeEach(() => {
+      jobData = {
+        data: {
+          serverId: loggingObject.serverId
+        }
+      };
+      loggingObject.queue.getJob = sandbox.stub().returns(jobData);
+    });
     it('ignores messages for other servers', async () => {
       jobData.data.serverId = -1;
       await loggingObject.handleFailedJob('jobId', new Error('The error that happened'));
