@@ -99,7 +99,9 @@ class LoggingObject extends EventEmitter {
         // havn't found any responses in a while, so reset to 0 and try again from scratch
         await this.setLastLogLine(0);
       }
-    } else {
+    }
+
+    if (result.lastLogLine) {
       // save the log line we found
       await this.setLastLogLine(result.lastLogLine + 1);
     }
