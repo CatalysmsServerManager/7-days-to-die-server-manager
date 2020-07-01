@@ -1,8 +1,7 @@
-const SdtdApi = require("7daystodie-api-wrapper");
-const EventEmitter = require("events");
-const enrichData = require("./enrichEventData");
+const EventEmitter = require('events');
+const enrichData = require('./enrichEventData');
 
-const { inspect } = require("util");
+const { inspect } = require('util');
 
 const defaultIntervalMs = 2000;
 const slowModeIntervalms = 300000;
@@ -21,16 +20,17 @@ class LoggingObject extends EventEmitter {
     this.intervalTime = intervalTime;
     this.requestInterval;
     this.failed = false;
+    this.slowmode = false;
     // Keep track of how many times we receive an empty response.
     // If we get too many empty responses, we force a recheck of lastLogLine
     this.emptyResponses = 0;
     // Set this to true to view detailed info about logs for a server. (protip: use discord bot eval command to set this to true in production instances)
     this.debug = true;
-    this.queue.on("global:completed", this.handleCompletedJob.bind(this));
-    this.queue.on("global:failed", this.handleFailedJob.bind(this));
-    this.queue.on("global:error", this.handleError.bind(this));
-    this.queue.on("global:cleaned", function (jobs, type) {
-      sails.log.debug("Cleaned %s %s jobs", jobs.length, type);
+    this.queue.on('global:completed', this.handleCompletedJob.bind(this));
+    this.queue.on('global:failed', this.handleFailedJob.bind(this));
+    this.queue.on('global:error', this.handleError.bind(this));
+    this.queue.on('global:cleaned', function (jobs, type) {
+      sails.log.debug('Cleaned %s %s jobs', jobs.length, type);
     });
   }
 
@@ -61,20 +61,7 @@ class LoggingObject extends EventEmitter {
     this.active = true;
     this.intervalTime = ms;
 
-<<<<<<< HEAD
-    try {
-      await this.setLastLogLine();
-    } catch (error) {
-      // Fail silently
-    }
-
-    await this.addFetchJob()
-=======
-    // Make sure there are no lingering jobs
-    await this.stop();
-
-    await this.addFetchJob("init")
->>>>>>> Simplify and add tets
+    await this.addFetchJob();
   }
 
   async handleError(error) {
@@ -120,7 +107,7 @@ class LoggingObject extends EventEmitter {
 
     for (const newLog of result.logs) {
       let enrichedLog = newLog;
-      if (newLog.type !== "logLine") {
+      if (newLog.type !== 'logLine') {
         enrichedLog = await enrichData(newLog);
         // We still want to emit these events as log lines aswell (for modules like hooks, discord notifications)
         this.emit('logLine', enrichedLog.data);
@@ -144,7 +131,7 @@ class LoggingObject extends EventEmitter {
       this.slowmode = false;
       await this.stop();
       await this.init();
-      return
+      return;
     }
 
     await sails.helpers.redis.set(`sdtdserver:${this.serverId}:sdtdLogs:lastSuccess`, Date.now());
@@ -174,7 +161,6 @@ class LoggingObject extends EventEmitter {
   }
 
   async setLastLogLine(lastLogLine) {
-    const server = await SdtdServer.findOne(this.serverId)
     await sails.helpers.redis.set(
       `sdtdserver:${this.serverId}:sdtdLogs:lastLogLine`,
       lastLogLine
@@ -201,13 +187,13 @@ class LoggingObject extends EventEmitter {
       if (!this.slowmode) {
         sails.log.info(
           `SdtdLogs - Server ${
-          this.serverId
+            this.serverId
           } has failed ${counter} times. Changing interval time. Server was last successful on ${prettyLastSuccess.toLocaleDateString()} ${prettyLastSuccess.toLocaleTimeString()}`
         );
         this.slowmode = true;
         await this.stop();
         await this.init(300000);
-        return
+        return;
       }
 
       if (lastSuccess + threeDaysInMs < Date.now()) {
