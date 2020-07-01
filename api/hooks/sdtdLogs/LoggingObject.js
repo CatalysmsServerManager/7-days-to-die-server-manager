@@ -93,15 +93,13 @@ class LoggingObject extends EventEmitter {
       return;
     }
 
-    console.log(result.logs);
-    console.log(result.logs.length);
-
 
     if (result.logs.length === 0) {
       this.emptyResponses++;
       if (this.emptyResponses > 5) {
         // haven't found any responses in a while, so reset to 0 and try again from scratch
         await this.setLastLogLine(0);
+        this.emptyResponses = 0;
       }
     }
 
@@ -171,7 +169,6 @@ class LoggingObject extends EventEmitter {
       lastLogLine
     );
     this.lastLogLine = lastLogLine || 0;
-    this.emptyResponses = 0;
     return lastLogLine;
   }
 
