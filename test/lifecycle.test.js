@@ -2,9 +2,9 @@ const sails = require('sails');
 const faker = require('faker');
 const MockDate = require('mockdate');
 const sinon = require('sinon');
-const chai = require("chai");
-const sinonChai = require("sinon-chai");
-const chaiAsPromised = require("chai-as-promised");
+const chai = require('chai');
+const sinonChai = require('sinon-chai');
+const chaiAsPromised = require('chai-as-promised');
 
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
@@ -21,10 +21,10 @@ beforeEach(function () {
 before(() => {
   global.sandbox = sinon.createSandbox();
   global.expect = chai.expect;
-})
+});
 beforeEach(() => {
-  global.sandbox.restore()
-})
+  global.sandbox.restore();
+});
 beforeEach(() => {
   sails.cache = {};
 });
@@ -119,11 +119,11 @@ beforeEach(function (done) {
     destroyFuncs.push(function (callback) {
       sails.models[modelName].destroy({})
         .exec(function (err) {
-          callback(null, err)
+          callback(null, err);
         });
-    })
+    });
   }
   async.parallel(destroyFuncs, function (err, results) {
     done(err);
-  })
+  });
 });
