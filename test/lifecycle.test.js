@@ -84,9 +84,7 @@ before(function (done) {
       csrf: false
     },
 
-
-    port: process.env.CSMM_PORT || 8500,
-
+    port: 0,
 
     datastores: {
       default: {
