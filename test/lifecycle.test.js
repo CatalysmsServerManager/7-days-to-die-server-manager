@@ -78,6 +78,7 @@ before(function (done) {
       grunt: false,
 
       playerTracking: false,
+      discordBot: false,
     },
     log: { level: process.env.CSMM_LOGLEVEL || 'info' },
     security: {
