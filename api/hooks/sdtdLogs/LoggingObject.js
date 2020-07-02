@@ -101,9 +101,7 @@ class LoggingObject extends EventEmitter {
         await this.setLastLogLine(0);
         this.emptyResponses = 0;
       }
-    }
-
-    if (result.lastLogLine) {
+    } else if (result.lastLogLine) {
       // save the log line we found
       await this.setLastLogLine(result.lastLogLine);
     }
