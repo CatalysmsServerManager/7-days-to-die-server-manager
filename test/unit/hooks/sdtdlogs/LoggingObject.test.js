@@ -97,6 +97,7 @@ describe('LoggingObject', function () {
       const job = {};
       const result = {
         serverId: sails.testServer.id,
+        lastLogLine: originalLastLogLine,
         logs: []
       };
       await loggingObject.handleCompletedJob(job, JSON.stringify(result));
@@ -109,6 +110,7 @@ describe('LoggingObject', function () {
       const job = {};
       const result = {
         serverId: sails.testServer.id,
+        lastLogLine: 100,
         logs: []
       };
       loggingObject.lastLogLine = 100;
