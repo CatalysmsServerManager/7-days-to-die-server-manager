@@ -63,7 +63,7 @@ module.exports = {
         cmdToExec = `give ${player.entityId} ${inputs.itemName} ${inputs.amount} ${inputs.quality ? inputs.quality : ''}`;
       }
 
-      let response = await SdtdApi.executeConsoleCommand({
+      let response = await sails.helpers.sdtdApi.executeConsoleCommand({
         ip: server.ip,
         port: server.webPort,
         adminUser: server.authName,
@@ -75,7 +75,7 @@ module.exports = {
       }
 
 
-      await SdtdApi.executeConsoleCommand({
+      await sails.helpers.sdtdApi.executeConsoleCommand({
         ip: server.ip,
         port: server.webPort,
         adminUser: server.authName,
@@ -83,7 +83,7 @@ module.exports = {
       }, `pm ${player.steamId} "CSMM - You have received ${inputs.amount} of ${inputs.itemName}"`);
 
       sails.log.info(`API - Player:give-item - giving ${inputs.amount} of ${inputs.itemName} to ${inputs.playerId} with quality: ${inputs.quality}`);
-
+      return exits.success();
     } catch (error) {
       sails.log.error(`API - Player:give-item - ${error}`);
       return exits.error(error);
