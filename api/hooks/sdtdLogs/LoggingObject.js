@@ -93,19 +93,18 @@ class LoggingObject extends EventEmitter {
       return;
     }
 
-
-    if (result.logs.length === 0) {
+    const isStalled = result.lastLogLine === this.lastLogLine;
+    if (isStalled) {
       this.emptyResponses++;
       if (this.emptyResponses > 5) {
         // haven't found any responses in a while, so reset to 0 and try again from scratch
         await this.setLastLogLine(0);
         this.emptyResponses = 0;
       }
-    }
-
-    if (result.lastLogLine) {
+    } else if (result.lastLogLine) {
       // save the log line we found
       await this.setLastLogLine(result.lastLogLine);
+      this.emptyResponses = 0;
     }
 
     for (const newLog of result.logs) {
@@ -189,7 +188,7 @@ class LoggingObject extends EventEmitter {
       if (!this.slowmode) {
         sails.log.info(
           `SdtdLogs - Server ${
-          this.serverId
+            this.serverId
           } has failed ${counter} times. Changing interval time. Server was last successful on ${prettyLastSuccess.toLocaleDateString()} ${prettyLastSuccess.toLocaleTimeString()}`
         );
         this.slowmode = true;

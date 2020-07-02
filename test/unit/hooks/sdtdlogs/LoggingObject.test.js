@@ -97,6 +97,7 @@ describe('LoggingObject', function () {
       const job = {};
       const result = {
         serverId: sails.testServer.id,
+        lastLogLine: originalLastLogLine,
         logs: []
       };
       await loggingObject.handleCompletedJob(job, JSON.stringify(result));
@@ -109,6 +110,7 @@ describe('LoggingObject', function () {
       const job = {};
       const result = {
         serverId: sails.testServer.id,
+        lastLogLine: 100,
         logs: []
       };
       loggingObject.lastLogLine = 100;
@@ -149,6 +151,27 @@ describe('LoggingObject', function () {
       loggingObject.queue.add.resetHistory();
     });
 
+    it('Increasing log line number, but not returned rows, it just means its rows we do not care about', async () => {
+      const job = {};
+      const result = {
+        serverId: sails.testServer.id,
+        lastLogLine: 100,
+        logs: []
+      };
+      loggingObject.lastLogLine = 100;
+
+      await loggingObject.handleCompletedJob(job, JSON.stringify(result));
+      expect(loggingObject.lastLogLine).to.equal(100);
+      expect(loggingObject.emptyResponses).to.equal(1);
+      expect(loggingObject.queue.add).to.have.been.called;
+      loggingObject.queue.add.resetHistory();
+
+      await loggingObject.handleCompletedJob(job, JSON.stringify({ ...result, lastLogLine: 150 }));
+      expect(loggingObject.lastLogLine).to.equal(150);
+      expect(loggingObject.emptyResponses).to.equal(0);
+      expect(loggingObject.queue.add).to.have.been.called;
+      loggingObject.queue.add.resetHistory();
+    });
     describe('success with various log types', () => {
       it('chatMessage', async () => {
         const job = {};
