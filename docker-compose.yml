@@ -3,7 +3,7 @@
 version: "3.7"
 
 services:
-  csmm:
+  csmm-web:
     build: .
     #image: catalysm/csmm
     depends_on:
@@ -22,10 +22,29 @@ services:
     ports:
       - 127.0.0.1:30005:1337
     restart: unless-stopped
+    entrypoint: ["npm", "run", "start:app"]
+  csmm-worker:
+    build: .
+    #image: catalysm/csmm
+    depends_on:
+      - cache
+      - db
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      REDISSTRING: "redis://cache:6379"
+      DBSTRING: "mysql2://csmm:mysecretpasswordissosecure@db:3306/csmm"
+    ports:
+      - 127.0.0.1:30005:1337
+    healthcheck:
+      disable: true
+    restart: unless-stopped
+    entrypoint: ["npm", "run", "start:worker"]
+
   cache:
     image: redis
     volumes:
       - ./redis-data:/data
+    command: ["redis-server", "--appendonly", "yes"]
     restart: unless-stopped
   db:
     image: mariadb
