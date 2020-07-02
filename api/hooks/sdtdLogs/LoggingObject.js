@@ -93,8 +93,8 @@ class LoggingObject extends EventEmitter {
       return;
     }
 
-
-    if (result.logs.length === 0) {
+    const isStalled = result.lastLogLine === this.lastLogLine;
+    if (isStalled) {
       this.emptyResponses++;
       if (this.emptyResponses > 5) {
         // haven't found any responses in a while, so reset to 0 and try again from scratch
