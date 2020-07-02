@@ -18,9 +18,8 @@ describe('/api/player/giveitem', function () {
                 amount: "1"
             })
 
-        console.log(response.body);
-
         expect(response.statusCode).to.equal(200);
+        expect(response.body).to.deep.eq({});
 
     })
 
