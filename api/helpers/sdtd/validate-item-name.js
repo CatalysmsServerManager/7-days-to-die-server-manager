@@ -1,15 +1,6 @@
-var sevenDays = require('machinepack-7daystodiewebapi');
-
-const SdtdApi = require('7daystodie-api-wrapper')
-
 module.exports = {
-
-
     friendlyName: 'Validate item name',
-
-
     description: 'checks if a given item name is valid for a server',
-
 
     inputs: {
 
@@ -27,17 +18,12 @@ module.exports = {
 
     },
 
-
     exits: {
         success: {
             outputFriendlyName: 'Success',
             outputType: 'boolean'
         },
-
-
     },
-
-
 
     fn: async function (inputs, exits) {
 
@@ -51,13 +37,11 @@ module.exports = {
             const itemsFound = (await sails.helpers.sdtdApi.executeConsoleCommand(server, `listitems ${inputs.itemName}`))
                 .result
                 .split('\n')
-                 .map(itemName => itemName.trim());
+                .map(itemName => itemName.trim());
 
+            const isItemValid = !!itemsFound.filter(foundItem => foundItem === inputs.itemName).length;
 
-            const itemFound = !!itemsFound.filter(_ => _ === inputs.itemName).length;
-
-
-            return exits.success(itemFound);
+            return exits.success(isItemValid);
         } catch (e) {
             exits.error(e);
         }
