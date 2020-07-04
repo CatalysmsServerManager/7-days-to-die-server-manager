@@ -50,7 +50,7 @@ module.exports = {
             port: server.webPort,
             authName: server.authName,
             authToken: server.authToken,
-            itemToSearch: inputs.item
+            itemToSearch: inputs.itemName
         }).exec({
             success: (response) => {
                 if (!response) {
