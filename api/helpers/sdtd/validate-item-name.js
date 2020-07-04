@@ -51,7 +51,7 @@ module.exports = {
             const itemsFound = (await sails.helpers.sdtdApi.executeConsoleCommand(server, `listitems ${inputs.itemName}`))
                 .result
                 .split('\n')
-                .map(_ => _.trim());
+                 .map(itemName => itemName.trim());
 
 
             const itemFound = !!itemsFound.filter(_ => _ === inputs.itemName).length;
