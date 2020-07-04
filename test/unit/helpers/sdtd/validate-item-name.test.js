@@ -25,7 +25,9 @@ describe('HELPER sdtd/validate-item-name', () => {
     });
 
     it('Errors when an unexisting server is given', async () => {
-        const fakeServer = sails.testServer;
+        const fakeServer = {}
+        Object.assign(fakeServer, sails.testServer)
+
         fakeServer.id += 5
         await expect(sails.helpers.sdtd.validateItemName(fakeServer, "ammo9mmBulletBall")).to.eventually.be.rejectedWith(Error)
     });
