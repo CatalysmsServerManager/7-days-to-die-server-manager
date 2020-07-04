@@ -1,4 +1,5 @@
 const LoggingObject = require('../../../../api/hooks/sdtdLogs/LoggingObject');
+const { expect } = require('chai');
 
 const LOG_LINES = {
   MEM_UPDATE: {
@@ -264,6 +265,31 @@ describe('LoggingObject', function () {
       expect(await sails.helpers.redis.get(`sdtdserver:${sails.testServer.id}:sdtdLogs:lastSuccess`)).to.equal('1588296005000');
       expect(loggingObject.lastLogLine).to.equal(10);
       expect(loggingObject.emptyResponses).to.equal(1);
+    });
+
+    it('Sets the active flag to true on start', async () => {
+      await loggingObject.init();
+      expect(loggingObject.active).to.be.true;
+    });
+
+    it('Sets the active flag to false on stop', async () => {
+      await loggingObject.init();
+      await loggingObject.stop();
+      expect(loggingObject.active).to.be.false;
+    });
+
+    it('Does not add new jobs when active flag is false', async () => {
+      await loggingObject.stop();
+      expect(loggingObject.active).to.be.false;
+      await loggingObject.addFetchJob();
+      expect(loggingObject.queue.add).not.to.have.been.called;
+    });
+
+    it('Adds new jobs when active flag is true', async () => {
+      await loggingObject.init();
+      expect(loggingObject.active).to.be.true;
+      await loggingObject.addFetchJob();
+      expect(loggingObject.queue.add).to.have.been.called;
     });
   });
 });
