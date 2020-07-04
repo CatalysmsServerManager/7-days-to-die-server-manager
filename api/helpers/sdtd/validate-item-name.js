@@ -1,5 +1,7 @@
 var sevenDays = require('machinepack-7daystodiewebapi');
 
+const SdtdApi = require('7daystodie-api-wrapper')
+
 module.exports = {
 
 
@@ -42,36 +44,23 @@ module.exports = {
         let server = await SdtdServer.findOne(inputs.serverId);
 
         if (_.isUndefined(server)) {
-            return exits.success(false);
+            return exits.error(new Error("Invalid server"));
         }
 
-        sevenDays.listItems({
-            ip: server.ip,
-            port: server.webPort,
-            authName: server.authName,
-            authToken: server.authToken,
-            itemToSearch: inputs.itemName
-        }).exec({
-            success: (response) => {
-                if (!response) {
-                    return exits.success(false)
-                }
-                let foundItem = false
+        try {
+            const itemsFound = (await sails.helpers.sdtdApi.executeConsoleCommand(server, `listitems ${inputs.itemName}`))
+                .result
+                .split('\n')
+                .map(_ => _.trim());
 
-                response.map(itemName => {
 
-                    if (itemName === inputs.itemName) {
-                        foundItem = true
-                    }
-                })
+            const itemFound = !!itemsFound.filter(_ => _ === inputs.itemName).length;
 
-                return exits.success(foundItem)
-            },
-            error: (error) => {
-                return exits.success(false)
-            }
-        });
 
+            return exits.success(itemFound);
+        } catch (e) {
+            exits.error(e);
+        }
 
     }
 
