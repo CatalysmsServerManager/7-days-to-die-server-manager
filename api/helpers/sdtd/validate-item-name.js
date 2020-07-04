@@ -1,13 +1,6 @@
-var sevenDays = require('machinepack-7daystodiewebapi');
-
 module.exports = {
-
-
     friendlyName: 'Validate item name',
-
-
     description: 'checks if a given item name is valid for a server',
-
 
     inputs: {
 
@@ -25,53 +18,33 @@ module.exports = {
 
     },
 
-
     exits: {
         success: {
             outputFriendlyName: 'Success',
             outputType: 'boolean'
         },
-
-
     },
-
-
 
     fn: async function (inputs, exits) {
 
         let server = await SdtdServer.findOne(inputs.serverId);
 
         if (_.isUndefined(server)) {
-            return exits.success(false);
+            return exits.error(new Error("Invalid server"));
         }
 
-        sevenDays.listItems({
-            ip: server.ip,
-            port: server.webPort,
-            authName: server.authName,
-            authToken: server.authToken,
-            itemToSearch: inputs.item
-        }).exec({
-            success: (response) => {
-                if (!response) {
-                    return exits.success(false)
-                }
-                let foundItem = false
+        try {
+            const itemsFound = (await sails.helpers.sdtdApi.executeConsoleCommand(server, `listitems ${inputs.itemName}`))
+                .result
+                .split('\n')
+                .map(itemName => itemName.trim());
 
-                response.map(itemName => {
+            const isItemValid = !!itemsFound.filter(foundItem => foundItem === inputs.itemName).length;
 
-                    if (itemName === inputs.itemName) {
-                        foundItem = true
-                    }
-                })
-
-                return exits.success(foundItem)
-            },
-            error: (error) => {
-                return exits.success(false)
-            }
-        });
-
+            return exits.success(isItemValid);
+        } catch (e) {
+            exits.error(e);
+        }
 
     }
 
