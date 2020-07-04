@@ -29,7 +29,12 @@ describe('HELPER sdtd/validate-item-name', () => {
         Object.assign(fakeServer, sails.testServer)
 
         fakeServer.id += 5
-        await expect(sails.helpers.sdtd.validateItemName(fakeServer, "ammo9mmBulletBall")).to.eventually.be.rejectedWith(Error)
+        await expect(sails.helpers.sdtd.validateItemName(fakeServer.id, "ammo9mmBulletBall")).to.eventually.be.rejectedWith(Error)
+    });
+
+    it('Throws when a request to the server fails', async () => {
+        sails.helpers.sdtdApi.executeConsoleCommand = sandbox.stub().throws(Error)
+        await expect(sails.helpers.sdtd.validateItemName(sails.testServer.id, "ammo9mmBulletBall")).to.eventually.be.rejectedWith(Error)
     });
 });
 
