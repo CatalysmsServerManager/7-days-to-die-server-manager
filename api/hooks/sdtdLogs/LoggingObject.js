@@ -35,22 +35,23 @@ class LoggingObject extends EventEmitter {
   }
 
   async addFetchJob() {
-    if (this.active) {
-      sails.log.debug(`Adding new fetch job for server ${this.serverId} - last log line: ${this.lastLogLine}`);
-      this.queue.add(
-        {
-          serverId: this.serverId,
-          lastLogLine: this.lastLogLine
-        },
-        {
-          timeout: 5000,
-          removeOnComplete: 100,
-          removeOnFail: 100,
-          attempts: 0,
-          delay: this.intervalTime
-        }
-      );
+    if (!this.active) {
+      return
     }
+    sails.log.debug(`Adding new fetch job for server ${this.serverId} - last log line: ${this.lastLogLine}`);
+    this.queue.add(
+      {
+        serverId: this.serverId,
+        lastLogLine: this.lastLogLine
+      },
+      {
+        timeout: 5000,
+        removeOnComplete: 100,
+        removeOnFail: 100,
+        attempts: 0,
+        delay: this.intervalTime
+      }
+    );
   };
 
   async init(ms = sails.config.custom.logCheckInterval) {
@@ -188,7 +189,7 @@ class LoggingObject extends EventEmitter {
       if (!this.slowmode) {
         sails.log.info(
           `SdtdLogs - Server ${
-            this.serverId
+          this.serverId
           } has failed ${counter} times. Changing interval time. Server was last successful on ${prettyLastSuccess.toLocaleDateString()} ${prettyLastSuccess.toLocaleTimeString()}`
         );
         this.slowmode = true;
