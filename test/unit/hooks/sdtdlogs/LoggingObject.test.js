@@ -1,5 +1,4 @@
 const LoggingObject = require('../../../../api/hooks/sdtdLogs/LoggingObject');
-const { expect } = require('chai');
 
 const LOG_LINES = {
   MEM_UPDATE: {
@@ -293,4 +292,3 @@ describe('LoggingObject', function () {
     });
   });
 });
-
