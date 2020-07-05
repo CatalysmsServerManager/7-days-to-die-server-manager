@@ -52,7 +52,7 @@
     "db:migrate": "node create_tables.js",
     "test": "mocha test",
     "build-docs": "./node_modules/.bin/jsdoc -c ./.jsdoc.json",
-    "lint": "eslint .",
+    "lint": "eslint --max-warnings 0 .",
     "dev": "nodemon",
     "debug": "node debug app.js",
     "cover": "nyc npm run test",
@@ -78,6 +78,7 @@
     "eslint": "^7.4.0",
     "faker": "^4.1.0",
     "grunt-bower-task": "^0.5.0",
+    "husky": "^4.2.5",
     "mocha": "^7.1.2",
     "mocha-junit-reporter": "^1.23.3",
     "mocha-lcov-reporter": "^1.3.0",
@@ -137,5 +138,10 @@
     "cache": true,
     "all": true,
     "report-dir": "./coverage"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
   }
 }
