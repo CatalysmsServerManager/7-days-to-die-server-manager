@@ -18,7 +18,7 @@ module.exports = {
     },
     staticOnly: {
       type: 'boolean',
-      description: "Only get information in the database, don't try and update it. Defaults to false. This should be used when performance/speed is more important than newest information."
+      description: 'Only get information in the database, don\'t try and update it. Defaults to false. This should be used when performance/speed is more important than newest information.'
     }
 
   },
@@ -59,14 +59,14 @@ module.exports = {
 
       } else {
         sails.helpers.sdtd.loadPlayerData.with({
-            serverId: inputs.serverId,
-            onlyOnline: inputs.onlyOnline === false ? false : true
-          })
+          serverId: inputs.serverId,
+          onlyOnline: inputs.onlyOnline === false ? false : true
+        })
           .switch({
             success: function (data) {
               return exits.success(data);
             },
-            error: function (error) {
+            error: function () {
               return exits.badRequest();
             }
           });

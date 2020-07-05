@@ -1,5 +1,4 @@
 let SdtdCommand = require('../command.js');
-const sevenDays = require('machinepack-7daystodiewebapi');
 const validator = require('validator');
 const he = require('he');
 
@@ -7,15 +6,15 @@ class Who extends SdtdCommand {
   constructor(serverId) {
     super(serverId, {
       name: 'who',
-      description: "See who was in your area",
-      extendedDescription: "You can provide a optional size argument. For most accurate results, try to keep the size as small as possible",
-      aliases: ["track", "search"]
+      description: 'See who was in your area',
+      extendedDescription: 'You can provide a optional size argument. For most accurate results, try to keep the size as small as possible',
+      aliases: ['track', 'search']
     });
     this.serverId = serverId;
   }
 
-  async isEnabled(chatMessage, player, server, args) {
-    return server.config.enabledWho && server.config.locationTracking
+  async isEnabled(chatMessage, player, server) {
+    return server.config.enabledWho && server.config.locationTracking;
   }
 
   async run(chatMessage, player, server, args) {
@@ -45,11 +44,11 @@ class Who extends SdtdCommand {
           '<': player.positionZ + size
         }
       },
-      sort: "createdAt DESC"
+      sort: 'createdAt DESC'
     });
 
     if (foundTrackingData.length === 0) {
-      return chatMessage.reply('whoNoDataFound')
+      return chatMessage.reply('whoNoDataFound');
     }
 
     let foundPlayers = foundTrackingData.map(dataPoint => dataPoint.player);
@@ -60,10 +59,10 @@ class Who extends SdtdCommand {
       id: uniquePlayers
     });
 
-    let playersnames = new String("List: ");
+    let playersnames = new String('List: ');
 
     for (const foundPlayer of playerRecords) {
-      playersnames += he.decode(foundPlayer.name) + ", "
+      playersnames += he.decode(foundPlayer.name) + ', ';
     }
 
     chatMessage.reply(`whoSuccess`, {

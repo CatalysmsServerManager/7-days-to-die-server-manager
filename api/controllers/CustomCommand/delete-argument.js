@@ -1,38 +1,38 @@
 module.exports = {
 
-    friendlyName: 'Delete argument',
+  friendlyName: 'Delete argument',
 
-    description: '',
+  description: '',
 
-    inputs: {
-        argumentId: {
-            type: 'number',
-            required: true
-        },
-
-
-    },
-
-    exits: {
-        success: {},
-        badCommand: {
-            responseType: 'badRequest'
-        },
-
-        badName: {
-            responseType: 'badRequest'
-        },
-
+  inputs: {
+    argumentId: {
+      type: 'number',
+      required: true
     },
 
 
-    fn: async function (inputs, exits) {
+  },
 
-        await CustomCommandArgument.destroy(inputs.argumentId);
+  exits: {
+    success: {},
+    badCommand: {
+      responseType: 'badRequest'
+    },
 
-        return exits.success();
+    badName: {
+      responseType: 'badRequest'
+    },
 
-    }
+  },
+
+
+  fn: async function (inputs, exits) {
+
+    await CustomCommandArgument.destroy(inputs.argumentId);
+
+    return exits.success();
+
+  }
 };
 
 

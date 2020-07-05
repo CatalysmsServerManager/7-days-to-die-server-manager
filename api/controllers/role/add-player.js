@@ -14,7 +14,7 @@ module.exports = {
       required: true,
       custom: async (valueToCheck) => {
         let foundRole = await Role.findOne(valueToCheck);
-        return foundRole
+        return foundRole;
       },
     },
 
@@ -23,7 +23,7 @@ module.exports = {
       required: true,
       custom: async (valueToCheck) => {
         let foundPlayer = await Player.findOne(valueToCheck);
-        return foundPlayer
+        return foundPlayer;
       },
     },
 
@@ -32,7 +32,7 @@ module.exports = {
 
   exits: {
     forbidden: {
-      description: "User is not allowed to do this action",
+      description: 'User is not allowed to do this action',
       responseType: 'forbidden',
       statusCode: 403
     },

@@ -1,17 +1,17 @@
 module.exports = {
-  friendlyName: "Remove bannedItem",
+  friendlyName: 'Remove bannedItem',
 
-  description: "Remove an item from the list of bannedItems",
+  description: 'Remove an item from the list of bannedItems',
 
   inputs: {
     bannedItem: {
       required: true,
-      type: "string"
+      type: 'string'
     },
 
     serverId: {
       required: true,
-      type: "string"
+      type: 'string'
     }
   },
 

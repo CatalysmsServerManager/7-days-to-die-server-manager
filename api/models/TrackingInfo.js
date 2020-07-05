@@ -20,7 +20,7 @@ module.exports = {
     y: {
       type: 'number',
     },
-    
+
     z: {
       type: 'number',
     },

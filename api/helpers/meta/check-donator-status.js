@@ -57,7 +57,7 @@ module.exports = {
       donorStatus = currentStatus;
     }
 
-    return exits.success(donorStatus || "free");
+    return exits.success(donorStatus || 'free');
   }
 
 

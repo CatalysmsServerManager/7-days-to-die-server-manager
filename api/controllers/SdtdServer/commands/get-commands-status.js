@@ -1,28 +1,28 @@
 module.exports = {
 
-    friendlyName: 'Get commands status',
+  friendlyName: 'Get commands status',
 
-    description: '',
+  description: '',
 
-    inputs: {
-        serverId: {
-            type: 'number',
-            required: true
-        }
-    },
-
-    exits: {
-        success: {
-        },
-    },
-
-
-    fn: async function (inputs, exits) {
-
-        let sdtdConfig = await SdtdConfig.findOne({ server: inputs.serverId });
-        let hookStatus = sails.hooks.sdtdcommands.getStatus(inputs.serverId);
-        let status = (sdtdConfig.commandsEnabled && hookStatus)
-        return exits.success(status);
-
+  inputs: {
+    serverId: {
+      type: 'number',
+      required: true
     }
+  },
+
+  exits: {
+    success: {
+    },
+  },
+
+
+  fn: async function (inputs, exits) {
+
+    let sdtdConfig = await SdtdConfig.findOne({ server: inputs.serverId });
+    let hookStatus = sails.hooks.sdtdcommands.getStatus(inputs.serverId);
+    let status = (sdtdConfig.commandsEnabled && hookStatus);
+    return exits.success(status);
+
+  }
 };

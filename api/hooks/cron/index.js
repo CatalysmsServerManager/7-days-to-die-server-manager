@@ -1,4 +1,4 @@
-const schedule = require('node-schedule')
+const schedule = require('node-schedule');
 
 /**
  * cron hook
@@ -22,21 +22,22 @@ module.exports = function defineCronHook(sails) {
       sails.on('hook:sdtdlogs:loaded', async () => {
 
         sails.log.info('Initializing custom hook (`cron`)');
+        // eslint-disable-next-line callback-return
         done();
-        let activeServers = await SdtdConfig.find({inactive: false});
+        let activeServers = await SdtdConfig.find({ inactive: false });
         let enabledJobs = await CronJob.find({ enabled: true, server: activeServers.map(c => c.server) });
 
         for (const jobToStart of enabledJobs) {
           try {
             await this.start(jobToStart.id);
           } catch (error) {
-            sails.log.error(`Error initializing cronjob ${jobToStart.id} - ${error}`)               
+            sails.log.error(`Error initializing cronjob ${jobToStart.id} - ${error}`);
           }
-        
+
         }
 
-        return 
-      })
+        return;
+      });
 
     },
 
@@ -54,7 +55,7 @@ module.exports = function defineCronHook(sails) {
 
       scheduledJobs.set(foundJob.id, scheduledJob);
       sails.log.debug(`Started a cronjob`, foundJob);
-      return
+      return;
     },
 
     stop: async function (jobId) {
@@ -63,13 +64,13 @@ module.exports = function defineCronHook(sails) {
       let job = scheduledJobs.get(foundJob.id);
 
       if (!foundJob || !job) {
-        return
+        return;
       }
 
       job.cancel();
       scheduledJobs.delete(foundJob.id);
       sails.log.debug(`Stopped a cronjob`, foundJob);
-      return
+      return;
 
     },
 

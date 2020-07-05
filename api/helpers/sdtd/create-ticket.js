@@ -1,5 +1,3 @@
-var sevenDays = require('machinepack-7daystodiewebapi');
-
 module.exports = {
 
 
@@ -82,14 +80,12 @@ module.exports = {
         player: inputs.playerId
       }).fetch();
 
-      let notificationMsg = `New Ticket by ${player.name}\n${ticket.title}\n${ticket.description}`;
-
       await sails.hooks.discordnotifications.sendNotification({
         serverId: ticket.server,
         notificationType: 'ticket',
         ticketNotificationType: 'New ticket',
         ticket: ticket
-      })
+      });
 
       sails.log.info(`HELPER - createTicket - Created a ticket for server ${sdtdServer.name} by player ${player.name} titled "${ticket.title}"`);
       return exits.success(ticket);

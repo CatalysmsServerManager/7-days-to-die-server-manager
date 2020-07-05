@@ -14,7 +14,7 @@ module.exports = {
       type: 'number',
       custom: async (valueToCheck) => {
         let foundPlayer = await Player.findOne(valueToCheck);
-        return foundPlayer
+        return foundPlayer;
       },
     },
 

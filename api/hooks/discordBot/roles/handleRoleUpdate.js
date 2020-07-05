@@ -12,7 +12,7 @@ async function handleRoleUpdate(oldMember, newMember) {
 
   if (addedRole.length > 0) {
     sails.log.debug(`Detected a discord role was added ${newMember.user.tag}`, addedRole[0].name);
-    await addCSMMRole(newMember)
+    await addCSMMRole(newMember);
   }
 }
 
@@ -44,7 +44,7 @@ async function deleteCSMMRole(member, role) {
           id: player.id
         }, {
           role: null
-        })
+        });
       }
     }
     addCSMMRole(member);
@@ -82,7 +82,7 @@ async function addCSMMRole(member) {
     });
 
     if (_.isUndefined(highestRole[0])) {
-        return
+      return;
     }
 
     if ((!_.isNull(currentPlayerRole) ? currentPlayerRole.level : 9999999) >  highestRole[0].level) {
@@ -90,8 +90,8 @@ async function addCSMMRole(member) {
         id: player.id
       }, {
         role: highestRole[0] ? highestRole[0].id : null
-      })
-      sails.log.debug(`Modified a players role based on discord role change - player ${player.id}. ${player.name} to role ${highestRole[0] ? highestRole[0].name : null}`)
+      });
+      sails.log.debug(`Modified a players role based on discord role change - player ${player.id}. ${player.name} to role ${highestRole[0] ? highestRole[0].name : null}`);
     }
 
 
@@ -99,4 +99,4 @@ async function addCSMMRole(member) {
 }
 
 
-module.exports = handleRoleUpdate
+module.exports = handleRoleUpdate;

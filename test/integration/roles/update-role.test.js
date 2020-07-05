@@ -3,7 +3,7 @@ const chai = require('chai');
 const expect = chai.expect;
 const faker = require('faker');
 
-const permissionFields = ["manageServer", "manageEconomy", "managePlayers", "manageTickets", "viewAnalytics", "viewDashboard", "useTracking", "useChat", "useCommands", "manageGbl", "discordExec", "discordLookup"];
+const permissionFields = ['manageServer', 'manageEconomy', 'managePlayers', 'manageTickets', 'viewAnalytics', 'viewDashboard', 'useTracking', 'useChat', 'useCommands', 'manageGbl', 'discordExec', 'discordLookup'];
 const testRoles = [];
 
 chai.config.truncateThreshold = 0;
@@ -14,16 +14,16 @@ describe('PATCH /api/role', function () {
     // Create some default roles
     let createdRole = await Role.create({
       server: sails.testServer.id,
-      name: "Admin",
-      level: "1",
+      name: 'Admin',
+      level: '1',
       manageServer: true
     }).fetch();
     testRoles.push(createdRole);
 
     createdRole = await Role.create({
       server: sails.testServer.id,
-      name: "Player",
-      level: "2000",
+      name: 'Player',
+      level: '2000',
       amountOfTeleports: 2
     }).fetch();
     testRoles.push(createdRole);
@@ -74,8 +74,8 @@ describe('PATCH /api/role', function () {
 
     createdRole = await Role.create({
       server: sails.testServer.id,
-      name: "Default",
-      level: "5000",
+      name: 'Default',
+      level: '5000',
       isDefault: true
     }).fetch();
     testRoles.push(createdRole);
@@ -87,7 +87,7 @@ describe('PATCH /api/role', function () {
         isDefault: true,
       })
       .expect(200)
-      .then(async function (response) {
+      .then(async function () {
         const oldDefault = await Role.findOne({
           id: createdRole.id
         });

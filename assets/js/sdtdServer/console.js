@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 class sdtdConsole {
   constructor(serverId) {
     this.serverId = parseInt(serverId);
@@ -6,14 +7,14 @@ class sdtdConsole {
   }
 
   init() {
-    $(".console-window").empty();
+    $('.console-window').empty();
 
     io.socket.on('logLine', (logLine) => {
       if (logLine.server.id === this.serverId && this.status) {
-        addNewLogLine(logLine.msg)
+        addNewLogLine(logLine.msg);
       }
     });
-    addSavedMessagesToConsoleWindow(this.serverId)
+    addSavedMessagesToConsoleWindow(this.serverId);
   }
 
   start() {
@@ -33,7 +34,7 @@ class sdtdConsole {
           serverId: this.serverId,
           command: command
         },
-        success: (data, status, xhr) => {
+        success: (data) => {
           addNewLogLine(data.msg);
           resolve(data);
         },
@@ -49,17 +50,17 @@ class sdtdConsole {
 
 function addNewLogLine(logLine) {
   if (_.isUndefined(logLine)) {
-    return
+    return;
   }
 
   if (logLine.includes('WebCommandResult.SendLines():') || logLine.includes('WebCommandResult_for_')) {
-    return
+    return;
   }
 
-  logLine = _.escape(logLine)
-  logLine = logLine.replace(/(\r\n|\n|\r)/gm, "<br />");
+  logLine = _.escape(logLine);
+  logLine = logLine.replace(/(\r\n|\n|\r)/gm, '<br />');
 
-  if (logLine.includes("error")) {
+  if (logLine.includes('error')) {
     $('.console-window').append(`<li class=\"log-line text-danger\"> ${logLine} </li>`);
   } else {
     $('.console-window').append(`<li class=\"log-line\"> ${logLine} </li>`);
@@ -72,7 +73,7 @@ function addNewLogLine(logLine) {
 
 
 function updateConsoleStorage(newMessage, serverId) {
-  let storage = window.localStorage
+  let storage = window.localStorage;
   let savedMessages = JSON.parse(storage.getItem(`consoleMessages-${serverId}`));
   if (!savedMessages) {
     savedMessages = new Array('Starting console');
@@ -90,8 +91,8 @@ function addSavedMessagesToConsoleWindow(serverId) {
   let savedMessages = JSON.parse(window.localStorage.getItem(`consoleMessages-${serverId}`));
   if (savedMessages) {
     savedMessages.forEach(msg => {
-      addNewLogLine(msg)
-    })
+      addNewLogLine(msg);
+    });
     $('.console-window').scrollTop($('.console-window')[0].scrollHeight);
   }
 }

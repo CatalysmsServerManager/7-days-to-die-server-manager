@@ -5,7 +5,7 @@
  * @docs        :: https://sailsjs.com/docs/concepts/extending-sails/hooks
  */
 
- const Discord = require('discord.js');
+const Discord = require('discord.js');
 
 module.exports = function defineCustomDiscordNotificationHook(sails) {
 
@@ -29,7 +29,7 @@ module.exports = function defineCustomDiscordNotificationHook(sails) {
         sails.log.warn(`Tried to start custom notifications for a server without a loggingObject`, {
           server: serverId
         });
-        return
+        return;
       }
 
       loggingObject.on('logLine', async (logLine) => {
@@ -44,17 +44,17 @@ module.exports = function defineCustomDiscordNotificationHook(sails) {
           let logMessage = logLine.msg.toLowerCase();
           let stringToSearchFor = notification.stringToSearchFor.toLowerCase();
 
-          
+
           if (logMessage.includes(stringToSearchFor) && notification.enabled ) {
-            if (notification.ignoreServerChat && (logMessage.startsWith("chat (from '-non-player-',") || logMessage.includes('webcommandresult_for_say')) ) {
-              
+            if (notification.ignoreServerChat && (logMessage.startsWith('chat (from \'-non-player-\',') || logMessage.includes('webcommandresult_for_say')) ) {
+
             } else {
-              sendNotification(logLine, server, notification)
+              sendNotification(logLine, server, notification);
             }
           }
         }
 
-      })
+      });
     },
   };
 };
@@ -69,9 +69,9 @@ async function sendNotification(logLine, server, customNotif) {
     let embed = new Discord.RichEmbed();
 
     embed.setTitle(`Custom notification for ${server.name}`)
-    .addField('Time', logLine.time, true)
-    .addField('Message', logLine.msg.substr(0, 1024))
-    .addField('Triggered by', customNotif.stringToSearchFor)
+      .addField('Time', logLine.time, true)
+      .addField('Message', logLine.msg.substr(0, 1024))
+      .addField('Triggered by', customNotif.stringToSearchFor);
     channel.send(embed);
   }
 

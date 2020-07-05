@@ -43,30 +43,30 @@ module.exports = {
   },
 
   'rules': {
-    'callback-return':              [2, ['callback', 'cb', 'next', 'done', 'proceed']],
-    'camelcase':                    [1, {'properties': 'always'}],
-    'comma-style':                  [2, 'last'],
-    'curly':                        [2],
-    'eqeqeq':                       [2, 'always'],
-    'eol-last':                     [1],
-    'handle-callback-err':          [2],
-    'indent':                       [1, 2, {'SwitchCase': 1}],
-    'no-dupe-keys':                 [2],
-    'no-duplicate-case':            [2],
-    'no-mixed-spaces-and-tabs':     [2, 'smart-tabs'],
-    'no-return-assign':             [2, 'always'],
-    'no-sequences':                 [2],
-    'no-trailing-spaces':           [1],
-    'no-undef':                     [0],
+    'callback-return': [2, ['callback', 'cb', 'next', 'done', 'proceed']],
+    'camelcase': [1, { 'properties': 'always' }],
+    'comma-style': [2, 'last'],
+    'curly': [2],
+    'eqeqeq': [2, 'always'],
+    'eol-last': [1],
+    'handle-callback-err': [2],
+    'indent': [1, 2, { 'SwitchCase': 1 }],
+    'no-dupe-keys': [2],
+    'no-duplicate-case': [2],
+    'no-mixed-spaces-and-tabs': [2, 'smart-tabs'],
+    'no-return-assign': [2, 'always'],
+    'no-sequences': [2],
+    'no-trailing-spaces': [1],
+    'no-undef': [0],
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // ^^Note: If this "no-undef" rule is enabled (set to `[2]`), then model globals
     // (e.g. `"User": true`) should also be included above under "globals".
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    'no-unexpected-multiline':      [1],
-    'no-unused-vars':               [1],
-    'one-var':                      [2, 'never'],
-    'quotes':                       [1, 'single', { 'avoidEscape': false, 'allowTemplateLiterals': true }],
-    'semi':                         [2, 'always']
+    'no-unexpected-multiline': [1],
+    'no-unused-vars': [1],
+    'one-var': [2, 'never'],
+    'quotes': [1, 'single', { 'avoidEscape': false, 'allowTemplateLiterals': true }],
+    'semi': [2, 'always']
   }
 
 };

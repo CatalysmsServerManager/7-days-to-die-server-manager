@@ -1,14 +1,14 @@
 module.exports = {
-  friendlyName: "Set playtimeEarner interval",
+  friendlyName: 'Set playtimeEarner interval',
 
   inputs: {
     serverId: {
-      type: "number",
+      type: 'number',
       required: true
     },
 
     interval: {
-      type: "number",
+      type: 'number',
       required: true,
       min: 1
     }
@@ -22,10 +22,10 @@ module.exports = {
         { server: inputs.serverId },
         { playtimeEarnerInterval: inputs.interval }
       );
-      await sails.hooks.economy.reload(inputs.serverId, "playtimeEarner");
+      await sails.hooks.economy.reload(inputs.serverId, 'playtimeEarner');
       await HistoricalInfo.create({
-        type: "economy",
-        economyAction: "config",
+        type: 'economy',
+        economyAction: 'config',
         server: inputs.serverId,
         message: `set playtime earner interval to ${inputs.interval}`
       });

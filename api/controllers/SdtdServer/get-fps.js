@@ -12,9 +12,6 @@ module.exports = {
   },
 
   exits: {
-    notFound: {
-      description: 'Server with given ID was not found in the system'
-    },
     badRequest: {
       responseType: 'badRequest'
     },
@@ -29,7 +26,7 @@ module.exports = {
       let fps = await sails.helpers.sdtd.loadFps(inputs.serverId);
       return exits.success(fps);
     } catch (error) {
-      return exits.success(0)
+      return exits.success(0);
     }
   }
 

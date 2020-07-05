@@ -31,11 +31,11 @@ module.exports = {
 
     await PlayerClaimItem.destroy({
       player: playersToDestroyIds
-    })
+    });
 
     await PlayerTeleport.destroy({
       player: playersToDestroyIds
-    })
+    });
 
     await PlayerUsedCommand.destroy({
       player: playersToDestroyIds

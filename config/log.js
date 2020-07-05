@@ -21,4 +21,4 @@ module.exports.log = {
 
   //  Disable captain's log so it doesn't prefix or stringify our meta data.
   inspect: false
-}
+};

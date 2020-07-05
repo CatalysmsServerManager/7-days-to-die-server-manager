@@ -1,12 +1,12 @@
 module.exports = {
-  friendlyName: "Get bannedItems",
+  friendlyName: 'Get bannedItems',
 
-  description: "Gets the list of bannedItems",
+  description: 'Gets the list of bannedItems',
 
   inputs: {
     serverId: {
       required: true,
-      type: "string"
+      type: 'string'
     }
   },
 

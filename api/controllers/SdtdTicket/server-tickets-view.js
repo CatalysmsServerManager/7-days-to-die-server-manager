@@ -47,7 +47,7 @@ module.exports = {
       });
       let tickets = await SdtdTicket.find({
         server: inputs.serverId
-      }).populate('player')
+      }).populate('player');
 
       if (_.isUndefined(server) || _.isUndefined(tickets)) {
         return exits.notFound();
@@ -55,7 +55,7 @@ module.exports = {
 
       sails.log.info(`API - SdtdServer:tickets-view - Success, loaded ${tickets.length} tickets for server ${server.name}`);
       return exits.success({
-        server: _.omit(server, "authName", "authToken"),
+        server: _.omit(server, 'authName', 'authToken'),
         tickets: tickets
       });
 

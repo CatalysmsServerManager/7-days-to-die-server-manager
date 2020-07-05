@@ -5,7 +5,7 @@
  * @docs        :: https://sailsjs.com/docs/concepts/extending-sails/hooks
  */
 
-const SdtdApi = require("7daystodie-api-wrapper");
+const SdtdApi = require('7daystodie-api-wrapper');
 
 module.exports = function defineGblHook(sails) {
   return {
@@ -14,12 +14,13 @@ module.exports = function defineGblHook(sails) {
      *
      * @param {Function} done
      */
-    initialize: async function(done) {
+    initialize: async function (done) {
       // done before we start loading bans so it doesn't block the hook loading
+      // eslint-disable-next-line callback-return
       done();
 
-      sails.on("lifted", async () => {
-        sails.log.info("Initializing custom hook (`gbl`)");
+      sails.on('lifted', async () => {
+        sails.log.info('Initializing custom hook (`gbl`)');
         refreshBans();
         return;
       });
@@ -35,7 +36,7 @@ async function refreshBans() {
   for (const server of sdtdServers) {
     try {
       let loggingObj = sails.hooks.sdtdlogs.getLoggingObject(server.id);
-      loggingObj.on("playerConnected", async connectedMsg => {
+      loggingObj.on('playerConnected', async connectedMsg => {
         if (!connectedMsg.steamID) {
           return;
         }
@@ -44,11 +45,11 @@ async function refreshBans() {
           where: {
             steamId: connectedMsg.steamID,
             server: {
-              "!=": connectedMsg.server.id
+              '!=': connectedMsg.server.id
             }
           },
           limit: 100
-        }).populate("server");
+        }).populate('server');
 
         // Get unique bans by server owner
         // This makes it so a ban on a network of servers is only counted once
@@ -91,11 +92,11 @@ async function refreshBans() {
 
         if (
           foundBans.length >= config.gblNotificationBans &&
-          config.gblNotificationBans != 0
+          config.gblNotificationBans !== 0
         ) {
           await sails.hooks.discordnotifications.sendNotification({
             serverId: connectedMsg.server.id,
-            notificationType: "gblmaxban",
+            notificationType: 'gblmaxban',
             player: player,
             bans: foundBans,
             banned: playerAutoKicked
@@ -114,8 +115,6 @@ async function refreshBans() {
 
   let dateEnded = new Date();
   sails.log.info(
-    `Reloaded bans for ${
-      sdtdServers.length
-    } servers! - Took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`
+    `Reloaded bans for ${sdtdServers.length} servers! - Took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`
   );
 }

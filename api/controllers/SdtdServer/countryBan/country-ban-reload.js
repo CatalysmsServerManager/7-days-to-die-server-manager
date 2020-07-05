@@ -51,7 +51,7 @@ module.exports = {
         return exits.notFound();
       }
 
-      let config = await SdtdConfig.findOne({server: server.id});
+      let config = await SdtdConfig.findOne({ server: server.id });
 
       if (_.isUndefined(inputs.newConfig)) {
         sails.hooks.countryban.reload(inputs.serverId);
@@ -74,10 +74,10 @@ module.exports = {
 
         if (_.isArray(inputs.newConfig.whiteListedSteamIds)) {
           configToSend.whiteListedSteamIds = inputs.newConfig.whiteListedSteamIds;
-          
+
         }
 
-        configToSend.kickMessage = inputs.newConfig.kickMessage == '' ? configToSend.kickMessage : inputs.newConfig.kickMessage;
+        configToSend.kickMessage = inputs.newConfig.kickMessage === '' ? configToSend.kickMessage : inputs.newConfig.kickMessage;
 
         sails.hooks.countryban.reload(inputs.serverId, configToSend);
       }

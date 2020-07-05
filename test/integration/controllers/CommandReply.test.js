@@ -1,12 +1,12 @@
 const supertest = require('supertest');
-const {expect} = require("chai");
+const {expect} = require('chai');
 
 const makeSmallResponse = (response) => { return { ok: response.ok, body: response.body, statusCode: response.statusCode }; };
 
 describe('CommandReply', function () {
 
   it('getting without server id should error', async function () {
-    const response = await supertest(sails.hooks.http.app).get('/api/sdtdserver/commands/reply')
+    const response = await supertest(sails.hooks.http.app).get('/api/sdtdserver/commands/reply');
     expect(response.body).to.deep.equal({
       code: 'E_MISSING_OR_INVALID_PARAMS',
       problems: [
@@ -18,11 +18,11 @@ describe('CommandReply', function () {
   });
 
   it('getting with server id, but no overrides, should return the default', async function () {
-    const response = await supertest(sails.hooks.http.app).get(`/api/sdtdserver/commands/reply?serverId=${sails.testServer.id}&type=notVoted`)
+    const response = await supertest(sails.hooks.http.app).get(`/api/sdtdserver/commands/reply?serverId=${sails.testServer.id}&type=notVoted`);
     expect(response.body).to.deep.equal([
       {
-        "reply": "You have not voted yet! You can vote at https://7daystodie-servers.com/server/serverIdToBeFilledByAdmin/",
-        "type": "notVoted"
+        'reply': 'You have not voted yet! You can vote at https://7daystodie-servers.com/server/serverIdToBeFilledByAdmin/',
+        'type': 'notVoted'
       }
     ]);
     expect(response.statusCode).to.equal(200);
@@ -37,8 +37,8 @@ describe('CommandReply', function () {
       ok: true,
       statusCode: 200,
       body: [{
-        "reply": "You have not voted yet! You can vote at https://7daystodie-servers.com/server/serverIdToBeFilledByAdmin/",
-        "type": "notVoted"
+        'reply': 'You have not voted yet! You can vote at https://7daystodie-servers.com/server/serverIdToBeFilledByAdmin/',
+        'type': 'notVoted'
       }]
     });
 
@@ -47,21 +47,21 @@ describe('CommandReply', function () {
         .post('/api/sdtdserver/commands/reply')
         .send({
           serverId: sails.testServer.id,
-          type: "notVoted",
-          reply: "You have not voted yet! You can vote at https://vote.gov/ (not really)",
+          type: 'notVoted',
+          reply: 'You have not voted yet! You can vote at https://vote.gov/ (not really)',
         })
         .then(makeSmallResponse)
     ).to.deep.equal({
       ok: true,
       statusCode: 200,
       body: {
-        "created": true,
-        "createdAt": 1588296005000,
-        "id": 1,
-        "reply": "You have not voted yet! You can vote at https://vote.gov/ (not really)",
-        "server": 1,
-        "type": "notVoted",
-        "updatedAt": 1588296005000,
+        'created': true,
+        'createdAt': 1588296005000,
+        'id': 1,
+        'reply': 'You have not voted yet! You can vote at https://vote.gov/ (not really)',
+        'server': 1,
+        'type': 'notVoted',
+        'updatedAt': 1588296005000,
       }
     });
 
@@ -73,12 +73,12 @@ describe('CommandReply', function () {
       ok: true,
       statusCode: 200,
       body: [{
-        "createdAt": 1588296005000,
-        "id": 1,
-        "reply": "You have not voted yet! You can vote at https://vote.gov/ (not really)",
-        "server": 1,
-        "type": "notVoted",
-        "updatedAt": 1588296005000,
+        'createdAt': 1588296005000,
+        'id': 1,
+        'reply': 'You have not voted yet! You can vote at https://vote.gov/ (not really)',
+        'server': 1,
+        'type': 'notVoted',
+        'updatedAt': 1588296005000,
       }]
     });
     expect(
@@ -89,12 +89,12 @@ describe('CommandReply', function () {
       ok: true,
       statusCode: 200,
       body: [{
-        "createdAt": 1588296005000,
-        "id": 1,
-        "reply": "You have not voted yet! You can vote at https://vote.gov/ (not really)",
-        "server": 1,
-        "type": "notVoted",
-        "updatedAt": 1588296005000,
+        'createdAt': 1588296005000,
+        'id': 1,
+        'reply': 'You have not voted yet! You can vote at https://vote.gov/ (not really)',
+        'server': 1,
+        'type': 'notVoted',
+        'updatedAt': 1588296005000,
       }]
     });
   });
@@ -105,20 +105,20 @@ describe('CommandReply', function () {
         .post('/api/sdtdserver/commands/reply')
         .send({
           serverId: sails.testServer.id,
-          type: "notVoted",
-          reply: "You have not voted yet! You can vote at https://vote.gov/ (not really)",
+          type: 'notVoted',
+          reply: 'You have not voted yet! You can vote at https://vote.gov/ (not really)',
         })
         .then(makeSmallResponse)
     ).to.deep.equal({
       ok: true,
       statusCode: 200,
       body: [{
-        "createdAt": 1588296005000,
-        "id": 1,
-        "reply": "You have not voted yet! You can vote at https://vote.gov/ (not really)",
-        "server": 1,
-        "type": "notVoted",
-        "updatedAt": 1588296005000,
+        'createdAt': 1588296005000,
+        'id': 1,
+        'reply': 'You have not voted yet! You can vote at https://vote.gov/ (not really)',
+        'server': 1,
+        'type': 'notVoted',
+        'updatedAt': 1588296005000,
       }]
     });
 
@@ -130,12 +130,12 @@ describe('CommandReply', function () {
       ok: true,
       statusCode: 200,
       body: [{
-        "createdAt": 1588296005000,
-        "id": 1,
-        "reply": "You have not voted yet! You can vote at https://vote.gov/ (not really)",
-        "server": 1,
-        "type": "notVoted",
-        "updatedAt": 1588296005000,
+        'createdAt': 1588296005000,
+        'id': 1,
+        'reply': 'You have not voted yet! You can vote at https://vote.gov/ (not really)',
+        'server': 1,
+        'type': 'notVoted',
+        'updatedAt': 1588296005000,
       }]
     });
 

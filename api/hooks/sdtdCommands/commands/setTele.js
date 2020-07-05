@@ -1,20 +1,19 @@
 let SdtdCommand = require('../command.js');
-const sevenDays = require('machinepack-7daystodiewebapi');
 var validator = require('validator');
 
 class setTele extends SdtdCommand {
   constructor(serverId) {
     super(serverId, {
       name: 'settele',
-      description: "Create a teleport location",
-      extendedDescription: "Creates a teleport location at your current position. Arguments: name",
-      aliases: ["teleset", "telecreate"]
+      description: 'Create a teleport location',
+      extendedDescription: 'Creates a teleport location at your current position. Arguments: name',
+      aliases: ['teleset', 'telecreate']
     });
     this.serverId = serverId;
   }
 
-  async isEnabled(chatMessage, player, server, args) {
-    return server.config.enabledPlayerTeleports
+  async isEnabled(chatMessage, player, server) {
+    return server.config.enabledPlayerTeleports;
   }
 
   async run(chatMessage, player, server, args) {
@@ -32,7 +31,7 @@ class setTele extends SdtdCommand {
       publicEnabled: true
     });
 
-    if (args.length == 0) {
+    if (args.length === 0) {
       return chatMessage.reply('setTeleMissingName');
     }
 
@@ -41,7 +40,7 @@ class setTele extends SdtdCommand {
     }
 
     if (playerTeleports.length >= server.config.maxPlayerTeleportLocations) {
-      return chatMessage.reply("setTeleTooManyTeleports");
+      return chatMessage.reply('setTeleTooManyTeleports');
     }
 
     if (playerTeleports.length >= playerRole.amountOfTeleports) {
@@ -56,12 +55,12 @@ class setTele extends SdtdCommand {
     teleportsToCheckForName = _.uniq(teleportsToCheckForName, 'id');
 
 
-    let nameAlreadyInUse = false
+    let nameAlreadyInUse = false;
     teleportsToCheckForName.forEach(teleport => {
-      if (teleport.name == args[0]) {
-        nameAlreadyInUse = true
+      if (teleport.name === args[0]) {
+        nameAlreadyInUse = true;
       }
-    })
+    });
 
     if (nameAlreadyInUse) {
       return chatMessage.reply(`setTeleNameInUse`);
@@ -72,18 +71,18 @@ class setTele extends SdtdCommand {
     }
 
     if (server.config.economyEnabled && server.config.costToSetTeleport) {
-      let notEnoughMoney = false
+      let notEnoughMoney = false;
       await sails.helpers.economy.deductFromPlayer.with({
         playerId: player.id,
         amountToDeduct: server.config.costToSetTeleport,
         message: `COMMAND - ${this.name}`
-      }).tolerate('notEnoughCurrency', totalNeeded => {
+      }).tolerate('notEnoughCurrency', () => {
         notEnoughMoney = true;
-      })
+      });
       if (notEnoughMoney) {
         return chatMessage.reply(`notEnoughMoney`, {
           cost: server.config.costToSetTeleport
-        })
+        });
       }
     }
 

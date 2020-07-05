@@ -46,39 +46,39 @@ module.exports = {
     },
 
     chatBridges: {
-      type: "number"
+      type: 'number'
     },
 
     countryBans: {
-      type: "number"
+      type: 'number'
     },
 
     ingameCommands: {
-      type: "number"
+      type: 'number'
     },
 
     gblEntries: {
-      type: "number"
+      type: 'number'
     },
 
     cronJobs: {
-      type: "number"
+      type: 'number'
     },
 
     pingKickers: {
-      type: "number"
+      type: 'number'
     },
 
     openTickets: {
-      type: "number"
+      type: 'number'
     },
 
     closedTickets: {
-      type: "number"
+      type: 'number'
     },
 
     gblComments: {
-      type: "number"
+      type: 'number'
     }
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗

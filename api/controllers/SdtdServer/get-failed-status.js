@@ -33,7 +33,7 @@ module.exports = {
       counter = 0;
     }
     counter = parseInt(counter);
-    lastSuccess = parseInt(lastSuccess)
+    lastSuccess = parseInt(lastSuccess);
 
     return exits.success({
       timesFailed: counter,

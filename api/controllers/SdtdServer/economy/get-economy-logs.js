@@ -26,7 +26,7 @@ module.exports = {
 
     endDate: {
       type: 'number',
-      description: "Unix timestamp of when logs should end",
+      description: 'Unix timestamp of when logs should end',
       min: 0,
     }
   },
@@ -42,7 +42,7 @@ module.exports = {
       let dateStarted = Date.now();
 
       if (_.isUndefined(inputs.beginDate)) {
-        inputs.beginDate = 0
+        inputs.beginDate = 0;
       }
 
       if (_.isUndefined(inputs.endDate)) {
@@ -50,7 +50,7 @@ module.exports = {
       }
 
       if (_.isUndefined(inputs.limit)) {
-        inputs.limit = 5000
+        inputs.limit = 5000;
       }
 
       let whereObject = {
@@ -60,17 +60,15 @@ module.exports = {
           '>': inputs.beginDate,
           '<': inputs.endDate,
         }
-      }
-
-      let totalLogs = 0;
+      };
 
       let historicalInfo = await HistoricalInfo.find({
         where: whereObject,
         limit: inputs.limit,
-        sort: "createdAt DESC"
+        sort: 'createdAt DESC'
       }).populate('player');
 
-      let dateEnded = Date.now()
+      let dateEnded = Date.now();
       sails.log.info(`API - SdtdServer:economy:get-economy-logs - Got ${historicalInfo.length} records of economy logs for server ${inputs.serverId} - Took ${dateEnded - dateStarted} ms`);
 
       return exits.success(historicalInfo);

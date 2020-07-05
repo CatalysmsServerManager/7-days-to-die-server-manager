@@ -39,7 +39,7 @@ module.exports = {
       return exits.notAuthorized({
         role: permCheck.role,
         requiredPerm: 'useTracking'
-      })
+      });
     }
 
     try {

@@ -1,38 +1,38 @@
 module.exports = {
 
-    friendlyName: 'Set prefix',
+  friendlyName: 'Set prefix',
 
-    inputs: {
-        serverId: {
-            required: true,
-            type: 'number'
-        },
-        guildId: {
-            required: true,
-            type: 'string'
-        },
-        prefix: {
-            required: true,
-            type: 'string'
-        }
+  inputs: {
+    serverId: {
+      required: true,
+      type: 'number'
     },
-
-    exits: {
-        success: {},
+    guildId: {
+      required: true,
+      type: 'string'
     },
-
-
-    fn: async function (inputs, exits) {
-
-        await SdtdConfig.update({ server: inputs.serverId }, { discordPrefix: inputs.prefix });
-        let discordClient = sails.hooks.discordbot.getClient();
-        let guild = discordClient.guilds.get(inputs.guildId);
-        if (guild) {
-            guild.commandPrefix = inputs.prefix;
-            return exits.success();
-        } else {
-            return exits.error();
-        }
-
+    prefix: {
+      required: true,
+      type: 'string'
     }
+  },
+
+  exits: {
+    success: {},
+  },
+
+
+  fn: async function (inputs, exits) {
+
+    await SdtdConfig.update({ server: inputs.serverId }, { discordPrefix: inputs.prefix });
+    let discordClient = sails.hooks.discordbot.getClient();
+    let guild = discordClient.guilds.get(inputs.guildId);
+    if (guild) {
+      guild.commandPrefix = inputs.prefix;
+      return exits.success();
+    } else {
+      return exits.error();
+    }
+
+  }
 };

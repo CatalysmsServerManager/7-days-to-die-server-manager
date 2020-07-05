@@ -8,7 +8,7 @@ const Discord = require('discord.js');
  */
 
 class CustomEmbed extends Discord.RichEmbed {
-  constructor(data) {
+  constructor() {
     super();
     this.setTimestamp();
     this.setTitle(sails.config.custom.botEmbedTitle);

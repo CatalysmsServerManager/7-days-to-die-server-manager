@@ -1,28 +1,28 @@
 module.exports = {
-  friendlyName: "Add Currency",
+  friendlyName: 'Add Currency',
 
-  description: "Adds some currency to a players balance",
+  description: 'Adds some currency to a players balance',
 
   inputs: {
     playerId: {
-      type: "string",
+      type: 'string',
       required: true
     },
 
     currencyToAdd: {
-      type: "number",
+      type: 'number',
       required: true
     },
 
     serverId: {
-      type: "string"
+      type: 'string'
     }
   },
 
   exits: {
     success: {
-      outputFriendlyName: "Success",
-      outputType: "boolean"
+      outputFriendlyName: 'Success',
+      outputType: 'boolean'
     }
   },
 
@@ -51,7 +51,7 @@ module.exports = {
       await sails.helpers.economy.giveToPlayer(
         player.id,
         inputs.currencyToAdd,
-        "Function call from a custom command - add"
+        'Function call from a custom command - add'
       );
     }
 
@@ -59,7 +59,7 @@ module.exports = {
       await sails.helpers.economy.deductFromPlayer(
         player.id,
         Math.abs(inputs.currencyToAdd),
-        "Function call from a custom command - deduct"
+        'Function call from a custom command - deduct'
       );
     }
 

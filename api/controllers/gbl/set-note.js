@@ -1,5 +1,3 @@
-const he = require('he');
-
 module.exports = {
 
 
@@ -16,7 +14,7 @@ module.exports = {
       type: 'number',
       custom: async function (valueToCheck) {
         let foundBan = await BanEntry.findOne(valueToCheck);
-        return foundBan
+        return foundBan;
       }
     },
 
@@ -47,7 +45,7 @@ module.exports = {
     });
 
     if (!permCheck.hasPermission) {
-      return exits.notAuthorized()
+      return exits.notAuthorized();
     }
 
     let updatedRecord = await BanEntry.update({
@@ -55,7 +53,7 @@ module.exports = {
     }, {
       note: _.escape(inputs.note)
     });
-    sails.log.info(`Update note on ban ${inputs.banId} by user ${this.req.session.user.id} - ${inputs.note}`)
+    sails.log.info(`Update note on ban ${inputs.banId} by user ${this.req.session.user.id} - ${inputs.note}`);
     return exits.success(updatedRecord);
 
   }

@@ -1,8 +1,8 @@
-const DiscordNotification = require("../DiscordNotification");
+const DiscordNotification = require('../DiscordNotification');
 
 class PlayerDisconnected extends DiscordNotification {
   constructor() {
-    super("playerdisconnected");
+    super('playerdisconnected');
   }
 
   async makeEmbed(event) {
@@ -10,29 +10,29 @@ class PlayerDisconnected extends DiscordNotification {
     let embed = new client.customEmbed();
 
     if (!event.player) {
-      return null
+      return null;
     }
     let gblBans = await BanEntry.find({ steamId: event.player.steamId });
 
     embed
       .setTitle(`Disconnected: ${event.player.name}`)
-      .setColor("RED")
+      .setColor('RED')
       .addField(
-        "Steam ID",
+        'Steam ID',
         `[${event.player.steamId}](https://steamidfinder.com/lookup/${event.player.steamId}/)`,
         true
       )
       .addField(
-        "CSMM profile",
+        'CSMM profile',
         `${process.env.CSMM_HOSTNAME}/player/${event.player.id}/profile`
       )
       .addField(
         `${gblBans.length} ban${
-          gblBans.length === 1 ? "" : "s"
+          gblBans.length === 1 ? '' : 's'
         } on the global ban list`,
         `[GBL profile page](${process.env.CSMM_HOSTNAME}/gbl/profile?steamId=${event.player.steamId})`
       )
-      .addField("Role", event.player.role ? event.player.role : "None")
+      .addField('Role', event.player.role ? event.player.role : 'None')
       .setFooter(`${event.server.name}`)
       .setURL(`${process.env.CSMM_HOSTNAME}/player/${event.player.id}/profile`);
 

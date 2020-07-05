@@ -25,7 +25,7 @@ module.exports = {
 
     await CommandReply.destroy({
       id: inputs.replyId,
-    })
+    });
 
     return exits.success();
 

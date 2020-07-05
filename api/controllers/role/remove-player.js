@@ -15,7 +15,7 @@ module.exports = {
       required: true,
       custom: async (valueToCheck) => {
         let foundPlayer = await Player.findOne(valueToCheck);
-        return foundPlayer
+        return foundPlayer;
       },
     },
 

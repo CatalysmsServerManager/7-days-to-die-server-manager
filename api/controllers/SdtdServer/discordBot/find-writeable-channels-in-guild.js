@@ -43,8 +43,8 @@ module.exports = {
         if (channel.type !== 'text') {
           return false;
         }
-        let userPerms = channel.permissionsFor(discordClient.user)
-        return (userPerms.has('SEND_MESSAGES') && userPerms.has('EMBED_LINKS') && userPerms.has('VIEW_CHANNEL'))
+        let userPerms = channel.permissionsFor(discordClient.user);
+        return (userPerms.has('SEND_MESSAGES') && userPerms.has('EMBED_LINKS') && userPerms.has('VIEW_CHANNEL'));
       });
 
       let foundChannelsArray = Array.from(foundChannels.values());
@@ -53,7 +53,7 @@ module.exports = {
         return {
           id: channel.id,
           name: channel.name
-        }
+        };
       }));
       sails.log.debug(`API - SdtdServer:find-writeable-channels-in-guild - Found ${foundChannelsArray.length} channels for guild ${inputs.guildId}!`);
     } catch (error) {

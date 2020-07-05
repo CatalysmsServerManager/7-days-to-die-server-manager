@@ -5,19 +5,19 @@ class Vote extends SdtdCommand {
   constructor(serverId) {
     super(serverId, {
       name: 'vote',
-      description: "Claim vote rewards",
-      extendedDescription: "Vote at https://7daystodie-servers.com/ to claim rewards!",
+      description: 'Claim vote rewards',
+      extendedDescription: 'Vote at https://7daystodie-servers.com/ to claim rewards!',
       aliases: []
     });
     this.serverId = serverId;
   }
 
-  async isEnabled(chatMessage, player, server, args) {
-    return server.config.votingEnabled
+  async isEnabled(chatMessage, player, server) {
+    return server.config.votingEnabled;
   }
 
 
-  async run(chatMessage, player, server, args) {
+  async run(chatMessage, player, server) {
 
     const apiKey = server.config.votingApiKey;
 
@@ -28,15 +28,15 @@ class Vote extends SdtdCommand {
     let voteCheck = await this.checkIfUserVoted(player.steamId, apiKey);
 
     switch (voteCheck) {
-      case "0":
+      case '0':
         return chatMessage.reply('notVoted');
-      case "1":
+      case '1':
         await this.awardVoteReward(player, server, server.config.votingCommand);
         return this.setVoteClaimed(player.steamId, apiKey);
-      case "2":
+      case '2':
         return chatMessage.reply('alreadyClaimed');
       default:
-        sails.log.error(`Unexpected response after checking vote status: ${voteCheck}`)
+        sails.log.error(`Unexpected response after checking vote status: ${voteCheck}`);
         return chatMessage.reply('error');
     }
 
@@ -52,7 +52,7 @@ class Vote extends SdtdCommand {
         element: 'claim',
         action: 'post'
       }
-    })
+    });
   }
 
   checkIfUserVoted(steamId, apiKey) {
@@ -63,7 +63,7 @@ class Vote extends SdtdCommand {
         object: 'votes',
         element: 'claim'
       }
-    })
+    });
   }
 
   async awardVoteReward(player, server, command) {

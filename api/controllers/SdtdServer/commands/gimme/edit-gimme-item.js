@@ -12,7 +12,7 @@ module.exports = {
 
     type: {
       type: 'string',
-      isIn: ["item", "command", "entity"],
+      isIn: ['item', 'command', 'entity'],
       required: true
     },
 

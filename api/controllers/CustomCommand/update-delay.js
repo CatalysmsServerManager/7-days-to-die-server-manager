@@ -1,45 +1,45 @@
 module.exports = {
 
 
-    friendlyName: 'Update delay',
+  friendlyName: 'Update delay',
 
 
-    description: '',
+  description: '',
 
 
-    inputs: {
-        commandId: {
-            type: 'number',
-            required: true
-        },
-
-        newDelay: {
-            type: 'number',
-            min: 0,
-            required: true
-        },
-
+  inputs: {
+    commandId: {
+      type: 'number',
+      required: true
     },
 
-
-    exits: {
-        success: {}
+    newDelay: {
+      type: 'number',
+      min: 0,
+      required: true
     },
 
+  },
 
-    fn: async function (inputs, exits) {
 
-        try {
-            await CustomCommand.update({
-                id: inputs.commandId,
-            }, { delay: inputs.newDelay })
-            return exits.success();
+  exits: {
+    success: {}
+  },
 
-        } catch (error) {
-            sails.log.error(error)
-        }
 
+  fn: async function (inputs, exits) {
+
+    try {
+      await CustomCommand.update({
+        id: inputs.commandId,
+      }, { delay: inputs.newDelay });
+      return exits.success();
+
+    } catch (error) {
+      sails.log.error(error);
     }
+
+  }
 
 
 };

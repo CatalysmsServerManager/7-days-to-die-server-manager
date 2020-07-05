@@ -46,7 +46,7 @@ module.exports = {
       let playerRole = await sails.helpers.sdtd.getPlayerRole(inputs.playerId);
 
       if (inputs.useMultiplier) {
-        inputs.amountToGive = (inputs.amountToGive * playerRole.economyGiveMultiplier)
+        inputs.amountToGive = (inputs.amountToGive * playerRole.economyGiveMultiplier);
       }
 
       let newBalance = currentBalance + inputs.amountToGive;
@@ -64,7 +64,7 @@ module.exports = {
         player: inputs.playerId,
         amount: inputs.amountToGive,
         economyAction: 'give'
-      })
+      });
 
       await sails.helpers.redis.incr(`server:${playerToGiveTo.server}:economyActionsCompleted`);
       await sails.helpers.economy.deleteOldData(playerToGiveTo.server);

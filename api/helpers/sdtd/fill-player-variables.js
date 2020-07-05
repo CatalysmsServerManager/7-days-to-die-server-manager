@@ -1,12 +1,12 @@
 /**
-  _____                                _           _ 
+  _____                                _           _
  |  __ \                              | |         | |
  | |  | | ___ _ __  _ __ ___  ___ __ _| |_ ___  __| |
  | |  | |/ _ \ '_ \| '__/ _ \/ __/ _` | __/ _ \/ _` |
  | |__| |  __/ |_) | | |  __/ (_| (_| | ||  __/ (_| |
  |_____/ \___| .__/|_|  \___|\___\__,_|\__\___|\__,_|
-             | |                                     
-             |_|                                     
+             | |
+             |_|
 
   This method is replaced with fill-custom-variables and is only kept for compatibility purposes.
  */
@@ -19,7 +19,7 @@ module.exports = {
 
   description: 'Fills player variables into a command string. Variables should be denoted as ${variable} in the string',
 
-  supportedVariables: ["steamId", "entityId", "playerName", "balance", "posX", 'posY', 'posZ'],
+  supportedVariables: ['steamId', 'entityId', 'playerName', 'balance', 'posX', 'posY', 'posZ'],
 
 
   inputs: {
@@ -34,7 +34,7 @@ module.exports = {
       required: true,
       custom: (value) => {
         if (!value.steamId || !value.entityId || !value.name || value.currency === undefined || value.positionX === undefined || value.positionY === undefined || value.positionZ === undefined) {
-          sails.log.error(`Invalid player data passed to fillPlayerVariables() - ${inspect(value)}`)
+          sails.log.error(`Invalid player data passed to fillPlayerVariables() - ${inspect(value)}`);
           return false;
         } else {
           return true;
@@ -58,14 +58,14 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    inputs.command = replaceAllInString(inputs.command, "${steamId}", inputs.player.steamId);
-    inputs.command = replaceAllInString(inputs.command, "${entityId}", inputs.player.entityId);
-    inputs.command = replaceAllInString(inputs.command, "${playerName}", inputs.player.name);
-    inputs.command = replaceAllInString(inputs.command, "${balance}", inputs.player.currency);
+    inputs.command = replaceAllInString(inputs.command, '${steamId}', inputs.player.steamId);
+    inputs.command = replaceAllInString(inputs.command, '${entityId}', inputs.player.entityId);
+    inputs.command = replaceAllInString(inputs.command, '${playerName}', inputs.player.name);
+    inputs.command = replaceAllInString(inputs.command, '${balance}', inputs.player.currency);
 
-    inputs.command = replaceAllInString(inputs.command, "${posX}", inputs.player.positionX);
-    inputs.command = replaceAllInString(inputs.command, "${posY}", inputs.player.positionY);
-    inputs.command = replaceAllInString(inputs.command, "${posZ}", inputs.player.positionZ);
+    inputs.command = replaceAllInString(inputs.command, '${posX}', inputs.player.positionX);
+    inputs.command = replaceAllInString(inputs.command, '${posY}', inputs.player.positionY);
+    inputs.command = replaceAllInString(inputs.command, '${posZ}', inputs.player.positionZ);
     return exits.success(inputs.command);
 
   }

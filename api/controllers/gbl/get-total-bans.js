@@ -1,29 +1,29 @@
 module.exports = {
 
 
-    friendlyName: 'Get total bans',
+  friendlyName: 'Get total bans',
 
 
-    description: '',
+  description: '',
 
 
-    inputs: {
+  inputs: {
 
-    },
-
-
-    exits: {
-
-    },
+  },
 
 
-    fn: async function (inputs, exits) {
+  exits: {
 
-        let serverBans = await BanEntry.count();
+  },
 
-        return exits.success(serverBans);
 
-    }
+  fn: async function (inputs, exits) {
+
+    let serverBans = await BanEntry.count();
+
+    return exits.success(serverBans);
+
+  }
 
 
 };

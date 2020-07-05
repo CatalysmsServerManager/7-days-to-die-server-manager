@@ -1,28 +1,28 @@
 module.exports = {
 
 
-    friendlyName: 'Ensure cache exists',
+  friendlyName: 'Ensure cache exists',
 
 
-    description: 'Makes sure the in memory cache exists',
+  description: 'Makes sure the in memory cache exists',
 
 
-    inputs: {},
+  inputs: {},
 
 
-    exits: {
+  exits: {
 
-    },
+  },
 
 
-    fn: async function (inputs, exits) {
+  fn: async function (inputs, exits) {
 
-        if (!sails.cache) {
-            sails.cache = {};
-        }
-
-        return exits.success();
+    if (!sails.cache) {
+      sails.cache = {};
     }
+
+    return exits.success();
+  }
 
 };
 

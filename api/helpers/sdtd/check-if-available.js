@@ -20,7 +20,7 @@ module.exports = {
     onlyStats: {
       type: 'boolean',
       defaultsTo: false,
-      description: "If true, only check via API response and skip command"
+      description: 'If true, only check via API response and skip command'
     }
 
   },
@@ -83,36 +83,36 @@ async function checkStats(sdtdServer) {
         if (response.gametime) {
           return resolve(true);
         } else {
-          return resolve(false)
+          return resolve(false);
         }
       },
-      error: (error) => {
+      error: () => {
         return resolve(false);
       },
-      connectionRefused: error => {
+      connectionRefused: () => {
         return resolve(false);
       }
     });
-  })
+  });
 }
 
 async function checkCommand(sdtdServer) {
   return new Promise(resolve => {
-    let statsResponse = sevenDays.executeCommand({
+    sevenDays.executeCommand({
       ip: sdtdServer.ip,
       port: sdtdServer.webPort,
       authName: sdtdServer.authName,
       authToken: sdtdServer.authToken,
       command: 'help'
     }).exec({
-      success: (response) => {
+      success: () => {
         resolve(true);
       },
-      error: (error) => {
+      error: () => {
         resolve(false);
       },
-      connectionRefused: error => {
-        resolve(false)
+      connectionRefused: () => {
+        resolve(false);
       }
     });
   });

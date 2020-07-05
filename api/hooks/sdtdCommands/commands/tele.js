@@ -6,14 +6,14 @@ class tele extends SdtdCommand {
     super(serverId, {
       name: 'tele',
       description: 'Teleport to a set location.',
-      extendedDescription: "Provide the name of where you want to go",
-      aliases: ["tp", "teleport"]
+      extendedDescription: 'Provide the name of where you want to go',
+      aliases: ['tp', 'teleport']
     });
     this.serverId = serverId;
   }
 
-  async isEnabled(chatMessage, player, server, args) {
-    return server.config.enabledPlayerTeleports
+  async isEnabled(chatMessage, player, server) {
+    return server.config.enabledPlayerTeleports;
   }
 
   async run(chatMessage, player, server, args) {
@@ -34,24 +34,24 @@ class tele extends SdtdCommand {
     // Remove duplicates
     serverTeleportsFound = _.uniq(serverTeleportsFound, 'id');
 
-    let teleportFound = false
+    let teleportFound = false;
     serverTeleportsFound.forEach(teleport => {
-      if (teleport.name == args[0]) {
-        teleportFound = teleport
+      if (teleport.name === args[0]) {
+        teleportFound = teleport;
       }
-    })
+    });
 
     if (!teleportFound) {
-      return chatMessage.reply(`NoTeleportFound`)
+      return chatMessage.reply(`NoTeleportFound`);
     }
 
     let currentTime = new Date();
-    let lastTeleportTime = new Date(player.lastTeleportTime)
+    let lastTeleportTime = new Date(player.lastTeleportTime);
     if (((currentTime - lastTeleportTime) / 1000) < server.config.playerTeleportTimeout) {
       let secondsToWait = Math.floor(server.config.playerTeleportTimeout - ((currentTime - lastTeleportTime) / 1000));
       return chatMessage.reply(`teleCooldown`, {
         secondsToWait: secondsToWait
-      })
+      });
     }
 
     if (server.config.playerTeleportDelay) {
@@ -64,7 +64,7 @@ class tele extends SdtdCommand {
       if (playerBalance < server.config.costToTeleport) {
         return chatMessage.reply(`notEnoughMoney`, {
           cost: server.config.costToTeleport
-        })
+        });
       }
     }
 
@@ -77,7 +77,7 @@ class tele extends SdtdCommand {
         playerId: player.steamId,
         coordinates: `${teleportFound.x} ${teleportFound.y} ${teleportFound.z}`
       }).exec({
-        success: async (response) => {
+        success: async () => {
           chatMessage.reply(`teleSuccess`, {
             teleport: teleportFound
           });
@@ -85,7 +85,7 @@ class tele extends SdtdCommand {
             id: player.id
           }, {
             lastTeleportTime: new Date()
-          })
+          });
           await PlayerTeleport.update({
             id: teleportFound.id
           }, {
@@ -102,11 +102,11 @@ class tele extends SdtdCommand {
         },
         error: (error) => {
           sails.log.warn(`Hook - sdtdCommands:teleport - ${error}`);
-          sails.log.error(error)
+          sails.log.error(error);
           chatMessage.reply(`error`);
         }
       });
-    }, server.config.playerTeleportDelay * 1000)
+    }, server.config.playerTeleportDelay * 1000);
 
 
 

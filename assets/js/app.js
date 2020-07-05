@@ -2,6 +2,7 @@
  * General (utility) functions
  */
 
+// eslint-disable-next-line no-unused-vars
 function loadSdtdServers(userId) {
   let serverslist = $('#sdtd-servers-owned');
   $.ajax({
@@ -9,7 +10,7 @@ function loadSdtdServers(userId) {
     data: {
       userId: userId
     },
-    success: (data, status, xhr) => {
+    success: (data) => {
       if (data.length === 0) {
         return serverslist.append(`<a class="dropdown-item"> None </a>`);
       }
@@ -29,32 +30,33 @@ function loadSdtdServers(userId) {
   });
 }
 
+// eslint-disable-next-line no-unused-vars
 async function checkUserPermission(userId, serverId, permissionField) {
   return new Promise((resolve, reject) => {
     if (_.isUndefined(serverId) || _.isUndefined(userId) || _.isUndefined(permissionField)) {
-      return showErrorModal(`checkUserPermission - Invalid input! Function requires serverId, userId and permissionField`)
+      return showErrorModal(`checkUserPermission - Invalid input! Function requires serverId, userId and permissionField`);
     }
 
     $.ajax({
-      url: "/api/permission",
+      url: '/api/permission',
       type: 'GET',
       data: {
         serverId: serverId,
         userId: userId,
         permissionField: permissionField
       },
-      success: (data, status, xhr) => {
+      success: (data) => {
         resolve(data);
 
       },
-      error: function (xhr, status, error) {
+      error: function (xhr) {
         displayAjaxToSupportData(xhr, this);
-        reject(xhr)
+        reject(xhr);
 
       }
-    })
+    });
 
-  })
+  });
 
 }
 
@@ -63,15 +65,15 @@ async function checkUserPermission(userId, serverId, permissionField) {
 function showErrorModal(errorMessage, xhr) {
 
   if (xhr && xhr.responseJSON && xhr.responseJSON.problems && xhr.responseJSON.problems.length > 0) {
-    errorMessage = xhr.responseJSON.problems.join("\n");
+    errorMessage = xhr.responseJSON.problems.join('\n');
   }
 
-  $("#error-modal-message").text(errorMessage)
+  $('#error-modal-message').text(errorMessage);
 
   if (errorMessage) {
-    $("#error-modal-message-bool").show();
+    $('#error-modal-message-bool').show();
   } else {
-    $("#error-modal-message-bool").hide();
+    $('#error-modal-message-bool').hide();
   }
 
   $('#error-modal').modal('show');
@@ -94,7 +96,7 @@ function displayAjaxToSupportData(xhr, ajaxRequest) {
   console.log('You can copy and paste this info to the support team.');
   console.log('Be careful! The data of your request might include sensitive details about your session (csrf token). Make sure you create a support ticket and share the info there if you are unsure.');
   console.log('---------');
-  console.log('Headers:')
+  console.log('Headers:');
   console.log(xhr.getAllResponseHeaders());
   console.log(`Status: ${xhr.status} - ${xhr.statusText}`);
   console.log(`URL: ${ajaxRequest.type} ${ajaxRequest.url}`);
@@ -103,18 +105,19 @@ function displayAjaxToSupportData(xhr, ajaxRequest) {
   console.log('---------');
 }
 
+// eslint-disable-next-line no-unused-vars
 function hhmmss(seconds) {
-  var d = ifNanZero(Number(seconds))
-  var h = ifNanZero(Math.floor(d / 3600))
-  var m = ifNanZero(Math.floor(d % 3600 / 60))
-  var s = ifNanZero(Math.floor(d % 3600 % 60))
-  return padNumber(h) + ':' + padNumber(m) + ':' + padNumber(s)
+  var d = ifNanZero(Number(seconds));
+  var h = ifNanZero(Math.floor(d / 3600));
+  var m = ifNanZero(Math.floor(d % 3600 / 60));
+  var s = ifNanZero(Math.floor(d % 3600 % 60));
+  return padNumber(h) + ':' + padNumber(m) + ':' + padNumber(s);
 }
 
 function ifNanZero(v) {
-  return isNaN(v) ? 0 : v
+  return isNaN(v) ? 0 : v;
 }
 
 function padNumber(n) {
-  return (n < 10 ? '0' : '') + n
+  return (n < 10 ? '0' : '') + n;
 }

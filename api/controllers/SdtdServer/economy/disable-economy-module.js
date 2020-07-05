@@ -47,7 +47,7 @@ module.exports = {
         server: inputs.serverId
       }, databaseUpdateObject);
 
-      await sails.hooks.economy.stop(inputs.serverId, inputs.moduleType)
+      await sails.hooks.economy.stop(inputs.serverId, inputs.moduleType);
       await HistoricalInfo.create({
         type: 'economy',
         economyAction: 'config',

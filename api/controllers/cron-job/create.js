@@ -35,7 +35,7 @@ module.exports = {
         let prevDate = interval.prev().toDate();
         let nextDate = interval.next().toDate();
 
-        return (prevDate.valueOf() + 300000) < nextDate.valueOf()
+        return (prevDate.valueOf() + 300000) < nextDate.valueOf();
 
       }
     },
@@ -90,16 +90,16 @@ module.exports = {
     let serverCronJobs = await CronJob.find({ server: server.id });
 
     if (serverCronJobs.length >= maxCronJobs) {
-      return exits.maxJobs(`You have set the max number of jobs already. You have ${serverCronJobs.length} jobs and are allowed ${maxCronJobs}`)
+      return exits.maxJobs(`You have set the max number of jobs already. You have ${serverCronJobs.length} jobs and are allowed ${maxCronJobs}`);
     }
 
     // Parse hours or minutes for users who can't read documentation ^_^
     if (inputs.hours) {
-      inputs.temporalValue = `0 */${inputs.hours} * * *`
+      inputs.temporalValue = `0 */${inputs.hours} * * *`;
     }
 
     if (inputs.minutes) {
-      inputs.temporalValue = `*/${inputs.minutes} * * * *`
+      inputs.temporalValue = `*/${inputs.minutes} * * * *`;
     }
 
 

@@ -44,7 +44,7 @@ module.exports = {
       try {
         await sails.hooks.cron.stop(jobToStop.id);
       } catch (error) {
-        sails.log.error(`Error initializing cronjob ${jobToStop.id} - ${error}`)
+        sails.log.error(`Error initializing cronjob ${jobToStop.id} - ${error}`);
       }
     }
 

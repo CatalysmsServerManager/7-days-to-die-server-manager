@@ -17,17 +17,17 @@ module.exports = async function canSeeTicket(req, res, next) {
     let userRole = await sails.helpers.roles.getUserRole(user.id, server.id);
 
 
-    if (user.steamId == ticket.player.steamId || userRole.manageTickets || userRole.manageServer) {
+    if (user.steamId.toString() === ticket.player.steamId.toString() || userRole.manageTickets || userRole.manageServer) {
       return next();
     } else {
       return res.view('meta/notauthorized', {
         role: userRole,
         requiredPerm: 'manageTickets'
-      })
+      });
     }
 
   } catch (error) {
-    sails.log.error(`POLICY - canSeeTicket - ${error}`)
+    sails.log.error(`POLICY - canSeeTicket - ${error}`);
   }
 
 };

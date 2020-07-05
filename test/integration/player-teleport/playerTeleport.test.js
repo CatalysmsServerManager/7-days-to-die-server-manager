@@ -1,5 +1,5 @@
 var supertest = require('supertest');
-var expect = require("chai").expect;
+var expect = require('chai').expect;
 const faker = require('faker');
 let testTeleports = [];
 
@@ -67,8 +67,8 @@ describe('Player teleports', function () {
 
       return supertest(sails.hooks.http.app)
         .delete('/api/teleport')
-        .query({teleportId:testTeleports[0].id})
-        .expect(async function (res) {
+        .query({ teleportId: testTeleports[0].id })
+        .expect(async function () {
           let record = await PlayerTeleport.findOne(testTeleports[0]);
           return expect(record).to.be.eq(undefined);
         })

@@ -31,7 +31,7 @@ module.exports = {
         let prevDate = interval.prev().toDate();
         let nextDate = interval.next().toDate();
 
-        return (prevDate.valueOf() + 300000) < nextDate.valueOf()
+        return (prevDate.valueOf() + 300000) < nextDate.valueOf();
 
       }
     }

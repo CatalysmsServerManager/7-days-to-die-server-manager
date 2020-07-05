@@ -1,9 +1,7 @@
-const Sentry = require('@sentry/node');
-
 module.exports = function banneditems(sails) {
   return {
-    initialize: function(cb) {
-      sails.on("hook:sdtdlogs:loaded", async function() {
+    initialize: function (cb) {
+      sails.on('hook:sdtdlogs:loaded', async function () {
         try {
           let configs = await SdtdConfig.find({
             inactive: false
@@ -36,27 +34,27 @@ module.exports = function banneditems(sails) {
   function start(serverId) {
     const loggingObject = sails.hooks.sdtdlogs.getLoggingObject(serverId);
 
-    loggingObject.on("trackingUpdate", handleItemTrackerUpdate);
+    loggingObject.on('trackingUpdate', handleItemTrackerUpdate);
     return;
   }
 
   function stop(serverId) {
     const loggingObject = sails.hooks.sdtdlogs.getLoggingObject(serverId);
-    loggingObject.removeListener("trackingUpdate", handleItemTrackerUpdate);
+    loggingObject.removeListener('trackingUpdate', handleItemTrackerUpdate);
     return;
   }
 
   async function handleItemTrackerUpdate(data) {
     const { server, trackingInfo } = data;
     const config = server.config[0] || {};
-    const { bannedItems, bannedItemsCommand } = config;
+    const { bannedItems } = config;
 
     // config.bannedItems should be an array (cause sails parses it), but we are pretty certain at some point its not, so handle both cases
     const bannedItemsSet = new Set(Array.isArray(bannedItems) ? bannedItems : sails.helpers.safeJsonParse(bannedItems, [], { serverId: server.id }));
     for (const onlinePlayer of trackingInfo) {
       if (onlinePlayer.inventory) {
         if (!Array.isArray(onlinePlayer.inventory)) {
-          onlinePlayer.inventory = sails.helpers.safeJsonParse(onlinePlayer.inventory, [], { serverId: server.id, playerId: onlinePlayer.name } );
+          onlinePlayer.inventory = sails.helpers.safeJsonParse(onlinePlayer.inventory, [], { serverId: server.id, playerId: onlinePlayer.name });
         }
 
         const playerItemsSet = new Set(onlinePlayer.inventory.map(e => e.name));
@@ -65,7 +63,7 @@ module.exports = function banneditems(sails) {
           const isImmune = await sails.helpers.roles.checkPermission.with({
             serverId: server.id,
             playerId: onlinePlayer.player,
-            permission: "immuneToBannedItemsList"
+            permission: 'immuneToBannedItemsList'
           });
 
           if (!isImmune.hasPermission) {
@@ -86,7 +84,7 @@ module.exports = function banneditems(sails) {
     );
     await sails.helpers.sdtd.executeCustomCmd(
       server,
-      config.bannedItemsCommand.split(";"),
+      config.bannedItemsCommand.split(';'),
       { player: player }
     );
   }

@@ -7,7 +7,7 @@ module.exports = function isLoggedInUser(req, res, next) {
 
     let userId = req.param('userId') || req.query.userId;
 
-    if (userId == req.session.userId) {
+    if (userId.toString() === req.session.userId.toString()) {
       return next();
 
     } else {

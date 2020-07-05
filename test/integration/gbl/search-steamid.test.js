@@ -1,5 +1,5 @@
 var supertest = require('supertest');
-var expect = require("chai").expect;
+var expect = require('chai').expect;
 const faker = require('faker');
 let testBans;
 
@@ -9,27 +9,27 @@ describe('GET /api/gbl/find', function () {
 
     // testPlayer ban on testServer
     testBans = await BanEntry.createEach([{
-        server: sails.testServer.id,
-        steamId: sails.testPlayer.steamId,
-        bannedUntil: faker.date.future().valueOf(),
-        reason: "Test ban"
-      }, {
-        // testPlayer ban on other server
-        server: sails.testServer.id + 1,
-        steamId: sails.testPlayer.steamId,
-        bannedUntil: faker.date.future().valueOf(),
-        reason: "Test ban"
-      },
-      {
-        // random player ban on testServer
-        server: sails.testServer.id,
-        steamId: faker.random.number({
-          min: 0,
-          max: 999999999999
-        }),
-        bannedUntil: faker.date.future().valueOf(),
-        reason: "Test ban"
-      }
+      server: sails.testServer.id,
+      steamId: sails.testPlayer.steamId,
+      bannedUntil: faker.date.future().valueOf(),
+      reason: 'Test ban'
+    }, {
+      // testPlayer ban on other server
+      server: sails.testServer.id + 1,
+      steamId: sails.testPlayer.steamId,
+      bannedUntil: faker.date.future().valueOf(),
+      reason: 'Test ban'
+    },
+    {
+      // random player ban on testServer
+      server: sails.testServer.id,
+      steamId: faker.random.number({
+        min: 0,
+        max: 999999999999
+      }),
+      bannedUntil: faker.date.future().valueOf(),
+      reason: 'Test ban'
+    }
     ]).fetch();
 
     return;

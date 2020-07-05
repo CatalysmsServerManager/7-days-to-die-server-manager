@@ -21,7 +21,7 @@ module.exports = {
     success: {},
 
     invalidIds: {
-      description: "",
+      description: '',
       responseType: 'badRequest',
       statusCode: 400
     }

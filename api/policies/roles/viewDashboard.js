@@ -9,7 +9,6 @@ module.exports = async function viewDashboard(req, res, next) {
   }
 
   let serverId = _.isUndefined(req.param('serverId')) ? req.query.serverId : req.param('serverId');
-  let server = await SdtdServer.findOne(serverId);
   let user = req.session.user;
 
   let permCheck = await sails.helpers.roles.checkPermission.with({
@@ -19,7 +18,7 @@ module.exports = async function viewDashboard(req, res, next) {
   });
 
   if (!permCheck.hasPermission) {
-    sails.log.warn(`User ${user.username} tried to access ${req.path} without sufficient permissions (user is ${permCheck.role.name}).`)
+    sails.log.warn(`User ${user.username} tried to access ${req.path} without sufficient permissions (user is ${permCheck.role.name}).`);
 
     if (req.wantsJSON) {
       return res.status(403).json({
@@ -29,7 +28,7 @@ module.exports = async function viewDashboard(req, res, next) {
       return res.view('meta/notauthorized', {
         role: permCheck.role,
         requiredPerm: 'viewDashboard'
-      })
+      });
     }
 
 

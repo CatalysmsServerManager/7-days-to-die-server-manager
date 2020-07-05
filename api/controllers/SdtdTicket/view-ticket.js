@@ -49,28 +49,28 @@ module.exports = {
         return new Promise((resolve, reject) => {
           User.findOne(comment.userThatPlacedTheComment).exec((err, foundUser) => {
             if (err) {
-              reject(err)
+              reject(err);
             }
-            comment.userInfo = foundUser
-            resolve(comment)
-          })
-        })
-      })
+            comment.userInfo = foundUser;
+            resolve(comment);
+          });
+        });
+      });
 
       Promise.all(promises).then((comments) => {
-        sails.log.info(`API - SdtdTicket:viewTicket - - Success, loaded ticket "${ticket.title}" for server ${server.name}`, _.omit(ticket, "playerInfo"));
+        sails.log.info(`API - SdtdTicket:viewTicket - - Success, loaded ticket "${ticket.title}" for server ${server.name}`, _.omit(ticket, 'playerInfo'));
         return exits.success({
-          server: _.omit(server, "authName", "authToken"),
+          server: _.omit(server, 'authName', 'authToken'),
           ticket: ticket,
           comments: comments
         });
-      }).catch(error => {
+      }).catch(() => {
         return exits.success({
-          server: _.omit(server, "authName", "authToken"),
+          server: _.omit(server, 'authName', 'authToken'),
           ticket: ticket,
           comments: []
         });
-      })
+      });
 
 
     } catch (error) {

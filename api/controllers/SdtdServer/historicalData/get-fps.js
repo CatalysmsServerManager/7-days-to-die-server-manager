@@ -28,18 +28,18 @@ module.exports = {
           server: inputs.serverId,
         },
         limit: 5000
-      })
+      });
       let dateEnded = new Date();
-      sails.log.debug(`Retrieved FPS data - took ${dateEnded - dateStarted} ms`)
+      sails.log.debug(`Retrieved FPS data - took ${dateEnded - dateStarted} ms`);
       return exits.success(dataToSend.map(dataPoint => {
         return {
           createdAt: dataPoint.createdAt,
           fps: dataPoint.fps
-        }
+        };
       }));
 
     } catch (error) {
-      return exits.success(0)
+      return exits.success(0);
     }
   }
 

@@ -36,7 +36,7 @@ class LoggingObject extends EventEmitter {
 
   async addFetchJob() {
     if (!this.active) {
-      return
+      return;
     }
     sails.log.debug(`Adding new fetch job for server ${this.serverId} - last log line: ${this.lastLogLine}`);
     this.queue.add(
@@ -72,6 +72,7 @@ class LoggingObject extends EventEmitter {
   async handleFailedJob(jobId, err) {
     const job = await this.queue.getJob(jobId);
 
+    // eslint-disable-next-line eqeqeq
     if (job.data.serverId != this.serverId) {
       // not one of ours
       return;
@@ -89,6 +90,7 @@ class LoggingObject extends EventEmitter {
     }
 
 
+    // eslint-disable-next-line eqeqeq
     if (result.serverId != this.serverId) {
       // not one of ours
       return;
@@ -189,12 +191,12 @@ class LoggingObject extends EventEmitter {
       if (!this.slowmode) {
         sails.log.info(
           `SdtdLogs - Server ${
-          this.serverId
+            this.serverId
           } has failed ${counter} times. Changing interval time. Server was last successful on ${prettyLastSuccess.toLocaleDateString()} ${prettyLastSuccess.toLocaleTimeString()}`
         );
         this.slowmode = true;
         await this.stop();
-        await this.init(300000);
+        await this.init(slowModeIntervalms);
         return;
       }
 

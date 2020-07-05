@@ -1,4 +1,4 @@
-const hhmmss = require('@streammedev/hhmmss')
+const hhmmss = require('@streammedev/hhmmss');
 
 module.exports = {
 
@@ -35,7 +35,7 @@ module.exports = {
     let amountOfCustomCommandsExecuted = await PlayerUsedCommand.count();
     let amountOfCustomHooks = await CustomHook.count();
 
-    let uptime = hhmmss(process.uptime())
+    let uptime = hhmmss(process.uptime());
 
     let amountOfChatBridges = sails.hooks.discordchatbridge.getAmount();
     let amountOfCountryBans = sails.hooks.countryban.getAmount();
@@ -84,9 +84,9 @@ module.exports = {
       openTickets: openTickets,
       closedTickets: closedTickets,
       gblComments: gblComments,
-    }
+    };
 
-    return exits.success(response)
+    return exits.success(response);
 
   }
 

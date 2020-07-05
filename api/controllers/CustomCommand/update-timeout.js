@@ -1,45 +1,45 @@
 module.exports = {
 
 
-    friendlyName: 'Update Timeout',
+  friendlyName: 'Update Timeout',
 
 
-    description: '',
+  description: '',
 
 
-    inputs: {
-        commandId: {
-            type: 'number',
-            required: true
-        },
-
-        newTimeout: {
-            type: 'number',
-            min: 0,
-            required: true
-        },
-
+  inputs: {
+    commandId: {
+      type: 'number',
+      required: true
     },
 
-
-    exits: {
-        success: {}
+    newTimeout: {
+      type: 'number',
+      min: 0,
+      required: true
     },
 
+  },
 
-    fn: async function (inputs, exits) {
 
-        try {
-            await CustomCommand.update({
-                id: inputs.commandId,
-            }, { timeout: inputs.newTimeout })
-            return exits.success();
+  exits: {
+    success: {}
+  },
 
-        } catch (error) {
-            sails.log.error(error)
-        }
 
+  fn: async function (inputs, exits) {
+
+    try {
+      await CustomCommand.update({
+        id: inputs.commandId,
+      }, { timeout: inputs.newTimeout });
+      return exits.success();
+
+    } catch (error) {
+      sails.log.error(error);
     }
+
+  }
 
 
 };

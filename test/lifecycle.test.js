@@ -123,7 +123,7 @@ beforeEach(function (done) {
         });
     });
   }
-  async.parallel(destroyFuncs, function (err, results) {
+  async.parallel(destroyFuncs, function (err) {
     done(err);
   });
 });

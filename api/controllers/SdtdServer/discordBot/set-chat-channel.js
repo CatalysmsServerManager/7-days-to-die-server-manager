@@ -40,35 +40,35 @@ module.exports = {
       let server = await SdtdServer.findOne(inputs.serverId);
       let discordClient = sails.hooks.discordbot.getClient();
       let chatChannel = discordClient.channels.get(inputs.chatChannelId);
-      let chatBridgeHook = sails.hooks.discordchatbridge
+      let chatBridgeHook = sails.hooks.discordchatbridge;
 
       if (_.isUndefined(server)) {
-        return exits.notFound()
+        return exits.notFound();
       }
 
-      if ((_.isUndefined(chatChannel) && inputs.chatChannelId) && inputs.chatChannelId != 0) {
+      if ((_.isUndefined(chatChannel) && inputs.chatChannelId) && inputs.chatChannelId !== 0) {
         return exits.badChannel();
       }
 
       await SdtdConfig.update({
         server: inputs.serverId
       }, {
-          chatChannelId: inputs.chatChannelId,
-          chatChannelRichMessages: inputs.richMessages,
-          chatChannelGlobalOnly: inputs.onlyGlobal
-        })
+        chatChannelId: inputs.chatChannelId,
+        chatChannelRichMessages: inputs.richMessages,
+        chatChannelGlobalOnly: inputs.onlyGlobal
+      });
 
       if (chatBridgeHook.getStatus(inputs.serverId)) {
         chatBridgeHook.stop(inputs.serverId);
         chatBridgeHook.start(inputs.serverId);
       } else {
-        chatBridgeHook.start(inputs.serverId)
+        chatBridgeHook.start(inputs.serverId);
       }
 
 
       let embed = new discordClient.customEmbed();
       embed.setDescription(':white_check_mark: Initialized a chat bridge')
-        .addField(`Rich messages`, inputs.richMessages ? ':white_check_mark:' : ':x:')
+        .addField(`Rich messages`, inputs.richMessages ? ':white_check_mark:' : ':x:');
       chatChannel.send(embed);
 
       sails.log.info(`API - SdtdServer:set-chat-channel - set chat channel ${inputs.chatChannelId} for server ${inputs.serverId}`);

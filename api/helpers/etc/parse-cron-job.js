@@ -1,5 +1,3 @@
-const sevenDays = require('7daystodie-api-wrapper');
-
 module.exports = {
 
 
@@ -16,7 +14,7 @@ module.exports = {
       required: true,
       custom: async (valueToCheck) => {
         let foundJob = await CronJob.findOne(valueToCheck);
-        return foundJob
+        return foundJob;
       }
     }
 
@@ -48,12 +46,12 @@ module.exports = {
         await sails.hooks.discordnotifications.sendNotification({
           serverId: foundJob.server.id,
           job: foundJob,
-          notificationType: "cronjob"
+          notificationType: 'cronjob'
         });
       }
 
 
-    }
+    };
 
 
     // All done.
@@ -62,23 +60,4 @@ module.exports = {
   }
 
 
-};
-
-async function execCmd(job, command) {
-  let response = sevenDays.executeConsoleCommand({
-    ip: job.server.ip,
-    port: job.server.webPort,
-    adminUser: job.server.authName,
-    adminToken: job.server.authToken,
-  }, command.trim());
-  return response;
-}
-
-
-function delaySeconds(seconds) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve()
-    }, seconds * 1000)
-  });
 };

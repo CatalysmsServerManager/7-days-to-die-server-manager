@@ -1,5 +1,5 @@
 var supertest = require('supertest');
-var expect = require("chai").expect;
+var expect = require('chai').expect;
 
 describe('POST /api/sdtdserver/cron', function () {
 
@@ -10,7 +10,7 @@ describe('POST /api/sdtdserver/cron', function () {
         serverId: 1,
         command: 'help',
         temporalValue: '0 */6 * * *'
-      })
+      });
     expect(response.statusCode).to.be.eql(200);
     expect(response.header['content-type']).to.include('json');
   });

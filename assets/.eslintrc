@@ -16,9 +16,7 @@
   // (See .eslintrc in the root directory of this Sails app for more context.)
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  "extends": [
-    "../.eslintrc"
-  ],
+  "extends": ["../.eslintrc"],
 
   "env": {
     "browser": true,
@@ -36,7 +34,7 @@
 
     // Allow any other window globals you're relying on here; e.g.
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    // "$": true,
+    "$": true,
     // "Vue": true,
     // "angular": true,
     // ...etc.
@@ -49,6 +47,7 @@
     "async": false,
     // ...and any other backend globals (e.g. `"User": false`)
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    "showErrorModal": true
   },
 
   "rules": {
@@ -60,5 +59,4 @@
     // could technically be removed since it's redundant.)
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   }
-
 }

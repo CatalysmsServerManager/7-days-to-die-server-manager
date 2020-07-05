@@ -32,11 +32,11 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    const objectToSend = await sails.helpers.user.getServersWithPermission(inputs.userId)
+    const objectToSend = await sails.helpers.user.getServersWithPermission(inputs.userId);
 
     return exits.success({
       ownedServers: objectToSend
-    })
+    });
 
   }
 };

@@ -13,7 +13,7 @@ module.exports = {
       type: 'number',
       custom: async (valueToCheck) => {
         let foundRole = await Role.findOne(valueToCheck);
-        return foundRole
+        return foundRole;
       },
     },
 
@@ -21,7 +21,7 @@ module.exports = {
       type: 'number',
       custom: async (valueToCheck) => {
         let foundServer = await SdtdServer.findOne(valueToCheck);
-        return foundServer
+        return foundServer;
       },
     }
 
@@ -36,10 +36,10 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     if (_.isUndefined(inputs.roleId) && _.isUndefined(inputs.serverId)) {
-      return exits.error(`Must provide either roleId or serverId`)
+      return exits.error(`Must provide either roleId or serverId`);
     }
 
-    let returnObject
+    let returnObject;
 
     if (inputs.roleId) {
       returnObject = await Role.findOne(inputs.roleId);

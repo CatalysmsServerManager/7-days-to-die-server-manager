@@ -37,7 +37,7 @@ module.exports = async function isPlayerOwner(req, res, next) {
       if (admin.id === user.id) {
         isOwner = true;
       }
-    })
+    });
 
 
     if (isOwner) {

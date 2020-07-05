@@ -1,17 +1,17 @@
 module.exports = {
-  friendlyName: "set bannedItem status",
+  friendlyName: 'set bannedItem status',
 
-  description: "Set the status for bannedItems to enabled or disabled",
+  description: 'Set the status for bannedItems to enabled or disabled',
 
   inputs: {
     status: {
       required: true,
-      type: "boolean"
+      type: 'boolean'
     },
 
     serverId: {
       required: true,
-      type: "string"
+      type: 'string'
     }
   },
 

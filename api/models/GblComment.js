@@ -33,11 +33,11 @@ module.exports = {
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
 
     user: {
-      model: "user"
+      model: 'user'
     },
 
     ban: {
-      model: "BanEntry",
+      model: 'BanEntry',
       required: true
     },
 

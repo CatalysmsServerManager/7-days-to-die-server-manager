@@ -1,20 +1,20 @@
 class MemUpdate {
   constructor(server, config, loggingObject) {
-    this.loggingObject = loggingObject
-    this.server = server
-    this.config = config
+    this.loggingObject = loggingObject;
+    this.server = server;
+    this.config = config;
     // Bind a updateListener function with this class so we can access server and config objects inside the event listener
     this.updateListener = this._updateListener.bind(this);
   }
 
   async start() {
-    sails.log.silly(`started memUpdate for server ${this.server.name}`)
-    this.loggingObject.on('memUpdate', this.updateListener)
+    sails.log.silly(`started memUpdate for server ${this.server.name}`);
+    this.loggingObject.on('memUpdate', this.updateListener);
   }
 
   async stop() {
-    sails.log.silly(`stopped memUpdate  for server ${this.server.name}`)
-    this.loggingObject.removeListener('memUpdate', this.updateListener)
+    sails.log.silly(`stopped memUpdate  for server ${this.server.name}`);
+    this.loggingObject.removeListener('memUpdate', this.updateListener);
   }
 
   async _updateListener(memUpdate) {
@@ -26,7 +26,7 @@ class MemUpdate {
     currentCycles = parseInt(currentCycles);
 
     if (!currentCycles) {
-      currentCycles = 1
+      currentCycles = 1;
     }
     sails.log.debug(`HOOK - historicalInfo - checking if we need to delete data - ${currentCycles}/${sails.config.custom.trackingCyclesBeforeDelete} cycles`);
     if (currentCycles >= sails.config.custom.trackingCyclesBeforeDelete) {
@@ -35,7 +35,7 @@ class MemUpdate {
   }
 
   get type() {
-    return 'memUpdate'
+    return 'memUpdate';
   }
 }
 
@@ -62,12 +62,12 @@ async function saveInfoToDatabase(server, memUpdate) {
   }
 }
 
-async function clearOldInfo(server, config) {
+async function clearOldInfo(server) {
   try {
     let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({
       serverId: server.id
     });
-    let hoursToKeepData = sails.config.custom.donorConfig[donatorRole].memUpdateKeepDataHours
+    let hoursToKeepData = sails.config.custom.donorConfig[donatorRole].memUpdateKeepDataHours;
     let milisecondsToKeepData = hoursToKeepData * 3600000;
     let dateNow = Date.now();
     let borderDate = new Date(dateNow.valueOf() - milisecondsToKeepData);
@@ -88,4 +88,4 @@ async function clearOldInfo(server, config) {
 
 }
 
-module.exports = MemUpdate
+module.exports = MemUpdate;

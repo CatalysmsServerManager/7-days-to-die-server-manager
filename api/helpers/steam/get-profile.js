@@ -61,14 +61,14 @@ module.exports = {
         steamids: inputs.steamId
       },
       json: true
-    }
+    };
 
     rp(requestOptions)
       .then(function (data) {
-        return exits.success(data.response.players)
+        return exits.success(data.response.players);
       })
       .catch(function (err) {
-        return exits.error(err)
+        return exits.error(err);
       });
 
   }

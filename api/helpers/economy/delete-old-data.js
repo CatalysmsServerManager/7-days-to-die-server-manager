@@ -27,13 +27,13 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     let actionsCompleted = await sails.helpers.redis.get(`server:${inputs.serverId}:economyActionsCompleted`);
-    sails.log.verbose(`Server ${inputs.serverId} has completed ${actionsCompleted} economy actions - checking if these need to be deleted.`)
+    sails.log.verbose(`Server ${inputs.serverId} has completed ${actionsCompleted} economy actions - checking if these need to be deleted.`);
     if (actionsCompleted && actionsCompleted > sails.config.custom.economyActionsBeforeDelete) {
       await sails.helpers.redis.set(`server:${inputs.serverId}:economyActionsCompleted`, 1);
       let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({
         serverId: inputs.serverId
       });
-      let hoursToKeepData = sails.config.custom.donorConfig[donatorRole].economyKeepDataHours
+      let hoursToKeepData = sails.config.custom.donorConfig[donatorRole].economyKeepDataHours;
       let milisecondsToKeepData = hoursToKeepData * 3600000;
       let dateNow = Date.now();
       let borderDate = new Date(dateNow.valueOf() - milisecondsToKeepData);
@@ -44,10 +44,10 @@ module.exports = {
         },
         type: 'economy',
         server: inputs.serverId
-      }).fetch()
+      }).fetch();
       sails.log.debug(`Deleted ${deletedRecords.length} records for server ${inputs.serverId}`);
     }
-    return exits.success()
+    return exits.success();
 
   }
 };

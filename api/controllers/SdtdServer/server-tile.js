@@ -1,5 +1,5 @@
 const request = require('request');
-const sevenDaysAPI = require("7daystodie-api-wrapper");
+const sevenDaysAPI = require('7daystodie-api-wrapper');
 
 
 module.exports = {
@@ -57,7 +57,7 @@ module.exports = {
     try {
       request({ url: url, headers: reqHeaders }).pipe(this.res);
     } catch (error) {
-      sails.log.error(`Error getting server-tile for ${url}`, error)
+      sails.log.error(`Error getting server-tile for ${url}`, error);
 
       return exits.unknownError();
     }

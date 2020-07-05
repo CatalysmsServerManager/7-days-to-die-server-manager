@@ -4,33 +4,33 @@
 async function getPlayersDataTable(req, res) {
   const whereObj = {
     server: req.body.serverId
-  }
-  const totalPlayers = await Player.count(whereObj)
+  };
+  const totalPlayers = await Player.count(whereObj);
 
   const queryObj = {
     where: whereObj,
     select: req.body.columns.map(c => c.data),
     skip: parseInt(req.body.start),
     limit: parseInt(req.body.length),
-  }
+  };
 
   if (!_.isEmpty(req.body.search.value)) {
     whereObj.or = [{
-        name: {
-          contains: req.body.search.value
-        }
-      },
-      {
-        steamId: {
-          contains: req.body.search.value
-        }
-      },
-      {
-        ip: {
-          contains: req.body.search.value
-        }
+      name: {
+        contains: req.body.search.value
       }
-    ]
+    },
+    {
+      steamId: {
+        contains: req.body.search.value
+      }
+    },
+    {
+      ip: {
+        contains: req.body.search.value
+      }
+    }
+    ];
 
 
   }

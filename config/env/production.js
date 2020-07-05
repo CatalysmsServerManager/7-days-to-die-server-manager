@@ -23,7 +23,7 @@ customLogger = require('../customLog').customLogger;
 
 
 let useRedis = false;
-if (process.env.REDISSTRING !== "") {
+if (process.env.REDISSTRING !== '') {
   useRedis = true;
 }
 

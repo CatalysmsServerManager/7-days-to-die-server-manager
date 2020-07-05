@@ -1,14 +1,14 @@
 module.exports = {
-  friendlyName: "Set playtimeEarner amount",
+  friendlyName: 'Set playtimeEarner amount',
 
   inputs: {
     serverId: {
-      type: "number",
+      type: 'number',
       required: true
     },
 
     amount: {
-      type: "number",
+      type: 'number',
       required: true,
       min: 1
     }
@@ -22,10 +22,10 @@ module.exports = {
         { server: inputs.serverId },
         { playtimeEarnerAmount: inputs.amount }
       );
-      await sails.hooks.economy.reload(inputs.serverId, "playtimeEarner");
+      await sails.hooks.economy.reload(inputs.serverId, 'playtimeEarner');
       await HistoricalInfo.create({
-        type: "economy",
-        economyAction: "config",
+        type: 'economy',
+        economyAction: 'config',
         server: inputs.serverId,
         message: `set playtime earner amount to ${inputs.amount}`
       });

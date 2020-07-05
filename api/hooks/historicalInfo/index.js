@@ -1,4 +1,3 @@
-var sevenDays = require('machinepack-7daystodiewebapi');
 let MemUpdate = require('./objects/memUpdate');
 
 module.exports = function historicalInfo(sails) {
@@ -30,7 +29,7 @@ module.exports = function historicalInfo(sails) {
           break;
 
         default:
-          throw new Error('Unknown updateObject type')
+          throw new Error('Unknown updateObject type');
           break;
       }
     },
@@ -42,7 +41,7 @@ module.exports = function historicalInfo(sails) {
           break;
 
         default:
-          throw new Error('Unknown updateObject type')
+          throw new Error('Unknown updateObject type');
           break;
       }
     },
@@ -50,11 +49,11 @@ module.exports = function historicalInfo(sails) {
     getStatus: function (server, type) {
       switch (type) {
         case 'memUpdate':
-          return memUpdateMap.has(String(server.id ? server.id : server))
+          return memUpdateMap.has(String(server.id ? server.id : server));
           break;
 
         default:
-          throw new Error('Unknown updateObject type')
+          throw new Error('Unknown updateObject type');
           break;
       }
     }
@@ -70,10 +69,10 @@ module.exports = function historicalInfo(sails) {
       let memUpdateObject = new MemUpdate(server, config, loggingObject);
       await memUpdateObject.start();
       setMap(server, memUpdateObject);
-      return true
+      return true;
     } catch (error) {
-      sails.log.error(`HOOK - historicalInfo - Error starting memUpdate ${error}`)
-      return false
+      sails.log.error(`HOOK - historicalInfo - Error starting memUpdate ${error}`);
+      return false;
     }
   }
 
@@ -83,8 +82,8 @@ module.exports = function historicalInfo(sails) {
       memUpdateObject.stop();
       deleteMap(serverId, memUpdateObject);
     } catch (error) {
-      sails.log.error(`HOOK - historicalInfo - Error stopping memUpdate ${error}`)
-      return false
+      sails.log.error(`HOOK - historicalInfo - Error stopping memUpdate ${error}`);
+      return false;
     }
   }
 
@@ -95,11 +94,11 @@ module.exports = function historicalInfo(sails) {
   function getMap(server, type) {
     switch (type) {
       case 'memUpdate':
-        return memUpdateMap.get(String(server.id ? server.id : server), type)
+        return memUpdateMap.get(String(server.id ? server.id : server), type);
         break;
 
       default:
-        throw new Error('Unknown updateObject type')
+        throw new Error('Unknown updateObject type');
         break;
     }
   }
@@ -111,7 +110,7 @@ module.exports = function historicalInfo(sails) {
         break;
 
       default:
-        throw new Error('Must set a known type in updateObject')
+        throw new Error('Must set a known type in updateObject');
         break;
     }
   }
@@ -123,7 +122,7 @@ module.exports = function historicalInfo(sails) {
         break;
 
       default:
-        throw new Error('Must set a known type in updateObject')
+        throw new Error('Must set a known type in updateObject');
         break;
     }
   }

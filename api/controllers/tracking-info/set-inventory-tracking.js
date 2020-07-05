@@ -1,7 +1,3 @@
-const sevenDays = require('machinepack-7daystodiewebapi');
-
-let detectedVersion
-
 module.exports = {
 
 
@@ -17,7 +13,7 @@ module.exports = {
       type: 'number',
       custom: async (valueToCheck) => {
         let foundServer = await SdtdServer.findOne(valueToCheck);
-        return foundServer
+        return foundServer;
       },
     },
 
@@ -47,7 +43,7 @@ module.exports = {
       }
       const version = await sails.helpers.sdtd.checkModVersion('Mod Allocs MapRendering and Webinterface', inputs.serverId);
       if (version < 26) {
-        return exits.notRunningPatch(`You must run Allocs webmap version greater than (or equal) 26!`)
+        return exits.notRunningPatch(`You must run Allocs webmap version greater than (or equal) 26!`);
       }
     }
     await SdtdConfig.update({

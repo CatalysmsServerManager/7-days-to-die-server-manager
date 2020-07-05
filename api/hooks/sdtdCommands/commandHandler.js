@@ -78,11 +78,11 @@ class CommandHandler {
 
         const splitString = trimmedMsg.split(' ');
         const commandName = splitString[0];
-        const splitArgs = parseArgs(trimmedMsg)
+        const splitArgs = parseArgs(trimmedMsg);
         const args = splitArgs.splice(1, splitArgs.length);
 
-        if (chatMessage.playerName === "Server") {
-          return
+        if (chatMessage.playerName === 'Server') {
+          return;
         }
         let player;
 
@@ -106,8 +106,8 @@ class CommandHandler {
         let playerInfo = await sails.helpers.sdtd.loadPlayerData.with({
           serverId: this.config.server,
           steamId: player[0].steamId
-        })
-        player = playerInfo[0]
+        });
+        player = playerInfo[0];
         let server = await SdtdServer.findOne(player.server).populate('players');
         server.config = await SdtdConfig.findOne({
           server: server.id
@@ -122,16 +122,16 @@ class CommandHandler {
           let commandIsEnabled = await commandToRun.isEnabled(chatMessage, player, server, args);
 
           if (!commandIsEnabled) {
-            return chatMessage.reply(`commandDisabled`)
+            return chatMessage.reply(`commandDisabled`);
           }
 
           try {
             await commandToRun.run(chatMessage, player, server, args, commandToRun.options);
             let dateEnded = Date.now();
-            sails.log.info(`HOOK SdtdCommands - command ran by player ${player.name} on server ${server.name}. Took ${dateEnded - dateStarted} ms - ${chatMessage.messageText}`)
+            sails.log.info(`HOOK SdtdCommands - command ran by player ${player.name} on server ${server.name}. Took ${dateEnded - dateStarted} ms - ${chatMessage.messageText}`);
             return;
           } catch (error) {
-            sails.log.error(error)
+            sails.log.error(error);
             chatMessage.reply(`error`);
             return;
           }
@@ -148,7 +148,7 @@ class CommandHandler {
   async findCommandToExecute(commandName) {
     if (this.commands.has(commandName)) {
       let commandToRun = this.commands.get(commandName);
-      return commandToRun
+      return commandToRun;
     }
 
     let aliasFound = false;
@@ -156,12 +156,12 @@ class CommandHandler {
     this.commands.forEach((command) => {
       let idx = _.findIndex(command.aliases, (alias => commandName === alias));
       if (idx !== -1) {
-        aliasFound = command
+        aliasFound = command;
       }
-    })
+    });
 
     if (aliasFound) {
-      return aliasFound
+      return aliasFound;
     }
 
     let customCommands = await sails.models.customcommand.find({
@@ -170,17 +170,17 @@ class CommandHandler {
       name: commandName
     }).populate('arguments');
 
-    let customCommandFound = false
+    let customCommandFound = false;
 
     customCommands.forEach(command => {
       customCommandFound = new CustomCommand(this.serverId, command);
-    })
+    });
 
     if (customCommandFound) {
-      return customCommandFound
+      return customCommandFound;
     }
 
-    return undefined
+    return undefined;
   }
 }
 
@@ -200,9 +200,9 @@ async function sendReplyToPlayer(server, player, type, data) {
       server: server.id
     });
     if (response.length === 0) {
-      return replyObj.default
+      return replyObj.default;
     }
-    return response[0].reply
+    return response[0].reply;
   }
 
   return new Promise(async (resolve, reject) => {
@@ -210,17 +210,17 @@ async function sendReplyToPlayer(server, player, type, data) {
     const replyObj = getReplyObj(type);
 
     if (!replyObj) {
-      return sendMsg(type)
+      return sendMsg(type);
     } else {
 
       let message = await getMessage(replyObj);
       if (!data) {
-        data = {}
+        data = {};
       }
       data.server = server;
       data.player = player;
       message = await sails.helpers.sdtd.fillCustomVariables(message, data);
-      return sendMsg(message)
+      return sendMsg(message);
     }
 
 
@@ -235,14 +235,14 @@ async function sendReplyToPlayer(server, player, type, data) {
       }).exec({
         error: (error) => {
           sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
-          reject(error)
+          reject(error);
         },
         success: (result) => {
-          resolve(result)
+          resolve(result);
         }
       });
     }
 
 
-  })
+  });
 }

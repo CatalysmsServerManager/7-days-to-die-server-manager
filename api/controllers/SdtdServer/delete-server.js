@@ -1,5 +1,3 @@
-const sevenDays = require('machinepack-7daystodiewebapi');
-
 module.exports = {
 
   friendlyName: 'Delete server',
@@ -47,7 +45,7 @@ module.exports = {
 
       await CronJob.destroy({
         server: server.id
-      })
+      });
 
       await CustomCommand.destroy({
         server: server.id
@@ -55,19 +53,19 @@ module.exports = {
 
       await HistoricalInfo.destroy({
         server: server.id
-      })
+      });
 
       let ticketsToDestroy = await SdtdTicket.find({
         server: server.id
-      })
+      });
 
       await TicketComment.destroy({
         ticket: ticketsToDestroy.map(ticket => ticket.id)
-      })
+      });
 
       await SdtdTicket.destroy({
         server: server.id
-      })
+      });
 
       let playersToDestroy = await Player.find({
         server: server.id
@@ -75,11 +73,11 @@ module.exports = {
 
       await PlayerClaimItem.destroy({
         player: playersToDestroy.map(player => player.id)
-      })
+      });
 
       await PlayerTeleport.destroy({
         player: playersToDestroy.map(player => player.id)
-      })
+      });
 
       await PlayerUsedCommand.destroy({
         player: playersToDestroy.map(player => player.id)
@@ -88,7 +86,7 @@ module.exports = {
 
       await Player.destroy({
         server: server.id
-      })
+      });
 
       await ShopListing.destroy({
         server: server.id
@@ -96,7 +94,7 @@ module.exports = {
 
       await TrackingInfo.destroy({
         server: server.id
-      })
+      });
 
       await SdtdConfig.destroy({
         server: server.id
@@ -106,7 +104,7 @@ module.exports = {
       });
 
       // TODO: make this an optional flag
-/*       sevenDays.executeCommand({
+      /*       sevenDays.executeCommand({
         ip: server.ip,
         port: server.webPort,
         authName: server.authName,

@@ -28,7 +28,7 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-      try {
+    try {
 
       let discordClient = sails.hooks.discordbot.getClient();
 

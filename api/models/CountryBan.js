@@ -43,11 +43,11 @@ module.exports = {
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
 
     server: {
-      model: "SdtdServer"
+      model: 'SdtdServer'
     },
 
     player: {
-      model: "Player"
+      model: 'Player'
     }
 
   },

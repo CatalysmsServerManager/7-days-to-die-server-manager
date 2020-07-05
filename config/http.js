@@ -24,7 +24,6 @@ var SteamStrategy = require('passport-steam');
 var DiscordStrategy = require('passport-discord').Strategy;
 const Sentry = require('@sentry/node');
 
-var maxAge = 900;
 /**
  * Steam strategy config
  */
@@ -41,19 +40,19 @@ passport.use(new SteamStrategy({
     }, {
       steamId: profile._json.steamid,
       username: profile._json.personaname
-    })
-    let updatedUser = await User.update({
+    });
+    await User.update({
       id: foundUser.id
     }, {
       username: profile._json.personaname,
       avatar: profile._json.avatarfull
-    }).fetch()
+    });
     foundUser.steamProfile = profile;
     return done(null, foundUser);
   } catch (error) {
-    sails.log.warn(`Error during steam auth!`)
-    sails.log.error(error)
-    res.send(`Error during steam auth. This should never happen. Please contact someone on the dev server`)
+    sails.log.warn(`Error during steam auth!`);
+    sails.log.error(error);
+    res.send(`Error during steam auth. This should never happen. Please contact someone on the dev server`);
   }
 
 }));
@@ -70,7 +69,7 @@ if (process.env.DISCORDCLIENTID && process.env.DISCORDCLIENTSECRET && process.en
     try {
       return cb(null, profile);
     } catch (error) {
-      sails.log.error(`Discord auth error! ${error}`)
+      sails.log.error(`Discord auth error! ${error}`);
     }
   }));
 
@@ -93,20 +92,20 @@ passport.deserializeUser(function (steamId, done) {
   });
 });
 
-morgan.token('userId', function (req, res) {
+morgan.token('userId', function (req) {
   if (req.session) {
-    return req.session.userId
+    return req.session.userId;
   } else {
-    return "Not logged in"
+    return 'Not logged in';
   }
-})
+});
 
 
 const morganLogger = morgan(':remote-addr - :userId - [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"', {
-  "stream": customLogger.stream,
-  skip: (req, res) => {
+  'stream': customLogger.stream,
+  skip: (req) => {
     if (process.env.IS_TEST) { return true; }
-    return !req.originalUrl.includes('api')
+    return !req.originalUrl.includes('api');
   }
 });
 

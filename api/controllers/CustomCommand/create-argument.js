@@ -1,81 +1,81 @@
 module.exports = {
 
-    friendlyName: 'Create argument',
+  friendlyName: 'Create argument',
 
-    description: '',
+  description: '',
 
-    inputs: {
-        commandId: {
-            type: 'number',
-            required: true
-        },
-
-        key: {
-            type: 'string',
-            required: true
-        },
-
-        type: {
-            type: 'string',
-            isIn: ['number', 'text', 'setValues'],
-            required: true
-        },
-
-        required: {
-            type: 'boolean'
-        },
-
-        default: {
-            type: 'string'
-        },
-
+  inputs: {
+    commandId: {
+      type: 'number',
+      required: true
     },
 
-    exits: {
-        success: {},
-        badCommand: {
-            responseType: 'badRequest'
-        },
-
-        badName: {
-            responseType: 'badRequest'
-        },
-
+    key: {
+      type: 'string',
+      required: true
     },
 
+    type: {
+      type: 'string',
+      isIn: ['number', 'text', 'setValues'],
+      required: true
+    },
 
-    fn: async function (inputs, exits) {
+    required: {
+      type: 'boolean'
+    },
 
-        inputs.key = _.toLower(inputs.key);
+    default: {
+      type: 'string'
+    },
 
-        let existingArg = await CustomCommandArgument.find({
-            key: inputs.key,
-            command: inputs.commandId
-        });
+  },
 
-        if (existingArg.length > 0) {
-            return exits.badName('An argument with this key already belongs to this command.')
-        }
+  exits: {
+    success: {},
+    badCommand: {
+      responseType: 'badRequest'
+    },
 
-        if (inputs.key === "steamid" || inputs.key === "entityid") {
-            return exits.badCommand('You cannot use reserved names for argument names.')
-        }
+    badName: {
+      responseType: 'badRequest'
+    },
 
-        if (!inputs.required && _.isUndefined(inputs.default)) {
-            return exits.badCommand('If an argument is not required, you must provide a default value.')
-        }
+  },
 
-        let createdArgument = await CustomCommandArgument.create({
-            key: inputs.key,
-            type: inputs.type,
-            required: inputs.required,
-            defaultValue: inputs.default,
-            command: inputs.commandId
-        }).fetch();
 
-        return exits.success(createdArgument)
+  fn: async function (inputs, exits) {
 
+    inputs.key = _.toLower(inputs.key);
+
+    let existingArg = await CustomCommandArgument.find({
+      key: inputs.key,
+      command: inputs.commandId
+    });
+
+    if (existingArg.length > 0) {
+      return exits.badName('An argument with this key already belongs to this command.');
     }
+
+    if (inputs.key === 'steamid' || inputs.key === 'entityid') {
+      return exits.badCommand('You cannot use reserved names for argument names.');
+    }
+
+    if (!inputs.required && _.isUndefined(inputs.default)) {
+      return exits.badCommand('If an argument is not required, you must provide a default value.');
+    }
+
+    let createdArgument = await CustomCommandArgument.create({
+      key: inputs.key,
+      type: inputs.type,
+      required: inputs.required,
+      defaultValue: inputs.default,
+      command: inputs.commandId
+    }).fetch();
+
+    return exits.success(createdArgument);
+
+  }
 };
 
 

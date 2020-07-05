@@ -1,16 +1,15 @@
 let SdtdCommand = require('../command.js');
-const sevenDays = require('machinepack-7daystodiewebapi');
 
 class help extends SdtdCommand {
   constructor(serverId) {
     super(serverId, {
       name: 'help',
-      description: "Get some help"
+      description: 'Get some help'
     });
     this.serverId = serverId;
   }
 
-  async isEnabled(chatMessage, player, server, args) {
+  async isEnabled() {
     return true;
   }
 
@@ -37,7 +36,7 @@ class help extends SdtdCommand {
 
         await chatMessage.reply(`${commandToGetHelp.name} - ${commandToGetHelp.description}`);
         await chatMessage.reply(`${commandToGetHelp.extendedDescription}`);
-        await chatMessage.reply(`Aliases: ${commandToGetHelp.aliases}`)
+        await chatMessage.reply(`Aliases: ${commandToGetHelp.aliases}`);
       } else {
         await chatMessage.reply(`Unknown command! Use help without argument to see a full list`);
       }
@@ -54,14 +53,14 @@ class help extends SdtdCommand {
         enabled: true,
       }
     });
-    await chatMessage.reply("Enabled commands:");
+    await chatMessage.reply('Enabled commands:');
 
     for (const command of commandsArr) {
 
       let commandEnabled = await command.isEnabled(chatMessage, player, server, args);
 
       if (commandEnabled) {
-        await chatMessage.reply(`${command.name} - ${command.description}`)
+        await chatMessage.reply(`${command.name} - ${command.description}`);
       }
     }
 
@@ -70,7 +69,7 @@ class help extends SdtdCommand {
       await chatMessage.reply(`${command.name} - ${command.description}`);
     }
 
-    await chatMessage.reply(`For more info see: https://docs.csmm.app`)
+    await chatMessage.reply(`For more info see: https://docs.csmm.app`);
 
     return;
   }

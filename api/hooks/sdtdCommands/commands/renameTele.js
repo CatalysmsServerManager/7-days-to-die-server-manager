@@ -1,20 +1,19 @@
 let SdtdCommand = require('../command.js');
-const sevenDays = require('machinepack-7daystodiewebapi');
 var validator = require('validator');
 
 class renameTele extends SdtdCommand {
   constructor(serverId) {
     super(serverId, {
       name: 'renametele',
-      description: "Rename a teleport location",
-      extendedDescription: "Arguments: oldname newname",
-      aliases: ["telerename"]
+      description: 'Rename a teleport location',
+      extendedDescription: 'Arguments: oldname newname',
+      aliases: ['telerename']
     });
     this.serverId = serverId;
   }
 
-  async isEnabled(chatMessage, player, server, args) {
-    return server.config.enabledPlayerTeleports
+  async isEnabled(chatMessage, player, server) {
+    return server.config.enabledPlayerTeleports;
   }
 
   async run(chatMessage, player, server, args) {
@@ -23,38 +22,38 @@ class renameTele extends SdtdCommand {
       player: player.id
     });
 
-    if (args.length == 0) {
+    if (args.length === 0) {
       return chatMessage.reply('renameTeleMissingArgument');
     }
 
     if (args.length > 2) {
-      return chatMessage.reply(`renameTeleTooManyArguments`)
+      return chatMessage.reply(`renameTeleTooManyArguments`);
     }
 
-    let teleportFound = false
+    let teleportFound = false;
     playerTeleports.forEach(teleport => {
-      if (teleport.name == args[0]) {
-        teleportFound = teleport
+      if (teleport.name === args[0]) {
+        teleportFound = teleport;
       }
-    })
+    });
 
     if (!teleportFound) {
-      return chatMessage.reply(`NoTeleportFound`)
+      return chatMessage.reply(`NoTeleportFound`);
     }
 
-    let nameAlreadyInUse = false
+    let nameAlreadyInUse = false;
     playerTeleports.forEach(teleport => {
-      if (teleport.name == args[1]) {
-        nameAlreadyInUse = true
+      if (teleport.name === args[1]) {
+        nameAlreadyInUse = true;
       }
-    })
+    });
 
     if (nameAlreadyInUse) {
-      return chatMessage.reply(`renameTeleNameInUse`)
+      return chatMessage.reply(`renameTeleNameInUse`);
     }
 
     if (!validator.isAlphanumeric(args[1])) {
-      return chatMessage.reply(`OnlyAlfaNumeric`)
+      return chatMessage.reply(`OnlyAlfaNumeric`);
     }
 
     await PlayerTeleport.update({
@@ -66,7 +65,7 @@ class renameTele extends SdtdCommand {
     return chatMessage.reply(`renameTeleSuccess`, {
       oldName: teleportFound.name,
       newName: args[1]
-    })
+    });
   }
 }
 

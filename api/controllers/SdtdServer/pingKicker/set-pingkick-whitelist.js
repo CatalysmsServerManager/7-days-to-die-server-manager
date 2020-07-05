@@ -37,7 +37,7 @@ module.exports = {
     await SdtdConfig.update({
       server: inputs.serverId
     }, {
-        pingWhitelist: JSON.stringify(inputs.whitelist)
+      pingWhitelist: JSON.stringify(inputs.whitelist)
     });
 
     sails.log.info(`Setting whitelist of pingKicker to ${inputs.whitelist} for server ${inputs.serverId}`);
