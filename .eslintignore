@@ -22,5 +22,23 @@
 #
 ################################################
 
+!.eslintrc.js
 assets/dependencies/**/*.js
 ./test/**/*.js
+node_modules
+.tmp
+*~
+*#
+.DS_STORE
+.netbeans
+nbproject
+.idea
+.node_history
+dump.rdb
+
+.env
+.nyc_output/*
+coverage
+assets/images/sdtdIcons
+db-data/
+test/output
