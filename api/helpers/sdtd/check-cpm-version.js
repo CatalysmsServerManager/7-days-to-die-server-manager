@@ -34,7 +34,7 @@ module.exports = {
     version = await sails.helpers.redis.get(`server:${inputs.serverId}:cpm-version`);
 
     if (!version || inputs.refresh) {
-      let apiResponse
+      let apiResponse;
       try {
         apiResponse = await sails.helpers.sdtd.checkModVersion('Mod CSMM Patrons', inputs.serverId);
       } catch (e) {

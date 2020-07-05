@@ -36,4 +36,4 @@ module.exports = {
       return exits.success(defaultValue);
     }
   }
-}
+};

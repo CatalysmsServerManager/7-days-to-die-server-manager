@@ -1,5 +1,5 @@
 var supertest = require('supertest');
-var expect = require("chai").expect;
+var expect = require('chai').expect;
 
 describe('POST /api/sdtdserver/commands/custom', function () {
 
@@ -8,8 +8,8 @@ describe('POST /api/sdtdserver/commands/custom', function () {
       .post('/api/sdtdserver/commands/custom')
       .send({
         serverId: sails.testServer.id,
-        commandName: "test-command",
-        commandsToExecute: "say test"
+        commandName: 'test-command',
+        commandsToExecute: 'say test'
       })
       .expect('Content-Type', /json/)
       .expect(200);
@@ -20,7 +20,7 @@ describe('POST /api/sdtdserver/commands/custom', function () {
       .post('/api/sdtdserver/commands/custom')
       .send({
         serverId: sails.testServer.id,
-        commandName: "test-command",
+        commandName: 'test-command',
       })
       .expect(400);
 
@@ -28,7 +28,7 @@ describe('POST /api/sdtdserver/commands/custom', function () {
       .post('/api/sdtdserver/commands/custom')
       .send({
         serverId: sails.testServer.id,
-        commandsToExecute: "say test"
+        commandsToExecute: 'say test'
       })
       .expect(400);
   });
@@ -38,8 +38,8 @@ describe('POST /api/sdtdserver/commands/custom', function () {
       .post('/api/sdtdserver/commands/custom')
       .send({
         serverId: sails.testServer.id,
-        commandName: "test command",
-        commandsToExecute: "say test"
+        commandName: 'test command',
+        commandsToExecute: 'say test'
       })
       .expect(400);
   });
@@ -49,17 +49,17 @@ describe('POST /api/sdtdserver/commands/custom', function () {
       .post('/api/sdtdserver/commands/custom')
       .send({
         serverId: sails.testServer.id,
-        commandName: "duplicateTest",
-        commandsToExecute: "say test"
+        commandName: 'duplicateTest',
+        commandsToExecute: 'say test'
       })
-      .expect(200)
+      .expect(200);
 
     await supertest(sails.hooks.http.app)
       .post('/api/sdtdserver/commands/custom')
       .send({
         serverId: sails.testServer.id,
-        commandName: "duplicateTest",
-        commandsToExecute: "say test"
+        commandName: 'duplicateTest',
+        commandsToExecute: 'say test'
       })
       .expect(400);
   });

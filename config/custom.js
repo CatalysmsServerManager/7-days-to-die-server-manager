@@ -28,12 +28,12 @@ module.exports.custom = {
   logCount: parseInt(process.env.CSMM_LOG_COUNT || '30'),
 
   // Discord bot config
-  botOwners: ['220554523561820160', '252369082991509514', "250381843482935308"],
+  botOwners: ['220554523561820160', '252369082991509514', '250381843482935308'],
   botToken: process.env.DISCORDBOTTOKEN,
   botEmbedLink: `${process.env.CSMM_HOSTNAME}`,
   botEmbedTitle: 'CSMM',
 
-  discordFeedbackChannel: "336823516383150080",
+  discordFeedbackChannel: '336823516383150080',
 
   adminSteamIds: (process.env.CSMM_ADMINS || '').split(',').map(str => str.trim()),
 

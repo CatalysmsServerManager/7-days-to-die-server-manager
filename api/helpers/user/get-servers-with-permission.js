@@ -43,7 +43,7 @@ module.exports = {
         }
 
       } catch (error) {
-        sails.log.error(error)
+        sails.log.error(error);
       }
     });
 
@@ -62,7 +62,7 @@ module.exports = {
       if (highestRole.length > 0) {
         highestRole = highestRole[0];
         server.role = highestRole;
-        objectToSend.push(server)
+        objectToSend.push(server);
       }
     }
 

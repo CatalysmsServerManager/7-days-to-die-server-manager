@@ -31,7 +31,7 @@ module.exports = {
     sails.log.debug(`API - User:get-user-info - Getting profile for user ${inputs.userId}`);
 
     try {
-      let user = await User.findOne(inputs.userId)
+      let user = await User.findOne(inputs.userId);
       return exits.success(user);
 
     } catch (error) {

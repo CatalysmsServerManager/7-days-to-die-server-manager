@@ -1,7 +1,7 @@
 var sevenDays = require('machinepack-7daystodiewebapi');
 var moment = require('moment');
 
-const countryBanRegex = new RegExp("^(CSMM: Players from your country )(\(.*\))( are not allowed to connect to this server)")
+const countryBanRegex = new RegExp('^(CSMM: Players from your country )(\(.*\))( are not allowed to connect to this server)');
 
 module.exports = {
 
@@ -49,12 +49,12 @@ module.exports = {
       success: async (response) => {
 
         if (!response) {
-          return exits.error()
+          return exits.error();
         }
 
         let result = response.result;
 
-        let banRows = result.split("\n");
+        let banRows = result.split('\n');
         banRows = _.drop(banRows, 2);
         banRows = _.dropRight(banRows, 1);
 
@@ -67,7 +67,7 @@ module.exports = {
           let splitBan = _.split(ban, ' - ');
           let bannedUntil = moment(splitBan[0]);
           let steamId = splitBan[1];
-          let banReason = _.join(_.drop(splitBan, 2), " ");
+          let banReason = _.join(_.drop(splitBan, 2), ' ');
 
           // Ignore bans made by the country ban module
           if (!countryBanRegex.test(banReason)) {
@@ -98,8 +98,8 @@ module.exports = {
         currentBansInDB = currentBansInDB.map(value => value.id);
 
         let bansInDBnotOnServer = currentBansInDB.filter(banEntry => {
-          return updatedServerBansInDB.indexOf(banEntry) === -1
-        })
+          return updatedServerBansInDB.indexOf(banEntry) === -1;
+        });
 
         if (bansInDBnotOnServer.length > 0) {
           let unBannedRecords = await BanEntry.update({
@@ -107,7 +107,7 @@ module.exports = {
           }, {
             unbanned: true
           }).fetch();
-          sails.log.debug(`Detected unban of ${unBannedRecords.length} player${unBannedRecords.length === 1 ? "" : "s"} on server ${sdtdServer.name}`);
+          sails.log.debug(`Detected unban of ${unBannedRecords.length} player${unBannedRecords.length === 1 ? '' : 's'} on server ${sdtdServer.name}`);
         }
 
 
@@ -118,8 +118,8 @@ module.exports = {
       },
       error: error => {
         sails.log.verbose(`Error loading bans for server ${sdtdServer.name} because ${error} - Skipping...`);
-        return exits.success([])
+        return exits.success([]);
       }
-    })
+    });
   }
-}
+};

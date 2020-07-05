@@ -1,12 +1,12 @@
 var supertest = require('supertest');
-var expect = require("chai").expect;
+var expect = require('chai').expect;
 let testCommand;
 
 describe('POST /api/sdtdserver/commands/custom/name', function () {
   beforeEach(async function () {
     testCommand = await CustomCommand.create({
       server: sails.testServer.id,
-      name: "update-test",
+      name: 'update-test',
       commandsToExecute: 'say test'
     }).fetch();
   });
@@ -23,7 +23,7 @@ describe('POST /api/sdtdserver/commands/custom/name', function () {
       .send({
         serverId: sails.testServer.id,
         commandId: testCommand.id,
-        newName: "newName",
+        newName: 'newName',
       })
       .expect(200, done);
   });
@@ -33,7 +33,7 @@ describe('POST /api/sdtdserver/commands/custom/name', function () {
       .post('/api/sdtdserver/commands/custom/name')
       .send({
         serverId: sails.testServer.id,
-        newName: "newName",
+        newName: 'newName',
       })
       .expect(400, done);
   });
@@ -42,7 +42,7 @@ describe('POST /api/sdtdserver/commands/custom/name', function () {
     supertest(sails.hooks.http.app)
       .post('/api/sdtdserver/commands/custom/name')
       .send({
-        newName: "newName",
+        newName: 'newName',
         commandId: testCommand.id,
       })
       .expect(400, done);
@@ -64,7 +64,7 @@ describe('POST /api/sdtdserver/commands/custom/commandsToExecute', function () {
   beforeEach(async function () {
     testCommand = await CustomCommand.create({
       server: sails.testServer.id,
-      name: "update-test",
+      name: 'update-test',
       commandsToExecute: 'say test'
     }).fetch();
   });
@@ -81,7 +81,7 @@ describe('POST /api/sdtdserver/commands/custom/commandsToExecute', function () {
       .send({
         serverId: sails.testServer.id,
         commandId: testCommand.id,
-        newCommandsToExecute: "newCommandsToExecute",
+        newCommandsToExecute: 'newCommandsToExecute',
       })
       .expect(200, done);
   });
@@ -91,7 +91,7 @@ describe('POST /api/sdtdserver/commands/custom/commandsToExecute', function () {
       .post('/api/sdtdserver/commands/custom/commandsToExecute')
       .send({
         serverId: sails.testServer.id,
-        newCommandsToExecute: "newCommandsToExecute",
+        newCommandsToExecute: 'newCommandsToExecute',
       })
       .expect(400, done);
   });
@@ -113,7 +113,7 @@ describe('POST /api/sdtdserver/commands/custom/cost', function () {
   beforeEach(async function () {
     testCommand = await CustomCommand.create({
       server: sails.testServer.id,
-      name: "update-test",
+      name: 'update-test',
       commandsToExecute: 'say test'
     }).fetch();
   });
@@ -157,7 +157,7 @@ describe('POST /api/sdtdserver/commands/custom/cost', function () {
       .post('/api/sdtdserver/commands/custom/cost')
       .send({
         commandId: testCommand.id,
-        newCost: "newCost",
+        newCost: 'newCost',
       })
       .expect(400, done);
   });
@@ -167,7 +167,7 @@ describe('POST /api/sdtdserver/commands/custom/enabled', function () {
   beforeEach(async function () {
     testCommand = await CustomCommand.create({
       server: sails.testServer.id,
-      name: "update-test",
+      name: 'update-test',
       commandsToExecute: 'say test'
     }).fetch();
   });
@@ -211,7 +211,7 @@ describe('POST /api/sdtdserver/commands/custom/enabled', function () {
       .post('/api/sdtdserver/commands/custom/enabled')
       .send({
         commandId: testCommand.id,
-        newEnabled: "newEnabled",
+        newEnabled: 'newEnabled',
       })
       .expect(400, done);
   });
@@ -221,7 +221,7 @@ describe('POST /api/sdtdserver/commands/custom/delay', function () {
   beforeEach(async function () {
     testCommand = await CustomCommand.create({
       server: sails.testServer.id,
-      name: "update-test",
+      name: 'update-test',
       commandsToExecute: 'say test'
     }).fetch();
   });
@@ -265,7 +265,7 @@ describe('POST /api/sdtdserver/commands/custom/delay', function () {
       .post('/api/sdtdserver/commands/custom/delay')
       .send({
         commandId: testCommand.id,
-        newDelay: "newDelay",
+        newDelay: 'newDelay',
       })
       .expect(400, done);
   });
@@ -275,7 +275,7 @@ describe('POST /api/sdtdserver/commands/custom/level', function () {
   beforeEach(async function () {
     testCommand = await CustomCommand.create({
       server: sails.testServer.id,
-      name: "update-test",
+      name: 'update-test',
       commandsToExecute: 'say test'
     }).fetch();
   });
@@ -319,7 +319,7 @@ describe('POST /api/sdtdserver/commands/custom/level', function () {
       .post('/api/sdtdserver/commands/custom/level')
       .send({
         commandId: testCommand.id,
-        newLevel: "newLevel",
+        newLevel: 'newLevel',
       })
       .expect(400, done);
   });
@@ -329,7 +329,7 @@ describe('POST /api/sdtdserver/commands/custom/output', function () {
   beforeEach(async function () {
     testCommand = await CustomCommand.create({
       server: sails.testServer.id,
-      name: "update-test",
+      name: 'update-test',
       commandsToExecute: 'say test'
     }).fetch();
   });
@@ -373,7 +373,7 @@ describe('POST /api/sdtdserver/commands/custom/output', function () {
       .post('/api/sdtdserver/commands/custom/output')
       .send({
         commandId: testCommand.id,
-        newOutput: "newOutput",
+        newOutput: 'newOutput',
       })
       .expect(400, done);
   });
@@ -383,7 +383,7 @@ describe('POST /api/sdtdserver/commands/custom/timeout', function () {
   beforeEach(async function () {
     testCommand = await CustomCommand.create({
       server: sails.testServer.id,
-      name: "update-test",
+      name: 'update-test',
       commandsToExecute: 'say test'
     }).fetch();
   });
@@ -427,7 +427,7 @@ describe('POST /api/sdtdserver/commands/custom/timeout', function () {
       .post('/api/sdtdserver/commands/custom/timeout')
       .send({
         commandId: testCommand.id,
-        newTimeout: "newTimeout",
+        newTimeout: 'newTimeout',
       })
       .expect(400, done);
   });
@@ -437,7 +437,7 @@ describe('POST /api/sdtdserver/commands/custom/description', function () {
   beforeEach(async function () {
     testCommand = await CustomCommand.create({
       server: sails.testServer.id,
-      name: "update-test",
+      name: 'update-test',
       commandsToExecute: 'say test'
     }).fetch();
   });
@@ -454,7 +454,7 @@ describe('POST /api/sdtdserver/commands/custom/description', function () {
       .send({
         serverId: sails.testServer.id,
         commandId: testCommand.id,
-        description: "description",
+        description: 'description',
       })
       .expect(200, done);
   });
@@ -464,7 +464,7 @@ describe('POST /api/sdtdserver/commands/custom/description', function () {
       .post('/api/sdtdserver/commands/custom/description')
       .send({
         serverId: sails.testServer.id,
-        description: "description",
+        description: 'description',
       })
       .expect(400, done);
   });

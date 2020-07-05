@@ -111,7 +111,7 @@ module.exports = function definePlayerTrackingHook(sails) {
         let dateEnded = new Date();
         sails.log.debug(`Player tracking - Performed tracking for server ${server.name} - ${playerRecords.length} players online - ${currentCycles}/${sails.config.custom.trackingCyclesBeforeDelete} tracking cycles - took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`);
 
-      }, 30000 + Math.floor(Math.random() * 1000) - 500)
+      }, 30000 + Math.floor(Math.random() * 1000) - 500);
 
 
 

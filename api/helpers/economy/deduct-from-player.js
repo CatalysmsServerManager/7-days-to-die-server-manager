@@ -49,7 +49,7 @@ module.exports = {
       let playerRole = await sails.helpers.sdtd.getPlayerRole(inputs.playerId);
 
       if (inputs.useMultiplier) {
-        inputs.amountToDeduct = inputs.amountToDeduct * playerRole.economyDeductMultiplier
+        inputs.amountToDeduct = inputs.amountToDeduct * playerRole.economyDeductMultiplier;
       }
 
       let newBalance = currentBalance - inputs.amountToDeduct;
@@ -69,7 +69,7 @@ module.exports = {
         player: inputs.playerId,
         amount: inputs.amountToDeduct,
         economyAction: 'deduct'
-      })
+      });
 
       await sails.helpers.redis.incr(`server:${playerToDeductFrom.server}:economyActionsCompleted`);
       await sails.helpers.economy.deleteOldData(playerToDeductFrom.server);

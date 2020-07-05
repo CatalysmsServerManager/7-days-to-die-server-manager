@@ -7,7 +7,7 @@ class CustomCommand extends SdtdCommand {
       name: 'customCommand',
     });
     this.serverId = serverId;
-    this.options = command
+    this.options = command;
   }
 
   async isEnabled(chatMessage, player, server, args) {
@@ -19,7 +19,7 @@ class CustomCommand extends SdtdCommand {
     let playerRole = await sails.helpers.sdtd.getPlayerRole(player.id);
 
     if (playerRole.level > this.options.level) {
-      return chatMessage.reply(`You do not have the correct role to execute this command. Ask your server admin for elevated permissions.`)
+      return chatMessage.reply(`You do not have the correct role to execute this command. Ask your server admin for elevated permissions.`);
     }
 
     for (const argument of options.arguments) {
@@ -27,24 +27,24 @@ class CustomCommand extends SdtdCommand {
       let validArg = validateArg(argument, valueToFill);
 
       if (!validArg) {
-        return chatMessage.reply(`You provided an invalid value! '${valueToFill}' is not valid for ${argument.key}`)
+        return chatMessage.reply(`You provided an invalid value! '${valueToFill}' is not valid for ${argument.key}`);
       }
 
 
 
       if (_.isUndefined(valueToFill) && !_.isUndefined(argument.defaultValue)) {
-        valueToFill = argument.defaultValue
+        valueToFill = argument.defaultValue;
       }
 
 
-      options.commandsToExecute = replaceAllInString(options.commandsToExecute, `\${${argument.key}}`, valueToFill)
-      argumentIterator++
+      options.commandsToExecute = replaceAllInString(options.commandsToExecute, `\${${argument.key}}`, valueToFill);
+      argumentIterator++;
     }
 
     // Check if the player has exceeded the configured timeout
     if (this.options.timeout) {
       let dateNow = Date.now();
-      let timeoutInMs = this.options.timeout * 1000
+      let timeoutInMs = this.options.timeout * 1000;
       let borderDate = new Date(dateNow.valueOf() - timeoutInMs);
       let foundUses = await PlayerUsedCommand.find({
         command: options.id,
@@ -55,28 +55,28 @@ class CustomCommand extends SdtdCommand {
       });
 
       if (foundUses.length > 0) {
-        return chatMessage.reply(`You need to wait longer before executing this command.`)
+        return chatMessage.reply(`You need to wait longer before executing this command.`);
       }
     }
 
     // Deduct money if configured
     if (server.config.economyEnabled && this.options.costToExecute) {
-      let notEnoughMoney = false
+      let notEnoughMoney = false;
       let result = await sails.helpers.economy.deductFromPlayer.with({
         playerId: player.id,
         amountToDeduct: this.options.costToExecute,
         message: `COMMAND - ${this.options.name}`
       }).tolerate('notEnoughCurrency', totalNeeded => {
         notEnoughMoney = true;
-      })
+      });
       if (notEnoughMoney) {
-        return chatMessage.reply(`You do not have enough money to do that! ${this.options.name} costs ${this.options.costToExecute} ${server.config.currencyName}`)
+        return chatMessage.reply(`You do not have enough money to do that! ${this.options.name} costs ${this.options.costToExecute} ${server.config.currencyName}`);
       }
     }
 
     // If delayed, let the player know the command is about to be executed
     if (this.options.delay) {
-      chatMessage.reply(`The command will be executed in ${this.options.delay} seconds`)
+      chatMessage.reply(`The command will be executed in ${this.options.delay} seconds`);
     }
 
     // Create a record of the player executing the command
@@ -86,10 +86,10 @@ class CustomCommand extends SdtdCommand {
     });
 
 
-    let delayInMs = this.options.delay * 1000
+    let delayInMs = this.options.delay * 1000;
     setTimeout(function () {
-      runCustomCommand(chatMessage, player, server, args, options)
-    }, delayInMs)
+      runCustomCommand(chatMessage, player, server, args, options);
+    }, delayInMs);
 
     async function runCustomCommand(chatMessage, player, server, args, options) {
       try {
@@ -112,8 +112,8 @@ class CustomCommand extends SdtdCommand {
 
 
       } catch (error) {
-        sails.log.error(`Custom command error - ${server.name} - ${chatMessage.messageText} - ${error}`)
-        chatMessage.reply(`Error! Contact your server admin with this message: ${error.toString().replace(/\"/g,"")}`)
+        sails.log.error(`Custom command error - ${server.name} - ${chatMessage.messageText} - ${error}`);
+        chatMessage.reply(`Error! Contact your server admin with this message: ${error.toString().replace(/\"/g,'')}`);
       }
     }
   }
@@ -135,13 +135,13 @@ function executeCommand(server, command) {
         resolve(response);
       },
       unknownCommand: (error) => {
-        reject(error)
+        reject(error);
       },
       error: (error) => {
-        reject(error)
+        reject(error);
       }
     });
-  })
+  });
 }
 
 function replaceAllInString(string, search, replacement) {
@@ -151,21 +151,21 @@ function replaceAllInString(string, search, replacement) {
 function validateArg(argumentRecord, value) {
 
   if (argumentRecord.required && _.isUndefined(value)) {
-    return false
+    return false;
   }
 
   switch (argumentRecord.type) {
     case 'number':
-      let parsed = parseInt(value)
+      let parsed = parseInt(value);
       //return !isNaN(parsed);
-      return true
+      return true;
       break;
     case 'text':
       return true;
       break;
 
     default:
-      return true
+      return true;
       break;
   }
 }
@@ -173,7 +173,7 @@ function validateArg(argumentRecord, value) {
 function delaySeconds(seconds) {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve()
-    }, seconds * 1000)
+      resolve();
+    }, seconds * 1000);
   });
 };

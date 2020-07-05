@@ -4,8 +4,8 @@ class Pay extends SdtdCommand {
   constructor(serverId) {
     super(serverId, {
       name: 'pay',
-      description: "Send some currency to another player.",
-      extendedDescription: "Usage: pay <playerName or steamId> amount"
+      description: 'Send some currency to another player.',
+      extendedDescription: 'Usage: pay <playerName or steamId> amount'
     });
     this.serverId = serverId;
   }
@@ -42,7 +42,7 @@ class Pay extends SdtdCommand {
     }
 
     if (amountToSend < 1) {
-      return chatMessage.reply("payMinimumAmount");
+      return chatMessage.reply('payMinimumAmount');
     }
 
     if (playerToSendTo.length === 0) {

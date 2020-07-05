@@ -16,7 +16,7 @@ module.exports = {
       required: true,
       custom: async (valueToCheck) => {
         let foundJob = await CronJob.findOne(valueToCheck);
-        return foundJob
+        return foundJob;
       }
     }
 
@@ -48,12 +48,12 @@ module.exports = {
         await sails.hooks.discordnotifications.sendNotification({
           serverId: foundJob.server.id,
           job: foundJob,
-          notificationType: "cronjob"
+          notificationType: 'cronjob'
         });
       }
 
 
-    }
+    };
 
 
     // All done.
@@ -78,7 +78,7 @@ async function execCmd(job, command) {
 function delaySeconds(seconds) {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve()
-    }, seconds * 1000)
+      resolve();
+    }, seconds * 1000);
   });
 };

@@ -3,7 +3,7 @@ const Sentry = require('@sentry/node');
 module.exports = function banneditems(sails) {
   return {
     initialize: function(cb) {
-      sails.on("hook:sdtdlogs:loaded", async function() {
+      sails.on('hook:sdtdlogs:loaded', async function() {
         try {
           let configs = await SdtdConfig.find({
             inactive: false
@@ -36,13 +36,13 @@ module.exports = function banneditems(sails) {
   function start(serverId) {
     const loggingObject = sails.hooks.sdtdlogs.getLoggingObject(serverId);
 
-    loggingObject.on("trackingUpdate", handleItemTrackerUpdate);
+    loggingObject.on('trackingUpdate', handleItemTrackerUpdate);
     return;
   }
 
   function stop(serverId) {
     const loggingObject = sails.hooks.sdtdlogs.getLoggingObject(serverId);
-    loggingObject.removeListener("trackingUpdate", handleItemTrackerUpdate);
+    loggingObject.removeListener('trackingUpdate', handleItemTrackerUpdate);
     return;
   }
 
@@ -65,7 +65,7 @@ module.exports = function banneditems(sails) {
           const isImmune = await sails.helpers.roles.checkPermission.with({
             serverId: server.id,
             playerId: onlinePlayer.player,
-            permission: "immuneToBannedItemsList"
+            permission: 'immuneToBannedItemsList'
           });
 
           if (!isImmune.hasPermission) {
@@ -86,7 +86,7 @@ module.exports = function banneditems(sails) {
     );
     await sails.helpers.sdtd.executeCustomCmd(
       server,
-      config.bannedItemsCommand.split(";"),
+      config.bannedItemsCommand.split(';'),
       { player: player }
     );
   }

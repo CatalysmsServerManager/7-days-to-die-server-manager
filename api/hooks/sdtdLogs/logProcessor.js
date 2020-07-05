@@ -1,4 +1,4 @@
-const handleLogLine = require("./handleLogLine");
+const handleLogLine = require('./handleLogLine');
 
 module.exports = async function (job) {
   const resultLogs = [];
@@ -21,7 +21,7 @@ module.exports = async function (job) {
   for (const line of newLogs.entries) {
     index++;
     if (newLogs.entries[index + 1]) {
-      if (newLogs.entries[index + 1].msg.includes("handled by mod")) {
+      if (newLogs.entries[index + 1].msg.includes('handled by mod')) {
         //Message is being handled by a mod, skip to the next line with possibly mod-controlled data
         continue;
       }

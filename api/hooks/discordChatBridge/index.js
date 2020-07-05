@@ -44,7 +44,7 @@ module.exports = function SdtdDiscordChatBridge(sails) {
               try {
                 await start(serverConfig.server);
               } catch (error) {
-                sails.log.error(`HOOK - DiscordChatBridge:initialize - Error for server ${serverConfig.server} - ${error}`)
+                sails.log.error(`HOOK - DiscordChatBridge:initialize - Error for server ${serverConfig.server} - ${error}`);
               }
             }
             sails.log.info(`HOOK SdtdDiscordChatBridge:initialize - Initialized ${chatBridgeInfoMap.size} chatbridge(s)`);
@@ -92,7 +92,7 @@ module.exports = function SdtdDiscordChatBridge(sails) {
     },
 
     getAmount: function () {
-      return chatBridgeInfoMap.size
+      return chatBridgeInfoMap.size;
     }
 
   };
@@ -106,7 +106,7 @@ module.exports = function SdtdDiscordChatBridge(sails) {
         server: serverId
       }).limit(1);
 
-      config = config[0]
+      config = config[0];
 
       if (_.isUndefined(config) || !config.chatChannelId) {
         throw new Error(`Tried to start chatbridge for server without config`);
@@ -134,7 +134,7 @@ module.exports = function SdtdDiscordChatBridge(sails) {
       }
 
       let chatBridge = new ChatBridgeChannel(textChannel, server);
-      setChatBridge(serverId, chatBridge)
+      setChatBridge(serverId, chatBridge);
       return;
     } catch (error) {
       sails.log.error(`HOOK SdtdDiscordChatBridge:start - ${error}`);
@@ -145,7 +145,7 @@ module.exports = function SdtdDiscordChatBridge(sails) {
   async function stop(serverId) {
     try {
       sails.log.debug(`HOOK SdtdDiscordChatBridge:stop - Stopping chatbridge for server ${serverId}`);
-      let chatBridge = getChatBridge(serverId)
+      let chatBridge = getChatBridge(serverId);
       if (!_.isUndefined(chatBridge)) {
         chatBridge.stop();
         return chatBridgeInfoMap.delete(String(serverId));
@@ -158,10 +158,10 @@ module.exports = function SdtdDiscordChatBridge(sails) {
   }
 
   function getChatBridge(serverId) {
-    return chatBridgeInfoMap.get(String(serverId))
+    return chatBridgeInfoMap.get(String(serverId));
   }
 
   function setChatBridge(serverId, chatBridgeObj) {
-    return chatBridgeInfoMap.set(String(serverId), chatBridgeObj)
+    return chatBridgeInfoMap.set(String(serverId), chatBridgeObj);
   }
 };

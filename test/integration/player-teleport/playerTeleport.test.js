@@ -1,5 +1,5 @@
 var supertest = require('supertest');
-var expect = require("chai").expect;
+var expect = require('chai').expect;
 const faker = require('faker');
 let testTeleports = [];
 

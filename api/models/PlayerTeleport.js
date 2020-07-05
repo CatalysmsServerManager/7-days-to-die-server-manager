@@ -2,59 +2,59 @@ module.exports = {
 
   attributes: {
 
-      //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
-      //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
-      //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
+    //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
+    //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
+    //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
 
-      name: {
-          type: 'string',
-          required: true
-      },
+    name: {
+      type: 'string',
+      required: true
+    },
 
-      x: {
-          type: 'number',
-          required: true
-      },
+    x: {
+      type: 'number',
+      required: true
+    },
 
-      y: {
-          type: 'number',
-          required: true
-      },
+    y: {
+      type: 'number',
+      required: true
+    },
 
-      z: {
-          type: 'number',
-          required: true
-      },
+    z: {
+      type: 'number',
+      required: true
+    },
 
-      publicEnabled: {
-          type: 'boolean',
-          defaultsTo: false,
-          columnName: 'public'
-      },
+    publicEnabled: {
+      type: 'boolean',
+      defaultsTo: false,
+      columnName: 'public'
+    },
 
-      timesUsed: {
-        type: 'number',
-        defaultsTo: 0
-      },
+    timesUsed: {
+      type: 'number',
+      defaultsTo: 0
+    },
 
-      //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
-      //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
-      //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
+    //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
+    //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
+    //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
 
 
-      //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
-      //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
-      //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
+    //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
+    //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
+    //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
 
-      /**
+    /**
        * @memberof PlayerTeleport
        * @var player
        * @description What player the teleport belongs to
        */
-      player: {
-          model: 'player',
-          required: true
-      },
+    player: {
+      model: 'player',
+      required: true
+    },
 
 
   },

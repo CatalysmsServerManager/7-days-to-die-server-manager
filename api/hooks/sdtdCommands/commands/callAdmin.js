@@ -5,15 +5,15 @@ class callAdmin extends SdtdCommand {
   constructor(serverId) {
     super(serverId, {
       name: 'calladmin',
-      description: "Make a support ticket",
-      extendedDescription: "Creates a support ticket on the website and notifies admins of your call for help",
-      aliases: ["admin", "admins", "support"]
+      description: 'Make a support ticket',
+      extendedDescription: 'Creates a support ticket on the website and notifies admins of your call for help',
+      aliases: ['admin', 'admins', 'support']
     });
     this.serverId = serverId;
   }
 
   async isEnabled(chatMessage, player, server, args) {
-    return server.config.enabledCallAdmin
+    return server.config.enabledCallAdmin;
   }
 
   async run(chatMessage, player, server, args) {
@@ -21,11 +21,11 @@ class callAdmin extends SdtdCommand {
     try {
 
       if (args == '') {
-        return chatMessage.reply("callAdminMissingReason");
+        return chatMessage.reply('callAdminMissingReason');
       }
 
       if (args.join(' ').length > 100) {
-        return chatMessage.reply("callAdminTooLong");
+        return chatMessage.reply('callAdminTooLong');
       }
 
       let ticket = await sails.helpers.sdtd.createTicket(
@@ -34,13 +34,13 @@ class callAdmin extends SdtdCommand {
         args.join(' ')
       );
 
-      return chatMessage.reply("callAdminSuccess", {
+      return chatMessage.reply('callAdminSuccess', {
         ticket: ticket
       });
 
     } catch (error) {
       sails.log.error(`HOOK - SdtdCommands:callAdmin - ${error}`);
-      return chatMessage.reply("error", {error: error});
+      return chatMessage.reply('error', {error: error});
     }
   }
 }

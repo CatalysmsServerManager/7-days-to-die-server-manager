@@ -10,12 +10,12 @@ module.exports = async function managePlayers(req, res, next) {
 
   let playerId = _.isUndefined(req.param('playerId')) ? req.query.playerId : req.param('playerId');
   let serverId = _.isUndefined(req.param('serverId')) ? req.query.serverId : req.param('serverId');
-  let server
+  let server;
   if (serverId) {
     server = await SdtdServer.findOne(serverId);
   } else {
     player = await Player.findOne(playerId);
-    server = await SdtdServer.findOne(player.server)
+    server = await SdtdServer.findOne(player.server);
   }
   let user = req.session.user;
 
@@ -26,7 +26,7 @@ module.exports = async function managePlayers(req, res, next) {
   });
 
   if (!permCheck.hasPermission) {
-    sails.log.warn(`User ${user.username} tried to access ${req.path} without sufficient permissions (user is ${permCheck.role.name}).`)
+    sails.log.warn(`User ${user.username} tried to access ${req.path} without sufficient permissions (user is ${permCheck.role.name}).`);
 
     if (req.wantsJSON) {
       return res.status(403).json({
@@ -36,7 +36,7 @@ module.exports = async function managePlayers(req, res, next) {
       return res.view('meta/notauthorized', {
         role: permCheck.role,
         requiredPerm: 'managePlayers'
-      })
+      });
     }
 
 

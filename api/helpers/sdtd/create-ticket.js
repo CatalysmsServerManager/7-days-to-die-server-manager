@@ -89,7 +89,7 @@ module.exports = {
         notificationType: 'ticket',
         ticketNotificationType: 'New ticket',
         ticket: ticket
-      })
+      });
 
       sails.log.info(`HELPER - createTicket - Created a ticket for server ${sdtdServer.name} by player ${player.name} titled "${ticket.title}"`);
       return exits.success(ticket);

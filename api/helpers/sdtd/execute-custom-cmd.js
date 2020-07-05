@@ -1,31 +1,31 @@
-const sdtdApi = require("7daystodie-api-wrapper");
-const supportedFunctions = ["wait", "addCurrency", "setRole"];
+const sdtdApi = require('7daystodie-api-wrapper');
+const supportedFunctions = ['wait', 'addCurrency', 'setRole'];
 
 module.exports = {
-  friendlyName: "Execute custom command",
+  friendlyName: 'Execute custom command',
 
-  description: "Takes an array of commands and executes them for a server",
+  description: 'Takes an array of commands and executes them for a server',
 
   inputs: {
     server: {
-      type: "ref",
+      type: 'ref',
       required: true
     },
 
     commands: {
-      type: "ref",
+      type: 'ref',
       required: true
     },
 
     data: {
-      type: "ref"
+      type: 'ref'
     }
   },
 
   exits: {
     success: {
-      outputFriendlyName: "Success",
-      outputType: "boolean"
+      outputFriendlyName: 'Success',
+      outputType: 'boolean'
     }
   },
 
@@ -57,7 +57,7 @@ module.exports = {
         commandsExecuted.push({
           command,
           parameters:
-            "Filling in variables - please check your variable syntax",
+            'Filling in variables - please check your variable syntax',
           result: error.toString()
         });
       }
@@ -73,9 +73,9 @@ module.exports = {
 
         try {
           switch (customFunction) {
-            case "wait":
-              command = "wait";
-              parameters = commandToExec.replace("wait(", "").replace(")", "");
+            case 'wait':
+              command = 'wait';
+              parameters = commandToExec.replace('wait(', '').replace(')', '');
               let secondsToWait;
 
               secondsToWait = parseInt(parameters);
@@ -87,12 +87,12 @@ module.exports = {
                 result: `Waited for ${secondsToWait} seconds`
               });
               break;
-            case "addCurrency":
-              command = "addCurrency";
+            case 'addCurrency':
+              command = 'addCurrency';
               parameters = commandToExec
-                .replace("addCurrency(", "")
-                .replace(")", "");
-              splitArgs = parameters.split(",");
+                .replace('addCurrency(', '')
+                .replace(')', '');
+              splitArgs = parameters.split(',');
               playerId = splitArgs[0].trim();
               let currency = parseInt(splitArgs[1]);
 
@@ -107,12 +107,12 @@ module.exports = {
                 result: `Adjusted currency of players by ${currency}`
               });
               break;
-            case "setRole":
-              command = "setRole";
+            case 'setRole':
+              command = 'setRole';
               parameters = commandToExec
-                .replace("setRole(", "")
-                .replace(")", "");
-              splitArgs = parameters.split(",");
+                .replace('setRole(', '')
+                .replace(')', '');
+              splitArgs = parameters.split(',');
               playerId = splitArgs[0].trim();
               let role = splitArgs[1].trim();
               await sails.helpers.sdtd.customfunctions.setRole(
@@ -132,7 +132,7 @@ module.exports = {
         } catch (error) {
           let result;
           if (_.isArray(error.problems)) {
-            result = error.problems.join(" ");
+            result = error.problems.join(' ');
           } else {
             result = error.toString();
           }
@@ -156,7 +156,7 @@ module.exports = {
 
 function checkForCustomFunction(command) {
   for (const fnc of supportedFunctions) {
-    if (command.includes(fnc + "(")) {
+    if (command.includes(fnc + '(')) {
       return fnc;
     }
   }

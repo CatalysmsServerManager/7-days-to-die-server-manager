@@ -5,15 +5,15 @@ class telePublic extends SdtdCommand {
   constructor(serverId) {
     super(serverId, {
       name: 'telepublic',
-      description: "Make a teleport public",
-      extendedDescription: "Let everyone on the server teleport to a location",
-      aliases: ["telepub", "pubtele", "publictele"]
+      description: 'Make a teleport public',
+      extendedDescription: 'Let everyone on the server teleport to a location',
+      aliases: ['telepub', 'pubtele', 'publictele']
     });
     this.serverId = serverId;
   }
 
   async isEnabled(chatMessage, player, server, args) {
-    return server.config.enabledPlayerTeleports
+    return server.config.enabledPlayerTeleports;
   }
 
   async run(chatMessage, player, server, args) {
@@ -31,30 +31,30 @@ class telePublic extends SdtdCommand {
 
     let teleportsToCheckForName = publicTeleports;
 
-    let nameAlreadyInUse = false
+    let nameAlreadyInUse = false;
     teleportsToCheckForName.forEach(teleport => {
       if (teleport.name == args[0]) {
-        nameAlreadyInUse = true
+        nameAlreadyInUse = true;
       }
-    })
+    });
 
     if (nameAlreadyInUse) {
       return chatMessage.reply(`renameTeleNameInUse`);
     }
 
     if (playerTeleports.length == 0) {
-      return chatMessage.reply(`NoTeleportFound`)
+      return chatMessage.reply(`NoTeleportFound`);
     }
 
-    let teleportFound = false
+    let teleportFound = false;
     playerTeleports.forEach(teleport => {
       if (teleport.name == args[0]) {
-        teleportFound = teleport
+        teleportFound = teleport;
       }
-    })
+    });
 
     if (!teleportFound) {
-      return chatMessage.reply(`NoTeleportFound`)
+      return chatMessage.reply(`NoTeleportFound`);
     }
 
     if (server.config.economyEnabled && server.config.costToMakeTeleportPublic) {
@@ -65,11 +65,11 @@ class telePublic extends SdtdCommand {
         message: `COMMAND - ${this.name}`
       }).tolerate('notEnoughCurrency', totalNeeded => {
         notEnoughMoney = true;
-      })
+      });
       if (notEnoughMoney) {
         return chatMessage.reply(`notEnoughMoney`, {
           cost: server.config.costToMakeTeleportPublic
-        })
+        });
       }
     }
 
@@ -80,7 +80,7 @@ class telePublic extends SdtdCommand {
     });
     return chatMessage.reply(`telePublicSuccess`, {
       teleport: teleportFound
-    })
+    });
 
 
 

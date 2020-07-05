@@ -41,15 +41,15 @@ module.exports = {
     let updateObject = new Object;
 
     if (inputs.channelId) {
-      updateObject.discordChannelId = inputs.channelId
+      updateObject.discordChannelId = inputs.channelId;
     }
 
     if (inputs.stringToSearchFor) {
-      updateObject.stringToSearchFor = inputs.stringToSearchFor
+      updateObject.stringToSearchFor = inputs.stringToSearchFor;
     }
 
     if (inputs.enabled) {
-      updateObject.enabled = inputs.enabled
+      updateObject.enabled = inputs.enabled;
     }
 
     await CustomDiscordNotification.update({

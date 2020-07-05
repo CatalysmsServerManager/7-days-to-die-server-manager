@@ -1,23 +1,23 @@
-const DiscordNotification = require('../DiscordNotification')
+const DiscordNotification = require('../DiscordNotification');
 
 class CountrybanKick extends DiscordNotification {
   constructor() {
-    super("countrybanKick")
+    super('countrybanKick');
   }
 
   async makeEmbed(event){
-    let client = sails.hooks.discordbot.getClient()
-    let embed = new client.customEmbed()
+    let client = sails.hooks.discordbot.getClient();
+    let embed = new client.customEmbed();
 
     embed.setTitle(`:flag_${event.player.country.toLowerCase()}: Country ban kicked: ${event.player.playerName}`)
-    .setColor("ORANGE")
-    .addField('Steam ID', `[${event.player.steamID}](https://steamidfinder.com/lookup/${event.player.steamID}/)`, true)
-    .addField('Entity ID', `${event.player.entityID}`, true)
-    .setFooter(`${event.server.name}`)
-    .setURL(`${process.env.CSMM_HOSTNAME}/player/${event.player.id}/profile`)
+      .setColor('ORANGE')
+      .addField('Steam ID', `[${event.player.steamID}](https://steamidfinder.com/lookup/${event.player.steamID}/)`, true)
+      .addField('Entity ID', `${event.player.entityID}`, true)
+      .setFooter(`${event.server.name}`)
+      .setURL(`${process.env.CSMM_HOSTNAME}/player/${event.player.id}/profile`);
 
-    return embed
+    return embed;
   }
 }
 
-module.exports = CountrybanKick
+module.exports = CountrybanKick;

@@ -23,7 +23,7 @@ module.exports = {
 
     endDate: {
       type: 'number',
-      description: "Unix timestamp of when logs should end",
+      description: 'Unix timestamp of when logs should end',
       min: 0,
     }
 
@@ -40,36 +40,36 @@ module.exports = {
     let dateStarted = new Date();
 
     if (_.isUndefined(inputs.beginDate)) {
-        inputs.beginDate = 0
-      }
+      inputs.beginDate = 0;
+    }
 
-      if (_.isUndefined(inputs.endDate)) {
-        inputs.endDate = Date.now();
-      }
+    if (_.isUndefined(inputs.endDate)) {
+      inputs.endDate = Date.now();
+    }
 
-      if (_.isUndefined(inputs.limit)) {
-        inputs.limit = 500
-      }
+    if (_.isUndefined(inputs.limit)) {
+      inputs.limit = 500;
+    }
 
-      let whereObject = {
-        server: inputs.serverId,
-        createdAt: {
-          '>': inputs.beginDate,
-          '<': inputs.endDate,
-        }
+    let whereObject = {
+      server: inputs.serverId,
+      createdAt: {
+        '>': inputs.beginDate,
+        '<': inputs.endDate,
       }
+    };
 
     try {
       let dataToSend = await Analytics.find({
         where: whereObject,
         sort: 'createdAt DESC',
         limit: inputs.limit
-      })
+      });
       let dateEnded = new Date();
-      sails.log.debug(`Retrieved ${dataToSend.length} records of historical data - took ${dateEnded - dateStarted} ms`)
+      sails.log.debug(`Retrieved ${dataToSend.length} records of historical data - took ${dateEnded - dateStarted} ms`);
       return exits.success(dataToSend);
     } catch (error) {
-      return exits.success(0)
+      return exits.success(0);
     }
   }
 

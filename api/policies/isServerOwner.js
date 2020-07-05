@@ -7,7 +7,7 @@ module.exports = async function isServerOwner(req, res, next) {
     if (_.isUndefined(serverId)) {
       return res.badRequest('No server ID given');
     }
-  
+
     if (_.isUndefined(req.session.userId)) {
       return res.redirect('/auth/steam');
     }
@@ -26,14 +26,14 @@ module.exports = async function isServerOwner(req, res, next) {
 
 
     if (server.owner === user.id) {
-      isOwner = true
-    } 
+      isOwner = true;
+    }
 
     server.admins.forEach(admin => {
       if (admin.id === user.id) {
-        isOwner= true
+        isOwner= true;
       }
-    })
+    });
 
     if (isOwner) {
       sails.log.silly(`POLICY - isServerOwner - User ${user.id} is owner of the server, approving request`);

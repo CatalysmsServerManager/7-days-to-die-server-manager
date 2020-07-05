@@ -1,4 +1,4 @@
-const expect = require("chai").expect;
+const expect = require('chai').expect;
 const PlayerConnected = require('../../../../../api/hooks/discordNotifications/notifications/playerConnected.js');
 
 describe('PlayerConnected', function () {

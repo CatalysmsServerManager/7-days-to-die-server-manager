@@ -10,12 +10,12 @@ module.exports = {
       required: true,
       custom: async (valueToCheck) => {
         let foundServer = await SdtdServer.findOne(valueToCheck);
-        return foundServer
+        return foundServer;
       },
     },
 
     status: {
-      type: "boolean",
+      type: 'boolean',
       required: true
     }
   },

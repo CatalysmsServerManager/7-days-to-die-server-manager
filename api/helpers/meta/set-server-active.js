@@ -1,12 +1,12 @@
 module.exports = {
-  friendlyName: "Set server active",
+  friendlyName: 'Set server active',
 
   description:
-    "Starts all hooks, timers, modules for a server that was inactive",
+    'Starts all hooks, timers, modules for a server that was inactive',
 
   inputs: {
     serverId: {
-      type: "string",
+      type: 'string',
       required: true
     }
   },
@@ -14,9 +14,9 @@ module.exports = {
   exits: {},
 
   fn: async function(inputs, exits) {
-    const server = await SdtdServer.findOne(inputs.serverId).populate("config");
+    const server = await SdtdServer.findOne(inputs.serverId).populate('config');
     if (_.isUndefined(server)) {
-      return exits.error("Unknown server ID");
+      return exits.error('Unknown server ID');
     }
     const config = server.config[0];
     const cronJobs = await CronJob.find({
@@ -53,15 +53,15 @@ module.exports = {
     // Economy
 
     if (config.playtimeEarnerEnabled) {
-      await sails.hooks.economy.start(server.id, "playtimeEarner");
+      await sails.hooks.economy.start(server.id, 'playtimeEarner');
     }
 
     if (config.discordTextEarnerEnabled) {
-      await sails.hooks.economy.start(server.id, "discordTextEarner");
+      await sails.hooks.economy.start(server.id, 'discordTextEarner');
     }
 
     if (config.killEarnerEnabled) {
-      await sails.hooks.economy.start(server.id, "killEarner");
+      await sails.hooks.economy.start(server.id, 'killEarner');
     }
 
     // High ping kick
@@ -74,7 +74,7 @@ module.exports = {
     }
 
     // Historical info (aka analytics)
-    await sails.hooks.historicalinfo.start(server.id, "memUpdate");
+    await sails.hooks.historicalinfo.start(server.id, 'memUpdate');
 
     // Player tracking
     await sails.hooks.playertracking.start(server.id);
@@ -92,7 +92,7 @@ module.exports = {
     );
     sails.log.info(
       `Server has been marked as active.`,
-      _.omit(server, "authName", "authToken")
+      _.omit(server, 'authName', 'authToken')
     );
 
     return exits.success();

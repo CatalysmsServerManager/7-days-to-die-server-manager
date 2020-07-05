@@ -33,11 +33,11 @@ module.exports = {
         id: inputs.commandId,
       }, {
         sendOutput: inputs.newOutput
-      })
+      });
       return exits.success();
 
     } catch (error) {
-      sails.log.error(error)
+      sails.log.error(error);
     }
 
   }

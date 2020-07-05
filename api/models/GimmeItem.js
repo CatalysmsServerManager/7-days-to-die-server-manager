@@ -9,7 +9,7 @@ module.exports = {
     type: {
       required: true,
       type: 'string',
-      isIn: ["item", "command", "entity"]
+      isIn: ['item', 'command', 'entity']
     },
 
     value: {
@@ -35,7 +35,7 @@ module.exports = {
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
 
     server: {
-      model: "SdtdServer"
+      model: 'SdtdServer'
     },
 
   },

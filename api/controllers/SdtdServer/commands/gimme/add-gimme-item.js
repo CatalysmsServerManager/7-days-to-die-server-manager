@@ -12,7 +12,7 @@ module.exports = {
 
     type: {
       type: 'string',
-      isIn: ["item", "command", "entity"],
+      isIn: ['item', 'command', 'entity'],
       required: true
     },
 
@@ -50,7 +50,7 @@ module.exports = {
     }
 
     let createdItem = await GimmeItem.create(databaseObject).fetch();
-    sails.log.info(`Added a new gimme items for server ${inputs.server} - ${JSON.stringify(createdItem)}`)
+    sails.log.info(`Added a new gimme items for server ${inputs.server} - ${JSON.stringify(createdItem)}`);
     return exits.success(createdItem);
 
   }

@@ -1,6 +1,6 @@
-const Discord = require("discord.js");
-const sevenDays = require("machinepack-7daystodiewebapi");
-const hhmmss = require("@streammedev/hhmmss");
+const Discord = require('discord.js');
+const sevenDays = require('machinepack-7daystodiewebapi');
+const hhmmss = require('@streammedev/hhmmss');
 
 /**
  * @class
@@ -52,32 +52,32 @@ class ChatBridgeChannel {
       if (!_.isUndefined(this.loggingObject) && this.config.chatChannelId) {
         if (this.config.chatChannelRichMessages) {
           this.loggingObject.on(
-            "playerConnected",
+            'playerConnected',
             this.sendRichConnectedMessageToDiscord
           );
           this.loggingObject.on(
-            "playerDisconnected",
+            'playerDisconnected',
             this.sendRichDisconnectedMessageToDiscord
           );
         } else {
           this.loggingObject.on(
-            "playerConnected",
+            'playerConnected',
             this.sendConnectedMessageToDiscord
           );
           this.loggingObject.on(
-            "playerDisconnected",
+            'playerDisconnected',
             this.sendDisconnectedMessageToDiscord
           );
         }
 
-        this.loggingObject.on("chatMessage", this.sendChatMessageToDiscord);
-        this.loggingObject.on("playerDeath", this.sendDeathMessageToDiscord);
+        this.loggingObject.on('chatMessage', this.sendChatMessageToDiscord);
+        this.loggingObject.on('playerDeath', this.sendDeathMessageToDiscord);
 
-        this.channel.client.on("message", this.sendMessageToGame);
+        this.channel.client.on('message', this.sendMessageToGame);
       } else {
         this.channel.send(
           new this.channel.client.errorEmbed(
-            ":x: Could not find a logging object for this server"
+            ':x: Could not find a logging object for this server'
           )
         );
       }
@@ -92,34 +92,34 @@ class ChatBridgeChannel {
     let embed = new this.channel.client.customEmbed();
     if (this.loggingObject) {
       this.loggingObject.removeListener(
-        "chatMessage",
+        'chatMessage',
         this.sendChatMessageToDiscord
       );
       this.loggingObject.removeListener(
-        "playerDeath",
+        'playerDeath',
         this.sendDeathMessageToDiscord
       );
       this.loggingObject.removeListener(
-        "playerConnected",
+        'playerConnected',
         this.sendConnectedMessageToDiscord
       );
       this.loggingObject.removeListener(
-        "playerDisconnected",
+        'playerDisconnected',
         this.sendDisconnectedMessageToDiscord
       );
       this.loggingObject.removeListener(
-        "playerConnected",
+        'playerConnected',
         this.sendRichConnectedMessageToDiscord
       );
       this.loggingObject.removeListener(
-        "playerDisconnected",
+        'playerDisconnected',
         this.sendRichDisconnectedMessageToDiscord
       );
-      this.channel.client.removeListener("message", this.sendMessageToGame);
-      embed.setDescription(":x: Disabled chat bridge");
+      this.channel.client.removeListener('message', this.sendMessageToGame);
+      embed.setDescription(':x: Disabled chat bridge');
     } else {
       embed.setDescription(
-        "Tried to stop chatbridge in this channel but something went wrong!"
+        'Tried to stop chatbridge in this channel but something went wrong!'
       );
     }
     this.channel.send(embed);
@@ -142,7 +142,7 @@ class ChatBridgeChannel {
       return;
     }
 
-    if (this.config.chatChannelGlobalOnly && chatMessage.channel !== "Global") {
+    if (this.config.chatChannelGlobalOnly && chatMessage.channel !== 'Global') {
       return;
     }
 
@@ -180,31 +180,31 @@ class ChatBridgeChannel {
     embed
       .setTitle(`${connectedMsg.playerName} connected`)
       .addField(
-        "Steam ID",
+        'Steam ID',
         `[${connectedMsg.steamId}](https://steamidfinder.com/lookup/${connectedMsg.steamId}/)`,
         true
       )
-      .addField("Country", connectedMsg.country, true)
+      .addField('Country', connectedMsg.country, true)
       .addField(
         `${gblBans.length} ban${
-          gblBans.length === 1 ? "" : "s"
+          gblBans.length === 1 ? '' : 's'
         } on the global ban list`,
         `[GBL profile page](${process.env.CSMM_HOSTNAME}/gbl/profile?steamId=${connectedMsg.steamId})`
       )
-      .setColor("GREEN")
+      .setColor('GREEN')
       .setFooter(`${this.sdtdServer.name}`);
 
     if (connectedPlayer) {
       embed
         .addField(
-          "Playtime",
+          'Playtime',
           connectedPlayer.playtime
             ? hhmmss(connectedPlayer.playtime)
-            : "New player!",
+            : 'New player!',
           true
         )
         .addField(
-          "CSMM profile",
+          'CSMM profile',
           `${process.env.CSMM_HOSTNAME}/player/${connectedPlayer.id}/profile`
         );
       if (connectedPlayer.avatarUrl) {
@@ -228,26 +228,26 @@ class ChatBridgeChannel {
     let embed = new this.channel.client.customEmbed();
     embed
       .setTitle(`${disconnectedMsg.playerName} disconnected`)
-      .setColor("RED")
+      .setColor('RED')
       .setFooter(`${this.sdtdServer.name}`);
 
     if (disconnectedPlayer) {
       embed
         .addField(
-          "Steam ID",
+          'Steam ID',
           disconnectedPlayer.steamId
             ? `[${disconnectedPlayer.steamId}](https://steamidfinder.com/lookup/${disconnectedPlayer.steamId}/)`
             : `Unknown`,
           true
         )
-        .addField("Playtime", hhmmss(disconnectedPlayer.playtime), true)
+        .addField('Playtime', hhmmss(disconnectedPlayer.playtime), true)
         .addField(
-          "CSMM profile",
+          'CSMM profile',
           `${process.env.CSMM_HOSTNAME}/player/${disconnectedPlayer.id}/profile`
         )
         .addField(
           `${gblBans.length} ban${
-            gblBans.length === 1 ? "" : "s"
+            gblBans.length === 1 ? '' : 's'
           } on the global ban list`,
           `[GBL profile page](${process.env.CSMM_HOSTNAME}/gbl/profile?steamId=${disconnectedMsg.steamId})`
         );
@@ -278,7 +278,7 @@ class ChatBridgeChannel {
             sails.log.error(
               `HOOK discordBot:chatBridgeChannel - sending discord message to game ${error}`
             );
-            message.react("⚠");
+            message.react('⚠');
           },
           success: () => {
             return true;

@@ -74,7 +74,7 @@ module.exports = {
 
         if (_.isArray(inputs.newConfig.whiteListedSteamIds)) {
           configToSend.whiteListedSteamIds = inputs.newConfig.whiteListedSteamIds;
-          
+
         }
 
         configToSend.kickMessage = inputs.newConfig.kickMessage == '' ? configToSend.kickMessage : inputs.newConfig.kickMessage;

@@ -8,7 +8,7 @@ class ServerInfo extends Commando.Command {
       group: 'sdtd',
       memberName: 'serverinfo',
       guildOnly: true,
-      details: "Show info about the server",
+      details: 'Show info about the server',
       args: [{
         key: 'server',
         default: 1,
@@ -16,7 +16,7 @@ class ServerInfo extends Commando.Command {
         prompt: 'Please specify what server to run this commmand for!'
       }],
       description: 'Shows detailed info about a server and it\'s settings',
-      examples: ["serverinfo"]
+      examples: ['serverinfo']
     });
   }
 
@@ -30,46 +30,46 @@ class ServerInfo extends Commando.Command {
     let sdtdServer = sdtdServers[args.server - 1];
 
     if (!sdtdServer) {
-      return msg.channel.send(`Did not find server ${args.server}! Check your config please.`)
+      return msg.channel.send(`Did not find server ${args.server}! Check your config please.`);
     }
 
     let serverInfo = await sails.helpers.loadSdtdserverInfo(sdtdServer.id);
 
 
     if (!serverInfo || !serverInfo.serverInfo || !serverInfo.stats) {
-      return msg.channel.send(`Could not load server data. Make sure the server is online.`)
+      return msg.channel.send(`Could not load server data. Make sure the server is online.`);
     }
 
 
     // Change data to a nice string
     switch (serverInfo.serverInfo.PlayerKillingMode) {
       case 0:
-        serverInfo.serverInfo.PlayerKillingMode = "PvE";
+        serverInfo.serverInfo.PlayerKillingMode = 'PvE';
         break;
       case 1:
-        serverInfo.serverInfo.PlayerKillingMode = "Kill allies only";
+        serverInfo.serverInfo.PlayerKillingMode = 'Kill allies only';
         break;
       case 2:
-        serverInfo.serverInfo.PlayerKillingMode = "Kill strangers only";
+        serverInfo.serverInfo.PlayerKillingMode = 'Kill strangers only';
         break;
       case 3:
-        serverInfo.serverInfo.PlayerKillingMode = "PvP";
+        serverInfo.serverInfo.PlayerKillingMode = 'PvP';
         break;
 
     }
 
     switch (serverInfo.serverInfo.DropOnDeath) {
       case 0:
-        serverInfo.serverInfo.DropOnDeath = "Drop all";
+        serverInfo.serverInfo.DropOnDeath = 'Drop all';
         break;
       case 1:
-        serverInfo.serverInfo.DropOnDeath = "Belt";
+        serverInfo.serverInfo.DropOnDeath = 'Belt';
         break;
       case 2:
-        serverInfo.serverInfo.DropOnDeath = "Backpack";
+        serverInfo.serverInfo.DropOnDeath = 'Backpack';
         break;
       case 3:
-        serverInfo.serverInfo.DropOnDeath = "Delete all";
+        serverInfo.serverInfo.DropOnDeath = 'Delete all';
         break;
     }
 
@@ -79,11 +79,11 @@ class ServerInfo extends Commando.Command {
       if (serverInfo.serverInfo.hasOwnProperty(key)) {
         const element = serverInfo.serverInfo[key];
         if (typeof element === 'boolean' && element) {
-          serverInfo.serverInfo[key] = ':white_check_mark:'
+          serverInfo.serverInfo[key] = ':white_check_mark:';
         }
 
         if (typeof element === 'boolean' && !element) {
-          serverInfo.serverInfo[key] = ':x:'
+          serverInfo.serverInfo[key] = ':x:';
         }
       }
     }
@@ -92,12 +92,12 @@ class ServerInfo extends Commando.Command {
     let embed = new this.client.customEmbed();
 
     embed.setTitle(`${serverInfo.name} - info`)
-      .setDescription(serverInfo.serverInfo.ServerDescription ? serverInfo.serverInfo.ServerDescription : "No description available")
+      .setDescription(serverInfo.serverInfo.ServerDescription ? serverInfo.serverInfo.ServerDescription : 'No description available')
       .addField('Connect', `${serverInfo.serverInfo.IP}:${serverInfo.serverInfo.Port}`, true)
       .addField('Max players', serverInfo.serverInfo.MaxPlayers, true)
       .addField('World', serverInfo.serverInfo.LevelName, true)
-      .addField('Website', `${serverInfo.serverInfo.ServerWebsiteURL ? serverInfo.serverInfo.ServerWebsiteURL : "No website configured"}`)
-      .addField('Version', serverInfo.serverInfo.Version ? serverInfo.serverInfo.Version : "Unknown version")
+      .addField('Website', `${serverInfo.serverInfo.ServerWebsiteURL ? serverInfo.serverInfo.ServerWebsiteURL : 'No website configured'}`)
+      .addField('Version', serverInfo.serverInfo.Version ? serverInfo.serverInfo.Version : 'Unknown version')
       .addField('Settings', `
 ${serverInfo.serverInfo.IsPasswordProtected} Password 
 ${serverInfo.serverInfo.EACEnabled} EAC 
@@ -115,9 +115,9 @@ ${serverInfo.serverInfo.EACEnabled} EAC
 :small_orange_diamond: Loot respawns in ${serverInfo.serverInfo.LootRespawnDays} days
 :small_orange_diamond: Loot abundance ${serverInfo.serverInfo.LootAbundance}
 `)
-      .setColor('RANDOM')
+      .setColor('RANDOM');
 
-    msg.channel.send(embed)
+    msg.channel.send(embed);
   }
 
 }

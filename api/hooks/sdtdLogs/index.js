@@ -36,7 +36,7 @@ module.exports = function sdtdLogs(sails) {
             inactive: false,
           });
           for (let config of enabledServers) {
-            await this.start(config.server)
+            await this.start(config.server);
           }
           sails.log.info(`HOOK: Sdtdlogs - Initialized ${loggingInfoMap.size} logging instances`);
           return cb();
@@ -147,12 +147,12 @@ module.exports = function sdtdLogs(sails) {
     eventEmitter.init();
 
     eventEmitter.on('logLine', function (logLine) {
-      logLine.server = _.omit(server, "authName", "authToken");
+      logLine.server = _.omit(server, 'authName', 'authToken');
       sails.sockets.broadcast(server.id, 'logLine', logLine);
     });
 
     eventEmitter.on('chatMessage', function (chatMessage) {
-      chatMessage.server = _.omit(server, "authName", "authToken");
+      chatMessage.server = _.omit(server, 'authName', 'authToken');
       chatMessage.player = _.omit(chatMessage.player, 'inventory');
 
       sails.sockets.broadcast(server.id, 'chatMessage', chatMessage);
@@ -160,7 +160,7 @@ module.exports = function sdtdLogs(sails) {
     });
 
     eventEmitter.on('playerConnected', async function (connectedMsg) {
-      connectedMsg.server = _.omit(server, "authName", "authToken");
+      connectedMsg.server = _.omit(server, 'authName', 'authToken');
       await sails.hooks.discordnotifications.sendNotification({
         serverId: server.id,
         notificationType: 'playerConnected',
@@ -172,7 +172,7 @@ module.exports = function sdtdLogs(sails) {
           steamId: connectedMsg.steamID
         }, {
           country: connectedMsg.country
-        })
+        });
       }
       sails.sockets.broadcast(server.id, 'playerConnected', connectedMsg);
       connectedMsg.player = _.omit(connectedMsg.player, 'inventory');
@@ -181,7 +181,7 @@ module.exports = function sdtdLogs(sails) {
 
 
     eventEmitter.on('playerJoined', async function (joinMsg) {
-      joinMsg.server = _.omit(server, "authName", "authToken");
+      joinMsg.server = _.omit(server, 'authName', 'authToken');
       joinMsg.player = _.omit(joinMsg.player, 'inventory');
 
       sails.sockets.broadcast(server.id, 'playerJoined', joinMsg);
@@ -189,7 +189,7 @@ module.exports = function sdtdLogs(sails) {
     });
 
     eventEmitter.on('playerDisconnected', async function (disconnectedMsg) {
-      disconnectedMsg.server = _.omit(server, "authName", "authToken");
+      disconnectedMsg.server = _.omit(server, 'authName', 'authToken');
       await sails.hooks.discordnotifications.sendNotification({
         serverId: server.id,
         notificationType: 'playerDisconnected',
@@ -202,7 +202,7 @@ module.exports = function sdtdLogs(sails) {
 
     eventEmitter.on('connectionLost', async function (eventMsg) {
       if (eventMsg) {
-        eventMsg.server = _.omit(server, "authName", "authToken");;
+        eventMsg.server = _.omit(server, 'authName', 'authToken');;
       }
 
       sails.sockets.broadcast(server.id, 'connectionLost', eventMsg);
@@ -210,31 +210,31 @@ module.exports = function sdtdLogs(sails) {
         serverId: server.id,
         notificationType: 'connectionLost',
         msg: eventMsg
-      })
+      });
       sails.log.debug(`Lost connection to server ${server.name}`);
     });
 
     eventEmitter.on('connected', async function (eventMsg) {
       if (eventMsg) {
-        eventMsg.server = _.omit(server, "authName", "authToken");;
+        eventMsg.server = _.omit(server, 'authName', 'authToken');;
       }
 
       sails.sockets.broadcast(server.id, 'connected', eventMsg);
       await sails.hooks.discordnotifications.sendNotification({
         serverId: server.id,
         notificationType: 'connected'
-      })
+      });
 
       sails.log.debug(`Connected to server ${server.name}`);
     });
 
     eventEmitter.on('playerDeath', function (deathMessage) {
-      deathMessage.server = _.omit(server, "authName", "authToken");;
+      deathMessage.server = _.omit(server, 'authName', 'authToken');;
       sails.sockets.broadcast(server.id, 'playerDeath', deathMessage);
     });
 
     eventEmitter.on('memUpdate', (memUpdate) => {
-      memUpdate.server = _.omit(server, "authName", "authToken");;
+      memUpdate.server = _.omit(server, 'authName', 'authToken');;
       sails.sockets.broadcast(server.id, 'memUpdate', memUpdate);
     });
 

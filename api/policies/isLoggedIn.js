@@ -12,7 +12,7 @@ module.exports = function isLoggedIn(req, res, next) {
   } else {
     sails.log.warn(`POLICY - isLoggedIn - ${req.ip} is not logged in, redirecting to ${req.originalUrl}`);
     if (req.session) {
-      req.session.redirectTo = req.originalUrl
+      req.session.redirectTo = req.originalUrl;
     }
     return res.redirect('/auth/steam');
   }

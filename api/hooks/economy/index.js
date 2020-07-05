@@ -18,7 +18,7 @@ module.exports = function economy(sails) {
         sails.log.info('Initializing custom hook (`economy`)');
         cb();
 
-        discordMessageEmitter = new DiscordMessageHandler()
+        discordMessageEmitter = new DiscordMessageHandler();
 
         let economyEnabledServers = await SdtdConfig.find({
           economyEnabled: true,
@@ -41,7 +41,7 @@ module.exports = function economy(sails) {
           }
         }
 
-        return
+        return;
       });
     },
 
@@ -59,7 +59,7 @@ module.exports = function economy(sails) {
           break;
 
         default:
-          throw new Error('Unknown updateObject type')
+          throw new Error('Unknown updateObject type');
           break;
       }
     },
@@ -76,7 +76,7 @@ module.exports = function economy(sails) {
           return stopKillEarner(serverId);
           break;
         default:
-          throw new Error('Unknown updateObject type')
+          throw new Error('Unknown updateObject type');
           break;
       }
     },
@@ -84,17 +84,17 @@ module.exports = function economy(sails) {
     getStatus: function (server, type) {
       switch (type) {
         case 'playtimeEarner':
-          return playtimeEarnerMap.has(String(server.id ? server.id : server))
+          return playtimeEarnerMap.has(String(server.id ? server.id : server));
           break;
         case 'discordTextEarner':
-          return discordTextEarnerMap.has(String(server.id ? server.id : server))
+          return discordTextEarnerMap.has(String(server.id ? server.id : server));
           break;
         case 'killEarner':
-          return killEarnerMap.has(String(server.id ? server.id : server))
+          return killEarnerMap.has(String(server.id ? server.id : server));
           break;
 
         default:
-          throw new Error('Unknown updateObject type')
+          throw new Error('Unknown updateObject type');
           break;
       }
     },
@@ -134,13 +134,13 @@ module.exports = function economy(sails) {
           break;
 
         default:
-          throw new Error('Unknown updateObject type')
+          throw new Error('Unknown updateObject type');
           break;
       }
     },
 
   };
-}
+};
 
 async function startKillEarner(serverId) {
   try {
@@ -154,10 +154,10 @@ async function startKillEarner(serverId) {
     let killEarnerObject = new KillEarner(server, config, loggingObject);
     await killEarnerObject.start();
     setMap(server.id, killEarnerObject);
-    return true
+    return true;
   } catch (error) {
-    sails.log.error(`HOOK - economy - Error starting killEarner ${error}`)
-    return false
+    sails.log.error(`HOOK - economy - Error starting killEarner ${error}`);
+    return false;
   }
 }
 
@@ -170,9 +170,9 @@ async function stopKillEarner(serverId) {
     let killEarnerObject = await getMap(serverId, 'killEarner');
     killEarnerObject.stop();
     deleteMap(serverId, killEarnerObject);
-    return true
+    return true;
   } catch (error) {
-    sails.log.error(`HOOK - economy - Error stopping killEarner ${error}`)
+    sails.log.error(`HOOK - economy - Error stopping killEarner ${error}`);
   }
 }
 
@@ -190,7 +190,7 @@ async function startPlaytimeEarner(serverId) {
     setMap(server.id, playtimeEarnerObject);
     return true;
   } catch (error) {
-    sails.log.error(`HOOK - economy - Error starting playtimeEarner ${error}`)
+    sails.log.error(`HOOK - economy - Error starting playtimeEarner ${error}`);
     return false;
   }
 }
@@ -206,7 +206,7 @@ async function stopPlaytimeEarner(serverId) {
     playtimeEarnerObject.stop();
     deleteMap(serverId, playtimeEarnerObject);
   } catch (error) {
-    sails.log.error(`HOOK - economy - Error stopping playtimeEarner ${error}`)
+    sails.log.error(`HOOK - economy - Error stopping playtimeEarner ${error}`);
   }
 }
 
@@ -225,7 +225,7 @@ async function startDiscordTextEarner(serverId) {
     setMap(server.id, discordTextEarnerObject);
     return true;
   } catch (error) {
-    sails.log.error(`HOOK - economy - Error starting discordTextEarner ${error}`)
+    sails.log.error(`HOOK - economy - Error starting discordTextEarner ${error}`);
     return false;
   }
 }
@@ -241,7 +241,7 @@ async function stopDiscordTextEarner(serverId) {
     discordTextEarnerObject.stop();
     deleteMap(serverId, discordTextEarnerObject);
   } catch (error) {
-    sails.log.error(`HOOK - economy - Error stopping discordTextEarner ${error}`)
+    sails.log.error(`HOOK - economy - Error stopping discordTextEarner ${error}`);
   }
 }
 
@@ -249,17 +249,17 @@ async function stopDiscordTextEarner(serverId) {
 function getMap(server, type) {
   switch (type) {
     case 'playtimeEarner':
-      return playtimeEarnerMap.get(String(server.id ? server.id : server))
+      return playtimeEarnerMap.get(String(server.id ? server.id : server));
       break;
     case 'discordTextEarner':
-      return discordTextEarnerMap.get(String(server.id ? server.id : server))
+      return discordTextEarnerMap.get(String(server.id ? server.id : server));
       break;
     case 'killEarner':
-      return killEarnerMap.get(String(server.id ? server.id : server))
+      return killEarnerMap.get(String(server.id ? server.id : server));
       break;
 
     default:
-      throw new Error('Unknown updateObject type')
+      throw new Error('Unknown updateObject type');
       break;
   }
 }
@@ -276,7 +276,7 @@ function setMap(server, updateObject) {
       return killEarnerMap.set(String(server.id ? server.id : server), updateObject);
       break;
     default:
-      throw new Error('Must set a known type in updateObject')
+      throw new Error('Must set a known type in updateObject');
       break;
   }
 }
@@ -293,7 +293,7 @@ function deleteMap(server, updateObject) {
       return killEarnerMap.delete(String(server.id ? server.id : server));
       break;
     default:
-      throw new Error('Must set a known type in updateObject')
+      throw new Error('Must set a known type in updateObject');
       break;
   }
 }

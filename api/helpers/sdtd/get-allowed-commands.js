@@ -15,7 +15,7 @@ module.exports = {
       type: 'ref',
       required: true,
       custom: (valueToCheck) => {
-        return valueToCheck.ip && valueToCheck.webPort && valueToCheck.authName && valueToCheck.authToken
+        return valueToCheck.ip && valueToCheck.webPort && valueToCheck.authName && valueToCheck.authToken;
       }
     }
 
@@ -46,12 +46,12 @@ module.exports = {
       success: response => {
         let allowedCommands = new Array();
         response.commands.forEach(command => {
-          allowedCommands.push(command.command)
-        })
+          allowedCommands.push(command.command);
+        });
 
         return exits.success(allowedCommands);
       }
-    })
+    });
 
 
 

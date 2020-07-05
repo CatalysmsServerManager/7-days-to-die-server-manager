@@ -27,7 +27,7 @@ module.exports = {
       return exits.success(players);
 
     } catch (error) {
-      return exits.error(error)
+      return exits.error(error);
     }
 
   }

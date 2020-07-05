@@ -43,7 +43,7 @@ module.exports = function Sentry(sails) {
       sails.hooks.responses.middleware.serverError = function(err) {
         Sentry.captureException(err);
         origServerError.bind(this)(...arguments);
-      }
+      };
 
       for (const level of Object.keys(sails.log)) {
         switch (level) {
@@ -83,7 +83,7 @@ module.exports = function Sentry(sails) {
             },
           );
           origFunction(...arguments);
-        }
+        };
       }
 
       // handles Bluebird's promises unhandled rejections

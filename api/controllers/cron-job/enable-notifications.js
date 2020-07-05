@@ -14,7 +14,7 @@ module.exports = {
       required: true,
       custom: async (valueToCheck) => {
         let foundJob = await CronJob.findOne(valueToCheck);
-        return foundJob
+        return foundJob;
       }
     }
 

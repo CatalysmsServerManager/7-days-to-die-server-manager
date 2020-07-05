@@ -38,7 +38,7 @@ module.exports = {
     },
 
     maxCommands: {
-      description: "User has added max amount of commands already",
+      description: 'User has added max amount of commands already',
       responseType: 'badRequest',
       statusCode: 400
     }
@@ -88,7 +88,7 @@ module.exports = {
         server: inputs.serverId
       }).fetch();
 
-      sails.log.info(`Created a custom command`, createdCommand)
+      sails.log.info(`Created a custom command`, createdCommand);
       return exits.success(createdCommand);
 
 
@@ -112,15 +112,15 @@ function getAllowedCommands(server) {
       authToken: server.authToken
     }).exec({
       error: error => {
-        reject(error)
+        reject(error);
       },
       success: response => {
         let allowedCommands = new Array();
         response.commands.forEach(command => {
-          allowedCommands.push(command.command)
-        })
+          allowedCommands.push(command.command);
+        });
         resolve(allowedCommands);
       }
-    })
-  })
+    });
+  });
 }

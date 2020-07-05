@@ -14,7 +14,7 @@ module.exports = {
     let player = await Player.findOne(inputs.playerId);
 
     if (_.isUndefined(player)) {
-      return exits.error(new Error("Unknown player ID"));
+      return exits.error(new Error('Unknown player ID'));
     }
     let user = await User.findOne({
       steamId: player.steamId
@@ -39,7 +39,7 @@ module.exports = {
     let member = await discordGuild.members.get(user.discordId);
 
     if (_.isUndefined(member)) {
-      return exits.error(new Error("No GuildMember found corresponding to the user."));
+      return exits.error(new Error('No GuildMember found corresponding to the user.'));
     }
 
     let memberRoles = member.roles.array();
@@ -60,7 +60,7 @@ module.exports = {
           id: player.id
         }, {
           role: highestRole[0] ? highestRole[0].id : null
-        })
+        });
       }
       sails.log.debug(`Modified a players role - player ${player.id}. ${player.name} to role ${highestRole[0] ? highestRole[0].name : null}`);
       return exits.success(player, highestRole[0]);

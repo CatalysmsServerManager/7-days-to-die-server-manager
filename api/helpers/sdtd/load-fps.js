@@ -3,50 +3,50 @@ var sevenDays = require('machinepack-7daystodiewebapi');
 module.exports = {
 
 
-    friendlyName: 'Load fps',
+  friendlyName: 'Load fps',
 
 
-    description: 'Loads a servers FPS.',
+  description: 'Loads a servers FPS.',
 
 
-    inputs: {
+  inputs: {
 
-        serverId: {
-            type: 'number',
-            description: 'Id of the server',
-            required: true
-        }
+    serverId: {
+      type: 'number',
+      description: 'Id of the server',
+      required: true
+    }
 
+  },
+
+
+  exits: {
+    success: {
+      outputFriendlyName: 'Success',
+      outputType: 'json'
     },
 
+    notAvailable: {
+      outputFriendlyName: 'Not available',
+      description: 'The server could not be reached'
+    }
+  },
 
-    exits: {
-        success: {
-            outputFriendlyName: 'Success',
-            outputType: 'json'
-        },
-
-        notAvailable: {
-            outputFriendlyName: 'Not available',
-            description: 'The server could not be reached'
-        }
-    },
-
-    /**
+  /**
      * @name loadFps
      * @memberof module:Helpers
      * @method
      * @param {number} serverId
      */
 
-    fn: async function (inputs, exits) {
-        try {
-            let fps = await sails.helpers.redis.get(`server:${inputs.serverId}:fps`);
-            return exits.success(fps);
-          } catch (error) {
-            return exits.success(0)
-          }
+  fn: async function (inputs, exits) {
+    try {
+      let fps = await sails.helpers.redis.get(`server:${inputs.serverId}:fps`);
+      return exits.success(fps);
+    } catch (error) {
+      return exits.success(0);
     }
+  }
 
 
 };

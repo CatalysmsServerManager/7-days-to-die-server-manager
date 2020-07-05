@@ -21,7 +21,7 @@ module.exports = {
       responseType: 'badRequest'
     },
     notFound: {
-        responseType: 'notFound'
+      responseType: 'notFound'
     }
   },
 
@@ -33,7 +33,7 @@ module.exports = {
       let discordClient = sails.hooks.discordbot.getClient();
       let chatBridgeHook = sails.hooks.discordchatbridge;
 
-      if (inputs.discordGuildId === "0" ) {
+      if (inputs.discordGuildId === '0' ) {
         await SdtdConfig.update({
           server: inputs.serverId
         }, {
@@ -47,12 +47,12 @@ module.exports = {
       }
 
       if (_.isUndefined(server)){
-        return exits.notFound()
+        return exits.notFound();
       }
 
       if (chatBridgeHook.getStatus(inputs.serverId)) {
         chatBridgeHook.stop(inputs.serverId);
-      } 
+      }
 
       await SdtdConfig.update({
         server: inputs.serverId

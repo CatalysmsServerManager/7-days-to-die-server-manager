@@ -56,7 +56,7 @@ module.exports = {
     success: {},
 
     invalidItem: {
-      description: "The given item name was not found on the server",
+      description: 'The given item name was not found on the server',
       responseType: 'badRequest',
       statusCode: 400
     }
@@ -84,7 +84,7 @@ module.exports = {
         price: inputs.price,
         server: inputs.serverId,
         iconName: inputs.customIcon,
-      }).fetch()
+      }).fetch();
 
       sails.log.info(`Created a new listing for server ${inputs.serverId}`, createdListing);
       return exits.success(createdListing);

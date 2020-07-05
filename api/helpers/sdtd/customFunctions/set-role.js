@@ -1,29 +1,29 @@
 module.exports = {
-  friendlyName: "Set role",
+  friendlyName: 'Set role',
 
-  description: "Set a players role in CSMM",
+  description: 'Set a players role in CSMM',
 
   inputs: {
     playerId: {
-      type: "string",
+      type: 'string',
       required: true
     },
 
     roleToSet: {
-      type: "string",
+      type: 'string',
       required: true
     },
 
     server: {
-      type: "ref",
+      type: 'ref',
       required: true
     }
   },
 
   exits: {
     success: {
-      outputFriendlyName: "Success",
-      outputType: "boolean"
+      outputFriendlyName: 'Success',
+      outputType: 'boolean'
     }
   },
 

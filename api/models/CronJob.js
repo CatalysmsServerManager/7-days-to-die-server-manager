@@ -14,10 +14,10 @@ module.exports = {
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
 
     command: {
-      type: "string",
+      type: 'string',
       required: true
     },
-    
+
     temporalValue: {
       type: 'string',
       required: true

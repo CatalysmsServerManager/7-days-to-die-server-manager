@@ -1,17 +1,17 @@
 module.exports = {
-  friendlyName: "Add bannedItem",
+  friendlyName: 'Add bannedItem',
 
-  description: "Add an item to the list of bannedItems",
+  description: 'Add an item to the list of bannedItems',
 
   inputs: {
     bannedItem: {
       required: true,
-      type: "string"
+      type: 'string'
     },
 
     serverId: {
       required: true,
-      type: "string"
+      type: 'string'
     }
   },
 

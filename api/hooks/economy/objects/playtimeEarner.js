@@ -2,7 +2,7 @@ class PlaytimeEarner {
   constructor(server, config) {
     this.server = server;
     this.config = config;
-    this.type = "playtimeEarner";
+    this.type = 'playtimeEarner';
     this.interval = undefined;
     this.intervalFunc = loadOnlinePlayersAndAwardMoney.bind(this);
     // Bind a updateListener function with this class so we can access server and config objects inside the event listener

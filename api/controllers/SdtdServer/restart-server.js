@@ -58,7 +58,7 @@ module.exports = {
             sails.log.error(`API - SdtdServer:restart-server - ${error}`);
           },
           success: (response) => {
-            sails.log.info(`API - SdtdServer:restart-server - Successful restart for server ${inputs.serverId} in ${inputs.delay} ${inputs.delay > 1 ? "minutes" : "minute"}`);
+            sails.log.info(`API - SdtdServer:restart-server - Successful restart for server ${inputs.serverId} in ${inputs.delay} ${inputs.delay > 1 ? 'minutes' : 'minute'}`);
 
           }
         });

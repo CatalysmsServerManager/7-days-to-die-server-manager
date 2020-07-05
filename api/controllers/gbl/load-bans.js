@@ -1,38 +1,38 @@
 module.exports = {
 
 
-    friendlyName: 'load bans',
+  friendlyName: 'load bans',
 
 
-    description: 'Load bans for a server',
+  description: 'Load bans for a server',
 
 
-    inputs: {
+  inputs: {
 
-        serverId: {
-            required: true,
-            type: 'number',
-            custom: async function (valueToCheck) {
-                let foundServer = await SdtdServer.findOne(valueToCheck);
-                return foundServer
-            }
-        },
-
+    serverId: {
+      required: true,
+      type: 'number',
+      custom: async function (valueToCheck) {
+        let foundServer = await SdtdServer.findOne(valueToCheck);
+        return foundServer;
+      }
     },
 
-
-    exits: {
-
-    },
+  },
 
 
-    fn: async function (inputs, exits) {
+  exits: {
 
-        let serverBans = await sails.helpers.sdtd.loadBans(inputs.serverId);
+  },
 
-        return exits.success(serverBans);
 
-    }
+  fn: async function (inputs, exits) {
+
+    let serverBans = await sails.helpers.sdtd.loadBans(inputs.serverId);
+
+    return exits.success(serverBans);
+
+  }
 
 
 };

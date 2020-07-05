@@ -19,7 +19,7 @@ module.exports = async function viewDashboard(req, res, next) {
   });
 
   if (!permCheck.hasPermission) {
-    sails.log.warn(`User ${user.username} tried to access ${req.path} without sufficient permissions (user is ${permCheck.role.name}).`)
+    sails.log.warn(`User ${user.username} tried to access ${req.path} without sufficient permissions (user is ${permCheck.role.name}).`);
 
     if (req.wantsJSON) {
       return res.status(403).json({
@@ -29,7 +29,7 @@ module.exports = async function viewDashboard(req, res, next) {
       return res.view('meta/notauthorized', {
         role: permCheck.role,
         requiredPerm: 'viewDashboard'
-      })
+      });
     }
 
 

@@ -14,7 +14,7 @@ module.exports = {
       required: true,
       custom: async (valueToCheck) => {
         let foundServer = await SdtdServer.findOne(valueToCheck);
-        return foundServer
+        return foundServer;
       },
     },
 
@@ -72,8 +72,8 @@ module.exports = {
     inputs.limit = inputs.limit ? inputs.limit : 5000;
     inputs.size = inputs.size ? inputs.size : 100;
 
-    if (inputs.playerIds[0] === 0 || inputs.playerIds[0] === "0") {
-      inputs.playerIds = undefined
+    if (inputs.playerIds[0] === 0 || inputs.playerIds[0] === '0') {
+      inputs.playerIds = undefined;
     }
 
 
@@ -86,29 +86,29 @@ module.exports = {
           '<': inputs.endDate,
         }
       },
-      sort: "createdAt DESC",
+      sort: 'createdAt DESC',
       limit: inputs.limit
-    }
+    };
 
     if (!_.isUndefined(inputs.x) && !_.isUndefined(inputs.z)) {
       let xQuery = {
         '>': inputs.x - inputs.size,
         '<': inputs.x + inputs.size
-      }
+      };
       let zQuery = {
         '>': inputs.z - inputs.size,
         '<': inputs.z + inputs.size
-      }
+      };
 
-      waterlineQuery.where.x = xQuery
-      waterlineQuery.where.z = zQuery
+      waterlineQuery.where.x = xQuery;
+      waterlineQuery.where.z = zQuery;
 
     }
 
     if (!_.isUndefined(inputs.item)) {
       waterlineQuery.where.inventory = {
         'contains': inputs.item
-      }
+      };
     }
 
 

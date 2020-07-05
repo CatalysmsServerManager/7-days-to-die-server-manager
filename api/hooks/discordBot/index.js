@@ -55,7 +55,7 @@ module.exports = function discordBot(sails) {
         });
 
         client.on('ready', () => {
-          sails.log.info(`Connected to Discord as ${client.user.tag} - ${client.guilds.size} guilds`)
+          sails.log.info(`Connected to Discord as ${client.user.tag} - ${client.guilds.size} guilds`);
         });
 
         client.on('commandRun', (command, promise, message) => {
@@ -67,7 +67,7 @@ module.exports = function discordBot(sails) {
         });
 
         client.on('disconnect', e => {
-          sails.log.error(`Discord disconnected with code ${e.code} - ${e.reason}`)
+          sails.log.error(`Discord disconnected with code ${e.code} - ${e.reason}`);
         });
 
         client.on('reconnecting', () => {
@@ -76,7 +76,7 @@ module.exports = function discordBot(sails) {
 
         client.on('warn', (msg) => {
           sails.log.warn(`Discord bot warning: ${msg}`);
-        })
+        });
 
         client.on('rateLimit', info => {
           sails.log.warn(`Discord API rateLimit reached! ${info.limit} max requests allowed to ${info.method} ${info.path}`);
@@ -85,9 +85,9 @@ module.exports = function discordBot(sails) {
         client.on('guildMemberUpdate', (oldMember, newMember) => {
 
           try {
-            handleRoleUpdate(oldMember, newMember)
+            handleRoleUpdate(oldMember, newMember);
           } catch (error) {
-            sails.log.error(`Error handling role change`, error)
+            sails.log.error(`Error handling role change`, error);
           }
 
         });
@@ -97,42 +97,42 @@ module.exports = function discordBot(sails) {
 
         if (process.env.DISCORDBOTTOKEN) {
           client.login(sails.config.custom.botToken).then(() => {
-              initializeGuildPrefixes();
+            initializeGuildPrefixes();
 
 
-              // Rotate presence with stats info
-              client.setInterval(async function () {
-                let statsInfo = await sails.helpers.meta.loadSystemStatsAndInfo();
-                let randomNumber = Math.trunc(Math.random() * 3);
+            // Rotate presence with stats info
+            client.setInterval(async function () {
+              let statsInfo = await sails.helpers.meta.loadSystemStatsAndInfo();
+              let randomNumber = Math.trunc(Math.random() * 3);
 
-                let presenceTextToSet = `$info | `
+              let presenceTextToSet = `$info | `;
 
-                switch (randomNumber) {
-                  case 0:
-                    presenceTextToSet += `Servers: ${statsInfo.servers}`
-                    break;
-                  case 1:
-                    presenceTextToSet += `Players: ${statsInfo.players}`
-                    break;
-                  case 2:
-                    presenceTextToSet += `Guilds: ${statsInfo.guilds}`
-                    break;
-                  case 3:
-                    presenceTextToSet += `Uptime: ${statsInfo.uptime}`
-                    break;
+              switch (randomNumber) {
+                case 0:
+                  presenceTextToSet += `Servers: ${statsInfo.servers}`;
+                  break;
+                case 1:
+                  presenceTextToSet += `Players: ${statsInfo.players}`;
+                  break;
+                case 2:
+                  presenceTextToSet += `Guilds: ${statsInfo.guilds}`;
+                  break;
+                case 3:
+                  presenceTextToSet += `Uptime: ${statsInfo.uptime}`;
+                  break;
 
-                  default:
-                    break;
+                default:
+                  break;
+              }
+
+              client.user.setPresence({
+                game: {
+                  name: presenceTextToSet
                 }
+              });
+            }, 60000);
 
-                client.user.setPresence({
-                  game: {
-                    name: presenceTextToSet
-                  }
-                })
-              }, 60000)
-
-            })
+          })
             .catch((err) => {
               sails.log.error(err);
             });
@@ -164,13 +164,13 @@ async function initializeGuildPrefixes() {
     discordGuildId: {
       '!=': ['']
     }
-  })
+  });
 
   serversWithDiscordEnabled.forEach(serverConfig => {
     let guild = client.guilds.get(serverConfig.discordGuildId);
     if (guild) {
       guild.commandPrefix = serverConfig.discordPrefix;
     }
-  })
+  });
 
 }

@@ -32,54 +32,54 @@ module.exports = {
     //Date Formats must be be ordered smallest -> largest and must end in a format with ceiling of null
     date_formats = {
       past: [{
-          ceiling: 60,
-          text: "$seconds seconds ago"
-        },
-        {
-          ceiling: 3600,
-          text: "$minutes minutes ago"
-        },
-        {
-          ceiling: 86400,
-          text: "$hours hours ago"
-        },
-        {
-          ceiling: 2629744,
-          text: "$days days ago"
-        },
-        {
-          ceiling: 31556926,
-          text: "$months months ago"
-        },
-        {
-          ceiling: null,
-          text: "$years years ago"
-        }
+        ceiling: 60,
+        text: '$seconds seconds ago'
+      },
+      {
+        ceiling: 3600,
+        text: '$minutes minutes ago'
+      },
+      {
+        ceiling: 86400,
+        text: '$hours hours ago'
+      },
+      {
+        ceiling: 2629744,
+        text: '$days days ago'
+      },
+      {
+        ceiling: 31556926,
+        text: '$months months ago'
+      },
+      {
+        ceiling: null,
+        text: '$years years ago'
+      }
       ],
       future: [{
-          ceiling: 60,
-          text: "in $seconds seconds"
-        },
-        {
-          ceiling: 3600,
-          text: "in $minutes minutes"
-        },
-        {
-          ceiling: 86400,
-          text: "in $hours hours"
-        },
-        {
-          ceiling: 2629744,
-          text: "in $days days"
-        },
-        {
-          ceiling: 31556926,
-          text: "in $months months"
-        },
-        {
-          ceiling: null,
-          text: "in $years years"
-        }
+        ceiling: 60,
+        text: 'in $seconds seconds'
+      },
+      {
+        ceiling: 3600,
+        text: 'in $minutes minutes'
+      },
+      {
+        ceiling: 86400,
+        text: 'in $hours hours'
+      },
+      {
+        ceiling: 2629744,
+        text: 'in $days days'
+      },
+      {
+        ceiling: 31556926,
+        text: 'in $months months'
+      },
+      {
+        ceiling: null,
+        text: 'in $years years'
+      }
       ]
     };
     //Time units must be be ordered largest -> smallest
@@ -133,7 +133,7 @@ module.exports = {
     function depluralize_time_ago_text(time_ago_text, breakdown) {
       for (var i in breakdown) {
         if (breakdown[i] == 1) {
-          var regexp = new RegExp("\\b" + i + "\\b");
+          var regexp = new RegExp('\\b' + i + '\\b');
           time_ago_text = time_ago_text.replace(regexp, function () {
             return arguments[0].replace(/s\b/g, '');
           });

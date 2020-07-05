@@ -26,15 +26,15 @@ module.exports = {
 
       await CustomCommandArgument.destroy({
         command: inputs.commandId
-      })
+      });
 
       await CustomCommand.destroy({
         id: inputs.commandId,
-      })
+      });
       return exits.success();
 
     } catch (error) {
-      sails.log.error(error)
+      sails.log.error(error);
       return exits.error();
     }
 

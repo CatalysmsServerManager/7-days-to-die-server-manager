@@ -32,7 +32,7 @@ module.exports = {
 
     try {
       let foundUser = await User.findOne({id: inputs.userId}).populate('adminOf').populate('servers');
-      let ownedServers = foundUser.servers.concat(foundUser.adminOf)
+      let ownedServers = foundUser.servers.concat(foundUser.adminOf);
       return exits.success(ownedServers);
 
     } catch (error) {

@@ -38,7 +38,7 @@ module.exports = {
 
     for (const potentialNewPlayer of apiResult.players) {
       let idx = _.findIndex(currentPlayers, (currentPlayer) => {
-        return currentPlayer.steamId === potentialNewPlayer.steamid
+        return currentPlayer.steamId === potentialNewPlayer.steamid;
       });
 
       // New player, so we add to the newPlayers array with init data
@@ -47,7 +47,7 @@ module.exports = {
           steamId: potentialNewPlayer.steamid,
           entityId: potentialNewPlayer.entityid,
           ip: potentialNewPlayer.ip,
-          name: potentialNewPlayer.name ? he.encode(potentialNewPlayer.name) : "Unknown",
+          name: potentialNewPlayer.name ? he.encode(potentialNewPlayer.name) : 'Unknown',
           positionX: potentialNewPlayer.position.x,
           positionY: potentialNewPlayer.position.y,
           positionZ: potentialNewPlayer.position.z,
@@ -55,9 +55,9 @@ module.exports = {
           playtime: potentialNewPlayer.totalplaytime,
           banned: potentialNewPlayer.banned,
           server: server.id
-        }
-        newPlayers.push(newPlayerData)
-      }    
+        };
+        newPlayers.push(newPlayerData);
+      }
 
     }
 
@@ -67,7 +67,7 @@ module.exports = {
 
     sails.log.debug(`load-all-player-data - Created ${newPlayers.length} new records out of ${apiResult.players.length} total players for server ${server.name} - Took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`);
 
-    return exits.success(apiResult.players)
+    return exits.success(apiResult.players);
 
 
   },

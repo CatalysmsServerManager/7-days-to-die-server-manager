@@ -28,13 +28,13 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     try {
-        let player = await Player.findOne(inputs.playerId);
+      let player = await Player.findOne(inputs.playerId);
 
-        let currentCurrency = Math.round(player.currency);
-        return exits.success(currentCurrency);
+      let currentCurrency = Math.round(player.currency);
+      return exits.success(currentCurrency);
     } catch (error) {
-        sails.log.error(`HELPER economy:get-player-balance - ${error}`);
-        return exits.error(error);
+      sails.log.error(`HELPER economy:get-player-balance - ${error}`);
+      return exits.error(error);
     }
 
   }

@@ -46,7 +46,7 @@ module.exports = {
         user: user,
         servers: servers,
         players: players
-      })
+      });
 
     } catch (error) {
       sails.log.error(`API - SdtdServer:profile - ${error}`);

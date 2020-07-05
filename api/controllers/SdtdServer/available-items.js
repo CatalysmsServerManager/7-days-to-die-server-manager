@@ -60,7 +60,7 @@ module.exports = {
       }).exec({
         success: (response) => {
           if (!response) {
-            return exits.success([])
+            return exits.success([]);
           }
           return exits.success(response);
         },

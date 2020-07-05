@@ -1,4 +1,4 @@
-const schedule = require('node-schedule')
+const schedule = require('node-schedule');
 
 /**
  * cron hook
@@ -30,13 +30,13 @@ module.exports = function defineCronHook(sails) {
           try {
             await this.start(jobToStart.id);
           } catch (error) {
-            sails.log.error(`Error initializing cronjob ${jobToStart.id} - ${error}`)               
+            sails.log.error(`Error initializing cronjob ${jobToStart.id} - ${error}`);
           }
-        
+
         }
 
-        return 
-      })
+        return;
+      });
 
     },
 
@@ -54,7 +54,7 @@ module.exports = function defineCronHook(sails) {
 
       scheduledJobs.set(foundJob.id, scheduledJob);
       sails.log.debug(`Started a cronjob`, foundJob);
-      return
+      return;
     },
 
     stop: async function (jobId) {
@@ -63,13 +63,13 @@ module.exports = function defineCronHook(sails) {
       let job = scheduledJobs.get(foundJob.id);
 
       if (!foundJob || !job) {
-        return
+        return;
       }
 
       job.cancel();
       scheduledJobs.delete(foundJob.id);
       sails.log.debug(`Stopped a cronjob`, foundJob);
-      return
+      return;
 
     },
 

@@ -1,32 +1,32 @@
 module.exports = {
 
 
-    friendlyName: 'delete ban',
+  friendlyName: 'delete ban',
 
 
-    description: 'Delete a ban from the GBL record',
+  description: 'Delete a ban from the GBL record',
 
 
-    inputs: {
-        banId: {
-            required: true,
-            type: 'string'
-        }
-    },
-
-
-    exits: {
-
-    },
-
-
-    fn: async function (inputs, exits) {
-
-        await BanEntry.destroy({id: inputs.banId});
-
-        return exits.success();
-
+  inputs: {
+    banId: {
+      required: true,
+      type: 'string'
     }
+  },
+
+
+  exits: {
+
+  },
+
+
+  fn: async function (inputs, exits) {
+
+    await BanEntry.destroy({id: inputs.banId});
+
+    return exits.success();
+
+  }
 
 
 };

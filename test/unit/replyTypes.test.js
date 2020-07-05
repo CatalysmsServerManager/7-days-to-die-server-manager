@@ -1,4 +1,4 @@
-var expect = require("chai").expect;
+var expect = require('chai').expect;
 
 describe('HELPER Command reply types', () => {
   it('Returns an array', () => {
@@ -7,11 +7,11 @@ describe('HELPER Command reply types', () => {
   it('Does not contain duplicate types', () => {
 
     const currentTypes = sails.hooks.sdtdcommands.replyTypes.map(o => o.type);
-    const unique = new Set()
+    const unique = new Set();
 
     currentTypes.forEach(function (type) {
-      if (!unique.has(type)) unique.add(type)
-    })
+      if (!unique.has(type)) {unique.add(type);}
+    });
 
     return expect([...unique]).to.eql(currentTypes);
   });

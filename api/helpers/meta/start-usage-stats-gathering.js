@@ -1,4 +1,4 @@
-const hhmmss = require('@streammedev/hhmmss')
+const hhmmss = require('@streammedev/hhmmss');
 
 module.exports = {
 
@@ -25,7 +25,7 @@ module.exports = {
       try {
         let lastStatsEntry = await UsageStats.find({
           limit: 1,
-          sort: "createdAt DESC"
+          sort: 'createdAt DESC'
         });
 
         if ((Date.now() - sails.config.custom.usageStatsInterval) > (_.isUndefined(lastStatsEntry[0]) ? 0 : lastStatsEntry[0].createdAt)) {
@@ -49,18 +49,18 @@ module.exports = {
             openTickets: currentStats.openTickets,
             closedTickets: currentStats.closedTickets,
             gblComments: currentStats.gblComments,
-          })
+          });
 
-          sails.log.info(`Gathered system usage information.`, currentStats)
+          sails.log.info(`Gathered system usage information.`, currentStats);
         }
 
-        sails.log.debug(`Checked if we need to get system stats - ${(Date.now() - sails.config.custom.usageStatsInterval) > (_.isUndefined(lastStatsEntry[0]) ? 0 : lastStatsEntry[0].createdAt)}`)
+        sails.log.debug(`Checked if we need to get system stats - ${(Date.now() - sails.config.custom.usageStatsInterval) > (_.isUndefined(lastStatsEntry[0]) ? 0 : lastStatsEntry[0].createdAt)}`);
       } catch (error) {
-        sails.log.error(error)
+        sails.log.error(error);
       }
 
     }, 360000);
-    return exits.success()
+    return exits.success();
 
   }
 

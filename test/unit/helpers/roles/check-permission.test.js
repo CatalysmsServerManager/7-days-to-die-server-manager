@@ -1,26 +1,26 @@
 const chai = require('chai');
 const expect = chai.expect;
 const faker = require('faker');
-const permissionFields = ["manageServer", "manageEconomy", "managePlayers", "manageTickets", "viewAnalytics", "viewDashboard", "useTracking", "useChat", "useCommands", "manageGbl", "discordExec", "discordLookup"];
+const permissionFields = ['manageServer', 'manageEconomy', 'managePlayers', 'manageTickets', 'viewAnalytics', 'viewDashboard', 'useTracking', 'useChat', 'useCommands', 'manageGbl', 'discordExec', 'discordLookup'];
 
 const testRoles = [];
 const testPlayers = [];
 
 const OtherServerRoles = [{
-    server: 65489654,
-    name: "Player",
-    level: "2000"
-  },
-  {
-    server: 65489654,
-    name: "Player",
-    level: "1000"
-  },
-  {
-    server: 65489654,
-    name: "Admin",
-    level: "0"
-  }
+  server: 65489654,
+  name: 'Player',
+  level: '2000'
+},
+{
+  server: 65489654,
+  name: 'Player',
+  level: '1000'
+},
+{
+  server: 65489654,
+  name: 'Admin',
+  level: '0'
+}
 ];
 
 chai.config.truncateThreshold = 0;
@@ -31,24 +31,24 @@ describe('HELPER roles/check-permission', () => {
     // Create some default roles
     let createdRole = await Role.create({
       server: sails.testServer.id,
-      name: "Admin",
-      level: "1",
+      name: 'Admin',
+      level: '1',
       manageServer: true
     }).fetch();
     testRoles.push(createdRole);
 
     createdRole = await Role.create({
       server: sails.testServer.id,
-      name: "Player",
-      level: "2000",
+      name: 'Player',
+      level: '2000',
       amountOfTeleports: 2
     }).fetch();
     testRoles.push(createdRole);
 
     createdRole = await Role.create({
       server: sails.testServer.id,
-      name: "Default",
-      level: "5000",
+      name: 'Default',
+      level: '5000',
       isDefault: true
     }).fetch();
     testRoles.push(createdRole);
@@ -83,7 +83,7 @@ describe('HELPER roles/check-permission', () => {
   });
 
   it(`Correctly checks if a user has the correct permission for the player role via user ID`, async function () {
-    let playerRole = testRoles.filter(r => r.name === "Player")[0];
+    let playerRole = testRoles.filter(r => r.name === 'Player')[0];
     let player = await mockPlayer({
       roleId: playerRole.id
     });
@@ -101,7 +101,7 @@ describe('HELPER roles/check-permission', () => {
   });
 
   it(`Correctly checks if a user has the correct permission for the admin role via user ID`, async function () {
-    let playerRole = testRoles.filter(r => r.name === "Admin")[0];
+    let playerRole = testRoles.filter(r => r.name === 'Admin')[0];
     let player = await mockPlayer({
       roleId: playerRole.id
     });
@@ -117,7 +117,7 @@ describe('HELPER roles/check-permission', () => {
     return Promise.all(promises);
   });
   it(`Correctly checks if a user has the correct permission for the player role via player ID`, async function () {
-    let playerRole = testRoles.filter(r => r.name === "Player")[0];
+    let playerRole = testRoles.filter(r => r.name === 'Player')[0];
     let player = await mockPlayer({
       roleId: playerRole.id
     });
@@ -135,7 +135,7 @@ describe('HELPER roles/check-permission', () => {
   });
 
   it(`Correctly checks if a user has the correct permission for the admin role via user ID`, async function () {
-    let playerRole = testRoles.filter(r => r.name === "Admin")[0];
+    let playerRole = testRoles.filter(r => r.name === 'Admin')[0];
     let player = await mockPlayer({
       roleId: playerRole.id
     });
@@ -154,7 +154,7 @@ describe('HELPER roles/check-permission', () => {
 
   it(`Defaults to the highest level role if no default is set`, async function () {
     const player = await mockPlayer({});
-    const defaultRole = testRoles.filter(r => r.name === "Default")[0];
+    const defaultRole = testRoles.filter(r => r.name === 'Default')[0];
     await Role.destroy({
       id: defaultRole.id
     });
@@ -168,7 +168,7 @@ describe('HELPER roles/check-permission', () => {
     const result = await sails.helpers.roles.checkPermission.with({
       serverId: sails.testServer.id,
       playerId: player.id,
-      permission: "manageServer"
+      permission: 'manageServer'
     });
 
     expect(result.role).to.deep.eq(highestLevelRole[0]);
@@ -176,12 +176,12 @@ describe('HELPER roles/check-permission', () => {
 
   it('Defaults to the default role if one is set', async function () {
     const player = await mockPlayer({});
-    const defaultRole = testRoles.filter(r => r.name === "Default")[0];
+    const defaultRole = testRoles.filter(r => r.name === 'Default')[0];
 
     const result = await sails.helpers.roles.checkPermission.with({
       serverId: sails.testServer.id,
       playerId: player.id,
-      permission: "manageServer"
+      permission: 'manageServer'
     });
 
     expect(result.role).to.deep.eq(defaultRole);

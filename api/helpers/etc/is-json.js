@@ -20,10 +20,10 @@ module.exports = {
       outputFriendlyName: 'Success',
       outputType: 'boolean'
     },
-    
-    
+
+
   },
-  
+
   sync: true,
 
 

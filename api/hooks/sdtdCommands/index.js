@@ -48,7 +48,7 @@ module.exports = function sdtdCommands(sails) {
         } catch (error) {
           sails.log.error(`HOOK SdtdCommands:initialize - ${error}`);
         }
-        return
+        return;
       });
 
     },
@@ -126,7 +126,7 @@ module.exports = function sdtdCommands(sails) {
       if (serverConfig.commandsEnabled) {
 
         if (commandInfoMap.has(String(serverId))) {
-          await this.stop(serverId)
+          await this.stop(serverId);
         }
 
         let serverLoggingObj = sails.hooks.sdtdlogs.getLoggingObject(String(serverId));

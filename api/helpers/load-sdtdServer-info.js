@@ -50,7 +50,7 @@ module.exports = {
       sails.log.debug(`HELPER - loadSdtdserverInfo - Loaded server info for server ${server.name}`);
       exits.success(server);
     } catch (error) {
-      sails.log.warn(`HELPER - load-sdtdServer-info - Failed to load info ${error}`)
+      sails.log.warn(`HELPER - load-sdtdServer-info - Failed to load info ${error}`);
       return exits.error(error);
     }
 

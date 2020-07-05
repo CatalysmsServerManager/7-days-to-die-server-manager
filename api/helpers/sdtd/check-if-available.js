@@ -20,7 +20,7 @@ module.exports = {
     onlyStats: {
       type: 'boolean',
       defaultsTo: false,
-      description: "If true, only check via API response and skip command"
+      description: 'If true, only check via API response and skip command'
     }
 
   },
@@ -83,7 +83,7 @@ async function checkStats(sdtdServer) {
         if (response.gametime) {
           return resolve(true);
         } else {
-          return resolve(false)
+          return resolve(false);
         }
       },
       error: (error) => {
@@ -93,7 +93,7 @@ async function checkStats(sdtdServer) {
         return resolve(false);
       }
     });
-  })
+  });
 }
 
 async function checkCommand(sdtdServer) {
@@ -112,7 +112,7 @@ async function checkCommand(sdtdServer) {
         resolve(false);
       },
       connectionRefused: error => {
-        resolve(false)
+        resolve(false);
       }
     });
   });

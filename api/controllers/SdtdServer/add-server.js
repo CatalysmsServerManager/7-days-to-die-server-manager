@@ -1,58 +1,58 @@
-const sevenDays = require("machinepack-7daystodiewebapi");
-const sevenDaysAPI = require("7daystodie-api-wrapper");
+const sevenDays = require('machinepack-7daystodiewebapi');
+const sevenDaysAPI = require('7daystodie-api-wrapper');
 
 module.exports = {
-  friendlyName: "Add server",
+  friendlyName: 'Add server',
 
-  description: "",
+  description: '',
 
   inputs: {
     serverIp: {
-      description: "Ip of the SdtdServer",
-      type: "string",
+      description: 'Ip of the SdtdServer',
+      type: 'string',
       required: true
     },
 
     webPort: {
-      type: "number",
+      type: 'number',
       required: true
     },
 
     authName: {
-      type: "string",
+      type: 'string',
       minLength: 2,
       maxLength: 200,
       required: true
     },
 
     authToken: {
-      type: "string",
+      type: 'string',
       minLength: 10,
       maxLength: 200,
       required: true
     },
 
     serverName: {
-      type: "string",
+      type: 'string',
       required: true
     }
   },
 
   exits: {
     success: {
-      description: "Server was added successfully"
+      description: 'Server was added successfully'
     },
 
     badRequest: {
-      description: "User did a bad thing :D",
-      responseType: "badRequest",
+      description: 'User did a bad thing :D',
+      responseType: 'badRequest',
       statusCode: 400
     }
   },
 
   fn: async function(inputs, exits) {
     let userProfile = await User.findOne(this.req.session.userId).populate(
-      "servers"
+      'servers'
     );
     let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({
       userId: userProfile.id
@@ -125,15 +125,15 @@ module.exports = {
       // Create some default roles
       let adminRole = await Role.create({
         server: addedServer.id,
-        name: "Admin",
-        level: "1",
+        name: 'Admin',
+        level: '1',
         manageServer: true
       }).fetch();
 
       await Role.create({
         server: addedServer.id,
-        name: "Moderator",
-        level: "10",
+        name: 'Moderator',
+        level: '10',
         manageEconomy: true,
         managePlayers: true,
         manageTickets: true,
@@ -147,16 +147,16 @@ module.exports = {
 
       await Role.create({
         server: addedServer.id,
-        name: "Donator",
-        level: "1000",
+        name: 'Donator',
+        level: '1000',
         economyGiveMultiplier: 1.25,
         amountOfTeleports: 5
       });
 
       await Role.create({
         server: addedServer.id,
-        name: "Player",
-        level: "2000",
+        name: 'Player',
+        level: '2000',
         amountOfTeleports: 2
       });
 
@@ -195,7 +195,7 @@ async function checkServerResponse(sdtdServer) {
   };
 
   if (!statsResponse.gametime) {
-    if (String(statsResponse).startsWith("<html>")) {
+    if (String(statsResponse).startsWith('<html>')) {
       responseObj.detectedControlPanelPortUsed = true;
     }
     responseObj.statsResponse = false;
@@ -231,7 +231,7 @@ async function checkCommand(sdtdServer) {
         adminUser: sdtdServer.authName,
         adminToken: sdtdServer.authToken
       },
-      "version",
+      'version',
       { timeout: 10000 }
     );
     return response;

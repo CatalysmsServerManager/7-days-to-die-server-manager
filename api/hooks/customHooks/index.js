@@ -33,7 +33,7 @@ module.exports = function defineCustomHooksHook(sails) {
         }
 
         for (let config of enabledServers) {
-          await this.start(config.server)
+          await this.start(config.server);
         }
 
         return;
@@ -106,7 +106,7 @@ module.exports = function defineCustomHooksHook(sails) {
         });
       }
 
-      sails.log.debug(`Started customHooks module for server ${serverId}`)
+      sails.log.debug(`Started customHooks module for server ${serverId}`);
 
     },
 
@@ -158,18 +158,18 @@ function checkLogLine(logLine, hook) {
   let logLineMatchesSearch = true;
 
   if (!_.isEmpty(hook.searchString)) {
-    logLineMatchesSearch = logLine.includes(hook.searchString)
+    logLineMatchesSearch = logLine.includes(hook.searchString);
   }
 
   if (!_.isEmpty(hook.regex)) {
-    logLineMatchesSearch = (new RegExp(hook.regex)).test(logLine)
+    logLineMatchesSearch = (new RegExp(hook.regex)).test(logLine);
   }
 
   return logLineMatchesSearch;
 }
 
 /**
- * 
+ *
  * @param {Object} hook The hook that is being executed
  * @returns {boolean} true: okay to execute, false: hook is still on cooldown
  */
@@ -212,7 +212,7 @@ function getVariablesValues(variables, logMsg) {
     let matches = logMsg.match(regex);
 
     if (!_.isNull(matches)) {
-      customVars[variable.name] = logMsg.match(regex)[0]
+      customVars[variable.name] = logMsg.match(regex)[0];
     }
   }
 

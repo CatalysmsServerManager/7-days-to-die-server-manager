@@ -5,15 +5,15 @@ class removeTele extends SdtdCommand {
   constructor(serverId) {
     super(serverId, {
       name: 'removetele',
-      description: "Remove a teleport location",
-      extendedDescription: "Delete a teleport location from the system",
-      aliases: ["deltele", "teledelete", "deletetele", "teleremove"]
+      description: 'Remove a teleport location',
+      extendedDescription: 'Delete a teleport location from the system',
+      aliases: ['deltele', 'teledelete', 'deletetele', 'teleremove']
     });
     this.serverId = serverId;
   }
 
   async isEnabled(chatMessage, player, server, args) {
-    return server.config.enabledPlayerTeleports
+    return server.config.enabledPlayerTeleports;
   }
 
   async run(chatMessage, player, server, args) {
@@ -22,28 +22,28 @@ class removeTele extends SdtdCommand {
     });
 
     if (args.length == 0) {
-      return chatMessage.reply(`removeTeleMissingTeleportName`)
+      return chatMessage.reply(`removeTeleMissingTeleportName`);
     }
 
     if (args.length > 1) {
-      return chatMessage.reply(`removeTeleTooManyArguments`)
+      return chatMessage.reply(`removeTeleTooManyArguments`);
     }
 
-    let teleportFound = false
+    let teleportFound = false;
     playerTeleports.forEach(teleport => {
       if (teleport.name == args[0]) {
-        teleportFound = teleport
+        teleportFound = teleport;
       }
-    })
+    });
 
     if (!teleportFound) {
-      return chatMessage.reply(`removeTeleTeleportNotFound`)
+      return chatMessage.reply(`removeTeleTeleportNotFound`);
     }
 
     await PlayerTeleport.destroy(teleportFound);
     return chatMessage.reply(`removeTeleSuccess`, {
       teleport: teleportFound
-    })
+    });
 
   }
 }

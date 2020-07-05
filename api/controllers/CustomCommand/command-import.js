@@ -1,17 +1,17 @@
-const validator = require("validator");
-const cronParser = require("cron-parser");
+const validator = require('validator');
+const cronParser = require('cron-parser');
 
 module.exports = {
-  friendlyName: "Cron export",
+  friendlyName: 'Cron export',
 
-  description: "",
+  description: '',
 
   inputs: {
     serverId: {
-      type: "number"
+      type: 'number'
     },
     file: {
-      type: "ref"
+      type: 'ref'
     }
   },
 
@@ -19,13 +19,13 @@ module.exports = {
     success: {},
 
     invalidIds: {
-      description: "Must give either listing or server ID",
-      responseType: "badRequest",
+      description: 'Must give either listing or server ID',
+      responseType: 'badRequest',
       statusCode: 400
     },
 
     invalidInput: {
-      responseType: "badRequest",
+      responseType: 'badRequest',
       statusCode: 400
     }
   },
@@ -52,18 +52,18 @@ module.exports = {
     }
 
     for (const newCommand of newData) {
-      if (newCommand.name.includes(" ")) {
-        problems.push("Name cannot have spaces");
+      if (newCommand.name.includes(' ')) {
+        problems.push('Name cannot have spaces');
       }
 
-      let commandsToExecute = newCommand.commandsToExecute.split(";");
+      let commandsToExecute = newCommand.commandsToExecute.split(';');
 
       if (!_.isBoolean(newCommand.enabled)) {
         problems.push(`Enabled must be true or false.`);
       }
 
       if (
-        !validator.isInt(newCommand.delay + "", {
+        !validator.isInt(newCommand.delay + '', {
           min: 0
         })
       ) {
@@ -71,7 +71,7 @@ module.exports = {
       }
 
       if (
-        !validator.isInt(newCommand.timeout + "", {
+        !validator.isInt(newCommand.timeout + '', {
           min: 0
         })
       ) {
@@ -79,7 +79,7 @@ module.exports = {
       }
 
       if (
-        !validator.isInt(newCommand.costToExecute + "", {
+        !validator.isInt(newCommand.costToExecute + '', {
           min: 0
         })
       ) {
@@ -104,7 +104,7 @@ module.exports = {
       let createdRecords = await CustomCommand.createEach(
         newData.map(newCommand => {
           newCommand.server = inputs.serverId;
-          return _.omit(newCommand, "arguments");
+          return _.omit(newCommand, 'arguments');
         })
       );
       sails.log.info(

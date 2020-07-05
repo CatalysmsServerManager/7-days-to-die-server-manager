@@ -1,5 +1,5 @@
-const geoip = require("geoip-country");
-const _ = require("lodash");
+const geoip = require('geoip-country');
+const _ = require('lodash');
 
 const replaceQuotes = string => string.substring(1, string.length - 1);
 
@@ -13,11 +13,11 @@ module.exports = logLine => {
   const joinedValuesRegex = /([A-Za-z_]*)=(?:'([^']*)'|(\d*))/gm;
 
   let returnValue = {
-    type: "logLine",
+    type: 'logLine',
     data: logLine
   };
 
-  if (_.startsWith(logLine.msg, "Time:")) {
+  if (_.startsWith(logLine.msg, 'Time:')) {
     // {
     //     date: '2018-04-12',
     //     time: '22:01:21',
@@ -28,52 +28,52 @@ module.exports = logLine => {
     // }
 
     // Find the positions of the data points
-    let splitLogLine = logLine.msg.split(" ");
-    let fpsIdx = splitLogLine.indexOf("FPS:");
-    let heapIdx = splitLogLine.indexOf("Heap:");
-    let chunksIdx = splitLogLine.indexOf("Chunks:");
-    let zombiesIdx = splitLogLine.indexOf("Zom:");
-    let entitiesIdx = splitLogLine.indexOf("Ent:");
-    let playersIdx = splitLogLine.indexOf("Ply:");
-    let itemsIdx = splitLogLine.indexOf("Items:");
-    let rssIdx = splitLogLine.indexOf("RSS:");
+    let splitLogLine = logLine.msg.split(' ');
+    let fpsIdx = splitLogLine.indexOf('FPS:');
+    let heapIdx = splitLogLine.indexOf('Heap:');
+    let chunksIdx = splitLogLine.indexOf('Chunks:');
+    let zombiesIdx = splitLogLine.indexOf('Zom:');
+    let entitiesIdx = splitLogLine.indexOf('Ent:');
+    let playersIdx = splitLogLine.indexOf('Ply:');
+    let itemsIdx = splitLogLine.indexOf('Items:');
+    let rssIdx = splitLogLine.indexOf('RSS:');
 
     let memUpdate = {
       date: logLine.date,
       time: logLine.time,
       uptime: logLine.uptime,
       msg: logLine.msg,
-      fps: fpsIdx === -1 ? "" : splitLogLine[fpsIdx + 1],
-      heap: heapIdx === -1 ? "" : splitLogLine[heapIdx + 1],
-      chunks: chunksIdx === -1 ? "" : splitLogLine[chunksIdx + 1],
-      zombies: zombiesIdx === -1 ? "" : splitLogLine[zombiesIdx + 1],
-      entities: entitiesIdx === -1 ? "" : splitLogLine[entitiesIdx + 1],
-      players: playersIdx === -1 ? "" : splitLogLine[playersIdx + 1],
-      items: itemsIdx === -1 ? "" : splitLogLine[itemsIdx + 1],
-      rss: rssIdx === -1 ? "" : splitLogLine[rssIdx + 1],
+      fps: fpsIdx === -1 ? '' : splitLogLine[fpsIdx + 1],
+      heap: heapIdx === -1 ? '' : splitLogLine[heapIdx + 1],
+      chunks: chunksIdx === -1 ? '' : splitLogLine[chunksIdx + 1],
+      zombies: zombiesIdx === -1 ? '' : splitLogLine[zombiesIdx + 1],
+      entities: entitiesIdx === -1 ? '' : splitLogLine[entitiesIdx + 1],
+      players: playersIdx === -1 ? '' : splitLogLine[playersIdx + 1],
+      items: itemsIdx === -1 ? '' : splitLogLine[itemsIdx + 1],
+      rss: rssIdx === -1 ? '' : splitLogLine[rssIdx + 1],
       uptime: logLine.uptime
     };
 
-    returnValue.type = "memUpdate";
+    returnValue.type = 'memUpdate';
     returnValue.data = memUpdate;
   }
 
   // A17 Chat
-  if (_.startsWith(logLine.msg, "Chat") && logLine.msg.includes("(from")) {
+  if (_.startsWith(logLine.msg, 'Chat') && logLine.msg.includes('(from')) {
     /*
-    { 
+    {
        date: '2018-11-20',
        time: '14:38:03',
        uptime: '2274.494',
        msg: 'Chat (from \'76561198028175941\', entity id \'171\', to \'Global\'): \'Catalysm\': blabla',
        trace: '',
-       type: 'Log' 
+       type: 'Log'
     }
     */
 
-    let splitMessage = logLine.msg.split("'");
+    let splitMessage = logLine.msg.split('\'');
 
-    if (logLine.msg.includes("Chat handled by mod")) {
+    if (logLine.msg.includes('Chat handled by mod')) {
       splitMessage = splitMessage.slice(2);
     }
 
@@ -88,24 +88,24 @@ module.exports = logLine => {
       playerName: splitMessage[7],
       messageText: splitMessage
         .slice(8)
-        .join(" ")
-        .replace(": ", "")
+        .join(' ')
+        .replace(': ', '')
     };
 
     // Filter out chatmessages that have been handled by some API mod already
     if (
-      (data.steamId === "-non-player-" && data.playerName !== "Server") ||
-      data.entityId === "-1"
+      (data.steamId === '-non-player-' && data.playerName !== 'Server') ||
+      data.entityId === '-1'
     ) {
       return;
     }
 
-    returnValue.type = "chatMessage";
+    returnValue.type = 'chatMessage';
     returnValue.data = data;
   }
 
   // pre A17 chat
-  if (_.startsWith(logLine.msg, "Chat:")) {
+  if (_.startsWith(logLine.msg, 'Chat:')) {
     /*
     {
       "date": "2017-11-14",
@@ -117,26 +117,26 @@ module.exports = logLine => {
     }
     */
 
-    let firstIdx = logLine.msg.indexOf("'");
-    let secondIdx = logLine.msg.indexOf("'", firstIdx + 1);
+    let firstIdx = logLine.msg.indexOf('\'');
+    let secondIdx = logLine.msg.indexOf('\'', firstIdx + 1);
     let playerName = logLine.msg.slice(firstIdx + 1, secondIdx);
     let messageText = logLine.msg.slice(secondIdx + 3, logLine.msg.length);
 
-    let type = "chat";
-    if (playerName == "Server") {
-      type = "server";
+    let type = 'chat';
+    if (playerName == 'Server') {
+      type = 'server';
     }
 
     /*
     Workaround for when the server uses servertools roles
-    Server tools 
+    Server tools
     */
-    if (playerName.includes("[-]") && playerName.includes("](")) {
-      let roleColourDividerIndex = playerName.indexOf("](");
-      let roleEndIndex = playerName.indexOf(")", roleColourDividerIndex);
+    if (playerName.includes('[-]') && playerName.includes('](')) {
+      let roleColourDividerIndex = playerName.indexOf('](');
+      let roleEndIndex = playerName.indexOf(')', roleColourDividerIndex);
       let newPlayerName = playerName
         .substring(roleEndIndex + 2)
-        .replace("[-]", "");
+        .replace('[-]', '');
       playerName = newPlayerName;
     }
 
@@ -144,11 +144,11 @@ module.exports = logLine => {
      * Workaround for coppi colours (with the colour ending indicator [-])
      */
 
-    if (playerName.includes("[-]")) {
-      let colourEndIdx = playerName.indexOf("]");
+    if (playerName.includes('[-]')) {
+      let colourEndIdx = playerName.indexOf(']');
       let newPlayerName = playerName
         .substring(colourEndIdx + 1)
-        .replace("[-]", "");
+        .replace('[-]', '');
       playerName = newPlayerName;
     }
 
@@ -162,17 +162,17 @@ module.exports = logLine => {
       msg: logLine.msg
     };
 
-    returnValue.type = "chatMessage";
+    returnValue.type = 'chatMessage';
     returnValue.data = data;
   }
 
   if (connectedRegex.test(logLine.msg)) {
-    const connectedArray = logLine.msg.split(",");
+    const connectedArray = logLine.msg.split(',');
     let joinMsg = {
-      steamId: connectedArray.find(e => e.includes("steamid")).split("=")[1],
-      playerName: connectedArray.find(e => e.includes("name")).split("=")[1],
-      entityId: connectedArray.find(e => e.includes("entityid")).split("=")[1],
-      ip: connectedArray.find(e => e.includes("ip")).split("=")[1],
+      steamId: connectedArray.find(e => e.includes('steamid')).split('=')[1],
+      playerName: connectedArray.find(e => e.includes('name')).split('=')[1],
+      entityId: connectedArray.find(e => e.includes('entityid')).split('=')[1],
+      ip: connectedArray.find(e => e.includes('ip')).split('=')[1],
       date: logLine.date,
       time: logLine.time,
       uptime: logLine.uptime,
@@ -182,7 +182,7 @@ module.exports = logLine => {
     const geoIpLookup = geoip.lookup(joinMsg.ip);
     joinMsg.country = geoIpLookup ? geoIpLookup.country : null;
 
-    returnValue.type = "playerConnected";
+    returnValue.type = 'playerConnected';
     returnValue.data = joinMsg;
   }
 
@@ -202,20 +202,20 @@ module.exports = logLine => {
     const joinedArray = logLine.msg.match(joinedValuesRegex);
 
     let joinMsg = {
-      steamId: replaceQuotes(joinedArray[2].replace("OwnerID=", "")),
-      playerName: replaceQuotes(joinedArray[3].replace("PlayerName=", "")),
-      entityId: joinedArray[0].replace("EntityID=", ""),
+      steamId: replaceQuotes(joinedArray[2].replace('OwnerID=', '')),
+      playerName: replaceQuotes(joinedArray[3].replace('PlayerName=', '')),
+      entityId: joinedArray[0].replace('EntityID=', ''),
       date: logLine.date,
       time: logLine.time,
       uptime: logLine.uptime,
       msg: logLine.msg
     };
 
-    returnValue.type = "playerJoined";
+    returnValue.type = 'playerJoined';
     returnValue.data = joinMsg;
   }
 
-  if (_.startsWith(logLine.msg, "Player disconnected:")) {
+  if (_.startsWith(logLine.msg, 'Player disconnected:')) {
     /*
     {
       "date": "2017-11-14",
@@ -227,21 +227,21 @@ module.exports = logLine => {
     }
     */
     let logMsg = logLine.msg;
-    logMsg = logMsg.replace("Player disconnected", "");
-    logMsg = logMsg.split(",");
+    logMsg = logMsg.replace('Player disconnected', '');
+    logMsg = logMsg.split(',');
 
-    let entityID = logMsg[0].replace(": EntityID=", "").trim();
+    let entityID = logMsg[0].replace(': EntityID=', '').trim();
     let playerID = logMsg[1]
-      .replace("PlayerID=", "")
-      .replace(/'/g, "")
+      .replace('PlayerID=', '')
+      .replace(/'/g, '')
       .trim();
     let ownerID = logMsg[2]
-      .replace("OwnerID=", "")
-      .replace(/'/g, "")
+      .replace('OwnerID=', '')
+      .replace(/'/g, '')
       .trim();
     let playerName = logMsg[3]
-      .replace("PlayerName=", "")
-      .replace(/'/g, "")
+      .replace('PlayerName=', '')
+      .replace(/'/g, '')
       .trim();
 
     let disconnectedMsg = {
@@ -255,7 +255,7 @@ module.exports = logLine => {
       msg: logLine.msg
     };
 
-    returnValue.type = "playerDisconnected";
+    returnValue.type = 'playerDisconnected';
     returnValue.data = disconnectedMsg;
   }
 
@@ -277,16 +277,16 @@ module.exports = logLine => {
       time: logLine.time,
       uptime: logLine.uptime,
       msg: logLine.msg,
-      steamId: replaceQuotes(deathArray[2].replace("OwnerID=", "")),
-      playerName: replaceQuotes(deathArray[3].replace("PlayerName=", "")),
-      entityId: deathArray[0].replace("EntityID=", "")
+      steamId: replaceQuotes(deathArray[2].replace('OwnerID=', '')),
+      playerName: replaceQuotes(deathArray[3].replace('PlayerName=', '')),
+      entityId: deathArray[0].replace('EntityID=', '')
     };
 
-    returnValue.type = "playerDeath";
+    returnValue.type = 'playerDeath';
     returnValue.data = deathMessage;
   }
 
-  if (logLine.msg.startsWith("[CSMM_Patrons]playerLeveled:")) {
+  if (logLine.msg.startsWith('[CSMM_Patrons]playerLeveled:')) {
     /*
     {
       "date": "2017-11-14",
@@ -297,13 +297,13 @@ module.exports = logLine => {
       "type": "Log"
     }
     */
-    let lvlMessage = logLine.msg.split("(");
+    let lvlMessage = logLine.msg.split('(');
 
-    let steamId = lvlMessage[1].split(")")[0].trim();
-    let newLvl = lvlMessage[1].split("level")[1].trim();
+    let steamId = lvlMessage[1].split(')')[0].trim();
+    let newLvl = lvlMessage[1].split('level')[1].trim();
     let oldLvl = lvlMessage[2]
-      .replace("was ", "")
-      .replace(")", "")
+      .replace('was ', '')
+      .replace(')', '')
       .trim();
 
     newLvl = parseInt(newLvl);
@@ -319,11 +319,11 @@ module.exports = logLine => {
       oldLvl: oldLvl
     };
 
-    returnValue.type = "playerLevel";
+    returnValue.type = 'playerLevel';
     returnValue.data = lvlMessage;
   }
 
-  if (logLine.msg.startsWith("[CSMM_Patrons]entityKilled:")) {
+  if (logLine.msg.startsWith('[CSMM_Patrons]entityKilled:')) {
     /*
     {
       "date": "2017-11-14",
@@ -334,10 +334,10 @@ module.exports = logLine => {
       "type": "Log"
     }
     */
-    let killMessage = logLine.msg.split("(");
+    let killMessage = logLine.msg.split('(');
 
-    let steamId = killMessage[1].split(")")[0].trim();
-    let victimInfo = killMessage[1].split("killed ")[1].split(" ");
+    let steamId = killMessage[1].split(')')[0].trim();
+    let victimInfo = killMessage[1].split('killed ')[1].split(' ');
     let entityClass = victimInfo[0];
     let entityName = victimInfo[1];
 
@@ -351,20 +351,20 @@ module.exports = logLine => {
       entityName: entityName
     };
 
-    if (entityClass === "zombie") {
-      returnValue.type = "zombieKilled";
+    if (entityClass === 'zombie') {
+      returnValue.type = 'zombieKilled';
     }
 
-    if (entityClass === "animal") {
-      returnValue.type = "animalKilled";
+    if (entityClass === 'animal') {
+      returnValue.type = 'animalKilled';
     }
 
     returnValue.data = killMessage;
   }
 
   if (
-    logLine.msg.startsWith("GMSG: Player") &&
-    logLine.msg.includes("killed")
+    logLine.msg.startsWith('GMSG: Player') &&
+    logLine.msg.includes('killed')
   ) {
     /*
     {
@@ -376,7 +376,7 @@ module.exports = logLine => {
       "type": "Log"
     }
     */
-    let killMessage = logLine.msg.split("'");
+    let killMessage = logLine.msg.split('\'');
 
     let victimName = killMessage[1].trim();
     let killerName = killMessage[3].trim();
@@ -390,7 +390,7 @@ module.exports = logLine => {
         playerName: victimName
       };
 
-      returnValue.type = "playerSuicide";
+      returnValue.type = 'playerSuicide';
       returnValue.data = suicideMessage;
     } else {
       killMessage = {
@@ -402,7 +402,7 @@ module.exports = logLine => {
         killerName: killerName
       };
 
-      returnValue.type = "playerKilled";
+      returnValue.type = 'playerKilled';
       returnValue.data = killMessage;
     }
   }

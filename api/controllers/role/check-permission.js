@@ -12,7 +12,7 @@ module.exports = {
     permissionField: {
       type: 'string',
       required: true,
-      isIn: ["manageServer", "manageEconomy", "managePlayers", "manageTickets", "viewAnalytics", "viewDashboard", "useTracking", "useChat", "useCommands", "manageGbl", "discordExec", "discordLookup"]
+      isIn: ['manageServer', 'manageEconomy', 'managePlayers', 'manageTickets', 'viewAnalytics', 'viewDashboard', 'useTracking', 'useChat', 'useCommands', 'manageGbl', 'discordExec', 'discordLookup']
     },
 
     serverId: {
@@ -47,15 +47,15 @@ module.exports = {
     options.permission = inputs.permissionField;
 
     if (inputs.playerId) {
-      options.playerId = inputs.playerId
+      options.playerId = inputs.playerId;
     }
 
     if (inputs.serverId) {
-      options.serverId = inputs.serverId
+      options.serverId = inputs.serverId;
     }
 
     if (inputs.userId) {
-      options.userId = inputs.userId
+      options.userId = inputs.userId;
     }
 
     let permCheck = await sails.helpers.roles.checkPermission.with(options);

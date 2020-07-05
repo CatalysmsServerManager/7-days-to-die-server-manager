@@ -1,21 +1,21 @@
 module.exports = {
-  friendlyName: "listing buy",
+  friendlyName: 'listing buy',
 
-  description: "Player buys a listing",
+  description: 'Player buys a listing',
 
   inputs: {
     listingId: {
-      type: "number",
+      type: 'number',
       required: true
     },
 
     playerId: {
-      type: "number",
+      type: 'number',
       required: true
     },
 
     amount: {
-      type: "number",
+      type: 'number',
       min: 1
     }
   },
@@ -24,15 +24,15 @@ module.exports = {
     success: {},
 
     invalidId: {
-      description: "The given ID was not found in the DB",
-      responseType: "badRequest",
+      description: 'The given ID was not found in the DB',
+      responseType: 'badRequest',
       statusCode: 400
     },
 
     notEnoughCurrency: {
       description:
-        "The player does not have enough money to play for the listing",
-      responseType: "badRequest",
+        'The player does not have enough money to play for the listing',
+      responseType: 'badRequest',
       statusCode: 400
     }
   },
@@ -48,18 +48,18 @@ module.exports = {
       let totalCost = listing.price * inputs.amount;
 
       if (_.isUndefined(player)) {
-        return exits.invalidId("Invalid player ID");
+        return exits.invalidId('Invalid player ID');
       }
 
       if (_.isUndefined(listing)) {
-        return exits.invalidId("Invalid listing ID");
+        return exits.invalidId('Invalid listing ID');
       }
 
       totalCost = totalCost * playerRole.economyDeductMultiplier;
 
       if (player.currency < totalCost) {
         return exits.notEnoughCurrency(
-          "You do not have enough money to buy this!"
+          'You do not have enough money to buy this!'
         );
       }
 

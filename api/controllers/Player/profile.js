@@ -45,7 +45,7 @@ module.exports = {
       let historicalInfo = await HistoricalInfo.find({
         player: player.id,
         server: server.id
-      })
+      });
 
       let updatedPlayer = await sails.helpers.sdtd.loadPlayerData(server.id, player.steamId, false, true);
       if (_.isArray(updatedPlayer) && !_.isUndefined(updatedPlayer[0])) {
@@ -56,7 +56,7 @@ module.exports = {
       }
 
 
-      const hhmmss = require('@streammedev/hhmmss')
+      const hhmmss = require('@streammedev/hhmmss');
       Object.defineProperty(player, 'playtimeHHMMSS', {
         value: hhmmss(player.playtime)
       });
@@ -65,7 +65,7 @@ module.exports = {
         steamId: player.steamId
       });
 
-      sails.log.info(`Loading player profile ${player.id} - ${player.name} for server ${server.name}`)
+      sails.log.info(`Loading player profile ${player.id} - ${player.name} for server ${server.name}`);
 
       return exits.success({
         player: player,

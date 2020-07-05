@@ -12,110 +12,110 @@ module.exports = {
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
 
     name: {
-      type: "string",
+      type: 'string',
       required: true
     },
 
     level: {
-      type: "number",
+      type: 'number',
       defaultsTo: 2000
     },
 
     // if true, csmm will use this role for any permission check where role is not explicitly set.
     isDefault: {
-      type: "boolean",
+      type: 'boolean',
       defaultsTo: false
     },
 
     amountOfTeleports: {
-      type: "number",
+      type: 'number',
       defaultsTo: 5
     },
 
     radiusAllowedToExplore: {
-      type: "number",
+      type: 'number',
       defaultsTo: 1000000
     },
 
     economyGiveMultiplier: {
-      type: "number",
+      type: 'number',
       defaultsTo: 1,
       min: 0
     },
 
     economyDeductMultiplier: {
-      type: "number",
+      type: 'number',
       defaultsTo: 1,
       min: 0
     },
 
     discordRole: {
-      type: "string",
+      type: 'string',
       allowNull: true
     },
 
     manageServer: {
-      type: "boolean",
+      type: 'boolean',
       defaultsTo: false
     },
 
     manageEconomy: {
-      type: "boolean",
+      type: 'boolean',
       defaultsTo: false
     },
 
     managePlayers: {
-      type: "boolean",
+      type: 'boolean',
       defaultsTo: false
     },
 
     manageTickets: {
-      type: "boolean",
+      type: 'boolean',
       defaultsTo: false
     },
 
     viewAnalytics: {
-      type: "boolean",
+      type: 'boolean',
       defaultsTo: false
     },
 
     viewDashboard: {
-      type: "boolean",
+      type: 'boolean',
       defaultsTo: false
     },
 
     useTracking: {
-      type: "boolean",
+      type: 'boolean',
       defaultsTo: false
     },
 
     useChat: {
-      type: "boolean",
+      type: 'boolean',
       defaultsTo: false
     },
 
     useCommands: {
-      type: "boolean",
+      type: 'boolean',
       defaultsTo: false
     },
 
     manageGbl: {
-      type: "boolean",
+      type: 'boolean',
       defaultsTo: false
     },
 
     discordExec: {
-      type: "boolean",
+      type: 'boolean',
       defaultsTo: false
     },
 
     discordLookup: {
-      type: "boolean",
+      type: 'boolean',
       defaultsTo: false
     },
 
     immuneToBannedItemsList: {
-      type: "boolean",
+      type: 'boolean',
       defaultsTo: false
     },
 
@@ -124,12 +124,12 @@ module.exports = {
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
 
     players: {
-      collection: "player",
-      via: "role"
+      collection: 'player',
+      via: 'role'
     },
 
     server: {
-      model: "sdtdServer",
+      model: 'sdtdServer',
       required: true
     }
   }

@@ -58,7 +58,7 @@ module.exports = {
 
       let cmdToExec;
       if (cpmVersion >= 6.4) {
-        cmdToExec = `giveplus ${player.steamId} ${inputs.itemName} ${inputs.amount} ${inputs.quality ? inputs.quality + " 0" : ''}`;
+        cmdToExec = `giveplus ${player.steamId} ${inputs.itemName} ${inputs.amount} ${inputs.quality ? inputs.quality + ' 0' : ''}`;
       } else {
         cmdToExec = `give ${player.entityId} ${inputs.itemName} ${inputs.amount} ${inputs.quality ? inputs.quality : ''}`;
       }

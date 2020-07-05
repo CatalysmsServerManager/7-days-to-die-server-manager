@@ -23,11 +23,11 @@ module.exports = async function canSeeTicket(req, res, next) {
       return res.view('meta/notauthorized', {
         role: userRole,
         requiredPerm: 'manageTickets'
-      })
+      });
     }
 
   } catch (error) {
-    sails.log.error(`POLICY - canSeeTicket - ${error}`)
+    sails.log.error(`POLICY - canSeeTicket - ${error}`);
   }
 
 };

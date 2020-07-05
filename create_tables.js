@@ -1,4 +1,4 @@
-const dotenv = require("dotenv");
+const dotenv = require('dotenv');
 const sails = require('sails');
 
 dotenv.load();

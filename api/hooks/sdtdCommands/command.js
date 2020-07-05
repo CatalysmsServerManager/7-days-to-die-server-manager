@@ -24,17 +24,17 @@ class SdtdCommand {
   async validateCommand() {
 
     if (_.isUndefined(this.name)) {
-      throw new Error(`Implementation error! Must provide a name for 7dtd commands.`)
+      throw new Error(`Implementation error! Must provide a name for 7dtd commands.`);
     }
 
     if (!_.isUndefined(this.aliases) && !_.isArray(this.aliases)) {
-      throw new Error(`Aliases must be an array or undefined.`)
+      throw new Error(`Aliases must be an array or undefined.`);
     }
   }
 
 
   async isEnabled() {
-    throw new Error(`${this.constructor.name} does not have a isEnabled() method.`)
+    throw new Error(`${this.constructor.name} does not have a isEnabled() method.`);
   }
 
 

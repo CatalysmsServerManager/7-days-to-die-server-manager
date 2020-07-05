@@ -1,14 +1,14 @@
-let SdtdCommand = require("../command.js");
-const SdtdApi = require("7daystodie-api-wrapper");
+let SdtdCommand = require('../command.js');
+const SdtdApi = require('7daystodie-api-wrapper');
 
 class Gimme extends SdtdCommand {
   constructor(serverId) {
     super(serverId, {
-      name: "gimme",
-      description: "Get some random item. GIMME GIMME",
+      name: 'gimme',
+      description: 'Get some random item. GIMME GIMME',
       extendedDescription:
-        "Get a random item, entity or command. An admin must configure possible items via the webinterface before you can use this command.",
-      aliases: ["gimmie"]
+        'Get a random item, entity or command. An admin must configure possible items via the webinterface before you can use this command.',
+      aliases: ['gimmie']
     });
     this.serverId = serverId;
   }
@@ -37,10 +37,10 @@ class Gimme extends SdtdCommand {
       where: {
         player: player.id,
         createdAt: {
-          ">": borderDate.valueOf()
+          '>': borderDate.valueOf()
         }
       },
-      sort: "createdAt DESC",
+      sort: 'createdAt DESC',
       limit: 1
     });
 
@@ -48,13 +48,13 @@ class Gimme extends SdtdCommand {
       let coolDownRemainderMs =
         cooldownInMs - (dateNow - previousUse[0].createdAt);
       let coolDownRemainderMin = Math.round(coolDownRemainderMs / 60000);
-      return chatMessage.reply("gimmeCooldown", {
+      return chatMessage.reply('gimmeCooldown', {
         coolDownRemainderMin: coolDownRemainderMin
       });
     }
 
     if (possibleGimmeItems.length === 0) {
-      return chatMessage.reply("gimmeNoConfig");
+      return chatMessage.reply('gimmeNoConfig');
     }
 
     if (server.config.economyEnabled && server.config.costToUseGimme) {
@@ -65,18 +65,18 @@ class Gimme extends SdtdCommand {
           amountToDeduct: server.config.costToUseGimme,
           message: `COMMAND - ${this.name}`
         })
-        .tolerate("notEnoughCurrency", totalNeeded => {
+        .tolerate('notEnoughCurrency', totalNeeded => {
           notEnoughMoney = true;
         });
       if (notEnoughMoney) {
-        return chatMessage.reply("notEnoughMoney", {
+        return chatMessage.reply('notEnoughMoney', {
           cost: server.config.costToUseGimme
         });
       }
     }
 
     switch (itemToUse.type) {
-      case "item":
+      case 'item':
         let parsedItems = parseItem(itemToUse.value);
         for (const itemToGive of parsedItems) {
           let cmdToExec;
@@ -98,16 +98,16 @@ class Gimme extends SdtdCommand {
               cmdToExec
             );
 
-            if (response.result.includes("ERR:")) {
-              chatMessage.reply("error", { error: response.result });
+            if (response.result.includes('ERR:')) {
+              chatMessage.reply('error', { error: response.result });
             }
           } catch (error) {
-            chatMessage.reply("error", { error: error });
+            chatMessage.reply('error', { error: error });
           }
         }
         break;
 
-      case "entity":
+      case 'entity':
         let parsedEntities = parseEntity(itemToUse.value);
         for (const entity of parsedEntities) {
           let cmdToExec = `spawnentity ${player.entityId} ${entity}`;
@@ -123,12 +123,12 @@ class Gimme extends SdtdCommand {
               cmdToExec
             );
           } catch (error) {
-            chatMessage.reply("error", { error: error });
+            chatMessage.reply('error', { error: error });
           }
         }
         break;
 
-      case "command":
+      case 'command':
         let parsedCommands = sails.helpers.sdtd.parseCommandsString(
           itemToUse.value
         );
@@ -155,9 +155,9 @@ class Gimme extends SdtdCommand {
 module.exports = Gimme;
 
 function parseEntity(value) {
-  return value.split(";");
+  return value.split(';');
 }
 
 function parseItem(value) {
-  return value.split(";");
+  return value.split(';');
 }

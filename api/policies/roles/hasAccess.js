@@ -21,7 +21,7 @@ module.exports = async function manageEconomy(req, res, next) {
   }
 
   if (role.manageServer || role.manageEconomy || role.managePlayers || role.manageRoles || role.manage || role.viewDashboard || role.useTracking || role.viewAnalytics || role.manageTickets || sails.config.custom.adminSteamIds.includes(user.steamId) || ownerCheck) {
-    next()
+    next();
   } else {
     if (req.wantsJSON) {
       return res.status(403).json({
@@ -31,7 +31,7 @@ module.exports = async function manageEconomy(req, res, next) {
       return res.view('meta/notauthorized', {
         role: role,
         requiredPerm: 'any'
-      })
+      });
     }
   }
 

@@ -37,7 +37,7 @@ module.exports = {
   exits: {
 
     invalidInput: {
-      description: "Invalid input given to this helper."
+      description: 'Invalid input given to this helper.'
     }
 
   },
@@ -54,7 +54,7 @@ module.exports = {
         discordId: inputs.discordId
       });
       if (!_.isUndefined(foundUser[0])) {
-        inputs.userId = foundUser[0].id
+        inputs.userId = foundUser[0].id;
       }
     }
 
@@ -63,7 +63,7 @@ module.exports = {
       try {
         await sails.helpers.discord.setRoleFromDiscord(inputs.playerId);
       } catch (error) {
-        sails.log.debug(`Couldn't update players roles via discord - ${error}`)
+        sails.log.debug(`Couldn't update players roles via discord - ${error}`);
       }
     }
 
@@ -96,16 +96,16 @@ module.exports = {
         if (foundRole[0]) {
           role = foundRole[0];
         }
-        hasPermission = true
+        hasPermission = true;
       }
     }
 
     if (role[inputs.permission]) {
-      hasPermission = true
+      hasPermission = true;
     }
 
     if (role.manageServer) {
-      hasPermission = true
+      hasPermission = true;
     }
 
     // Check if the user owns the server on CSMM, in that case we will always return true.
@@ -117,7 +117,7 @@ module.exports = {
       }
     }
 
-    sails.log.debug(`Checked if ${inputs.playerId ? `player ${inputs.playerId}` : `user ${inputs.userId}`} has permission ${inputs.permission} - ${hasPermission}`)
+    sails.log.debug(`Checked if ${inputs.playerId ? `player ${inputs.playerId}` : `user ${inputs.userId}`} has permission ${inputs.permission} - ${hasPermission}`);
 
     // All done.
     return exits.success({

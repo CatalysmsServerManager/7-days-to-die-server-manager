@@ -42,29 +42,29 @@ module.exports = {
       ban.comments = ban.comments.map(async comment => {
         comment = await GblComment.findOne(comment.id).populate('user').populate('heartedBy');
 
-        return comment
+        return comment;
       });
 
 
       return new Promise((resolve => {
         Promise.all(ban.comments).then(completed => {
-          completed = _.filter(completed, comment => !comment.deleted)
+          completed = _.filter(completed, comment => !comment.deleted);
           // Sort comments by amount of hearts
-          completed = _.sortBy(completed, comment => -1 * comment.heartedBy.length)
-          ban.comments = completed
+          completed = _.sortBy(completed, comment => -1 * comment.heartedBy.length);
+          ban.comments = completed;
           resolve(ban);
         });
-      }))
+      }));
 
 
 
-    })
+    });
 
     Promise.all(foundBans).then(filledBans => {
       sails.log.info(`Searched the global ban list for ${inputs.steamId} - found ${filledBans.length} entries`);
 
       return exits.success(filledBans);
-    })
+    });
 
 
 

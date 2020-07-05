@@ -1,40 +1,40 @@
-const sevenDays = require("machinepack-7daystodiewebapi");
+const sevenDays = require('machinepack-7daystodiewebapi');
 
 module.exports = {
-  friendlyName: "Update connection info",
+  friendlyName: 'Update connection info',
 
-  description: "Update ip, port, authname and/or authtoken for a sdtdServer",
+  description: 'Update ip, port, authname and/or authtoken for a sdtdServer',
 
   inputs: {
     serverId: {
       required: true,
-      type: "string"
+      type: 'string'
     },
     serverIp: {
-      type: "string",
+      type: 'string',
       minLength: 2,
       maxLength: 100
     },
 
     webPort: {
-      type: "number",
+      type: 'number',
       min: 50,
       max: 100000
     },
 
     authName: {
-      type: "string",
+      type: 'string',
       minLength: 2,
       maxLength: 200
     },
 
     authToken: {
-      type: "string",
+      type: 'string',
       minLength: 10,
       maxLength: 200
     },
     serverName: {
-      type: "string",
+      type: 'string',
       minLength: 5,
       maxLength: 200
     }
@@ -42,8 +42,8 @@ module.exports = {
 
   exits: {
     badRequest: {
-      description: "Server with given ID not found in the system",
-      responseType: "badRequest"
+      description: 'Server with given ID not found in the system',
+      responseType: 'badRequest'
     },
     success: {}
   },
@@ -109,7 +109,7 @@ module.exports = {
 
       sails.log.info(
         `API - SdtdServer:update-connection-info - Updated connection info for server ${inputs.serverId}`,
-        _.omit(inputs, ["authName", "authToken"])
+        _.omit(inputs, ['authName', 'authToken'])
       );
       return exits.success();
     } catch (error) {

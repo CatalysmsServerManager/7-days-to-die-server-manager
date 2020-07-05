@@ -154,7 +154,7 @@ module.exports = {
       id: inputs.roleId
     }, updateObj).fetch();
 
-    sails.log.info(`Updated a role for server ${updatedRole[0].server}`, updatedRole[0])
+    sails.log.info(`Updated a role for server ${updatedRole[0].server}`, updatedRole[0]);
 
     return exits.success(updatedRole[0]);
 

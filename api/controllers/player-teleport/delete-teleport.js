@@ -1,26 +1,26 @@
 module.exports = {
 
-    friendlyName: 'Delete a teleport',
+  friendlyName: 'Delete a teleport',
 
-    description: '',
+  description: '',
 
-    inputs: {
-        teleportId: {
-            type: 'number',
-            required: true
-        }
-    },
-
-    exits: {
-        success: {
-        },
-    },
-
-
-    fn: async function (inputs, exits) {
-
-        await PlayerTeleport.destroy({id: inputs.teleportId});
-        return exits.success();
-
+  inputs: {
+    teleportId: {
+      type: 'number',
+      required: true
     }
+  },
+
+  exits: {
+    success: {
+    },
+  },
+
+
+  fn: async function (inputs, exits) {
+
+    await PlayerTeleport.destroy({id: inputs.teleportId});
+    return exits.success();
+
+  }
 };

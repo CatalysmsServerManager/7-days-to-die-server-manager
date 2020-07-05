@@ -1,4 +1,4 @@
-const Bull = require("bull");
+const Bull = require('bull');
 
 module.exports = {
   friendlyName: 'Returns a bull queue object',

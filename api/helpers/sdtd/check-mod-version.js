@@ -31,10 +31,10 @@ module.exports = {
     let server = await SdtdServer.findOne(inputs.serverId);
 
     if (_.isUndefined(server)) {
-      return exits.error(new Error('No server found'))
+      return exits.error(new Error('No server found'));
     }
 
-    let versionResult
+    let versionResult;
     try {
       versionResult = await sails.helpers.sdtdApi.executeConsoleCommand({
         ip: server.ip,
@@ -55,22 +55,22 @@ module.exports = {
     let versionToFindLine = new String();
     for (const modLine of modsArray) {
       if (modLine.startsWith(inputs.modName)) {
-        versionToFindLine = modLine
+        versionToFindLine = modLine;
       }
     }
 
-    let splitVersionLine = versionToFindLine.split(":");
+    let splitVersionLine = versionToFindLine.split(':');
 
-    if (inputs.modName === "Game version") {
+    if (inputs.modName === 'Game version') {
       return exits.success(_.trim(splitVersionLine[splitVersionLine.length - 1]));
     }
 
     let versionNumber = _.trim(splitVersionLine[splitVersionLine.length - 1]);
     if (versionNumber === '') {
-      versionNumber = 0
+      versionNumber = 0;
     }
 
-    sails.log.debug(`Checked mod version of server ${inputs.serverId} for mod ${inputs.modName}. Found version ${versionNumber}`)
+    sails.log.debug(`Checked mod version of server ${inputs.serverId} for mod ${inputs.modName}. Found version ${versionNumber}`);
     return exits.success(parseFloat(versionNumber));
 
   }

@@ -5,8 +5,8 @@ class Shop extends SdtdCommand {
   constructor(serverId) {
     super(serverId, {
       name: 'shop',
-      description: "Ingame shop",
-      extendedDescription: "",
+      description: 'Ingame shop',
+      extendedDescription: '',
       aliases: ['store']
     });
     this.serverId = serverId;
@@ -31,7 +31,7 @@ class Shop extends SdtdCommand {
 
 
     if (cpmVersion >= 6.4) {
-      cmdToExec = `giveplus ${player.steamId} "${listing.name}" ${listing.amount} ${listing.quality ? listing.quality + " 0" : ''}`;
+      cmdToExec = `giveplus ${player.steamId} "${listing.name}" ${listing.amount} ${listing.quality ? listing.quality + ' 0' : ''}`;
     } else {
       cmdToExec = `give ${player.entityId} "${listing.name}" ${listing.amount} ${listing.quality ? listing.quality : ''}`;
     }
@@ -54,7 +54,7 @@ class Shop extends SdtdCommand {
         timesBought: listing.timesBought++
       });
 
-      return chatMessage.reply(`shopSuccess`, { listing })
+      return chatMessage.reply(`shopSuccess`, { listing });
     } catch (error) {
       sails.log.warn(error);
       chatMessage.reply(`error`);
@@ -123,7 +123,7 @@ class Shop extends SdtdCommand {
         let listingCounter = 1;
         for (const listing of listingsToShow) {
           await chatMessage.reply(`#${listingCounter}. ${listing.price} ${server.config.currencyName} ${listing.friendlyName}`);
-          listingCounter++
+          listingCounter++;
         }
       }
     }

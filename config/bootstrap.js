@@ -1,4 +1,4 @@
-const SdtdApi = require("7daystodie-api-wrapper");
+const SdtdApi = require('7daystodie-api-wrapper');
 /**
  * Bootstrap
  * (sails.config.bootstrap)
@@ -29,8 +29,8 @@ module.exports.bootstrap = async function (done) {
   }
 
   setInterval(async () => {
-    await sails.helpers.meta.fixDuplicatePlayers()
-  }, 360000)
+    await sails.helpers.meta.fixDuplicatePlayers();
+  }, 360000);
 
 
   // It's very important to trigger this callback method when you are finished

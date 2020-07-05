@@ -14,8 +14,8 @@ module.exports = {
       required: true,
       custom: async (valueToCheck) => {
         let foundJob = await CronJob.findOne(valueToCheck);
-        return foundJob
-      } 
+        return foundJob;
+      }
     }
 
   },
@@ -27,10 +27,10 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    
+
     await sails.hooks.cron.stop(inputs.jobId);
     let deletedJob = await CronJob.destroy({id: inputs.jobId}).fetch();
-    sails.log.info(`Deleted cron job ${inputs.jobId}`)
+    sails.log.info(`Deleted cron job ${inputs.jobId}`);
     return exits.success(deletedJob);
 
   }

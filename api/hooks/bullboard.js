@@ -1,4 +1,4 @@
-const { UI, setQueues } = require('bull-board')
+const { UI, setQueues } = require('bull-board');
 const path = require('path');
 
 module.exports = function BullBoard(sails) {

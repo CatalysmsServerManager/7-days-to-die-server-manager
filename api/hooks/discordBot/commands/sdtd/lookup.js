@@ -11,20 +11,20 @@ class Lookup extends Commando.Command {
       guildOnly: true,
       memberName: 'lookup',
       args: [{
-          key: 'playername',
-          prompt: 'Please specify a player name to look for',
-          type: 'string'
-        },
-        {
-          key: 'server',
-          default: 1,
-          type: 'integer',
-          prompt: 'Please specify what server to run this commmand for!'
-        }
+        key: 'playername',
+        prompt: 'Please specify a player name to look for',
+        type: 'string'
+      },
+      {
+        key: 'server',
+        default: 1,
+        type: 'integer',
+        prompt: 'Please specify what server to run this commmand for!'
+      }
       ],
       description: 'Lookup a player profile',
       details: 'This is an admin-only command as it shows IP, location info',
-      examples: ["lookup Cata", "lookup bill"]
+      examples: ['lookup Cata', 'lookup bill']
     });
   }
 
@@ -38,7 +38,7 @@ class Lookup extends Commando.Command {
     let sdtdServer = sdtdServers[args.server - 1];
 
     if (!sdtdServer) {
-      return msg.channel.send(`Did not find server ${args.server}! Check your config please.`)
+      return msg.channel.send(`Did not find server ${args.server}! Check your config please.`);
     }
 
     let permCheck = await sails.helpers.roles.checkPermission.with({
@@ -48,36 +48,36 @@ class Lookup extends Commando.Command {
     });
 
     if (!permCheck.hasPermission) {
-      let errorEmbed = new this.client.errorEmbed(`You do not have sufficient permissions to execute this command. Your registered role is ${permCheck.role.name}. Contact your server admin if you think you should have a higher role.`)
+      let errorEmbed = new this.client.errorEmbed(`You do not have sufficient permissions to execute this command. Your registered role is ${permCheck.role.name}. Contact your server admin if you think you should have a higher role.`);
 
       let usersWithDiscordId = await User.find({
         discordId: msg.author.id
       });
 
       if (usersWithDiscordId.length === 0) {
-        errorEmbed.addField(`No users with your discord ID ${msg.author.id} found!`, "Link your Discord profile to CSMM first.")
+        errorEmbed.addField(`No users with your discord ID ${msg.author.id} found!`, 'Link your Discord profile to CSMM first.');
       }
-      return msg.channel.send(errorEmbed)
+      return msg.channel.send(errorEmbed);
     }
 
     let foundPlayer = await sails.models.player.find({
       server: sdtdServer.id,
       or: [{
-          name: {
-            'contains': args.playername
-          },
+        name: {
+          'contains': args.playername
         },
-        {
-          entityId: isNaN(parseInt(args.playername)) ? -1 : args.playername
-        },
-        {
-          steamId: args.playername
-        },
+      },
+      {
+        entityId: isNaN(parseInt(args.playername)) ? -1 : args.playername
+      },
+      {
+        steamId: args.playername
+      },
       ]
     });
 
     if (foundPlayer.length == 0) {
-      return msg.channel.send(`Did not find any players with that name/ID!`)
+      return msg.channel.send(`Did not find any players with that name/ID!`);
     }
 
     if (foundPlayer.length > 1) {
@@ -93,7 +93,7 @@ class Lookup extends Commando.Command {
 
 
     let lastOnlineTimeAgo = await sails.helpers.etc.humanizedTime(lastOnlineDate);
-    let embed = new this.client.customEmbed()
+    let embed = new this.client.customEmbed();
 
 
     embed.setTitle(`${foundPlayer.name} - profile`)
@@ -101,20 +101,20 @@ class Lookup extends Commando.Command {
       .addField('💰 Currency', foundPlayer.currency ? foundPlayer.currency : 0, true)
       .addField('⏲️ Last online', `${lastOnlineDate.toDateString()} - ${lastOnlineTimeAgo}`, true)
       .addField('🗺️ Location', `${foundPlayer.positionX} ${foundPlayer.positionY} ${foundPlayer.positionZ}`, true)
-      .addField('🖧 IP', foundPlayer.ip ? foundPlayer.ip : "Unknown", true)
+      .addField('🖧 IP', foundPlayer.ip ? foundPlayer.ip : 'Unknown', true)
       .addField('👤 Profile', `${process.env.CSMM_HOSTNAME}/player/${foundPlayer.id}/profile`)
 
 
-      .setFooter(`CSMM - ${sdtdServer.name}`)
+      .setFooter(`CSMM - ${sdtdServer.name}`);
 
     if (foundPlayer.avatarUrl) {
-      embed.setThumbnail(foundPlayer.avatarUrl)
+      embed.setThumbnail(foundPlayer.avatarUrl);
     }
 
     if (foundPlayer.inventory) {
       fs.writeFile(`${sdtdServer.name}_${foundPlayer.id}_inventory.txt`, JSON.stringify(foundPlayer.inventory), err => {
         if (err) {
-          sails.log.error(err)
+          sails.log.error(err);
         }
         msg.channel.send({
           embed: embed,
@@ -125,15 +125,15 @@ class Lookup extends Commando.Command {
         }).then(response => {
           fs.unlink(`${sdtdServer.name}_${foundPlayer.id}_inventory.txt`, err => {
             if (err) {
-              sails.log.error(err)
+              sails.log.error(err);
             }
-          })
+          });
         }).catch(e => {
-          sails.log.error(`DISCORD COMMAND - LOOKUP - ${e}`)
-        })
+          sails.log.error(`DISCORD COMMAND - LOOKUP - ${e}`);
+        });
       });
     } else {
-      msg.channel.send(embed)
+      msg.channel.send(embed);
     }
 
 

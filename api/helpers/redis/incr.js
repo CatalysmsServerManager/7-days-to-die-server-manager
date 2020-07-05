@@ -27,12 +27,12 @@ module.exports = {
     if (datastore.config.adapter === 'sails-redis') {
       sails.getDatastore('cache').leaseConnection(function during(redisConnection, proceed) {
         redisConnection.incr(inputs.keyString, (err, reply) => {
-          if (err) return proceed(err);
+          if (err) {return proceed(err);}
 
-          return proceed(undefined, reply)
+          return proceed(undefined, reply);
         });
       }).exec((err, result) => {
-        if (err) return exits.error(err);
+        if (err) {return exits.error(err);}
 
         return exits.success(result);
       });

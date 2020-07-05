@@ -146,5 +146,5 @@ module.exports.getAPIConfig = function getAPIConfig(server) {
     forceHttps: server.forceHttps,
     adminUser: server.authName,
     adminToken: server.authToken,
-  }
-}
+  };
+};

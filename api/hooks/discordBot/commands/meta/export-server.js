@@ -1,22 +1,22 @@
-const Commando = require("discord.js-commando");
-const fs = require("fs");
+const Commando = require('discord.js-commando');
+const fs = require('fs');
 
 class Export extends Commando.Command {
   constructor(client) {
     super(client, {
-      name: "export",
-      group: "meta",
-      memberName: "export",
-      description: "Export server database rows",
+      name: 'export',
+      group: 'meta',
+      memberName: 'export',
+      description: 'Export server database rows',
       hidden: true,
       ownerOnly: true,
       args: [
         {
-          key: "serverId",
-          label: "ID of the server, duh",
+          key: 'serverId',
+          label: 'ID of the server, duh',
           required: true,
-          type: "string",
-          prompt: "I need the server ID, dummy."
+          type: 'string',
+          prompt: 'I need the server ID, dummy.'
         }
       ]
     });
@@ -96,7 +96,7 @@ class Export extends Commando.Command {
       banEntries: banEntries,
       gblComments: gblComments,
       gimmeItems: gimmeItems,
-      players: players.map(player => _.omit(player, "user", "inventory")),
+      players: players.map(player => _.omit(player, 'user', 'inventory')),
       playerClaimItems: playerClaimItems,
       playerTeleports: playerTeleports,
       playerUsedCommands: playerUsedCommands,
@@ -131,8 +131,8 @@ module.exports = Export;
 
 function omitDates(object) {
   if (_.isArray(object)) {
-    return object.map(e => _.omit(e, "createdAt", "updatedAt"));
+    return object.map(e => _.omit(e, 'createdAt', 'updatedAt'));
   } else {
-    return _.omit(object, "createdAt", "updatedAt");
+    return _.omit(object, 'createdAt', 'updatedAt');
   }
 }

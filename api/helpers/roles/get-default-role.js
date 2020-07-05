@@ -20,7 +20,7 @@ module.exports = {
   exits: {
 
     invalidInput: {
-      description: "Invalid input given to this helper."
+      description: 'Invalid input given to this helper.'
     }
 
   },
@@ -56,14 +56,14 @@ module.exports = {
       if (amountOfRoles === 0) {
         let createdRole = await Role.create({
           server: inputs.serverId,
-          name: "Player",
-          level: "2000",
+          name: 'Player',
+          level: '2000',
         }).fetch();
-        return exits.success(createdRole)
+        return exits.success(createdRole);
       }
     }
 
     return exits.success(foundRole[0]);
 
   }
-}
+};

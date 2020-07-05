@@ -35,7 +35,7 @@ module.exports = function defineHighPingKickHook(sails) {
 
 
 
-      })
+      });
     },
 
 
@@ -49,11 +49,11 @@ module.exports = function defineHighPingKickHook(sails) {
         sails.log.warn(`Tried to start ping kicker for a server without a loggingObject - ${server.name}`, {
           server: serverId
         });
-        return
+        return;
       }
 
 
-      loggingObject.on('memUpdate', handlePingCheck)
+      loggingObject.on('memUpdate', handlePingCheck);
     },
 
     stop: async function (serverId) {
@@ -76,7 +76,7 @@ async function handlePingCheck(memUpdate) {
     server: server.id
   });
 
-  let pingWhitelist
+  let pingWhitelist;
 
   try {
     pingWhitelist = JSON.parse(config.pingWhitelist);
@@ -108,15 +108,15 @@ async function handlePingCheck(memUpdate) {
       let whiteListIdx = pingWhitelist.indexOf(playerRecord.steamId);
 
       if (onlinePlayer.ping > config.maxPing && whiteListIdx === -1) {
-        failedChecksForServer++
+        failedChecksForServer++;
         let currentFailedChecks = await getPlayerFails(playerRecord.id);
 
         if (currentFailedChecks >= config.pingChecksToFail) {
           await kickPlayer(playerRecord, server, config.pingKickMessage);
           await setPlayerFails(playerRecord.id, 0);
-          sails.log.debug(`Kicked player ${playerRecord.id} from server ${server.name} for high ping! ping = ${onlinePlayer.ping}`)
+          sails.log.debug(`Kicked player ${playerRecord.id} from server ${server.name} for high ping! ping = ${onlinePlayer.ping}`);
         } else {
-          await setPlayerFails(playerRecord.id, currentFailedChecks + 1)
+          await setPlayerFails(playerRecord.id, currentFailedChecks + 1);
         }
 
       } else {

@@ -24,7 +24,7 @@ module.exports = function(grunt) {
   //   'sails-linker:clientSideTemplates',
   // ]);
 
- // Something is original prod task breaks the build. So using dev task as prod for now ¯\_(ツ)_/¯
+  // Something is original prod task breaks the build. So using dev task as prod for now ¯\_(ツ)_/¯
 
   grunt.registerTask('prod', [
     //'polyfill:dev', //« uncomment to ALSO transpile during development (for broader browser compat.)
