@@ -1,4 +1,4 @@
-{
+module.exports = {
   //   ╔═╗╔═╗╦  ╦╔╗╔╔╦╗┬─┐┌─┐
   //   ║╣ ╚═╗║  ║║║║ ║ ├┬┘│
   //  o╚═╝╚═╝╩═╝╩╝╚╝ ╩ ┴└─└─┘
@@ -21,16 +21,17 @@
   // you would visit `http://eslint.org/docs/rules/no-sequences`.
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  "env": {
-    "es6": true,
-    "node": true
+  'env': {
+    'es6': true,
+    'node': true
   },
 
-  "parserOptions": {
-    "ecmaVersion": 8
+  'parserOptions': {
+    'ecmaVersion': 9,
+    'sourceType': 'module'
   },
 
-  "globals": {
+  'globals': {
     // If "no-undef" is enabled below and your app uses globals, be sure to list all
     // relevant globals below (including the globalIds of models, if relevant):
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -41,32 +42,31 @@
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   },
 
-  "rules": {
-    "callback-return":              [2, ["callback", "cb", "next", "done", "proceed"]],
-    "camelcase":                    [1, {"properties": "always"}],
-    "comma-style":                  [2, "last"],
-    "curly":                        [2],
-    "eqeqeq":                       [2, "always"],
-    "eol-last":                     [1],
-    "handle-callback-err":          [2],
-    "indent":                       [1, 2, {"SwitchCase": 1}],
-    "linebreak-style":              [2, "windows"],
-    "no-dupe-keys":                 [2],
-    "no-duplicate-case":            [2],
-    "no-mixed-spaces-and-tabs":     [2, "smart-tabs"],
-    "no-return-assign":             [2, "always"],
-    "no-sequences":                 [2],
-    "no-trailing-spaces":           [1],
-    "no-undef":                     [0],
+  'rules': {
+    'callback-return':              [2, ['callback', 'cb', 'next', 'done', 'proceed']],
+    'camelcase':                    [1, {'properties': 'always'}],
+    'comma-style':                  [2, 'last'],
+    'curly':                        [2],
+    'eqeqeq':                       [2, 'always'],
+    'eol-last':                     [1],
+    'handle-callback-err':          [2],
+    'indent':                       [1, 2, {'SwitchCase': 1}],
+    'no-dupe-keys':                 [2],
+    'no-duplicate-case':            [2],
+    'no-mixed-spaces-and-tabs':     [2, 'smart-tabs'],
+    'no-return-assign':             [2, 'always'],
+    'no-sequences':                 [2],
+    'no-trailing-spaces':           [1],
+    'no-undef':                     [0],
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // ^^Note: If this "no-undef" rule is enabled (set to `[2]`), then model globals
     // (e.g. `"User": true`) should also be included above under "globals".
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    "no-unexpected-multiline":      [1],
-    "no-unused-vars":               [1],
-    "one-var":                      [2, "never"],
-    "quotes":                       [1, "single", { "avoidEscape": false, "allowTemplateLiterals": true }],
-    "semi":                         [2, "always"]
+    'no-unexpected-multiline':      [1],
+    'no-unused-vars':               [1],
+    'one-var':                      [2, 'never'],
+    'quotes':                       [1, 'single', { 'avoidEscape': false, 'allowTemplateLiterals': true }],
+    'semi':                         [2, 'always']
   }
 
-}
+};
