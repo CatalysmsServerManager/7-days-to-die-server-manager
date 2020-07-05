@@ -1,5 +1,4 @@
 const validator = require('validator');
-const cronParser = require('cron-parser');
 
 module.exports = {
   friendlyName: 'Cron export',
@@ -30,7 +29,7 @@ module.exports = {
     }
   },
 
-  fn: async function(inputs, exits) {
+  fn: async function (inputs, exits) {
     let problems = new Array();
     let server = await SdtdServer.findOne(inputs.serverId);
 
@@ -55,8 +54,6 @@ module.exports = {
       if (newCommand.name.includes(' ')) {
         problems.push('Name cannot have spaces');
       }
-
-      let commandsToExecute = newCommand.commandsToExecute.split(';');
 
       if (!_.isBoolean(newCommand.enabled)) {
         problems.push(`Enabled must be true or false.`);
@@ -101,7 +98,7 @@ module.exports = {
       await CustomCommand.destroy({
         server: inputs.serverId
       });
-      let createdRecords = await CustomCommand.createEach(
+      await CustomCommand.createEach(
         newData.map(newCommand => {
           newCommand.server = inputs.serverId;
           return _.omit(newCommand, 'arguments');

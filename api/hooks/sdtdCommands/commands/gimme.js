@@ -13,11 +13,11 @@ class Gimme extends SdtdCommand {
     this.serverId = serverId;
   }
 
-  async isEnabled(chatMessage, player, server, args) {
+  async isEnabled(chatMessage, player, server) {
     return server.config.enabledGimme;
   }
 
-  async run(chatMessage, player, server, args) {
+  async run(chatMessage, player, server) {
     const cpmVersion = await sails.helpers.sdtd.checkCpmVersion(this.serverId);
     const possibleGimmeItems = await GimmeItem.find({
       server: server.id
@@ -65,7 +65,7 @@ class Gimme extends SdtdCommand {
           amountToDeduct: server.config.costToUseGimme,
           message: `COMMAND - ${this.name}`
         })
-        .tolerate('notEnoughCurrency', totalNeeded => {
+        .tolerate('notEnoughCurrency', () => {
           notEnoughMoney = true;
         });
       if (notEnoughMoney) {
@@ -113,7 +113,7 @@ class Gimme extends SdtdCommand {
           let cmdToExec = `spawnentity ${player.entityId} ${entity}`;
 
           try {
-            let response = await SdtdApi.executeConsoleCommand(
+            await SdtdApi.executeConsoleCommand(
               {
                 ip: server.ip,
                 port: server.webPort,

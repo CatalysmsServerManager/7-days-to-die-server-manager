@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 class sdtdConsole {
   constructor(serverId) {
     this.serverId = parseInt(serverId);
@@ -33,7 +34,7 @@ class sdtdConsole {
           serverId: this.serverId,
           command: command
         },
-        success: (data, status, xhr) => {
+        success: (data) => {
           addNewLogLine(data.msg);
           resolve(data);
         },

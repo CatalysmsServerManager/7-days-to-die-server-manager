@@ -1,7 +1,3 @@
-const sevenDays = require('machinepack-7daystodiewebapi');
-
-let detectedVersion;
-
 module.exports = {
 
 

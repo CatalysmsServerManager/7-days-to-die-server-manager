@@ -1,5 +1,4 @@
 let SdtdCommand = require('../command.js');
-const sevenDays = require('machinepack-7daystodiewebapi');
 
 class callAdmin extends SdtdCommand {
   constructor(serverId) {
@@ -12,7 +11,7 @@ class callAdmin extends SdtdCommand {
     this.serverId = serverId;
   }
 
-  async isEnabled(chatMessage, player, server, args) {
+  async isEnabled(chatMessage, player, server) {
     return server.config.enabledCallAdmin;
   }
 
@@ -20,7 +19,7 @@ class callAdmin extends SdtdCommand {
 
     try {
 
-      if (args == '') {
+      if (args === '') {
         return chatMessage.reply('callAdminMissingReason');
       }
 
@@ -40,7 +39,7 @@ class callAdmin extends SdtdCommand {
 
     } catch (error) {
       sails.log.error(`HOOK - SdtdCommands:callAdmin - ${error}`);
-      return chatMessage.reply('error', {error: error});
+      return chatMessage.reply('error', { error: error });
     }
   }
 }

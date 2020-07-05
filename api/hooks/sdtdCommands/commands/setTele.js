@@ -1,5 +1,4 @@
 let SdtdCommand = require('../command.js');
-const sevenDays = require('machinepack-7daystodiewebapi');
 var validator = require('validator');
 
 class setTele extends SdtdCommand {
@@ -13,7 +12,7 @@ class setTele extends SdtdCommand {
     this.serverId = serverId;
   }
 
-  async isEnabled(chatMessage, player, server, args) {
+  async isEnabled(chatMessage, player, server) {
     return server.config.enabledPlayerTeleports;
   }
 
@@ -32,7 +31,7 @@ class setTele extends SdtdCommand {
       publicEnabled: true
     });
 
-    if (args.length == 0) {
+    if (args.length === 0) {
       return chatMessage.reply('setTeleMissingName');
     }
 
@@ -58,7 +57,7 @@ class setTele extends SdtdCommand {
 
     let nameAlreadyInUse = false;
     teleportsToCheckForName.forEach(teleport => {
-      if (teleport.name == args[0]) {
+      if (teleport.name === args[0]) {
         nameAlreadyInUse = true;
       }
     });
@@ -77,7 +76,7 @@ class setTele extends SdtdCommand {
         playerId: player.id,
         amountToDeduct: server.config.costToSetTeleport,
         message: `COMMAND - ${this.name}`
-      }).tolerate('notEnoughCurrency', totalNeeded => {
+      }).tolerate('notEnoughCurrency', () => {
         notEnoughMoney = true;
       });
       if (notEnoughMoney) {

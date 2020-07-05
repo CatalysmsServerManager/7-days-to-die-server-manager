@@ -9,7 +9,7 @@ module.exports = {
   afterCreate(newConfig, cb) {
     sails.hooks.sdtdlogs
       .start(newConfig.server)
-      .then(r => {
+      .then(() => {
         let modules = [];
         modules.push(sails.hooks.customhooks.start(newConfig.server));
         modules.push(

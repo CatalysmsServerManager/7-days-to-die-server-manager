@@ -36,7 +36,7 @@ module.exports = {
       let discordClient = sails.hooks.discordbot.getClient();
       let foundUser = await User.findOne(inputs.userId);
 
-      if (_.isUndefined(foundUser) || '' == foundUser.discordId) {
+      if (_.isUndefined(foundUser) || '' === foundUser.discordId) {
         return exits.badRequest();
       }
 

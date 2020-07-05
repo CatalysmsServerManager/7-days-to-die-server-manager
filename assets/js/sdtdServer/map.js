@@ -1,3 +1,6 @@
+/* global L:false server:false */
+
+// eslint-disable-next-line no-unused-vars
 class sdtdMap {
   constructor(mapElement, server) {
     this.mapElement = mapElement;
@@ -22,10 +25,10 @@ class sdtdMap {
       existingMarker.remove();
     });
 
-    playerMarkerMap.clear();
+    this.playerMarkerMap.clear();
   }
 
-  drawCircle(x, z, radius, extraOptions) {
+  drawCircle(x, z, radius) {
     let circle = L.circle([x, z], { radius: radius });
     circle.addTo(this.layerGroup);
     this.circles.push(circle);
@@ -76,7 +79,7 @@ class sdtdMap {
           }
         }
 
-        let colors = ['purple' ,'cyan', 'red', 'green', 'blue', 'yellow', 'orange', 'brown'];
+        let colors = ['purple', 'cyan', 'red', 'green', 'blue', 'yellow', 'orange', 'brown'];
         let colorIterator = 0;
 
         playerPathArrays.forEach((playerPath, playerId) => {
@@ -165,7 +168,7 @@ class sdtdMap {
       maxzoom: 4
     };
 
-    let SDTD_Projection = {
+    let SdtdProjection = {
       project: function (latlng) {
         return new L.Point(
           (latlng.lat) / Math.pow(2, mapinfo.maxzoom),
@@ -181,7 +184,7 @@ class sdtdMap {
 
 
     let SDTD_CRS = L.extend({}, L.CRS.Simple, {
-      projection: SDTD_Projection,
+      projection: SdtdProjection,
       transformation: new L.Transformation(1, 0, -1, 0),
 
       scale: function (zoom) {
@@ -204,7 +207,7 @@ class sdtdMap {
   }
 
   GetSdtdTileLayer(mapinfo, initTime, isMiniMap) {
-    if (typeof isMiniMap === 'undefined') {isMiniMap = false;}
+    if (typeof isMiniMap === 'undefined') { isMiniMap = false; }
 
     var tileLayer = L.tileLayer(`http://${server.ip}:${server.webPort}/map/{z}/{x}/{y}.png?adminuser={adminuser}&admintoken={admintoken}`, {
       maxZoom: mapinfo.maxzoom + 1,

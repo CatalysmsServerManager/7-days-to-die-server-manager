@@ -6,7 +6,7 @@ class DiscordNotification {
     }
   }
 
-  async makeEmbed(event) {
+  async makeEmbed() {
     throw new Error(`makeEmbed has to be implemented.`);
   }
 

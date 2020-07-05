@@ -113,7 +113,7 @@ module.exports = {
    * @description login via discord
    */
 
-  discordLogin: function (req, res, next) {
+  discordLogin: function (req, res) {
     try {
       passport.authenticate('discord', {
         failureRedirect: `${process.env.CSMM_HOSTNAME}`

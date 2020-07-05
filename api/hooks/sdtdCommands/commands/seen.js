@@ -11,7 +11,7 @@ class Seen extends SdtdCommand {
     this.serverId = serverId;
   }
 
-  async isEnabled(chatMessage, player, server, args) {
+  async isEnabled() {
     return true;
   }
 

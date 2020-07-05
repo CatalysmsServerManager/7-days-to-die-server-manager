@@ -27,7 +27,6 @@ module.exports = {
     let countryBanConfig = config.countryBanConfig;
 
     if (countryBanConfig.bannedCountries.includes(inputs.newCountry)) {
-      let idx = countryBanConfig.bannedCountries.indexOf(inputs.newCountry);
       let adjustedCountries = _.without(countryBanConfig.bannedCountries, inputs.newCountry);
       countryBanConfig.bannedCountries = adjustedCountries;
       await SdtdConfig.update({ server: inputs.serverId }, { countryBanConfig: countryBanConfig });

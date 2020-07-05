@@ -4,15 +4,7 @@
  * @param {*} sails Global sails instance
  */
 
-module.exports = function SdtdDiscordChatBridge(sails) {
-
-  /**
-   * @var {Map} discordNotificationInfoMap Keeps track of servers with chatbridges activated
-   * @private
-   */
-
-  let discordNotificationInfoMap = new Map();
-
+module.exports = function SdtdDiscordNotification(sails) {
   let loadedNotifications;
 
   return {
@@ -43,25 +35,6 @@ module.exports = function SdtdDiscordChatBridge(sails) {
     },
 
     sendNotification: sendNotification,
-
-    /**
-     * @memberof module:SdtdDiscordNotificationHook
-     * @method
-     * @name start
-     * @description Starts the notifications
-     */
-
-    start: (notificationType, serverId) => {},
-
-    /**
-     * @memberof module:SdtdDiscordNotificationHook
-     * @method
-     * @name stop
-     * @description Stops the notifications
-     */
-
-    stop: (notificationType, serverId) => {},
-
   };
 
   function loadNotifications() {
@@ -95,7 +68,7 @@ module.exports = function SdtdDiscordChatBridge(sails) {
     }
 
     try {
-      let serverConfig = await SdtdConfig.findOne({server: notificationOptions.serverId});
+      let serverConfig = await SdtdConfig.findOne({ server: notificationOptions.serverId });
       if (serverConfig.discordNotificationConfig[notificationOptions.notificationType]) {
         let notificationClass = getNotificationClass(notificationOptions.notificationType);
         notificationClass.sendNotification(notificationOptions);

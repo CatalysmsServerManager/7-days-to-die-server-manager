@@ -13,7 +13,7 @@ class ListServers extends Commando.Command {
     });
   }
 
-  async run(msg, args) {
+  async run(msg) {
     let sdtdServers = await findSdtdServer(msg);
 
     if (!sdtdServers.length === 0) {

@@ -1,5 +1,4 @@
 let SdtdCommand = require('../command.js');
-const sevenDays = require('machinepack-7daystodiewebapi');
 
 class help extends SdtdCommand {
   constructor(serverId) {
@@ -10,7 +9,7 @@ class help extends SdtdCommand {
     this.serverId = serverId;
   }
 
-  async isEnabled(chatMessage, player, server, args) {
+  async isEnabled() {
     return true;
   }
 

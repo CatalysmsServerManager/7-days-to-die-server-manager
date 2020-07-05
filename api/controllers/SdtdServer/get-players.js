@@ -66,7 +66,7 @@ module.exports = {
             success: function (data) {
               return exits.success(data);
             },
-            error: function (error) {
+            error: function () {
               return exits.badRequest();
             }
           });

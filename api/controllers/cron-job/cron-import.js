@@ -1,4 +1,3 @@
-const validator = require('validator');
 const cronParser = require('cron-parser');
 
 module.exports = {
@@ -100,7 +99,7 @@ module.exports = {
     if (problems.length === 0) {
 
       await CronJob.destroy({ server: inputs.serverId });
-      let createdRecords = await CronJob.createEach(newData.map(newCron => {
+      await CronJob.createEach(newData.map(newCron => {
         newCron.server = inputs.serverId;
         return newCron;
       }));

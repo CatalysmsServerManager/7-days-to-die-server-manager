@@ -72,6 +72,7 @@ class LoggingObject extends EventEmitter {
   async handleFailedJob(jobId, err) {
     const job = await this.queue.getJob(jobId);
 
+    // eslint-disable-next-line eqeqeq
     if (job.data.serverId != this.serverId) {
       // not one of ours
       return;
@@ -89,6 +90,7 @@ class LoggingObject extends EventEmitter {
     }
 
 
+    // eslint-disable-next-line eqeqeq
     if (result.serverId != this.serverId) {
       // not one of ours
       return;
@@ -194,7 +196,7 @@ class LoggingObject extends EventEmitter {
         );
         this.slowmode = true;
         await this.stop();
-        await this.init(300000);
+        await this.init(slowModeIntervalms);
         return;
       }
 

@@ -12,7 +12,7 @@ class tele extends SdtdCommand {
     this.serverId = serverId;
   }
 
-  async isEnabled(chatMessage, player, server, args) {
+  async isEnabled(chatMessage, player, server) {
     return server.config.enabledPlayerTeleports;
   }
 
@@ -36,7 +36,7 @@ class tele extends SdtdCommand {
 
     let teleportFound = false;
     serverTeleportsFound.forEach(teleport => {
-      if (teleport.name == args[0]) {
+      if (teleport.name === args[0]) {
         teleportFound = teleport;
       }
     });
@@ -77,7 +77,7 @@ class tele extends SdtdCommand {
         playerId: player.steamId,
         coordinates: `${teleportFound.x} ${teleportFound.y} ${teleportFound.z}`
       }).exec({
-        success: async (response) => {
+        success: async () => {
           chatMessage.reply(`teleSuccess`, {
             teleport: teleportFound
           });

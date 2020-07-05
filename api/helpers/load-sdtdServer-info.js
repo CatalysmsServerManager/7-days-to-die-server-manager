@@ -56,14 +56,14 @@ module.exports = {
 
 
     function loadStats(server) {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         sevenDays.getStats({
           ip: server.ip,
           port: server.webPort,
           authName: server.authName,
           authToken: server.authToken
         }).exec({
-          error: error => {
+          error: () => {
             resolve(undefined);
           },
           success: data => {
@@ -74,14 +74,14 @@ module.exports = {
     }
 
     function loadServerInfo(server) {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         sevenDays.getServerInfo({
           ip: server.ip,
           port: server.webPort,
           authName: server.authName,
           authToken: server.authToken
         }).exec({
-          error: error => {
+          error: () => {
             resolve(undefined);
           },
           success: data => {

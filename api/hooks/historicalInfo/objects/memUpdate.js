@@ -62,7 +62,7 @@ async function saveInfoToDatabase(server, memUpdate) {
   }
 }
 
-async function clearOldInfo(server, config) {
+async function clearOldInfo(server) {
   try {
     let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({
       serverId: server.id

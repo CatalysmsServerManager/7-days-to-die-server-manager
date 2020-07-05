@@ -64,7 +64,7 @@ module.exports = {
         playerId: player.steamId,
         coordinates: `${inputs.coordX} ${inputs.coordY} ${inputs.coordZ}`
       }).exec({
-        success: (response) => {
+        success: () => {
           sails.log.debug(`API - Player:teleport - Successfully teleported player ${inputs.playerId} to ${inputs.coordX} ${inputs.coordY} ${inputs.coordZ}`);
           return exits.success();
         },

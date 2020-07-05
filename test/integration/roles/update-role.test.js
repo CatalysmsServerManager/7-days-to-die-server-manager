@@ -87,7 +87,7 @@ describe('PATCH /api/role', function () {
         isDefault: true,
       })
       .expect(200)
-      .then(async function (response) {
+      .then(async function () {
         const oldDefault = await Role.findOne({
           id: createdRole.id
         });

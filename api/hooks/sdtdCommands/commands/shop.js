@@ -12,7 +12,7 @@ class Shop extends SdtdCommand {
     this.serverId = serverId;
   }
 
-  async isEnabled(chatMessage, player, server, args) {
+  async isEnabled(chatMessage, player, server) {
     return server.config.economyEnabled;
   }
 

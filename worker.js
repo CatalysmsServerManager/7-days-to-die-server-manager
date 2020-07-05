@@ -1,4 +1,3 @@
-const dotenv = require('dotenv');
 const sails = require('sails');
 const SdtdApi = require('7daystodie-api-wrapper');
 
@@ -37,6 +36,9 @@ const configOverrides = {
 
 const logProcessor = require('./api/hooks/sdtdLogs/logProcessor');
 sails.load(configOverrides, async function (err) {
+  if (err) {
+    process.exit(1);
+  }
   sails.helpers.sdtdApi = {};
   for (const func of Object.keys(SdtdApi)) {
     sails.helpers.sdtdApi[func] = SdtdApi[func];

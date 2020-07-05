@@ -9,7 +9,6 @@ module.exports = async function viewDashboard(req, res, next) {
   }
 
   let serverId = _.isUndefined(req.param('serverId')) ? req.query.serverId : req.param('serverId');
-  let server = await SdtdServer.findOne(serverId);
   let user = req.session.user;
 
   let permCheck = await sails.helpers.roles.checkPermission.with({

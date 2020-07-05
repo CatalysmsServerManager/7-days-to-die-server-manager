@@ -27,7 +27,6 @@ module.exports = {
     let countryBanConfig = config.countryBanConfig;
 
     if (countryBanConfig.whiteListedSteamIds.includes(inputs.newSteamId)) {
-      let idx = countryBanConfig.whiteListedSteamIds.indexOf(inputs.newSteamId);
       let adjustedWhitelist = _.without(countryBanConfig.whiteListedSteamIds, inputs.newSteamId);
       countryBanConfig.whiteListedSteamIds = adjustedWhitelist;
       await SdtdConfig.update({ server: inputs.serverId }, { countryBanConfig: countryBanConfig });

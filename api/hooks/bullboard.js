@@ -20,8 +20,7 @@ module.exports = function BullBoard(sails) {
      * @param  {Function} cb Callback for when we're done initializing
      * @return {Function} cb Callback for when we're done initializing
      */
-    initialize: function(cb) {
-      var settings = sails.config[this.configKey];
+    initialize: function (cb) {
       setQueues([
         sails.helpers.getQueueObject('logs'),
       ]);
@@ -29,7 +28,7 @@ module.exports = function BullBoard(sails) {
       sails.after('hook:http:loaded', function () {
         sails.hooks.http.app.use(
           '/admin/queues',
-          function(req, res, next) {
+          function (req, res, next) {
             /* Meh auth for static files */
             if (path.resolve(req.originalUrl).startsWith('/admin/queues/static/')) {
               return next();

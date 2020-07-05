@@ -51,7 +51,7 @@ class Player extends Commando.Command {
       ]
     });
 
-    if (foundPlayer.length == 0) {
+    if (foundPlayer.length === 0) {
       return msg.channel.send(`Did not find any players with that name/ID!`);
     }
 

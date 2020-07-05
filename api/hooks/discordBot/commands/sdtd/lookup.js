@@ -1,7 +1,6 @@
 const Commando = require('discord.js-commando');
 const findSdtdServer = require('../../util/findSdtdServer.js');
 const fs = require('fs');
-const checkIfAdmin = require('../../util/checkIfAdmin');
 
 class Lookup extends Commando.Command {
   constructor(client) {
@@ -76,7 +75,7 @@ class Lookup extends Commando.Command {
       ]
     });
 
-    if (foundPlayer.length == 0) {
+    if (foundPlayer.length === 0) {
       return msg.channel.send(`Did not find any players with that name/ID!`);
     }
 
@@ -122,7 +121,7 @@ class Lookup extends Commando.Command {
             attachment: `${sdtdServer.name}_${foundPlayer.id}_inventory.txt`,
             name: `${sdtdServer.name}_${foundPlayer.id}_inventory.txt`
           }]
-        }).then(response => {
+        }).then(() => {
           fs.unlink(`${sdtdServer.name}_${foundPlayer.id}_inventory.txt`, err => {
             if (err) {
               sails.log.error(err);

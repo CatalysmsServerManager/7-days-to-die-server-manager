@@ -33,6 +33,7 @@ module.exports = function sdtdCommands(sails) {
     initialize: async function (cb) {
       sails.on('hook:sdtdlogs:loaded', async function () {
         sails.log.info('Initializing custom hook (`sdtdCommands`)');
+        // eslint-disable-next-line callback-return
         cb();
         try {
           let enabledServers = await SdtdConfig.find({

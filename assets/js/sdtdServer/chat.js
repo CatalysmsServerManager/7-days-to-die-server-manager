@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 class sdtdChat {
   constructor(serverId) {
     this.serverId = serverId;
@@ -31,14 +32,14 @@ class sdtdChat {
   }
 
   sendMessage(message, username) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       $.ajax({
         url: `/api/sdtdserver/sendMessage`,
         data: {
           serverId: this.serverId,
           message: `${username}: ${message}`
         },
-        success: (data, status, xhr) => {
+        success: (data) => {
           resolve(data);
         },
         error: function (xhr, status, error) {
@@ -53,7 +54,7 @@ class sdtdChat {
     chatMessage.messageText = _.escape(chatMessage.messageText);
     chatMessage.playerName = _.escape(chatMessage.playerName);
 
-    if (chatMessage.playerName == 'Server') {
+    if (chatMessage.playerName === 'Server') {
       $('.chat-window').append(`<li class=\"chat-message\">[${chatMessage.time}] ${chatMessage.messageText} </li>`);
       addMessageToStorage(`[${chatMessage.time}] ${chatMessage.messageText}`, this.serverId);
 

@@ -28,8 +28,7 @@ class Top extends Commando.Command {
         type: 'integer',
         prompt: 'Please specify what server to run this commmand for!'
       }],
-      details: 'Show top 10 players in different categories',
-      details: 'The type argument can be: \'currency\', \'zombies\', \'players\', \'deaths\', \'playtime\', \'score\' or \'level\'',
+      details: 'Show top 10 players in different categories\nThe type argument can be: \'currency\', \'zombies\', \'players\', \'deaths\', \'playtime\', \'score\' or \'level\'',
       examples: ['top playtime 5', 'top currency 20', 'top deaths']
     });
   }

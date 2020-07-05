@@ -30,7 +30,7 @@ process.chdir(__dirname);
 var sails;
 var rc;
 try {
-  console.log(`CSMM version: ${require('./package.json').version}`)
+  console.log(`CSMM version: ${require('./package.json').version}`);
   require('dotenv').config();
   sails = require('sails');
   rc = require('sails/accessible/rc');
@@ -44,7 +44,6 @@ try {
   console.error('Alternatively, if you have sails installed globally (i.e. you did `npm install -g sails`), you can use `sails lift`.');
   console.error('When you run `sails lift`, your app will still use a local `./node_modules/sails` dependency if it exists,');
   console.error('but if it doesn\'t, the app will run with the global sails instead!');
-  return;
 } //-•
 
 process.on('unhandledRejection', (reason, p) => {
@@ -56,9 +55,9 @@ process.on('SIGINT', function () {
   sails.lower(
     function (err) {
       if (err) {
-        sails.log.error("Error occurred lowering Sails app: ", err);
+        sails.log.error('Error occurred lowering Sails app: ', err);
       }
-      sails.log.info("Sails app lowered successfully!");
+      sails.log.info('Sails app lowered successfully!');
       return process.exit(err ? 1 : 0);
     }
   );

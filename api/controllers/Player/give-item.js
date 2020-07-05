@@ -1,5 +1,3 @@
-const SdtdApi = require('7daystodie-api-wrapper');
-
 module.exports = {
 
   friendlyName: 'Give item',

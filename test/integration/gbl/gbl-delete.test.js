@@ -50,7 +50,7 @@ describe('DELETE /api/gbl/', function () {
         banId: testBans[0].id
       })
       .expect(200)
-      .then(async response => {
+      .then(async () => {
         let record = await BanEntry.findOne(testBans[0].id);
         expect(record).to.be.eq(undefined);
       });

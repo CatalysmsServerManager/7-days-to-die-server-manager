@@ -1,4 +1,3 @@
-var sevenDays = require('machinepack-7daystodiewebapi');
 let MemUpdate = require('./objects/memUpdate');
 
 module.exports = function historicalInfo(sails) {

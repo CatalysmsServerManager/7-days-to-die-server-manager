@@ -1,5 +1,4 @@
 let SdtdCommand = require('../command.js');
-const sevenDays = require('machinepack-7daystodiewebapi');
 
 class telePrivate extends SdtdCommand {
   constructor(serverId) {
@@ -12,7 +11,7 @@ class telePrivate extends SdtdCommand {
     this.serverId = serverId;
   }
 
-  async isEnabled(chatMessage, player, server, args) {
+  async isEnabled(chatMessage, player, server) {
     return server.config.enabledPlayerTeleports;
   }
 
@@ -22,13 +21,13 @@ class telePrivate extends SdtdCommand {
       player: player.id
     });
 
-    if (playerTeleports.length == 0) {
+    if (playerTeleports.length === 0) {
       return chatMessage.reply(`NoTeleportFound`);
     }
 
     let teleportFound = false;
     playerTeleports.forEach(teleport => {
-      if (teleport.name == args[0]) {
+      if (teleport.name === args[0]) {
         teleportFound = teleport;
       }
     });

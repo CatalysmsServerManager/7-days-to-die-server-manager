@@ -62,8 +62,6 @@ module.exports = {
         }
       };
 
-      let totalLogs = 0;
-
       let historicalInfo = await HistoricalInfo.find({
         where: whereObject,
         limit: inputs.limit,

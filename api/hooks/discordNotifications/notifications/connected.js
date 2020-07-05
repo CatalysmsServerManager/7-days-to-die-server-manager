@@ -5,7 +5,7 @@ class Connected extends DiscordNotification {
     super('connected');
   }
 
-  async makeEmbed(event){
+  async makeEmbed() {
     let client = sails.hooks.discordbot.getClient();
     let embed = new client.customEmbed();
 

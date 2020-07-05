@@ -55,10 +55,10 @@ module.exports = {
           return exits.success(false);
         }
       },
-      error: (error) => {
+      error: () => {
         return exits.success(false);
       },
-      connectionRefused: error => {
+      connectionRefused: () => {
         return exits.success(false);
       }
     });

@@ -1,5 +1,4 @@
 let SdtdCommand = require('./command.js');
-const sevenDays = require('machinepack-7daystodiewebapi');
 
 class CustomCommand extends SdtdCommand {
   constructor(serverId, command) {
@@ -10,7 +9,7 @@ class CustomCommand extends SdtdCommand {
     this.options = command;
   }
 
-  async isEnabled(chatMessage, player, server, args) {
+  async isEnabled() {
     return true;
   }
 
@@ -62,11 +61,11 @@ class CustomCommand extends SdtdCommand {
     // Deduct money if configured
     if (server.config.economyEnabled && this.options.costToExecute) {
       let notEnoughMoney = false;
-      let result = await sails.helpers.economy.deductFromPlayer.with({
+      await sails.helpers.economy.deductFromPlayer.with({
         playerId: player.id,
         amountToDeduct: this.options.costToExecute,
         message: `COMMAND - ${this.options.name}`
-      }).tolerate('notEnoughCurrency', totalNeeded => {
+      }).tolerate('notEnoughCurrency', () => {
         notEnoughMoney = true;
       });
       if (notEnoughMoney) {
@@ -113,36 +112,13 @@ class CustomCommand extends SdtdCommand {
 
       } catch (error) {
         sails.log.error(`Custom command error - ${server.name} - ${chatMessage.messageText} - ${error}`);
-        chatMessage.reply(`Error! Contact your server admin with this message: ${error.toString().replace(/\"/g,'')}`);
+        chatMessage.reply(`Error! Contact your server admin with this message: ${error.toString().replace(/\"/g, '')}`);
       }
     }
   }
 }
 
 module.exports = CustomCommand;
-
-
-function executeCommand(server, command) {
-  return new Promise((resolve, reject) => {
-    sevenDays.executeCommand({
-      ip: server.ip,
-      port: server.webPort,
-      authName: server.authName,
-      authToken: server.authToken,
-      command: command
-    }).exec({
-      success: (response) => {
-        resolve(response);
-      },
-      unknownCommand: (error) => {
-        reject(error);
-      },
-      error: (error) => {
-        reject(error);
-      }
-    });
-  });
-}
 
 function replaceAllInString(string, search, replacement) {
   return string.split(search).join(replacement);
@@ -154,9 +130,10 @@ function validateArg(argumentRecord, value) {
     return false;
   }
 
+  // TODO: validate argument types
   switch (argumentRecord.type) {
     case 'number':
-      let parsed = parseInt(value);
+      //let parsed = parseInt(value);
       //return !isNaN(parsed);
       return true;
       break;
@@ -169,11 +146,3 @@ function validateArg(argumentRecord, value) {
       break;
   }
 }
-
-function delaySeconds(seconds) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, seconds * 1000);
-  });
-};

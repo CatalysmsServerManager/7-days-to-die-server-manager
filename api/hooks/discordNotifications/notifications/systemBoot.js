@@ -5,7 +5,7 @@ class SystemBoot extends DiscordNotification {
     super('systemboot');
   }
 
-  async makeEmbed(event){
+  async makeEmbed() {
     let client = sails.hooks.discordbot.getClient();
     let embed = new client.customEmbed();
 

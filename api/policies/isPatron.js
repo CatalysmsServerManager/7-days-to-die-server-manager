@@ -6,7 +6,6 @@ module.exports = async function isPatron(req, res, next) {
     }
 
     const serverId = req.param('serverId') || req.query.serverId;
-    const userId = req.session.userId;
 
     if (serverId) {
       let donatorStatus = await sails.helpers.meta.checkDonatorStatus.with({ serverId: parseInt(serverId, 10) });

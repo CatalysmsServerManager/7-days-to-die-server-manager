@@ -11,7 +11,7 @@ class Stats extends Commando.Command {
     });
   }
 
-  async run(msg, args) {
+  async run(msg) {
     const statsInfo = await sails.helpers.meta.loadSystemStatsAndInfo();
     const memUsage = process.memoryUsage();
     const embed = new this.client.customEmbed();

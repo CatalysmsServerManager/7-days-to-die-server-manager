@@ -1,5 +1,4 @@
 var sevenDays = require('machinepack-7daystodiewebapi');
-const validator = require('validator');
 
 module.exports = {
 
@@ -22,8 +21,6 @@ module.exports = {
     }
 
   },
-  description: 'Id of the server',
-
 
   exits: {
     success: {
@@ -57,7 +54,6 @@ module.exports = {
         playerSplitResult.forEach(async playerInfo => {
 
           let splitResult = playerInfo.split(', ');
-          let deaths; let zombieKills; let playerKills; let score; let level; let steamId;
           let playerStats = {
             deaths: 0,
             zombieKills: 0,

@@ -80,7 +80,7 @@ module.exports = {
     if (problems.length === 0) {
 
       await ShopListing.destroy({ server: inputs.serverId });
-      let createdRecords = await ShopListing.createEach(newData.map(newListing => {
+      await ShopListing.createEach(newData.map(newListing => {
         newListing.server = inputs.serverId;
         return newListing;
       }));

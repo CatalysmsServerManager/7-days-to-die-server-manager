@@ -18,8 +18,7 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-
-    let config = await SdtdConfig.update({ server: inputs.serverId }, { commandsEnabled: true });
+    await SdtdConfig.update({ server: inputs.serverId }, { commandsEnabled: true });
     await sails.hooks.sdtdcommands.start(inputs.serverId);
     return exits.success();
 

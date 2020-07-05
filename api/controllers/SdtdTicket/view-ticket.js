@@ -64,7 +64,7 @@ module.exports = {
           ticket: ticket,
           comments: comments
         });
-      }).catch(error => {
+      }).catch(() => {
         return exits.success({
           server: _.omit(server, 'authName', 'authToken'),
           ticket: ticket,

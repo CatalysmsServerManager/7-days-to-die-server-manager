@@ -13,8 +13,6 @@ class GblMaxBan extends DiscordNotification {
       throw new Error('Implementation error! Must provide player info.');
     }
 
-    let executionTime = new Date();
-
     if (event.banned) {
       embed
         .setTitle(
@@ -38,9 +36,7 @@ class GblMaxBan extends DiscordNotification {
       .addField('Name', event.player.name)
       .setFooter(`${event.server.name}`)
       .addField(
-        `${event.bans.length} ban${
-          event.bans.length === 1 ? '' : 's'
-        } on the global ban list`,
+        `${event.bans.length} ban${event.bans.length === 1 ? '' : 's'} on the global ban list`,
         `[GBL profile page](${process.env.CSMM_HOSTNAME}/gbl/profile?steamId=${event.player.steamId})`
       )
       .setURL(`${process.env.CSMM_HOSTNAME}/player/${event.player.id}/profile`);

@@ -38,7 +38,7 @@ class SdtdCommand {
   }
 
 
-  async run(chatMessage, playerId) {
+  async run() {
     throw new Error(`${this.constructor.name} doesn't have a run() method.`);
   }
 }

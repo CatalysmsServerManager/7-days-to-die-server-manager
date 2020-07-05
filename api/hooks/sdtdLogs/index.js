@@ -1,4 +1,3 @@
-var sevenDays = require('machinepack-7daystodiewebapi');
 const LoggingObject = require('./LoggingObject');
 const EventEmitter = require('events');
 
@@ -166,7 +165,7 @@ module.exports = function sdtdLogs(sails) {
         notificationType: 'playerConnected',
         player: connectedMsg.player
       });
-      if (connectedMsg.country != null && connectedMsg.steamID) {
+      if (connectedMsg.country !== null && connectedMsg.steamID) {
         await Player.update({
           server: server.id,
           steamId: connectedMsg.steamID

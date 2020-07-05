@@ -1,5 +1,3 @@
-const he = require('he');
-
 module.exports = {
 
 

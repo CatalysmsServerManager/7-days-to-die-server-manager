@@ -1,5 +1,3 @@
-const steam64Regex = new RegExp('[0-9]{17}');
-
 module.exports = async function enrichEventData(event) {
 
   switch (event.type) {

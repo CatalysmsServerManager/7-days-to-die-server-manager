@@ -1,4 +1,3 @@
-const Discord = require('discord.js');
 const sevenDays = require('machinepack-7daystodiewebapi');
 const hhmmss = require('@streammedev/hhmmss');
 
@@ -186,9 +185,7 @@ class ChatBridgeChannel {
       )
       .addField('Country', connectedMsg.country, true)
       .addField(
-        `${gblBans.length} ban${
-          gblBans.length === 1 ? '' : 's'
-        } on the global ban list`,
+        `${gblBans.length} ban${gblBans.length === 1 ? '' : 's'} on the global ban list`,
         `[GBL profile page](${process.env.CSMM_HOSTNAME}/gbl/profile?steamId=${connectedMsg.steamId})`
       )
       .setColor('GREEN')
@@ -246,9 +243,7 @@ class ChatBridgeChannel {
           `${process.env.CSMM_HOSTNAME}/player/${disconnectedPlayer.id}/profile`
         )
         .addField(
-          `${gblBans.length} ban${
-            gblBans.length === 1 ? '' : 's'
-          } on the global ban list`,
+          `${gblBans.length} ban${gblBans.length === 1 ? '' : 's'} on the global ban list`,
           `[GBL profile page](${process.env.CSMM_HOSTNAME}/gbl/profile?steamId=${disconnectedMsg.steamId})`
         );
       if (disconnectedPlayer.avatarUrl) {
@@ -262,7 +257,7 @@ class ChatBridgeChannel {
     if (
       !message.author.bot &&
       message.channel.id === this.channel.id &&
-      message.author.id != message.client.user.id &&
+      message.author.id !== message.client.user.id &&
       !message.content.startsWith(message.guild.commandPrefix)
     ) {
       sevenDays

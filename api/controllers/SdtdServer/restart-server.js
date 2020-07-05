@@ -57,7 +57,7 @@ module.exports = {
           error: (error) => {
             sails.log.error(`API - SdtdServer:restart-server - ${error}`);
           },
-          success: (response) => {
+          success: () => {
             sails.log.info(`API - SdtdServer:restart-server - Successful restart for server ${inputs.serverId} in ${inputs.delay} ${inputs.delay > 1 ? 'minutes' : 'minute'}`);
 
           }
@@ -66,7 +66,7 @@ module.exports = {
 
 
 
-      for (let index = 0; index < inputs.delay+1; index++) {
+      for (let index = 0; index < inputs.delay + 1; index++) {
         setTimeout(async function () {
           if (inputs.delay - index > 0) {
             await sendXMinutesUntilRestartToServer(inputs.delay - index, server);
@@ -111,7 +111,7 @@ function sendXMinutesUntilRestartToServer(minutesLeft, server) {
       error: (error) => {
         reject(error);
       },
-      success: (response) => {
+      success: () => {
         resolve(minutesLeft - 1);
       }
     });

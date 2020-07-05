@@ -1,5 +1,4 @@
 var sevenDays = require('machinepack-7daystodiewebapi');
-const validator = require('validator');
 
 module.exports = {
 
@@ -29,8 +28,6 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     let server = await SdtdServer.findOne({ id: inputs.serverId });
-    let response = new Array();
-
     sevenDays.getOnlinePlayers({
       ip: server.ip,
       port: server.webPort,

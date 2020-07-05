@@ -1,5 +1,3 @@
-const sevenDays = require('machinepack-7daystodiewebapi');
-
 module.exports = {
   friendlyName: 'Update connection info',
 
@@ -60,7 +58,7 @@ module.exports = {
    * @param {string} authToken
    */
 
-  fn: async function(inputs, exits) {
+  fn: async function (inputs, exits) {
     try {
       let server = await SdtdServer.findOne(inputs.serverId);
 

@@ -1,5 +1,3 @@
-var sevenDays = require('machinepack-7daystodiewebapi');
-
 /**
  * @memberof Player
  * @description  Get the contents of a players inventory

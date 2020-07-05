@@ -65,7 +65,7 @@ module.exports = {
       // If steam ID is given, filter the response. Allocs API currently doesn't support filtering at this stage
       if (inputs.steamId) {
         playerList.players = playerList.players.filter(player => {
-          return player.steamid == inputs.steamId;
+          return player.steamid === inputs.steamId;
         });
         playerList.total = playerList.players.length;
         playerList.totalUnfiltered = playerList.players.length;
@@ -88,7 +88,6 @@ module.exports = {
 
         // Inventory & stats data is only available when a player is online, so we only load it then.
         let playerInventory;
-        let playerStats;
         let steamAvatar;
 
         if (inputs.steamAvatar) {
@@ -153,14 +152,14 @@ module.exports = {
 };
 
 async function getPlayerList(server) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     sevenDays.getPlayerList({
       ip: server.ip,
       port: server.webPort,
       authName: server.authName,
       authToken: server.authToken
     }).exec({
-      error: function (err) {
+      error: function () {
         resolve({
           players: []
         });
@@ -200,7 +199,7 @@ async function findOrCreatePlayer(player, serverId) {
 }
 
 function loadPlayerInventory(steamId, server) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     sevenDays.getPlayerInventory({
       ip: server.ip,
       port: server.webPort,
@@ -221,7 +220,7 @@ function loadPlayerInventory(steamId, server) {
 
 function loadSteamAvatar(steamId) {
   let request = require('request-promise-native');
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     request({
       uri: 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002',
       qs: {

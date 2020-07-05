@@ -19,7 +19,7 @@ class Import extends Commando.Command {
     });
   }
 
-  async run(msg, args) {
+  async run(msg) {
     const fileUrl = msg.attachments.first().url;
     await this.downloadFile(fileUrl);
     let data = require('../../../../../import.json');
@@ -43,7 +43,7 @@ class Import extends Commando.Command {
     try {
       const server = await SdtdServer.create(this.omitId(data.server)).fetch();
       data.config.server = server.id;
-      const config = await SdtdConfig.create(this.omitId(data.config)).fetch();
+      await SdtdConfig.create(this.omitId(data.config)).fetch();
 
       statusEmbed.setFooter(`2/${Object.keys(data).length} tables loaded`);
       this.addDescriptionLine(`Importing ${data.cronJobs.length} cronjobs`);
@@ -237,7 +237,7 @@ class Import extends Commando.Command {
   downloadFile(url) {
     let file = fs.createWriteStream('import.json');
     return new Promise((resolve, reject) => {
-      const stream = request(url)
+      request(url)
         .pipe(file)
         .on('finish', () => {
           sails.log.info(`Finished downloading file for import`);

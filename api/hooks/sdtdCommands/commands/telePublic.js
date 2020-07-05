@@ -1,5 +1,4 @@
 let SdtdCommand = require('../command.js');
-const sevenDays = require('machinepack-7daystodiewebapi');
 
 class telePublic extends SdtdCommand {
   constructor(serverId) {
@@ -12,7 +11,7 @@ class telePublic extends SdtdCommand {
     this.serverId = serverId;
   }
 
-  async isEnabled(chatMessage, player, server, args) {
+  async isEnabled(chatMessage, player, server) {
     return server.config.enabledPlayerTeleports;
   }
 
@@ -33,7 +32,7 @@ class telePublic extends SdtdCommand {
 
     let nameAlreadyInUse = false;
     teleportsToCheckForName.forEach(teleport => {
-      if (teleport.name == args[0]) {
+      if (teleport.name === args[0]) {
         nameAlreadyInUse = true;
       }
     });
@@ -42,13 +41,13 @@ class telePublic extends SdtdCommand {
       return chatMessage.reply(`renameTeleNameInUse`);
     }
 
-    if (playerTeleports.length == 0) {
+    if (playerTeleports.length === 0) {
       return chatMessage.reply(`NoTeleportFound`);
     }
 
     let teleportFound = false;
     playerTeleports.forEach(teleport => {
-      if (teleport.name == args[0]) {
+      if (teleport.name === args[0]) {
         teleportFound = teleport;
       }
     });
@@ -59,11 +58,11 @@ class telePublic extends SdtdCommand {
 
     if (server.config.economyEnabled && server.config.costToMakeTeleportPublic) {
       let notEnoughMoney = false;
-      let result = await sails.helpers.economy.deductFromPlayer.with({
+      await sails.helpers.economy.deductFromPlayer.with({
         playerId: player.id,
         amountToDeduct: server.config.costToMakeTeleportPublic,
         message: `COMMAND - ${this.name}`
-      }).tolerate('notEnoughCurrency', totalNeeded => {
+      }).tolerate('notEnoughCurrency', () => {
         notEnoughMoney = true;
       });
       if (notEnoughMoney) {

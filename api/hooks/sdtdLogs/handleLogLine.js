@@ -51,7 +51,6 @@ module.exports = logLine => {
       players: playersIdx === -1 ? '' : splitLogLine[playersIdx + 1],
       items: itemsIdx === -1 ? '' : splitLogLine[itemsIdx + 1],
       rss: rssIdx === -1 ? '' : splitLogLine[rssIdx + 1],
-      uptime: logLine.uptime
     };
 
     returnValue.type = 'memUpdate';
@@ -123,7 +122,7 @@ module.exports = logLine => {
     let messageText = logLine.msg.slice(secondIdx + 3, logLine.msg.length);
 
     let type = 'chat';
-    if (playerName == 'Server') {
+    if (playerName === 'Server') {
       type = 'server';
     }
 

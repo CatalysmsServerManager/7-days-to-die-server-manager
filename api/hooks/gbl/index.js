@@ -14,8 +14,9 @@ module.exports = function defineGblHook(sails) {
      *
      * @param {Function} done
      */
-    initialize: async function(done) {
+    initialize: async function (done) {
       // done before we start loading bans so it doesn't block the hook loading
+      // eslint-disable-next-line callback-return
       done();
 
       sails.on('lifted', async () => {
@@ -91,7 +92,7 @@ async function refreshBans() {
 
         if (
           foundBans.length >= config.gblNotificationBans &&
-          config.gblNotificationBans != 0
+          config.gblNotificationBans !== 0
         ) {
           await sails.hooks.discordnotifications.sendNotification({
             serverId: connectedMsg.server.id,
@@ -114,8 +115,6 @@ async function refreshBans() {
 
   let dateEnded = new Date();
   sails.log.info(
-    `Reloaded bans for ${
-      sdtdServers.length
-    } servers! - Took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`
+    `Reloaded bans for ${sdtdServers.length} servers! - Took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`
   );
 }

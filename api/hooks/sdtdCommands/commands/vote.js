@@ -12,12 +12,12 @@ class Vote extends SdtdCommand {
     this.serverId = serverId;
   }
 
-  async isEnabled(chatMessage, player, server, args) {
+  async isEnabled(chatMessage, player, server) {
     return server.config.votingEnabled;
   }
 
 
-  async run(chatMessage, player, server, args) {
+  async run(chatMessage, player, server) {
 
     const apiKey = server.config.votingApiKey;
 

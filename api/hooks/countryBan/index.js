@@ -272,8 +272,8 @@ module.exports = function sdtdCountryBan(sails) {
       ['ZW', 'Zimbabwe']
     ],
 
-    initialize: function(cb) {
-      sails.on('hook:sdtdlogs:loaded', async function() {
+    initialize: function (cb) {
+      sails.on('hook:sdtdlogs:loaded', async function () {
         try {
           let configs = await SdtdConfig.find({
             inactive: false
@@ -324,7 +324,7 @@ module.exports = function sdtdCountryBan(sails) {
      * @method
      */
 
-    stop: async function(serverId) {
+    stop: async function (serverId) {
       sails.log.debug(
         `HOOK:countryBan Stopping countryBan for server ${serverId} `
       );
@@ -347,14 +347,14 @@ module.exports = function sdtdCountryBan(sails) {
      * @method
      */
 
-    getStatus: function(serverId) {
+    getStatus: function (serverId) {
       sails.log.debug(
         `HOOK:countryBan Getting countryBan status for server ${serverId} `
       );
       return countryBanInfoMap.get(String(serverId));
     },
 
-    getAmount: function() {
+    getAmount: function () {
       return countryBanInfoMap.size;
     },
 
@@ -366,7 +366,7 @@ module.exports = function sdtdCountryBan(sails) {
      * @method
      */
 
-    reload: async function(serverId, newConfig) {
+    reload: async function (serverId, newConfig) {
       try {
         sails.log.debug(
           `HOOK:countryBan Reloading country ban for server ${serverId} `
@@ -384,7 +384,7 @@ module.exports = function sdtdCountryBan(sails) {
           newConfig = config.countryBanConfig;
         }
 
-        let updatedServer = await SdtdConfig.update(
+        await SdtdConfig.update(
           {
             server: serverId
           },

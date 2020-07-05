@@ -16,6 +16,7 @@ module.exports = function economy(sails) {
 
       sails.on('hook:sdtdlogs:loaded', async function () {
         sails.log.info('Initializing custom hook (`economy`)');
+        // eslint-disable-next-line callback-return
         cb();
 
         discordMessageEmitter = new DiscordMessageHandler();

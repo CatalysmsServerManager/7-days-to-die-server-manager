@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 class gblComments {
   constructor(loggedInUserId) {
     this.listElement = $('#comments-list');

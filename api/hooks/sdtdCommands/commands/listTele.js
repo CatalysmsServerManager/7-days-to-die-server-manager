@@ -1,5 +1,4 @@
 let SdtdCommand = require('../command.js');
-const sevenDays = require('machinepack-7daystodiewebapi');
 
 class listTele extends SdtdCommand {
   constructor(serverId) {
@@ -12,7 +11,7 @@ class listTele extends SdtdCommand {
     this.serverId = serverId;
   }
 
-  async isEnabled(chatMessage, player, server, args) {
+  async isEnabled(chatMessage, player, server) {
     return server.config.enabledPlayerTeleports;
   }
 
@@ -20,7 +19,7 @@ class listTele extends SdtdCommand {
 
     async function loadTeleports() {
       let playerTeleports = new Array();
-      if (args[0] == 'public') {
+      if (args[0] === 'public') {
         for (const player of server.players) {
           let publicTelesByPlayer = await PlayerTeleport.find({
             player: player.id,
@@ -45,7 +44,7 @@ class listTele extends SdtdCommand {
       return chatMessage.reply('listTeleTooManyArguments');
     }
 
-    if (playerTeleports.length == 0) {
+    if (playerTeleports.length === 0) {
       return chatMessage.reply('listTeleNoTeleportsFound');
     }
 

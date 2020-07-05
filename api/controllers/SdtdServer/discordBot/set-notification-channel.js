@@ -41,13 +41,13 @@ module.exports = {
         return exits.notFound();
       }
 
-      if (_.isUndefined(notificationChannel) && inputs.notificationChannelId != '0') {
+      if (_.isUndefined(notificationChannel) && inputs.notificationChannelId !== '0') {
         return exits.badChannel();
       }
 
-      let currentConfig = await SdtdConfig.findOne({server: inputs.serverId});
+      let currentConfig = await SdtdConfig.findOne({ server: inputs.serverId });
       currentConfig.discordNotificationConfig[inputs.notificationType] = inputs.notificationChannelId;
-      await SdtdConfig.update({server: inputs.serverId}, {discordNotificationConfig: currentConfig.discordNotificationConfig});
+      await SdtdConfig.update({ server: inputs.serverId }, { discordNotificationConfig: currentConfig.discordNotificationConfig });
 
       if (notificationChannel) {
         notificationChannel.send(`This channel has been selected to receive ${inputs.notificationType} notifications for ${server.name}`);

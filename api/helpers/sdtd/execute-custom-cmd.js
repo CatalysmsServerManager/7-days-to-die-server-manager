@@ -29,7 +29,7 @@ module.exports = {
     }
   },
 
-  fn: async function(inputs, exits) {
+  fn: async function (inputs, exits) {
     const commandsExecuted = new Array();
 
     if (!_.isArray(inputs.commands)) {
@@ -180,12 +180,4 @@ async function executeCommand(server, command) {
       result: error.toString()
     };
   }
-}
-
-function wait(seconds) {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve();
-    }, seconds * 1000);
-  });
 }

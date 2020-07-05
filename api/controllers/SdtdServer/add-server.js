@@ -1,4 +1,3 @@
-const sevenDays = require('machinepack-7daystodiewebapi');
 const sevenDaysAPI = require('7daystodie-api-wrapper');
 
 module.exports = {
@@ -50,7 +49,7 @@ module.exports = {
     }
   },
 
-  fn: async function(inputs, exits) {
+  fn: async function (inputs, exits) {
     let userProfile = await User.findOne(this.req.session.userId).populate(
       'servers'
     );
@@ -264,8 +263,8 @@ async function addServerToDb(sdtdServerToAdd) {
     owner: sdtdServerToAdd.owner
   }).fetch();
 
-  let createdConfig = await SdtdConfig.create({
+  await SdtdConfig.create({
     server: createdServer.id
-  }).fetch();
+  });
   return createdServer;
 }

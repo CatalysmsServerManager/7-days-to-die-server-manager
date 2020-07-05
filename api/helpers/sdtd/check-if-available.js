@@ -86,10 +86,10 @@ async function checkStats(sdtdServer) {
           return resolve(false);
         }
       },
-      error: (error) => {
+      error: () => {
         return resolve(false);
       },
-      connectionRefused: error => {
+      connectionRefused: () => {
         return resolve(false);
       }
     });
@@ -98,20 +98,20 @@ async function checkStats(sdtdServer) {
 
 async function checkCommand(sdtdServer) {
   return new Promise(resolve => {
-    let statsResponse = sevenDays.executeCommand({
+    sevenDays.executeCommand({
       ip: sdtdServer.ip,
       port: sdtdServer.webPort,
       authName: sdtdServer.authName,
       authToken: sdtdServer.authToken,
       command: 'help'
     }).exec({
-      success: (response) => {
+      success: () => {
         resolve(true);
       },
-      error: (error) => {
+      error: () => {
         resolve(false);
       },
-      connectionRefused: error => {
+      connectionRefused: () => {
         resolve(false);
       }
     });

@@ -1,5 +1,4 @@
 var supertest = require('supertest');
-var expect = require('chai').expect;
 let testCommand;
 
 describe('POST /api/sdtdserver/commands/custom/name', function () {

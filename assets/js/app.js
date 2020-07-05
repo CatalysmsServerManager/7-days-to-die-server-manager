@@ -2,6 +2,7 @@
  * General (utility) functions
  */
 
+// eslint-disable-next-line no-unused-vars
 function loadSdtdServers(userId) {
   let serverslist = $('#sdtd-servers-owned');
   $.ajax({
@@ -9,7 +10,7 @@ function loadSdtdServers(userId) {
     data: {
       userId: userId
     },
-    success: (data, status, xhr) => {
+    success: (data) => {
       if (data.length === 0) {
         return serverslist.append(`<a class="dropdown-item"> None </a>`);
       }
@@ -29,6 +30,7 @@ function loadSdtdServers(userId) {
   });
 }
 
+// eslint-disable-next-line no-unused-vars
 async function checkUserPermission(userId, serverId, permissionField) {
   return new Promise((resolve, reject) => {
     if (_.isUndefined(serverId) || _.isUndefined(userId) || _.isUndefined(permissionField)) {
@@ -43,11 +45,11 @@ async function checkUserPermission(userId, serverId, permissionField) {
         userId: userId,
         permissionField: permissionField
       },
-      success: (data, status, xhr) => {
+      success: (data) => {
         resolve(data);
 
       },
-      error: function (xhr, status, error) {
+      error: function (xhr) {
         displayAjaxToSupportData(xhr, this);
         reject(xhr);
 
@@ -103,6 +105,7 @@ function displayAjaxToSupportData(xhr, ajaxRequest) {
   console.log('---------');
 }
 
+// eslint-disable-next-line no-unused-vars
 function hhmmss(seconds) {
   var d = ifNanZero(Number(seconds));
   var h = ifNanZero(Math.floor(d / 3600));

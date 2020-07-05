@@ -1,5 +1,3 @@
-const sevenDays = require('machinepack-7daystodiewebapi');
-
 module.exports = {
 
   friendlyName: 'Delete server',

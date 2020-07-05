@@ -34,9 +34,9 @@ module.exports = {
 
     let serverOrderedResult = _.groupBy(result.rows, 'server');
 
-    _.each(serverOrderedResult, (dupPlayerArray, server) => {
+    _.each(serverOrderedResult, (dupPlayerArray) => {
       let ordered = _.groupBy(dupPlayerArray, 'steamId');
-      _.each(ordered, (playerArr, steamId) => {
+      _.each(ordered, (playerArr) => {
         let smallestId = _.min(playerArr.map(p => p.id));
         let profileToKeep = _.find(playerArr, ['id', smallestId]);
         let profilesToDelete = _.filter(playerArr, player => {

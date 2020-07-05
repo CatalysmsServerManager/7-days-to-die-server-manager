@@ -1,5 +1,4 @@
 var supertest = require('supertest');
-var expect = require('chai').expect;
 
 describe('POST /api/sdtdserver/commands/custom', function () {
 
@@ -15,7 +14,7 @@ describe('POST /api/sdtdserver/commands/custom', function () {
       .expect(200);
   });
 
-  it('should return 400 when name or commandsToExecute is not given',async function () {
+  it('should return 400 when name or commandsToExecute is not given', async function () {
     await supertest(sails.hooks.http.app)
       .post('/api/sdtdserver/commands/custom')
       .send({
@@ -33,7 +32,7 @@ describe('POST /api/sdtdserver/commands/custom', function () {
       .expect(400);
   });
 
-  it('should return 400 when name with spaces is given',async function () {
+  it('should return 400 when name with spaces is given', async function () {
     await supertest(sails.hooks.http.app)
       .post('/api/sdtdserver/commands/custom')
       .send({
@@ -44,7 +43,7 @@ describe('POST /api/sdtdserver/commands/custom', function () {
       .expect(400);
   });
 
-  it('should return 400 when name that is already taken is given',async function () {
+  it('should return 400 when name that is already taken is given', async function () {
     await supertest(sails.hooks.http.app)
       .post('/api/sdtdserver/commands/custom')
       .send({

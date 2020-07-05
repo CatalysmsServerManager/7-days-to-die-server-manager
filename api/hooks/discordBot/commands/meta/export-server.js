@@ -23,10 +23,6 @@ class Export extends Commando.Command {
   }
 
   async run(msg, args) {
-    let databaseString = new String(
-      `DONT FORGET TO FILL ADDITIONAL VALUES LIKE THE OWNER ID!!\r\n`
-    );
-
     const server = await SdtdServer.findOne(args.serverId);
 
     if (_.isUndefined(server)) {
@@ -111,7 +107,7 @@ class Export extends Commando.Command {
     fs.writeFile(
       `${server.name}_export.json`,
       JSON.stringify(exportData),
-      async function() {
+      async function () {
         await msg.channel.send({
           files: [
             {

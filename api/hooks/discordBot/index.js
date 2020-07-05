@@ -32,6 +32,7 @@ module.exports = function discordBot(sails) {
         });
 
         sails.discordBotClient = client;
+        // eslint-disable-next-line callback-return
         cb();
 
         // Register custom embed messages

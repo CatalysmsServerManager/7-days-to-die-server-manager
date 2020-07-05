@@ -12,7 +12,7 @@ class Claim extends SdtdCommand {
     this.serverId = serverId;
   }
 
-  async isEnabled(chatMessage, player, server, args) {
+  async isEnabled(chatMessage, player, server) {
     return server.config.economyEnabled;
   }
 
@@ -66,7 +66,7 @@ class Claim extends SdtdCommand {
         }, cmdToExec);
 
         if (response.result.includes('ERR:')) {
-          return chatMessage.reply('error', {error: response.result});
+          return chatMessage.reply('error', { error: response.result });
         }
 
         chatMessage.reply('claimItemGiven', {
@@ -78,7 +78,7 @@ class Claim extends SdtdCommand {
           claimed: true
         });
       } catch (error) {
-        chatMessage.reply('error', {error: error});
+        chatMessage.reply('error', { error: error });
       }
 
     });

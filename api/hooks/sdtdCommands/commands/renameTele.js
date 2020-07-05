@@ -1,5 +1,4 @@
 let SdtdCommand = require('../command.js');
-const sevenDays = require('machinepack-7daystodiewebapi');
 var validator = require('validator');
 
 class renameTele extends SdtdCommand {
@@ -13,7 +12,7 @@ class renameTele extends SdtdCommand {
     this.serverId = serverId;
   }
 
-  async isEnabled(chatMessage, player, server, args) {
+  async isEnabled(chatMessage, player, server) {
     return server.config.enabledPlayerTeleports;
   }
 
@@ -23,7 +22,7 @@ class renameTele extends SdtdCommand {
       player: player.id
     });
 
-    if (args.length == 0) {
+    if (args.length === 0) {
       return chatMessage.reply('renameTeleMissingArgument');
     }
 
@@ -33,7 +32,7 @@ class renameTele extends SdtdCommand {
 
     let teleportFound = false;
     playerTeleports.forEach(teleport => {
-      if (teleport.name == args[0]) {
+      if (teleport.name === args[0]) {
         teleportFound = teleport;
       }
     });
@@ -44,7 +43,7 @@ class renameTele extends SdtdCommand {
 
     let nameAlreadyInUse = false;
     playerTeleports.forEach(teleport => {
-      if (teleport.name == args[1]) {
+      if (teleport.name === args[1]) {
         nameAlreadyInUse = true;
       }
     });

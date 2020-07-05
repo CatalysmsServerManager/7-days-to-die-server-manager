@@ -1,4 +1,3 @@
-const sevenDays = require('machinepack-7daystodiewebapi');
 const SdtdApi = require('7daystodie-api-wrapper');
 
 /**
@@ -102,7 +101,6 @@ module.exports = function definePlayerTrackingHook(sails) {
 
         if (currentCycles >= sails.config.custom.trackingCyclesBeforeDelete) {
           await deleteLocationData(server);
-          //await deleteInventoryData(server);
           await sails.helpers.redis.set(`server:${serverId}:trackingCyclesCompleted`, 0);
         } else {
           await sails.helpers.redis.incr(`server:${serverId}:trackingCyclesCompleted`);
@@ -299,34 +297,4 @@ async function deleteLocationData(server) {
 
   let dateEnded = new Date();
   sails.log.verbose(`Deleted location data for server ${server.name} - deleted ${deleteResult.affectedRows} rows - took ${dateEnded.valueOf() - dateNow.valueOf()} ms`);
-
-
-}
-
-
-async function deleteInventoryData(server) {
-  try {
-    let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({
-      serverId: server.id
-    });
-    let hoursToKeepData = sails.config.custom.donorConfig[donatorRole].playerTrackerKeepInventoryHours;
-    let milisecondsToKeepData = hoursToKeepData * 3600000;
-    let dateNow = Date.now();
-    let borderDate = new Date(dateNow.valueOf() - milisecondsToKeepData);
-
-    await TrackingInfo.update({
-      createdAt: {
-        '<': borderDate.valueOf()
-      },
-      server: server.id
-    }, {
-      inventory: null
-    });
-
-    let dateEnded = new Date();
-    sails.log.verbose(`Deleted inventory data for server ${server.name} - took ${dateEnded.valueOf() - dateNow.valueOf()} ms`);
-
-  } catch (error) {
-    sails.log.error(error);
-  }
 }

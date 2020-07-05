@@ -19,6 +19,7 @@ module.exports = function defineHighPingKickHook(sails) {
     initialize: function (done) {
 
 
+      // eslint-disable-next-line callback-return
       done();
 
       sails.on('lifted', async () => {

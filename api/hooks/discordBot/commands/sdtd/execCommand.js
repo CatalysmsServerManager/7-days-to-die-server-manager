@@ -1,7 +1,6 @@
 const Commando = require('discord.js-commando');
 const Discord = require('discord.js');
 const findSdtdServer = require('../../util/findSdtdServer.js');
-const checkIfAdmin = require('../../util/checkIfAdmin');
 const Daystodiewebapi = require('machinepack-7daystodiewebapi');
 const fs = require('fs');
 
@@ -113,7 +112,7 @@ class ExecCommand extends Commando.Command {
                   attachment: `${sdtdServer.name}_${args.command}_output.txt`,
                   name: `${sdtdServer.name}_${args.command}_output.txt`
                 }]
-              }).then(response => {
+              }).then(() => {
                 fs.unlink(`${sdtdServer.name}_${args.command}_output.txt`, err => {
                   if (err) {
                     sails.log.error(err);

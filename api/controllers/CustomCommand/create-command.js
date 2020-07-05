@@ -1,5 +1,3 @@
-var sevenDays = require('machinepack-7daystodiewebapi');
-
 module.exports = {
 
   friendlyName: 'Create command',
@@ -101,26 +99,3 @@ module.exports = {
 
   }
 };
-
-
-function getAllowedCommands(server) {
-  return new Promise((resolve, reject) => {
-    sevenDays.getAllowedCommands({
-      ip: server.ip,
-      port: server.webPort,
-      authName: server.authName,
-      authToken: server.authToken
-    }).exec({
-      error: error => {
-        reject(error);
-      },
-      success: response => {
-        let allowedCommands = new Array();
-        response.commands.forEach(command => {
-          allowedCommands.push(command.command);
-        });
-        resolve(allowedCommands);
-      }
-    });
-  });
-}
