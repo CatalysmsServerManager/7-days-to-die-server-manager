@@ -59,7 +59,7 @@ class LokiTransport extends winston.transports.Http {
               [
                 nanoseconds(),
                 `${options.params.message} ${JSON.stringify(options.params.meta)}`
-                // `${options.params.level}: ${options.params.message}`
+                `${options.params.level}: ${options.params.message}`
               ],
             ]
           }
