@@ -23,10 +23,13 @@ A clear and concise description of what you expected to happen.
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
 
-**Desktop (please complete the following information):**
+**Desktop (please complete the following information if this is a problem on the CSMM web application):**
  - OS: [e.g. iOS]
  - Browser [e.g. chrome, safari]
  - Version [e.g. 22]
+
+**7 days to die server info:**
+ - Output of the `version` command:
 
 **Additional context**
 Add any other context about the problem here.
