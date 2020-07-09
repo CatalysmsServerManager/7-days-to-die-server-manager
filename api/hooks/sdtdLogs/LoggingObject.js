@@ -185,7 +185,7 @@ class LoggingObject extends EventEmitter {
       `sdtdserver:${this.serverId}:sdtdLogs:lastSuccess`
     );
     lastSuccess = parseInt(lastSuccess);
-    if (counter > 100) {
+    if (counter > 500) {
       let prettyLastSuccess = new Date(lastSuccess);
 
       if (!this.slowmode) {
