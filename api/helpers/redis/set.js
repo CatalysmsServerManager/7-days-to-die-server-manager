@@ -36,8 +36,8 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-
-    if (process.env.REDISSTRING) {
+    const datastore = sails.getDatastore('cache');
+    if (datastore.config.adapter === 'sails-redis') {
 
       if (inputs.ex) {
         if (_.isUndefined(inputs.ttl)) {
