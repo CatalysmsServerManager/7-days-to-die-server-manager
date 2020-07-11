@@ -60,4 +60,23 @@ describe('sdtdLogs#handleLogLine', () => {
     expect(result.data.steamId).to.eq('76561198028175941');
     expect(result.data.entityId).to.eq('531');
   });
+
+  it('correctly detects a playerLevel event', () => {
+    const logLine = {
+      'date': '2020-07-11',
+      'time': '08:11:40',
+      'uptime': '1673.118',
+      'msg': '[CSMM_Patrons]playerLeveled: (VE) Kiota (76561198108856299) made level 4 (was 3)',
+      'trace': '',
+      'type': 'Log'
+    };
+
+    const result = handleLogLine(logLine);
+
+    expect(result.type).to.eq('playerLevel');
+    expect(result.data.steamId).to.eq('76561198108856299');
+    expect(result.data.newLvl).to.eq('4');
+    expect(result.data.oldLvl).to.eq('3');
+
+  });
 });
