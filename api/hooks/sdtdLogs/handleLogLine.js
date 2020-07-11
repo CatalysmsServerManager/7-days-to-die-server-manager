@@ -16,6 +16,8 @@ const joinedValuesRegex = /([A-Za-z_]*)=(?:'([^']*)'|(\d*))/gm;
 const newLevelRegex = /(made level \d*)/g;
 const oldLevelRegex = /(was )\d*/g;
 
+const entityKilledRegex = /(killed .*)/g;
+
 module.exports = logLine => {
 
 
@@ -334,28 +336,24 @@ module.exports = logLine => {
       "type": "Log"
     }
     */
-    let killMessage = logLine.msg.split('(');
 
-    let steamId = killMessage[1].split(')')[0].trim();
-    let victimInfo = killMessage[1].split('killed ')[1].split(' ');
-    let entityClass = victimInfo[0];
-    let entityName = victimInfo[1];
+    const entityInfo = logLine.msg.match(entityKilledRegex)[0].split(' ');
 
     killMessage = {
       date: logLine.date,
       time: logLine.time,
       uptime: logLine.uptime,
       msg: logLine.msg,
-      steamId: steamId,
-      entityClass: entityClass,
-      entityName: entityName
+      steamId: logLine.msg.match(steamIdRegex)[0],
+      entityClass: entityInfo[1],
+      entityName: entityInfo[2]
     };
 
-    if (entityClass === 'zombie') {
+    if (killMessage.entityClass === 'zombie') {
       returnValue.type = 'zombieKilled';
     }
 
-    if (entityClass === 'animal') {
+    if (killMessage.entityClass === 'animal') {
       returnValue.type = 'animalKilled';
     }
 

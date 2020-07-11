@@ -79,4 +79,23 @@ describe('sdtdLogs#handleLogLine', () => {
     expect(result.data.oldLvl).to.eq('3');
 
   });
+
+
+  it('correctly detects a zombieKilled event', () => {
+    const logLine = {
+      'date': '2017-11-14',
+      'time': '14:50:49',
+      'uptime': '133.559',
+      'msg': '[CSMM_Patrons]entityKilled: (VE) Kiota (76561198028175941) killed zombie zombieBoe',
+      'trace': '',
+      'type': 'Log'
+    };
+    const result = handleLogLine(logLine);
+
+    expect(result.type).to.eq('zombieKilled');
+    expect(result.data.steamId).to.eq('76561198028175941');
+    expect(result.data.entityClass).to.eq('zombie');
+    expect(result.data.entityName).to.eq('zombieBoe');
+
+  });
 });
