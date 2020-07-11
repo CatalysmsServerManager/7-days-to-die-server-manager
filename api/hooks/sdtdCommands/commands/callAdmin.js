@@ -39,7 +39,7 @@ class callAdmin extends SdtdCommand {
 
     } catch (error) {
       sails.log.error(`HOOK - SdtdCommands:callAdmin - ${error}`);
-      return chatMessage.reply('error', { error: error });
+      return chatMessage.reply('error');
     }
   }
 }

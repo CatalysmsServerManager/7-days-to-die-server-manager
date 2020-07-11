@@ -111,8 +111,8 @@ class CustomCommand extends SdtdCommand {
 
 
       } catch (error) {
-        sails.log.error(`Custom command error - ${server.name} - ${chatMessage.messageText} - ${error}`);
-        chatMessage.reply(`Error! Contact your server admin with this message: ${error.toString().replace(/\"/g, '')}`);
+        sails.log.error(`Custom command error - server ${server.id} - ${chatMessage.messageText} - ${error}`);
+        chatMessage.reply(`Error, please contact your server admin!`);
       }
     }
   }
