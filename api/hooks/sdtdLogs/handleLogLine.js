@@ -2,15 +2,24 @@ const geoip = require('geoip-country');
 const _ = require('lodash');
 
 const replaceQuotes = string => string.substring(1, string.length - 1);
+const extractIntegers = string => string.match(/\d*/g).join('');
+
+const steamIdRegex = /\d{17}/g;
+const deathRegex = /(PlayerSpawnedInWorld \(reason: Died, position:)/g;
+const deathValuesRegex = /([A-Za-z_]*)=(?:'([^']*)'|(\d*))/gm;
+
+const connectedRegex = /(Player connected,)/g;
+
+const joinedRegex = /(PlayerSpawnedInWorld \(reason: EnterMultiplayer, position:)/g;
+const joinedValuesRegex = /([A-Za-z_]*)=(?:'([^']*)'|(\d*))/gm;
+
+const newLevelRegex = /(made level \d*)/g;
+const oldLevelRegex = /(was )\d*/g;
+
+const entityKilledRegex = /(killed .*)/g;
 
 module.exports = logLine => {
-  const deathRegex = /(PlayerSpawnedInWorld \(reason: Died, position:)/g;
-  const deathValuesRegex = /([A-Za-z_]*)=(?:'([^']*)'|(\d*))/gm;
 
-  const connectedRegex = /(Player connected,)/g;
-
-  const joinedRegex = /(PlayerSpawnedInWorld \(reason: EnterMultiplayer, position:)/g;
-  const joinedValuesRegex = /([A-Za-z_]*)=(?:'([^']*)'|(\d*))/gm;
 
   let returnValue = {
     type: 'logLine',
@@ -296,17 +305,11 @@ module.exports = logLine => {
       "type": "Log"
     }
     */
-    let lvlMessage = logLine.msg.split('(');
 
-    let steamId = lvlMessage[1].split(')')[0].trim();
-    let newLvl = lvlMessage[1].split('level')[1].trim();
-    let oldLvl = lvlMessage[2]
-      .replace('was ', '')
-      .replace(')', '')
-      .trim();
+    const steamId = logLine.msg.match(steamIdRegex)[0];
+    const newLvl = extractIntegers(logLine.msg.match(newLevelRegex)[0]);
+    const oldLvl = extractIntegers(logLine.msg.match(oldLevelRegex)[0]);
 
-    newLvl = parseInt(newLvl);
-    oldLvl = parseInt(oldLvl);
 
     lvlMessage = {
       date: logLine.date,
@@ -333,28 +336,24 @@ module.exports = logLine => {
       "type": "Log"
     }
     */
-    let killMessage = logLine.msg.split('(');
 
-    let steamId = killMessage[1].split(')')[0].trim();
-    let victimInfo = killMessage[1].split('killed ')[1].split(' ');
-    let entityClass = victimInfo[0];
-    let entityName = victimInfo[1];
+    const entityInfo = logLine.msg.match(entityKilledRegex)[0].split(' ');
 
     killMessage = {
       date: logLine.date,
       time: logLine.time,
       uptime: logLine.uptime,
       msg: logLine.msg,
-      steamId: steamId,
-      entityClass: entityClass,
-      entityName: entityName
+      steamId: logLine.msg.match(steamIdRegex)[0],
+      entityClass: entityInfo[1],
+      entityName: entityInfo[2]
     };
 
-    if (entityClass === 'zombie') {
+    if (killMessage.entityClass === 'zombie') {
       returnValue.type = 'zombieKilled';
     }
 
-    if (entityClass === 'animal') {
+    if (killMessage.entityClass === 'animal') {
       returnValue.type = 'animalKilled';
     }
 

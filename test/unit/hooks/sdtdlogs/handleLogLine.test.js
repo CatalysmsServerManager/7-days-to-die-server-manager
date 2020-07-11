@@ -60,4 +60,60 @@ describe('sdtdLogs#handleLogLine', () => {
     expect(result.data.steamId).to.eq('76561198028175941');
     expect(result.data.entityId).to.eq('531');
   });
+
+  it('correctly detects a playerLevel event', () => {
+    const logLine = {
+      'date': '2020-07-11',
+      'time': '08:11:40',
+      'uptime': '1673.118',
+      'msg': '[CSMM_Patrons]playerLeveled: (VE) Kiota (76561198108856299) made level 4 (was 3)',
+      'trace': '',
+      'type': 'Log'
+    };
+
+    const result = handleLogLine(logLine);
+
+    expect(result.type).to.eq('playerLevel');
+    expect(result.data.steamId).to.eq('76561198108856299');
+    expect(result.data.newLvl).to.eq('4');
+    expect(result.data.oldLvl).to.eq('3');
+
+  });
+
+
+  it('correctly detects a zombieKilled event', () => {
+    const logLine = {
+      'date': '2017-11-14',
+      'time': '14:50:49',
+      'uptime': '133.559',
+      'msg': '[CSMM_Patrons]entityKilled: (VE) Kiota (76561198028175941) killed zombie zombieBoe',
+      'trace': '',
+      'type': 'Log'
+    };
+    const result = handleLogLine(logLine);
+
+    expect(result.type).to.eq('zombieKilled');
+    expect(result.data.steamId).to.eq('76561198028175941');
+    expect(result.data.entityClass).to.eq('zombie');
+    expect(result.data.entityName).to.eq('zombieBoe');
+
+  });
+
+  it('correctly detects a animalKilled event', () => {
+    const logLine = {
+      'date': '2017-11-14',
+      'time': '14:50:49',
+      'uptime': '133.559',
+      'msg': '[CSMM_Patrons]entityKilled: (VE) Kiota (76561198028175941) killed animal cuteBambi',
+      'trace': '',
+      'type': 'Log'
+    };
+    const result = handleLogLine(logLine);
+
+    expect(result.type).to.eq('animalKilled');
+    expect(result.data.steamId).to.eq('76561198028175941');
+    expect(result.data.entityClass).to.eq('animal');
+    expect(result.data.entityName).to.eq('cuteBambi');
+
+  });
 });
