@@ -29,7 +29,7 @@ describe('sdtdLogs#handleLogLine', () => {
       time: '14:50:25',
       uptime: '109.802',
       msg:
-        'Player connected, entityid=3667, name=Catalysm, steamid=76561198028175941, steamOwner=76561198028175941, ip=192.168.1.100',
+        'Player connected, entityid=3667, name=Catalysm, steamid=76561198028175941, steamOwner=76561198028175941, ip=2.21.16.8',
       trace: '',
       type: 'Log'
     };
@@ -40,6 +40,8 @@ describe('sdtdLogs#handleLogLine', () => {
     expect(result.data.playerName).to.eq('Catalysm');
     expect(result.data.steamId).to.eq('76561198028175941');
     expect(result.data.entityId).to.eq('3667');
+    // I don't think it makes sense to check the actual country, just that something gets set
+    expect(result.data.country).to.not.be.null;
   });
 
   it('Correctly detects a playerJoined event', () => {
