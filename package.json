@@ -88,7 +88,7 @@
     "sails-disk": "^1.1.2",
     "sinon": "^9.0.2",
     "sinon-chai": "^3.5.0",
-    "supertest": "^3.3.0"
+    "supertest": "^4.0.2"
   },
   "mocha": {
     "reporter": "mochawesome",
