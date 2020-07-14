@@ -59,15 +59,18 @@ class ServerInfo extends Commando.Command {
 
     switch (serverInfo.serverInfo.DropOnDeath) {
       case 0:
-        serverInfo.serverInfo.DropOnDeath = 'Drop all';
+        serverInfo.serverInfo.DropOnDeath = 'Nothing';
         break;
       case 1:
-        serverInfo.serverInfo.DropOnDeath = 'Belt';
+        serverInfo.serverInfo.DropOnDeath = 'Everything';
         break;
       case 2:
-        serverInfo.serverInfo.DropOnDeath = 'Backpack';
+        serverInfo.serverInfo.DropOnDeath = 'Toolbelt only';
         break;
       case 3:
+        serverInfo.serverInfo.DropOnDeath = 'Backpack only';
+        break;
+      case 4:
         serverInfo.serverInfo.DropOnDeath = 'Delete all';
         break;
     }
