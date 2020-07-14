@@ -35,7 +35,6 @@ class ServerInfo extends Commando.Command {
 
     let serverInfo = await sails.helpers.loadSdtdserverInfo(sdtdServer.id);
 
-
     if (!serverInfo || !serverInfo.serverInfo || !serverInfo.stats) {
       return msg.channel.send(`Could not load server data. Make sure the server is online.`);
     }
@@ -108,7 +107,6 @@ ${serverInfo.serverInfo.EACEnabled} EAC
 :small_orange_diamond: Max zombies:  ${serverInfo.serverInfo.MaxSpawnedZombies}
 :small_orange_diamond: Blood moon enemy count:  ${serverInfo.serverInfo.BloodMoonEnemyCount}
 :small_orange_diamond: Land claim size: ${serverInfo.serverInfo.LandClaimSize} - Dead zone: ${serverInfo.serverInfo.LandClaimDeadZone} - Expiry date: ${serverInfo.serverInfo.LandClaimExpiryTime}
-:small_orange_diamond: Game difficulty:  ${serverInfo.serverInfo.GameDifficulty}
 :small_orange_diamond: Drop on death:  ${serverInfo.serverInfo.DropOnDeath}
 :small_orange_diamond: Player killing mode:  ${serverInfo.serverInfo.PlayerKillingMode}
 :small_orange_diamond: Air drop frequency: ${serverInfo.serverInfo.AirDropFrequency / 24} days
