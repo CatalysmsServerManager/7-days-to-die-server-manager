@@ -85,7 +85,7 @@ before(function (done) {
       csrf: false
     },
 
-    port: 0,
+    port: 1338,
 
     datastores: {
       default: {

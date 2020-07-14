@@ -35,7 +35,6 @@ class ServerInfo extends Commando.Command {
 
     let serverInfo = await sails.helpers.loadSdtdserverInfo(sdtdServer.id);
 
-
     if (!serverInfo || !serverInfo.serverInfo || !serverInfo.stats) {
       return msg.channel.send(`Could not load server data. Make sure the server is online.`);
     }
