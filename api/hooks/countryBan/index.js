@@ -405,7 +405,8 @@ module.exports = function sdtdCountryBan(sails) {
   async function handleCountryBan(connectedMessage) {
     let country = connectedMessage.country;
     let steamId = connectedMessage.steamId;
-    let serverId = this.server.id;
+    let serverId = connectedMessage.server.id;
+
     try {
       let server = await SdtdServer.findOne(serverId);
 
