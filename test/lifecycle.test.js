@@ -59,7 +59,9 @@ before(function (done) {
 
     let testServerConfig = await SdtdConfig.create({
       server: testServer.id,
-      inactive: true
+      inactive: true,
+      countryBanConfig: { bannedCountries: ['BE'], whiteListedSteamIds: [] },
+
     }).fetch();
 
     sails.testUser = testUser;
