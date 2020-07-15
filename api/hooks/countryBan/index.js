@@ -399,7 +399,9 @@ module.exports = function sdtdCountryBan(sails) {
       } catch (error) {
         sails.log.error(`HOOK:countryBan ${error}`);
       }
-    }
+    },
+
+    handleCountryBan: handleCountryBan
   };
 
   async function handleCountryBan(connectedMessage) {
@@ -425,6 +427,7 @@ module.exports = function sdtdCountryBan(sails) {
       });
 
       let countryBanConfig = config[0].countryBanConfig;
+      console.log(countryBanConfig);
       if (
         countryBanConfig.bannedCountries.includes(country) &&
         !countryBanConfig.whiteListedSteamIds.includes(steamId)
@@ -439,7 +442,7 @@ module.exports = function sdtdCountryBan(sails) {
         });
 
         if (countryBanConfig.ban) {
-          await SdtdApi.executeConsoleCommand(
+          await sails.helpers.sdtdApi.executeConsoleCommand(
             {
               ip: server.ip,
               port: server.webPort,
@@ -449,7 +452,7 @@ module.exports = function sdtdCountryBan(sails) {
             `ban add ${connectedMessage.steamId} 100 years "CSMM: Players from your country (${country}) are not allowed to connect to this server."`
           );
         } else {
-          await SdtdApi.executeConsoleCommand(
+          await sails.helpers.sdtdApi.executeConsoleCommand(
             {
               ip: server.ip,
               port: server.webPort,
