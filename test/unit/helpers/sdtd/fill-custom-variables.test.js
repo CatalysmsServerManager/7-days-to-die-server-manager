@@ -17,5 +17,29 @@ describe('HELPER sdtd/fill-custom-variables', () => {
     const result = await sails.helpers.sdtd.fillCustomVariables('whoa there ${player.friendlyName}', { player: { friendlyName: 'halkeye' } } );
     expect(result).to.be.eql('whoa there halkeye');
   });
+  describe('randNum', () => {
+    it('min:max', async () => {
+      const start = 1;
+      const end = 100;
+      const numbers = await Promise.all(Array.from({ length: 1000 }, async () => {
+        const result = await sails.helpers.sdtd.fillCustomVariables('whoa there ${randNum:1-100}', { } );
+        return parseInt(result.match(/(\d+)/)[1], 10);
+      }));
+      expect(numbers.every(n => n >= start)).to.be.true;
+      expect(numbers.every(n => n <= end)).to.be.true;
+    });
+    it('max:min', async () => {
+      const result = await sails.helpers.sdtd.fillCustomVariables('whoa there ${randNum:100-1}', { } );
+      expect(result).to.be.eql('whoa there ${randNum:100-1}');
+    });
+    it('not enough variables', async () => {
+      const result = await sails.helpers.sdtd.fillCustomVariables('whoa there ${randNum:100}', { } );
+      expect(result).to.be.eql('whoa there ${randNum:100}');
+    });
+    it('not numbers', async () => {
+      const result = await sails.helpers.sdtd.fillCustomVariables('whoa there ${randNum:apple-orange}', { } );
+      expect(result).to.be.eql('whoa there ${randNum:apple-orange}');
+    });
+  });
 });
 
