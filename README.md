@@ -1,6 +1,6 @@
 <div align="center">
 
-[![codecov](https://codecov.io/gh/CatalysmsServerManager/7-days-to-die-server-manager/branch/master/graph/badge.svg)](https://codecov.io/gh/CatalysmsServerManager/7-days-to-die-server-manager)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/407cdb68165fc000cfd6/test_coverage)](https://codeclimate.com/github/CatalysmsServerManager/7-days-to-die-server-manager/test_coverage)
 [![Build Status](https://travis-ci.org/CatalysmsServerManager/7-days-to-die-server-manager.svg?branch=master)](https://travis-ci.org/CatalysmsServerManager/7-days-to-die-server-manager)
 [![Discord](https://img.shields.io/discord/336821518250147850?label=Discord&logo=Discord)](http://catalysm.net/discord)
 
@@ -16,7 +16,6 @@
 
 <div align="justify">
 
-
 **Server automation** - run any command in any time interval you want. Timed server messages, automatic world saving, ...
 
 **Discord notifications** - built-in for common use cases. Ability to detect specific strings for your custom purposes.
@@ -26,7 +25,7 @@
 **Country ban** - automatically kick or ban players from certain countries from your server.
 
 **Player tracking** - Track location and inventory of online players and view them on a map of your server.
-  
+
 **Ingame commands** - Playermade teleports, ingame support system, ... Custom commands to expose console commands to players in a controlled way
 **Economy system** - Let players earn money by playing, killing zombies, typing on your Discord server. They can spend their cash in your servers shop, teleports and more.
 
@@ -40,8 +39,8 @@
 <div align="center">
 
 ## [Installation](https://docs.csmm.app/en/CSMM/self-host/installation.html)
-## [Documentation](https://docs.csmm.app)
 
+## [Documentation](https://docs.csmm.app)
 
 ## Support
 
