@@ -6,8 +6,14 @@ function randNum(matches) {
   return null;
 }
 
+function randList(matches) {
+  let choices = matches[1].split(',').map(s=>s.trim());
+  return choices[Math.floor(Math.random() * choices.length)];
+}
+
 const customVariables = [
-  [/^randNum:(-?\d+):(-?\d+)$/, randNum]
+  [/^randNum:(-?\d+):(-?\d+)$/, randNum],
+  [/^randList:(.*)$/, randList]
 ];
 
 module.exports = {

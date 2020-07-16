@@ -17,6 +17,24 @@ describe('HELPER sdtd/fill-custom-variables', () => {
     const result = await sails.helpers.sdtd.fillCustomVariables('whoa there ${player.friendlyName}', { player: { friendlyName: 'halkeye' } } );
     expect(result).to.be.eql('whoa there halkeye');
   });
+  describe('randList', () => {
+    it('choices', async () => {
+      const choices = ['a', 'b', 'c'];
+      const words = await Promise.all(Array.from({ length: 1000 }, async () => {
+        const result = await sails.helpers.sdtd.fillCustomVariables('whoa there ${randList:' + choices.join(',') + '}', { } );
+        return result.split(' ')[2];
+      }));
+      expect(words.every(n => choices.includes(n))).to.be.true;
+    });
+    it('single', async () => {
+      const choices = ['a'];
+      const words = await Promise.all(Array.from({ length: 1000 }, async () => {
+        const result = await sails.helpers.sdtd.fillCustomVariables('whoa there ${randList:' + choices.join(',') + '}', { } );
+        return result.split(' ')[2];
+      }));
+      expect(words.every(n => choices.includes(n))).to.be.true;
+    });
+  });
   describe('randNum', () => {
     it('negatives', async () => {
       const start = -100;
