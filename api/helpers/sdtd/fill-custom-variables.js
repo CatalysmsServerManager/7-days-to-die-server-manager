@@ -19,7 +19,7 @@ module.exports = {
   },
   fn: async function (inputs, exits) {
     return exits.success(inputs.command.toString().replace(/\$\{([^}]+)\}/g, function (match, group1) {
-      const randNumberMatch = group1.trim().match(/^randNum:(\d+)-(\d+)$/);
+      const randNumberMatch = group1.trim().match(/^randNum:(-?\d+):(-?\d+)$/);
       if (randNumberMatch) {
         let [, min, max] = randNumberMatch.map(i=>Number.parseInt(i, 10));
         if (max >= min) {
