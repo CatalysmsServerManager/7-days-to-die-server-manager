@@ -131,12 +131,28 @@
 
   <h3>Custom commands</h3>
 
-  <% customCommands.forEach(command => { %>
+  <table id="commands-table" class="table table-striped table-bordered">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Commands</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% customCommands.forEach(command => { %>
+        <tr>
+          <td scope="row"><%= command.name %></td>
+          <td><%= command.description %></td>
+          <td><%= command.commandsToExecute %></td>
+          <td><%- include('./editCommandModal.ejs', { command: command}) %></td>
+        </tr>
+      
+        <% }) %>
 
-  <%- include('./editCommandModal.ejs', { command: command}) %>
-
-
-  <% }) %>
+    </tbody>
+  </table>
 
   <hr>
 
@@ -198,6 +214,8 @@
 
 <script>
   $(document).ready(function () {
+
+    $('#commands-table').DataTable();
 
     $("#custom-commands-import-btn").click(e => {
 
