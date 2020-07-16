@@ -425,7 +425,7 @@ module.exports = function sdtdCountryBan(sails) {
       });
 
       let countryBanConfig = config[0].countryBanConfig;
-      console.log(countryBanConfig);
+
       if (
         countryBanConfig.bannedCountries.includes(country) &&
         !countryBanConfig.whiteListedSteamIds.includes(steamId)
