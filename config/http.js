@@ -132,6 +132,7 @@ module.exports.http = {
     xframe: require('lusca').xframe('SAMEORIGIN'),
     sentryRequest: Sentry.Handlers.requestHandler(),
     sentryError: Sentry.Handlers.errorHandler(),
+    sentryTracing: Sentry.Handlers.tracingHandler(),
     morgan: morganLogger,
 
     /***************************************************************************
@@ -143,6 +144,7 @@ module.exports.http = {
 
     order: [
       'sentryRequest',
+      'sentryTracing',
       'sentryError',
       'cookieParser',
       'session',

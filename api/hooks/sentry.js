@@ -14,6 +14,7 @@ module.exports = function Sentry(sails) {
         environment: process.env.NODE_ENV || 'development',
         serverName: process.env.CSMM_HOSTNAME || os.hostname(),
         release: require('../../package.json').version,
+        tracesSampleRate: 0.01,
       }
     },
 
@@ -22,7 +23,7 @@ module.exports = function Sentry(sails) {
      * @param  {Function} cb Callback for when we're done initializing
      * @return {Function} cb Callback for when we're done initializing
      */
-    initialize: function(cb) {
+    initialize: function (cb) {
       var settings = sails.config[this.configKey];
 
       if (!settings.dsn) {
@@ -40,7 +41,7 @@ module.exports = function Sentry(sails) {
       sails.sentry = Sentry;
 
       const origServerError = sails.hooks.responses.middleware.serverError;
-      sails.hooks.responses.middleware.serverError = function(err) {
+      sails.hooks.responses.middleware.serverError = function (err) {
         Sentry.captureException(err);
         origServerError.bind(this)(...arguments);
       };
@@ -70,7 +71,7 @@ module.exports = function Sentry(sails) {
             throw new Error('not sure what to do with ' + level);
         }
         const origFunction = sails.log[level].bind(sails.log);
-        sails.log[level] = function() {
+        sails.log[level] = function () {
           getCurrentHub().addBreadcrumb(
             {
               category: 'sailslog',
@@ -87,7 +88,7 @@ module.exports = function Sentry(sails) {
       }
 
       // handles Bluebird's promises unhandled rejections
-      process.on('unhandledRejection', function(reason) {
+      process.on('unhandledRejection', function (reason) {
         console.error('Unhandled rejection:', reason);
         Sentry.captureException(reason);
       });
