@@ -20,7 +20,7 @@
     "geoip-lite": "^1.4.2",
     "grunt": "1.0.3",
     "he": "^1.2.0",
-    "lodash": "^4.17.13",
+    "lodash": "^4.17.19",
     "lusca": "^1.6.1",
     "machinepack-7daystodiewebapi": "^0.3.4",
     "minimist": "^1.2.3",
