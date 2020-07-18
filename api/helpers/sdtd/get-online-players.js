@@ -1,5 +1,3 @@
-var sevenDays = require('machinepack-7daystodiewebapi');
-
 module.exports = {
 
 
@@ -27,27 +25,20 @@ module.exports = {
   },
 
   fn: async function (inputs, exits) {
-    let server = await SdtdServer.findOne({ id: inputs.serverId });
-    sevenDays.getOnlinePlayers({
-      ip: server.ip,
-      port: server.webPort,
-      authName: server.authName,
-      authToken: server.authToken,
-    }).exec({
-      success: response => {
-        return exits.success(response);
-      },
-      error: err => {
-        sails.log.warn(`Error getting online players for server ${server.name} - ${err}`);
-        return exits.success([]);
-      }
-    });
+    const server = await SdtdServer.findOne({ id: inputs.serverId });
 
+    if (_.isUndefined(server)) {
+      return exits.error(new Error('Invalid server'));
+    }
 
-
+    try {
+      const onlinePlayers = await sails.helpers.sdtdApi.getOnlinePlayers(SdtdServer.getAPIConfig(server));
+      return exits.success(onlinePlayers);
+    } catch (e) {
+      sails.log.warn(e);
+      return exits.success([]);
+    }
   }
-
-
 };
 
 
