@@ -52,5 +52,5 @@ jobs:
           file: ./coverage/lcov.info
       - uses: actions/upload-artifact@v2
         with:
-          name: Mochawesome-test-report
-          path: ./coverage/mochawesome/
+          name: test-report
+          path: ./coverage/
