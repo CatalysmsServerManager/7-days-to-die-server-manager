@@ -23,6 +23,7 @@ module.exports = function BullBoard(sails) {
     initialize: function (cb) {
       setQueues([
         sails.helpers.getQueueObject('logs'),
+        sails.helpers.getQueueObject('cron'),
       ]);
 
       sails.after('hook:http:loaded', function () {

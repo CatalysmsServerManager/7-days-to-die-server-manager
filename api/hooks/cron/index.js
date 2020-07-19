@@ -1,5 +1,3 @@
-const schedule = require('node-schedule');
-
 /**
  * cron hook
  *
@@ -8,74 +6,59 @@ const schedule = require('node-schedule');
  */
 
 module.exports = function defineCronHook(sails) {
-
-  const scheduledJobs = new Map();
-
   return {
 
-    /**
-     * Runs when a Sails app loads/lifts.
-     *
-     * @param {Function} done
-     */
+    queue: null,
+
     initialize: function (done) {
-      sails.on('hook:sdtdlogs:loaded', async () => {
+      this.queue = sails.helpers.getQueueObject('cron');
+      sails.on('hook:sdtdlogs:loaded', this.ensureJobsAreQueuedOnStart);
+      this.queue.process(this.processor);
+      return done();
+    },
 
-        sails.log.info('Initializing custom hook (`cron`)');
-        // eslint-disable-next-line callback-return
-        done();
-        let activeServers = await SdtdConfig.find({ inactive: false });
-        let enabledJobs = await CronJob.find({ enabled: true, server: activeServers.map(c => c.server) });
-
-        for (const jobToStart of enabledJobs) {
-          try {
-            await this.start(jobToStart.id);
-          } catch (error) {
-            sails.log.error(`Error initializing cronjob ${jobToStart.id} - ${error}`);
-          }
-
-        }
-
-        return;
-      });
-
+    ensureJobsAreQueuedOnStart: async function () {
+      const enabledJobs = await CronJob.find({ enabled: true });
+      for (const job of enabledJobs) {
+        // We do not need to check if job is already in queue
+        // Bull is intelligent enough to not double add jobs with same repeat options
+        // As long as we pass the jobId in start() we're fine
+        await this.start(job.id);
+      }
     },
 
     start: async function (jobId) {
+      const job = await CronJob.findOne(jobId);
 
-      let foundJob = await CronJob.findOne(jobId);
-
-      if (!foundJob) {
+      if (!job) {
         throw new Error(`Tried to start a job which doesn't exist`);
       }
 
-      let functionToExecute = await sails.helpers.etc.parseCronJob(foundJob.id);
-
-      let scheduledJob = schedule.scheduleJob(foundJob.temporalValue, functionToExecute);
-
-      scheduledJobs.set(foundJob.id, scheduledJob);
-      sails.log.debug(`Started a cronjob`, foundJob);
-      return;
+      await this.queue.add(job, {
+        // Pass JobId here to allow multiple jobs with the same cron
+        // https://github.com/OptimalBits/bull/pull/603
+        jobId: jobId,
+        repeat: {
+          cron: job.temporalValue
+        },
+      });
     },
 
     stop: async function (jobId) {
-
-      let foundJob = await CronJob.findOne(jobId);
-      let job = scheduledJobs.get(foundJob.id);
-
-      if (!foundJob || !job) {
-        return;
+      const foundJobs = await this.queue.getJobs(['delayed', 'active', 'waiting']);
+      // eslint-disable-next-line eqeqeq
+      let foundJob = foundJobs.find(job => job.data.id == jobId);
+      if (foundJob) {
+        await foundJob.remove();
+      } else {
+        sails.log.warn(`Tried to remove a job that didn't exist - ${jobId}`);
       }
-
-      job.cancel();
-      scheduledJobs.delete(foundJob.id);
-      sails.log.debug(`Stopped a cronjob`, foundJob);
-      return;
-
     },
 
+    processor: async (job) => {
+      sails.log.info(`Executing a cron job`, job);
+      const functionToExecute = await sails.helpers.etc.parseCronJob(job.data.id);
+      return functionToExecute();
+    }
   };
-
-
-
 };
