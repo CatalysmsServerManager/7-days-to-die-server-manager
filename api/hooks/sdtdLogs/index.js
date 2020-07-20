@@ -165,10 +165,10 @@ module.exports = function sdtdLogs(sails) {
         notificationType: 'playerConnected',
         player: connectedMsg.player
       });
-      if (connectedMsg.country !== null && connectedMsg.steamID) {
+      if (connectedMsg.country !== null && connectedMsg.steamId) {
         await Player.update({
           server: server.id,
-          steamId: connectedMsg.steamID
+          steamId: connectedMsg.steamId
         }, {
           country: connectedMsg.country
         });
