@@ -1,5 +1,5 @@
 const EventEmitter = require('events');
-const enrichData = require('./enrichEventData');
+const enrich = require('./enrichEventData');
 
 const { inspect } = require('util');
 
@@ -113,7 +113,12 @@ class LoggingObject extends EventEmitter {
     for (const newLog of result.logs) {
       let enrichedLog = newLog;
       if (newLog.type !== 'logLine') {
-        enrichedLog = await enrichData(newLog);
+        try {
+          enrichedLog = await enrich.enrichEventData(newLog);
+        } catch (e) {
+          sails.log.warn('Error trying to enrich a log line, this should be OK to fail...');
+          sails.log.error(e);
+        }
         // We still want to emit these events as log lines aswell (for modules like hooks, discord notifications)
         this.emit('logLine', enrichedLog.data);
       }
@@ -192,7 +197,7 @@ class LoggingObject extends EventEmitter {
       if (!this.slowmode) {
         sails.log.info(
           `SdtdLogs - Server ${
-            this.serverId
+          this.serverId
           } has failed ${counter} times. Changing interval time. Server was last successful on ${prettyLastSuccess.toLocaleDateString()} ${prettyLastSuccess.toLocaleTimeString()}`
         );
         this.slowmode = true;
