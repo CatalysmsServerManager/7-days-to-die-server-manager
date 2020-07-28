@@ -1,5 +1,3 @@
-
-
 async function enrichEventData(event) {
 
   switch (event.type) {
