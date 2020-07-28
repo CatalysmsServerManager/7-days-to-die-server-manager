@@ -40,10 +40,17 @@ module.exports = async function enrichEventData(event) {
   // If we do not find the player via steamId, we try via name.
   if (_.isUndefined(player)) {
     if (!_.isEmpty(event.data.playerName)) {
-      player = await Player.findOne({
-        name: event.data.playerName,
-        server: event.server.id
-      });
+
+      try {
+        player = await Player.findOne({
+          name: event.data.playerName,
+          server: event.server.id
+        });
+      } catch (e) {
+        // Some error, don't care, just return
+      }
+
+
     }
   }
   event.data.player = player;
