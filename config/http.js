@@ -52,7 +52,7 @@ passport.use(new SteamStrategy({
   } catch (error) {
     sails.log.warn(`Error during steam auth!`);
     sails.log.error(error);
-    res.send(`Error during steam auth. This should never happen. Please contact someone on the dev server`);
+    return done(new Error(`Error during steam auth. This should never happen. Please contact someone on the dev server`));
   }
 
 }));
