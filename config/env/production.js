@@ -67,7 +67,12 @@ let production = {
 
   },
 
-
+  ssl: {
+    //ca: require('fs').readFileSync(require('path').resolve(__dirname,'../../ssl/ca_bundle.crt')),
+    //key: require('fs').readFileSync(require('path').resolve(__dirname,'../../ssl/private.key')),
+    //cert: require('fs').readFileSync(require('path').resolve(__dirname,'../../ssl/certificate.crt'))
+    //pfx: require('fs').readFileSync(require('path').resolve(__dirname,'../../ssl/my-site.pfx'))
+  },
 
   models: {
 
