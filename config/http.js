@@ -52,6 +52,7 @@ passport.use(new SteamStrategy({
   } catch (error) {
     sails.log.warn(`Error during steam auth!`);
     sails.log.error(error);
+    Sentry.captureException(error);
     return done(new Error(`Error during steam auth. This should never happen. Please contact someone on the dev server`));
   }
 
