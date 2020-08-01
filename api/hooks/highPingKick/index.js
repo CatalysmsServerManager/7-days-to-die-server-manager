@@ -1,5 +1,3 @@
-const SdtdApi = require('7daystodie-api-wrapper');
-
 /**
  * highPingKick hook
  *
@@ -7,157 +5,135 @@ const SdtdApi = require('7daystodie-api-wrapper');
  * @docs        :: https://sailsjs.com/docs/concepts/extending-sails/hooks
  */
 
-module.exports = function defineHighPingKickHook(sails) {
+class HighPingCount {
+  constructor(sails) {
+    this.sails = sails;
+  }
+  /**
+   * Runs when a Sails app loads/lifts.
+   *
+   * @param {Function} done
+   */
+  initialize(done) {
+    // eslint-disable-next-line callback-return
+    done();
 
-  return {
+    this.sails.on('lifted', async () => {
 
-    /**
-     * Runs when a Sails app loads/lifts.
-     *
-     * @param {Function} done
-     */
-    initialize: function (done) {
+      this.sails.log.info('Initializing custom hook (`highPingKick`)');
 
-
-      // eslint-disable-next-line callback-return
-      done();
-
-      sails.on('lifted', async () => {
-
-        sails.log.info('Initializing custom hook (`highPingKick`)');
-
-        let enabledConfigs = await SdtdConfig.find({
-          pingKickEnabled: true
-        });
-
-        for (const configToStart of enabledConfigs) {
-          this.start(configToStart.server);
-        }
-
-
-
+      let enabledConfigs = await SdtdConfig.find({
+        pingKickEnabled: true
       });
-    },
 
-
-    start: async function (serverId) {
-
-      let server = await SdtdServer.findOne(serverId);
-
-      let loggingObject = sails.hooks.sdtdlogs.getLoggingObject(serverId);
-
-      if (_.isUndefined(loggingObject)) {
-        sails.log.warn(`Tried to start ping kicker for a server without a loggingObject - ${server.name}`, {
-          server: serverId
-        });
-        return;
+      for (const configToStart of enabledConfigs) {
+        this.start(configToStart.server);
       }
-
-
-      loggingObject.on('memUpdate', handlePingCheck);
-    },
-
-    stop: async function (serverId) {
-
-      let loggingObject = sails.hooks.sdtdlogs.getLoggingObject(serverId);
-
-      loggingObject.removeListener('memUpdate', handlePingCheck);
-    }
-
-  };
-
-};
-
-async function handlePingCheck(memUpdate) {
-
-  let dateStarted = new Date();
-
-  let server = await SdtdServer.findOne(memUpdate.server.id);
-  let config = await SdtdConfig.findOne({
-    server: server.id
-  });
-
-  let pingWhitelist;
-
-  try {
-    pingWhitelist = JSON.parse(config.pingWhitelist);
-  } catch (error) {
-    return sails.log.error(`Error parsing ping whitelist entries for ${server.name}`);
+    });
   }
 
-  let onlinePlayers = await SdtdApi.getOnlinePlayers({
-    ip: server.ip,
-    port: server.webPort,
-    adminToken: server.authToken,
-    adminUser: server.authName
-  });
+  async start (serverId) {
 
-  let failedChecksForServer = 0;
+    let server = await SdtdServer.findOne(serverId);
 
-  if (config.pingKickEnabled) {
-    for (const onlinePlayer of onlinePlayers) {
+    let loggingObject = this.sails.hooks.sdtdlogs.getLoggingObject(serverId);
 
-      let playerRecord = await Player.findOne({
-        steamId: onlinePlayer.steamid,
-        server: server.id
+    if (_.isUndefined(loggingObject)) {
+      this.sails.log.warn(`Tried to start ping kicker for a server without a loggingObject - ${server.name}`, {
+        server: serverId
       });
+      return;
+    }
 
-      if (_.isUndefined(playerRecord)) {
-        sails.log.warn(`Did not find player data for ${JSON.stringify(onlinePlayer)}`);
-      }
+    loggingObject.on('memUpdate', this.handlePingCheck);
+  }
 
-      let whiteListIdx = pingWhitelist.indexOf(playerRecord.steamId);
+  async stop (serverId) {
+    let loggingObject = this.sails.hooks.sdtdlogs.getLoggingObject(serverId);
+    loggingObject.removeListener('memUpdate', this.handlePingCheck);
+  }
 
-      if (onlinePlayer.ping > config.maxPing && whiteListIdx === -1) {
-        failedChecksForServer++;
-        let currentFailedChecks = await getPlayerFails(playerRecord.id);
+  async handlePingCheck(memUpdate) {
+    let dateStarted = new Date();
 
-        if (currentFailedChecks >= config.pingChecksToFail) {
-          await kickPlayer(playerRecord, server, config.pingKickMessage);
-          await setPlayerFails(playerRecord.id, 0);
-          sails.log.debug(`Kicked player ${playerRecord.id} from server ${server.name} for high ping! ping = ${onlinePlayer.ping}`);
+    let server = await SdtdServer.findOne(memUpdate.server.id);
+    let config = await SdtdConfig.findOne({ server: server.id });
+
+    let pingWhitelist;
+
+    try {
+      pingWhitelist = JSON.parse(config.pingWhitelist);
+    } catch (error) {
+      return sails.log.error(`Error parsing ping whitelist entries for ${server.name}`);
+    }
+
+    let onlinePlayers = await sails.helpers.sdtdApi.getOnlinePlayers(SdtdServer.getAPIConfig(server));
+
+    let failedChecksForServer = 0;
+
+    if (config.pingKickEnabled) {
+      for (const onlinePlayer of onlinePlayers) {
+
+        let playerRecord = await Player.findOne({
+          steamId: onlinePlayer.steamid,
+          server: server.id
+        });
+
+        if (_.isUndefined(playerRecord)) {
+          sails.log.warn(`Did not find player data for ${JSON.stringify(onlinePlayer)}`);
+          continue;
+        }
+
+        let whiteListIdx = pingWhitelist.indexOf(playerRecord.steamId);
+
+        if (onlinePlayer.ping > config.maxPing && whiteListIdx === -1) {
+          failedChecksForServer++;
+          let currentFailedChecks = await this.getPlayerFails(playerRecord.id);
+
+          console.log('          Iif (currentFailedChecks >= config.pingChecksToFail) {', currentFailedChecks, config.pingChecksToFail);
+          if (currentFailedChecks >= config.pingChecksToFail) {
+            await this.kickPlayer(playerRecord, server, config.pingKickMessage);
+            await this.setPlayerFails(playerRecord.id, 0);
+            sails.log.debug(`Kicked player ${playerRecord.id} from server ${server.name} for high ping! ping = ${onlinePlayer.ping}`);
+          } else {
+            await this.setPlayerFails(playerRecord.id, currentFailedChecks + 1);
+          }
+
         } else {
-          await setPlayerFails(playerRecord.id, currentFailedChecks + 1);
+          await this.setPlayerFails(playerRecord.id, 0);
         }
 
-      } else {
-        await setPlayerFails(playerRecord.id, 0);
       }
-
     }
+
+    let dateEnded = new Date();
+    sails.log.verbose(`Performed maxPingCheck for ${server.name} - ${failedChecksForServer} / ${onlinePlayers.length} players failed the check - took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`);
   }
 
-  let dateEnded = new Date();
-  sails.log.verbose(`Performed maxPingCheck for ${server.name} - ${failedChecksForServer} / ${onlinePlayers.length} players failed the check - took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`);
+  async kickPlayer(player, server, reason) {
+    await sails.helpers.sdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(server), `kick ${player.steamId} "${reason}"`);
+  }
 
+  getPlayerFails(playerId) {
+    return new Promise(async (resolve, reject) => {
+      sails.helpers.redis.get(`player:${playerId}:failedPingChecks`).then(failedChecks => {
+        if (!failedChecks) {
+          resolve(0);
+        } else {
+          resolve(parseInt(failedChecks));
+        }
+      }).catch(reject);
+    });
+  }
+
+  setPlayerFails(playerId, failedChecks) {
+    return new Promise(async (resolve, reject) => {
+      sails.helpers.redis.set(`player:${playerId}:failedPingChecks`, failedChecks).then(resolve).catch(reject);
+    });
+  }
 }
 
-async function kickPlayer(player, server, reason) {
-  await SdtdApi.executeConsoleCommand({
-    ip: server.ip,
-    port: server.webPort,
-    adminToken: server.authToken,
-    adminUser: server.authName,
-  }, `kick ${player.steamId} "${reason}"`);
-}
-
-
-
-
-function getPlayerFails(playerId) {
-  return new Promise(async (resolve, reject) => {
-    sails.helpers.redis.get(`player:${playerId}:failedPingChecks`).then(failedChecks => {
-      if (!failedChecks) {
-        resolve(0);
-      } else {
-        resolve(parseInt(failedChecks));
-      }
-    }).catch(reject);
-  });
-}
-
-function setPlayerFails(playerId, failedChecks) {
-  return new Promise(async (resolve, reject) => {
-    sails.helpers.redis.set(`player:${playerId}:failedPingChecks`, failedChecks).then(resolve).catch(reject);
-  });
-}
+module.exports = function defineHighPingKickHook(sails) {
+  return new HighPingCount(sails);
+};
+module.exports.HighPingCount = HighPingCount;
