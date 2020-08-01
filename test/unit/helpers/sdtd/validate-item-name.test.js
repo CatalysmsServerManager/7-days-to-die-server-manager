@@ -1,13 +1,9 @@
 describe('HELPER sdtd/validate-item-name', () => {
-
-  beforeEach(() => {
-    sails.helpers.sdtdApi.executeConsoleCommand = sandbox.stub().returns({
+  it('Validates an item', async () => {
+    sandbox.stub(sails.helpers.sdtdApi, 'executeConsoleCommand').returns({
       result: `    ammo9mmBulletBall
             Listed 1 matching items.`
     });
-  });
-
-  it('Validates an item', async () => {
 
     const trueResult = await sails.helpers.sdtd.validateItemName(sails.testServer.id, 'ammo9mmBulletBall');
 
@@ -33,7 +29,7 @@ describe('HELPER sdtd/validate-item-name', () => {
   });
 
   it('Throws when a request to the server fails', async () => {
-    sails.helpers.sdtdApi.executeConsoleCommand = sandbox.stub().throws(Error);
+    sandbox.stub(sails.helpers.sdtdApi, 'executeConsoleCommand').throws(Error);
     await expect(sails.helpers.sdtd.validateItemName(sails.testServer.id, 'ammo9mmBulletBall')).to.eventually.be.rejectedWith(Error);
   });
 });
