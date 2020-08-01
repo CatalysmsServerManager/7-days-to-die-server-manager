@@ -15,10 +15,7 @@ class HighPingCount {
    * @param {Function} done
    */
   initialize(done) {
-    // eslint-disable-next-line callback-return
-    done();
-
-    this.sails.on('lifted', async () => {
+    this.sails.on('hook:orm:loaded', async () => {
 
       this.sails.log.info('Initializing custom hook (`highPingKick`)');
 
@@ -29,6 +26,8 @@ class HighPingCount {
       for (const configToStart of enabledConfigs) {
         this.start(configToStart.server);
       }
+
+      done();
     });
   }
 
@@ -90,7 +89,6 @@ class HighPingCount {
           failedChecksForServer++;
           let currentFailedChecks = await this.getPlayerFails(playerRecord.id);
 
-          console.log('          Iif (currentFailedChecks >= config.pingChecksToFail) {', currentFailedChecks, config.pingChecksToFail);
           if (currentFailedChecks >= config.pingChecksToFail) {
             await this.kickPlayer(playerRecord, server, config.pingKickMessage);
             await this.setPlayerFails(playerRecord.id, 0);
