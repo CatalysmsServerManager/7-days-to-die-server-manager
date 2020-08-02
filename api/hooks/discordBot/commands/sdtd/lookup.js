@@ -90,7 +90,6 @@ class Lookup extends Commando.Command {
     foundPlayer = playerInfo[0] || foundPlayer[0];
     let lastOnlineDate = new Date(foundPlayer.lastOnline);
 
-
     let lastOnlineTimeAgo = await sails.helpers.etc.humanizedTime(lastOnlineDate);
     let embed = new this.client.customEmbed();
 
