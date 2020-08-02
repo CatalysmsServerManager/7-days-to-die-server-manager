@@ -87,7 +87,7 @@ class Lookup extends Commando.Command {
       serverId: sdtdServer.id,
       steamId: foundPlayer[0].steamId
     });
-    foundPlayer = playerInfo[0];
+    foundPlayer = playerInfo[0] || foundPlayer[0];
     let lastOnlineDate = new Date(foundPlayer.lastOnline);
 
 
