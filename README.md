@@ -46,14 +46,8 @@
 
 We are happy to help you on our [Discord server](http://catalysm.net/discord).
 
-## [Feature requests](https://feathub.com/CatalysmsServerManager/7-days-to-die-server-manager)
+## Sponsors
 
-When requesting a new feature, please be as descriptive as possible
-
-[![Feature Requests](https://feathub.com/CatalysmsServerManager/7-days-to-die-server-manager?format=svg)](https://feathub.com/CatalysmsServerManager/7-days-to-die-server-manager)
-
-## Donations
-
-Donations are highly appreciated and help us enormously! You can make a monthly pledge on [Patreon](https://www.patreon.com/bePatron?c=1523282) or send a one-time payment via [Paypal](https://www.paypal.com/paypalme2/catalysmcsmm).
+[![Sentry](assets/images/meta/sentry.png)](https://sentry.io)
 
 </div>
