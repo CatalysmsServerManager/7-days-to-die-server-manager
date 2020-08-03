@@ -9,17 +9,9 @@ services:
     depends_on:
       - cache
       - db
+    env_file: .env
     environment:
       NODE_ENV: ${NODE_ENV:-development}
-      REDISSTRING: ${REDISSTRING}
-      DBSTRING: ${DBSTRING}
-      CSMM_HOSTNAME: ${CSMM_HOSTNAME}
-      CSMM_PORT: ${CSMM_PORT}
-      CSMM_ADMINS: ${CSMM_ADMINS}
-      API_KEY_STEAM: ${API_KEY_STEAM}
-      DISCORDBOTTOKEN: ${DISCORDBOTTOKEN}
-      DISCORDCLIENTSECRET: ${DISCORDCLIENTSECRET}
-      DISCORDCLIENTID: ${DISCORDCLIENTID}
     ports:
       - 127.0.0.1:${CSMM_PORT}:1337
     restart: unless-stopped
@@ -31,11 +23,9 @@ services:
     depends_on:
       - cache
       - db
+    env_file: .env
     environment:
       NODE_ENV: ${NODE_ENV:-development}
-      REDISSTRING: ${REDISSTRING}
-      DBSTRING: ${DBSTRING}
-
     healthcheck:
       disable: true
     restart: unless-stopped
