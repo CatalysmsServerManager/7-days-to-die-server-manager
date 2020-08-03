@@ -11,18 +11,20 @@ services:
       - db
     environment:
       NODE_ENV: ${NODE_ENV:-development}
-      REDISSTRING: "redis://cache:6379"
-      DBSTRING: "mysql2://csmm:mysecretpasswordissosecure@db:3306/csmm"
-      CSMM_HOSTNAME: "http://localhost:30005"
-      API_KEY_STEAM: ""
-      DISCORDBOTTOKEN: ""
-      DISCORDCLIENTSECRET: ""
-      DISCORDCLIENTID: ""
-      CSMM_ADMINS: ""
+      REDISSTRING: ${REDISSTRING}
+      DBSTRING: ${DBSTRING}
+      CSMM_HOSTNAME: ${CSMM_HOSTNAME}
+      CSMM_PORT: ${CSMM_PORT}
+      CSMM_ADMINS: ${CSMM_ADMINS}
+      API_KEY_STEAM: ${API_KEY_STEAM}
+      DISCORDBOTTOKEN: ${DISCORDBOTTOKEN}
+      DISCORDCLIENTSECRET: ${DISCORDCLIENTSECRET}
+      DISCORDCLIENTID: ${DISCORDCLIENTID}
     ports:
       - 127.0.0.1:30005:1337
     restart: unless-stopped
     entrypoint: ["npm", "run", "start:app"]
+
   csmm-worker:
     build: .
     #image: catalysm/csmm
@@ -31,10 +33,9 @@ services:
       - db
     environment:
       NODE_ENV: ${NODE_ENV:-development}
-      REDISSTRING: "redis://cache:6379"
-      DBSTRING: "mysql2://csmm:mysecretpasswordissosecure@db:3306/csmm"
-    ports:
-      - 127.0.0.1:30005:1337
+      REDISSTRING: ${REDISSTRING}
+      DBSTRING: ${DBSTRING}
+
     healthcheck:
       disable: true
     restart: unless-stopped
@@ -46,13 +47,14 @@ services:
       - ./redis-data:/data
     command: ["redis-server", "--appendonly", "yes"]
     restart: unless-stopped
+
   db:
     image: mariadb
     volumes:
       - ./db-data:/var/lib/mysql
     environment:
-      MYSQL_DATABASE: "csmm"
-      MYSQL_USER: "csmm"
-      MYSQL_PASSWORD: "mysecretpasswordissosecure"
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_RANDOM_ROOT_PASSWORD: "true"
     restart: unless-stopped
