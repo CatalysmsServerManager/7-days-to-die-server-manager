@@ -21,7 +21,7 @@ services:
       DISCORDCLIENTSECRET: ${DISCORDCLIENTSECRET}
       DISCORDCLIENTID: ${DISCORDCLIENTID}
     ports:
-      - 127.0.0.1:30005:1337
+      - 127.0.0.1:${CSMM_PORT}:1337
     restart: unless-stopped
     entrypoint: ["npm", "run", "start:app"]
 
