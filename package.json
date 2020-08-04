@@ -17,7 +17,7 @@
     "cross-env": "^7.0.2",
     "discord.js": "^11.4.2",
     "discord.js-commando": "^0.10.0",
-    "dotenv": "^6.2.0",
+    "dotenv": "^8.2.0",
     "geoip-lite": "^1.4.2",
     "grunt": "1.0.3",
     "he": "^1.2.0",
