@@ -32,7 +32,7 @@ class HighPingCount {
     });
   }
 
-  async start (serverId) {
+  async start(serverId) {
 
     let server = await SdtdServer.findOne(serverId);
 
@@ -48,7 +48,7 @@ class HighPingCount {
     loggingObject.on('memUpdate', this.handlePingCheck);
   }
 
-  async stop (serverId) {
+  async stop(serverId) {
     let loggingObject = this.sails.hooks.sdtdlogs.getLoggingObject(serverId);
     loggingObject.removeListener('memUpdate', this.handlePingCheck);
   }
@@ -133,7 +133,7 @@ class HighPingCount {
 }
 
 module.exports = function defineHighPingKickHook(sails) {
-  return classToHook(new HighPingCount(sails));
+  return new HighPingCount(sails);
 };
 
 module.exports.HighPingCount = HighPingCount;
