@@ -17,7 +17,6 @@ class HighPingCount {
    */
   initialize(done) {
     this.sails.on('hook:orm:loaded', async () => {
-
       this.sails.log.info('Initializing custom hook (`highPingKick`)');
 
       let enabledConfigs = await SdtdConfig.find({
@@ -133,7 +132,7 @@ class HighPingCount {
 }
 
 module.exports = function defineHighPingKickHook(sails) {
-  return classToHook(new HighPingCount(sails));
+  return Object.assign(this, classToHook(new HighPingCount(sails)));
 };
 
 module.exports.HighPingCount = HighPingCount;
