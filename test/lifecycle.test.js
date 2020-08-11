@@ -12,7 +12,6 @@ chai.use(sinonChai);
 process.env.IS_TEST = true;
 process.env.NODE_ENV = 'test';
 process.env.CSMM_DONATOR_TIER = 'patron';
-delete process.env.REDISSTRING;
 delete process.env.PORT;
 
 beforeEach(function () {
