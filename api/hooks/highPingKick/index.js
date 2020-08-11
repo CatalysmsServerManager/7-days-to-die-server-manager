@@ -1,3 +1,4 @@
+const { classToHook } = require('../../utils.js');
 /**
  * highPingKick hook
  *
@@ -132,6 +133,7 @@ class HighPingCount {
 }
 
 module.exports = function defineHighPingKickHook(sails) {
-  return new HighPingCount(sails);
+  return classToHook(new HighPingCount(sails));
 };
+
 module.exports.HighPingCount = HighPingCount;
