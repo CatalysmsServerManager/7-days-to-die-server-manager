@@ -9,6 +9,7 @@ describe('Cron hook', () => {
   before(async () => {
     hook = sails.hooks.cron;
     queue = sails.helpers.getQueueObject('cron');
+    await queue.pause();
     testJob = await CronJob.create({
       command: 'say "Testerino"',
       temporalValue: '0 * * * *',
@@ -16,8 +17,17 @@ describe('Cron hook', () => {
     }).fetch();
   });
 
-  afterEach(() => {
-    queue.reset();
+  beforeEach(async () => {
+    // By default, no jobs run in these tests
+    await queue.pause();
+  });
+
+  afterEach(async () => {
+    const statuses = ['completed', 'wait', 'active',
+      'delayed', 'failed'];
+    for (const status of statuses) {
+      await queue.clean(0, status);
+    }
   });
 
   it('Can queue a new job', async () => {
