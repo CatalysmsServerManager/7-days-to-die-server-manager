@@ -5,7 +5,7 @@ module.exports = {
         .filter(m => 'function' === typeof o[m]);
     }
     return getMethods(obj).filter(m => m !== 'constructor').reduce(function(ret, method) {
-      ret[method] = obj[method].bind(obj);
+      ret[method] = obj[method];
       return ret;
     }, {});
   }

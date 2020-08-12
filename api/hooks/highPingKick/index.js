@@ -7,9 +7,6 @@ const { classToHook } = require('../../utils.js');
  */
 
 class HighPingCount {
-  constructor(sails) {
-    this.sails = sails;
-  }
   /**
    * Runs when a Sails app loads/lifts.
    *
@@ -17,7 +14,6 @@ class HighPingCount {
    */
   initialize(done) {
     this.sails.on('hook:orm:loaded', async () => {
-
       this.sails.log.info('Initializing custom hook (`highPingKick`)');
 
       let enabledConfigs = await SdtdConfig.find({
@@ -132,8 +128,9 @@ class HighPingCount {
   }
 }
 
+// eslint-disable-next-line no-unused-vars
 module.exports = function defineHighPingKickHook(sails) {
-  return new HighPingCount(sails);
+  return Object.assign(this, classToHook(new HighPingCount(sails)));
 };
 
 module.exports.HighPingCount = HighPingCount;
