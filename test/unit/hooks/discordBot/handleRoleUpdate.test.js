@@ -1,5 +1,4 @@
-const { handleRoleUpdate, deleteCSMMRole, addCSMMRole } = require('../../../../api/hooks/discordBot/roles/handleRoleUpdate');
-const { GuildMember } = require('discord.js');
+const { handleRoleUpdate } = require('../../../../api/hooks/discordBot/roles/handleRoleUpdate');
 
 const mockRoleChange = () => {
 
