@@ -20,6 +20,9 @@ class Import extends Commando.Command {
   }
 
   async run(msg) {
+
+    await msg.channel.send('This command is deprecated and will be removed in a future version of CSMM. https://github.com/CatalysmsServerManager/7-days-to-die-server-manager/milestone/1');
+
     const fileUrl = msg.attachments.first().url;
     await this.downloadFile(fileUrl);
     let data = require('../../../../../import.json');
