@@ -85,7 +85,7 @@ async function addCSMMRole(member) {
       return;
     }
 
-    if ((!_.isNull(currentPlayerRole) ? currentPlayerRole.level : 9999999) >  highestRole[0].level) {
+    if ((!_.isNull(currentPlayerRole) ? currentPlayerRole.level : 9999999) > highestRole[0].level) {
       await Player.update({
         id: player.id
       }, {
@@ -99,4 +99,9 @@ async function addCSMMRole(member) {
 }
 
 
-module.exports = handleRoleUpdate;
+
+module.exports = {
+  addCSMMRole,
+  deleteCSMMRole,
+  handleRoleUpdate
+};

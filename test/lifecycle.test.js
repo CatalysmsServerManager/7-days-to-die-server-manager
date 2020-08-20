@@ -60,7 +60,10 @@ before(function (done) {
     let testServerConfig = await SdtdConfig.create({
       server: testServer.id,
       inactive: true,
-      countryBanConfig: { bannedCountries: ['BE'], whiteListedSteamIds: [] },
+      countryBanConfig: {
+        bannedCountries: ['BE'], whiteListedSteamIds: [],
+      },
+      discordGuildId: 'testDiscordGuild'
 
     }).fetch();
 
