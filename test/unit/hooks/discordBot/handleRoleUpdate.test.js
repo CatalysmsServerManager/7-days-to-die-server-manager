@@ -69,6 +69,16 @@ describe('Discordbot#handleRoleUpdate', () => {
     expect(sails.testPlayer.role).to.eql(null);
   });
 
+  it('Does not give a new role if the player already has a higher role in CSMM', async () => {
+    const [oldRole, newRole] = mockRoleChange();
+    await Player.update(sails.testPlayer.id, { role: roles[0].id });
+    sails.testPlayer = await Player.findOne(sails.testPlayer.id).populate('role');
+    expect(sails.testPlayer.role).to.eql(roles[0]);
+    await handleRoleUpdate(oldRole, newRole);
+    sails.testPlayer = await Player.findOne(sails.testPlayer.id).populate('role');
+    expect(sails.testPlayer.role).to.eql(roles[0]);
+  });
+
   it('Handles players that are part of multiple servers', async () => {
 
     const newServer = await SdtdServer.create({
@@ -108,6 +118,8 @@ describe('Discordbot#handleRoleUpdate', () => {
       level: 100,
       server: newServer.id
     });
+
+    await Player.update(sails.testPlayer.id, { role: null });
 
 
     const [oldRole, newRole] = mockRoleChange();
