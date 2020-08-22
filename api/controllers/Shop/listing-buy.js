@@ -37,7 +37,7 @@ module.exports = {
     }
   },
 
-  fn: async function(inputs, exits) {
+  fn: async function (inputs, exits) {
     try {
       let player = await Player.findOne(inputs.playerId);
       let listing = await ShopListing.findOne(inputs.listingId);
@@ -54,8 +54,6 @@ module.exports = {
       if (_.isUndefined(listing)) {
         return exits.invalidId('Invalid listing ID');
       }
-
-      totalCost = totalCost * playerRole.economyDeductMultiplier;
 
       if (player.currency < totalCost) {
         return exits.notEnoughCurrency(
