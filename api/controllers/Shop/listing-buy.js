@@ -41,9 +41,6 @@ module.exports = {
     try {
       let player = await Player.findOne(inputs.playerId);
       let listing = await ShopListing.findOne(inputs.listingId);
-      const playerRole = await sails.helpers.sdtd.getPlayerRole(
-        inputs.playerId
-      );
       inputs.amount = inputs.amount ? inputs.amount : 1;
       let totalCost = listing.price * inputs.amount;
 
