@@ -61,8 +61,12 @@ describe('Discordbot#handleRoleUpdate', () => {
     expect(sails.testPlayer.role).to.eql(roles[1]);
   });
 
-  xit('Deletes a role from a CSMM user', async () => {
-
+  it('Deletes a role from a CSMM user', async () => {
+    const [newRole, oldRole] = mockRoleChange();
+    expect(sails.testPlayer.role).to.eql(roles[1]);
+    await handleRoleUpdate(oldRole, newRole);
+    sails.testPlayer = await Player.findOne(sails.testPlayer.id).populate('role');
+    expect(sails.testPlayer.role).to.eql(null);
   });
 
 
