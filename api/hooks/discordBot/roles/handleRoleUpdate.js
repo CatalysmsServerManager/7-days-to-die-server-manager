@@ -84,8 +84,8 @@ async function addCSMMRole(member) {
     });
 
     if (_.isUndefined(highestRole[0])) {
-      sails.log.warn(`No highest role found for server ${player.server}. Something is wrong`);
-      return;
+      sails.log.warn(`[handleRoleUpdate] No highest role found for server ${player.server}. Something is wrong`);
+      continue;
     }
 
     if ((!_.isNull(currentPlayerRole) ? currentPlayerRole.level : 9999999) > highestRole[0].level) {
