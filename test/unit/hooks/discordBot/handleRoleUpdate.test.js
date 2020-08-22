@@ -107,7 +107,7 @@ describe('Discordbot#handleRoleUpdate', () => {
     });
 
     const expectedRole = await Role.create({
-      name: 'test 10',
+      name: 'test 10 2',
       level: 10,
       server: newServer.id,
       discordRole: 'testDiscordRole'
@@ -132,6 +132,18 @@ describe('Discordbot#handleRoleUpdate', () => {
 
   });
 
+  it('handles correctly when a server has no role configured for discord role', async () => {
+    await Role.update({ where: { name: 'test 10' } }, { discordRole: null });
+    await Player.update({ where: { name: 'test player 2' } }, { role: null });
+    const expectedRole = await Role.findOne({
+      name: 'test 10 2',
+    });
+
+    const [oldRole, newRole] = mockRoleChange();
+    await handleRoleUpdate(oldRole, newRole);
+    const newPlayer = await Player.findOne({ where: { name: 'test player 2' } }).populate('role');
+    expect(newPlayer.role).to.eql(expectedRole);
+  });
 
 
 });
