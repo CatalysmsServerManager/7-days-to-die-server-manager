@@ -69,5 +69,57 @@ describe('Discordbot#handleRoleUpdate', () => {
     expect(sails.testPlayer.role).to.eql(null);
   });
 
+  it('Handles players that are part of multiple servers', async () => {
+
+    const newServer = await SdtdServer.create({
+      name: 'testServer 2',
+      ip: '192.168.1.1',
+      port: '1337',
+      authName: 'blabla',
+      authToken: 'bla',
+      owner: sails.testUser.id
+    }).fetch();
+    const newConfig = await SdtdConfig.create({
+      server: newServer.id,
+      discordGuildId: 'testDiscordGuild'
+    });
+    let newPlayer = await Player.create({
+      steamId: sails.testPlayer.steamId,
+      user: sails.testUser.id,
+      name: 'test player 2',
+      server: newServer.id
+    }).fetch();
+
+    await Role.create({
+      name: 'test 1',
+      level: 1,
+      server: newServer.id
+    });
+
+    const expectedRole = await Role.create({
+      name: 'test 10',
+      level: 10,
+      server: newServer.id,
+      discordRole: 'testDiscordRole'
+    }).fetch();
+
+    await Role.create({
+      name: 'test 100',
+      level: 100,
+      server: newServer.id
+    });
+
+
+    const [oldRole, newRole] = mockRoleChange();
+    expect(newPlayer.role).to.eql(null);
+    await handleRoleUpdate(oldRole, newRole);
+    newPlayer = await Player.findOne(newPlayer.id).populate('role');
+    sails.testPlayer = await Player.findOne(sails.testPlayer.id).populate('role');
+    expect(sails.testPlayer.role).to.eql(roles[1]);
+    expect(newPlayer.role).to.eql(expectedRole);
+
+  });
+
+
 
 });
