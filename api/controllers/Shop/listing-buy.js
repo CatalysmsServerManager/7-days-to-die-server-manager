@@ -37,13 +37,10 @@ module.exports = {
     }
   },
 
-  fn: async function(inputs, exits) {
+  fn: async function (inputs, exits) {
     try {
       let player = await Player.findOne(inputs.playerId);
       let listing = await ShopListing.findOne(inputs.listingId);
-      const playerRole = await sails.helpers.sdtd.getPlayerRole(
-        inputs.playerId
-      );
       inputs.amount = inputs.amount ? inputs.amount : 1;
       let totalCost = listing.price * inputs.amount;
 
@@ -54,8 +51,6 @@ module.exports = {
       if (_.isUndefined(listing)) {
         return exits.invalidId('Invalid listing ID');
       }
-
-      totalCost = totalCost * playerRole.economyDeductMultiplier;
 
       if (player.currency < totalCost) {
         return exits.notEnoughCurrency(
