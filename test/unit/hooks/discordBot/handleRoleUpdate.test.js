@@ -89,7 +89,7 @@ describe('Discordbot#handleRoleUpdate', () => {
       authToken: 'bla',
       owner: sails.testUser.id
     }).fetch();
-    const newConfig = await SdtdConfig.create({
+    await SdtdConfig.create({
       server: newServer.id,
       discordGuildId: 'testDiscordGuild'
     });
