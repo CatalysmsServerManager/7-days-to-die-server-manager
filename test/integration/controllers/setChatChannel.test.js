@@ -11,7 +11,7 @@ describe('/api/sdtdserver/setchatchannel', function () {
   });
 
   it('returns OK with correct data', async function () {
-
+    const client = sails.hooks.discordbot.getClient();
     sandbox.stub(sails.hooks.discordchatbridge, 'getStatus').returns(false);
     const response = await supertest(sails.hooks.http.app)
       .post('/api/sdtdserver/setchatchannel')
@@ -25,6 +25,7 @@ describe('/api/sdtdserver/setchatchannel', function () {
     expect(response.statusCode).to.equal(200);
     expect(response.body).to.deep.eq({});
     expect(sails.hooks.discordchatbridge.start.calledOnce).to.be.true;
+    expect(client.channels.get().send.calledOnce).to.be.true;
 
   });
 
@@ -42,7 +43,6 @@ describe('/api/sdtdserver/setchatchannel', function () {
     expect(response.statusCode).to.equal(200);
     expect(response.body).to.deep.eq({});
     expect(sails.hooks.discordchatbridge.stop.calledOnce).to.be.true;
-
   });
 
 });
