@@ -47,7 +47,6 @@ module.exports = {
       }
 
       if (_.isUndefined(chatChannel) && inputs.chatChannelId !== '0') {
-        console.log(' --------------------- didnt pass validation');
         return exits.badChannel();
       }
 
