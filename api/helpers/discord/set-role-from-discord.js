@@ -11,43 +11,30 @@ module.exports = {
   exits: {},
 
   fn: async function (inputs, exits) {
-    let player = await Player.findOne(inputs.playerId);
+    const player = await Player.findOne(inputs.playerId);
+    const currentPlayerRole = player.role;
 
     if (_.isUndefined(player)) {
       return exits.error(new Error('Unknown player ID'));
     }
-    let user = await User.findOne({
+    const user = await User.findOne({
       steamId: player.steamId
     });
 
-    let serverConfig = await SdtdConfig.findOne({
+    const serverConfig = await SdtdConfig.findOne({
       server: player.server
     }).populate('server');
-    let discordClient = sails.hooks.discordbot.getClient();
-    if (!discordClient) {
-      return exits.success(player, undefined);
-    }
-
-    let discordGuild = await discordClient.guilds.get(serverConfig.discordGuildId);
-    if (_.isUndefined(discordGuild) || !discordGuild) {
-      return exits.success(player, undefined);
-    }
 
     if (!user.discordId) {
+      sails.log.debug('[setRoleFromDiscord] User has no discord ID linked, exiting');
       return exits.success(player, undefined);
     }
-    let member = await discordGuild.members.get(user.discordId);
 
-    if (_.isUndefined(member)) {
-      return exits.error(new Error('No GuildMember found corresponding to the user.'));
-    }
-
-    let memberRoles = member.roles.array();
-    let currentPlayerRole = player.role;
+    const { roles } = await sails.helpers.discord.discordrequest(`guilds/${serverConfig.discordGuildId}/members/${user.discordId}`);
 
     let highestRole = await Role.find({
       where: {
-        discordRole: memberRoles.map(role => role.id),
+        discordRole: roles,
         server: player.server
       },
       sort: 'level ASC',
@@ -62,7 +49,7 @@ module.exports = {
           role: highestRole[0] ? highestRole[0].id : null
         });
       }
-      sails.log.debug(`Modified a players role - player ${player.id}. ${player.name} to role ${highestRole[0] ? highestRole[0].name : null}`);
+      sails.log.debug(`[setRoleFromDiscord] Modified a players role - player ${player.id}. ${player.name} to role ${highestRole[0] ? highestRole[0].name : null}`);
       return exits.success(player, highestRole[0]);
     }
 
