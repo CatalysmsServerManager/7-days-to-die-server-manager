@@ -1,11 +1,45 @@
+const { expect } = require('chai');
+
 describe('setRoleFromDiscord', () => {
+
+  describe('shouldSetRole', () => {
+    const shouldSetRole = require('../../../../api/helpers/discord/set-role-from-discord').shouldSetRole;
+    it('Returns true if currentRole null and potentionRole not null', () => {
+      expect(shouldSetRole(null, { level: 5 })).to.be.true;
+    });
+    it('Returns false if currentRole null and potentionRole null', () => {
+      expect(shouldSetRole(null, null)).to.be.false;
+    });
+    it('Returns false if currentRole not null and potentionRole null', () => {
+      expect(shouldSetRole({ level: 5 }, null)).to.be.false;
+    });
+    it('Returns false if currentRole level 5 and potentionRole level 10', () => {
+      expect(shouldSetRole({ level: 5 }, { level: 10 })).to.be.false;
+    });
+    it('Returns true if currentRole level 10 and potentionRole level 5', () => {
+      expect(shouldSetRole({ level: 10 }, { level: 5 })).to.be.true;
+    });
+    it('Returns false if currentRole level 5 and potentionRole level 5', () => {
+      expect(shouldSetRole({ level: 5 }, { level: 5 })).to.be.false;
+    });
+
+    it('Returns false if currentRole level 5 and potentionRole invalid', () => {
+      expect(shouldSetRole({ level: 5 }, 5)).to.be.false;
+      expect(shouldSetRole({ level: 5 }, { asfsa: 'fasfas' })).to.be.false;
+      expect(shouldSetRole({ level: 5 }, { level: 'fasfas' })).to.be.false;
+      expect(shouldSetRole({ level: 5 }, { level: -Infinity })).to.be.false;
+      expect(shouldSetRole({ level: 5 }, { level: NaN })).to.be.false;
+    });
+
+  });
 
   let roles;
   before(async () => {
     await Role.create({
       name: 'test 1',
       level: 1,
-      server: sails.testServer.id
+      server: sails.testServer.id,
+      discordRole: 'testDiscordRole1'
     });
 
     await Role.create({
@@ -24,20 +58,32 @@ describe('setRoleFromDiscord', () => {
     roles = await Role.find();
   });
 
-  it('Adds a role to a CSMM user', async () => {
+  it('Adds a role to a CSMM user with no role', async () => {
     sandbox.stub(sails.helpers.discord, 'discordrequest').resolves({
       roles: [
         'randomRole1',
         'randomRole2',
         'testDiscordRole',
-        'randomRole3',
-        'randomRole4'
       ],
     });
     expect(sails.testPlayer.role).to.eql(null);
     await sails.helpers.discord.setRoleFromDiscord(sails.testPlayer.id);
     sails.testPlayer = await Player.findOne(sails.testPlayer.id).populate('role');
     expect(sails.testPlayer.role).to.eql(roles[1]);
+  });
+
+  it('Adds a role to a CSMM user with a role that has less permissions', async () => {
+    sandbox.stub(sails.helpers.discord, 'discordrequest').resolves({
+      roles: [
+        'randomRole1',
+        'randomRole2',
+        'testDiscordRole1',
+      ],
+    });
+    expect(sails.testPlayer.role).to.eql(roles[1]);
+    await sails.helpers.discord.setRoleFromDiscord(sails.testPlayer.id);
+    sails.testPlayer = await Player.findOne(sails.testPlayer.id).populate('role');
+    expect(sails.testPlayer.role).to.eql(roles[0]);
   });
 
   it('Does not give a new role if the player already has a higher role in CSMM', async () => {

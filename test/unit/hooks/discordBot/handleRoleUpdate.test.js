@@ -32,6 +32,8 @@ const mockRoleChange = () => {
 describe('Discordbot#handleRoleUpdate', () => {
   let roles;
   before(async () => {
+    await Player.update(sails.testPlayer.id, { role: null });
+    sails.testPlayer = await Player.findOne(sails.testPlayer.id).populate('role');
     await Role.create({
       name: 'test 1',
       level: 1,

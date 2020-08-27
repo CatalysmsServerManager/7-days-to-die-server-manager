@@ -11,7 +11,7 @@ module.exports = {
   exits: {},
 
   fn: async function (inputs, exits) {
-    const player = await Player.findOne(inputs.playerId);
+    const player = await Player.findOne(inputs.playerId).populate('role');
     const currentPlayerRole = player.role;
 
     if (_.isUndefined(player)) {
@@ -41,19 +41,41 @@ module.exports = {
       limit: 1
     });
 
-    if (!_.isUndefined(highestRole[0])) {
-      if ((!_.isNull(currentPlayerRole) ? currentPlayerRole.level : 9999999) > highestRole[0].level) {
-        await Player.update({
-          id: player.id
-        }, {
-          role: highestRole[0] ? highestRole[0].id : null
-        });
-      }
-      sails.log.debug(`[setRoleFromDiscord] Modified a players role - player ${player.id}. ${player.name} to role ${highestRole[0] ? highestRole[0].name : null}`);
-      return exits.success(player, highestRole[0]);
+    if (_.isUndefined(highestRole[0])) {
+      sails.log.warn(`[setRoleFromDiscord] No highest role found for server ${player.server}. Something is wrong`);
+      return exits.success(player, undefined);
     }
 
-    return exits.error(new Error(`Unexpected to return here, should have returned earlier.`));
-
+    if (shouldSetRole(currentPlayerRole, highestRole[0])) {
+      await Player.update({
+        id: player.id
+      }, {
+        role: highestRole[0].id
+      });
+      sails.log.debug(`[setRoleFromDiscord] Modified a players role - player ${player.id}. ${player.name} to role ${highestRole[0] ? highestRole[0].name : null}`);
+    }
+    return exits.success(player, highestRole[0]);
   },
 };
+
+
+const shouldSetRole = (currentRole, potentialRole) => {
+  if (_.isNil(currentRole) && _.isNil(potentialRole)) {
+    return false;
+  }
+  if (_.isNil(potentialRole)) {
+    return false;
+  }
+
+  if (_.isNil(currentRole)) {
+    return true;
+  }
+
+  if (!_.isFinite(potentialRole.level)) {
+    return false;
+  }
+
+  return currentRole.level > potentialRole.level;
+};
+
+module.exports.shouldSetRole = shouldSetRole;
