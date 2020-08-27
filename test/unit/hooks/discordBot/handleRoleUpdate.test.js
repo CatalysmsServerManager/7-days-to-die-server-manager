@@ -4,6 +4,7 @@ const mockRoleChange = () => {
 
   const getMember = () => {
     return {
+      id: sails.testUser.discordId,
       user: {
         tag: 'testPlayer'
       },

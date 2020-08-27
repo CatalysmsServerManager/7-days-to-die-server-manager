@@ -38,7 +38,8 @@ before(function (done) {
 
     let testUser = await User.create({
       steamId: faker.random.number({ min: 0, max: 9999999999999 }),
-      username: faker.internet.userName()
+      username: faker.internet.userName(),
+      discordId: 'testUserDiscordId'
     }).fetch();
 
     let testServer = await SdtdServer.create({
