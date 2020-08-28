@@ -11,62 +11,71 @@ module.exports = {
   exits: {},
 
   fn: async function (inputs, exits) {
-    let player = await Player.findOne(inputs.playerId);
+    const player = await Player.findOne(inputs.playerId).populate('role');
+    const currentPlayerRole = player.role;
 
     if (_.isUndefined(player)) {
       return exits.error(new Error('Unknown player ID'));
     }
-    let user = await User.findOne({
+    const user = await User.findOne({
       steamId: player.steamId
     });
 
-    let serverConfig = await SdtdConfig.findOne({
+    const serverConfig = await SdtdConfig.findOne({
       server: player.server
     }).populate('server');
-    let discordClient = sails.hooks.discordbot.getClient();
-    if (!discordClient) {
-      return exits.success(player, undefined);
-    }
-
-    let discordGuild = await discordClient.guilds.get(serverConfig.discordGuildId);
-    if (_.isUndefined(discordGuild) || !discordGuild) {
-      return exits.success(player, undefined);
-    }
 
     if (!user.discordId) {
+      sails.log.debug('[setRoleFromDiscord] User has no discord ID linked, exiting');
       return exits.success(player, undefined);
     }
-    let member = await discordGuild.members.get(user.discordId);
 
-    if (_.isUndefined(member)) {
-      return exits.error(new Error('No GuildMember found corresponding to the user.'));
-    }
-
-    let memberRoles = member.roles.array();
-    let currentPlayerRole = player.role;
+    const { roles } = await sails.helpers.discord.discordrequest(`guilds/${serverConfig.discordGuildId}/members/${user.discordId}`);
 
     let highestRole = await Role.find({
       where: {
-        discordRole: memberRoles.map(role => role.id),
+        discordRole: roles,
         server: player.server
       },
       sort: 'level ASC',
       limit: 1
     });
 
-    if (!_.isUndefined(highestRole[0])) {
-      if ((!_.isNull(currentPlayerRole) ? currentPlayerRole.level : 9999999) > highestRole[0].level) {
-        await Player.update({
-          id: player.id
-        }, {
-          role: highestRole[0] ? highestRole[0].id : null
-        });
-      }
-      sails.log.debug(`Modified a players role - player ${player.id}. ${player.name} to role ${highestRole[0] ? highestRole[0].name : null}`);
-      return exits.success(player, highestRole[0]);
+    if (_.isUndefined(highestRole[0])) {
+      sails.log.warn(`[setRoleFromDiscord] No highest role found for server ${player.server}. Something is wrong`);
+      return exits.success(player, undefined);
     }
 
-    return exits.error(new Error(`Unexpected to return here, should have returned earlier.`));
-
+    if (shouldSetRole(currentPlayerRole, highestRole[0])) {
+      await Player.update({
+        id: player.id
+      }, {
+        role: highestRole[0].id
+      });
+      sails.log.debug(`[setRoleFromDiscord] Modified a players role - player ${player.id}. ${player.name} to role ${highestRole[0] ? highestRole[0].name : null}`);
+    }
+    return exits.success(player, highestRole[0]);
   },
 };
+
+
+const shouldSetRole = (currentRole, potentialRole) => {
+  if (_.isNil(currentRole) && _.isNil(potentialRole)) {
+    return false;
+  }
+  if (_.isNil(potentialRole)) {
+    return false;
+  }
+
+  if (_.isNil(currentRole)) {
+    return true;
+  }
+
+  if (!_.isFinite(potentialRole.level)) {
+    return false;
+  }
+
+  return currentRole.level > potentialRole.level;
+};
+
+module.exports.shouldSetRole = shouldSetRole;

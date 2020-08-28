@@ -1,3 +1,5 @@
+const shouldSetRole = require('../../../helpers/discord/set-role-from-discord').shouldSetRole;
+
 async function handleRoleUpdate(oldMember, newMember) {
   let oldRoles = oldMember.roles.array();
   let newRoles = newMember.roles.array();
@@ -88,11 +90,11 @@ async function addCSMMRole(member) {
       continue;
     }
 
-    if ((!_.isNull(currentPlayerRole) ? currentPlayerRole.level : 9999999) > highestRole[0].level) {
+    if (shouldSetRole(currentPlayerRole, highestRole[0])) {
       await Player.update({
         id: player.id
       }, {
-        role: highestRole[0] ? highestRole[0].id : null
+        role: highestRole[0].id
       });
       sails.log.debug(`[handleRoleUpdate] Modified a players role based on discord role change - player ${player.id}. ${player.name} to role ${highestRole[0] ? highestRole[0].name : null}`);
     }
