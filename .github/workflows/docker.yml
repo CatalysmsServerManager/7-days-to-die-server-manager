@@ -1,6 +1,6 @@
 name: Docker
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   build:
@@ -16,4 +16,3 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: catalysm/csmm
           tag_with_ref: true
-          tag_with_sha: true
