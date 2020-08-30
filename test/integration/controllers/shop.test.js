@@ -4,14 +4,16 @@ const { expect } = require('chai');
 describe('shop', () => {
 
   describe('post /api/shop/listing', () => {
-    it('returns 200 if correct data', async () => {
 
+    beforeEach(() => {
       sandbox.stub(sails.helpers.sdtdApi, 'executeConsoleCommand').resolves({
         command: 'listitems',
         parameters: 'terrDestroyedWoodDebris',
         result: '    some test item\nListed 1 matching items.\n'
       });
+    });
 
+    it('returns 200 if correct data', async () => {
       const response = await supertest(sails.hooks.http.app)
         .post('/api/shop/listing')
         .send({
@@ -30,13 +32,6 @@ describe('shop', () => {
     });
 
     it('returns 400 if incorrect item name is given', async () => {
-
-      sandbox.stub(sails.helpers.sdtdApi, 'executeConsoleCommand').resolves({
-        command: 'listitems',
-        parameters: 'terrDestroyedWoodDebris',
-        result: '    some test item\nListed 1 matching items.\n'
-      });
-
       const response = await supertest(sails.hooks.http.app)
         .post('/api/shop/listing')
         .send({
@@ -51,13 +46,6 @@ describe('shop', () => {
     });
 
     it('returns 400 when setting quality and amount', async () => {
-
-      sandbox.stub(sails.helpers.sdtdApi, 'executeConsoleCommand').resolves({
-        command: 'listitems',
-        parameters: 'terrDestroyedWoodDebris',
-        result: '    some test item\nListed 1 matching items.\n'
-      });
-
       const response = await supertest(sails.hooks.http.app)
         .post('/api/shop/listing')
         .send({
