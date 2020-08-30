@@ -75,6 +75,8 @@ describe('shop', () => {
 
       expect(response.statusCode).to.equal(200);
       expect(response.body.name).to.eq('testListing');
+      await Player.update(sails.testPlayer.id, { role: null });
+      await Role.destroy(createdRole.id);
     });
 
   });

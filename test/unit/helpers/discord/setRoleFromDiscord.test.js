@@ -55,7 +55,7 @@ describe('setRoleFromDiscord', () => {
       server: sails.testServer.id
     });
 
-    roles = await Role.find();
+    roles = await Role.find({ name: { in: ['test 1', 'test 10', 'test 100'] } });
   });
 
   it('Adds a role to a CSMM user with no role', async () => {
