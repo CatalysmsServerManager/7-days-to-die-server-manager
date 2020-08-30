@@ -1,8 +1,13 @@
 var supertest = require('supertest');
 var expect = require('chai').expect;
 
-describe('POST /api/sdtdserver/cron', function () {
+let queue;
 
+before(() => {
+  queue = sails.helpers.getQueueObject('cron');
+});
+
+describe('POST /api/sdtdserver/cron', function () {
   it('should return 200 with valid info', async function () {
     const response = await supertest(sails.hooks.http.app)
       .post('/api/sdtdserver/cron')
@@ -13,9 +18,10 @@ describe('POST /api/sdtdserver/cron', function () {
       });
     expect(response.statusCode).to.be.eql(200);
     expect(response.header['content-type']).to.include('json');
+    expect(await queue.count()).to.be.eql(1);
   });
-  it('should return 400 when command or temporal value is not given', function (done) {
-    supertest(sails.hooks.http.app)
+  it('should return 400 when command or temporal value is not given', async function () {
+    await supertest(sails.hooks.http.app)
       .post('/api/sdtdserver/cron')
       .send({
         serverId: 1,
@@ -23,23 +29,27 @@ describe('POST /api/sdtdserver/cron', function () {
       })
       .expect(400);
 
-    supertest(sails.hooks.http.app)
+    await supertest(sails.hooks.http.app)
       .post('/api/sdtdserver/cron')
       .send({
         serverId: 1,
         command: 'help',
       })
-      .expect(400, done);
+      .expect(400);
+
+    expect(await queue.count()).to.be.eql(0);
   });
-  it('should return 400 when temporal value is invalid', function (done) {
-    supertest(sails.hooks.http.app)
+  it('should return 400 when temporal value is invalid', async function () {
+    await supertest(sails.hooks.http.app)
       .post('/api/sdtdserver/cron')
       .send({
         serverId: 1,
         command: 'help',
         temporalValue: 'invalid'
       })
-      .expect(400, done);
+      .expect(400);
+
+    expect(await queue.count()).to.be.eql(0);
   });
 });
 
@@ -143,13 +153,15 @@ describe('POST /api/sdtdserver/cron/status', function () {
 
 describe('DELETE /api/sdtdserver/cron/status', function () {
 
-  it('should return 200 with valid info', function (done) {
-    supertest(sails.hooks.http.app)
+  it('should return 200 with valid info', async function () {
+
+    await supertest(sails.hooks.http.app)
       .delete('/api/sdtdserver/cron/status')
       .send({
         jobId: 1,
       })
-      .expect(200, done);
+      .expect(200);
+
   });
 
   it('should return 400 when no jobId is given', function (done) {
@@ -168,13 +180,23 @@ describe('DELETE /api/sdtdserver/cron', function () {
       .expect(400, done);
   });
 
-  it('should return 200 with valid info', function (done) {
-    supertest(sails.hooks.http.app)
+  it('should return 200 with valid info', async function () {
+    const response = await supertest(sails.hooks.http.app)
+      .post('/api/sdtdserver/cron')
+      .send({
+        serverId: 1,
+        command: 'help',
+        temporalValue: '0 */6 * * *'
+      });
+    expect(await queue.count()).to.be.eql(1);
+    await supertest(sails.hooks.http.app)
       .delete('/api/sdtdserver/cron')
       .send({
-        jobId: 1,
+        jobId: response.body.id,
       })
       .expect('Content-Type', /json/)
-      .expect(200, done);
+      .expect(200);
+
+    expect(await queue.count()).to.be.eql(0);
   });
 });

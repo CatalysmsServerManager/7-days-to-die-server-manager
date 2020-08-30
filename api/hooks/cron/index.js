@@ -37,11 +37,12 @@ module.exports = function defineCronHook(sails) {
       await this.queue.add(job, {
         // Pass JobId here to allow multiple jobs with the same cron
         // https://github.com/OptimalBits/bull/pull/603
-        jobId: jobId,
+        jobId: job.id,
         repeat: {
           cron: job.temporalValue
         },
       });
+      sails.log.debug(`Started cron job ${job.id}`);
     },
 
     stop: async function (jobId) {
@@ -50,6 +51,7 @@ module.exports = function defineCronHook(sails) {
       let foundJob = foundJobs.find(job => job.data.id == jobId);
       if (foundJob) {
         await foundJob.remove();
+        sails.log.debug(`Stopped cron job ${jobId}`);
       } else {
         sails.log.warn(`Tried to remove a job that didn't exist - ${jobId}`);
       }

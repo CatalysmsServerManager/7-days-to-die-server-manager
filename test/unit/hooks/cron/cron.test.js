@@ -1,5 +1,13 @@
 const { expect } = require('chai');
 
+const statuses = [
+  'completed',
+  'wait',
+  'active',
+  'delayed',
+  'failed'
+];
+
 let hook;
 let queue;
 let testJob;
@@ -22,29 +30,45 @@ describe('Cron hook', () => {
     await queue.pause();
   });
 
-  afterEach(async () => {
-    const statuses = ['completed', 'wait', 'active',
-      'delayed', 'failed'];
-    for (const status of statuses) {
-      await queue.clean(0, status);
-    }
-  });
-
   it('Can queue a new job', async () => {
     await hook.start(testJob.id);
 
-    const foundJobs = await queue.getJobs(['delayed', 'active', 'waiting']);
+    const foundJobs = await queue.getJobs(statuses);
     let testJobFound = foundJobs.find(job => job.data.id === testJob.id);
     expect(testJobFound).to.not.be.undefined;
   });
 
+  it('Can queue a new job with the same repeat options', async () => {
+    await hook.start(testJob.id);
+
+    const secondJob = await CronJob.create({
+      command: 'say "Testerino 2"',
+      temporalValue: '0 * * * *',
+      server: sails.testServer.id
+    }).fetch();
+
+    await hook.start(secondJob.id);
+
+    const foundJobs = await queue.getJobs(statuses);
+    let testJobFound = foundJobs.find(job => job.data.id === testJob.id);
+    expect(testJobFound).to.not.be.undefined;
+    let testSecondJobFound = foundJobs.find(job => job.data.id === secondJob.id);
+    expect(testSecondJobFound).to.not.be.undefined;
+    expect(foundJobs.length).to.be.eq(2);
+  });
+
   it('Clears the repeatable job from the queue when a CronJob is deleted', async () => {
     await hook.start(testJob.id);
+
+    let foundJobs = await queue.getJobs(statuses);
+    let testJobFound = foundJobs.find(job => job.data.id === testJob.id);
+    expect(testJobFound).to.not.be.undefined;
+
     await hook.stop(testJob.id);
 
-    const foundJobs = await queue.getJobs(['delayed', 'active', 'waiting']);
+    foundJobs = await queue.getJobs(statuses);
 
-    let testJobFound = foundJobs.find(job => job.data.id === testJob.id);
+    testJobFound = foundJobs.find(job => job.data.id === testJob.id);
     expect(testJobFound).to.be.undefined;
   });
 });

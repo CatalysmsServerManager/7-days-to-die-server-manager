@@ -24,8 +24,8 @@ before(() => {
 beforeEach(() => {
   global.sandbox.restore();
 });
-beforeEach(() => {
-  sails.cache = {};
+beforeEach(async () => {
+  await clearRedis();
 });
 // Before running any tests...
 before(function (done) {
@@ -94,8 +94,7 @@ before(function (done) {
         inMemoryOnly: true
       },
       cache: {
-        adapter: 'sails-disk',
-        inMemoryOnly: true
+        adapter: 'sails-redis',
       },
       testDB: {
         adapter: 'sails-disk',
@@ -128,3 +127,19 @@ beforeEach(function (done) {
     done(err);
   });
 });
+
+function clearRedis() {
+  return new Promise((resolve, reject) => {
+    sails.getDatastore('cache').leaseConnection(function during(redisConnection, proceed) {
+      redisConnection.flushdb((err, reply) => {
+        if (err) { return proceed(err); }
+
+        return proceed(undefined, reply);
+      });
+    }).exec((err, result) => {
+      if (err) { return reject(err); }
+
+      return resolve(result);
+    });
+  });
+}
