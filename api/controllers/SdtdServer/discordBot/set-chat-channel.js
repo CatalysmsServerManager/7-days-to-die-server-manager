@@ -46,7 +46,7 @@ module.exports = {
         return exits.notFound();
       }
 
-      if ((_.isUndefined(chatChannel) && inputs.chatChannelId) && inputs.chatChannelId !== 0) {
+      if (_.isUndefined(chatChannel) && inputs.chatChannelId !== '0') {
         return exits.badChannel();
       }
 
@@ -65,11 +65,12 @@ module.exports = {
         chatBridgeHook.start(inputs.serverId);
       }
 
-
-      let embed = new discordClient.customEmbed();
-      embed.setDescription(':white_check_mark: Initialized a chat bridge')
-        .addField(`Rich messages`, inputs.richMessages ? ':white_check_mark:' : ':x:');
-      chatChannel.send(embed);
+      if (!_.isUndefined(chatChannel)) {
+        let embed = new discordClient.customEmbed();
+        embed.setDescription(':white_check_mark: Initialized a chat bridge')
+          .addField(`Rich messages`, inputs.richMessages ? ':white_check_mark:' : ':x:');
+        chatChannel.send(embed);
+      }
 
       sails.log.info(`API - SdtdServer:set-chat-channel - set chat channel ${inputs.chatChannelId} for server ${inputs.serverId}`);
       return exits.success();

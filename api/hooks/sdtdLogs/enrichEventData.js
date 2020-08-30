@@ -1,4 +1,4 @@
-module.exports = async function enrichEventData(event) {
+async function enrichEventData(event) {
 
   switch (event.type) {
     case 'playerKilled':
@@ -40,6 +40,7 @@ module.exports = async function enrichEventData(event) {
   // If we do not find the player via steamId, we try via name.
   if (_.isUndefined(player)) {
     if (!_.isEmpty(event.data.playerName)) {
+
       player = await Player.findOne({
         name: event.data.playerName,
         server: event.server.id
@@ -48,4 +49,8 @@ module.exports = async function enrichEventData(event) {
   }
   event.data.player = player;
   return event;
+};
+
+module.exports = {
+  enrichEventData
 };

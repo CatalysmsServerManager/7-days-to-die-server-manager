@@ -33,6 +33,10 @@ module.exports = {
 
       let foundJob = await CronJob.findOne(inputs.jobId).populate('server');
 
+      if (!foundJob) {
+        return;
+      }
+
       let commandsToExecute = foundJob.command.split(';');
       const dateStarted = Date.now();
       sails.log.debug(`Executing a cron job for server ${foundJob.server.name}`, _.omit(foundJob, 'server'));

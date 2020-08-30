@@ -37,7 +37,8 @@ before(function (done) {
 
     let testUser = await User.create({
       steamId: faker.random.number({ min: 0, max: 9999999999999 }),
-      username: faker.internet.userName()
+      username: faker.internet.userName(),
+      discordId: 'testUserDiscordId'
     }).fetch();
 
     let testServer = await SdtdServer.create({
@@ -59,7 +60,10 @@ before(function (done) {
     let testServerConfig = await SdtdConfig.create({
       server: testServer.id,
       inactive: true,
-      countryBanConfig: { bannedCountries: ['BE'], whiteListedSteamIds: [] },
+      countryBanConfig: {
+        bannedCountries: ['BE'], whiteListedSteamIds: [],
+      },
+      discordGuildId: 'testDiscordGuild'
 
     }).fetch();
 
@@ -80,6 +84,7 @@ before(function (done) {
 
       playerTracking: false,
       discordBot: false,
+      highpingkick: false
     },
     log: { level: process.env.CSMM_LOGLEVEL || 'info' },
     security: {

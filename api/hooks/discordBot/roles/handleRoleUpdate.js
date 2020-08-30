@@ -1,3 +1,5 @@
+const shouldSetRole = require('../../../helpers/discord/set-role-from-discord').shouldSetRole;
+
 async function handleRoleUpdate(oldMember, newMember) {
   let oldRoles = oldMember.roles.array();
   let newRoles = newMember.roles.array();
@@ -6,12 +8,12 @@ async function handleRoleUpdate(oldMember, newMember) {
   let addedRole = _.difference(newRoles, oldRoles);
 
   if (deletedRole.length > 0) {
-    sails.log.debug(`Detected a discord role was deleted ${newMember.user.tag}`, deletedRole[0].name);
+    sails.log.debug(`[handleRoleUpdate] Detected a discord role was deleted ${newMember.user.tag}`, deletedRole[0].name);
     await deleteCSMMRole(newMember, deletedRole[0]);
   }
 
   if (addedRole.length > 0) {
-    sails.log.debug(`Detected a discord role was added ${newMember.user.tag}`, addedRole[0].name);
+    sails.log.debug(`[handleRoleUpdate] Detected a discord role was added ${newMember.user.tag}`, addedRole[0].name);
     await addCSMMRole(newMember);
   }
 }
@@ -66,6 +68,8 @@ async function addCSMMRole(member) {
     server: serverConfigs.map(config => config.server.id)
   }).populate('role');
 
+  sails.log.debug(`[handleRoleUpdate] Found ${players.length} players, ${serverConfigs.length} servers, ${users.length} users corresponding to the Discord role update`);
+
   for (const player of players) {
 
     let memberRoles = member.roles.array();
@@ -82,21 +86,23 @@ async function addCSMMRole(member) {
     });
 
     if (_.isUndefined(highestRole[0])) {
-      return;
+      sails.log.warn(`[handleRoleUpdate] No highest role found for server ${player.server}. Something is wrong`);
+      continue;
     }
 
-    if ((!_.isNull(currentPlayerRole) ? currentPlayerRole.level : 9999999) >  highestRole[0].level) {
+    if (shouldSetRole(currentPlayerRole, highestRole[0])) {
       await Player.update({
         id: player.id
       }, {
-        role: highestRole[0] ? highestRole[0].id : null
+        role: highestRole[0].id
       });
-      sails.log.debug(`Modified a players role based on discord role change - player ${player.id}. ${player.name} to role ${highestRole[0] ? highestRole[0].name : null}`);
+      sails.log.debug(`[handleRoleUpdate] Modified a players role based on discord role change - player ${player.id}. ${player.name} to role ${highestRole[0] ? highestRole[0].name : null}`);
     }
-
-
   }
 }
 
-
-module.exports = handleRoleUpdate;
+module.exports = {
+  addCSMMRole,
+  deleteCSMMRole,
+  handleRoleUpdate
+};

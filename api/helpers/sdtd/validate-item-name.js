@@ -34,7 +34,7 @@ module.exports = {
     }
 
     try {
-      const itemsFound = (await sails.helpers.sdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(server), `listitems ${inputs.itemName}`))
+      const itemsFound = (await sails.helpers.sdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(server), `listitems "${inputs.itemName}"`))
         .result
         .split('\n')
         .map(itemName => itemName.trim());

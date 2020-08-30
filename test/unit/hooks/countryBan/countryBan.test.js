@@ -4,7 +4,7 @@ const { expect } = require('chai');
 describe('countryBan', () => {
 
   beforeEach(() => {
-    sails.helpers.sdtdApi.executeConsoleCommand = sandbox.stub().callsFake();
+    sandbox.stub(sails.helpers.sdtdApi, 'executeConsoleCommand').callsFake();
   });
 
   it('Kicks a player that connects from a banned country', async () => {
