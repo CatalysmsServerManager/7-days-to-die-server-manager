@@ -1,12 +1,71 @@
 const supertest = require('supertest');
+const { expect } = require('chai');
 
 describe('shop', () => {
+
+  describe('post /api/shop/listing', () => {
+
+    beforeEach(() => {
+      sandbox.stub(sails.helpers.sdtdApi, 'executeConsoleCommand').resolves({
+        command: 'listitems',
+        parameters: 'terrDestroyedWoodDebris',
+        result: '    some test item\nListed 1 matching items.\n'
+      });
+    });
+
+    it('returns 200 if correct data', async () => {
+      const response = await supertest(sails.hooks.http.app)
+        .post('/api/shop/listing')
+        .send({
+          serverId: sails.testServer.id,
+          name: 'some test item',
+          amount: '1',
+          price: 50
+        });
+
+      expect(response.body.name).to.eq('some test item');
+      expect(response.statusCode).to.equal(200);
+
+      const record = await ShopListing.findOne({ name: 'some test item' });
+      expect(record).to.exist;
+
+    });
+
+    it('returns 400 if incorrect item name is given', async () => {
+      const response = await supertest(sails.hooks.http.app)
+        .post('/api/shop/listing')
+        .send({
+          serverId: sails.testServer.id,
+          name: 'doesnt exist',
+          amount: '1',
+          price: 50
+        });
+
+      expect(response.statusCode).to.equal(400);
+      expect(response.body).to.eq('You have provided an invalid item name.');
+    });
+
+    it('returns 400 when setting quality and amount', async () => {
+      const response = await supertest(sails.hooks.http.app)
+        .post('/api/shop/listing')
+        .send({
+          serverId: sails.testServer.id,
+          name: 'some test item',
+          amount: 2,
+          quality: 4,
+          price: 50
+        });
+
+      expect(response.body).to.eq('When setting quality, amount cannot be more than 1');
+      expect(response.statusCode).to.equal(400);
+    });
+  });
 
   describe('/api/shop/listing/buy', () => {
 
     before(async () => {
       await ShopListing.create({
-        id: 1,
+        id: 10,
         price: 50,
         name: 'testListing',
         server: sails.testServer.id
@@ -22,7 +81,7 @@ describe('shop', () => {
         .post('/api/shop/listing/buy')
         .send({
           playerId: 1,
-          listingId: 1,
+          listingId: 10,
           amount: '1'
         });
 
@@ -49,7 +108,7 @@ describe('shop', () => {
         .post('/api/shop/listing/buy')
         .send({
           playerId: 1,
-          listingId: 1,
+          listingId: 10,
           amount: '1'
         });
 
@@ -69,7 +128,7 @@ describe('shop', () => {
         .post('/api/shop/listing/buy')
         .send({
           playerId: 1,
-          listingId: 1,
+          listingId: 10,
           amount: '1'
         });
 
