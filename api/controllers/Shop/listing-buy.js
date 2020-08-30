@@ -39,10 +39,9 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     try {
-      let player = await Player.findOne(inputs.playerId);
-      let listing = await ShopListing.findOne(inputs.listingId);
-      inputs.amount = inputs.amount ? inputs.amount : 1;
-      let totalCost = listing.price * inputs.amount;
+      const player = await Player.findOne(inputs.playerId);
+      const listing = await ShopListing.findOne(inputs.listingId);
+
 
       if (_.isUndefined(player)) {
         return exits.invalidId('Invalid player ID');
@@ -52,11 +51,8 @@ module.exports = {
         return exits.invalidId('Invalid listing ID');
       }
 
-      if (player.currency < totalCost) {
-        return exits.notEnoughCurrency(
-          'You do not have enough money to buy this!'
-        );
-      }
+      inputs.amount = inputs.amount ? inputs.amount : 1;
+      let totalCost = listing.price * inputs.amount;
 
       await sails.helpers.economy.deductFromPlayer(
         player.id,
@@ -89,6 +85,11 @@ module.exports = {
       );
       return exits.success(itemClaim);
     } catch (error) {
+
+      if (error.message = 'notEnoughCurrency') {
+        return exits.notEnoughCurrency('You do not have enough money to buy this!');
+      }
+
       sails.log.error(error);
       return exits.error(error);
     }
