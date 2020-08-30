@@ -2,11 +2,34 @@ const supertest = require('supertest');
 
 describe('shop', () => {
 
+  describe('post /api/shop/listing', () => {
+    it('returns 200 if correct data', async () => {
+
+      sandbox.stub(sails.helpers.sdtdApi, 'executeConsoleCommand').resolves({
+        command: 'listitems',
+        parameters: 'terrDestroyedWoodDebris',
+        result: '    some test item\nListed 1 matching items.\n'
+      });
+
+      const response = await supertest(sails.hooks.http.app)
+        .post('/api/shop/listing')
+        .send({
+          serverId: sails.testServer.id,
+          name: 'some test item',
+          amount: '1',
+          price: 50
+        });
+
+      expect(response.body.name).to.eq('some test item');
+      expect(response.statusCode).to.equal(200);
+    });
+  });
+
   describe('/api/shop/listing/buy', () => {
 
     before(async () => {
       await ShopListing.create({
-        id: 1,
+        id: 10,
         price: 50,
         name: 'testListing',
         server: sails.testServer.id
@@ -22,7 +45,7 @@ describe('shop', () => {
         .post('/api/shop/listing/buy')
         .send({
           playerId: 1,
-          listingId: 1,
+          listingId: 10,
           amount: '1'
         });
 
@@ -49,7 +72,7 @@ describe('shop', () => {
         .post('/api/shop/listing/buy')
         .send({
           playerId: 1,
-          listingId: 1,
+          listingId: 10,
           amount: '1'
         });
 
@@ -69,7 +92,7 @@ describe('shop', () => {
         .post('/api/shop/listing/buy')
         .send({
           playerId: 1,
-          listingId: 1,
+          listingId: 10,
           amount: '1'
         });
 
