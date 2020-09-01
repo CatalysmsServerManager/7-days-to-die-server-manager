@@ -143,7 +143,11 @@ module.exports = function sdtdLogs(sails) {
     let server = await SdtdServer.findOne(serverID);
 
     let eventEmitter = new LoggingObject(server);
-    eventEmitter.init();
+
+    sails.after('lifted', () => {
+      eventEmitter.init();
+    });
+
 
     eventEmitter.on('logLine', function (logLine) {
       logLine.server = _.omit(server, 'authName', 'authToken');
@@ -165,10 +169,10 @@ module.exports = function sdtdLogs(sails) {
         notificationType: 'playerConnected',
         player: connectedMsg.player
       });
-      if (connectedMsg.country !== null && connectedMsg.steamID) {
+      if (connectedMsg.country !== null && connectedMsg.steamId) {
         await Player.update({
           server: server.id,
-          steamId: connectedMsg.steamID
+          steamId: connectedMsg.steamId
         }, {
           country: connectedMsg.country
         });

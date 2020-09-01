@@ -37,32 +37,33 @@ module.exports = {
    */
 
   fn: async function (inputs, exits) {
-
     const server = await SdtdServer.findOne(inputs.serverId);
     const serverConfig = await SdtdConfig.findOne({
       server: server.id
     });
-    const user = await User.findOne(this.req.session.userId);
+
+    let user;
+
+    user = await User.findOne(this.req.session.userId);
+
+
 
     const gimmeItems = await GimmeItem.find({
       server: server.id
     });
 
-    try {
-      // Force a recheck of the CPM version in the cache
-      await sails.helpers.sdtd.checkCpmVersion(server.id, true);
-
-    } catch (e) {
-      // Ok to fail silently
-    }
-
+    // Force a recheck of the CPM version in the cache
+    sails.helpers.sdtd.checkCpmVersion(server.id, true)
+      // No need to do anything
+      .then(() => { })
+      .catch(e => sails.log.warn(e));
 
     try {
 
       let customCommands = await CustomCommand.find({
         server: server.id,
       }).populate('arguments');
-      sails.log.info(`VIEW - SdtdServer:settings - Showing settings for ${server.name} to user ${user.username}`);
+      sails.log.info(`VIEW - SdtdServer:settings - Showing settings for ${server.id}`);
       return exits.success({
         server: server,
         config: serverConfig,

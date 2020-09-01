@@ -1,4 +1,6 @@
+const enrichDataObj = require('../../../../api/hooks/sdtdLogs/enrichEventData');
 const LoggingObject = require('../../../../api/hooks/sdtdLogs/LoggingObject');
+const { expect } = require('chai');
 
 const LOG_LINES = {
   MEM_UPDATE: {
@@ -289,6 +291,25 @@ describe('LoggingObject', function () {
       expect(loggingObject.active).to.be.true;
       await loggingObject.addFetchJob();
       expect(loggingObject.queue.add).to.have.been.called;
+    });
+
+    it('Adds a job even when enrichData throws', async () => {
+      sandbox.stub(enrichDataObj, 'enrichEventData').throws(new Error('Fake throw ;)'));
+
+      const job = {};
+      const result = {
+        serverId: sails.testServer.id,
+        lastLogLine: 10,
+        logs: [{ data: { msg: 1 } }, { data: { msg: 2 } }, { data: { msg: 3 } }
+        ]
+      };
+      const events = [];
+      loggingObject.on('logLine', _ => events.push(_));
+      await loggingObject.handleCompletedJob(job, JSON.stringify(result));
+
+      expect(events).to.have.length(3);
+      expect(loggingObject.queue.add).to.have.been.called;
+
     });
   });
 });

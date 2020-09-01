@@ -1,7 +1,7 @@
 const dotenv = require('dotenv');
 const sails = require('sails');
 
-dotenv.load();
+dotenv.config();
 
 // disable discord bot
 process.env.DISCORDBOTTOKEN = '';

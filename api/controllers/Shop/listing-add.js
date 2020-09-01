@@ -52,7 +52,7 @@ module.exports = {
   exits: {
     success: {},
 
-    invalidItem: {
+    badRequest: {
       description: 'The given item name was not found on the server',
       responseType: 'badRequest',
       statusCode: 400
@@ -66,11 +66,11 @@ module.exports = {
       let validItemName = await sails.helpers.sdtd.validateItemName(inputs.serverId, inputs.name);
 
       if (!validItemName) {
-        return exits.invalidItem('You have provided an invalid item name.');
+        return exits.badRequest('You have provided an invalid item name.');
       }
 
       if (inputs.quality && inputs.amount > 1) {
-        return exits.invalidItem('When setting quality, amount cannot be more than 1');
+        return exits.badRequest('When setting quality, amount cannot be more than 1');
       }
 
       let createdListing = await ShopListing.create({
