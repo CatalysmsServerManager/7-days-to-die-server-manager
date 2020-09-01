@@ -52,6 +52,12 @@ sails.load(configOverrides, async function (err) {
       job.data.server = await SdtdServer.findOne(job.data.serverId);
       return logProcessor(job);
     }),
+
+    sails.helpers.getQueueObject('cron').process(100, async (job) => {
+      sails.log.debug('[Worker] Got a `cron` job', job.data);
+      const functionToExecute = await sails.helpers.etc.parseCronJob(job.data.id);
+      return functionToExecute();
+    }),
   ]);
 
   return;

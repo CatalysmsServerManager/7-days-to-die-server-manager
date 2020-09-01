@@ -12,8 +12,7 @@ module.exports = function defineCronHook(sails) {
 
     initialize: function (done) {
       this.queue = sails.helpers.getQueueObject('cron');
-      sails.on('hook:sdtdlogs:loaded', this.ensureJobsAreQueuedOnStart);
-      this.queue.process(this.processor);
+      sails.after('hook:sdtdlogs:loaded', this.ensureJobsAreQueuedOnStart);
       return done();
     },
 
@@ -56,11 +55,5 @@ module.exports = function defineCronHook(sails) {
         sails.log.warn(`Tried to remove a job that didn't exist - ${jobId}`);
       }
     },
-
-    processor: async (job) => {
-      sails.log.info(`Executing a cron job`, job);
-      const functionToExecute = await sails.helpers.etc.parseCronJob(job.data.id);
-      return functionToExecute();
-    }
   };
 };
