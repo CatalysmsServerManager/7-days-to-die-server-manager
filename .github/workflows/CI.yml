@@ -19,7 +19,16 @@ jobs:
         ports:
           - 3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-
+      redis:
+        image: redis
+        # Set health checks to wait until redis has started
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
@@ -39,6 +48,7 @@ jobs:
       - run: npm test
         env:
           DBSTRING: mysql2://root@127.0.0.1:3306/csmm
+          REDISSTRING: redis://127.0.0.1:6379
       - name: Test & publish code coverage
         uses: paambaati/codeclimate-action@v2.6.0
         env:

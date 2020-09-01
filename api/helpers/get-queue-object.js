@@ -16,16 +16,12 @@ module.exports = {
     },
   },
   fn: function (inputs, exits) {
+    let queueName = `sdtdserver:${inputs.queueName}`;
     if (process.env.IS_TEST) {
-      return exits.success({
-        on: function () { },
-        process: function () { },
-        empty: function () { },
-        add: function() {}
-      });
+      queueName += ':test';
     }
     const queue = new Bull(
-      `sdtdserver:${inputs.queueName}`,
+      queueName,
       process.env.REDISSTRING
     );
     return exits.success(queue);
