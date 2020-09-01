@@ -22,7 +22,11 @@ module.exports = function defineCronHook(sails) {
         // We do not need to check if job is already in queue
         // Bull is intelligent enough to not double add jobs with same repeat options
         // As long as we pass the jobId in start() we're fine
-        await this.start(job.id);
+        try {
+          await this.start(job.id);
+        } catch (e) {
+          sails.log.error(`Error starting job ${job.id}`, e);
+        }
       }
     },
 
@@ -40,6 +44,7 @@ module.exports = function defineCronHook(sails) {
         repeat: {
           cron: job.temporalValue
         },
+        timeout: 2500
       });
       sails.log.debug(`Started cron job ${job.id}`);
     },
