@@ -21,7 +21,8 @@ describe('Cron hook', () => {
     testJob = await CronJob.create({
       command: 'say "Testerino"',
       temporalValue: '0 * * * *',
-      server: sails.testServer.id
+      server: sails.testServer.id,
+      notificationEnabled: true
     }).fetch();
   });
 
@@ -71,4 +72,28 @@ describe('Cron hook', () => {
     testJobFound = foundJobs.find(job => job.data.id === testJob.id);
     expect(testJobFound).to.be.undefined;
   });
+
+  it('Sends a notification', () => {
+    return new Promise(async (resolve, reject) => {
+      await hook.start(testJob.id);
+
+      const foundJobs = await queue.getJobs(statuses);
+      const testJobFound = foundJobs.find(job => job.data.id === testJob.id);
+
+      queue.on('global:completed', () => {
+        expect(sails.hooks.discordnotifications.sendNotification).to.have.been.calledOnce;
+        // Have to call resolve like this otherwise the test always succeeds
+        resolve();
+      });
+
+      queue.on('global:failed', function (job, err) {
+        reject(err);
+      });
+
+      sandbox.spy(sails.hooks.discordnotifications, 'sendNotification');
+      await testJobFound.promote();
+      await queue.resume();
+    });
+  });
+
 });

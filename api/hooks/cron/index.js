@@ -12,6 +12,12 @@ module.exports = function defineCronHook(sails) {
 
     initialize: function (done) {
       this.queue = sails.helpers.getQueueObject('cron');
+
+      this.queue.process(100, async (job) => {
+        sails.log.debug('[Worker] Got a `cron` job', job.data);
+        const functionToExecute = await sails.helpers.etc.parseCronJob(job.data.id);
+        return functionToExecute();
+      });
       sails.after('hook:sdtdlogs:loaded', this.ensureJobsAreQueuedOnStart);
       return done();
     },

@@ -12,10 +12,6 @@ module.exports = {
     jobId: {
       type: 'number',
       required: true,
-      custom: async (valueToCheck) => {
-        let foundJob = await CronJob.findOne(valueToCheck);
-        return foundJob;
-      }
     }
 
   },
@@ -53,8 +49,6 @@ module.exports = {
           notificationType: 'cronjob'
         });
       }
-
-
     };
 
 
