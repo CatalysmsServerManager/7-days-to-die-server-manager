@@ -1,0 +1,3 @@
+module.exports = {
+  'config': 'sequelize.config.js'
+}
