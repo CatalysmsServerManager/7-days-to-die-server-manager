@@ -31,7 +31,7 @@
     "passport": "^0.4.1",
     "passport-discord": "^0.1.4",
     "passport-steam": "^1.0.14",
-    "rand-token": "^0.4.0",
+    "rand-token": "^1.0.1",
     "redis": "^2.8.0",
     "request": "^2.88.2",
     "request-promise-native": "^1.0.9",
