@@ -4,7 +4,7 @@
   "description": "A 7dtd server manager made with Sails.js",
   "keywords": [],
   "dependencies": {
-    "7daystodie-api-wrapper": "1.5.0",
+    "7daystodie-api-wrapper": "1.5.2",
     "@sailshq/connect-redis": "^3.2.1",
     "@sailshq/socket.io-redis": "^5.2.0",
     "@sentry/apm": "^5.19.2",
