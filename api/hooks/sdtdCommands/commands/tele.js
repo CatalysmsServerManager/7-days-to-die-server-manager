@@ -34,12 +34,7 @@ class tele extends SdtdCommand {
     // Remove duplicates
     serverTeleportsFound = _.uniq(serverTeleportsFound, 'id');
 
-    let teleportFound = false;
-    serverTeleportsFound.forEach(teleport => {
-      if (teleport.name === args[0]) {
-        teleportFound = teleport;
-      }
-    });
+    let teleportFound = serverTeleportsFound.find(element => element.name == args[0]);
 
     if (!teleportFound) {
       return chatMessage.reply(`NoTeleportFound`);
