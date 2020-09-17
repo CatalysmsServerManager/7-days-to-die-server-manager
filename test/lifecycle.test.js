@@ -14,6 +14,7 @@ process.env.NODE_ENV = 'test';
 process.env.CSMM_DONATOR_TIER = 'patron';
 delete process.env.PORT;
 
+
 beforeEach(function () {
   MockDate.set('2020-05-01T01:20:05+0000');
 });
@@ -71,6 +72,9 @@ before(function (done) {
     sails.testServer = testServer;
     sails.testPlayer = testPlayer;
     sails.testServerConfig = testServerConfig;
+    sails.testServer.config = testServerConfig;
+
+    sails.testServer.players = [testPlayer];
   }
 
   // Increase the Mocha timeout so that Sails has enough time to lift
