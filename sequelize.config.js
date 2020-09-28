@@ -6,7 +6,8 @@ process.env.DBSTRING = process.env.DBSTRING.replace('mysql2://', 'mysql://');
 
 const commonConfig = {
   url: process.env.DBSTRING,
-  dialect: 'mysql'
+  dialect: 'mysql',
+  logging: console.log
 };
 
 module.exports = {
