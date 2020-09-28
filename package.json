@@ -136,7 +136,8 @@
       "tasks/**/*",
       ".tmp/**/*",
       "views/**/*",
-      "test/**/*"
+      "test/**/*",
+      "migrations/**/*"
     ],
     "cache": true,
     "all": true,
