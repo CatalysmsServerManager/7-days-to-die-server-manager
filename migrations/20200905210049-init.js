@@ -2,52 +2,53 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
+    const {DataTypes} = Sequelize;
     queryInterface.createTable(
       'user',
       {
         createdAt: {
-          type: Sequelize.DataTypes.BIGINT,
+          type: DataTypes.BIGINT,
           allowNull: true
         },
         updatedAt: {
-          type: Sequelize.DataTypes.BIGINT,
+          type: DataTypes.BIGINT,
           allowNull: true
         },
         id: {
           autoIncrement: true,
-          type: Sequelize.DataTypes.INTEGER(11),
+          type: DataTypes.INTEGER(11),
+          unique: true,
           allowNull: false,
           primaryKey: true
         },
         steamId: {
-          type: Sequelize.DataTypes.STRING(255),
+          type: DataTypes.STRING(255),
           allowNull: true,
           unique: true
         },
         discordId: {
-          type: Sequelize.DataTypes.STRING(255),
+          type: DataTypes.STRING(255),
           allowNull: true
         },
         username: {
-          type: Sequelize.DataTypes.STRING(255),
+          type: DataTypes.STRING(255),
           allowNull: true
         },
         avatar: {
-          type: Sequelize.DataTypes.STRING(255),
+          type: DataTypes.STRING(255),
           allowNull: true
         },
         admin: {
-          type: Sequelize.DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         banned: {
-          type: Sequelize.DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         }
       },
       {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_unicode_ci'
+        charset: 'latin1'
       }
     );
 
@@ -65,6 +66,7 @@ module.exports = {
         id: {
           autoIncrement: true,
           type: DataTypes.INTEGER(11),
+          unique: true,
           allowNull: false,
           primaryKey: true
         },
@@ -94,8 +96,7 @@ module.exports = {
         }
       },
       {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_unicode_ci'
+        charset: 'latin1'
       }
     );
 
@@ -113,6 +114,7 @@ module.exports = {
         id: {
           autoIncrement: true,
           type: DataTypes.INTEGER(11),
+          unique: true,
           allowNull: false,
           primaryKey: true
         },
@@ -158,8 +160,7 @@ module.exports = {
         }
       },
       {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_unicode_ci'
+        charset: 'latin1'
       }
     );
 
@@ -178,6 +179,7 @@ module.exports = {
         id: {
           autoIncrement: true,
           type: DataTypes.INTEGER(11),
+          unique: true,
           allowNull: false,
           primaryKey: true
         },
@@ -198,7 +200,7 @@ module.exports = {
           allowNull: true
         },
         unbanned: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         server: {
@@ -207,8 +209,7 @@ module.exports = {
         }
       },
       {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_unicode_ci'
+        charset: 'latin1'
       }
     );
 
@@ -227,6 +228,7 @@ module.exports = {
         id: {
           autoIncrement: true,
           type: DataTypes.INTEGER(11),
+          unique: true,
           allowNull: false,
           primaryKey: true
         },
@@ -244,8 +246,7 @@ module.exports = {
         }
       },
       {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_unicode_ci'
+        charset: 'latin1'
       }
     );
 
@@ -263,6 +264,7 @@ module.exports = {
         id: {
           autoIncrement: true,
           type: DataTypes.INTEGER(11),
+          unique: true,
           allowNull: false,
           primaryKey: true
         },
@@ -292,8 +294,7 @@ module.exports = {
         }
       },
       {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_unicode_ci'
+        charset: 'latin1'
       }
     );
 
@@ -312,6 +313,7 @@ module.exports = {
         id: {
           autoIncrement: true,
           type: DataTypes.INTEGER(11),
+          unique: true,
           allowNull: false,
           primaryKey: true
         },
@@ -324,11 +326,11 @@ module.exports = {
           allowNull: true
         },
         enabled: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         notificationEnabled: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         server: {
@@ -337,8 +339,7 @@ module.exports = {
         }
       },
       {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_unicode_ci'
+        charset: 'latin1'
       }
     );
 
@@ -357,6 +358,7 @@ module.exports = {
         id: {
           autoIncrement: true,
           type: DataTypes.INTEGER(11),
+          unique: true,
           allowNull: false,
           primaryKey: true
         },
@@ -381,7 +383,7 @@ module.exports = {
           allowNull: true
         },
         enabled: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         delay: {
@@ -393,7 +395,7 @@ module.exports = {
           allowNull: true
         },
         sendOutput: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         level: {
@@ -406,8 +408,7 @@ module.exports = {
         }
       },
       {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_unicode_ci'
+        charset: 'latin1'
       }
     );
 
@@ -426,6 +427,7 @@ module.exports = {
         id: {
           autoIncrement: true,
           type: DataTypes.INTEGER(11),
+          unique: true,
           allowNull: false,
           primaryKey: true
         },
@@ -442,7 +444,7 @@ module.exports = {
           allowNull: true
         },
         required: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         defaultValue: {
@@ -455,8 +457,7 @@ module.exports = {
         }
       },
       {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_unicode_ci'
+        charset: 'latin1'
       }
     );
 
@@ -474,6 +475,7 @@ module.exports = {
         id: {
           autoIncrement: true,
           type: DataTypes.INTEGER(11),
+          unique: true,
           allowNull: false,
           primaryKey: true
         },
@@ -486,22 +488,20 @@ module.exports = {
           allowNull: true
         },
         enabled: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         ignoreServerChat: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         server: {
           type: DataTypes.INTEGER(11),
           allowNull: true
         }
-
       },
       {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_unicode_ci'
+        charset: 'latin1'
       }
     );
     queryInterface.createTable(
@@ -518,6 +518,7 @@ module.exports = {
         id: {
           autoIncrement: true,
           type: DataTypes.INTEGER(11),
+          unique: true,
           allowNull: false,
           primaryKey: true
         },
@@ -547,8 +548,7 @@ module.exports = {
         }
       },
       {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_unicode_ci'
+        charset: 'latin1'
       }
     );
     queryInterface.createTable(
@@ -557,6 +557,7 @@ module.exports = {
         id: {
           autoIncrement: true,
           type: DataTypes.INTEGER(11),
+          unique: true,
           allowNull: false,
           primaryKey: true
         },
@@ -570,8 +571,7 @@ module.exports = {
         }
       },
       {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_unicode_ci'
+        charset: 'latin1'
       }
     );
     queryInterface.createTable(
@@ -588,6 +588,7 @@ module.exports = {
         id: {
           autoIncrement: true,
           type: DataTypes.INTEGER(11),
+          unique: true,
           allowNull: false,
           primaryKey: true
         },
@@ -596,7 +597,7 @@ module.exports = {
           allowNull: true
         },
         deleted: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         user: {
@@ -609,8 +610,7 @@ module.exports = {
         },
       },
       {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_unicode_ci'
+        charset: 'latin1'
       }
     );
     queryInterface.createTable(
@@ -627,6 +627,7 @@ module.exports = {
         id: {
           autoIncrement: true,
           type: DataTypes.INTEGER(11),
+          unique: true,
           allowNull: false,
           primaryKey: true
         },
@@ -648,8 +649,7 @@ module.exports = {
         }
       },
       {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_unicode_ci'
+        charset: 'latin1'
       }
     );
     queryInterface.createTable(
@@ -666,6 +666,7 @@ module.exports = {
         id: {
           autoIncrement: true,
           type: DataTypes.INTEGER(11),
+          unique: true,
           allowNull: false,
           primaryKey: true
         },
@@ -731,8 +732,7 @@ module.exports = {
         }
       },
       {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_unicode_ci'
+        charset: 'latin1'
       }
     );
     queryInterface.createTable(
@@ -749,6 +749,7 @@ module.exports = {
         id: {
           autoIncrement: true,
           type: DataTypes.INTEGER(11),
+          unique: true,
           allowNull: false,
           primaryKey: true
         },
@@ -766,8 +767,7 @@ module.exports = {
         }
       },
       {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_unicode_ci'
+        charset: 'latin1'
       }
     );
     queryInterface.createTable(
@@ -784,6 +784,7 @@ module.exports = {
         id: {
           autoIncrement: true,
           type: DataTypes.INTEGER(11),
+          unique: true,
           allowNull: false,
           primaryKey: true
         },
@@ -840,7 +841,7 @@ module.exports = {
           allowNull: true
         },
         banned: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         deaths: {
@@ -881,8 +882,7 @@ module.exports = {
         }
       },
       {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_unicode_ci'
+        charset: 'latin1'
       }
     );
     queryInterface.createTable(
@@ -899,6 +899,7 @@ module.exports = {
         id: {
           autoIncrement: true,
           type: DataTypes.INTEGER(11),
+          unique: true,
           allowNull: false,
           primaryKey: true
         },
@@ -915,7 +916,7 @@ module.exports = {
           allowNull: true
         },
         claimed: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         player: {
@@ -924,8 +925,7 @@ module.exports = {
         }
       },
       {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_unicode_ci'
+        charset: 'latin1'
       }
     );
     queryInterface.createTable(
@@ -942,6 +942,7 @@ module.exports = {
         id: {
           autoIncrement: true,
           type: DataTypes.INTEGER(11),
+          unique: true,
           allowNull: false,
           primaryKey: true
         },
@@ -962,7 +963,7 @@ module.exports = {
           allowNull: true
         },
         public: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         timesUsed: {
@@ -975,8 +976,7 @@ module.exports = {
         }
       },
       {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_unicode_ci'
+        charset: 'latin1'
       }
     );
     queryInterface.createTable(
@@ -993,6 +993,7 @@ module.exports = {
         id: {
           autoIncrement: true,
           type: DataTypes.INTEGER(11),
+          unique: true,
           allowNull: false,
           primaryKey: true
         },
@@ -1006,8 +1007,7 @@ module.exports = {
         }
       },
       {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_unicode_ci'
+        charset: 'latin1'
       }
     );
     queryInterface.createTable(
@@ -1024,6 +1024,7 @@ module.exports = {
         id: {
           autoIncrement: true,
           type: DataTypes.INTEGER(11),
+          unique: true,
           allowNull: false,
           primaryKey: true
         },
@@ -1037,8 +1038,7 @@ module.exports = {
         }
       },
       {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_unicode_ci'
+        charset: 'latin1'
       }
     );
     queryInterface.createTable(
@@ -1055,6 +1055,7 @@ module.exports = {
         id: {
           autoIncrement: true,
           type: DataTypes.INTEGER(11),
+          unique: true,
           allowNull: false,
           primaryKey: true
         },
@@ -1067,7 +1068,7 @@ module.exports = {
           allowNull: true
         },
         isDefault: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         amountOfTeleports: {
@@ -1091,55 +1092,55 @@ module.exports = {
           allowNull: true
         },
         manageServer: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         manageEconomy: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         managePlayers: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         manageTickets: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         viewAnalytics: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         viewDashboard: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         useTracking: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         useChat: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         useCommands: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         manageGbl: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         discordExec: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         discordLookup: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         immuneToBannedItemsList: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         server: {
@@ -1148,8 +1149,7 @@ module.exports = {
         }
       },
       {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_unicode_ci'
+        charset: 'latin1'
       }
     );
     queryInterface.createTable(
@@ -1166,23 +1166,24 @@ module.exports = {
         id: {
           autoIncrement: true,
           type: DataTypes.INTEGER(11),
+          unique: true,
           allowNull: false,
           primaryKey: true
         },
         inactive: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         inventoryTracking: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         locationTracking: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         economyEnabled: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         currencyName: {
@@ -1190,7 +1191,7 @@ module.exports = {
           allowNull: true
         },
         killEarnerEnabled: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         zombieKillReward: {
@@ -1202,7 +1203,7 @@ module.exports = {
           allowNull: true
         },
         playtimeEarnerEnabled: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         playtimeEarnerInterval: {
@@ -1214,7 +1215,7 @@ module.exports = {
           allowNull: true
         },
         discordTextEarnerEnabled: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         discordTextEarnerAmountPerMessage: {
@@ -1246,7 +1247,7 @@ module.exports = {
           allowNull: true
         },
         commandsEnabled: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         commandPrefix: {
@@ -1254,19 +1255,19 @@ module.exports = {
           allowNull: true
         },
         enabledCallAdmin: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         enabledPlayerTeleports: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         enabledWho: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         enabledGimme: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         maxPlayerTeleportLocations: {
@@ -1298,11 +1299,11 @@ module.exports = {
           allowNull: true
         },
         chatChannelRichMessages: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         chatChannelGlobalOnly: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         chatChannelBlockedPrefixes: {
@@ -1318,7 +1319,7 @@ module.exports = {
           allowNull: true
         },
         gblAutoBanEnabled: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         gblAutoBanBans: {
@@ -1326,11 +1327,11 @@ module.exports = {
           allowNull: true
         },
         loggingEnabled: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         memUpdateInfoEnabled: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         countryBanConfig: {
@@ -1338,7 +1339,7 @@ module.exports = {
           allowNull: true
         },
         pingKickEnabled: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         maxPing: {
@@ -1362,7 +1363,7 @@ module.exports = {
           allowNull: true
         },
         votingEnabled: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         votingCommand: {
@@ -1370,7 +1371,7 @@ module.exports = {
           allowNull: true
         },
         bannedItemsEnabled: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         bannedItems: {
@@ -1387,8 +1388,7 @@ module.exports = {
         }
       },
       {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_unicode_ci'
+        charset: 'latin1'
       }
     );
     queryInterface.createTable(
@@ -1397,6 +1397,7 @@ module.exports = {
         id: {
           autoIncrement: true,
           type: DataTypes.INTEGER(11),
+          unique: true,
           allowNull: false,
           primaryKey: true
         },
@@ -1410,8 +1411,7 @@ module.exports = {
         }
       },
       {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_unicode_ci'
+        charset: 'latin1'
       }
     );
     queryInterface.createTable(
@@ -1428,6 +1428,7 @@ module.exports = {
         id: {
           autoIncrement: true,
           type: DataTypes.INTEGER(11),
+          unique: true,
           allowNull: false,
           primaryKey: true
         },
@@ -1457,8 +1458,7 @@ module.exports = {
         }
       },
       {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_unicode_ci'
+        charset: 'latin1'
       }
     );
     queryInterface.createTable(
@@ -1475,6 +1475,7 @@ module.exports = {
         id: {
           autoIncrement: true,
           type: DataTypes.INTEGER(11),
+          unique: true,
           allowNull: false,
           primaryKey: true
         },
@@ -1487,7 +1488,7 @@ module.exports = {
           allowNull: true
         },
         status: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         playerInfo: {
@@ -1504,8 +1505,7 @@ module.exports = {
         }
       },
       {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_unicode_ci'
+        charset: 'latin1'
       }
     );
     queryInterface.createTable(
@@ -1522,6 +1522,7 @@ module.exports = {
         id: {
           autoIncrement: true,
           type: DataTypes.INTEGER(11),
+          unique: true,
           allowNull: false,
           primaryKey: true
         },
@@ -1563,8 +1564,7 @@ module.exports = {
         }
       },
       {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_unicode_ci'
+        charset: 'latin1'
       }
     );
     queryInterface.createTable(
@@ -1581,6 +1581,7 @@ module.exports = {
         id: {
           autoIncrement: true,
           type: DataTypes.INTEGER(11),
+          unique: true,
           allowNull: false,
           primaryKey: true
         },
@@ -1598,8 +1599,7 @@ module.exports = {
         }
       },
       {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_unicode_ci'
+        charset: 'latin1'
       }
     );
     queryInterface.createTable(
@@ -1616,6 +1616,7 @@ module.exports = {
         id: {
           autoIncrement: true,
           type: DataTypes.INTEGER(11),
+          unique: true,
           allowNull: false,
           primaryKey: true
         },
@@ -1645,8 +1646,7 @@ module.exports = {
         }
       },
       {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_unicode_ci'
+        charset: 'latin1'
       }
     );
     queryInterface.createTable(
@@ -1663,6 +1663,7 @@ module.exports = {
         id: {
           autoIncrement: true,
           type: DataTypes.INTEGER(11),
+          unique: true,
           allowNull: false,
           primaryKey: true
         },
@@ -1736,8 +1737,7 @@ module.exports = {
         }
       },
       {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_unicode_ci'
+        charset: 'latin1'
       }
     );
     queryInterface.createTable(
@@ -1754,6 +1754,7 @@ module.exports = {
         id: {
           autoIncrement: true,
           type: DataTypes.INTEGER(11),
+          unique: true,
           allowNull: false,
           primaryKey: true
         },
@@ -1775,17 +1776,48 @@ module.exports = {
           allowNull: true
         },
         admin: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         },
         banned: {
-          type: DataTypes.INTEGER(1),
+          type: DataTypes.TINYINT(1),
           allowNull: true
         }
       },
       {
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_unicode_ci'
+        charset: 'latin1'
+      }
+    );
+
+    queryInterface.createTable(
+      'archive',
+      {
+        id: {
+          autoIncrement: true,
+          type: DataTypes.INTEGER(11),
+          unique: true,
+          allowNull: false,
+          primaryKey: true
+        },
+        createdAt: {
+          type: DataTypes.BIGINT,
+          allowNull: true
+        },
+        fromModel: {
+          type: DataTypes.STRING(255),
+          allowNull: true
+        },
+        originalRecord: {
+          type: 'LONGTEXT',
+          allowNull: true
+        },
+        originalRecordId: {
+          type: 'LONGTEXT',
+          allowNull: true
+        }
+      },
+      {
+        charset: 'latin1'
       }
     );
 
