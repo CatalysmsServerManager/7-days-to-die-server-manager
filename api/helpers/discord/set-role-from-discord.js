@@ -32,6 +32,10 @@ module.exports = {
 
     const { roles } = await sails.helpers.discord.discordrequest(`guilds/${serverConfig.discordGuildId}/members/${user.discordId}`);
 
+    if (_.isNil(roles)) {
+      return exits.success(player, undefined);
+    }
+
     let highestRole = await Role.find({
       where: {
         discordRole: roles,
@@ -40,6 +44,7 @@ module.exports = {
       sort: 'level ASC',
       limit: 1
     });
+
 
     if (_.isUndefined(highestRole[0])) {
       sails.log.warn(`[setRoleFromDiscord] No highest role found for server ${player.server}. Something is wrong`);

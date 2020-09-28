@@ -99,7 +99,7 @@ class LoggingObject extends EventEmitter {
     const isStalled = result.lastLogLine === this.lastLogLine;
     if (isStalled) {
       this.emptyResponses++;
-      if (this.emptyResponses > 5) {
+      if (this.emptyResponses > 15) {
         // haven't found any responses in a while, so reset to 0 and try again from scratch
         await this.setLastLogLine(0);
         this.emptyResponses = 0;
@@ -196,8 +196,7 @@ class LoggingObject extends EventEmitter {
 
       if (!this.slowmode) {
         sails.log.info(
-          `SdtdLogs - Server ${
-            this.serverId
+          `SdtdLogs - Server ${this.serverId
           } has failed ${counter} times. Changing interval time. Server was last successful on ${prettyLastSuccess.toLocaleDateString()} ${prettyLastSuccess.toLocaleTimeString()}`
         );
         this.slowmode = true;

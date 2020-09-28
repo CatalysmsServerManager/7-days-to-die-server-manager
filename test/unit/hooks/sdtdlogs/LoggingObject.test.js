@@ -108,43 +108,22 @@ describe('LoggingObject', function () {
       expect(loggingObject.queue.add).to.have.been.called;
     });
 
-    it('fifth empty response should reset log last log line and empty response', async () => {
+    it('fifteenth empty response should reset log last log line and empty response', async () => {
       const job = {};
       const result = {
         serverId: sails.testServer.id,
         lastLogLine: 100,
         logs: []
       };
-      loggingObject.lastLogLine = 100;
-      await loggingObject.handleCompletedJob(job, JSON.stringify(result));
-      expect(loggingObject.lastLogLine).to.equal(100);
-      expect(loggingObject.emptyResponses).to.equal(1);
-      expect(loggingObject.queue.add).to.have.been.called;
-      loggingObject.queue.add.resetHistory();
 
-      await loggingObject.handleCompletedJob(job, JSON.stringify(result));
-      expect(loggingObject.lastLogLine).to.equal(100);
-      expect(loggingObject.emptyResponses).to.equal(2);
-      expect(loggingObject.queue.add).to.have.been.called;
-      loggingObject.queue.add.resetHistory();
-
-      await loggingObject.handleCompletedJob(job, JSON.stringify(result));
-      expect(loggingObject.lastLogLine).to.equal(100);
-      expect(loggingObject.emptyResponses).to.equal(3);
-      expect(loggingObject.queue.add).to.have.been.called;
-      loggingObject.queue.add.resetHistory();
-
-      await loggingObject.handleCompletedJob(job, JSON.stringify(result));
-      expect(loggingObject.lastLogLine).to.equal(100);
-      expect(loggingObject.emptyResponses).to.equal(4);
-      expect(loggingObject.queue.add).to.have.been.called;
-      loggingObject.queue.add.resetHistory();
-
-      await loggingObject.handleCompletedJob(job, JSON.stringify(result));
-      expect(loggingObject.lastLogLine).to.equal(100);
-      expect(loggingObject.emptyResponses).to.equal(5);
-      expect(loggingObject.queue.add).to.have.been.called;
-      loggingObject.queue.add.resetHistory();
+      for (let i = 1; i < 16; i++) {
+        loggingObject.lastLogLine = 100;
+        await loggingObject.handleCompletedJob(job, JSON.stringify(result));
+        expect(loggingObject.lastLogLine).to.equal(100);
+        expect(loggingObject.emptyResponses).to.equal(i);
+        expect(loggingObject.queue.add).to.have.been.called;
+        loggingObject.queue.add.resetHistory();
+      }
 
       await loggingObject.handleCompletedJob(job, JSON.stringify(result));
       expect(loggingObject.lastLogLine).to.equal(0);
