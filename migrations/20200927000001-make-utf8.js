@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    const {DataTypes} = Sequelize;
+    const { DataTypes } = Sequelize;
     const transaction = await queryInterface.sequelize.transaction();
     try {
       const tableNames = [
@@ -40,9 +40,11 @@ module.exports = {
         'user',
         'archive',
       ];
+
       for (const tableName of tableNames) {
         await queryInterface.sequelize.query(`ALTER TABLE ${tableName} CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`)
       }
+
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();
