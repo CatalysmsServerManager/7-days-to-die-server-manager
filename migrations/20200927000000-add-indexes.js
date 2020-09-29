@@ -5,46 +5,46 @@ module.exports = {
     const {DataTypes} = Sequelize;
     const transaction = await queryInterface.sequelize.transaction();
     try {
-      queryInterface.changeColumn('gblcomment', 'content', {
+      await queryInterface.changeColumn('gblcomment', 'content', {
         type: DataTypes.TEXT,
         allowNull: true
       });
-      queryInterface.changeColumn('sdtdconfig', 'votingCommand', {
+      await queryInterface.changeColumn('sdtdconfig', 'votingCommand', {
         type: DataTypes.TEXT,
         allowNull: true
       });
-      queryInterface.changeColumn('customcommand', 'commandsToExecute', {
+      await queryInterface.changeColumn('customcommand', 'commandsToExecute', {
         type: DataTypes.TEXT + ' CHARACTER SET utf8mb4',
         allowNull: true
       });
-      queryInterface.changeColumn('customhook', 'commandsToExecute', {
+      await queryInterface.changeColumn('customhook', 'commandsToExecute', {
         type: DataTypes.TEXT + ' CHARACTER SET utf8mb4',
         allowNull: true
       });
-      queryInterface.changeColumn('cronjob', 'command', {
+      await queryInterface.changeColumn('cronjob', 'command', {
         type: DataTypes.TEXT,
         allowNull: true
       });
-      queryInterface.changeColumn('banentry', 'reason', {
+      await queryInterface.changeColumn('banentry', 'reason', {
         type: DataTypes.TEXT,
         allowNull: true
       });
-      queryInterface.changeColumn('banentry', 'note', {
+      await queryInterface.changeColumn('banentry', 'note', {
         type: DataTypes.TEXT,
         allowNull: true
       });
-      queryInterface.changeColumn('customhook', 'cooldown', {
+      await queryInterface.changeColumn('customhook', 'cooldown', {
         type: DataTypes.DOUBLE,
         allowNull: true,
-        default: 0
+        defaultValue: 0
       });
-      queryInterface.changeColumn('role', 'immuneToBannedItemsList', {
+      await queryInterface.changeColumn('role', 'immuneToBannedItemsList', {
         type: DataTypes.TINYINT(1),
         allowNull: true,
-        default: 0
+        defaultValue: 0
       });
 
-      queryInterface.addIndex(
+      await queryInterface.addIndex(
         'sdtdconfig',
         {
           name: 'IDX_sdtdconfig_server',
@@ -52,7 +52,7 @@ module.exports = {
           fields: ['server']
         }
       );
-      queryInterface.addIndex(
+      await queryInterface.addIndex(
         'historicalinfo',
         {
           name: 'IDX_historicalinfo_createdAt',
@@ -60,13 +60,13 @@ module.exports = {
           fields: ['createdAt']
         }
       );
-      queryInterface.addIndex(
+      await queryInterface.addIndex(
         'historicalinfo',
         {
           fields: ['type']
         }
       );
-      queryInterface.addIndex(
+      await queryInterface.addIndex(
         'player',
         {
           name: 'IDX_player_steamId_server',
@@ -74,13 +74,13 @@ module.exports = {
           fields: ['steamId', 'server']
         }
       );
-      queryInterface.addIndex(
+      await queryInterface.addIndex(
         'player',
         {
           fields: ['server']
         }
       );
-      queryInterface.addIndex(
+      await queryInterface.addIndex(
         'analytics',
         {
           name: 'IDX_analytics_createdAt_server',
@@ -88,7 +88,7 @@ module.exports = {
           fields: ['createdAt', 'server']
         }
       );
-      queryInterface.addIndex(
+      await queryInterface.addIndex(
         'customdiscordnotification',
         {
           name: 'IDX_customdiscordnotification_server',
@@ -96,14 +96,14 @@ module.exports = {
           fields: ['server']
         }
       );
-      queryInterface.addIndex(
+      await queryInterface.addIndex(
         'trackinginfo',
         {
           unique: false,
           fields: ['createdAt']
         }
       );
-      queryInterface.addIndex(
+      await queryInterface.addIndex(
         'trackinginfo',
         {
           unique: false,

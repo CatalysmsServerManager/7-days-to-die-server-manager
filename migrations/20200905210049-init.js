@@ -3,7 +3,7 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     const {DataTypes} = Sequelize;
-    queryInterface.createTable(
+    await queryInterface.createTable(
       'user',
       {
         createdAt: {
@@ -52,7 +52,7 @@ module.exports = {
       }
     );
 
-    queryInterface.createTable(
+    await queryInterface.createTable(
       'sdtdserver',
       {
         createdAt: {
@@ -100,7 +100,7 @@ module.exports = {
       }
     );
 
-    queryInterface.createTable(
+    await queryInterface.createTable(
       'analytics',
       {
         createdAt: {
@@ -165,7 +165,7 @@ module.exports = {
     );
 
 
-    queryInterface.createTable(
+    await queryInterface.createTable(
       'banentry',
       {
         createdAt: {
@@ -214,7 +214,7 @@ module.exports = {
     );
 
 
-    queryInterface.createTable(
+    await queryInterface.createTable(
       'commandreply',
       {
         createdAt: {
@@ -250,7 +250,7 @@ module.exports = {
       }
     );
 
-    queryInterface.createTable(
+    await queryInterface.createTable(
       'countryban',
       {
         createdAt: {
@@ -299,7 +299,7 @@ module.exports = {
     );
 
 
-    queryInterface.createTable(
+    await queryInterface.createTable(
       'cronjob',
       {
         createdAt: {
@@ -344,7 +344,7 @@ module.exports = {
     );
 
 
-    queryInterface.createTable(
+    await queryInterface.createTable(
       'customcommand',
       {
         createdAt: {
@@ -413,7 +413,7 @@ module.exports = {
     );
 
 
-    queryInterface.createTable(
+    await queryInterface.createTable(
       'customcommandargument',
       {
         createdAt: {
@@ -461,7 +461,7 @@ module.exports = {
       }
     );
 
-    queryInterface.createTable(
+    await queryInterface.createTable(
       'customdiscordnotification',
       {
         createdAt: {
@@ -504,7 +504,7 @@ module.exports = {
         charset: 'latin1'
       }
     );
-    queryInterface.createTable(
+    await queryInterface.createTable(
       'customhook',
       {
         createdAt: {
@@ -551,7 +551,7 @@ module.exports = {
         charset: 'latin1'
       }
     );
-    queryInterface.createTable(
+    await queryInterface.createTable(
       'gblcomment_heartedBy__user_heartedGblComment',
       {
         id: {
@@ -574,7 +574,7 @@ module.exports = {
         charset: 'latin1'
       }
     );
-    queryInterface.createTable(
+    await queryInterface.createTable(
       'gblcomment',
       {
         createdAt: {
@@ -613,7 +613,7 @@ module.exports = {
         charset: 'latin1'
       }
     );
-    queryInterface.createTable(
+    await queryInterface.createTable(
       'gimmeitem',
       {
         createdAt: {
@@ -652,7 +652,7 @@ module.exports = {
         charset: 'latin1'
       }
     );
-    queryInterface.createTable(
+    await queryInterface.createTable(
       'historicalinfo',
       {
         createdAt: {
@@ -735,7 +735,7 @@ module.exports = {
         charset: 'latin1'
       }
     );
-    queryInterface.createTable(
+    await queryInterface.createTable(
       'hookvariable',
       {
         createdAt: {
@@ -770,7 +770,7 @@ module.exports = {
         charset: 'latin1'
       }
     );
-    queryInterface.createTable(
+    await queryInterface.createTable(
       'player',
       {
         createdAt: {
@@ -885,7 +885,7 @@ module.exports = {
         charset: 'latin1'
       }
     );
-    queryInterface.createTable(
+    await queryInterface.createTable(
       'playerclaimitem',
       {
         createdAt: {
@@ -928,7 +928,7 @@ module.exports = {
         charset: 'latin1'
       }
     );
-    queryInterface.createTable(
+    await queryInterface.createTable(
       'playerteleport',
       {
         createdAt: {
@@ -979,7 +979,7 @@ module.exports = {
         charset: 'latin1'
       }
     );
-    queryInterface.createTable(
+    await queryInterface.createTable(
       'playerusedcommand',
       {
         createdAt: {
@@ -1010,7 +1010,7 @@ module.exports = {
         charset: 'latin1'
       }
     );
-    queryInterface.createTable(
+    await queryInterface.createTable(
       'playerusedgimme',
       {
         createdAt: {
@@ -1041,7 +1041,7 @@ module.exports = {
         charset: 'latin1'
       }
     );
-    queryInterface.createTable(
+    await queryInterface.createTable(
       'role',
       {
         createdAt: {
@@ -1152,7 +1152,7 @@ module.exports = {
         charset: 'latin1'
       }
     );
-    queryInterface.createTable(
+    await queryInterface.createTable(
       'sdtdconfig',
       {
         createdAt: {
@@ -1391,7 +1391,7 @@ module.exports = {
         charset: 'latin1'
       }
     );
-    queryInterface.createTable(
+    await queryInterface.createTable(
       'sdtdserver_admins__user_adminOf',
       {
         id: {
@@ -1414,7 +1414,7 @@ module.exports = {
         charset: 'latin1'
       }
     );
-    queryInterface.createTable(
+    await queryInterface.createTable(
       'sdtdserver',
       {
         createdAt: {
@@ -1461,7 +1461,7 @@ module.exports = {
         charset: 'latin1'
       }
     );
-    queryInterface.createTable(
+    await queryInterface.createTable(
       'sdtdticket',
       {
         createdAt: {
@@ -1508,7 +1508,7 @@ module.exports = {
         charset: 'latin1'
       }
     );
-    queryInterface.createTable(
+    await queryInterface.createTable(
       'shoplisting',
       {
         createdAt: {
@@ -1567,7 +1567,7 @@ module.exports = {
         charset: 'latin1'
       }
     );
-    queryInterface.createTable(
+    await queryInterface.createTable(
       'ticketcomment',
       {
         createdAt: {
@@ -1602,7 +1602,7 @@ module.exports = {
         charset: 'latin1'
       }
     );
-    queryInterface.createTable(
+    await queryInterface.createTable(
       'trackinginfo',
       {
         createdAt: {
@@ -1649,7 +1649,7 @@ module.exports = {
         charset: 'latin1'
       }
     );
-    queryInterface.createTable(
+    await queryInterface.createTable(
       'usagestats',
       {
         createdAt: {
@@ -1740,7 +1740,7 @@ module.exports = {
         charset: 'latin1'
       }
     );
-    queryInterface.createTable(
+    await queryInterface.createTable(
       'user',
       {
         createdAt: {
@@ -1789,7 +1789,7 @@ module.exports = {
       }
     );
 
-    queryInterface.createTable(
+    await queryInterface.createTable(
       'archive',
       {
         id: {
