@@ -115,7 +115,7 @@ beforeEach(async function () {
 
   let testServerConfig = await SdtdConfig.create({
     server: testServer.id,
-    inactive: true,
+    inactive: false,
     countryBanConfig: {
       bannedCountries: ['BE'], whiteListedSteamIds: [],
     },
