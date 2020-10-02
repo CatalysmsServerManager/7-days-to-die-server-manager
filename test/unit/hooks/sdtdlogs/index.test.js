@@ -57,7 +57,7 @@ describe('logging hook index', () => {
       },
       type: 'playerConnected'
     };
-
+    await sails.hooks.sdtdlogs.start(sails.testServer.id);
     const loggingObject = sails.hooks.sdtdlogs.getLoggingObject(sails.testServer.id);
     sandbox.spy(Player, 'update');
     sandbox.stub(sails.hooks.discordnotifications, 'sendNotification').callsFake(() => { });

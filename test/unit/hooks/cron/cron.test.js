@@ -18,15 +18,15 @@ describe('Cron hook', () => {
     hook = sails.hooks.cron;
     queue = sails.helpers.getQueueObject('cron');
     await queue.pause();
+  });
+
+  beforeEach(async () => {
     testJob = await CronJob.create({
       command: 'say "Testerino"',
       temporalValue: '0 * * * *',
       server: sails.testServer.id,
       notificationEnabled: true
     }).fetch();
-  });
-
-  beforeEach(async () => {
     // By default, no jobs run in these tests
     await queue.pause();
   });

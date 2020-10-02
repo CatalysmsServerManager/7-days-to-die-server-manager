@@ -48,7 +48,7 @@
     "start": "cross-env NODE_ENV=production run-p start:*",
     "start:app": "node app.js",
     "start:worker": "node worker.js",
-    "test": "mocha test",
+    "test": "mocha test ",
     "lint": "eslint --max-warnings 0 .",
     "dev": "nodemon",
     "debug": "node debug app.js",
@@ -95,6 +95,7 @@
     "supertest": "^4.0.2"
   },
   "mocha": {
+    "timeout": 5000,
     "reporter": "mochawesome",
     "exit": true,
     "recursive": true,
