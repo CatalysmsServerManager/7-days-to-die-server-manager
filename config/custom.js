@@ -28,7 +28,7 @@ module.exports.custom = {
   logCount: !Number.isNaN(parseInt(process.env.CSMM_LOG_COUNT)) ? parseInt(process.env.CSMM_LOG_COUNT) : 50,
 
   // Discord bot config
-  botOwners: process.env.DISCORDOWNERIDS ? process.env.DISCORDOWNERIDS.split(',') : undefined,
+  botOwners: process.env.DISCORDOWNERIDS ? process.env.DISCORDOWNERIDS.split(',') : [],
   botToken: process.env.DISCORDBOTTOKEN,
   botEmbedLink: `${process.env.CSMM_HOSTNAME}`,
   botEmbedTitle: 'CSMM',
