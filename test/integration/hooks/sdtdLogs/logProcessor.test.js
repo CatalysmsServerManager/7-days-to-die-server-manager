@@ -83,7 +83,7 @@ describe('logProcessor', function () {
       }
     });
 
-    expect(ret).to.deep.equal({
+    expect(ret).to.deep.include({
       'serverId': 1,
       'lastLogLine': 1102,
       'logs': [

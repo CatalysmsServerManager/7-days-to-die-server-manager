@@ -63,7 +63,7 @@ describe('shop', () => {
 
   describe('/api/shop/listing/buy', () => {
 
-    before(async () => {
+    beforeEach(async () => {
       await ShopListing.create({
         id: 10,
         price: 50,

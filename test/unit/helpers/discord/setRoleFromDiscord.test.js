@@ -33,7 +33,7 @@ describe('setRoleFromDiscord', () => {
   });
 
   let roles;
-  before(async () => {
+  beforeEach(async () => {
     await Role.create({
       name: 'test 1',
       level: 1,
