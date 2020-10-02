@@ -76,6 +76,7 @@ after(function (done) {
 });
 
 beforeEach(async function () {
+  const promises = [];
   for (modelName in sails.models) {
     // make sure any hooks are called
     //await new Promise((resolve, reject) => {
@@ -86,8 +87,10 @@ beforeEach(async function () {
     //    });
     //});
     // reset the db from scratch
-    await sequelize.query(`truncate ${sails.models[modelName].tableName}`, []);
+    promises.push(sequelize.query(`truncate ${sails.models[modelName].tableName}`, []));
   }
+
+  await Promise.all(promises);
   let testUser = await User.create({
     steamId: faker.random.number({ min: 0, max: 9999999999999 }),
     username: faker.internet.userName(),
@@ -126,7 +129,7 @@ beforeEach(async function () {
   sails.testServerConfig = testServerConfig;
 });
 
-before(async function() {
+before(async function () {
   genericHelper.getEnvironment = () => 'test';
   configHelper.getConfigFile = () => path.resolve(__dirname, '..', 'sequelize.config.js');
   configHelper.configFileExists = () => true;
