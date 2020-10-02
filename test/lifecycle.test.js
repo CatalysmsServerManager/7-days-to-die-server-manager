@@ -75,7 +75,7 @@ after(function (done) {
   sails.lower(done);
 });
 
-beforeEach(async function () {
+afterEach(async function () {
   const promises = [];
   for (modelName in sails.models) {
     // make sure any hooks are called
@@ -89,8 +89,10 @@ beforeEach(async function () {
     // reset the db from scratch
     promises.push(sequelize.query(`truncate ${sails.models[modelName].tableName}`, []));
   }
-
   await Promise.all(promises);
+});
+
+beforeEach(async function () {
   let testUser = await User.create({
     steamId: faker.random.number({ min: 0, max: 9999999999999 }),
     username: faker.internet.userName(),
