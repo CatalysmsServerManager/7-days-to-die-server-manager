@@ -31,7 +31,7 @@ const mockRoleChange = () => {
 
 describe('Discordbot#handleRoleUpdate', () => {
   let roles;
-  before(async () => {
+  beforeEach(async () => {
     await Player.update(sails.testPlayer.id, { role: null });
     sails.testPlayer = await Player.findOne(sails.testPlayer.id).populate('role');
     await Role.create({
@@ -66,6 +66,8 @@ describe('Discordbot#handleRoleUpdate', () => {
 
   it('Deletes a role from a CSMM user', async () => {
     const [newRole, oldRole] = mockRoleChange();
+    await Player.update(sails.testPlayer.id, { role: roles[1].id });
+    sails.testPlayer = await Player.findOne(sails.testPlayer.id).populate('role');
     expect(sails.testPlayer.role).to.eql(roles[1]);
     await handleRoleUpdate(oldRole, newRole);
     sails.testPlayer = await Player.findOne(sails.testPlayer.id).populate('role');
@@ -136,15 +138,37 @@ describe('Discordbot#handleRoleUpdate', () => {
   });
 
   it('handles correctly when a server has no role configured for discord role', async () => {
-    await Role.update({ where: { name: 'test 10' } }, { discordRole: null });
-    await Player.update({ where: { name: 'test player 2' } }, { role: null });
-    const expectedRole = await Role.findOne({
-      name: 'test 10 2',
+    const newServer = await SdtdServer.create({
+      name: 'testServer 2',
+      ip: '192.168.1.1',
+      port: '1337',
+      authName: 'blabla',
+      authToken: 'bla',
+      owner: sails.testUser.id
+    }).fetch();
+    await SdtdConfig.create({
+      server: newServer.id,
+      discordGuildId: 'testDiscordGuild'
     });
+    let newPlayer = await Player.create({
+      steamId: sails.testPlayer.steamId,
+      user: sails.testUser.id,
+      name: 'test player 2',
+      server: newServer.id
+    }).fetch();
+
+    await Role.update({ where: { name: 'test 10' } }, { discordRole: null });
+    const expectedRole = await Role.create({
+      name: 'test 10 2',
+      level: 10,
+      server: newServer.id,
+      discordRole: 'testDiscordRole'
+    }).fetch();
+
 
     const [oldRole, newRole] = mockRoleChange();
     await handleRoleUpdate(oldRole, newRole);
-    const newPlayer = await Player.findOne({ where: { name: 'test player 2' } }).populate('role');
+    newPlayer = await Player.findOne({ where: { name: 'test player 2' } }).populate('role');
     expect(newPlayer.role).to.eql(expectedRole);
   });
 
