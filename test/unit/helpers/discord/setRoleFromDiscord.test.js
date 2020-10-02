@@ -79,6 +79,9 @@ describe('setRoleFromDiscord', () => {
         'testDiscordRole1',
       ],
     });
+
+    await Player.update({ id: sails.testPlayer.id }, { role: roles[1].id });
+    sails.testPlayer = await Player.findOne(sails.testPlayer.id).populate('role');
     expect(sails.testPlayer.role).to.eql(roles[1]);
     await sails.helpers.discord.setRoleFromDiscord(sails.testPlayer.id);
     sails.testPlayer = await Player.findOne(sails.testPlayer.id).populate('role');
