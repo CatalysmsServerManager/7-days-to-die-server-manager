@@ -53,6 +53,8 @@ jobs:
       - name: Test & publish code coverage
         uses: paambaati/codeclimate-action@v2.6.0
         env:
+          DBSTRING: mysql2://root@127.0.0.1:3306/csmm
+          REDISSTRING: redis://127.0.0.1:6379
           CC_TEST_REPORTER_ID: 60858e4981c4a2b71600ef66b26dcbff099fa8f5dff907a973d548764d4b6051
           coverageLocations: |
             ./coverage/lcov.info:lcov
