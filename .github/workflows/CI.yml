@@ -49,6 +49,7 @@ jobs:
         env:
           DBSTRING: mysql2://root@127.0.0.1:3306/csmm
           REDISSTRING: redis://127.0.0.1:6379
+          CSMM_LOGLEVEL: debug
       - name: Test & publish code coverage
         uses: paambaati/codeclimate-action@v2.6.0
         env:
