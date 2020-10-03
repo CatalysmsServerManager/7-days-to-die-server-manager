@@ -1,5 +1,10 @@
 const { expect } = require('chai');
 
+describe('baddd', () => {
+  it('fails', () => {
+    expect(true).to.be.false;
+  });
+});
 
 describe('countryBan', () => {
 
