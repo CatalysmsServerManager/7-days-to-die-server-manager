@@ -45,11 +45,17 @@ jobs:
             ${{ runner.OS }}-
       - run: npm ci
       - run: npm run lint
-      - run: npm test
+      - run: npm test -- --reporter mocha-junit-reporter
         env:
           DBSTRING: mysql2://root@127.0.0.1:3306/csmm
           REDISSTRING: redis://127.0.0.1:6379
           CSMM_LOGLEVEL: debug
+      - uses: check-run-reporter/action@v2.0.0
+        # always run, otherwise you'll only see results for passing builds
+        if: ${{ always() }}
+        with:
+          token: ${{ secrets.CHECK_RUN_REPORTER_TOKEN }}
+          report: 'test-results.xml'
       - name: Test & publish code coverage
         uses: paambaati/codeclimate-action@v2.6.0
         env:
