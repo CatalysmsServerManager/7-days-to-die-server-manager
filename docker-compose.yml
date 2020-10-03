@@ -40,7 +40,15 @@ services:
     env_file: .env
     healthcheck:
       disable: true
-    entrypoint: ["npm", "run", "db:migrate"]
+    entrypoint:
+      [
+        "/bin/bash",
+        "/usr/src/app/scripts/wait-for-mysql.sh",
+        "&&",
+        "npm",
+        "run",
+        "db:migrate",
+      ]
 
   cache:
     image: redis
