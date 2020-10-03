@@ -50,12 +50,15 @@ jobs:
           DBSTRING: mysql2://root@127.0.0.1:3306/csmm
           REDISSTRING: redis://127.0.0.1:6379
           CSMM_LOGLEVEL: debug
-      - uses: check-run-reporter/action@v2.0.0
-        # always run, otherwise you'll only see results for passing builds
-        if: ${{ always() }}
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1.2
+        if: always()
         with:
-          token: ${{ secrets.CHECK_RUN_REPORTER_TOKEN }}
-          report: 'test-results.xml'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          check_name: Unit Test Results
+          files: 'test-results.xml'
+          report_individual_runs: true
+          deduplicate_classes_by_file_name: false
       - name: Test & publish code coverage
         uses: paambaati/codeclimate-action@v2.6.0
         env:
