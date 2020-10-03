@@ -1,6 +1,5 @@
 const { expect } = require('chai');
 
-
 describe('countryBan', () => {
 
   beforeEach(() => {
