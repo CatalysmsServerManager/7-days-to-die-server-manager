@@ -37,37 +37,50 @@ beforeEach(async () => {
   await clearRedis();
 });
 // Before running any tests...
-before(function (done) {
+before(async function () {
   // Increase the Mocha timeout so that Sails has enough time to lift
   this.timeout(50000);
-  sails.lift({
-    // Your sails app's configuration files will be loaded automatically,
-    // but you can also specify any other special overrides here for testing purposes.
-    hookTimeout: this.timeout() - 1000,
-    hooks: {
-      grunt: false,
+  genericHelper.getEnvironment = () => 'test';
+  configHelper.getConfigFile = () => path.resolve(__dirname, '..', 'sequelize.config.js');
+  configHelper.configFileExists = () => true;
+  configHelper.rawConfig = require(configHelper.getConfigFile());
+  pathHelper.getPath = () => path.resolve(__dirname, '..', 'migrations');
 
-      playerTracking: false,
-      discordBot: false,
-      highpingkick: false
-    },
-    log: { level: process.env.CSMM_LOGLEVEL || 'info' },
-    security: {
-      csrf: false
-    },
+  sequelize = new Sequelize(require(configHelper.getConfigFile()).test.url, { logging: false });
+  const migrator = await getMigrator('migration');
+  await ensureCurrentMetaSchema(migrator).then(() => migrator.pending());
+  await migrator.up({});
+  await new Promise((resolve, reject) => {
+    sails.lift({
+      // Your sails app's configuration files will be loaded automatically,
+      // but you can also specify any other special overrides here for testing purposes.
+      hookTimeout: this.timeout() - 1000,
+      hooks: {
+        grunt: false,
 
-    port: 1338,
-
-    datastores: {
-      default: {
-        adapter: 'sails-mysql',
-        url: process.env.TEST_DBSTRING || process.env.DBSTRING
+        playerTracking: false,
+        discordBot: false,
+        highpingkick: false
       },
-      cache: {
-        adapter: 'sails-redis',
+      log: { level: process.env.CSMM_LOGLEVEL || 'info' },
+      security: {
+        csrf: false
       },
-    }
-  }, done);
+
+      port: 1338,
+
+      datastores: {
+        default: {
+          adapter: 'sails-mysql',
+          url: process.env.TEST_DBSTRING || process.env.DBSTRING,
+          charset: 'utf8mb4'
+        },
+        cache: {
+          adapter: 'sails-redis',
+        },
+      }
+    }, (err) => err ? reject(err): resolve());
+  });
 });
 
 // After all tests have finished...
@@ -129,19 +142,6 @@ beforeEach(async function () {
   sails.testServer = testServer;
   sails.testPlayer = testPlayer;
   sails.testServerConfig = testServerConfig;
-});
-
-before(async function () {
-  genericHelper.getEnvironment = () => 'test';
-  configHelper.getConfigFile = () => path.resolve(__dirname, '..', 'sequelize.config.js');
-  configHelper.configFileExists = () => true;
-  configHelper.rawConfig = require(configHelper.getConfigFile());
-  pathHelper.getPath = () => path.resolve(__dirname, '..', 'migrations');
-
-  sequelize = new Sequelize(require(configHelper.getConfigFile()).test.url, { logging: false });
-  const migrator = await getMigrator('migration');
-  await ensureCurrentMetaSchema(migrator).then(() => migrator.pending());
-  await migrator.up({});
 });
 
 function clearRedis() {
