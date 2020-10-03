@@ -40,15 +40,7 @@ services:
     env_file: .env
     healthcheck:
       disable: true
-    entrypoint:
-      [
-        "/bin/bash",
-        "/usr/src/app/scripts/wait-for-mysql.sh",
-        "&&",
-        "npm",
-        "run",
-        "db:migrate",
-      ]
+    entrypoint: ["npx", "run-s", "wait-for:db", "db:migrate"]
 
   cache:
     image: redis
@@ -56,6 +48,7 @@ services:
       - ./redis-data:/data
     command: ["redis-server", "--appendonly", "yes"]
     restart: unless-stopped
+
   db:
     image: mariadb
     volumes:
