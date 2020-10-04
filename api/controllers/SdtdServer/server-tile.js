@@ -38,9 +38,6 @@ module.exports = {
     unknownError: {
       responseType: 'badRequest'
     },
-    redirectTemporary: {
-      responseType: 'redirectTemporary'
-    }
   },
 
   fn: async function (inputs, exits) {
