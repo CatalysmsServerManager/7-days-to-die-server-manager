@@ -38,16 +38,25 @@ module.exports = {
     unknownError: {
       responseType: 'badRequest'
     },
+    redirectTemporary: {
+      responseType: 'redirectTemporary'
+    }
   },
 
   fn: async function (inputs, exits) {
-    let server = await SdtdServer.findOne(inputs.serverId);
+    const server = await SdtdServer.findOne(inputs.serverId).populate('config');
+    // is there a cheap way to call api/helpers/user/get-servers-with-permission.js
+
     if (!server) {
       return exits.notFound();
     }
 
     const baseUrl = sevenDaysAPI.getBaseUrl(SdtdServer.getAPIConfig(server));
     const url = `${baseUrl}/map/${inputs.z}/${inputs.x}/${inputs.y}.png?adminuser=${server.authName}&admintoken=${server.authToken}`;
+    if (!server.config[0].mapProxy) {
+      this.res.redirect(url);
+      return;
+    }
 
     const reqHeaders = {...this.req.headers};
     delete reqHeaders.host;

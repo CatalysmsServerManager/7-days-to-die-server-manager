@@ -239,4 +239,20 @@
       <%- include('./partials/settings/customHooks', {server: server, config: config, user: user}) %>
     </div>
   </div>
+
+  <!-- experiments settings  -->
+
+  <div class="card">
+    <div class="card-header" id="settings-heading-experiments">
+      <h5 class="mb-0">
+        <button class="btn btn-link" data-toggle="collapse" data-target="#settings-collapse-experiments">
+          <i class="fas fa-flask fa-lg"></i> Experiments
+        </button>
+      </h5>
+    </div>
+
+    <div id="settings-collapse-experiments" class="collapse">
+      <%- include('./partials/settings/experiments', {server: server, config: config, user: user}) %>
+    </div>
+  </div>
 </div>

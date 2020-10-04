@@ -40,6 +40,7 @@ let policyObject = {
     'get-players-datatable': ['isLoggedIn', 'roles/managePlayers'],
     'server-info-view': ['isLoggedIn', 'roles/hasAccess'],
     'check-donator': 'isLoggedIn',
+    'server-tile': ['isLoggedIn'],
   },
 
   gblController: {

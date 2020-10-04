@@ -301,6 +301,7 @@ module.exports.routes = {
     'SdtdServerController.update-connection-info',
   'post /api/sdtdserver/toggleLogging': 'SdtdServerController.logging-toggle',
   'post /api/sdtdserver/inactive': 'SdtdServerController.set-active-status',
+  'post /api/sdtdserver/settings': 'SdtdServerController.set-settings',
 
   // Cron
 
