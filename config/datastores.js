@@ -49,7 +49,8 @@ let datastores = {
      *                                                                          *
      ***************************************************************************/
     adapter: 'sails-disk',
-    inMemoryOnly: true
+    inMemoryOnly: true,
+    charset: 'utf8mb4'
   },
   cache: {
     adapter: 'sails-disk',
@@ -61,6 +62,7 @@ module.exports.datastores = datastores;
 if (process.env.DBSTRING) {
   datastores.default = {
     adapter: 'sails-mysql',
+    charset: 'utf8mb4',
     url: process.env.DBSTRING
   };
 }
