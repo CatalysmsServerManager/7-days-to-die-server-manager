@@ -13,8 +13,8 @@ class HighPingCount {
    * @param {Function} done
    */
   initialize(done) {
-    this.sails.on('hook:orm:loaded', async () => {
-      this.sails.log.info('Initializing custom hook (`highPingKick`)');
+    sails.on('hook:orm:loaded', async () => {
+      sails.log.info('Initializing custom hook (`highPingKick`)');
 
       let enabledConfigs = await SdtdConfig.find({
         pingKickEnabled: true
@@ -32,10 +32,10 @@ class HighPingCount {
 
     let server = await SdtdServer.findOne(serverId);
 
-    let loggingObject = this.sails.hooks.sdtdlogs.getLoggingObject(serverId);
+    let loggingObject = sails.hooks.sdtdlogs.getLoggingObject(serverId);
 
     if (_.isUndefined(loggingObject)) {
-      this.sails.log.warn(`Tried to start ping kicker for a server without a loggingObject - ${server.name}`, {
+      sails.log.warn(`Tried to start ping kicker for a server without a loggingObject - ${server.name}`, {
         server: serverId
       });
       return;
@@ -45,7 +45,7 @@ class HighPingCount {
   }
 
   async stop(serverId) {
-    let loggingObject = this.sails.hooks.sdtdlogs.getLoggingObject(serverId);
+    let loggingObject = sails.hooks.sdtdlogs.getLoggingObject(serverId);
     loggingObject.removeListener('memUpdate', this.handlePingCheck);
   }
 
