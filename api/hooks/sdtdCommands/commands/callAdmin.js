@@ -16,18 +16,21 @@ class callAdmin extends SdtdCommand {
   }
 
   async run(chatMessage, player, server, args) {
-    if (args === '') { // TODO: This is broken
+
+    const ticketMessage = args.join(' ').trim();
+
+    if (ticketMessage === '') {
       return chatMessage.reply('callAdminMissingReason');
     }
 
-    if (args.join(' ').length > 100) {
+    if (ticketMessage.length > 100) {
       return chatMessage.reply('callAdminTooLong');
     }
 
     let ticket = await sails.helpers.sdtd.createTicket(
       server.id,
       player.id,
-      args.join(' ')
+      ticketMessage
     );
 
     return chatMessage.reply('callAdminSuccess', {
