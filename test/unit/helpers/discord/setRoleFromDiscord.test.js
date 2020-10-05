@@ -30,11 +30,10 @@ describe('setRoleFromDiscord', () => {
       expect(shouldSetRole({ level: 5 }, { level: -Infinity })).to.be.false;
       expect(shouldSetRole({ level: 5 }, { level: NaN })).to.be.false;
     });
-
   });
 
   let roles;
-  before(async () => {
+  beforeEach(async () => {
     await Role.create({
       name: 'test 1',
       level: 1,
@@ -80,6 +79,9 @@ describe('setRoleFromDiscord', () => {
         'testDiscordRole1',
       ],
     });
+
+    await Player.update({ id: sails.testPlayer.id }, { role: roles[1].id });
+    sails.testPlayer = await Player.findOne(sails.testPlayer.id).populate('role');
     expect(sails.testPlayer.role).to.eql(roles[1]);
     await sails.helpers.discord.setRoleFromDiscord(sails.testPlayer.id);
     sails.testPlayer = await Player.findOne(sails.testPlayer.id).populate('role');
@@ -93,5 +95,27 @@ describe('setRoleFromDiscord', () => {
     await sails.helpers.discord.setRoleFromDiscord(sails.testPlayer.id);
     sails.testPlayer = await Player.findOne(sails.testPlayer.id).populate('role');
     expect(sails.testPlayer.role).to.eql(roles[0]);
+  });
+
+  /**
+   * When a victim server does not have the discord roles sync configured
+   * The discord role check will return undefined
+   * and a player authenticates via Discord on CSMM (and kicks off the role sync)
+   * This resulted in the suspect getting admin rights (highest role) on the victim server
+   */
+  it('Does not give a new role to a player on a different server', async () => {
+    sandbox.stub(sails.helpers.discord, 'discordrequest').resolves({
+      roles: undefined,
+    });
+    await Player.update(sails.testPlayer.id, { role: null });
+    sails.testPlayer = await Player.findOne(sails.testPlayer.id).populate('role');
+    expect(sails.testPlayer.role).to.eql(null);
+
+
+    await sails.helpers.discord.setRoleFromDiscord(sails.testPlayer.id);
+
+
+    sails.testPlayer = await Player.findOne(sails.testPlayer.id).populate('role');
+    expect(sails.testPlayer.role).to.eql(null);
   });
 });

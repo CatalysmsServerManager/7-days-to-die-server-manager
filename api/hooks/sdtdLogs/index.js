@@ -31,13 +31,12 @@ module.exports = function sdtdLogs(sails) {
           // TODO: Once we scale this to multiple processes, this should happen differently
           await sails.helpers.getQueueObject('logs').empty();
           let enabledServers = await SdtdConfig.find({
-            loggingEnabled: true,
             inactive: false,
           });
           for (let config of enabledServers) {
             await this.start(config.server);
           }
-          sails.log.info(`HOOK: Sdtdlogs - Initialized ${loggingInfoMap.size} logging instances`);
+          sails.log.debug(`HOOK: Sdtdlogs - Initialized ${loggingInfoMap.size} logging instances`);
           return cb();
         } catch (error) {
           sails.log.error(`HOOKS - sdtdLogs`, error);
@@ -163,6 +162,7 @@ module.exports = function sdtdLogs(sails) {
     });
 
     eventEmitter.on('playerConnected', async function (connectedMsg) {
+
       connectedMsg.server = _.omit(server, 'authName', 'authToken');
       await sails.hooks.discordnotifications.sendNotification({
         serverId: server.id,

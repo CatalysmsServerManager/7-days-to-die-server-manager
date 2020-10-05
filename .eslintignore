@@ -42,3 +42,6 @@ coverage
 assets/images/sdtdIcons
 db-data/
 test/output
+
+models
+migrations

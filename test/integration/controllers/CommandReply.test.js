@@ -59,7 +59,7 @@ describe('CommandReply', function () {
         'createdAt': 1588296005000,
         'id': 1,
         'reply': 'You have not voted yet! You can vote at https://vote.gov/ (not really)',
-        'server': 1,
+        'server': sails.testServer.id,
         'type': 'notVoted',
         'updatedAt': 1588296005000,
       }
@@ -76,7 +76,7 @@ describe('CommandReply', function () {
         'createdAt': 1588296005000,
         'id': 1,
         'reply': 'You have not voted yet! You can vote at https://vote.gov/ (not really)',
-        'server': 1,
+        'server': sails.testServer.id,
         'type': 'notVoted',
         'updatedAt': 1588296005000,
       }]
@@ -92,7 +92,7 @@ describe('CommandReply', function () {
         'createdAt': 1588296005000,
         'id': 1,
         'reply': 'You have not voted yet! You can vote at https://vote.gov/ (not really)',
-        'server': 1,
+        'server': sails.testServer.id,
         'type': 'notVoted',
         'updatedAt': 1588296005000,
       }]
@@ -112,14 +112,15 @@ describe('CommandReply', function () {
     ).to.deep.equal({
       ok: true,
       statusCode: 200,
-      body: [{
+      body: {
+        created: true,
         'createdAt': 1588296005000,
         'id': 1,
         'reply': 'You have not voted yet! You can vote at https://vote.gov/ (not really)',
-        'server': 1,
+        'server': sails.testServer.id,
         'type': 'notVoted',
         'updatedAt': 1588296005000,
-      }]
+      }
     });
 
     expect(
@@ -133,7 +134,7 @@ describe('CommandReply', function () {
         'createdAt': 1588296005000,
         'id': 1,
         'reply': 'You have not voted yet! You can vote at https://vote.gov/ (not really)',
-        'server': 1,
+        'server': sails.testServer.id,
         'type': 'notVoted',
         'updatedAt': 1588296005000,
       }]

@@ -1,6 +1,6 @@
 {
   "name": "csmm",
-  "version": "1.15.1",
+  "version": "1.17.0",
   "description": "A 7dtd server manager made with Sails.js",
   "keywords": [],
   "dependencies": {
@@ -27,7 +27,9 @@
     "minimist": "^1.2.3",
     "moment": "^2.27.0",
     "morgan": "^1.10.0",
+    "mysql2": "^2.1.0",
     "npm-run-all": "^4.1.5",
+    "p-wait-for": "^3.1.0",
     "passport": "^0.4.1",
     "passport-discord": "^0.1.4",
     "passport-steam": "^1.0.14",
@@ -41,6 +43,8 @@
     "sails-hook-sockets": "^1.5.5",
     "sails-mysql": "^1.0.1",
     "sails-redis": "^1.0.0",
+    "sequelize": "^6.3.5",
+    "sequelize-cli": "^6.2.0",
     "validator": "^10.9.0",
     "winston": "^2.4.3"
   },
@@ -48,15 +52,17 @@
     "start": "cross-env NODE_ENV=production run-p start:*",
     "start:app": "node app.js",
     "start:worker": "node worker.js",
-    "db:migrate": "node create_tables.js",
-    "test": "mocha test",
-    "build-docs": "./node_modules/.bin/jsdoc -c ./.jsdoc.json",
+    "wait-for:db": "node ./scripts/wait-for-db.js",
+    "test": "mocha test ",
     "lint": "eslint --max-warnings 0 .",
     "dev": "nodemon",
     "debug": "node debug app.js",
     "cover": "nyc npm run test",
     "itemIcons:update": "bash ./scripts/itemIconsUpdate.sh",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags",
+    "sequelize": "sequelize-cli",
+    "db:migrate": "npm run sequelize -- db:migrate",
+    "db:migrate:undo": "npm run sequelize -- db:migrate:undo"
   },
   "main": "app.js",
   "repository": {
@@ -91,6 +97,7 @@
     "supertest": "^4.0.2"
   },
   "mocha": {
+    "timeout": 5000,
     "reporter": "mochawesome",
     "exit": true,
     "recursive": true,
@@ -132,7 +139,8 @@
       "tasks/**/*",
       ".tmp/**/*",
       "views/**/*",
-      "test/**/*"
+      "test/**/*",
+      "migrations/**/*"
     ],
     "cache": true,
     "all": true,

@@ -17,7 +17,7 @@ jobs:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
           MYSQL_DATABASE: csmm
         ports:
-          - 3306
+          - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
       redis:
         image: redis
@@ -49,9 +49,12 @@ jobs:
         env:
           DBSTRING: mysql2://root@127.0.0.1:3306/csmm
           REDISSTRING: redis://127.0.0.1:6379
+          CSMM_LOGLEVEL: debug
       - name: Test & publish code coverage
         uses: paambaati/codeclimate-action@v2.6.0
         env:
+          DBSTRING: mysql2://root@127.0.0.1:3306/csmm
+          REDISSTRING: redis://127.0.0.1:6379
           CC_TEST_REPORTER_ID: 60858e4981c4a2b71600ef66b26dcbff099fa8f5dff907a973d548764d4b6051
           coverageLocations: |
             ./coverage/lcov.info:lcov
@@ -61,6 +64,7 @@ jobs:
         with:
           file: ./coverage/lcov.info
       - uses: actions/upload-artifact@v2
+        if: always()
         with:
           name: test-report
           path: ./coverage/

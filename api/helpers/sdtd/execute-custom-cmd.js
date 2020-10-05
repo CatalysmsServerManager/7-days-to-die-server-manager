@@ -54,11 +54,11 @@ module.exports = {
           );
         }
       } catch (error) {
+        sails.log.error(error);
         commandsExecuted.push({
           command,
-          parameters:
-            'Filling in variables - please check your variable syntax',
-          result: error.toString()
+          parameters: '',
+          result: 'Error filling in variables - please check your variable syntax'
         });
       }
 
@@ -130,16 +130,11 @@ module.exports = {
               break;
           }
         } catch (error) {
-          let result;
-          if (_.isArray(error.problems)) {
-            result = error.problems.join(' ');
-          } else {
-            result = error.toString();
-          }
+          sails.log.error(error);
           commandsExecuted.push({
             command,
             parameters,
-            result
+            result: 'An internal error occurred'
           });
         }
 
@@ -176,8 +171,9 @@ async function executeCommand(server, command) {
     );
     return result;
   } catch (error) {
+    sails.log.error(error);
     return {
-      result: error.toString()
+      result: 'An error occurred executing the API request to the 7D2D server'
     };
   }
 }

@@ -176,6 +176,8 @@ module.exports = {
         );
       }
 
+      await sails.hooks.sdtdlogs.start(addedServer.id);
+
       return exits.success(errorResponse);
     } else {
       return exits.error(errorResponse);

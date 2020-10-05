@@ -10,17 +10,10 @@ services:
       - cache
       - db
     environment:
-      NODE_ENV: ${NODE_ENV:-development}
-      REDISSTRING: "redis://cache:6379"
-      DBSTRING: "mysql2://csmm:mysecretpasswordissosecure@db:3306/csmm"
-      CSMM_HOSTNAME: "http://localhost:30005"
-      API_KEY_STEAM: ""
-      DISCORDBOTTOKEN: ""
-      DISCORDCLIENTSECRET: ""
-      DISCORDCLIENTID: ""
-      CSMM_ADMINS: ""
+      NODE_ENV: "production"
+    env_file: .env
     ports:
-      - 127.0.0.1:30005:1337
+      - 127.0.0.1:8000:1337
     restart: unless-stopped
     entrypoint: ["npm", "run", "start:app"]
   csmm-worker:
@@ -30,15 +23,24 @@ services:
       - cache
       - db
     environment:
-      NODE_ENV: ${NODE_ENV:-development}
-      REDISSTRING: "redis://cache:6379"
-      DBSTRING: "mysql2://csmm:mysecretpasswordissosecure@db:3306/csmm"
-    ports:
-      - 127.0.0.1:30005:1337
+      NODE_ENV: "production"
+    env_file: .env
     healthcheck:
       disable: true
     restart: unless-stopped
     entrypoint: ["npm", "run", "start:worker"]
+
+  csmm-migrations:
+    build: .
+    #image: catalysm/csmm
+    depends_on:
+      - db
+    environment:
+      NODE_ENV: "production"
+    env_file: .env
+    healthcheck:
+      disable: true
+    entrypoint: ["npx", "run-s", "wait-for:db", "db:migrate"]
 
   cache:
     image: redis
@@ -46,13 +48,14 @@ services:
       - ./redis-data:/data
     command: ["redis-server", "--appendonly", "yes"]
     restart: unless-stopped
+
   db:
     image: mariadb
     volumes:
       - ./db-data:/var/lib/mysql
-    environment:
-      MYSQL_DATABASE: "csmm"
-      MYSQL_USER: "csmm"
-      MYSQL_PASSWORD: "mysecretpasswordissosecure"
-      MYSQL_RANDOM_ROOT_PASSWORD: "true"
+    env_file: .env
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10

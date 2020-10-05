@@ -1,3 +1,4 @@
+const path = require('path');
 const sails = require('sails');
 const faker = require('faker');
 const MockDate = require('mockdate');
@@ -5,6 +6,12 @@ const sinon = require('sinon');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
 const chaiAsPromised = require('chai-as-promised');
+const { Sequelize } = require('sequelize');
+const { config: configHelper, path: pathHelper, generic: genericHelper } = require('sequelize-cli/lib/helpers/index');
+const {
+  getMigrator,
+  ensureCurrentMetaSchema,
+} = require('sequelize-cli/lib/core/migrator');
 
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
@@ -14,6 +21,7 @@ process.env.NODE_ENV = 'test';
 process.env.CSMM_DONATOR_TIER = 'patron';
 delete process.env.PORT;
 
+let sequelize = undefined;
 
 beforeEach(function () {
   MockDate.set('2020-05-01T01:20:05+0000');
@@ -29,92 +37,50 @@ beforeEach(async () => {
   await clearRedis();
 });
 // Before running any tests...
-before(function (done) {
-
-  async function onComplete(err) {
-    if (err) {
-      throw err;
-    }
-
-    let testUser = await User.create({
-      steamId: faker.random.number({ min: 0, max: 9999999999999 }),
-      username: faker.internet.userName(),
-      discordId: 'testUserDiscordId'
-    }).fetch();
-
-    let testServer = await SdtdServer.create({
-      name: faker.company.companyName(),
-      ip: 'localhost',
-      webPort: '8082',
-      authName: faker.random.alphaNumeric(20),
-      authToken: faker.random.alphaNumeric(20),
-      owner: testUser.id
-    }).fetch();
-
-    let testPlayer = await Player.create({
-      steamId: testUser.steamId,
-      server: testServer.id,
-      user: testUser.id,
-      name: faker.internet.userName(),
-    }).fetch();
-
-    let testServerConfig = await SdtdConfig.create({
-      server: testServer.id,
-      inactive: true,
-      countryBanConfig: {
-        bannedCountries: ['BE'], whiteListedSteamIds: [],
-      },
-      discordGuildId: 'testDiscordGuild'
-
-    }).fetch();
-
-    sails.testUser = testUser;
-    sails.testServer = testServer;
-    sails.testPlayer = testPlayer;
-    sails.testServerConfig = testServerConfig;
-    sails.testServer.config = testServerConfig;
-
-    sails.testServer.players = [testPlayer];
-  }
-
+before(async function () {
   // Increase the Mocha timeout so that Sails has enough time to lift
   this.timeout(50000);
-  sails.lift({
-    // Your sails app's configuration files will be loaded automatically,
-    // but you can also specify any other special overrides here for testing purposes.
-    hookTimeout: this.timeout() - 1000,
-    hooks: {
-      grunt: false,
+  genericHelper.getEnvironment = () => 'test';
+  configHelper.getConfigFile = () => path.resolve(__dirname, '..', 'sequelize.config.js');
+  configHelper.configFileExists = () => true;
+  configHelper.rawConfig = require(configHelper.getConfigFile());
+  pathHelper.getPath = () => path.resolve(__dirname, '..', 'migrations');
 
-      playerTracking: false,
-      discordBot: false,
-      highpingkick: false
-    },
-    log: { level: process.env.CSMM_LOGLEVEL || 'info' },
-    security: {
-      csrf: false
-    },
+  sequelize = new Sequelize(require(configHelper.getConfigFile()).test.url, { logging: false });
+  const migrator = await getMigrator('migration');
+  await ensureCurrentMetaSchema(migrator).then(() => migrator.pending());
+  await migrator.up({});
+  await new Promise((resolve, reject) => {
+    sails.lift({
+      // Your sails app's configuration files will be loaded automatically,
+      // but you can also specify any other special overrides here for testing purposes.
+      hookTimeout: this.timeout() - 1000,
+      hooks: {
+        grunt: false,
 
-    port: 1338,
-
-    datastores: {
-      default: {
-        adapter: 'sails-disk',
-        inMemoryOnly: true
+        playerTracking: false,
+        discordBot: false,
+        highpingkick: false
       },
-      cache: {
-        adapter: 'sails-redis',
+      log: { level: process.env.CSMM_LOGLEVEL || 'info' },
+      security: {
+        csrf: false
       },
-      testDB: {
-        adapter: 'sails-disk',
-        inMemoryOnly: true
+
+      port: 1338,
+
+      datastores: {
+        default: {
+          adapter: 'sails-mysql',
+          url: process.env.TEST_DBSTRING || process.env.DBSTRING,
+          charset: 'utf8mb4'
+        },
+        cache: {
+          adapter: 'sails-redis',
+        },
       }
-    },
-    models: {
-      datastore: 'testDB',
-    },
-
-  }, (err) => { onComplete(err).then(done, done); });
+    }, (err) => err ? reject(err): resolve());
+  });
 });
 
 // After all tests have finished...
@@ -122,19 +88,63 @@ after(function (done) {
   sails.lower(done);
 });
 
-beforeEach(function (done) {
-  destroyFuncs = [];
+afterEach(async function () {
+  const promises = [];
   for (modelName in sails.models) {
-    destroyFuncs.push(function (callback) {
-      sails.models[modelName].destroy({})
-        .exec(function (err) {
-          callback(null, err);
-        });
-    });
+    // make sure any hooks are called
+    //await new Promise((resolve, reject) => {
+    //  sails.models[modelName].destroy({})
+    //    .exec(function (err) {
+    //      if (err) { return reject(err); }
+    //      return resolve();
+    //    });
+    //});
+    // reset the db from scratch
+    promises.push(sequelize.query(`truncate ${sails.models[modelName].tableName}`, []));
   }
-  async.parallel(destroyFuncs, function (err) {
-    done(err);
-  });
+  await Promise.all(promises);
+});
+
+beforeEach(async function () {
+  let testUser = await User.create({
+    steamId: faker.random.number({ min: 0, max: 9999999999999 }),
+    username: faker.internet.userName(),
+    discordId: 'testUserDiscordId'
+  }).meta({ skipAllLifecycleCallbacks: true }).fetch();
+
+  let testServer = await SdtdServer.create({
+    name: faker.company.companyName(),
+    ip: 'localhost',
+    webPort: '8082',
+    authName: faker.random.alphaNumeric(20),
+    authToken: faker.random.alphaNumeric(20),
+    owner: testUser.id
+  }).meta({ skipAllLifecycleCallbacks: true }).fetch();
+
+  let testPlayer = await Player.create({
+    steamId: testUser.steamId,
+    server: testServer.id,
+    user: testUser.id,
+    name: faker.internet.userName(),
+  }).meta({ skipAllLifecycleCallbacks: true }).fetch();
+
+  let testServerConfig = await SdtdConfig.create({
+    server: testServer.id,
+    inactive: false,
+    countryBanConfig: {
+      bannedCountries: ['BE'], whiteListedSteamIds: [],
+    },
+    discordGuildId: 'testDiscordGuild'
+
+  }).meta({ skipAllLifecycleCallbacks: true }).fetch();
+
+  sails.testUser = testUser;
+  sails.testServer = testServer;
+  sails.testPlayer = testPlayer;
+  sails.testServerConfig = testServerConfig;
+  sails.testServer.config = testServerConfig;
+
+  sails.testServer.players = [testPlayer];
 });
 
 function clearRedis() {
