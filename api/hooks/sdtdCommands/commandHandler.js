@@ -2,6 +2,7 @@ const sevenDays = require('machinepack-7daystodiewebapi');
 const CustomCommand = require('./customCommand.js');
 const he = require('he');
 const parseArgs = require('./parseArgs');
+const Sentry = require('@sentry/node');
 
 /**
  * @memberof module:SdtdCommandsHook
@@ -132,7 +133,8 @@ class CommandHandler {
             return;
           } catch (error) {
             sails.log.error(error);
-            chatMessage.reply(`error`);
+            chatMessage.reply(`error`, { error: 'An unknown error occured' });
+            Sentry.captureException(err);
             return;
           }
         }

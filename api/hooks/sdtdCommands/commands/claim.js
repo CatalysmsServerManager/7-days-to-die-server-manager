@@ -57,30 +57,25 @@ class Claim extends SdtdCommand {
         cmdToExec = `give ${player.entityId} "${item.name}" ${item.amount} ${item.quality ? item.quality : ''}`;
       }
 
-      try {
-        let response = await SdtdApi.executeConsoleCommand({
-          ip: server.ip,
-          port: server.webPort,
-          adminUser: server.authName,
-          adminToken: server.authToken
-        }, cmdToExec);
+      let response = await SdtdApi.executeConsoleCommand({
+        ip: server.ip,
+        port: server.webPort,
+        adminUser: server.authName,
+        adminToken: server.authToken
+      }, cmdToExec);
 
-        if (response.result.includes('ERR:')) {
-          return chatMessage.reply('error');
-        }
-
-        chatMessage.reply('claimItemGiven', {
-          item: item
-        });
-        await PlayerClaimItem.update({
-          id: item.id
-        }, {
-          claimed: true
-        });
-      } catch (error) {
-        chatMessage.reply('error');
+      if (response.result.includes('ERR:')) {
+        return chatMessage.reply('error', { error: 'Error while executing give command' });
       }
 
+      chatMessage.reply('claimItemGiven', {
+        item: item
+      });
+      await PlayerClaimItem.update({
+        id: item.id
+      }, {
+        claimed: true
+      });
     });
   }
 }
