@@ -17,6 +17,10 @@ class callAdmin extends SdtdCommand {
 
   async run(chatMessage, player, server, args) {
 
+    if (!args || !args.length) {
+      return chatMessage.reply('callAdminMissingReason');
+    }
+
     const ticketMessage = args.join(' ').trim();
 
     if (ticketMessage === '') {

@@ -21,9 +21,16 @@ describe('COMMAND callAdmin', () => {
 
   it('Errors correctly when no message provided', async () => {
     await command.run(chatMessage, sails.testPlayer, sails.testServer, []);
-
     expect(spy).to.have.been.calledOnceWith('callAdminMissingReason');
+
+    await command.run(chatMessage, sails.testPlayer, sails.testServer);
+    expect(spy).to.have.been.calledTwice;
+
+    await command.run(chatMessage, sails.testPlayer, sails.testServer, [' ', '', '   ']);
+    expect(spy).to.have.been.calledThrice;
+
     expect(sails.helpers.sdtd.createTicket).to.not.have.been.called;
+    expect(spy).to.have.always.been.calledWith('callAdminMissingReason');
   });
 
   it('Errors correctly when message too long', async () => {
