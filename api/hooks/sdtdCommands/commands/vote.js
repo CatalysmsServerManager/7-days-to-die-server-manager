@@ -22,7 +22,7 @@ class Vote extends SdtdCommand {
     const apiKey = server.config.votingApiKey;
 
     if (_.isEmpty(apiKey)) {
-      return chatMessage.reply('error');
+      return chatMessage.reply('error', { error: 'No API key configured' });
     }
 
     let voteCheck = await this.checkIfUserVoted(player.steamId, apiKey);
@@ -37,7 +37,7 @@ class Vote extends SdtdCommand {
         return chatMessage.reply('alreadyClaimed');
       default:
         sails.log.error(`Unexpected response after checking vote status: ${voteCheck}`);
-        return chatMessage.reply('error');
+        return chatMessage.reply('error', { error: 'Unexpected response after checking vote status' });
     }
 
   }

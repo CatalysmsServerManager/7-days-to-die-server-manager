@@ -16,31 +16,23 @@ class callAdmin extends SdtdCommand {
   }
 
   async run(chatMessage, player, server, args) {
-
-    try {
-
-      if (args === '') {
-        return chatMessage.reply('callAdminMissingReason');
-      }
-
-      if (args.join(' ').length > 100) {
-        return chatMessage.reply('callAdminTooLong');
-      }
-
-      let ticket = await sails.helpers.sdtd.createTicket(
-        server.id,
-        player.id,
-        args.join(' ')
-      );
-
-      return chatMessage.reply('callAdminSuccess', {
-        ticket: ticket
-      });
-
-    } catch (error) {
-      sails.log.error(`HOOK - SdtdCommands:callAdmin - ${error}`);
-      return chatMessage.reply('error');
+    if (args === '') { // TODO: This is broken
+      return chatMessage.reply('callAdminMissingReason');
     }
+
+    if (args.join(' ').length > 100) {
+      return chatMessage.reply('callAdminTooLong');
+    }
+
+    let ticket = await sails.helpers.sdtd.createTicket(
+      server.id,
+      player.id,
+      args.join(' ')
+    );
+
+    return chatMessage.reply('callAdminSuccess', {
+      ticket: ticket
+    });
   }
 }
 
