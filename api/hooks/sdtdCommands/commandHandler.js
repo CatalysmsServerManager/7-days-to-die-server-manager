@@ -134,7 +134,7 @@ class CommandHandler {
           } catch (error) {
             sails.log.error(error);
             chatMessage.reply(`error`, { error: 'An unknown error occured' });
-            Sentry.captureMessage(error);
+            Sentry.captureException(err);
             return;
           }
         }
