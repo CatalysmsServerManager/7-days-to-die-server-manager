@@ -22,6 +22,7 @@ const configOverrides = {
     discordnotifications: false,
     economy: false,
     historicalinfo: false,
+    highpingkick: false,
     playertracking: false,
     sdtdcommands: false,
     sdtdlogs: false,
