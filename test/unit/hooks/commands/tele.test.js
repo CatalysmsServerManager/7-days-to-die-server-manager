@@ -4,18 +4,14 @@ const { expect } = require('chai');
 
 describe('COMMAND tele', () => {
   let command;
-  let spy;
+  let spy = sinon.spy();
   let chatMessage;
 
-  before(() => {
+  beforeEach(async () => {
     command = new Command(sails.testServer.id);
-    spy = sinon.spy();
     chatMessage = { reply: spy };
-
     sails.testServer.config.playerTeleportDelay = 0;
-  });
-
-  beforeEach(() => {
+    sails.testServer.config.playerTeleportTimeout = 0;
     spy.resetHistory();
     sandbox.stub(sails.helpers.sdtdApi, 'executeConsoleCommand').returns(Promise.resolve(
       {}
@@ -29,6 +25,7 @@ describe('COMMAND tele', () => {
     expect(sails.helpers.sdtdApi.executeConsoleCommand).to.not.have.been.called;
 
   });
+
   it('Tells players they are on cooldown', async () => {
     sails.testPlayer.lastTeleportTime = Date.now();
     sails.testServer.config.playerTeleportTimeout = 10000;
@@ -39,9 +36,9 @@ describe('COMMAND tele', () => {
 
     expect(spy).to.have.been.calledOnceWith('teleCooldown');
     expect(sails.helpers.sdtdApi.executeConsoleCommand).to.not.have.been.called;
-
-    sails.testServer.config.playerTeleportTimeout = 0;
   });
+
+
   it('Tells players they don\'t have enough money', async () => {
     sails.testServer.config.costToTeleport = 5;
     sails.testServer.config.economyEnabled = true;
@@ -80,13 +77,26 @@ describe('COMMAND tele', () => {
   });
 
   it('Delays a teleport if configured', async () => {
-    // TODO: how do you bend time in a test?
+    sails.testPlayer.lastTeleportTime = 1;
+    const clock = sinon.useFakeTimers(Date.now());
+    sails.testServer.config.playerTeleportDelay = 1;
+    sandbox.stub(PlayerTeleport, 'find').resolves([{ name: 'teleportName', timesUsed: 5 }]);
+
+    command.run(chatMessage, sails.testPlayer, sails.testServer, ['teleportName']);
+    expect(sails.helpers.sdtdApi.executeConsoleCommand).to.not.have.been.called;
+    await clock.runAllAsync();
+
+    expect(spy).to.have.been.calledWith('teleDelay');
+    expect(spy).to.have.been.calledWith('teleSuccess');
+    expect(spy).to.have.been.calledTwice;
+    expect(sails.helpers.sdtdApi.executeConsoleCommand).to.have.been.called;
   });
 
 
 
   // https://github.com/CatalysmsServerManager/7-days-to-die-server-manager/issues/291
-  it('Defaults to a players own teles instead of public ones', async () => { });
-
+  it('Defaults to a players own teles instead of public ones', async () => {
+    // TODO
+  });
 
 });
