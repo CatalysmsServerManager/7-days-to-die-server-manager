@@ -99,14 +99,11 @@ describe('COMMAND tele', () => {
       .onCall(0)
       .resolves([{ name: 'teleportName', timesUsed: 1337, publicEnabled: true }])
       .onCall(1)
-      .resolves([{ name: 'teleportName', timesUsed: 5 }]);
+      .resolves([{ name: 'teleportName', timesUsed: 5, publicEnabled: false }]);
 
     await command.run(chatMessage, sails.testPlayer, sails.testServer, ['teleportName']);
 
-    // timesUsed is different for the two teles,
-    // we use this to differentiate because
-    // publicEnabled is not passed to the final result
-    expect(spy).to.have.been.calledOnceWith('teleSuccess', { teleport: { name: 'teleportName', timesUsed: 5 } });
+    expect(spy).to.have.been.calledOnceWith('teleSuccess', { teleport: { name: 'teleportName', timesUsed: 5, publicEnabled: false } });
     expect(sails.helpers.sdtdApi.executeConsoleCommand).to.have.been.called;
   });
 
