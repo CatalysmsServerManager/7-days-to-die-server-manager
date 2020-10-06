@@ -1,7 +1,42 @@
 const {HighPingCount} = require('../../../../api/hooks/highPingKick/index.js');
+const highPingCountHook = require('../../../../api/hooks/highPingKick/index.js');
 const { expect } = require('chai');
 
+
+function MockLoggingObject() {
+  return {
+    on: sandbox.stub(),
+    emit: sandbox.stub(),
+    removeListener: sandbox.stub(),
+  };
+}
 describe('highPingCount', function () {
+  let mockingObject;
+  beforeEach(function () {
+    mockingObject = new MockLoggingObject();
+    sandbox.stub(sails.hooks.sdtdlogs, 'getLoggingObject').returns(mockingObject);
+  });
+
+  describe('start', function() {
+    it('start non existant server', async function() {
+      sandbox.stub(SdtdServer, 'findOne').returns(Promise.resolve(null));
+      await expect(highPingCountHook(sails).start(sails.testServer.id)).to.be.rejectedWith(Error);
+      expect(mockingObject.on).not.to.have.been.called;
+    });
+    it('start server', async function() {
+      sandbox.stub(SdtdServer, 'findOne').returns(Promise.resolve(sails.testServer));
+      await highPingCountHook(sails).start(sails.testServer.id);
+      expect(mockingObject.on).to.have.been.calledWith('memUpdate', sandbox.match.func);
+    });
+  });
+
+  describe('stop', function() {
+    it('stop server', async function() {
+      await highPingCountHook(sails).stop(sails.testServer.id);
+      expect(mockingObject.removeListener).to.have.been.calledWith('memUpdate', sandbox.match.func);
+    });
+  });
+
   it('Doesnt do anything when steamid is not found', async () => {
     sandbox.stub(sails.helpers.sdtdApi, 'getOnlinePlayers').returns(Promise.resolve(
       [
@@ -11,7 +46,7 @@ describe('highPingCount', function () {
     sails.testServerConfig.pingKickEnabled = 1;
     sandbox.stub(SdtdConfig, 'findOne').returns(Promise.resolve(sails.testServerConfig));
 
-    const highPingCount = new HighPingCount({ });
+    const highPingCount = new HighPingCount(sails);
 
     await highPingCount.handlePingCheck({
       server: sails.testServer
@@ -30,7 +65,7 @@ describe('highPingCount', function () {
 
     sandbox.stub(SdtdConfig, 'findOne').returns(Promise.resolve(sails.testServerConfig));
 
-    const highPingCount = new HighPingCount({ });
+    const highPingCount = new HighPingCount(sails);
 
     await highPingCount.handlePingCheck({
       server: sails.testServer
@@ -51,7 +86,7 @@ describe('highPingCount', function () {
 
     sandbox.stub(SdtdConfig, 'findOne').returns(Promise.resolve(sails.testServerConfig));
 
-    const highPingCount = new HighPingCount({ });
+    const highPingCount = new HighPingCount(sails);
 
     // first time
     await highPingCount.handlePingCheck({
@@ -88,7 +123,7 @@ describe('highPingCount', function () {
 
     sandbox.stub(SdtdConfig, 'findOne').returns(Promise.resolve(sails.testServerConfig));
 
-    const highPingCount = new HighPingCount({ });
+    const highPingCount = new HighPingCount(sails);
 
     await highPingCount.handlePingCheck({
       server: sails.testServer
