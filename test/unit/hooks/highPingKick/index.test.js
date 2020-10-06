@@ -1,5 +1,5 @@
 const {HighPingCount} = require('../../../../api/hooks/highPingKick/index.js');
-const HighPingCountHook = require('../../../../api/hooks/highPingKick/index.js');
+const highPingCountHook = require('../../../../api/hooks/highPingKick/index.js');
 const { expect } = require('chai');
 
 
@@ -20,22 +20,19 @@ describe('highPingCount', function () {
   describe('start', function() {
     it('start non existant server', async function() {
       sandbox.stub(SdtdServer, 'findOne').returns(Promise.resolve(null));
-      const highPingCount = new HighPingCount(sails);
-      await expect(highPingCount.start(sails.testServer.id)).to.be.rejectedWith(Error);
+      await expect(highPingCountHook(sails).start(sails.testServer.id)).to.be.rejectedWith(Error);
       expect(mockingObject.on).not.to.have.been.called;
     });
     it('start server', async function() {
       sandbox.stub(SdtdServer, 'findOne').returns(Promise.resolve(sails.testServer));
-      const highPingCount = new HighPingCount(sails);
-      await highPingCount.start(sails.testServer.id);
+      await highPingCountHook(sails).start(sails.testServer.id);
       expect(mockingObject.on).to.have.been.calledWith('memUpdate', sandbox.match.func);
     });
   });
 
   describe('stop', function() {
     it('stop server', async function() {
-      const highPingCount = new HighPingCount(sails);
-      await highPingCount.stop(sails.testServer.id);
+      await highPingCountHook(sails).stop(sails.testServer.id);
       expect(mockingObject.removeListener).to.have.been.calledWith('memUpdate', sandbox.match.func);
     });
   });
