@@ -65,9 +65,9 @@ describe('COMMAND tele', () => {
 
     sandbox.stub(PlayerTeleport, 'find')
       .onCall(0)
-      .resolves([{ name: 'teleportName', timesUsed: 5 }])
+      .resolves([{ name: 'publicTeleport', timesUsed: 1337, publicEnabled: true }])
       .onCall(1)
-      .resolves([{ name: 'publicTeleport', timesUsed: 1337, publicEnabled: true }]);
+      .resolves([{ name: 'teleportName', timesUsed: 5 }]);
 
     await command.run(chatMessage, sails.testPlayer, sails.testServer, ['publicTeleport']);
 
@@ -90,13 +90,24 @@ describe('COMMAND tele', () => {
     expect(spy).to.have.been.calledWith('teleSuccess');
     expect(spy).to.have.been.calledTwice;
     expect(sails.helpers.sdtdApi.executeConsoleCommand).to.have.been.called;
+    clock.restore();
   });
-
-
 
   // https://github.com/CatalysmsServerManager/7-days-to-die-server-manager/issues/291
   it('Defaults to a players own teles instead of public ones', async () => {
-    // TODO
+    sandbox.stub(PlayerTeleport, 'find')
+      .onCall(0)
+      .resolves([{ name: 'teleportName', timesUsed: 1337, publicEnabled: true }])
+      .onCall(1)
+      .resolves([{ name: 'teleportName', timesUsed: 5 }]);
+
+    await command.run(chatMessage, sails.testPlayer, sails.testServer, ['teleportName']);
+
+    // timesUsed is different for the two teles,
+    // we use this to differentiate because
+    // publicEnabled is not passed to the final result
+    expect(spy).to.have.been.calledOnceWith('teleSuccess', { teleport: { name: 'teleportName', timesUsed: 5 } });
+    expect(sails.helpers.sdtdApi.executeConsoleCommand).to.have.been.called;
   });
 
 });
