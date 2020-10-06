@@ -11,7 +11,6 @@ module.exports = function Sentry(sails) {
     defaults: {
       __configKey__: {
         dsn: process.env.SENTRY_DSN,
-        process: process.env.npm_lifecycle_event,
         environment: process.env.NODE_ENV || 'development',
         serverName: process.env.CSMM_HOSTNAME || os.hostname(),
         release: require('../../package.json').version,
@@ -38,6 +37,9 @@ module.exports = function Sentry(sails) {
       const util = require('util');
 
       Sentry.init(settings);
+      Sentry.configureScope(function (scope) {
+        scope.setTag('workerProcess', process.env.npm_lifecycle_event || 'sails');
+      });
 
       sails.sentry = Sentry;
 
