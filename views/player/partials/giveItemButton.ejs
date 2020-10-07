@@ -94,7 +94,7 @@
       event.preventDefault();
       let amount = $('#player-give-item-input-amount').val()
       let itemName = $('#player-give-item-input-itemName').val()
-      let quality = $('#player-give-item-input-quality').val()
+      let quality = parseInt($('#player-give-item-input-quality').val(), 10)
 
       if (!(amount == '')) {
         if (isNaN(quality)) {
