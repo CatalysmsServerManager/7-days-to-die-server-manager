@@ -79,7 +79,7 @@ before(async function () {
           adapter: 'sails-redis',
         },
       }
-    }, (err) => err ? reject(err): resolve());
+    }, (err) => err ? reject(err) : resolve());
   });
 });
 
@@ -126,6 +126,7 @@ beforeEach(async function () {
     server: testServer.id,
     user: testUser.id,
     name: faker.internet.userName(),
+    lastTeleportTime: 0
   }).meta({ skipAllLifecycleCallbacks: true }).fetch();
 
   let testServerConfig = await SdtdConfig.create({
@@ -142,6 +143,7 @@ beforeEach(async function () {
   sails.testServer = testServer;
   sails.testPlayer = testPlayer;
   sails.testServerConfig = testServerConfig;
+  sails.testServer.players = [testPlayer];
 });
 
 function clearRedis() {
