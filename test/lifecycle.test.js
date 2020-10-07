@@ -143,8 +143,6 @@ beforeEach(async function () {
   sails.testServer = testServer;
   sails.testPlayer = testPlayer;
   sails.testServerConfig = testServerConfig;
-  sails.testServer.config = testServerConfig;
-
   sails.testServer.players = [testPlayer];
 });
 

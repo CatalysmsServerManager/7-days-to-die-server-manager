@@ -10,6 +10,7 @@ describe('COMMAND tele', () => {
   beforeEach(async () => {
     command = new Command(sails.testServer.id);
     chatMessage = { reply: spy };
+    sails.testServer = await SdtdServer.findOne(sails.testServer.id).populate('config').populate('players');
     sails.testServer.config.playerTeleportDelay = 0;
     sails.testServer.config.playerTeleportTimeout = 0;
     spy.resetHistory();
