@@ -1,5 +1,6 @@
 const sails = require('sails');
 const SdtdApi = require('7daystodie-api-wrapper');
+const Sentry = require('@sentry/node');
 
 // disable discord bot
 process.env.DISCORDBOTTOKEN = '';
@@ -45,6 +46,9 @@ sails.load(configOverrides, async function (err) {
     sails.helpers.sdtdApi[func] = SdtdApi[func];
   }
   sails.log('Running bulls worker');
+  Sentry.configureScope(function (scope) {
+    scope.setTag('workerProcess', process.env.npm_lifecycle_event || 'worker');
+  });
 
   await Promise.all([
     // We can afford a high concurrency here since jobs are only a HTTP fetch. This would be different if they are long running, blocking operations
