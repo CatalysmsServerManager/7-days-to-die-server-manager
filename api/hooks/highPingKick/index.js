@@ -9,6 +9,7 @@ const { classToHook } = require('../../utils.js');
 class HighPingCount {
   constructor(sails) {
     this.sails = sails;
+    this.boundHandlePingCheck = (...args) => this.handlePingCheck(...args);
   }
 
   /**
@@ -53,12 +54,12 @@ class HighPingCount {
       return;
     }
 
-    loggingObject.on('memUpdate', this.handlePingCheck);
+    loggingObject.on('memUpdate', this.boundHandlePingCheck);
   }
 
   async stop(serverId) {
     let loggingObject = this.sails.hooks.sdtdlogs.getLoggingObject(serverId);
-    loggingObject.removeListener('memUpdate', this.handlePingCheck);
+    loggingObject.removeListener('memUpdate', this.boundHandlePingCheck);
   }
 
   async handlePingCheck(memUpdate) {
@@ -92,9 +93,13 @@ class HighPingCount {
           continue;
         }
 
-        let whiteListIdx = pingWhitelist.indexOf(playerRecord.steamId);
+        const isWhitelisted = pingWhitelist.includes(playerRecord.steamId);
+        if (isWhitelisted) {
+          this.sails.log.warn(`Whitelisted player(${playerRecord.steamId}) has too high of ping count`);
+          continue;
+        }
 
-        if (onlinePlayer.ping > config.maxPing && whiteListIdx === -1) {
+        if (onlinePlayer.ping > config.maxPing) {
           failedChecksForServer++;
           let currentFailedChecks = await this.getPlayerFails(playerRecord.id);
 
