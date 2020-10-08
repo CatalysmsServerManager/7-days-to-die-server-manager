@@ -1,19 +1,23 @@
-const {HighPingCount} = require('../../../../api/hooks/highPingKick/index.js');
 const highPingCountHook = require('../../../../api/hooks/highPingKick/index.js');
 const { expect } = require('chai');
+const  EventEmitter = require('events').EventEmitter;
 
 
 function MockLoggingObject() {
-  return {
-    on: sandbox.stub(),
-    emit: sandbox.stub(),
-    removeListener: sandbox.stub(),
-  };
+  return new EventEmitter();
 }
+
+function callEventEmitter(mockingObject, eventName, ...args) {
+  return Promise.all(mockingObject.listeners(eventName).map(f => f(...args)));
+}
+
 describe('highPingCount', function () {
   let mockingObject;
   beforeEach(function () {
     mockingObject = new MockLoggingObject();
+    mockingObject.spyOn = sandbox.spy(mockingObject, 'on');
+    mockingObject.spyEmit = sandbox.spy(mockingObject, 'emit');
+    mockingObject.spyRemoveListener = sandbox.spy(mockingObject, 'removeListener');
     sandbox.stub(sails.hooks.sdtdlogs, 'getLoggingObject').returns(mockingObject);
   });
 
@@ -21,19 +25,19 @@ describe('highPingCount', function () {
     it('start non existant server', async function() {
       sandbox.stub(SdtdServer, 'findOne').returns(Promise.resolve(null));
       await expect(highPingCountHook(sails).start(sails.testServer.id)).to.be.rejectedWith(Error);
-      expect(mockingObject.on).not.to.have.been.called;
+      expect(mockingObject.spyOn).not.to.have.been.called;
     });
     it('start server', async function() {
       sandbox.stub(SdtdServer, 'findOne').returns(Promise.resolve(sails.testServer));
       await highPingCountHook(sails).start(sails.testServer.id);
-      expect(mockingObject.on).to.have.been.calledWith('memUpdate', sandbox.match.func);
+      expect(mockingObject.spyOn).to.have.been.calledWith('memUpdate', sandbox.match.func);
     });
   });
 
   describe('stop', function() {
     it('stop server', async function() {
       await highPingCountHook(sails).stop(sails.testServer.id);
-      expect(mockingObject.removeListener).to.have.been.calledWith('memUpdate', sandbox.match.func);
+      expect(mockingObject.spyRemoveListener).to.have.been.calledWith('memUpdate', sandbox.match.func);
     });
   });
 
@@ -45,12 +49,10 @@ describe('highPingCount', function () {
     ));
     sails.testServerConfig.pingKickEnabled = 1;
     sandbox.stub(SdtdConfig, 'findOne').returns(Promise.resolve(sails.testServerConfig));
+    sandbox.stub(SdtdServer, 'findOne').returns(Promise.resolve(sails.testServer));
 
-    const highPingCount = new HighPingCount(sails);
-
-    await highPingCount.handlePingCheck({
-      server: sails.testServer
-    });
+    await highPingCountHook(sails).start(sails.testServer.id);
+    await callEventEmitter(mockingObject, 'memUpdate', { server: sails.testServer });
   });
   it('Ignores user in whitelist', async () => {
     sandbox.stub(sails.helpers.sdtdApi, 'getOnlinePlayers').returns(Promise.resolve(
@@ -65,11 +67,9 @@ describe('highPingCount', function () {
 
     sandbox.stub(SdtdConfig, 'findOne').returns(Promise.resolve(sails.testServerConfig));
 
-    const highPingCount = new HighPingCount(sails);
+    await highPingCountHook(sails).start(sails.testServer.id);
+    await callEventEmitter(mockingObject, 'memUpdate', { server: sails.testServer });
 
-    await highPingCount.handlePingCheck({
-      server: sails.testServer
-    });
     expect(execSpy).to.have.callCount(0);
   });
   it('kicks a player who has too high of ping for too long', async () => {
@@ -86,26 +86,18 @@ describe('highPingCount', function () {
 
     sandbox.stub(SdtdConfig, 'findOne').returns(Promise.resolve(sails.testServerConfig));
 
-    const highPingCount = new HighPingCount(sails);
+    await highPingCountHook(sails).start(sails.testServer.id);
 
     // first time
-    await highPingCount.handlePingCheck({
-      server: sails.testServer
-    });
+    await callEventEmitter(mockingObject, 'memUpdate', { server: sails.testServer });
     // second time
-    await highPingCount.handlePingCheck({
-      server: sails.testServer
-    });
+    await callEventEmitter(mockingObject, 'memUpdate', { server: sails.testServer });
     // third time
-    await highPingCount.handlePingCheck({
-      server: sails.testServer
-    });
+    await callEventEmitter(mockingObject, 'memUpdate', { server: sails.testServer });
     // has not yet been kicked
     expect(execSpy).to.have.callCount(0);
     // 4th time it should get kicked
-    await highPingCount.handlePingCheck({
-      server: sails.testServer
-    });
+    await callEventEmitter(mockingObject, 'memUpdate', { server: sails.testServer });
     expect(execSpy).to.have.callCount(1);
   });
   it('multiple accounts shouldnt break if the first one isnt found', async () => {
@@ -123,11 +115,8 @@ describe('highPingCount', function () {
 
     sandbox.stub(SdtdConfig, 'findOne').returns(Promise.resolve(sails.testServerConfig));
 
-    const highPingCount = new HighPingCount(sails);
-
-    await highPingCount.handlePingCheck({
-      server: sails.testServer
-    });
+    await highPingCountHook(sails).start(sails.testServer.id);
+    await callEventEmitter(mockingObject, 'memUpdate', { server: sails.testServer });
     expect(execSpy).to.have.callCount(1);
   });
 });
