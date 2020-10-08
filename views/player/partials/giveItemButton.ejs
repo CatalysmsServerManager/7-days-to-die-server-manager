@@ -35,6 +35,7 @@
           <div class="input-group mb-2 mr-sm-2">
             <input type="text" class="form-control" id="player-give-item-input-quality" placeholder="Quality">
           </div>
+          <div><small>For items that do not support quality, use '0'.</small></div>
 
           <input type="submit" class="btn btn-primary" data-dismiss="modal" aria-hidden="true" id="player-give-item-submit">
 
@@ -93,10 +94,10 @@
       event.preventDefault();
       let amount = $('#player-give-item-input-amount').val()
       let itemName = $('#player-give-item-input-itemName').val()
-      let quality = $('#player-give-item-input-quality').val()
+      let quality = parseInt($('#player-give-item-input-quality').val(), 10)
 
       if (!(amount == '')) {
-        if (isNaN(amount)) {
+        if (isNaN(quality)) {
           return alert('Please provide a valid value for quality (number)')
         }
       }
