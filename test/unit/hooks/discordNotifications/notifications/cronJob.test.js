@@ -59,7 +59,7 @@ describe('CronJob', function () {
       {
         'inline': true,
         'name': 'Execution time',
-        'value': ' Thu Apr 30 2020 - 18:20:05 GMT-0700 (Pacific Daylight Time)'
+        'value': ' Fri May 01 2020 - 01:20:05 GMT+0000 (Coordinated Universal Time)'
       },
       {
         'inline': false,
@@ -97,7 +97,7 @@ describe('CronJob', function () {
       {
         'inline': true,
         'name': 'Execution time',
-        'value': ' Thu Apr 30 2020 - 18:20:05 GMT-0700 (Pacific Daylight Time)'
+        'value': ' Fri May 01 2020 - 01:20:05 GMT+0000 (Coordinated Universal Time)'
       },
       {
         'inline': false,
