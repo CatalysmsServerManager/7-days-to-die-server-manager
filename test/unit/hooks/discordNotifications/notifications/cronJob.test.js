@@ -3,7 +3,7 @@ const CronJob = require('../../../../../api/hooks/discordNotifications/notificat
 describe('CronJob', function () {
   beforeEach(function() {
     this.channel = {
-      send: sandbox.fake()
+      send: sandbox.fake(async () => {})
     };
 
     this.notification = new CronJob();
