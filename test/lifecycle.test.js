@@ -16,6 +16,7 @@ const {
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
 
+process.env.TZ = 'UTC';
 process.env.IS_TEST = true;
 process.env.NODE_ENV = 'test';
 process.env.CSMM_DONATOR_TIER = 'patron';
