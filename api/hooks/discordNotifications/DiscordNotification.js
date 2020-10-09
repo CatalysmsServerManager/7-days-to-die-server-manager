@@ -36,12 +36,15 @@ class DiscordNotification {
         const owner = await User.findOne(enrichedOptions.server.owner);
         if (owner.discordId) {
           const discordUser = await this.getDiscordUser(owner.discordId);
-          discordUser.send(`There was an error sending a CSMM notification to your channel: ${error}`);
+          await discordUser.send(`There was an error sending a CSMM notification to your channel and thus the notification has been disabled: \`${error}\``);
         }
       } catch (error) {
         sails.log.error(`HOOK - discordNotification:DiscordNotification - Error letting owner know of discord issue - ${error}`);
       }
       sails.log.error(`HOOK - discordNotification:DiscordNotification - ${error}`);
+
+      delete enrichedOptions.server.config.discordNotificationConfig[notificationOptions.notificationType];
+      await SdtdConfig.update({ server: enrichedOptions.server.id }, { discordNotificationConfig: enrichedOptions.server.config.discordNotificationConfig });
     }
 
   }

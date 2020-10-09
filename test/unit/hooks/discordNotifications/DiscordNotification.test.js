@@ -34,6 +34,6 @@ describe('DiscordNotification', function () {
     });
     expect(this.discordUser.send.callCount).to.equal(1);
     expect(this.discordUser.send.getCall(0).args.length).to.eql(1);
-    expect(this.discordUser.send.getCall(0).args[0]).to.eql('There was an error sending a CSMM notification to your channel: Error: AHH');
+    expect(this.discordUser.send.getCall(0).args[0]).to.eql('There was an error sending a CSMM notification to your channel and thus the notification has been disabled: `Error: AHH`');
   });
 });
