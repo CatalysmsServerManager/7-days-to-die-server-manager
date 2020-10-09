@@ -56,7 +56,8 @@ let production = {
      ***************************************************************************/
     default: {
       adapter: 'sails-mysql',
-      url: process.env.DBSTRING
+      url: process.env.DBSTRING,
+      charset: 'utf8mb4',
     },
 
     cache: {
