@@ -13,7 +13,9 @@ class Top extends Commando.Command {
         key: 'type',
         prompt: 'Please specify which top you want to see',
         type: 'string',
-        oneOf: ['currency', 'zombies', 'players', 'deaths', 'playtime', 'score', 'level']
+        oneOf: ['currency', 'zombies', 'players', 'deaths', 'playtime', 'score', 'level'],
+        validate: (val, msg, arg) => arg.oneOf.some(valid => val === valid),
+        error: 'Top Command: Type argument value was not valid.'
       }, {
         key: 'amount',
         prompt: 'Amount of players to show',
