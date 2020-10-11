@@ -16,7 +16,7 @@ class Top extends Commando.Command {
         prompt: 'Please specify which top you want to see',
         type: 'string',
         oneOf: validTypes,
-        validate: (val, msg, arg) => arg.oneOf.some(type => val.toLowerCase() === type.toLowerCase()),
+        validate: val => validTypes.some(type => val.toLowerCase() === type.toLowerCase()),
         parse: val => val.toLowerCase(),
         error: `Top Command: Type argument value was not valid. Please use one of: ${validTypes.join(', ')}`
       }, {
