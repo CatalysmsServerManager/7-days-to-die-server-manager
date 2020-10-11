@@ -42,6 +42,10 @@ module.exports = {
 
       let discordUser = discordClient.users.get(foundUser.discordId);
 
+      if (discordUser === undefined || discordUser === null) {
+        return exits.badRequest();
+      }
+
       let foundGuilds = discordClient.guilds.filter(guild => {
         let member = guild.members.get(discordUser.id);
         if (_.isUndefined(member)) {
