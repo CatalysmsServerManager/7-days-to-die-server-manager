@@ -30,9 +30,11 @@ class sdtdConsole {
     return new Promise((resolve, reject) => {
       $.ajax({
         url: `/api/sdtdserver/executeCommand`,
+        method: 'post',
         data: {
           serverId: this.serverId,
-          command: command
+          command: command,
+          _csrf: window.SAILS_LOCALS._csrf
         },
         success: (data) => {
           addNewLogLine(data.msg);
