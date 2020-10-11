@@ -54,18 +54,18 @@ class Status extends Commando.Command {
     });
 
     let bloodMoonDay;
+    let nextHorde;
 
     try{
       bloodMoonDay = await sails.helpers.sdtdApi.executeConsoleCommand(
         SdtdServer.getAPIConfig(sdtdServer),
         `ggs BloodMoonDay`
       );
+      nextHorde = parseInt(bloodMoonDay.result.split(` = `)[1]);
     } catch (error) {
       sails.log.warn(`Hook - discordBot:status - ${error}`);
       sails.log.error(error);
     }
-
-    let nextHorde = parseInt(bloodMoonDay.result.split(` = `)[1]);
     const daysUntilHorde = nextHorde - serverInfo.stats.gametime.days;
 
     let embed = new this.client.customEmbed();
@@ -73,7 +73,7 @@ class Status extends Commando.Command {
     embed.setTitle(`${serverInfo.name} - status`)
       .addField('FPS', `${fps}`, true)
       .addField(`Gametime`, `${serverInfo.stats.gametime.days} days ${serverInfo.stats.gametime.hours} hours ${serverInfo.stats.gametime.minutes} minutes
-        Next horde in ${daysUntilHorde} days`, true)
+        Next horde in ${ bloodMoonDay ? daysUntilHorde : `unknown`} days`, true)
       .addField(`${serverInfo.stats.hostiles} hostiles`, `${serverInfo.stats.animals} animals`)
       .addField(`${serverInfo.stats.players} players online`, onlinePlayersStringList.length > 0 ? onlinePlayersStringList : 'None');
 
