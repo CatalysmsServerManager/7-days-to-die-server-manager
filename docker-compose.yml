@@ -13,7 +13,7 @@ services:
       NODE_ENV: "production"
     env_file: .env
     ports:
-      - 127.0.0.1:8000:1337
+      - 1377:1337
     restart: unless-stopped
     entrypoint: ["npm", "run", "start:app"]
   csmm-worker:
