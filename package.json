@@ -74,7 +74,6 @@
     "node": "8"
   },
   "devDependencies": {
-    "@arkweid/lefthook": "^0.7.2",
     "@types/bull": "^3.10.3",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
