@@ -39,7 +39,7 @@
     "sails": "^1.1.0",
     "sails-hook-grunt": "^4.0.1",
     "sails-hook-orm": "^2.1.1",
-    "sails-hook-sockets": "^1.5.5",
+    "sails-hook-sockets": "^2.0.0",
     "sails-mysql": "^1.0.1",
     "sails-redis": "^1.0.0",
     "sequelize": "^6.3.5",
