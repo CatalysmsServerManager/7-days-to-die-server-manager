@@ -42,7 +42,7 @@
 
 ## [Documentation](https://docs.csmm.app)
 
-## [Support]
+## Support
 
 We are happy to help you on our [Discord server](http://catalysm.net/discord).
 
