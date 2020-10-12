@@ -1,5 +1,3 @@
-const sevenDays = require('machinepack-7daystodiewebapi');
-
 module.exports = {
 
   friendlyName: 'Execute command',
@@ -41,45 +39,37 @@ module.exports = {
    */
 
   fn: async function (inputs, exits) {
-
-
     try {
       let sdtdServer = await SdtdServer.findOne(inputs.serverId);
       if (_.isUndefined(sdtdServer)) {
         return exits.notFound();
       }
-      sevenDays.executeCommand({
-        ip: sdtdServer.ip,
-        port: sdtdServer.webPort,
-        authName: sdtdServer.authName,
-        authToken: sdtdServer.authToken,
-        command: inputs.command
-      }).exec({
-        success: (response) => {
 
-          if (!response) {
-            return exits.error();
-          }
+      const response = await sails.helpers.sdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(sdtdServer), inputs.command);
 
-          let logLine = {
-            msg: response.result,
-            date: new Date(),
-            type: 'commandResponse'
-          };
-          sails.log.info(`API - Executing a command on ${sdtdServer.name} by user ${this.req.session.userId} - ${inputs.command}`);
-          return exits.success(logLine);
-        },
-        unknownCommand: (error) => {
-          return exits.commandError(error);
-        },
-        error: (error) => {
-          return exits.error(error);
-        }
-      });
+      if (!response) {
+        return exits.error();
+      }
+
+      let logLine = {
+        msg: response.result,
+        date: new Date(),
+        type: 'commandResponse'
+      };
+      sails.log.info(`API - Executed a command on ${sdtdServer.name} by user ${this.req.session.userId} - ${inputs.command}`);
+      return exits.success(logLine);
 
     } catch (error) {
+      if (error.message === 'Not Found') {
+        return exits.success({
+          msg: 'Error: unknown command',
+          date: new Date(),
+          type: 'commandResponse'
+        });
+      }
+
       sails.log.error(`API - SdtdServer:executeCommand - ${error}`);
-      return exits.error(error);
+      return exits.commandError(error);
     }
 
   }

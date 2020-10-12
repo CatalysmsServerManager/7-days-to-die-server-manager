@@ -137,7 +137,7 @@ module.exports.routes = {
 
   // SDTDSERVER
 
-  'get /api/sdtdserver/executeCommand': 'SdtdServerController.execute-command',
+  'post /api/sdtdserver/executeCommand': 'SdtdServerController.execute-command',
   'get /api/sdtdserver/sendMessage': 'SdtdServerController.send-message',
   'get /api/sdtdserver/loadServerInfo': 'SdtdServerController.load-server-info',
   'get /api/sdtdserver/players': 'SdtdServerController.get-players',
