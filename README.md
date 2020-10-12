@@ -1,6 +1,5 @@
 <div align="center">
 
-[![Test Coverage](https://api.codeclimate.com/v1/badges/407cdb68165fc000cfd6/test_coverage)](https://codeclimate.com/github/CatalysmsServerManager/7-days-to-die-server-manager/test_coverage)
 [![Build Status](https://travis-ci.org/CatalysmsServerManager/7-days-to-die-server-manager.svg?branch=master)](https://travis-ci.org/CatalysmsServerManager/7-days-to-die-server-manager)
 [![Discord](https://img.shields.io/discord/336821518250147850?label=Discord&logo=Discord)](http://catalysm.net/discord)
 
@@ -42,7 +41,7 @@
 
 ## [Documentation](https://docs.csmm.app)
 
-## Support
+## [Support](https://docs.csmm.app/en/csmm/support.html)
 
 We are happy to help you on our [Discord server](http://catalysm.net/discord).
 
