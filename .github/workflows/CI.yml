@@ -54,8 +54,3 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           file: ./coverage/lcov.info
-      - uses: actions/upload-artifact@v2
-        if: always()
-        with:
-          name: test-report
-          path: ./coverage/
