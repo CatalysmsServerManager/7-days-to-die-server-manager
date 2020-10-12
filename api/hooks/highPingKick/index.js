@@ -18,7 +18,7 @@ class HighPingCount {
    * @param {Function} done
    */
   initialize(done) {
-    this.sails.on('hook:orm:loaded', async () => {
+    this.sails.after('hook:sdtdlogs:loaded', async () => {
       this.sails.log.info('Initializing custom hook (`highPingKick`)');
 
       let enabledConfigs = await SdtdConfig.find({
@@ -119,7 +119,7 @@ class HighPingCount {
     }
 
     let dateEnded = new Date();
-    this.sails.log.verbose(`Performed maxPingCheck for ${server.name} - ${failedChecksForServer} / ${onlinePlayers.length} players failed the check - took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`);
+    this.sails.log.debug(`Performed maxPingCheck for ${server.name} - ${failedChecksForServer} / ${onlinePlayers.length} players failed the check - took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`);
   }
 
   async kickPlayer(player, server, reason) {
