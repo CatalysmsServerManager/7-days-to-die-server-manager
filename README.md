@@ -1,6 +1,6 @@
 <div align="center">
 
-[![Build Status](https://codecov.io/gh/CatalysmsServerManager/7-days-to-die-server-manager/branch/master/graph/badge.svg)](https://codecov.io/gh/CatalysmsServerManager/7-days-to-die-server-manager)
+[![Test Coverage](https://codecov.io/gh/CatalysmsServerManager/7-days-to-die-server-manager/branch/master/graph/badge.svg)](https://codecov.io/gh/CatalysmsServerManager/7-days-to-die-server-manager)
 [![Build Status](https://travis-ci.org/CatalysmsServerManager/7-days-to-die-server-manager.svg?branch=master)](https://travis-ci.org/CatalysmsServerManager/7-days-to-die-server-manager)
 [![Discord](https://img.shields.io/discord/336821518250147850?label=Discord&logo=Discord)](http://catalysm.net/discord)
 
