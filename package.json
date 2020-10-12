@@ -27,7 +27,7 @@
     "minimist": "^1.2.3",
     "moment": "^2.27.0",
     "morgan": "^1.10.0",
-    "mysql2": "^2.1.0",
+    "mysql2": "^2.2.5",
     "npm-run-all": "^4.1.5",
     "p-wait-for": "^3.1.0",
     "passport": "^0.4.1",
