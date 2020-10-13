@@ -34,7 +34,6 @@ module.exports = {
       defaultsTo: false
     },
 
-    //When a server does not respond to requests for a long time, it is set to inactive.
     mapProxy: {
       type: 'boolean',
       defaultsTo: false
