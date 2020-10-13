@@ -14,7 +14,7 @@ describe('/api/player/giveitem', function () {
       .post('/api/player/giveitem')
       .send({
         playerId: 1,
-        itemName: 'something',
+        itemName: 'something new',
         amount: '1'
       });
 
