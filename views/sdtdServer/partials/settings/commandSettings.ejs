@@ -141,12 +141,12 @@
       </tr>
     </thead>
     <tbody>
-      <% customCommands.forEach(command => { %>
+      <% customCommands.forEach(async command => { %>
         <tr>
           <td scope="row"><%= command.name %></td>
           <td><%= command.description %></td>
           <td><%= command.commandsToExecute %></td>
-          <td><%- await include('./editCommandModal.ejs', { command: command}) %></td>
+          <td><%- await include('./editCommandModal.ejs', { command: command }) %></td>
         </tr>
 
         <% }) %>

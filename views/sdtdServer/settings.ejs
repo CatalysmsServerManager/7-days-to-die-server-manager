@@ -252,7 +252,7 @@
     </div>
 
     <div id="settings-collapse-experiments" class="collapse">
-      <%- include('./partials/settings/experiments', {server: server, config: config, user: user}) %>
+      <%- await include('./partials/settings/experiments', {server: server, config: config, user: user}) %>
     </div>
   </div>
 </div>
