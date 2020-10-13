@@ -45,7 +45,7 @@ class HighPingCount {
       return;
     }
 
-    let loggingObject = this.sails.hooks.sdtdlogs.getLoggingObject(server.id);
+    let loggingObject = await this.sails.hooks.sdtdlogs.getLoggingObject(server.id);
 
     if (_.isUndefined(loggingObject)) {
       this.sails.log.warn(`Tried to start ping kicker for a server without a loggingObject - ${server.name}`, {
@@ -58,7 +58,7 @@ class HighPingCount {
   }
 
   async stop(serverId) {
-    let loggingObject = this.sails.hooks.sdtdlogs.getLoggingObject(serverId);
+    let loggingObject = await this.sails.hooks.sdtdlogs.getLoggingObject(serverId);
     loggingObject.removeListener('memUpdate', this.boundHandlePingCheck);
   }
 

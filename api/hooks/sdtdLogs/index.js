@@ -1,5 +1,4 @@
 const LoggingObject = require('./LoggingObject');
-const EventEmitter = require('events');
 
 /**
  * @module 7dtdLoggingHook
@@ -59,8 +58,8 @@ module.exports = function sdtdLogs(sails) {
           sails.log.debug(`HOOKS - sdtdLogs - starting logging for server ${serverID}`);
           let loggingObj = await createLogObject(serverID);
           loggingInfoMap.set(serverID, loggingObj);
-          sails.hooks.playertracking.start(serverID);
-          sails.hooks.customdiscordnotification.start(serverID);
+          await sails.hooks.playertracking.start(serverID);
+          await sails.hooks.customdiscordnotification.start(serverID);
           return;
         } else {
           throw new Error(`Tried to start logging for a server that already had it enabled`);
@@ -104,11 +103,13 @@ module.exports = function sdtdLogs(sails) {
      * @method
      */
 
-    getLoggingObject: function (serverId) {
+    getLoggingObject: async function (serverId) {
       let obj = loggingInfoMap.get(String(serverId));
-
       if (_.isUndefined(obj)) {
-        return new EventEmitter();
+        // TODO: Check if server is inactive
+        sails.log.warn(`Tried to get a non-existing loggingObject, creating a new loggingObject for server ${serverId}.`);
+        await this.start(serverId);
+        obj = loggingInfoMap.get(String(serverId));
       }
       return obj;
     },

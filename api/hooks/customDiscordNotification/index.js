@@ -21,9 +21,9 @@ module.exports = function defineCustomDiscordNotificationHook(sails) {
       done();
     },
 
-    start(serverId) {
+    async start(serverId) {
 
-      let loggingObject = sails.hooks.sdtdlogs.getLoggingObject(serverId);
+      let loggingObject = await sails.hooks.sdtdlogs.getLoggingObject(serverId);
 
       if (_.isUndefined(loggingObject)) {
         sails.log.warn(`Tried to start custom notifications for a server without a loggingObject`, {
@@ -45,8 +45,8 @@ module.exports = function defineCustomDiscordNotificationHook(sails) {
           let stringToSearchFor = notification.stringToSearchFor.toLowerCase();
 
 
-          if (logMessage.includes(stringToSearchFor) && notification.enabled ) {
-            if (notification.ignoreServerChat && (logMessage.startsWith('chat (from \'-non-player-\',') || logMessage.includes('webcommandresult_for_say')) ) {
+          if (logMessage.includes(stringToSearchFor) && notification.enabled) {
+            if (notification.ignoreServerChat && (logMessage.startsWith('chat (from \'-non-player-\',') || logMessage.includes('webcommandresult_for_say'))) {
 
             } else {
               sendNotification(logLine, server, notification);

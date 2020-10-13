@@ -44,7 +44,7 @@ module.exports = function defineCustomHooksHook(sails) {
     },
 
     start: async function (serverId) {
-      let loggingObject = sails.hooks.sdtdlogs.getLoggingObject(serverId);
+      let loggingObject = await sails.hooks.sdtdlogs.getLoggingObject(serverId);
 
       for (const eventType of sails.config.custom.supportedHooks) {
 

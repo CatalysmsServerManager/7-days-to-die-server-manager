@@ -1,7 +1,7 @@
 module.exports = function banneditems(sails) {
   return {
     initialize: function (cb) {
-      sails.on('hook:sdtdlogs:loaded', async function () {
+      sails.after('hook:sdtdlogs:loaded', async function () {
         try {
           let configs = await SdtdConfig.find({
             inactive: false
@@ -31,8 +31,8 @@ module.exports = function banneditems(sails) {
     stop: stop
   };
 
-  function start(serverId) {
-    const loggingObject = sails.hooks.sdtdlogs.getLoggingObject(serverId);
+  async function start(serverId) {
+    const loggingObject = await sails.hooks.sdtdlogs.getLoggingObject(serverId);
 
     loggingObject.on('trackingUpdate', handleItemTrackerUpdate);
     return;
