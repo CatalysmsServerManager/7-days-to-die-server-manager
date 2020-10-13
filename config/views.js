@@ -41,7 +41,8 @@ module.exports.views = {
      *                                                                          *
      ***************************************************************************/
 
-  layout: 'layouts/applicationLayout',
+  layoutTemplate: 'layouts/applicationLayout',
+  getRenderFn: () => require('../api/view-rendering-fn.js'),
 
   locals: {
 

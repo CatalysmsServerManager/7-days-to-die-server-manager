@@ -10,14 +10,14 @@
               <%= server.ip %>
             </small>
           </h1>
-          <% include ./partials/backToDashboard %>
+          <% await include ./partials/backToDashboard %>
         </div>
       </div>
     </div>
     <div class="row">
-      <% include ./partials/console/consoleWindow %>
+      <% await include ./partials/console/consoleWindow %>
         <div class="col-md-4">
-          <% include ./partials/console/consoleControls %>
+          <% await include ./partials/console/consoleControls %>
         </div>
     </div>
   </div>

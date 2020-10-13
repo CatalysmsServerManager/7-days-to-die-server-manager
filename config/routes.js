@@ -25,28 +25,28 @@ module.exports.routes = {
   '/': {
     view: 'index',
     locals: {
-      layout: 'layouts/homepageLayout'
+      layoutTemplate: 'layouts/homepageLayout'
     }
   },
 
   '/donate': {
     view: 'meta/donate',
     locals: {
-      layout: 'layouts/homepageLayoutNoFooter'
+      layoutTemplate: 'layouts/homepageLayoutNoFooter'
     }
   },
 
   '/privacy': {
     view: 'meta/privacy',
     locals: {
-      layout: 'layouts/homepageLayout'
+      layoutTemplate: 'layouts/homepageLayout'
     }
   },
 
   '/stats': {
     view: 'meta/stats',
     locals: {
-      layout: 'layouts/homepageLayoutNoFooter'
+      layoutTemplate: 'layouts/homepageLayoutNoFooter'
     }
   },
 

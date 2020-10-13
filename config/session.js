@@ -15,6 +15,7 @@ if (process.env.REDISSTRING !== '') {
 }
 
 module.exports.session = {
+  adapter: '@sailshq/connect-redis',
 
   /***************************************************************************
    *                                                                          *
@@ -42,5 +43,7 @@ module.exports.session = {
   // },
 
   url: useRedis ? process.env.REDISSTRING : undefined,
-
+  cookie: {
+    maxAge: 24 * 60 * 60 * 1000 * 7, // 1 week
+  },
 };

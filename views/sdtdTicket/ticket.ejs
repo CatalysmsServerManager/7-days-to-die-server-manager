@@ -64,20 +64,20 @@
       <div class="btn-group btn-group-sm btn-group-vertical" role="group">
 
         <% if (ticket.status) { %>
-          <%- include('./partials/editTicketDescriptionButton', ticket) %>
+          <%- await include('./partials/editTicketDescriptionButton', ticket) %>
             <% } %>
 
               <% if (ticket.status) { %>
-                <%- include('./partials/closeTicketButton', ticket) %>
+                <%- await include('./partials/closeTicketButton', ticket) %>
                   <% } else { %>
-                    <%- include('./partials/openTicketButton', ticket) %>
+                    <%- await include('./partials/openTicketButton', ticket) %>
                       <% } %>
                         <!--
                         <button id="btn-toggle-inventory" class="btn btn-secondary" type="button">
                           Toggle inventory
                         </button>
                       -->
-                        <%- include('./partials/addCommentButton', ticket) %>
+                        <%- await include('./partials/addCommentButton', ticket) %>
       </div>
     </div>
 
@@ -88,7 +88,7 @@
     <div class="col-12">
       <div id="player-inventory">
         <h2>Inventory</h2>
-        <%- include('../player/partials/playerInventory', {player: ticket.playerInfo}) %>
+        <%- await include('../player/partials/playerInventory', {player: ticket.playerInfo}) %>
       </div>
 
     </div>
@@ -98,7 +98,7 @@
   <div class="row">
     <div class="col-md-8">
       <% comments.forEach(comment => { %>
-        <%- include('./partials/ticketComment', {comment: comment, ticket: ticket}) %>
+        <%- await include('./partials/ticketComment', {comment: comment, ticket: ticket}) %>
           <% }) %>
     </div>
     <div class="col-md-4">
