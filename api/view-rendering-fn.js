@@ -62,8 +62,15 @@ module.exports = async function renderFile(file, options, fn){
   options.locals.partial = partial.bind(options);
 
   options.locals.serverMapUrl = async (serverId) => {
-    const server = await SdtdServer.findOne(serverId);
-    return `http://${server.ip}:${server.webPort}/map/{z}/{x}/{y}.png?adminuser=${sdtdServer.authName}&admintoken=${sdtdServer.authToken}`;
+    const sdtdServer = await SdtdServer.findOne(serverId).populate('config');
+    // shouldn't happen
+    if (!sdtdServer) { return null; }
+
+    if (!sdtdServer.config[0].mapProxy) {
+      const baseUrl = sails.helpers.sdtdApi.getBaseUrl(SdtdServer.getAPIConfig(sdtdServer));
+      return `${baseUrl}/map/{z}/{x}/{y}.png?adminuser=${sdtdServer.authName}&admintoken=${sdtdServer.authToken}`;
+    }
+    return `/api/sdtdserver/${sdtdServer.id}/tile/{z}/{x}/{y}/.png`;
   };
 
   options.async = true;

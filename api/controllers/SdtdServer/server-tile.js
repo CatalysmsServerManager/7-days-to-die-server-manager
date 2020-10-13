@@ -1,6 +1,4 @@
 const request = require('request');
-const sevenDaysAPI = require('7daystodie-api-wrapper');
-
 
 module.exports = {
 
@@ -41,19 +39,14 @@ module.exports = {
   },
 
   fn: async function (inputs, exits) {
-    const server = await SdtdServer.findOne(inputs.serverId).populate('config');
-    // is there a cheap way to call api/helpers/user/get-servers-with-permission.js
+    const server = await SdtdServer.findOne(inputs.serverId);
 
     if (!server) {
       return exits.notFound();
     }
 
-    const baseUrl = sevenDaysAPI.getBaseUrl(SdtdServer.getAPIConfig(server));
+    const baseUrl = sails.helpers.sdtdApi.getBaseUrl(SdtdServer.getAPIConfig(server));
     const url = `${baseUrl}/map/${inputs.z}/${inputs.x}/${inputs.y}.png?adminuser=${server.authName}&admintoken=${server.authToken}`;
-    if (!server.config[0].mapProxy) {
-      this.res.redirect(url);
-      return;
-    }
 
     const reqHeaders = {...this.req.headers};
     delete reqHeaders.host;

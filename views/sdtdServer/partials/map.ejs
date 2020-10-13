@@ -286,7 +286,7 @@
     if (typeof isMiniMap == "undefined") isMiniMap = false;
 
     var tileLayer = L.tileLayer(
-      <%= JSON.stringify(await serverMapUrl(server.id)) %>,
+      <%- JSON.stringify(await serverMapUrl(server.id)) -%>,
       {
         maxZoom: mapinfo.maxzoom + 1,
         minZoom: Math.max(0, mapinfo.maxzoom - 5),
