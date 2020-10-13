@@ -6,6 +6,7 @@ const customEmbed = require('../../../../api/hooks/discordBot/util/createEmbed')
 describe('Discord - status', function () {
   let sendStub;
   let serverInfoResponse;
+  let consoleCommandResponse;
   beforeEach(() => {
     serverInfoResponse = {
       stats: {
@@ -19,7 +20,7 @@ describe('Discord - status', function () {
     const playerInfoResponse = [
       {name: 'Player a'}, {name: 'Player b'}
     ];
-    const consoleCommandResponse = {
+    consoleCommandResponse = {
       result: 'GameStat.BloodMoonDay = 8'
     };
     sandbox.stub(SdtdConfig, 'find').callsFake(() => ['random server']);
@@ -28,23 +29,35 @@ describe('Discord - status', function () {
     sandbox.stub(sails.helpers, 'loadSdtdserverInfo').callsFake(async () => serverInfoResponse);
     sandbox.stub(sails.helpers.sdtd, 'loadFps').callsFake(async () => 15);
     sandbox.stub(sails.helpers.sdtd, 'loadPlayerData').value({ with: async () => playerInfoResponse });
-    sandbox.stub(sails.helpers.sdtdApi, 'executeConsoleCommand').callsFake(async () => consoleCommandResponse);
     Command.prototype.client = {customEmbed: customEmbed};
   });
 
   it('Sends a discord message', async function () {
+    sandbox.stub(sails.helpers.sdtdApi, 'executeConsoleCommand').callsFake(async () => consoleCommandResponse);
+    await doTest(sendStub, serverInfoResponse);
+  });
 
-    await Command.prototype.run(
-      {
-        guild: { id: 'someGuildId'},
-        channel: new Channel({}, {})
-      },
-      { server: 1});
-
-    expect(Channel.prototype.send).to.have.been.calledOnce;
-    const sendCall = sendStub.getCall(0).firstArg;
-    const playersOnlineField = sendCall.fields.find(_ => _.name.includes('players online'));
-    const playersOnline = parseInt(playersOnlineField.name.split(' ')[0]);
-    expect(playersOnline).to.be.equal(serverInfoResponse.stats.players);
+  it('Sends a discord message with API call failing', async function(){
+    sandbox.stub(sails.helpers.sdtdApi, 'executeConsoleCommand').callsFake(async () => new Error('Some issue happened here!'));
+    const embed = await doTest(sendStub, serverInfoResponse);
+    const gametime = embed.fields.find(_ => _.name.includes('Gametime'));
+    expect(gametime.value.includes('unknown'));
   });
 });
+
+async function doTest(sendStub, serverInfoResponse){
+
+  await Command.prototype.run(
+    {
+      guild: { id: 'someGuildId'},
+      channel: new Channel({}, {})
+    },
+    { server: 1});
+
+  expect(Channel.prototype.send).to.have.been.calledOnce;
+  const sendCall = sendStub.getCall(0).firstArg;
+  const playersOnlineField = sendCall.fields.find(_ => _.name.includes('players online'));
+  const playersOnline = parseInt(playersOnlineField.name.split(' ')[0]);
+  expect(playersOnline).to.be.equal(serverInfoResponse.stats.players);
+  return sendCall;
+}
