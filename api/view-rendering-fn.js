@@ -320,7 +320,6 @@ function partial(view, options){
         // merge(options, object);
       }
     }
-    // TODO Support other templates (but it's sync now...)
     let html = ejs.render(source, options, options);
     return html;
   }
