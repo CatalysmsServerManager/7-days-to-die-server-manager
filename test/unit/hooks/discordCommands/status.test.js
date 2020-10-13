@@ -34,13 +34,13 @@ describe('Discord - status', function () {
 
   it('Sends a discord message', async function () {
     sandbox.stub(sails.helpers.sdtdApi, 'executeConsoleCommand').callsFake(async () => consoleCommandResponse);
-    await doTest(sendStub, serverInfoResponse);
+    const gametime = await doTest(sendStub, serverInfoResponse);
+    expect(gametime.value.includes('3'));
   });
 
   it('Sends a discord message with API call failing', async function(){
     sandbox.stub(sails.helpers.sdtdApi, 'executeConsoleCommand').callsFake(async () => new Error('Some issue happened here!'));
-    const embed = await doTest(sendStub, serverInfoResponse);
-    const gametime = embed.fields.find(_ => _.name.includes('Gametime'));
+    const gametime = await doTest(sendStub, serverInfoResponse);
     expect(gametime.value.includes('unknown'));
   });
 });
@@ -58,6 +58,7 @@ async function doTest(sendStub, serverInfoResponse){
   const sendCall = sendStub.getCall(0).firstArg;
   const playersOnlineField = sendCall.fields.find(_ => _.name.includes('players online'));
   const playersOnline = parseInt(playersOnlineField.name.split(' ')[0]);
+  const gametime = sendCall.fields.find(_ => _.name.includes('Gametime'));
   expect(playersOnline).to.be.equal(serverInfoResponse.stats.players);
-  return sendCall;
+  return gametime;
 }
