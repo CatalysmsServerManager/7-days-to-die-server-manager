@@ -61,7 +61,7 @@ class Status extends Commando.Command {
         SdtdServer.getAPIConfig(sdtdServer),
         `ggs BloodMoonDay`
       );
-      nextHorde = parseInt(bloodMoonDay.result.split(` = `)[1]);
+      nextHorde = parseInt(bloodMoonDay.result.split(` = `)[1], 10);
     } catch (error) {
       sails.log.warn(`Hook - discordBot:status - ${error}`);
       sails.log.error(error);
