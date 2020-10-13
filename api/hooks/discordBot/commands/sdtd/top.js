@@ -1,6 +1,8 @@
 const Commando = require('discord.js-commando');
 const findSdtdServer = require('../../util/findSdtdServer.js');
 
+const validTypes = ['currency', 'zombies', 'players', 'deaths', 'playtime', 'score', 'level'];
+
 class Top extends Commando.Command {
   constructor(client) {
     super(client, {
@@ -13,7 +15,10 @@ class Top extends Commando.Command {
         key: 'type',
         prompt: 'Please specify which top you want to see',
         type: 'string',
-        oneOf: ['currency', 'zombies', 'players', 'deaths', 'playtime', 'score', 'level']
+        oneOf: validTypes,
+        validate: val => validTypes.some(type => val.toLowerCase() === type.toLowerCase()),
+        parse: val => val.toLowerCase(),
+        error: `Top Command: Type argument value was not valid. Please use one of: ${validTypes.join(', ')}`
       }, {
         key: 'amount',
         prompt: 'Amount of players to show',

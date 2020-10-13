@@ -87,22 +87,18 @@ class Gimme extends SdtdCommand {
             cmdToExec = `give ${player.entityId} ${itemToGive} 1`;
           }
 
-          try {
-            let response = await SdtdApi.executeConsoleCommand(
-              {
-                ip: server.ip,
-                port: server.webPort,
-                adminUser: server.authName,
-                adminToken: server.authToken
-              },
-              cmdToExec
-            );
+          let response = await SdtdApi.executeConsoleCommand(
+            {
+              ip: server.ip,
+              port: server.webPort,
+              adminUser: server.authName,
+              adminToken: server.authToken
+            },
+            cmdToExec
+          );
 
-            if (response.result.includes('ERR:')) {
-              chatMessage.reply('error');
-            }
-          } catch (error) {
-            chatMessage.reply('error');
+          if (response.result.includes('ERR:')) {
+            chatMessage.reply('error', { error: 'Error while executing give command' });
           }
         }
         break;
@@ -123,7 +119,7 @@ class Gimme extends SdtdCommand {
               cmdToExec
             );
           } catch (error) {
-            chatMessage.reply('error');
+            chatMessage.reply('error', { error: 'Error while executing give command' });
           }
         }
         break;

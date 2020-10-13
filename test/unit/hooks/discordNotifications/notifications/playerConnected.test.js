@@ -4,7 +4,7 @@ const PlayerConnected = require('../../../../../api/hooks/discordNotifications/n
 describe('PlayerConnected', function () {
   beforeEach(function() {
     this.channel = {
-      send: sandbox.fake()
+      send: sandbox.fake(async () => {})
     };
 
     this.notification = new PlayerConnected();

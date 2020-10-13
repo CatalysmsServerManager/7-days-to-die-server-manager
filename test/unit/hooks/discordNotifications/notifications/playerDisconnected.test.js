@@ -3,7 +3,7 @@ const PlayerDisconnected = require('../../../../../api/hooks/discordNotification
 describe('PlayerDisconnected', function () {
   beforeEach(function() {
     this.channel = {
-      send: sandbox.fake()
+      send: sandbox.fake(async () => {})
     };
 
     this.notification = new PlayerDisconnected();

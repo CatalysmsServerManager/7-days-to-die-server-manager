@@ -1,0 +1,6 @@
+name: "CodeQL config"
+
+paths-ignore:
+  - node_modules
+  - "**/*.test.js"
+  - assets/dependencies
