@@ -1,5 +1,6 @@
 module.exports = async (serverId) => {
   const sdtdServer = await SdtdServer.findOne(serverId).populate('config');
+
   // shouldn't happen
   if (!sdtdServer) { return null; }
 
