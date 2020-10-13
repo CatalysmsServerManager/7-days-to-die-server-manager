@@ -15,6 +15,13 @@ let join = path.join;
 let basename = path.basename;
 
 
+const localsFunctions = {};
+fs.readdirSync(path.join(__dirname, 'localsfuncs')).forEach(file => {
+  file = path.join(__dirname, 'localsfuncs', file);
+  const key = _.camelCase(path.basename(file, '.js'));
+  localsFunctions[key] = require(file);
+});
+
 /**
  * Fork of https://github.com/balderdashy/sails/blob/master/lib/hooks/views/default-view-rendering-fn.js
  *
@@ -36,7 +43,6 @@ let basename = path.basename;
  */
 
 module.exports = async function renderFile(file, options, fn){
-  console.log({ file });
   // Express used to set options.locals for us, but now we do it ourselves
   // (EJS does some __proto__ magic to expose these funcs/values in the template)
   if (!options.locals) {
@@ -61,17 +67,7 @@ module.exports = async function renderFile(file, options, fn){
   options.locals.layout  = layout.bind(options);
   options.locals.partial = partial.bind(options);
 
-  options.locals.serverMapUrl = async (serverId) => {
-    const sdtdServer = await SdtdServer.findOne(serverId).populate('config');
-    // shouldn't happen
-    if (!sdtdServer) { return null; }
-
-    if (!sdtdServer.config[0].mapProxy) {
-      const baseUrl = sails.helpers.sdtdApi.getBaseUrl(SdtdServer.getAPIConfig(sdtdServer));
-      return `${baseUrl}/map/{z}/{x}/{y}.png?adminuser=${sdtdServer.authName}&admintoken=${sdtdServer.authToken}`;
-    }
-    return `/api/sdtdserver/${sdtdServer.id}/tile/{z}/{x}/{y}/.png`;
-  };
+  _.extend(options.locals, localsFunctions);
 
   options.async = true;
 
