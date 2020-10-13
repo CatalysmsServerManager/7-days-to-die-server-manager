@@ -19,12 +19,16 @@ describe('Discord - status', function () {
     const playerInfoResponse = [
       {name: 'Player a'}, {name: 'Player b'}
     ];
+    const consoleCommandResponse = {
+      result: 'GameStat.BloodMoonDay = 8'
+    };
     sandbox.stub(SdtdConfig, 'find').callsFake(() => ['random server']);
     sandbox.stub(SdtdServer, 'findOne').callsFake(() => sails.testServer);
     sendStub = sandbox.stub(Channel.prototype, 'send').callsFake(() => null);
     sandbox.stub(sails.helpers, 'loadSdtdserverInfo').callsFake(async () => serverInfoResponse);
     sandbox.stub(sails.helpers.sdtd, 'loadFps').callsFake(async () => 15);
     sandbox.stub(sails.helpers.sdtd, 'loadPlayerData').value({ with: async () => playerInfoResponse });
+    sandbox.stub(sails.helpers.sdtdApi, 'executeConsoleCommand').callsFake(async () => consoleCommandResponse);
     Command.prototype.client = {customEmbed: customEmbed};
   });
 
