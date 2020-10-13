@@ -28,7 +28,8 @@ module.exports = function discordBot(sails) {
         sails.log.info('Initializing custom hook (`discordBot`)');
         client = new Commando.Client({
           owner: sails.config.custom.botOwners,
-          unknownCommandResponse: false
+          unknownCommandResponse: false,
+          invite: process.env.INVITELINK
         });
 
         sails.discordBotClient = client;
