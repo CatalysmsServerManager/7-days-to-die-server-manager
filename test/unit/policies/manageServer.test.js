@@ -26,7 +26,11 @@ describe('Policies/roles - manageServer', function() {
       path: 'some/random/path/',
       wantsJSON: true
     };
+
     res = mockResponse();
+    res.view = sandbox.fake();
+    res.badRequest = sandbox.fake();
+
     next = sandbox.mock();
     rolesResponse = {
       hasPermission: true,
