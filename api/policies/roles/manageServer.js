@@ -12,6 +12,10 @@ module.exports = async function manageServer(req, res, next) {
   let server = await SdtdServer.findOne(serverId);
   let user = req.session.user;
 
+  if(!server) {
+    return res.badRequest(`Error while running "manageServer" policy, could not find a server.`);
+  }
+
   let permCheck = await sails.helpers.roles.checkPermission.with({
     userId: user.id,
     serverId: server.id,
