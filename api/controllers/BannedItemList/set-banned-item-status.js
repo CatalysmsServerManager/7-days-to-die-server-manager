@@ -17,16 +17,16 @@ module.exports = {
 
   exits: {},
 
-  fn: async function(inputs, exits) {
+  fn: async function (inputs, exits) {
     await SdtdConfig.update(
       { server: inputs.serverId },
       { bannedItemsEnabled: inputs.status }
     );
 
     if (inputs.status) {
-      sails.hooks.banneditems.start(inputs.serverId);
+      await sails.hooks.banneditems.start(inputs.serverId);
     } else {
-      sails.hooks.banneditems.stop(inputs.serverId);
+      await sails.hooks.banneditems.stop(inputs.serverId);
     }
 
     return exits.success();

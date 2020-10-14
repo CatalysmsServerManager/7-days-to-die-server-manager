@@ -63,7 +63,6 @@ module.exports = {
     if (config.killEarnerEnabled) {
       await sails.hooks.economy.stop(server.id, 'killEarner');
     }
-
     // High ping kick
     await sails.hooks.highpingkick.stop(server.id);
 
@@ -73,7 +72,7 @@ module.exports = {
     // SdtdCommands
     await sails.hooks.sdtdcommands.stop(server.id);
 
-    sails.hooks.banneditems.stop(server.id);
+    await sails.hooks.banneditems.stop(server.id);
 
     // Logs
     await sails.hooks.sdtdlogs.stop(server.id);

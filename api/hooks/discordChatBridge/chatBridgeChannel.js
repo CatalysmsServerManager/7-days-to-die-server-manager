@@ -13,9 +13,7 @@ class ChatBridgeChannel {
     this.channel = textChannel;
     this.sdtdServer = sdtdServer;
     this.config;
-    this.loggingObject = sails.hooks.sdtdlogs.getLoggingObject(
-      this.sdtdServer.id
-    );
+    this.loggingObject;
     this.donorStatus;
     this.start();
   }
@@ -29,6 +27,9 @@ class ChatBridgeChannel {
       this.donorStatus = await sails.helpers.meta.checkDonatorStatus(
         this.sdtdServer.id
       );
+
+      this.loggingObject = await sails.hooks.sdtdlogs.getLoggingObject(this.sdtdServer.id);
+
       // Bind 'this' to sendMessage functions
       this.sendChatMessageToDiscord = this.sendChatMessageToDiscord.bind(this);
       this.sendConnectedMessageToDiscord = this.sendConnectedMessageToDiscord.bind(

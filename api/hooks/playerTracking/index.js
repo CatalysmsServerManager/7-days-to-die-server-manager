@@ -21,9 +21,9 @@ module.exports = function definePlayerTrackingHook(sails) {
 
     },
 
-    start(serverId) {
+    async start(serverId) {
 
-      let loggingObject = sails.hooks.sdtdlogs.getLoggingObject(serverId);
+      let loggingObject = await sails.hooks.sdtdlogs.getLoggingObject(serverId);
 
       if (_.isUndefined(loggingObject)) {
         sails.log.warn(`Tried to start tracking for a server without a loggingObject`, {

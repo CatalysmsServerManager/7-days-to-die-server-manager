@@ -327,7 +327,7 @@ module.exports = function sdtdCountryBan(sails) {
         `HOOK:countryBan Stopping countryBan for server ${serverId} `
       );
 
-      let loggingObj = sails.hooks.sdtdlogs.getLoggingObject(serverId);
+      let loggingObj = await sails.hooks.sdtdlogs.getLoggingObject(serverId);
 
       if (_.isUndefined(loggingObj)) {
         throw new Error('Could not find logging object for server');
@@ -483,7 +483,7 @@ module.exports = function sdtdCountryBan(sails) {
       });
       currentConfig = config.countryBanConfig;
 
-      let loggingObj = sails.hooks.sdtdlogs.getLoggingObject(serverId);
+      let loggingObj = await sails.hooks.sdtdlogs.getLoggingObject(serverId);
       if (_.isUndefined(loggingObj)) {
         return sails.log.error('Could not find logging object for server');
       }

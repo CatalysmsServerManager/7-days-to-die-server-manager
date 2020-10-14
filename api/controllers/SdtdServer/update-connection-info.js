@@ -83,7 +83,7 @@ module.exports = {
         updateObject
       );
 
-      let loggingObject = sails.hooks.sdtdlogs.getLoggingObject(
+      let loggingObject = await sails.hooks.sdtdlogs.getLoggingObject(
         inputs.serverId
       );
 

@@ -13,7 +13,7 @@ module.exports = {
 
   exits: {},
 
-  fn: async function(inputs, exits) {
+  fn: async function (inputs, exits) {
     const server = await SdtdServer.findOne(inputs.serverId).populate('config');
     if (_.isUndefined(server)) {
       return exits.error('Unknown server ID');
@@ -70,7 +70,7 @@ module.exports = {
     }
 
     if (config.bannedItemsEnabled) {
-      sails.hooks.banneditems.start(inputs.serverId);
+      await sails.hooks.banneditems.start(inputs.serverId);
     }
 
     // Historical info (aka analytics)
