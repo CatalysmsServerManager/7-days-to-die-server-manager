@@ -51,16 +51,16 @@
                   <div class="btn-group btn-group-vertical">
 
                     <% if (player.banned) { %>
-                    <%- await include("./partials/unbanPlayerButton", {player: player}) %>
+                    <%- await include("./partials/unbanPlayerButton.sejs", {player: player}) %>
                     <% } else { %>
 
-                    <%- await include("./partials/banPlayerButton", {player: player}) %>
-                    <%- await include("./partials/kickPlayerButton", {player: player}) %>
-                    <%- await include("./partials/teleportPlayerButton", {player: player}) %>
-                    <%- await include("./partials/giveItemButton", {player: player}) %>
+                    <%- await include("./partials/banPlayerButton.sejs", {player: player}) %>
+                    <%- await include("./partials/kickPlayerButton.sejs", {player: player}) %>
+                    <%- await include("./partials/teleportPlayerButton.sejs", {player: player}) %>
+                    <%- await include("./partials/giveItemButton.sejs", {player: player}) %>
                     <% } %>
-                    <%- await include("./partials/setMoneyButton", {player: player}) %>
-                    <%- await include("./partials/deletePlayerButton", {player: player}) %>
+                    <%- await include("./partials/setMoneyButton.sejs", {player: player}) %>
+                    <%- await include("./partials/deletePlayerButton.sejs", {player: player}) %>
                   </div>
                 </div>
                 <div class="col-lg-3">
@@ -366,7 +366,7 @@
         <div class="card-body">
           <h4 class="card-title">Inventory</h4>
           <p class="card-text">
-            <%- await include('./partials/playerInventory', {player: player}) %>
+            <%- await include('./partials/playerInventory.sejs', {player: player}) %>
           </p>
         </div>
       </div>

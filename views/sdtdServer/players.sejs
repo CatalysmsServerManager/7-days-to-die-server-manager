@@ -22,9 +22,9 @@
 
     <br />
 
-    <%- await include('./partials/deletePlayersButton') %>
-    <%- await include('./partials/wipeTeleports') %>
-    <%- await include('./partials/wipeCurrencyBtn') %>
+    <%- await include('./partials/deletePlayersButton.sejs') %>
+    <%- await include('./partials/wipeTeleports.sejs') %>
+    <%- await include('./partials/wipeCurrencyBtn.sejs') %>
 
     <br />
 

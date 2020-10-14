@@ -165,11 +165,9 @@
 <body>
 
 
-    <%- await include("../includes/header.ejs") %>
+    <%- await include("../includes/header.sejs") %>
 
     <%- body %>
-
-    <%- await include("../includes/footer.ejs") %>
 
 
 </body>

@@ -9,7 +9,7 @@
 
 
 
-  <%- await include('./partials/listOfOwnedServers', {servers: ownedServers}) %>
+  <%- await include('./partials/listOfOwnedServers.sejs', {servers: ownedServers}) %>
 
 
 

@@ -1,3 +1,4 @@
+<% layout('layouts/homepageLayout') %>
 <body>
 
     <div class="container">
