@@ -14,7 +14,7 @@ class LoggingObject extends EventEmitter {
     super();
     this.serverId = server.id;
 
-    this.active = true;
+    this.active = false;
     this.lastLogLine = 0;
     this.queue = sails.helpers.getQueueObject('logs');
     this.intervalTime = intervalTime;

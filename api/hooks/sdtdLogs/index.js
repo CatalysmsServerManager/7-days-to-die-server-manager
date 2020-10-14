@@ -22,7 +22,7 @@ module.exports = function sdtdLogs(sails) {
      * @private
      */
     initialize: function (cb) {
-      sails.on('hook:orm:loaded', async () => {
+      sails.after('hook:orm:loaded', async () => {
         sails.log.info('Initializing custom hook (`sdtdLogs`)');
 
         try {

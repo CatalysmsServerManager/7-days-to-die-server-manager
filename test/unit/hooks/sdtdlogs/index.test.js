@@ -1,4 +1,6 @@
 const { expect } = require('chai');
+const faker = require('faker');
+const util = require('util');
 
 describe('logging hook index', () => {
 
@@ -98,6 +100,40 @@ describe('logging hook index', () => {
       const res = await sails.hooks.sdtdlogs.getLoggingObject(sails.testServer.id);
       expect(res).to.be.instanceOf(LoggingObject);
       expect(res.active).to.not.be.ok;
+    });
+
+  });
+
+
+  describe('initialize', () => {
+
+    it('Only starts servers that are active', async () => {
+      const initialize = util.promisify(sails.hooks.sdtdlogs.initialize);
+
+      const inactiveServer = await SdtdServer.create({
+        name: faker.company.companyName(),
+        ip: 'localhost',
+        webPort: '8082',
+        authName: faker.random.alphaNumeric(20),
+        authToken: faker.random.alphaNumeric(20),
+        owner: sails.testUser.id
+      }).meta({ skipAllLifecycleCallbacks: true }).fetch();
+
+      await SdtdConfig.create({
+        server: inactiveServer.id,
+        inactive: true,
+
+      }).meta({ skipAllLifecycleCallbacks: true }).fetch();
+
+      await initialize();
+
+      const logObjActive = await sails.hooks.sdtdlogs.getLoggingObject(sails.testServer.id);
+      const logObjInactive = await sails.hooks.sdtdlogs.getLoggingObject(inactiveServer.id);
+
+
+      expect(logObjActive.active).to.be.true;
+      expect(logObjInactive.active).to.be.false;
+
     });
 
   });
