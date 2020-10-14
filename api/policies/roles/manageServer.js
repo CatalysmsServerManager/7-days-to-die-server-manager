@@ -1,14 +1,14 @@
 module.exports = async function manageServer(req, res, next) {
 
-  if (_.isUndefined(req.session.user)) {
+  if (!req.session.user) {
     return res.redirect('/auth/steam');
   }
 
-  if (_.isUndefined(req.param('serverId')) && _.isUndefined(req.query.serverId)) {
+  if (!req.param('serverId') && !req.query.serverId) {
     return res.badRequest(`Error while running "manageServer" policy, could not determine server ID.`);
   }
 
-  let serverId = _.isUndefined(req.param('serverId')) ? req.query.serverId : req.param('serverId');
+  let serverId = req.param('serverId') ? req.param('serverId') : req.query.serverId;
   let server = await SdtdServer.findOne(serverId);
   let user = req.session.user;
 
