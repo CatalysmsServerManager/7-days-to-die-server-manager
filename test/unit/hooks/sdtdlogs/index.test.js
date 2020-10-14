@@ -1,8 +1,5 @@
 const { expect } = require('chai');
 
-const LoggingObject = require('../../../../api/hooks/sdtdLogs/LoggingObject');
-
-
 describe('logging hook index', () => {
 
   it('Updates a Players country on connectedMessage event', async () => {
@@ -79,29 +76,28 @@ describe('logging hook index', () => {
   describe('getLoggingObject', () => {
 
     it('Returns an instance of LoggingObject', async () => {
+      // Have to require inside the test because sails does weird stuff
+      // See: https://github.com/CatalysmsServerManager/7-days-to-die-server-manager/pull/370
+      const LoggingObject = require('../../../../api/hooks/sdtdLogs/LoggingObject');
       const res = await sails.hooks.sdtdlogs.getLoggingObject(sails.testServer.id);
-      // TODO: This should be an instanceof assertion but JS classes are kicking me in the brain
-      console.log(res.constructor); // => [Function: LoggingObject]
-      console.log(LoggingObject); // => [Function: LoggingObject]
-      //console.log(res.prototype.isPrototypeOf(LoggingObject)); // => Cannot read property 'isPrototypeOf' of undefined
-      expect(res instanceof LoggingObject).to.be.ok; // => Errors
-      expect(res.constructor).to.be.equal(LoggingObject);
       expect(res).to.be.instanceOf(LoggingObject);
     });
 
     it('Creates a loggingObject when one doesnt exist yet', async () => {
+      const LoggingObject = require('../../../../api/hooks/sdtdLogs/LoggingObject');
       await sails.hooks.sdtdlogs.stop(sails.testServer.id);
       const res = await sails.hooks.sdtdlogs.getLoggingObject(sails.testServer.id);
       expect(res).to.be.instanceOf(LoggingObject);
     });
 
-    it('Returns null when a server is inactive', async () => {
-      // Could also return an inactive LoggingObject here...
-      // That will not break things in other files
-      await sails.hooks.sdtdlogs.stop(sails.testServer.id);
-      await sails.helpers.setServerInactive(sails.testServer.id);
+    it('Returns an inactive loggingObject when a server is inactive', async () => {
+      const LoggingObject = require('../../../../api/hooks/sdtdLogs/LoggingObject');
+
+      //await sails.hooks.sdtdlogs.stop(sails.testServer.id);
+      await sails.helpers.meta.setServerInactive(sails.testServer.id);
       const res = await sails.hooks.sdtdlogs.getLoggingObject(sails.testServer.id);
-      expect(res).to.be.null;
+      expect(res).to.be.instanceOf(LoggingObject);
+      expect(res.active).to.not.be.ok;
     });
 
   });

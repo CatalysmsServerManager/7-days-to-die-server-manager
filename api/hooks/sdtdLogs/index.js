@@ -106,10 +106,15 @@ module.exports = function sdtdLogs(sails) {
     getLoggingObject: async function (serverId) {
       let obj = loggingInfoMap.get(String(serverId));
       if (_.isUndefined(obj)) {
-        // TODO: Check if server is inactive
         sails.log.warn(`Tried to get a non-existing loggingObject, creating a new loggingObject for server ${serverId}.`);
         await this.start(serverId);
+        const config = await SdtdConfig.findOne({ where: { server: serverId } });
         obj = loggingInfoMap.get(String(serverId));
+        // If a server is set to inactive, the created loggingObject should not do anything
+        if (config.inactive) {
+          await obj.stop();
+        }
+
       }
       return obj;
     },

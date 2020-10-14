@@ -61,7 +61,7 @@ before(async function () {
 
         playerTracking: false,
         discordBot: false,
-        highpingkick: false
+        //highpingkick: false
       },
       log: { level: process.env.CSMM_LOGLEVEL || 'info' },
       security: {

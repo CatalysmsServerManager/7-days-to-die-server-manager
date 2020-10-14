@@ -38,8 +38,8 @@ module.exports = function banneditems(sails) {
     return;
   }
 
-  function stop(serverId) {
-    const loggingObject = sails.hooks.sdtdlogs.getLoggingObject(serverId);
+  async function stop(serverId) {
+    const loggingObject = await sails.hooks.sdtdlogs.getLoggingObject(serverId);
     loggingObject.removeListener('trackingUpdate', handleItemTrackerUpdate);
     return;
   }
