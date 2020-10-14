@@ -440,8 +440,7 @@
       })
 
       // Map
-      trackingMap = new sdtdMap($("#sdtdMap"))
-
+      trackingMap = new sdtdMap($("#sdtdMap"), <%- JSON.stringify(await serverMapUrl(server.id)) -%>)
 
       $("#tracking-draw-land-claims").click(e => {
         trackingMap.clear()

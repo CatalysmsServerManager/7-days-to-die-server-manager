@@ -16,8 +16,8 @@
                     <%= commentDate.toTimeString() %>
                 </div>
                 <% if (comment.userThatPlacedTheComment === req.session.userId) { %>
-                    <%- include('./removeCommentButton', {comment: comment, ticket: ticket}) %>
-                    <%- include('./editCommentButton', {comment: comment, ticket: ticket}) %>
+                    <%- await include('./removeCommentButton', {comment: comment, ticket: ticket}) %>
+                    <%- await include('./editCommentButton', {comment: comment, ticket: ticket}) %>
                         <% } %>
         </div>
     </div>

@@ -25,28 +25,28 @@ module.exports.routes = {
   '/': {
     view: 'index',
     locals: {
-      layout: 'layouts/homepageLayout'
+      layoutTemplate: 'layouts/homepageLayout'
     }
   },
 
   '/donate': {
     view: 'meta/donate',
     locals: {
-      layout: 'layouts/homepageLayoutNoFooter'
+      layoutTemplate: 'layouts/homepageLayoutNoFooter'
     }
   },
 
   '/privacy': {
     view: 'meta/privacy',
     locals: {
-      layout: 'layouts/homepageLayout'
+      layoutTemplate: 'layouts/homepageLayout'
     }
   },
 
   '/stats': {
     view: 'meta/stats',
     locals: {
-      layout: 'layouts/homepageLayoutNoFooter'
+      layoutTemplate: 'layouts/homepageLayoutNoFooter'
     }
   },
 
@@ -301,6 +301,7 @@ module.exports.routes = {
     'SdtdServerController.update-connection-info',
   'post /api/sdtdserver/toggleLogging': 'SdtdServerController.logging-toggle',
   'post /api/sdtdserver/inactive': 'SdtdServerController.set-active-status',
+  'post /api/sdtdserver/settings': 'SdtdServerController.set-settings',
 
   // Cron
 

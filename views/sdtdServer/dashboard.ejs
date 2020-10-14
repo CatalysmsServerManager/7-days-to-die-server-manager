@@ -16,7 +16,7 @@
 
 <button id="reload-gbl-entries" type="button" class="btn btn-primary btn-lg">Refresh GBL entries</button>
 
-<%- include('./partials/restartServer', {server: server}) %>
+<%- await include('./partials/restartServer', {server: server}) %>
 
 
 <!-- Button trigger modal -->
@@ -67,7 +67,7 @@
     <div class="card-body">
       <p class="card-text">
 
-        <%- include('./partials/onlinePlayers', {server: server}) %>
+        <%- await include('./partials/onlinePlayers', {server: server}) %>
 
 
       </p>
@@ -83,7 +83,7 @@
     <div class="card-body">
       <p class="card-text">
 
-        <%- include('./partials/basicServerInfo', {server: server}) %>
+        <%- await include('./partials/basicServerInfo', {server: server}) %>
 
       </p>
     </div>
@@ -105,8 +105,8 @@
     <div class="card-body">
       <p class="card-text">
 
-        <%- include('./partials/chat/chatWindow', {server: server}) %>
-        <%- include('./partials/chat/chatControls', {server: server}) %>
+        <%- await include('./partials/chat/chatWindow', {server: server}) %>
+        <%- await include('./partials/chat/chatControls', {server: server}) %>
 
       </p>
     </div>
@@ -119,8 +119,8 @@
     </div>
     <div class="card-body">
       <p class="card-text">
-        <%- include('./partials/console/consoleWindow', {server: server}) %>
-        <%- include('./partials/console/consoleControls', {server: server}) %>
+        <%- await include('./partials/console/consoleWindow', {server: server}) %>
+        <%- await include('./partials/console/consoleControls', {server: server}) %>
       </p>
     </div>
   </div>
@@ -134,7 +134,7 @@
   </div>
   <div class="card-body">
     <p class="card-text">
-      <%- include('./partials/map', {server: server}) %>
+      <%- await include('./partials/map', {server: server}) %>
     </p>
   </div>
 </div>

@@ -51,16 +51,16 @@
                   <div class="btn-group btn-group-vertical">
 
                     <% if (player.banned) { %>
-                    <%- include("./partials/unbanPlayerButton", {player: player}) %>
+                    <%- await include("./partials/unbanPlayerButton", {player: player}) %>
                     <% } else { %>
 
-                    <%- include("./partials/banPlayerButton", {player: player}) %>
-                    <%- include("./partials/kickPlayerButton", {player: player}) %>
-                    <%- include("./partials/teleportPlayerButton", {player: player}) %>
-                    <%- include("./partials/giveItemButton", {player: player}) %>
+                    <%- await include("./partials/banPlayerButton", {player: player}) %>
+                    <%- await include("./partials/kickPlayerButton", {player: player}) %>
+                    <%- await include("./partials/teleportPlayerButton", {player: player}) %>
+                    <%- await include("./partials/giveItemButton", {player: player}) %>
                     <% } %>
-                    <%- include("./partials/setMoneyButton", {player: player}) %>
-                    <%- include("./partials/deletePlayerButton", {player: player}) %>
+                    <%- await include("./partials/setMoneyButton", {player: player}) %>
+                    <%- await include("./partials/deletePlayerButton", {player: player}) %>
                   </div>
                 </div>
                 <div class="col-lg-3">
@@ -366,7 +366,7 @@
         <div class="card-body">
           <h4 class="card-title">Inventory</h4>
           <p class="card-text">
-            <%- include('./partials/playerInventory', {player: player}) %>
+            <%- await include('./partials/playerInventory', {player: player}) %>
           </p>
         </div>
       </div>

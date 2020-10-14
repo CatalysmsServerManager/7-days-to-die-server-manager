@@ -78,17 +78,17 @@
 
   <div id="gimme-settings">
     <hr>
-    <%- include('./gimmeModal', gimmeItems) %>
+    <%- await include('./gimmeModal', gimmeItems) %>
   </div>
 
   <div id="voteSettings">
     <hr>
-    <%- include('./voteSettings') %>
+    <%- await include('./voteSettings') %>
   </div>
 
   <div id="replySettings">
     <hr>
-    <%- include('./commandReplies') %>
+    <%- await include('./commandReplies') %>
   </div>
 
 
@@ -141,14 +141,14 @@
       </tr>
     </thead>
     <tbody>
-      <% customCommands.forEach(command => { %>
+      <% customCommands.forEach(async command => { %>
         <tr>
           <td scope="row"><%= command.name %></td>
           <td><%= command.description %></td>
           <td><%= command.commandsToExecute %></td>
-          <td><%- include('./editCommandModal.ejs', { command: command}) %></td>
+          <td><%- await include('./editCommandModal.ejs', { command: command }) %></td>
         </tr>
-      
+
         <% }) %>
 
     </tbody>
@@ -157,7 +157,7 @@
   <hr>
 
 
-  <%- include('./addCommandModal.ejs') %>
+  <%- await include('./addCommandModal.ejs') %>
 
   <!-- Button trigger modal -->
   <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#custom-commands-import-modal">
@@ -208,7 +208,7 @@
   <a name="export-customcommands" id="export-custom-commands" class="btn btn-secondary"
     href="/api/sdtdserver/commands/export?serverId=<%= server.id %>" role="button">Export to file</a>
 
-  <%- include('../commandsHelpButton') %>
+  <%- await include('../commandsHelpButton') %>
 
 </div>
 
