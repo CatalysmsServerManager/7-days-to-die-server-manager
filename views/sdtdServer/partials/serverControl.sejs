@@ -27,7 +27,7 @@
             <i class="fa fa-cog" aria-hidden="true"></i> Settings
           </a>
 
-          <% await include ./restartServer %>
+          <% await include('./restartServer.sejs') %>
 
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-server-button">

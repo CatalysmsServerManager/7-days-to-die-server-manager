@@ -163,7 +163,7 @@
 <body>
 
 
-    <%- await include("../includes/header.ejs") %>
+    <%- await include("../includes/header.sejs") %>
 
     <div class="container-fluid">
 
@@ -172,7 +172,7 @@
     </div>
 
 
-    <%- await include("../includes/footer.ejs") %>
+    <%- await include("../includes/footer.sejs") %>
 
 
 </body>

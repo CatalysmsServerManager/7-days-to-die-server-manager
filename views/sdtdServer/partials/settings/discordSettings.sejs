@@ -219,7 +219,7 @@
     </div>
   </div>
 
-  <%- await include('./customDiscordNotifications') %>
+  <%- await include('./customDiscordNotifications.sejs') %>
 
   <% } %>
 

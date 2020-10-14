@@ -186,7 +186,7 @@
 <body class="sidenav-toggled">
 
 
-  <%- await include("../includes/applicationNav.ejs") %>
+  <%- await include("../includes/applicationNav.sejs") %>
 
 
 
