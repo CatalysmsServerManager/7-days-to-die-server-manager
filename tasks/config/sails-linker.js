@@ -11,7 +11,9 @@
  *   https://sailsjs.com/anatomy/tasks/config/sails-linker.js
  *
  */
-module.exports = function(grunt) {
+
+const version = require('../../package.json').version;
+module.exports = function (grunt) {
 
   grunt.config.set('sails-linker', {
 
@@ -26,7 +28,7 @@ module.exports = function(grunt) {
       options: {
         startTag: '<!--SCRIPTS-->',
         endTag: '<!--SCRIPTS END-->',
-        fileTmpl: '<script src="%s"></script>',
+        fileTmpl: `<script src="%s?v=${version}"></script>`,
         appRoot: '.tmp/public'
       },
       files: {
@@ -40,7 +42,7 @@ module.exports = function(grunt) {
       options: {
         startTag: '<!--SCRIPTS-->',
         endTag: '<!--SCRIPTS END-->',
-        fileTmpl: '<script src="%s"></script>',
+        fileTmpl: `<script src="%s?v=${version}"></script>`,
         appRoot: '.tmp/public',
         relative: true
       },
@@ -53,7 +55,7 @@ module.exports = function(grunt) {
       options: {
         startTag: '<!--SCRIPTS-->',
         endTag: '<!--SCRIPTS END-->',
-        fileTmpl: '<script src="%s"></script>',
+        fileTmpl: `<script src="%s?v=${version}"></script>`,
         appRoot: '.tmp/public'
       },
       files: {
@@ -67,7 +69,7 @@ module.exports = function(grunt) {
       options: {
         startTag: '<!--SCRIPTS-->',
         endTag: '<!--SCRIPTS END-->',
-        fileTmpl: '<script src="%s"></script>',
+        fileTmpl: `<script src="%s?v=${version}"></script>`,
         appRoot: '.tmp/public',
         relative: true
       },
@@ -87,7 +89,7 @@ module.exports = function(grunt) {
       options: {
         startTag: '<!--STYLES-->',
         endTag: '<!--STYLES END-->',
-        fileTmpl: '<link rel="stylesheet" href="%s">',
+        fileTmpl: `<link rel="stylesheet" href="%s?v=${version}">`,
         appRoot: '.tmp/public'
       },
 
@@ -102,7 +104,7 @@ module.exports = function(grunt) {
       options: {
         startTag: '<!--STYLES-->',
         endTag: '<!--STYLES END-->',
-        fileTmpl: '<link rel="stylesheet" href="%s">',
+        fileTmpl: `<link rel="stylesheet" href="%s?v=${version}">`,
         appRoot: '.tmp/public',
         relative: true
       },
@@ -116,7 +118,7 @@ module.exports = function(grunt) {
       options: {
         startTag: '<!--STYLES-->',
         endTag: '<!--STYLES END-->',
-        fileTmpl: '<link rel="stylesheet" href="%s">',
+        fileTmpl: `<link rel="stylesheet" href="%s?v=${version}">`,
         appRoot: '.tmp/public'
       },
       files: {
@@ -130,7 +132,7 @@ module.exports = function(grunt) {
       options: {
         startTag: '<!--STYLES-->',
         endTag: '<!--STYLES END-->',
-        fileTmpl: '<link rel="stylesheet" href="%s">',
+        fileTmpl: `<link rel="stylesheet" href="%s?v=${version}">`,
         appRoot: '.tmp/public',
         relative: true
       },
