@@ -28,7 +28,7 @@
 
     <div id="settings-collapse-basicServerSettings" class="collapse">
       <div class="card-body">
-        <%- await include('./partials/settings/basicServerSettings', {server: server, config: config}) %>
+        <%- await include('./partials/settings/basicServerSettings.sejs', {server: server, config: config}) %>
       </div>
     </div>
 
@@ -46,7 +46,7 @@
     </div>
 
     <div id="settings-collapse-discordSettings" class="collapse">
-      <%- await include('./partials/settings/discordSettings', {server: server, config: config, user: user}) %>
+      <%- await include('./partials/settings/discordSettings.sejs', {server: server, config: config, user: user}) %>
     </div>
   </div>
 
@@ -64,7 +64,7 @@
     <div id="settings-collapse-cronSettings" class="collapse">
       <div class="card-body">
 
-        <%- await include('./partials/settings/cronSettings', {server: server, config: config}) %>
+        <%- await include('./partials/settings/cronSettings.sejs', {server: server, config: config}) %>
       </div>
     </div>
 
@@ -81,7 +81,7 @@
 
     <div id="settings-collapse-roleSettings" class="collapse">
       <div class="card-body">
-        <%- await include('./partials/settings/roleSettings', {server: server, config: config}) %>
+        <%- await include('./partials/settings/roleSettings.sejs', {server: server, config: config}) %>
       </div>
     </div>
 
@@ -101,7 +101,7 @@
     <div id="settings-collapse-gblSettings" class="collapse">
       <div class="card-body">
 
-        <%- await include('./partials/settings/gblSettings', {server: server, config: config}) %>
+        <%- await include('./partials/settings/gblSettings.sejs', {server: server, config: config}) %>
       </div>
     </div>
 
@@ -121,7 +121,7 @@
     <div id="settings-collapse-bannedItemList" class="collapse">
       <div class="card-body">
 
-        <%- await include('./partials/settings/bannedItemList', {server: server, config: config}) %>
+        <%- await include('./partials/settings/bannedItemList.sejs', {server: server, config: config}) %>
       </div>
     </div>
 
@@ -140,7 +140,7 @@
 
     <div id="settings-collapse-pingKickerSettings" class="collapse">
       <div class="card-body">
-        <%- await include('./partials/settings/pingKickerSettings', {server: server, config: config}) %>
+        <%- await include('./partials/settings/pingKickerSettings.sejs', {server: server, config: config}) %>
       </div>
     </div>
 
@@ -160,7 +160,7 @@
     <div id="settings-collapse-countryBanSettings" class="collapse">
       <div class="card-body">
 
-        <%- await include('./partials/settings/countryBanSettings', {server: server, config: config}) %>
+        <%- await include('./partials/settings/countryBanSettings.sejs', {server: server, config: config}) %>
       </div>
     </div>
 
@@ -179,7 +179,7 @@
 
     <div id="settings-collapse-trackerSettings" class="collapse">
       <div class="card-body">
-        <%- await include('./partials/settings/playerTracking.ejs', {server: server, config: config, user: user}) %>
+        <%- await include('./partials/settings/playerTracking.sejs', {server: server, config: config, user: user}) %>
       </div>
     </div>
 
@@ -200,7 +200,7 @@
     <div id="settings-collapse-ingameCommandsSettings" class="collapse">
       <div class="card-body">
 
-        <%- await include('./partials/settings/commandSettings', {server: server, config: config}) %>
+        <%- await include('./partials/settings/commandSettings.sejs', {server: server, config: config}) %>
       </div>
     </div>
 
@@ -217,7 +217,7 @@
 
     <div id="settings-collapse-economySettings" class="collapse">
       <div class="card-body">
-        <%- await include('./partials/settings/economySettings', {server: server, config: config}) %>
+        <%- await include('./partials/settings/economySettings.sejs', {server: server, config: config}) %>
 
       </div>
     </div>
@@ -236,7 +236,7 @@
     </div>
 
     <div id="settings-collapse-customHooks" class="collapse">
-      <%- await include('./partials/settings/customHooks', {server: server, config: config, user: user}) %>
+      <%- await include('./partials/settings/customHooks.sejs', {server: server, config: config, user: user}) %>
     </div>
   </div>
 
@@ -252,7 +252,7 @@
     </div>
 
     <div id="settings-collapse-experiments" class="collapse">
-      <%- await include('./partials/settings/experiments', {server: server, config: config, user: user}) %>
+      <%- await include('./partials/settings/experiments.sejs', {server: server, config: config, user: user}) %>
     </div>
   </div>
 </div>

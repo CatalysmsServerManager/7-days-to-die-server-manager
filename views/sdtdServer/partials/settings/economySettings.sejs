@@ -114,9 +114,9 @@
 
   <h3>Modules</h3>
 
-  <%- await include('../../economy/module-playtimeEarner') %>
-  <%- await include('../../economy/module-discordTextEarner') %>
-  <%- await include('../../economy/module-killEarner') %>
+  <%- await include('../../economy/module-playtimeEarner.sejs') %>
+  <%- await include('../../economy/module-discordTextEarner.sejs') %>
+  <%- await include('../../economy/module-killEarner.sejs') %>
 
 
 

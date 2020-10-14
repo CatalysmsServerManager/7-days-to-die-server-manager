@@ -24,30 +24,18 @@ module.exports.routes = {
 
   '/': {
     view: 'index',
-    locals: {
-      layoutTemplate: 'layouts/homepageLayout'
-    }
   },
 
   '/donate': {
     view: 'meta/donate',
-    locals: {
-      layoutTemplate: 'layouts/homepageLayoutNoFooter'
-    }
   },
 
   '/privacy': {
     view: 'meta/privacy',
-    locals: {
-      layoutTemplate: 'layouts/homepageLayout'
-    }
   },
 
   '/stats': {
     view: 'meta/stats',
-    locals: {
-      layoutTemplate: 'layouts/homepageLayoutNoFooter'
-    }
   },
 
   '/auth/steam': {

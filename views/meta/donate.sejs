@@ -1,3 +1,4 @@
+<% layout('layouts/homepageLayoutNoFooter') %>
 <div class="container" align="center">
   <h1>Donate</h1>
   <p>CSMM is currently developed by one person! I spend alot of time working on this project in my free time, any type
