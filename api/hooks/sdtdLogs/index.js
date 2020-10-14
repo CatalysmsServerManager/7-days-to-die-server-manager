@@ -60,7 +60,8 @@ module.exports = function sdtdLogs(sails) {
           await sails.hooks.customdiscordnotification.start(serverID);
           return;
         } else {
-          throw new Error(`Tried to start logging for a server that already had it enabled`);
+          const loggingObj = loggingInfoMap.get(serverID);
+          await loggingObj.init();
         }
 
       } catch (error) {
