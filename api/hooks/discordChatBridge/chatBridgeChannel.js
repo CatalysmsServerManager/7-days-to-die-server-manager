@@ -184,7 +184,7 @@ class ChatBridgeChannel {
         `[${connectedMsg.steamId}](https://steamidfinder.com/lookup/${connectedMsg.steamId}/)`,
         true
       )
-      .addField('Country', connectedMsg.country, true)
+      .addField('Country', connectedMsg.country || 'Unknown country', true)
       .addField(
         `${gblBans.length} ban${gblBans.length === 1 ? '' : 's'} on the global ban list`,
         `[GBL profile page](${process.env.CSMM_HOSTNAME}/gbl/profile?steamId=${connectedMsg.steamId})`
