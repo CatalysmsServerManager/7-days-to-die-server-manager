@@ -22,16 +22,14 @@ module.exports = function sdtdLogs(sails) {
      * @private
      */
     initialize: function (cb) {
-      sails.on('hook:orm:loaded', async () => {
+      sails.after('hook:orm:loaded', async () => {
         sails.log.info('Initializing custom hook (`sdtdLogs`)');
 
         try {
           // Make sure there are no lingering jobs
           // TODO: Once we scale this to multiple processes, this should happen differently
           await sails.helpers.getQueueObject('logs').empty();
-          let enabledServers = await SdtdConfig.find({
-            inactive: false,
-          });
+          let enabledServers = await SdtdConfig.find({ inactive: false });
           for (let config of enabledServers) {
             await this.start(config.server);
           }
@@ -62,7 +60,8 @@ module.exports = function sdtdLogs(sails) {
           await sails.hooks.customdiscordnotification.start(serverID);
           return;
         } else {
-          throw new Error(`Tried to start logging for a server that already had it enabled`);
+          const loggingObj = loggingInfoMap.get(serverID);
+          await loggingObj.init();
         }
 
       } catch (error) {
@@ -112,9 +111,9 @@ module.exports = function sdtdLogs(sails) {
         obj = loggingInfoMap.get(String(serverId));
         // If a server is set to inactive, the created loggingObject should not do anything
         if (config.inactive) {
+          sails.log.warn(`Created new loggingObject but server ${serverId} was set to inactive, disabling loggingObject`);
           await obj.stop();
         }
-
       }
       return obj;
     },
@@ -145,12 +144,14 @@ module.exports = function sdtdLogs(sails) {
 
   async function createLogObject(serverID) {
 
-    let server = await SdtdServer.findOne(serverID);
+    let server = await SdtdServer.findOne(serverID).populate('config');
 
     let eventEmitter = new LoggingObject(server);
 
     sails.after('lifted', () => {
-      eventEmitter.init();
+      if (!server.config[0].inactive) {
+        eventEmitter.init();
+      }
     });
 
 
