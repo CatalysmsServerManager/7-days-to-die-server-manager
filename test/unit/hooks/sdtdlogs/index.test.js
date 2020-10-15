@@ -130,7 +130,6 @@ describe('logging hook index', () => {
       const logObjActive = await sails.hooks.sdtdlogs.getLoggingObject(sails.testServer.id);
       const logObjInactive = await sails.hooks.sdtdlogs.getLoggingObject(inactiveServer.id);
 
-
       expect(logObjActive.active).to.be.true;
       expect(logObjInactive.active).to.be.false;
 

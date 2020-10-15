@@ -29,7 +29,7 @@ module.exports = function sdtdLogs(sails) {
           // Make sure there are no lingering jobs
           // TODO: Once we scale this to multiple processes, this should happen differently
           await sails.helpers.getQueueObject('logs').empty();
-          let enabledServers = await SdtdConfig.find();
+          let enabledServers = await SdtdConfig.find({ inactive: false });
           for (let config of enabledServers) {
             await this.start(config.server);
           }
