@@ -35,22 +35,22 @@
     -->
 
   <!--STYLES-->
-  <link rel="stylesheet" href="/dependencies/bootstrap/css/bootstrap-grid.css">
-  <link rel="stylesheet" href="/dependencies/bootstrap/css/bootstrap-grid.min.css">
-  <link rel="stylesheet" href="/dependencies/bootstrap/css/bootstrap-reboot.css">
-  <link rel="stylesheet" href="/dependencies/bootstrap/css/bootstrap-reboot.min.css">
-  <link rel="stylesheet" href="/dependencies/bootstrap/css/bootstrap.css">
-  <link rel="stylesheet" href="/dependencies/bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/dependencies/sb-admin/sb-admin.css">
-  <link rel="stylesheet" href="/styles/app.css">
-  <link rel="stylesheet" href="/styles/flags/flags.css">
-  <link rel="stylesheet" href="/styles/flags/flags.min.css">
-  <link rel="stylesheet" href="/styles/importer.css">
-  <link rel="stylesheet" href="/styles/landing-page.css">
-  <link rel="stylesheet" href="/styles/sdtd/chat.css">
-  <link rel="stylesheet" href="/styles/sdtd/console.css">
-  <link rel="stylesheet" href="/styles/sdtd/gblComment.css">
-  <link rel="stylesheet" href="/styles/sdtd/tickets.css">
+  <%- stylesheetTag('/dependencies/bootstrap/css/bootstrap-grid.css') %>
+  <%- stylesheetTag('/dependencies/bootstrap/css/bootstrap-grid.min.css') %>
+  <%- stylesheetTag('/dependencies/bootstrap/css/bootstrap-reboot.css') %>
+  <%- stylesheetTag('/dependencies/bootstrap/css/bootstrap-reboot.min.css') %>
+  <%- stylesheetTag('/dependencies/bootstrap/css/bootstrap.css') %>
+  <%- stylesheetTag('/dependencies/bootstrap/css/bootstrap.min.css') %>
+  <%- stylesheetTag('/dependencies/sb-admin/sb-admin.css') %>
+  <%- stylesheetTag('/styles/app.css') %>
+  <%- stylesheetTag('/styles/flags/flags.css') %>
+  <%- stylesheetTag('/styles/flags/flags.min.css') %>
+  <%- stylesheetTag('/styles/importer.css') %>
+  <%- stylesheetTag('/styles/landing-page.css') %>
+  <%- stylesheetTag('/styles/sdtd/chat.css') %>
+  <%- stylesheetTag('/styles/sdtd/console.css') %>
+  <%- stylesheetTag('/styles/sdtd/gblComment.css') %>
+  <%- stylesheetTag('/styles/sdtd/tickets.css') %>
   <!--STYLES END-->
 
 
@@ -125,24 +125,24 @@
     -->
 
   <!--SCRIPTS-->
-  <script src="/dependencies/sails.io.js"></script>
-  <script src="/dependencies/jquery-3.2.1.js"></script>
-  <script src="/dependencies/jquery-3.2.1.min.js"></script>
-  <script src="/dependencies/bootstrap/js/bootstrap.bundle.js"></script>
-  <script src="/dependencies/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="/dependencies/bootstrap/js/bootstrap.js"></script>
-  <script src="/dependencies/bootstrap/js/bootstrap.min.js"></script>
-  <script src="/dependencies/jquery-easing/jquery.easing.compatibility.js"></script>
-  <script src="/dependencies/jquery-easing/jquery.easing.js"></script>
-  <script src="/dependencies/jquery-easing/jquery.easing.min.js"></script>
-  <script src="/dependencies/lodash.js"></script>
-  <script src="/dependencies/sb-admin/sb-admin.js"></script>
-  <script src="/dependencies/validator.js"></script>
-  <script src="/js/app.js"></script>
-  <script src="/js/gbl/gblComments.js"></script>
-  <script src="/js/sdtdServer/chat.js"></script>
-  <script src="/js/sdtdServer/console.js"></script>
-  <script src="/js/sdtdServer/map.js"></script>
+  <%- scriptTag('/dependencies/sails.io.js') %>
+  <%- scriptTag('/dependencies/jquery-3.2.1.js') %>
+  <%- scriptTag('/dependencies/jquery-3.2.1.min.js') %>
+  <%- scriptTag('/dependencies/bootstrap/js/bootstrap.bundle.js') %>
+  <%- scriptTag('/dependencies/bootstrap/js/bootstrap.bundle.min.js') %>
+  <%- scriptTag('/dependencies/bootstrap/js/bootstrap.js') %>
+  <%- scriptTag('/dependencies/bootstrap/js/bootstrap.min.js') %>
+  <%- scriptTag('/dependencies/jquery-easing/jquery.easing.compatibility.js') %>
+  <%- scriptTag('/dependencies/jquery-easing/jquery.easing.js') %>
+  <%- scriptTag('/dependencies/jquery-easing/jquery.easing.min.js') %>
+  <%- scriptTag('/dependencies/lodash.js') %>
+  <%- scriptTag('/dependencies/sb-admin/sb-admin.js') %>
+  <%- scriptTag('/dependencies/validator.js') %>
+  <%- scriptTag('/js/app.js') %>
+  <%- scriptTag('/js/gbl/gblComments.js') %>
+  <%- scriptTag('/js/sdtdServer/chat.js') %>
+  <%- scriptTag('/js/sdtdServer/console.js') %>
+  <%- scriptTag('/js/sdtdServer/map.js') %>
   <!--SCRIPTS END-->
 
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
