@@ -12,8 +12,8 @@
  *
  */
 
-const scriptFileRef = (filename) => `<script src="${filename}?v=<%= hashFile('${filename}') %>"></script>`;
-const linkFileRef = (filename) => `<link rel="stylesheet" href="${filename}?v=<%= hashFile('${filename}') %>">`;
+const scriptFileRef = (filename) => `<%- scriptTag('${filename}') %>`;
+const linkFileRef = (filename) => `<%- stylesheetTag('${filename}') %>`;
 module.exports = function (grunt) {
 
   grunt.config.set('sails-linker', {
