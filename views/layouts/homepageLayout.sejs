@@ -38,22 +38,22 @@
     -->
 
   <!--STYLES-->
-  <link rel="stylesheet" href="/dependencies/bootstrap/css/bootstrap-grid.css?v=1.17.5">
-  <link rel="stylesheet" href="/dependencies/bootstrap/css/bootstrap-grid.min.css?v=1.17.5">
-  <link rel="stylesheet" href="/dependencies/bootstrap/css/bootstrap-reboot.css?v=1.17.5">
-  <link rel="stylesheet" href="/dependencies/bootstrap/css/bootstrap-reboot.min.css?v=1.17.5">
-  <link rel="stylesheet" href="/dependencies/bootstrap/css/bootstrap.css?v=1.17.5">
-  <link rel="stylesheet" href="/dependencies/bootstrap/css/bootstrap.min.css?v=1.17.5">
-  <link rel="stylesheet" href="/dependencies/sb-admin/sb-admin.css?v=1.17.5">
-  <link rel="stylesheet" href="/styles/app.css?v=1.17.5">
-  <link rel="stylesheet" href="/styles/flags/flags.css?v=1.17.5">
-  <link rel="stylesheet" href="/styles/flags/flags.min.css?v=1.17.5">
-  <link rel="stylesheet" href="/styles/importer.css?v=1.17.5">
-  <link rel="stylesheet" href="/styles/landing-page.css?v=1.17.5">
-  <link rel="stylesheet" href="/styles/sdtd/chat.css?v=1.17.5">
-  <link rel="stylesheet" href="/styles/sdtd/console.css?v=1.17.5">
-  <link rel="stylesheet" href="/styles/sdtd/gblComment.css?v=1.17.5">
-  <link rel="stylesheet" href="/styles/sdtd/tickets.css?v=1.17.5">
+  <link rel="stylesheet" href="/dependencies/bootstrap/css/bootstrap-grid.css?v=<%= hashFile('/dependencies/bootstrap/css/bootstrap-grid.css') %>">
+  <link rel="stylesheet" href="/dependencies/bootstrap/css/bootstrap-grid.min.css?v=<%= hashFile('/dependencies/bootstrap/css/bootstrap-grid.min.css') %>">
+  <link rel="stylesheet" href="/dependencies/bootstrap/css/bootstrap-reboot.css?v=<%= hashFile('/dependencies/bootstrap/css/bootstrap-reboot.css') %>">
+  <link rel="stylesheet" href="/dependencies/bootstrap/css/bootstrap-reboot.min.css?v=<%= hashFile('/dependencies/bootstrap/css/bootstrap-reboot.min.css') %>">
+  <link rel="stylesheet" href="/dependencies/bootstrap/css/bootstrap.css?v=<%= hashFile('/dependencies/bootstrap/css/bootstrap.css') %>">
+  <link rel="stylesheet" href="/dependencies/bootstrap/css/bootstrap.min.css?v=<%= hashFile('/dependencies/bootstrap/css/bootstrap.min.css') %>">
+  <link rel="stylesheet" href="/dependencies/sb-admin/sb-admin.css?v=<%= hashFile('/dependencies/sb-admin/sb-admin.css') %>">
+  <link rel="stylesheet" href="/styles/app.css?v=<%= hashFile('/styles/app.css') %>">
+  <link rel="stylesheet" href="/styles/flags/flags.css?v=<%= hashFile('/styles/flags/flags.css') %>">
+  <link rel="stylesheet" href="/styles/flags/flags.min.css?v=<%= hashFile('/styles/flags/flags.min.css') %>">
+  <link rel="stylesheet" href="/styles/importer.css?v=<%= hashFile('/styles/importer.css') %>">
+  <link rel="stylesheet" href="/styles/landing-page.css?v=<%= hashFile('/styles/landing-page.css') %>">
+  <link rel="stylesheet" href="/styles/sdtd/chat.css?v=<%= hashFile('/styles/sdtd/chat.css') %>">
+  <link rel="stylesheet" href="/styles/sdtd/console.css?v=<%= hashFile('/styles/sdtd/console.css') %>">
+  <link rel="stylesheet" href="/styles/sdtd/gblComment.css?v=<%= hashFile('/styles/sdtd/gblComment.css') %>">
+  <link rel="stylesheet" href="/styles/sdtd/tickets.css?v=<%= hashFile('/styles/sdtd/tickets.css') %>">
   <!--STYLES END-->
 
 
@@ -128,24 +128,24 @@
     -->
 
   <!--SCRIPTS-->
-  <script src="/dependencies/sails.io.js?v=1.17.5"></script>
-  <script src="/dependencies/jquery-3.2.1.js?v=1.17.5"></script>
-  <script src="/dependencies/jquery-3.2.1.min.js?v=1.17.5"></script>
-  <script src="/dependencies/bootstrap/js/bootstrap.bundle.js?v=1.17.5"></script>
-  <script src="/dependencies/bootstrap/js/bootstrap.bundle.min.js?v=1.17.5"></script>
-  <script src="/dependencies/bootstrap/js/bootstrap.js?v=1.17.5"></script>
-  <script src="/dependencies/bootstrap/js/bootstrap.min.js?v=1.17.5"></script>
-  <script src="/dependencies/jquery-easing/jquery.easing.compatibility.js?v=1.17.5"></script>
-  <script src="/dependencies/jquery-easing/jquery.easing.js?v=1.17.5"></script>
-  <script src="/dependencies/jquery-easing/jquery.easing.min.js?v=1.17.5"></script>
-  <script src="/dependencies/lodash.js?v=1.17.5"></script>
-  <script src="/dependencies/sb-admin/sb-admin.js?v=1.17.5"></script>
-  <script src="/dependencies/validator.js?v=1.17.5"></script>
-  <script src="/js/app.js?v=1.17.5"></script>
-  <script src="/js/gbl/gblComments.js?v=1.17.5"></script>
-  <script src="/js/sdtdServer/chat.js?v=1.17.5"></script>
-  <script src="/js/sdtdServer/console.js?v=1.17.5"></script>
-  <script src="/js/sdtdServer/map.js?v=1.17.5"></script>
+  <script src="/dependencies/sails.io.js?v=<%= hashFile('/dependencies/sails.io.js') %>"></script>
+  <script src="/dependencies/jquery-3.2.1.js?v=<%= hashFile('/dependencies/jquery-3.2.1.js') %>"></script>
+  <script src="/dependencies/jquery-3.2.1.min.js?v=<%= hashFile('/dependencies/jquery-3.2.1.min.js') %>"></script>
+  <script src="/dependencies/bootstrap/js/bootstrap.bundle.js?v=<%= hashFile('/dependencies/bootstrap/js/bootstrap.bundle.js') %>"></script>
+  <script src="/dependencies/bootstrap/js/bootstrap.bundle.min.js?v=<%= hashFile('/dependencies/bootstrap/js/bootstrap.bundle.min.js') %>"></script>
+  <script src="/dependencies/bootstrap/js/bootstrap.js?v=<%= hashFile('/dependencies/bootstrap/js/bootstrap.js') %>"></script>
+  <script src="/dependencies/bootstrap/js/bootstrap.min.js?v=<%= hashFile('/dependencies/bootstrap/js/bootstrap.min.js') %>"></script>
+  <script src="/dependencies/jquery-easing/jquery.easing.compatibility.js?v=<%= hashFile('/dependencies/jquery-easing/jquery.easing.compatibility.js') %>"></script>
+  <script src="/dependencies/jquery-easing/jquery.easing.js?v=<%= hashFile('/dependencies/jquery-easing/jquery.easing.js') %>"></script>
+  <script src="/dependencies/jquery-easing/jquery.easing.min.js?v=<%= hashFile('/dependencies/jquery-easing/jquery.easing.min.js') %>"></script>
+  <script src="/dependencies/lodash.js?v=<%= hashFile('/dependencies/lodash.js') %>"></script>
+  <script src="/dependencies/sb-admin/sb-admin.js?v=<%= hashFile('/dependencies/sb-admin/sb-admin.js') %>"></script>
+  <script src="/dependencies/validator.js?v=<%= hashFile('/dependencies/validator.js') %>"></script>
+  <script src="/js/app.js?v=<%= hashFile('/js/app.js') %>"></script>
+  <script src="/js/gbl/gblComments.js?v=<%= hashFile('/js/gbl/gblComments.js') %>"></script>
+  <script src="/js/sdtdServer/chat.js?v=<%= hashFile('/js/sdtdServer/chat.js') %>"></script>
+  <script src="/js/sdtdServer/console.js?v=<%= hashFile('/js/sdtdServer/console.js') %>"></script>
+  <script src="/js/sdtdServer/map.js?v=<%= hashFile('/js/sdtdServer/map.js') %>"></script>
   <!--SCRIPTS END-->
 
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>

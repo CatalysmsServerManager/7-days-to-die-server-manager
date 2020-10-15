@@ -12,7 +12,8 @@
  *
  */
 
-const version = require('../../package.json').version;
+const scriptFileRef = (filename) => `<script src="${filename}?v=<%= hashFile('${filename}') %>"></script>`;
+const linkFileRef = (filename) => `<link rel="stylesheet" href="${filename}?v=<%= hashFile('${filename}') %>">`;
 module.exports = function (grunt) {
 
   grunt.config.set('sails-linker', {
@@ -28,7 +29,7 @@ module.exports = function (grunt) {
       options: {
         startTag: '<!--SCRIPTS-->',
         endTag: '<!--SCRIPTS END-->',
-        fileTmpl: `<script src="%s?v=${version}"></script>`,
+        fileRef: scriptFileRef,
         appRoot: '.tmp/public'
       },
       files: {
@@ -42,7 +43,7 @@ module.exports = function (grunt) {
       options: {
         startTag: '<!--SCRIPTS-->',
         endTag: '<!--SCRIPTS END-->',
-        fileTmpl: `<script src="%s?v=${version}"></script>`,
+        fileRef: scriptFileRef,
         appRoot: '.tmp/public',
         relative: true
       },
@@ -55,7 +56,7 @@ module.exports = function (grunt) {
       options: {
         startTag: '<!--SCRIPTS-->',
         endTag: '<!--SCRIPTS END-->',
-        fileTmpl: `<script src="%s?v=${version}"></script>`,
+        fileRef: scriptFileRef,
         appRoot: '.tmp/public'
       },
       files: {
@@ -69,7 +70,7 @@ module.exports = function (grunt) {
       options: {
         startTag: '<!--SCRIPTS-->',
         endTag: '<!--SCRIPTS END-->',
-        fileTmpl: `<script src="%s?v=${version}"></script>`,
+        fileRef: scriptFileRef,
         appRoot: '.tmp/public',
         relative: true
       },
@@ -89,7 +90,7 @@ module.exports = function (grunt) {
       options: {
         startTag: '<!--STYLES-->',
         endTag: '<!--STYLES END-->',
-        fileTmpl: `<link rel="stylesheet" href="%s?v=${version}">`,
+        fileRef: linkFileRef,
         appRoot: '.tmp/public'
       },
 
@@ -104,7 +105,7 @@ module.exports = function (grunt) {
       options: {
         startTag: '<!--STYLES-->',
         endTag: '<!--STYLES END-->',
-        fileTmpl: `<link rel="stylesheet" href="%s?v=${version}">`,
+        fileRef: linkFileRef,
         appRoot: '.tmp/public',
         relative: true
       },
@@ -118,7 +119,7 @@ module.exports = function (grunt) {
       options: {
         startTag: '<!--STYLES-->',
         endTag: '<!--STYLES END-->',
-        fileTmpl: `<link rel="stylesheet" href="%s?v=${version}">`,
+        fileRef: linkFileRef,
         appRoot: '.tmp/public'
       },
       files: {
@@ -132,7 +133,7 @@ module.exports = function (grunt) {
       options: {
         startTag: '<!--STYLES-->',
         endTag: '<!--STYLES END-->',
-        fileTmpl: `<link rel="stylesheet" href="%s?v=${version}">`,
+        fileRef: linkFileRef,
         appRoot: '.tmp/public',
         relative: true
       },
@@ -152,7 +153,7 @@ module.exports = function (grunt) {
       options: {
         startTag: '<!--TEMPLATES-->',
         endTag: '<!--TEMPLATES END-->',
-        fileTmpl: '<script type="text/javascript" src="%s"></script>',
+        fileRef: scriptFileRef,
         appRoot: '.tmp/public'
       },
       files: {
@@ -165,7 +166,7 @@ module.exports = function (grunt) {
       options: {
         startTag: '<!--TEMPLATES-->',
         endTag: '<!--TEMPLATES END-->',
-        fileTmpl: '<script type="text/javascript" src="%s"></script>',
+        fileRef: scriptFileRef,
         appRoot: '.tmp/public',
         relative: true
       },
