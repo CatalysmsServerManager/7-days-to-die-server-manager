@@ -8,5 +8,5 @@ module.exports = async (serverId) => {
     const baseUrl = sails.helpers.sdtdApi.getBaseUrl(SdtdServer.getAPIConfig(sdtdServer));
     return `${baseUrl}/map/{z}/{x}/{y}.png?adminuser=${sdtdServer.authName}&admintoken=${sdtdServer.authToken}`;
   }
-  return `/api/sdtdserver/${sdtdServer.id}/tile/{z}/{x}/{y}/.png`;
+  return `/api/sdtdserver/${sdtdServer.id}/tile/{z}/{x}/{y}/tile.png`;
 };

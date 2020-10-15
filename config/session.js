@@ -15,6 +15,9 @@ if (process.env.REDISSTRING !== '') {
 }
 
 module.exports.session = {
+  isSessionDisabled: function (req){
+    return !req.path.endsWith('/tile.png') && !!req.path.match(req._sails.LOOKS_LIKE_ASSET_RX);
+  },
   adapter: '@sailshq/connect-redis',
 
   /***************************************************************************
