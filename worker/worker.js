@@ -36,7 +36,7 @@ const configOverrides = {
   },
 };
 
-const logProcessor = require('./api/hooks/sdtdLogs/logProcessor');
+const logProcessor = require('../api/hooks/sdtdLogs/logProcessor');
 sails.load(configOverrides, async function (err) {
   if (err) {
     process.exit(1);
