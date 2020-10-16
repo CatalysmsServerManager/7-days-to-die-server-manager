@@ -1,11 +1,11 @@
-const DiscordNotification = require('../../../../api/hooks/discordNotifications/DiscordNotification.js');
+const DiscordNotification = require('../../../../worker/processors/discordNotification/DiscordNotification');
 describe('DiscordNotification', function () {
-  beforeEach(async function() {
+  beforeEach(async function () {
     this.discordChannel = {
-      send: sandbox.fake(async () => {})
+      send: sandbox.fake(async () => { })
     };
     this.discordUser = {
-      send: sandbox.fake(async () => {})
+      send: sandbox.fake(async () => { })
     };
     this.notification = new DiscordNotification('generic');
     this.notification.getDiscordChannel = () => Promise.resolve(this.discordChannel);
@@ -23,7 +23,7 @@ describe('DiscordNotification', function () {
     });
     expect(this.discordChannel.send.callCount).to.equal(1);
     expect(this.discordChannel.send.getCall(0).args.length).to.eql(1);
-    expect(this.discordChannel.send.getCall(0).args[0]).to.have.all.keys('author','color','description','fields','file','files','footer','image','thumbnail','timestamp','title','url');
+    expect(this.discordChannel.send.getCall(0).args[0]).to.have.all.keys('author', 'color', 'description', 'fields', 'file', 'files', 'footer', 'image', 'thumbnail', 'timestamp', 'title', 'url');
     expect(this.discordChannel.send.getCall(0).args[0].fields).to.eql([]);
   });
   it('Gracefully handle an error', async function () {

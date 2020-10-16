@@ -1,9 +1,9 @@
-const CronJob = require('../../../../../api/hooks/discordNotifications/notifications/cronJob.js');
+const CronJob = require('../../../../../worker/processors/discordNotification/notifications/cronJob');
 
 describe('CronJob', function () {
-  beforeEach(function() {
+  beforeEach(function () {
     this.channel = {
-      send: sandbox.fake(async () => {})
+      send: sandbox.fake(async () => { })
     };
 
     this.notification = new CronJob();
@@ -41,15 +41,15 @@ describe('CronJob', function () {
         createdAt: 1584558400790,
         updatedAt: 1584588946156,
         command:
-        'say "[FAAC58]Merci de poser un bloc de revendication à l\'emplacement de votre base afin que celle-ci ne soit pas réinitialisé lors de la réinitialisation du lundi.[-]"',
+          'say "[FAAC58]Merci de poser un bloc de revendication à l\'emplacement de votre base afin que celle-ci ne soit pas réinitialisé lors de la réinitialisation du lundi.[-]"',
         temporalValue: '*/45 * * * *',
         enabled: true,
-        responses: [{ result: 'An error occurred executing the API request to the 7D2D server' } ]
+        responses: [{ result: 'An error occurred executing the API request to the 7D2D server' }]
       }
     });
     expect(this.channel.send.callCount).to.equal(1);
     expect(this.channel.send.getCall(0).args.length).to.eql(1);
-    expect(this.channel.send.getCall(0).args[0]).to.have.all.keys('author','color','description','fields','file','files','footer','image','thumbnail','timestamp','title','url');
+    expect(this.channel.send.getCall(0).args[0]).to.have.all.keys('author', 'color', 'description', 'fields', 'file', 'files', 'footer', 'image', 'thumbnail', 'timestamp', 'title', 'url');
     expect(this.channel.send.getCall(0).args[0].fields).to.eql([
       {
         'inline': true,
@@ -87,7 +87,7 @@ describe('CronJob', function () {
     });
     expect(this.channel.send.callCount).to.equal(1);
     expect(this.channel.send.getCall(0).args.length).to.eql(1);
-    expect(this.channel.send.getCall(0).args[0]).to.have.all.keys('author','color','description','fields','file','files','footer','image','thumbnail','timestamp','title','url');
+    expect(this.channel.send.getCall(0).args[0]).to.have.all.keys('author', 'color', 'description', 'fields', 'file', 'files', 'footer', 'image', 'thumbnail', 'timestamp', 'title', 'url');
     expect(this.channel.send.getCall(0).args[0].fields).to.eql([
       {
         'inline': true,

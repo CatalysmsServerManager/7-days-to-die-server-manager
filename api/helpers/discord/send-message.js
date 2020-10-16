@@ -5,18 +5,28 @@ module.exports = {
     channelId: {
       required: true,
       type: 'string',
-      // TODO: Validate regex?
+      regex: /[\d]{18}$/
       // TODO: should this helper support sending DMs?
     },
 
     content: {
-      type: 'string'
-      // TODO: validate if its string
+      type: 'string',
+      minLength: 1,
+      maxLength: 1800
     },
 
     embed: {
-      type: 'ref'
-      // TODO: validate if its embed
+      type: 'json',
+      custom: (val) => {
+        // instanceof would be ideal but sails is doing weird shit again
+        // So just check the shape of the object
+        return (
+          val.title &&
+          val.url &&
+          val.fields &&
+          val.timestamp
+        );
+      }
     },
 
   },
@@ -25,6 +35,11 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     try {
+
+      if (!inputs.content && !inputs.embed) {
+        return exits.error(new Error('Invalid usage, must provide either content or embed'));
+      }
+
       await sails.helpers.discord.discordrequest(
         `/channels/${inputs.channelId}/messages`,
         'post',

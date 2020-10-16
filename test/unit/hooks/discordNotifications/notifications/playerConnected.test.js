@@ -1,10 +1,10 @@
 const expect = require('chai').expect;
-const PlayerConnected = require('../../../../../api/hooks/discordNotifications/notifications/playerConnected.js');
+const PlayerConnected = require('../../../../../worker/processors/discordNotification/notifications/playerConnected.js');
 
 describe('PlayerConnected', function () {
-  beforeEach(function() {
+  beforeEach(function () {
     this.channel = {
-      send: sandbox.fake(async () => {})
+      send: sandbox.fake(async () => { })
     };
 
     this.notification = new PlayerConnected();

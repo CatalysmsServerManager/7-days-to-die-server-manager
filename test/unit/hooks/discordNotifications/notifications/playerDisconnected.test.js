@@ -1,9 +1,9 @@
-const PlayerDisconnected = require('../../../../../api/hooks/discordNotifications/notifications/playerDisconnected.js');
+const PlayerDisconnected = require('../../../../../worker/processors/discordNotification/notifications/playerDisconnected.js');
 
 describe('PlayerDisconnected', function () {
-  beforeEach(function() {
+  beforeEach(function () {
     this.channel = {
-      send: sandbox.fake(async () => {})
+      send: sandbox.fake(async () => { })
     };
 
     this.notification = new PlayerDisconnected();
