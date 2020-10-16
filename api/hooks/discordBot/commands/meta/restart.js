@@ -12,7 +12,7 @@ class Restart extends Commando.Command {
 
   async run(msg) {
 
-    const admins = process.env.CSMM_ADMINS.split(',');
+    const admins = (process.env.CSMM_ADMINS || '').split(',');
     const adminUsers = await User.find({
       where: {
         steamId: admins,
