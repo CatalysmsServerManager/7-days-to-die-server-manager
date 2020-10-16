@@ -22,18 +22,17 @@ module.exports = {
   exits: {},
 
   fn: async function (inputs, exits) {
-    try {
-      const response = await fetch(`https://discord.com/api/${inputs.resource}`, {
-        headers: getHeaders(),
-        method: inputs.method,
-        body: JSON.stringify(inputs.data)
-      });
+    const response = await fetch(`https://discord.com/api/${inputs.resource}`, {
+      headers: getHeaders(),
+      method: inputs.method,
+      body: JSON.stringify(inputs.data)
+    });
 
+    if (response.ok) {
       const data = await response.json();
-
       return exits.success(data);
-    } catch (e) {
-      return exits.error(e);
+    } else {
+      return exits.error(new Error(response.statusText));
     }
   },
 };
