@@ -73,7 +73,7 @@ class LoggingObject extends EventEmitter {
     const job = await this.queue.getJob(jobId);
 
     // eslint-disable-next-line eqeqeq
-    if (job.data.serverId != this.serverId) {
+    if (job.data != this.data) {
       // not one of ours
       return;
     }
