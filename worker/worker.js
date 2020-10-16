@@ -3,6 +3,9 @@ const SdtdApi = require('7daystodie-api-wrapper');
 const Sentry = require('@sentry/node');
 
 // disable discord bot
+// TODO: uncomment this?
+// I didn't notice anything breaking, the discord hooks from main process are disabled here
+// But this is set to an empty string for a reason: why? :)
 //process.env.DISCORDBOTTOKEN = '';
 
 const configOverrides = {
