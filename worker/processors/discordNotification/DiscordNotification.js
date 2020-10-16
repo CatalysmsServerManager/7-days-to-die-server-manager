@@ -1,9 +1,16 @@
+const { CustomEmbed } = require('../../../api/hooks/discordBot/util/createEmbed');
+
+
 class DiscordNotification {
   constructor(notificationType) {
     this.name = notificationType;
     if (!this.name) {
       throw new Error('Must specify a name for this notification');
     }
+  }
+
+  getBlankEmbed() {
+    return new CustomEmbed();
   }
 
   async makeEmbed() {

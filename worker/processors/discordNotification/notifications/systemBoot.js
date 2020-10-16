@@ -1,5 +1,4 @@
 const DiscordNotification = require('../DiscordNotification');
-const { CustomEmbed } = require('../../../../api/hooks/discordBot/util/createEmbed');
 
 
 class SystemBoot extends DiscordNotification {
@@ -8,7 +7,7 @@ class SystemBoot extends DiscordNotification {
   }
 
   async makeEmbed() {
-    let embed = new CustomEmbed();
+    let embed = this.getBlankEmbed();
 
     embed.setTitle('CSMM has (re)started')
       .setColor('RANDOM');

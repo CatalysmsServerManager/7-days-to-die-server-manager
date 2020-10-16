@@ -24,5 +24,5 @@ module.exports = async (job) => {
 };
 
 function getNotificationClass(notificationName) {
-  return notifications.find(notif => notif.name === notificationName.toLowerCase());
+  return notifications.find(notif => notif.name.toLowerCase() === notificationName.toLowerCase());
 }

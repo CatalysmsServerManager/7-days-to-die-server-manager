@@ -6,8 +6,7 @@ class Connected extends DiscordNotification {
   }
 
   async makeEmbed() {
-    let client = sails.hooks.discordbot.getClient();
-    let embed = new client.customEmbed();
+    let embed = this.getBlankEmbed();
 
     embed.setTitle('Connected to CSMM')
       .setColor('GREEN');

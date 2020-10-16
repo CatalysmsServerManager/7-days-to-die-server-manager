@@ -6,8 +6,7 @@ class GblMaxBan extends DiscordNotification {
   }
 
   async makeEmbed(event) {
-    let client = sails.hooks.discordbot.getClient();
-    let embed = new client.customEmbed();
+    let embed = this.getBlankEmbed();
 
     if (!event.player) {
       throw new Error('Implementation error! Must provide player info.');

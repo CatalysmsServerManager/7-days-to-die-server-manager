@@ -6,8 +6,7 @@ class CountrybanKick extends DiscordNotification {
   }
 
   async makeEmbed(event) {
-    let client = sails.hooks.discordbot.getClient();
-    let embed = new client.customEmbed();
+    let embed = this.getBlankEmbed();
 
     embed.setTitle(`:flag_${event.player.country.toLowerCase()}: Country ban kicked: ${event.player.playerName}`)
       .setColor('ORANGE')
@@ -15,6 +14,9 @@ class CountrybanKick extends DiscordNotification {
       .addField('Entity ID', `${event.player.entityId}`, true)
       .setFooter(`${event.server.name}`)
       .setURL(`${process.env.CSMM_HOSTNAME}/player/${event.player.id}/profile`);
+
+
+    console.log(embed);
 
     return embed;
   }
