@@ -36,7 +36,7 @@ const configOverrides = {
   },
 };
 
-const logProcessor = require('../api/hooks/sdtdLogs/logProcessor');
+const logProcessor = require('./processors/logs');
 sails.load(configOverrides, async function (err) {
   if (err) {
     sails.log.error(err);
@@ -53,11 +53,7 @@ sails.load(configOverrides, async function (err) {
 
   await Promise.all([
     // We can afford a high concurrency here since jobs are only a HTTP fetch. This would be different if they are long running, blocking operations
-    sails.helpers.getQueueObject('logs').process(100, async (job) => {
-      sails.log.debug('[Worker] Got a `logs` job', job.data);
-      job.data.server = await SdtdServer.findOne(job.data.serverId);
-      return logProcessor(job);
-    }),
+    sails.helpers.getQueueObject('logs').process(100, logProcessor),
   ]);
 
   return;
