@@ -10,11 +10,6 @@ class DiscordNotification {
     throw new Error(`makeEmbed has to be implemented.`);
   }
 
-  async getDiscordChannel(channelId) {
-    let discordClient = sails.hooks.discordbot.getClient();
-    return discordClient.channels.get(channelId);
-  }
-
   async getDiscordUser(userId) {
     let discordClient = sails.hooks.discordbot.getClient();
     return discordClient.fetchUser(userId, false);
@@ -27,10 +22,9 @@ class DiscordNotification {
     embedToSend.setFooter(`CSMM notification for ${enrichedOptions.server.name}`);
 
     try {
-      const discordChannel = await this.getDiscordChannel(enrichedOptions.server.config.discordNotificationConfig[notificationOptions.notificationType]);
-      if (discordChannel) {
-        await discordChannel.send(embedToSend);
-      }
+      const channelId = enrichedOptions.server.config.discordNotificationConfig[notificationOptions.notificationType];
+      await sails.helpers.discord.sendMessage(channelId, undefined, embedToSend);
+
     } catch (error) {
       try {
         const owner = await User.findOne(enrichedOptions.server.owner);
@@ -44,7 +38,11 @@ class DiscordNotification {
       sails.log.error(`HOOK - discordNotification:DiscordNotification - ${error}`);
 
       delete enrichedOptions.server.config.discordNotificationConfig[notificationOptions.notificationType];
-      await SdtdConfig.update({ server: enrichedOptions.server.id }, { discordNotificationConfig: enrichedOptions.server.config.discordNotificationConfig });
+      // TODO: uncomment this! Was annoying during dev :D
+      // await SdtdConfig.update({ server: enrichedOptions.server.id }, { discordNotificationConfig: enrichedOptions.server.config.discordNotificationConfig });
+
+      // Still throw, this fails the queue job which is good for traceability
+      throw error;
     }
 
   }

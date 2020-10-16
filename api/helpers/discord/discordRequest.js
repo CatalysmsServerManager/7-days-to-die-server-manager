@@ -12,17 +12,21 @@ module.exports = {
       default: 'get',
       type: 'string',
       isIn: ['get', 'post']
+    },
+
+    data: {
+      type: 'ref'
     }
 
   },
   exits: {},
 
   fn: async function (inputs, exits) {
-
     try {
       const response = await fetch(`https://discord.com/api/${inputs.resource}`, {
         headers: getHeaders(),
-        method: inputs.method
+        method: inputs.method,
+        body: JSON.stringify(inputs.data)
       });
 
       const data = await response.json();
@@ -38,6 +42,7 @@ module.exports = {
 
 function getHeaders() {
   return {
+    'Content-Type': 'application/json',
     ...getAuth()
   };
 }

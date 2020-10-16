@@ -24,6 +24,7 @@ module.exports = function BullBoard(sails) {
       setQueues([
         sails.helpers.getQueueObject('logs'),
         sails.helpers.getQueueObject('cron'),
+        sails.helpers.getQueueObject('discordNotifications'),
       ]);
 
       sails.after('hook:http:loaded', function () {

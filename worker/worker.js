@@ -3,7 +3,7 @@ const SdtdApi = require('7daystodie-api-wrapper');
 const Sentry = require('@sentry/node');
 
 // disable discord bot
-process.env.DISCORDBOTTOKEN = '';
+//process.env.DISCORDBOTTOKEN = '';
 
 const configOverrides = {
   hookTimeout: 2000,
@@ -37,6 +37,7 @@ const configOverrides = {
 };
 
 const logProcessor = require('./processors/logs');
+const notifProcessor = require('./processors/discordNotification');
 sails.load(configOverrides, async function (err) {
   if (err) {
     sails.log.error(err);
@@ -54,6 +55,7 @@ sails.load(configOverrides, async function (err) {
   await Promise.all([
     // We can afford a high concurrency here since jobs are only a HTTP fetch. This would be different if they are long running, blocking operations
     sails.helpers.getQueueObject('logs').process(100, logProcessor),
+    sails.helpers.getQueueObject('discordNotifications').process(notifProcessor),
   ]);
 
   return;

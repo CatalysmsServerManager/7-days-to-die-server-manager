@@ -1,4 +1,6 @@
 const DiscordNotification = require('../DiscordNotification');
+const { CustomEmbed } = require('../../../../api/hooks/discordBot/util/createEmbed');
+
 
 class SystemBoot extends DiscordNotification {
   constructor() {
@@ -6,8 +8,7 @@ class SystemBoot extends DiscordNotification {
   }
 
   async makeEmbed() {
-    let client = sails.hooks.discordbot.getClient();
-    let embed = new client.customEmbed();
+    let embed = new CustomEmbed();
 
     embed.setTitle('CSMM has (re)started')
       .setColor('RANDOM');
