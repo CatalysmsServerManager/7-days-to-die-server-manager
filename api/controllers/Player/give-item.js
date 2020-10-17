@@ -35,7 +35,9 @@ module.exports = {
     },
 
     badRequest: {
-      responseType: 'badRequest'
+      description: 'The given item name was not found on the server',
+      responseType: 'badRequest',
+      statusCode: 400
     }
   },
 
@@ -53,6 +55,12 @@ module.exports = {
       let player = await Player.findOne(inputs.playerId).populate('server');
       let server = await SdtdServer.findOne(player.server.id);
       const cpmVersion = await sails.helpers.sdtd.checkCpmVersion(server.id);
+
+      let validItemName = await sails.helpers.sdtd.validateItemName(inputs.serverId, inputs.name);
+
+      if (!validItemName) {
+        return exits.badRequest('You have provided an invalid item name.');
+      }
 
       let cmdToExec;
       if (cpmVersion >= 6.4) {
