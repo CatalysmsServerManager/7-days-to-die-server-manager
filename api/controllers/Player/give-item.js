@@ -56,7 +56,7 @@ module.exports = {
       let server = await SdtdServer.findOne(player.server.id);
       const cpmVersion = await sails.helpers.sdtd.checkCpmVersion(server.id);
 
-      let validItemName = await sails.helpers.sdtd.validateItemName(inputs.serverId, inputs.name);
+      let validItemName = await sails.helpers.sdtd.validateItemName(player.server.id, inputs.itemName);
 
       if (!validItemName) {
         return exits.badRequest('You have provided an invalid item name.');
