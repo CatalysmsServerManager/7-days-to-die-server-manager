@@ -89,6 +89,14 @@ describe('setRoleFromDiscord', () => {
   });
 
   it('Does not give a new role if the player already has a higher role in CSMM', async () => {
+    sandbox.stub(sails.helpers.discord, 'discordrequest').resolves({
+      roles: [
+        'randomRole1',
+        'randomRole2',
+        'testDiscordRole1',
+      ],
+    });
+
     await Player.update(sails.testPlayer.id, { role: roles[0].id });
     sails.testPlayer = await Player.findOne(sails.testPlayer.id).populate('role');
     expect(sails.testPlayer.role).to.eql(roles[0]);
