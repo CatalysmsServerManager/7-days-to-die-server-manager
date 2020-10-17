@@ -2,7 +2,7 @@ module.exports = {
   friendlyName: 'Execute a discord request',
   inputs: {
 
-    channelId: {
+    userId: {
       required: true,
       type: 'string',
       regex: /[\d]{18}$/
@@ -38,15 +38,15 @@ module.exports = {
         return exits.error(new Error('Invalid usage, must provide either content or embed'));
       }
 
-      await sails.helpers.discord.discordrequest(
-        `channels/${inputs.channelId}/messages`,
+      const DMChannel = await sails.helpers.discord.discordrequest(
+        `users/@me/channels`,
         'post',
         {
-          'content': inputs.content,
-          'tts': false,
-          'embed': inputs.embed
+          'recipient_id': inputs.userId,
         }
       );
+
+      await sails.helpers.discord.sendMessage(DMChannel.id, inputs.content, inputs.embed);
     } catch (e) {
       return exits.error(e);
     }

@@ -28,8 +28,9 @@ describe('DiscordNotification', function () {
       serverId: sails.testServer.id,
       player: sails.testPlayer,
     });
-    expect(spy.callCount).to.equal(1);
-    expect(spy.getCall(0).args.length).to.eql(1);
-    expect(spy.getCall(0).args[0]).to.eql('There was an error sending a CSMM notification to your channel and thus the notification has been disabled: `Error: AHH`');
+    expect(spy.callCount).to.equal(2);
+    expect(spy.getCall(1).args.length).to.eql(2);
+    expect(spy.getCall(1).args[0]).to.eql(sails.testUser.discordId);
+    expect(spy.getCall(1).args[1]).to.eql('There was an error sending a CSMM notification to your channel and thus the notification has been disabled: `Error: AHH`');
   });
 });

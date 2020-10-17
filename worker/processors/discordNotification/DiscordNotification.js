@@ -17,11 +17,6 @@ class DiscordNotification {
     throw new Error(`makeEmbed has to be implemented.`);
   }
 
-  async getDiscordUser(userId) {
-    let discordClient = sails.hooks.discordbot.getClient();
-    return discordClient.fetchUser(userId, false);
-  }
-
   async sendNotification(notificationOptions) {
     let enrichedOptions = await this.enrichEvent(notificationOptions);
     let embedToSend = await this.makeEmbed(enrichedOptions);
@@ -36,8 +31,7 @@ class DiscordNotification {
       try {
         const owner = await User.findOne(enrichedOptions.server.owner);
         if (owner.discordId) {
-          const discordUser = await this.getDiscordUser(owner.discordId);
-          await discordUser.send(`There was an error sending a CSMM notification to your channel and thus the notification has been disabled: \`${error}\``);
+          await sails.helpers.discord.sendDm(owner.discordId, `There was an error sending a CSMM notification to your channel and thus the notification has been disabled: \`${error}\``);
         }
       } catch (error) {
         sails.log.error(`HOOK - discordNotification:DiscordNotification - Error letting owner know of discord issue - ${error}`);
@@ -45,11 +39,7 @@ class DiscordNotification {
       sails.log.error(`HOOK - discordNotification:DiscordNotification - ${error}`);
 
       delete enrichedOptions.server.config.discordNotificationConfig[notificationOptions.notificationType];
-      // TODO: uncomment this! Was annoying during dev :D
-      // await SdtdConfig.update({ server: enrichedOptions.server.id }, { discordNotificationConfig: enrichedOptions.server.config.discordNotificationConfig });
-
-      // Still throw, this fails the queue job which is good for traceability
-      throw error;
+      await SdtdConfig.update({ server: enrichedOptions.server.id }, { discordNotificationConfig: enrichedOptions.server.config.discordNotificationConfig });
     }
 
   }

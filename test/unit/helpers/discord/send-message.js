@@ -17,8 +17,6 @@ describe('HELPER discord.sendMessage', () => {
     // Success
     await expect(sails.helpers.discord.sendMessage('577950911582961664', 'Hello!')).to.eventually.be.fulfilled;
     await expect(sails.helpers.discord.sendMessage('577950911582961664', undefined, new CustomEmbed())).to.eventually.be.fulfilled;
-
-
   });
 
 });

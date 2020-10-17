@@ -15,14 +15,17 @@ module.exports = {
     },
 
     data: {
-      type: 'ref'
+      type: 'json'
     }
 
   },
   exits: {},
 
   fn: async function (inputs, exits) {
-    const response = await fetch(`https://discord.com/api/${inputs.resource}`, {
+    const url = `https://discord.com/api/${inputs.resource}`;
+    sails.log.debug(`HELPER:discordRequest - sending request!`, inputs);
+
+    const response = await fetch(url, {
       headers: getHeaders(),
       method: inputs.method,
       body: JSON.stringify(inputs.data)
@@ -32,6 +35,7 @@ module.exports = {
       const data = await response.json();
       return exits.success(data);
     } else {
+      sails.log.error(`HELPER:discordRequest - request errored`, response);
       return exits.error(new Error(response.statusText));
     }
   },
