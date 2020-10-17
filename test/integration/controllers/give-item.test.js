@@ -1,6 +1,10 @@
 const supertest = require('supertest');
 const { expect } = require('chai');
 
+beforeEach(async () => {
+  sails.testPlayer = await Player.findOne(sails.testPlayer.id).populate('role');
+});
+
 describe('/api/player/giveitem', function () {
   it('returns OK with correct data', async function () {
     sandbox.stub(sails.helpers.sdtdApi, 'executeConsoleCommand').callsFake(async () => {
