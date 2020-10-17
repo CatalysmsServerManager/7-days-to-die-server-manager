@@ -21,7 +21,7 @@ describe('/api/player/giveitem', function () {
 
     await supertest(sails.hooks.http.app)
       .post('/api/player/giveitem')
-      .send();
+      .send(commandInput);
 
     expect(sails.helpers.sdtdApi.executeConsoleCommand).to.have.been.calledWith(sails.testServer.id, `giveplus ${sails.testPlayer.steamId} "${commandInput.itemName}" ${commandInput.amount} ${commandInput.quality ? commandInput.quality + ' 0' : ''}`);
 
