@@ -425,10 +425,14 @@ module.exports = function sdtdCountryBan(sails) {
       });
 
       let countryBanConfig = config[0].countryBanConfig;
+      let countryBanListMode = config[0].countryBanListMode;
 
       if (
-        countryBanConfig.bannedCountries.includes(country) &&
-        !countryBanConfig.whiteListedSteamIds.includes(steamId)
+        !countryBanConfig.whiteListedSteamIds.includes(steamId) && //not on whitelist AND either
+        (
+          (countryBanConfig.bannedCountries.includes(country) && !countryBanListMode) || //country is on the list, and in blacklist mode OR
+          (!countryBanConfig.bannedCountries.includes(country) && countryBanListMode)    //country is not on list, and in whitelist mode
+        )
       ) {
         await CountryBan.create({
           steamId: connectedMessage.steamId,
