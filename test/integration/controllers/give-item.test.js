@@ -14,10 +14,10 @@ describe('/api/player/giveitem', function () {
       .post('/api/player/giveitem')
       .send({
         playerId: 1,
-        itemName: 'something',
+        itemName: 'ammo9mmBulletBall',
         amount: '1'
       });
-
+    console.log(response);
     expect(response.statusCode).to.equal(200);
     expect(response.body).to.deep.eq({});
 
@@ -39,7 +39,7 @@ describe('/api/player/giveitem', function () {
         itemName: 'doesnt exist',
         amount: '1'
       });
-
+    console.log(response);
     expect(response.statusCode).to.equal(400);
     expect(response.body).to.eq('You have provided an invalid item name.');
   });
