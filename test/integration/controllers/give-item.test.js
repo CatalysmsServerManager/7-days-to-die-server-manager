@@ -9,17 +9,17 @@ describe('/api/player/giveitem', function () {
       };
     });
     sandbox.stub(sails.helpers.sdtd, 'checkCpmVersion').callsFake(async () => 7);
+    const commandInput = {
+      playerId: 1,
+      itemName: 'someItem',
+      amount: '1'
+    };
 
-    const response = await supertest(sails.hooks.http.app)
+    await supertest(sails.hooks.http.app)
       .post('/api/player/giveitem')
-      .send({
-        playerId: 1,
-        itemName: 'something new',
-        amount: '1'
-      });
+      .send();
 
-    expect(response.statusCode).to.equal(200);
-    expect(response.body).to.deep.eq({});
+    expect(sails.helpers.sdtdApi.executeConsoleCommand).to.have.been.calledWith(sails.testServer.id, `giveplus ${sails.testServer.player.steamId} "${commandInput.itemName}" ${commandInput.amount} ${commandInput.quality ? commandInput.quality + ' 0' : ''}`);
 
   });
 
