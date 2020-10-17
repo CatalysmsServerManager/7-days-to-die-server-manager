@@ -19,7 +19,7 @@ describe('/api/player/giveitem', function () {
       .post('/api/player/giveitem')
       .send();
 
-    expect(sails.helpers.sdtdApi.executeConsoleCommand).to.have.been.calledWith(sails.testServer.id, `giveplus ${sails.testServer.player.steamId} "${commandInput.itemName}" ${commandInput.amount} ${commandInput.quality ? commandInput.quality + ' 0' : ''}`);
+    expect(sails.helpers.sdtdApi.executeConsoleCommand).to.have.been.calledWith(sails.testServer.id, `giveplus ${sails.testPlayer.steamId} "${commandInput.itemName}" ${commandInput.amount} ${commandInput.quality ? commandInput.quality + ' 0' : ''}`);
 
   });
 
