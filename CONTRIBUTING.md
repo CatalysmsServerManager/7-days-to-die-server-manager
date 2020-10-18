@@ -1,15 +1,15 @@
 # Contributing to 7 days to die sever manager
-You can find all the information about the server [here](https://docs.csmm.app/en/7D2D)
+
 ## Thanks for taking the time to contribute
 The following is a set of guidelines for contributing to 7 days to die sever manager. These are mostly guidelines, not rules. Use your best judgment, and feel free to propose changes to this document in a pull request.
 
 ## Links to some resources
 
-You can join the discord server to directly communicate with the developers by clicking [here](http://catalysm.net/discord).
+You can join the [Discord server](http://catalysm.net/discord) to directly communicate with the developers.
 
-You can find all information about the CSMM [here](https://docs.csmm.app/).
+You can find all information about the [CSMM](https://docs.csmm.app/) here.
 
-You can find the installation guide [here](https://docs.csmm.app/en/CSMM/self-host/installation.html).
+Please go through the [installation guide](https://docs.csmm.app/en/CSMM/self-host/installation.html) to setup your environment.
 
 
 
@@ -18,7 +18,7 @@ This project and everyone participating in it is governed by the code of conduct
 
 ## How can I contribute?
 1. You can report bugs/glitches/faults that you are likely to come across when using the project server and client apps.
-2. You can suggest enhancements that you would want to see implemented on the project.
+2. You can suggest enhancements that you would want to see implemented on the project by creating an issue.
 3. You can address a wide variety of open issues if you wish to contribute using your code and make a pull request.
 
 ## Steps to contribute
@@ -26,6 +26,15 @@ This project and everyone participating in it is governed by the code of conduct
 * Comment on the issue you want to work on. Make sure it's not assigned to someone else. For new comers to open-source, you can pick the issue having 'good first issue' tag.
 
 * If you think you encounter a bug or have a suggestion for improvement of code or to add a feature, then create a issue with proper title and tags but first make sure it's not already present.
+
+## Running tests
+
+To run the tests:
+`npm run test`
+
+Please note that running the tests requires a database and Redis. The tests will overwrite and delete a bunch of data so it is advised to make sure you have nothing important inside Redis before running the tests. 
+
+You can supply a different connection URL for the test database via the env variable `TEST_DBSTRING`
 
 ### Making a PR
 
@@ -56,7 +65,7 @@ This project and everyone participating in it is governed by the code of conduct
     ```
 * Create a PR from your repo on GitHub. Give a proper title and description for the changes you made.
 
-* The maintainer of this repo will review the changes you have made. They will review if your changes are proper or not. And if they find any mistakes, they may request some changes. In that case, you should make changes in your forked repository and then commit that changes. And make sure you make changes in the same branch you previously requested PR from.
+* The maintainer of this repo will review the changes you have made. They will review if your changes are proper or not. If they find any mistakes they may request some changes; in which case, you should make the changes in your forked repository and then commit them. Note: make sure you make changes in the same branch you previously requested PR from.
 
 * At last if maintainers think your PR is proper and correct then your request will be approved and will be merged.
 
