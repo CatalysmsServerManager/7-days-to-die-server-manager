@@ -11,7 +11,11 @@ module.exports = {
 
     mapProxy: {
       type: 'boolean',
-    }
+    },
+
+    countryBanListMode: {
+      type: 'boolean'
+    },
   },
   exits: {
     badRequest: {
@@ -19,6 +23,7 @@ module.exports = {
     },
   },
   fn: async function (inputs, exits) {
+
     let server = await SdtdServer.findOne(inputs.serverId);
     if (!server) {
       return exits.badRequest('Unknown server ID');
@@ -28,6 +33,10 @@ module.exports = {
 
     if ('mapProxy' in inputs) {
       updates.mapProxy = inputs.mapProxy;
+    }
+    if ('countryBanListMode' in inputs) {
+      updates.countryBanListMode = inputs.countryBanListMode;
+      sails.log.info(`ServerId ${inputs.serverId} has set countryBanListMod to ${inputs.countryBanListMode}.`);
     }
 
     await SdtdConfig.update(
