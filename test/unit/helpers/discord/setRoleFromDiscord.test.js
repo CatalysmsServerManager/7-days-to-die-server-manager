@@ -2,10 +2,6 @@ const { expect } = require('chai');
 
 describe('setRoleFromDiscord', () => {
 
-  it('fails a test', () => {
-    expect(1).to.be.eql(2);
-  });
-
   describe('shouldSetRole', () => {
     const shouldSetRole = require('../../../../api/helpers/discord/set-role-from-discord').shouldSetRole;
     it('Returns true if currentRole null and potentionRole not null', () => {
