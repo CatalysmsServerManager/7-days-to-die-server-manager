@@ -141,15 +141,18 @@
       </tr>
     </thead>
     <tbody>
-      <% await Promise.all(customCommands.map(async command => { %>
-        <tr>
-          <td scope="row"><%= command.name %></td>
-          <td><%= command.description %></td>
-          <td><%= command.commandsToExecute %></td>
-          <td><%- await include('./editCommandModal.sejs', { command: command }) %></td>
-        </tr>
 
-        <% })) %>
+    <% for(let command of customCommands){%>
+
+      <tr>
+        <td scope="row"><%= command.name %></td>
+        <td><%= command.description %></td>
+        <td><%= command.commandsToExecute %></td>
+        <td><%- await include('./editCommandModal.sejs', { command: command }) %></td>
+      </tr>
+
+      <%}%>
+
 
     </tbody>
   </table>
