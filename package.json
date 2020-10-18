@@ -45,7 +45,7 @@
     "sails-redis": "^1.0.0",
     "sequelize": "^6.3.5",
     "sequelize-cli": "^6.2.0",
-    "validator": "^10.9.0",
+    "validator": "^13.1.17",
     "winston": "^2.4.3"
   },
   "scripts": {
