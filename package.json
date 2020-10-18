@@ -57,7 +57,7 @@
     "lint": "eslint --max-warnings 0 .",
     "dev": "nodemon",
     "debug": "node debug app.js",
-    "cover": "nyc npm run test",
+    "cover": "nyc npm run test -- --reporter mocha-junit-reporter ",
     "itemIcons:update": "bash ./scripts/itemIconsUpdate.sh",
     "postversion": "git push && git push --tags",
     "sequelize": "sequelize-cli",
@@ -98,7 +98,6 @@
   },
   "mocha": {
     "timeout": 10000,
-    "reporter": "mocha-junit-reporter",
     "exit": true,
     "recursive": true,
     "reporterOptions": {

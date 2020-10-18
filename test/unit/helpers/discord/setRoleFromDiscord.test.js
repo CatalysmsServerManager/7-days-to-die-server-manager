@@ -3,7 +3,7 @@ const { expect } = require('chai');
 describe('setRoleFromDiscord', () => {
 
   it('fails a test', () => {
-    expect(1).to.be(2);
+    expect(1).to.be.eq(2);
   });
 
   describe('shouldSetRole', () => {
