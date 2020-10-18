@@ -15,9 +15,6 @@ class CountrybanKick extends DiscordNotification {
       .setFooter(`${event.server.name}`)
       .setURL(`${process.env.CSMM_HOSTNAME}/player/${event.player.id}/profile`);
 
-
-    console.log(embed);
-
     return embed;
   }
 }
