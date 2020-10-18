@@ -50,6 +50,8 @@ jobs:
           DBSTRING: mysql2://root@127.0.0.1:3306/csmm
           REDISSTRING: redis://127.0.0.1:6379
           CSMM_LOGLEVEL: debug
+      - run: echo $(pwd)
+      - run: ls -la
       - name: Test & publish code coverage
         uses: codecov/codecov-action@v1
         with:
