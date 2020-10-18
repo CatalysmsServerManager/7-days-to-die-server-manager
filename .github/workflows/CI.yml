@@ -53,9 +53,10 @@ jobs:
           REDISSTRING: redis://127.0.0.1:6379
           CSMM_LOGLEVEL: debug
       - name: Test & publish code coverage
+        if: ${{ always() }}
         uses: codecov/codecov-action@v1
         with:
-          file: ./coverage/lcov.info
+          file: ./reports/coverage/lcov.info
       - uses: check-run-reporter/action@v2.0.0
         # always run, otherwise you'll only see results for passing builds
         if: ${{ always() }}
