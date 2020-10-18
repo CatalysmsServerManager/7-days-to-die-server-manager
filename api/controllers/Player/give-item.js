@@ -54,6 +54,7 @@ module.exports = {
 
       let player = await Player.findOne(inputs.playerId).populate('server');
       let server = await SdtdServer.findOne(player.server.id);
+      inputs.itemName = inputs.itemName.replace(/"/g, '');
       const cpmVersion = await sails.helpers.sdtd.checkCpmVersion(server.id);
 
       let validItemName = await sails.helpers.sdtd.validateItemName(player.server.id, inputs.itemName);

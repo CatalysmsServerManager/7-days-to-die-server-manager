@@ -3,7 +3,8 @@ const { expect } = require('chai');
 
 describe('/api/player/giveitem', function () {
   const items = {
-    ammo9mmBulletBall: true
+    ammo9mmBulletBall: true,
+    'item with quotes': true,
   };
   let cpmVersion = 0;
 
@@ -34,6 +35,22 @@ describe('/api/player/giveitem', function () {
       expect(sails.helpers.sdtdApi.executeConsoleCommand).to.have.been.calledWith(
         sandbox.match.any,
         `giveplus ${sails.testPlayer.steamId} "ammo9mmBulletBall" 1 `
+      );
+    });
+
+    it('Quoted item silently drops the quotes', async function () {
+      const response = await supertest(sails.hooks.http.app)
+        .post('/api/player/giveitem')
+        .send({
+          playerId: 1,
+          itemName: '"item with quotes"',
+          amount: '1'
+        });
+      expect(response.statusCode).to.equal(200);
+      expect(response.body).to.deep.eq({});
+      expect(sails.helpers.sdtdApi.executeConsoleCommand).to.have.been.calledWith(
+        sandbox.match.any,
+        `giveplus ${sails.testPlayer.steamId} "item with quotes" 1 `
       );
     });
 
@@ -70,6 +87,23 @@ describe('/api/player/giveitem', function () {
         `give ${sails.testPlayer.entityId} "ammo9mmBulletBall" 1 `
       );
     });
+
+    it('Quoted item silently drops the quotes', async function () {
+      const response = await supertest(sails.hooks.http.app)
+        .post('/api/player/giveitem')
+        .send({
+          playerId: 1,
+          itemName: '"item with quotes"',
+          amount: '1'
+        });
+      expect(response.statusCode).to.equal(200);
+      expect(response.body).to.deep.eq({});
+      expect(sails.helpers.sdtdApi.executeConsoleCommand).to.have.been.calledWith(
+        sandbox.match.any,
+        `give ${sails.testPlayer.entityId} "item with quotes" 1 `
+      );
+    });
+
 
     it('returns 400 if incorrect item name is given', async () => {
       const response = await supertest(sails.hooks.http.app)
