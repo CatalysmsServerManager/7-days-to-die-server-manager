@@ -18,19 +18,17 @@ This project and everyone participating in it is governed by the code of conduct
 
 ## How can I contribute?
 1. You can report bugs/glitches/faults that you are likely to come across when using the project server and client apps.
-2. You can suggest enhancements that you would want to see implemented on the project - which gets voted in the roadmap.
+2. You can suggest enhancements that you would want to see implemented on the project.
 3. You can address a wide variety of open issues if you wish to contribute using your code and make a pull request.
 
 ## Steps to contribute
 
 * Comment on the issue you want to work on. Make sure it's not assigned to someone else. For new comers to open-source, you can pick the issue having 'good first issue' tag.
 
-* If you think you encounter a bug or have a suggestion for improvement of code or to add a feature, then create a issue with proper title and tags but first make sure it's not already present. And if you want to work on that, then comment on that issue and wait for the owner to assign that work to you.
+* If you think you encounter a bug or have a suggestion for improvement of code or to add a feature, then create a issue with proper title and tags but first make sure it's not already present.
 
 ### Making a PR
 
-> - Make sure you have been assigned the issue to which you are making a PR.
-> - If you make PR before being assigned, It will be labeled `invalid` and closed without merging.
 
 * Fork the repo. This will create a copy of the current repository that you can edit and make changes to.
 
@@ -61,3 +59,6 @@ This project and everyone participating in it is governed by the code of conduct
 * The maintainer of this repo will review the changes you have made. They will review if your changes are proper or not. And if they find any mistakes, they may request some changes. In that case, you should make changes in your forked repository and then commit that changes. And make sure you make changes in the same branch you previously requested PR from.
 
 * At last if maintainers think your PR is proper and correct then your request will be approved and will be merged.
+
+### References
+  This document was adapted from the https://github.com/Py-Contributors/awesomeScripts/blob/master/CONTRIBUTING.md.
