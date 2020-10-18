@@ -141,7 +141,7 @@
       </tr>
     </thead>
     <tbody>
-      <% customCommands.forEach(async command => { %>
+      <% await Promise.all(customCommands.map(async command => { %>
         <tr>
           <td scope="row"><%= command.name %></td>
           <td><%= command.description %></td>
@@ -149,7 +149,7 @@
           <td><%- await include('./editCommandModal.sejs', { command: command }) %></td>
         </tr>
 
-        <% }) %>
+        <% })) %>
 
     </tbody>
   </table>
