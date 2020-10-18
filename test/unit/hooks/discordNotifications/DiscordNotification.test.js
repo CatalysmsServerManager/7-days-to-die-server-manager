@@ -1,3 +1,4 @@
+const { expect } = require('chai');
 const { CustomEmbed } = require('../../../../api/hooks/discordBot/util/createEmbed');
 const DiscordNotification = require('../../../../worker/processors/discordNotification/DiscordNotification');
 
@@ -34,5 +35,11 @@ describe('DiscordNotification', function () {
     expect(dmSpy.getCall(0).args.length).to.eql(2);
     expect(dmSpy.getCall(0).args[0]).to.eql(sails.testUser.discordId);
     expect(dmSpy.getCall(0).args[1]).to.eql('There was an error sending a CSMM notification to your channel and thus the notification has been disabled: `Error: AHH`');
+  });
+
+  it('MakeEmbed should throw if it is not implemented', async function () {
+    // This forces notifications to implement the function
+    const blankNotification = new DiscordNotification('blank');
+    await expect(blankNotification.makeEmbed()).to.eventually.be.rejectedWith('makeEmbed has to be implemented.');
   });
 });
