@@ -45,8 +45,6 @@ jobs:
             ${{ runner.OS }}-
       - run: npm ci
       - run: npm run lint -- --format junit -o reports/lint/js-lint-results.xml
-      - run: echo $(pwd)
-      - run: ls -la
       - run: npm run cover
         env:
           DBSTRING: mysql2://root@127.0.0.1:3306/csmm
@@ -61,5 +59,7 @@ jobs:
         # always run, otherwise you'll only see results for passing builds
         if: ${{ always() }}
         with:
-          token: ${{ secrets.CHECK_RUN_REPORTER_TOKEN }}
+          # Token in plaintext to allow CRR to run for forked PRs
+          # https://github.com/check-run-reporter/feedback/issues/9
+          token: "01d31e48-772c-4bcb-b5fa-239689ad5419"
           report: "reports/**/*.xml"
