@@ -16,24 +16,24 @@
 
 <div align="justify">
 
-**Server automation** - run any command in any time interval you want. Timed server messages, automatic world saving, ...
+**Server automation** - Run any command in any time interval you want. Timed server messages, automatic world saving, ...
 
-**Discord notifications** - built-in for common use cases. Ability to detect specific strings for your custom purposes.
+**Discord notifications** - Built-in for common use cases. Ability to detect specific strings for your custom purposes.
 
 **High ping kicker** - Kick players with constant bad connection.
 
-**Country ban** - automatically kick or ban players from certain countries from your server.
+**Country ban** - Automatically kick or ban players from certain countries from your server.
 
 **Player tracking** - Track location and inventory of online players and view them on a map of your server.
 
-**Ingame commands** - Playermade teleports, ingame support system, ... Custom commands to expose console commands to players in a controlled way
+**Ingame commands** - Playermade teleports, ingame support system, ... Custom commands to expose console commands to players in a controlled way.
 **Economy system** - Let players earn money by playing, killing zombies, typing on your Discord server. They can spend their cash in your servers shop, teleports and more.
 
-**Discord integration** - Chat bridge (chat between Discord and the game), multiple commands to view player info or view server status.
+**Discord integration** - Chat bridge(chat between Discord and the game), multiple commands to view player info or view server status.
 
-**Support ticket system** - Let players create support requests ingame. Admins can view and comment on these via the website to provide quick support for players.
+**Support ticket system** - Let players create support requests in-game. Admins can view and comment on these via the website to provide quick support for players.
 
-**Server analytics** - charts of # of online players, server FPS, RAM usage.
+**Server analytics** - Charts of # of online players, server FPS, RAM usage.
 
 </div>
 <div align="center">
