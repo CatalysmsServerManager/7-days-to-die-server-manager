@@ -87,7 +87,6 @@
     "mocha": "^8.1.0",
     "mocha-junit-reporter": "^2.0.0",
     "mocha-lcov-reporter": "^1.3.0",
-    "mochawesome": "^6.1.1",
     "mock-req-res": "^1.2.0",
     "mockdate": "^3.0.2",
     "nodemon": "^2.0.3",
@@ -99,13 +98,12 @@
   },
   "mocha": {
     "timeout": 10000,
-    "reporter": "mochawesome",
+    "reporter": "mocha-junit-reporter",
     "exit": true,
     "recursive": true,
-    "reporter-options": [
-      "reportDir=coverage/mochawesome",
-      "reportFilename=index"
-    ],
+    "reporterOptions": {
+      "mochaFile": "./reports/mocha/junit.xml"
+    },
     "file": [
       "./test/lifecycle.test.js"
     ],
@@ -145,7 +143,7 @@
     ],
     "cache": true,
     "all": true,
-    "report-dir": "./coverage"
+    "report-dir": "./reports/coverage"
   },
   "husky": {
     "hooks": {

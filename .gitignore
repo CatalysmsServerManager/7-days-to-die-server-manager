@@ -152,7 +152,7 @@ dump.rdb
 config/datastores.js
 .env
 .nyc_output/*
-coverage
+reports
 assets/images/sdtdIcons
 db-data/
 redis-data/
