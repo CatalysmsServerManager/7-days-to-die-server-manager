@@ -31,7 +31,7 @@
 
 **Discord integration** - Chat bridge(chat between Discord and the game), multiple commands to view player info or view server status.
 
-**Support ticket system** - Let players create support requests in game. Admins can view and comment on these via the website to provide quick support for players.
+**Support ticket system** - Let players create support requests in-game. Admins can view and comment on these via the website to provide quick support for players.
 
 **Server analytics** - Charts of # of online players, server FPS, RAM usage.
 
