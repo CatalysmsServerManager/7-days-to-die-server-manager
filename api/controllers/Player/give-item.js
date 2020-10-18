@@ -63,6 +63,7 @@ module.exports = {
         return exits.badRequest('You have provided an invalid item name.');
       }
 
+      // TODO start - this should be a helper
       let cmdToExec;
       if (cpmVersion >= 6.4) {
         cmdToExec = `giveplus ${player.steamId} "${inputs.itemName}" ${inputs.amount} ${inputs.quality ? inputs.quality + ' 0' : ''}`;
@@ -75,7 +76,7 @@ module.exports = {
       if (response.result.startsWith('ERR:')) {
         return exits.badRequest(`Error while giving item - ${response.result}`);
       }
-
+      // TODO end - this should be a helper
 
       await sails.helpers.sdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(server), `pm ${player.steamId} "CSMM - You have received ${inputs.amount} of ${inputs.itemName}"`);
 
