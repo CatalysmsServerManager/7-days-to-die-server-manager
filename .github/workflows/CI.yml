@@ -44,7 +44,7 @@ jobs:
             ${{ runner.OS }}-node-
             ${{ runner.OS }}-
       - run: npm ci
-      - run: npm run lint --format junit -o reports/lint/js-lint-results.xml
+      - run: npm run lint -- --format junit -o reports/lint/js-lint-results.xml
       - run: echo $(pwd)
       - run: ls -la
       - run: npm run cover
