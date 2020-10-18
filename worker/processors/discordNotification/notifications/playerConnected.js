@@ -5,9 +5,7 @@ class PlayerConnected extends DiscordNotification {
     super('playerconnected');
   }
 
-  async makeEmbed(event) {
-    let embed = this.getBlankEmbed();
-
+  async makeEmbed(event, embed) {
     if (!event.player) {
       return null;
     }

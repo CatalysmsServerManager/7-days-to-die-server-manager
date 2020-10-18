@@ -19,7 +19,7 @@ class DiscordNotification {
 
   async sendNotification(notificationOptions) {
     let enrichedOptions = await this.enrichEvent(notificationOptions);
-    let embedToSend = await this.makeEmbed(enrichedOptions);
+    let embedToSend = await this.makeEmbed(enrichedOptions, this.getBlankEmbed());
     if (!embedToSend) { return; }
     embedToSend.setFooter(`CSMM notification for ${enrichedOptions.server.name}`);
 

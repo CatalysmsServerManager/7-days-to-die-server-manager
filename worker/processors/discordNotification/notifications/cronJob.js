@@ -5,9 +5,7 @@ class CronJob extends DiscordNotification {
     super('cronjob');
   }
 
-  async makeEmbed(event) {
-    let embed = this.getBlankEmbed();
-
+  async makeEmbed(event, embed) {
     if (!event.job || !event.job.responses) {
       throw new Error('Implementation error! Must provide job info.');
     }

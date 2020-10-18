@@ -6,9 +6,7 @@ class SystemBoot extends DiscordNotification {
     super('systemboot');
   }
 
-  async makeEmbed() {
-    let embed = this.getBlankEmbed();
-
+  async makeEmbed(event, embed) {
     embed.setTitle('CSMM has (re)started')
       .setColor('RANDOM');
     return embed;

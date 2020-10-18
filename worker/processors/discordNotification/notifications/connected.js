@@ -5,9 +5,7 @@ class Connected extends DiscordNotification {
     super('connected');
   }
 
-  async makeEmbed() {
-    let embed = this.getBlankEmbed();
-
+  async makeEmbed(event, embed) {
     embed.setTitle('Connected to CSMM')
       .setColor('GREEN');
     return embed;
