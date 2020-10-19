@@ -5,14 +5,11 @@ class PlayerConnected extends DiscordNotification {
     super('playerconnected');
   }
 
-  async makeEmbed(event){
-    let client = sails.hooks.discordbot.getClient();
-    let embed = new client.customEmbed();
-
+  async makeEmbed(event, embed) {
     if (!event.player) {
       return null;
     }
-    let gblBans = await BanEntry.find({steamId: event.player.steamId});
+    let gblBans = await BanEntry.find({ steamId: event.player.steamId });
 
     embed.setTitle(`Connected: ${event.player.name}`)
       .setColor('GREEN')

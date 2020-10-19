@@ -5,10 +5,7 @@ class CountrybanKick extends DiscordNotification {
     super('countrybanKick');
   }
 
-  async makeEmbed(event) {
-    let client = sails.hooks.discordbot.getClient();
-    let embed = new client.customEmbed();
-
+  async makeEmbed(event, embed) {
     embed.setTitle(`:flag_${event.player.country.toLowerCase()}: Country ban kicked: ${event.player.playerName}`)
       .setColor('ORANGE')
       .addField('Steam ID', `[${event.player.steamId}](https://steamidfinder.com/lookup/${event.player.steamId}/)`, true)

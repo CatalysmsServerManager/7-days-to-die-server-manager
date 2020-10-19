@@ -5,10 +5,7 @@ class CronJob extends DiscordNotification {
     super('cronjob');
   }
 
-  async makeEmbed(event) {
-    let client = sails.hooks.discordbot.getClient();
-    let embed = new client.customEmbed();
-
+  async makeEmbed(event, embed) {
     if (!event.job || !event.job.responses) {
       throw new Error('Implementation error! Must provide job info.');
     }

@@ -5,10 +5,7 @@ class PlayerDisconnected extends DiscordNotification {
     super('playerdisconnected');
   }
 
-  async makeEmbed(event) {
-    let client = sails.hooks.discordbot.getClient();
-    let embed = new client.customEmbed();
-
+  async makeEmbed(event, embed) {
     if (!event.player) {
       return null;
     }
@@ -27,8 +24,7 @@ class PlayerDisconnected extends DiscordNotification {
         `${process.env.CSMM_HOSTNAME}/player/${event.player.id}/profile`
       )
       .addField(
-        `${gblBans.length} ban${
-          gblBans.length === 1 ? '' : 's'
+        `${gblBans.length} ban${gblBans.length === 1 ? '' : 's'
         } on the global ban list`,
         `[GBL profile page](${process.env.CSMM_HOSTNAME}/gbl/profile?steamId=${event.player.steamId})`
       )

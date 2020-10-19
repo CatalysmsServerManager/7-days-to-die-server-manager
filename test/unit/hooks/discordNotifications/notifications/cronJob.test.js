@@ -1,13 +1,9 @@
-const CronJob = require('../../../../../api/hooks/discordNotifications/notifications/cronJob.js');
+const CronJob = require('../../../../../worker/processors/discordNotification/notifications/cronJob');
 
 describe('CronJob', function () {
-  beforeEach(function() {
-    this.channel = {
-      send: sandbox.fake(async () => {})
-    };
-
+  beforeEach(function () {
+    this.spy = sandbox.stub(sails.helpers.discord, 'sendMessage').callsFake(() => { });
     this.notification = new CronJob();
-    this.notification.getDiscordChannel = () => Promise.resolve(this.channel);
   });
 
   // it('Shouldnt try to talk to discord unless all data is available', async function () {
@@ -41,16 +37,16 @@ describe('CronJob', function () {
         createdAt: 1584558400790,
         updatedAt: 1584588946156,
         command:
-        'say "[FAAC58]Merci de poser un bloc de revendication à l\'emplacement de votre base afin que celle-ci ne soit pas réinitialisé lors de la réinitialisation du lundi.[-]"',
+          'say "[FAAC58]Merci de poser un bloc de revendication à l\'emplacement de votre base afin que celle-ci ne soit pas réinitialisé lors de la réinitialisation du lundi.[-]"',
         temporalValue: '*/45 * * * *',
         enabled: true,
-        responses: [{ result: 'An error occurred executing the API request to the 7D2D server' } ]
+        responses: [{ result: 'An error occurred executing the API request to the 7D2D server' }]
       }
     });
-    expect(this.channel.send.callCount).to.equal(1);
-    expect(this.channel.send.getCall(0).args.length).to.eql(1);
-    expect(this.channel.send.getCall(0).args[0]).to.have.all.keys('author','color','description','fields','file','files','footer','image','thumbnail','timestamp','title','url');
-    expect(this.channel.send.getCall(0).args[0].fields).to.eql([
+    expect(this.spy.callCount).to.equal(1);
+    expect(this.spy.getCall(0).args.length).to.eql(3);
+    expect(this.spy.getCall(0).args[2]).to.have.all.keys('author', 'color', 'description', 'fields', 'file', 'files', 'footer', 'image', 'thumbnail', 'timestamp', 'title', 'url');
+    expect(this.spy.getCall(0).args[2].fields).to.eql([
       {
         'inline': true,
         'name': 'Command',
@@ -85,10 +81,10 @@ describe('CronJob', function () {
         responses: [{ command: 'say', parameters: Array(255).fill('x').join(''), result: Array(255).fill('x').join('') }]
       }
     });
-    expect(this.channel.send.callCount).to.equal(1);
-    expect(this.channel.send.getCall(0).args.length).to.eql(1);
-    expect(this.channel.send.getCall(0).args[0]).to.have.all.keys('author','color','description','fields','file','files','footer','image','thumbnail','timestamp','title','url');
-    expect(this.channel.send.getCall(0).args[0].fields).to.eql([
+    expect(this.spy.callCount).to.equal(1);
+    expect(this.spy.getCall(0).args.length).to.eql(3);
+    expect(this.spy.getCall(0).args[2]).to.have.all.keys('author', 'color', 'description', 'fields', 'file', 'files', 'footer', 'image', 'thumbnail', 'timestamp', 'title', 'url');
+    expect(this.spy.getCall(0).args[2].fields).to.eql([
       {
         'inline': true,
         'name': 'Command',

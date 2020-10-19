@@ -5,9 +5,7 @@ class ConnectionLost extends DiscordNotification {
     super('connectionlost');
   }
 
-  async makeEmbed(event){
-    let client = sails.hooks.discordbot.getClient();
-    let embed = new client.customEmbed();
+  async makeEmbed(event, embed) {
     embed.setTitle('Lost connection to CSMM')
       .addField('Reason', event.msg.output)
       .setColor('RED');

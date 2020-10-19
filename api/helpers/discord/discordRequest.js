@@ -12,24 +12,31 @@ module.exports = {
       default: 'get',
       type: 'string',
       isIn: ['get', 'post']
+    },
+
+    data: {
+      type: 'json'
     }
 
   },
   exits: {},
 
   fn: async function (inputs, exits) {
+    const url = `https://discord.com/api/${inputs.resource}`;
+    sails.log.debug(`HELPER:discordRequest - sending request!`, inputs);
 
-    try {
-      const response = await fetch(`https://discord.com/api/${inputs.resource}`, {
-        headers: getHeaders(),
-        method: inputs.method
-      });
+    const response = await fetch(url, {
+      headers: getHeaders(),
+      method: inputs.method,
+      body: JSON.stringify(inputs.data)
+    });
 
+    if (response.ok) {
       const data = await response.json();
-
       return exits.success(data);
-    } catch (e) {
-      return exits.error(e);
+    } else {
+      sails.log.error(`HELPER:discordRequest - request errored`, response);
+      return exits.error(new Error(response.statusText));
     }
   },
 };
@@ -38,6 +45,7 @@ module.exports = {
 
 function getHeaders() {
   return {
+    'Content-Type': 'application/json',
     ...getAuth()
   };
 }

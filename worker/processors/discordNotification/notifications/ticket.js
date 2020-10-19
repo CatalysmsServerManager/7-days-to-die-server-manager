@@ -6,8 +6,7 @@ class Ticket extends DiscordNotification {
   }
 
   async makeEmbed(event) {
-    let client = sails.hooks.discordbot.getClient();
-    let embed = new client.customEmbed();
+    let embed = this.getBlankEmbed();
 
     if (!event.ticketNotificationType) {
       throw new Error('Implementation error! Must provide a ticketNotificationType.');
