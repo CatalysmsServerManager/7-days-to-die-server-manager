@@ -304,7 +304,7 @@
     let notificationToggle =
       `<input id="cronjob-notifications-enabled-checkbox-${cronJob.id}" value="${cronJob.id}" type="checkbox" ${cronJob.notificationEnabled ? "checked" : ""} >`;
     let deleteButton = `<button type="button" class="btn btn-danger" value="${cronJob.id}">Delete</button>`;
-    let testButton = `<button type="button" class="btn btn-primary" value="${cronJob.id}">Test</button>`;
+    let testButton = `<button type="button" class="btn btn-primary" value="${cronJob.id}">Run now</button>`;
     let saveButton = `<button type="button" class="btn btn-primary invisible" value="${cronJob.id}">Save</button>`;
 
     $(cellCommand).html(commandText);
