@@ -17,8 +17,7 @@ module.exports = {
     embed: {
       type: 'json',
       custom: (val) => {
-        // instanceof would be ideal but sails is doing weird shit again
-        // So just check the shape of the object
+        // Check the shape of the object
         return (
           val.title &&
           val.url &&
