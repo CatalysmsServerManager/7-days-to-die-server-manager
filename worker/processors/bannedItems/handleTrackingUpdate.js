@@ -30,12 +30,15 @@ module.exports = async function handleItemTrackerUpdate(data) {
       if (unionOfSets.size) {
         const isImmune = await sails.helpers.roles.checkPermission(undefined, server.id, onlinePlayer.player, undefined, 'immuneToBannedItemsList');
 
-        if (!isImmune.hasPermission) {
-          sails.log.info(
-            `Detected banned item(s) on player ${onlinePlayer.player} from server ${onlinePlayer.server}`
-          );
-          await executePunishment(onlinePlayer.player, server, config);
+        if (isImmune.hasPermission) {
+          sails.log.debug(`HOOK:bannedItems - banned items detected but player is immune player ${onlinePlayer.player} from server ${onlinePlayer.server}`);
+          continue;
         }
+        sails.log.info(
+          `Detected banned item(s) on player ${onlinePlayer.player} from server ${onlinePlayer.server}`
+        );
+        await executePunishment(onlinePlayer.player, server, config);
+
       } else {
         sails.log.debug(`HOOK:bannedItems - no banned items detected from player ${onlinePlayer.player} from server ${onlinePlayer.server}`);
       }
