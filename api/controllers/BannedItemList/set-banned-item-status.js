@@ -23,12 +23,6 @@ module.exports = {
       { bannedItemsEnabled: inputs.status }
     );
 
-    if (inputs.status) {
-      await sails.hooks.banneditems.start(inputs.serverId);
-    } else {
-      await sails.hooks.banneditems.stop(inputs.serverId);
-    }
-
     return exits.success();
   }
 };

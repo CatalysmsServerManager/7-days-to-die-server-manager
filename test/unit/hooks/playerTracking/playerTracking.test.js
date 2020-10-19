@@ -18,6 +18,7 @@ describe('Player tracking', () => {
     sandbox.spy(hook, 'inventoryTracking');
     sandbox.spy(hook, 'basicTracking');
     sandbox.spy(hook, 'deleteLocationData');
+    sandbox.spy(sails.hooks.banneditems, 'run');
     sandbox.spy(TrackingInfo, 'createEach');
   });
 
@@ -42,7 +43,7 @@ describe('Player tracking', () => {
     expect(hook.locationTracking).to.have.been.calledOnce;
     expect(hook.inventoryTracking).to.have.been.calledOnce;
 
-    expect(loggingObject.emit).to.have.been.calledOnceWith('trackingUpdate');
+    expect(sails.hooks.banneditems.run).to.have.been.calledOnce;
     expect(TrackingInfo.createEach).to.have.been.calledOnce;
   });
 
