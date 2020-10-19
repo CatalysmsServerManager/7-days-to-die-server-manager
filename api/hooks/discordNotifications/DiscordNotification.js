@@ -10,9 +10,14 @@ class DiscordNotification {
     throw new Error(`makeEmbed has to be implemented.`);
   }
 
-  async getDiscordChannel(channel) {
+  async getDiscordChannel(channelId) {
     let discordClient = sails.hooks.discordbot.getClient();
-    return discordClient.channels.get(channel);
+    return discordClient.channels.get(channelId);
+  }
+
+  async getDiscordUser(userId) {
+    let discordClient = sails.hooks.discordbot.getClient();
+    return discordClient.fetchUser(userId, false);
   }
 
   async sendNotification(notificationOptions) {
@@ -24,10 +29,22 @@ class DiscordNotification {
     try {
       const discordChannel = await this.getDiscordChannel(enrichedOptions.server.config.discordNotificationConfig[notificationOptions.notificationType]);
       if (discordChannel) {
-        discordChannel.send(embedToSend);
+        await discordChannel.send(embedToSend);
       }
     } catch (error) {
+      try {
+        const owner = await User.findOne(enrichedOptions.server.owner);
+        if (owner.discordId) {
+          const discordUser = await this.getDiscordUser(owner.discordId);
+          await discordUser.send(`There was an error sending a CSMM notification to your channel and thus the notification has been disabled: \`${error}\``);
+        }
+      } catch (error) {
+        sails.log.error(`HOOK - discordNotification:DiscordNotification - Error letting owner know of discord issue - ${error}`);
+      }
       sails.log.error(`HOOK - discordNotification:DiscordNotification - ${error}`);
+
+      delete enrichedOptions.server.config.discordNotificationConfig[notificationOptions.notificationType];
+      await SdtdConfig.update({ server: enrichedOptions.server.id }, { discordNotificationConfig: enrichedOptions.server.config.discordNotificationConfig });
     }
 
   }

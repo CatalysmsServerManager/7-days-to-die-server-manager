@@ -44,27 +44,22 @@ jobs:
             ${{ runner.OS }}-node-
             ${{ runner.OS }}-
       - run: npm ci
-      - run: npm run lint
-      - run: npm test
+      - run: npm run lint -- --format junit -o reports/lint/js-lint-results.xml
+      - run: npm run cover
         env:
           DBSTRING: mysql2://root@127.0.0.1:3306/csmm
           REDISSTRING: redis://127.0.0.1:6379
           CSMM_LOGLEVEL: debug
       - name: Test & publish code coverage
-        uses: paambaati/codeclimate-action@v2.6.0
-        env:
-          DBSTRING: mysql2://root@127.0.0.1:3306/csmm
-          REDISSTRING: redis://127.0.0.1:6379
-          CC_TEST_REPORTER_ID: 60858e4981c4a2b71600ef66b26dcbff099fa8f5dff907a973d548764d4b6051
-          coverageLocations: |
-            ./coverage/lcov.info:lcov
+        if: ${{ always() }}
+        uses: codecov/codecov-action@v1
         with:
-          coverageCommand: npm run cover
-      - uses: codecov/codecov-action@v1
+          file: ./reports/coverage/lcov.info
+      - uses: check-run-reporter/action@v2.0.0
+        # always run, otherwise you'll only see results for passing builds
+        if: ${{ always() }}
         with:
-          file: ./coverage/lcov.info
-      - uses: actions/upload-artifact@v2
-        if: always()
-        with:
-          name: test-report
-          path: ./coverage/
+          # Token in plaintext to allow CRR to run for forked PRs
+          # https://github.com/check-run-reporter/feedback/issues/9
+          token: "01d31e48-772c-4bcb-b5fa-239689ad5419"
+          report: "reports/**/*.xml"

@@ -11,7 +11,10 @@
  *   https://sailsjs.com/anatomy/tasks/config/sails-linker.js
  *
  */
-module.exports = function(grunt) {
+
+const scriptFileRef = (filename) => `<%- scriptTag('${filename}') %>`;
+const linkFileRef = (filename) => `<%- stylesheetTag('${filename}') %>`;
+module.exports = function (grunt) {
 
   grunt.config.set('sails-linker', {
 
@@ -26,13 +29,13 @@ module.exports = function(grunt) {
       options: {
         startTag: '<!--SCRIPTS-->',
         endTag: '<!--SCRIPTS END-->',
-        fileTmpl: '<script src="%s"></script>',
+        fileRef: scriptFileRef,
         appRoot: '.tmp/public'
       },
       files: {
         '.tmp/public/**/*.html': require('../pipeline').jsFilesToInject,
         'views/**/*.html': require('../pipeline').jsFilesToInject,
-        'views/**/*.ejs': require('../pipeline').jsFilesToInject
+        'views/**/*.sejs': require('../pipeline').jsFilesToInject
       }
     },
 
@@ -40,7 +43,7 @@ module.exports = function(grunt) {
       options: {
         startTag: '<!--SCRIPTS-->',
         endTag: '<!--SCRIPTS END-->',
-        fileTmpl: '<script src="%s"></script>',
+        fileRef: scriptFileRef,
         appRoot: '.tmp/public',
         relative: true
       },
@@ -53,13 +56,13 @@ module.exports = function(grunt) {
       options: {
         startTag: '<!--SCRIPTS-->',
         endTag: '<!--SCRIPTS END-->',
-        fileTmpl: '<script src="%s"></script>',
+        fileRef: scriptFileRef,
         appRoot: '.tmp/public'
       },
       files: {
         '.tmp/public/**/*.html': ['.tmp/public/min/production.min.js'],
         'views/**/*.html': ['.tmp/public/min/production.min.js'],
-        'views/**/*.ejs': ['.tmp/public/min/production.min.js']
+        'views/**/*.sejs': ['.tmp/public/min/production.min.js']
       }
     },
 
@@ -67,7 +70,7 @@ module.exports = function(grunt) {
       options: {
         startTag: '<!--SCRIPTS-->',
         endTag: '<!--SCRIPTS END-->',
-        fileTmpl: '<script src="%s"></script>',
+        fileRef: scriptFileRef,
         appRoot: '.tmp/public',
         relative: true
       },
@@ -87,14 +90,14 @@ module.exports = function(grunt) {
       options: {
         startTag: '<!--STYLES-->',
         endTag: '<!--STYLES END-->',
-        fileTmpl: '<link rel="stylesheet" href="%s">',
+        fileRef: linkFileRef,
         appRoot: '.tmp/public'
       },
 
       files: {
         '.tmp/public/**/*.html': require('../pipeline').cssFilesToInject,
         'views/**/*.html': require('../pipeline').cssFilesToInject,
-        'views/**/*.ejs': require('../pipeline').cssFilesToInject
+        'views/**/*.sejs': require('../pipeline').cssFilesToInject
       }
     },
 
@@ -102,7 +105,7 @@ module.exports = function(grunt) {
       options: {
         startTag: '<!--STYLES-->',
         endTag: '<!--STYLES END-->',
-        fileTmpl: '<link rel="stylesheet" href="%s">',
+        fileRef: linkFileRef,
         appRoot: '.tmp/public',
         relative: true
       },
@@ -116,13 +119,13 @@ module.exports = function(grunt) {
       options: {
         startTag: '<!--STYLES-->',
         endTag: '<!--STYLES END-->',
-        fileTmpl: '<link rel="stylesheet" href="%s">',
+        fileRef: linkFileRef,
         appRoot: '.tmp/public'
       },
       files: {
         '.tmp/public/index.html': ['.tmp/public/min/production.min.css'],
         'views/**/*.html': ['.tmp/public/min/production.min.css'],
-        'views/**/*.ejs': ['.tmp/public/min/production.min.css']
+        'views/**/*.sejs': ['.tmp/public/min/production.min.css']
       }
     },
 
@@ -130,7 +133,7 @@ module.exports = function(grunt) {
       options: {
         startTag: '<!--STYLES-->',
         endTag: '<!--STYLES END-->',
-        fileTmpl: '<link rel="stylesheet" href="%s">',
+        fileRef: linkFileRef,
         appRoot: '.tmp/public',
         relative: true
       },
@@ -150,20 +153,20 @@ module.exports = function(grunt) {
       options: {
         startTag: '<!--TEMPLATES-->',
         endTag: '<!--TEMPLATES END-->',
-        fileTmpl: '<script type="text/javascript" src="%s"></script>',
+        fileRef: scriptFileRef,
         appRoot: '.tmp/public'
       },
       files: {
         '.tmp/public/index.html': ['.tmp/public/jst.js'],
         'views/**/*.html': ['.tmp/public/jst.js'],
-        'views/**/*.ejs': ['.tmp/public/jst.js']
+        'views/**/*.sejs': ['.tmp/public/jst.js']
       }
     },
     clientSideTemplatesBuild: {
       options: {
         startTag: '<!--TEMPLATES-->',
         endTag: '<!--TEMPLATES END-->',
-        fileTmpl: '<script type="text/javascript" src="%s"></script>',
+        fileRef: scriptFileRef,
         appRoot: '.tmp/public',
         relative: true
       },

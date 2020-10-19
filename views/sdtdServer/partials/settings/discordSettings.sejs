@@ -1,0 +1,759 @@
+<!-- DISCORD SETTINGS -->
+
+
+<div class="container">
+  <p>Control how the bot behaves in your server. You can reload the channels by setting a discord guild</p>
+
+
+  <% if ('' === user.discordId) { %>
+
+  <div class="alert alert-warning" role="alert">
+    <strong>You have not linked a discord ID yet. Please login to control discord settings</strong>
+  </div>
+
+  <a href="/auth/discord">
+    <img src="../../images/discordIcon.png" width="50%">
+  </a>
+
+  <%  } else { %>
+
+  <a class="btn btn-primary" href='https://discordapp.com/oauth2/authorize?client_id=<%= process.env.DISCORDCLIENTID %>&scope=bot&permissions=268749889'
+    target="_blank" role="button">Add bot to your server</a>
+
+  <hr>
+
+  <!-- Server select -->
+
+  <label for="input-settings-discord-guild">Select discord guild to associate with this 7DTD server</label>
+  <div class="form-inline">
+    <button id="input-settings-discord-setguild-btn" type="button" class="btn btn-primary">Set guild</button>
+    <select class="form-control" id="input-settings-discord-guild"> </select>
+  </div>
+
+  <hr>
+  <!-- Prefix select -->
+
+  <div class="form-inline">
+    <div class="form-group">
+      <button id="inputs-setting-discord-prefix-btn" type="button" class="btn btn-primary">Set prefix</button>
+      <input type="text" class="form-control" name="input-settings-discord-prefix" id="input-settings-discord-prefix"
+        aria-describedby="discord-prefix-help" value="<%= config.discordPrefix %>">
+      <small id="discord-prefix-help" class="form-text text-muted"></small>
+    </div>
+
+  </div>
+
+  <hr>
+
+  <!-- Chat channel select -->
+
+  <label for="input-settings-discord-chatchannel">Chat bridge channel</label>
+  <br>
+  <p>Designate a discord channel to create a chat bridge to your server with. Make sure the bot has permissions to send
+    messages and embed links </p>
+
+  <select class="form-control" id="input-settings-discord-chatchannel">
+  </select>
+  <div class="form-check">
+    <% if(config.chatChannelRichMessages) { %>
+    <input class="form-check-input" type="checkbox" value="" id="input-settings-discord-chatchannel-richmessages"
+      checked>
+    <% } else { %>
+    <input class="form-check-input" type="checkbox" value="" id="input-settings-discord-chatchannel-richmessages">
+    <% } %>
+    <label class="form-check-label" for="input-settings-discord-chatchannel-richmessages">
+      <strong> Rich messages </strong>
+      <br>
+      <p> Displays additional information on player (dis)connect. When disabled, chatbridge will only show a simple
+        "playername connected" message. </p>
+    </label>
+  </div>
+
+  <div class="form-check">
+    <% if(config.chatChannelGlobalOnly) { %>
+    <input class="form-check-input" type="checkbox" value="" id="input-settings-discord-chatchannel-chatChannel-GlobalOnly"
+      checked>
+    <% } else { %>
+    <input class="form-check-input" type="checkbox" value="" id="input-settings-discord-chatchannel-chatChannel-GlobalOnly">
+    <% } %>
+    <label class="form-check-label" for="input-settings-discord-chatchannel-chatChannel-GlobalOnly">
+      <strong> Only global messages </strong>
+      <br>
+      <p> When checked, only messages sent in the global chat channel will be displayed. Thus excluding party chat. </p>
+    </label>
+  </div>
+
+  <div class="form-group">
+    <label for="input-settings-discord-chatchannel-blockedPrefixes">Blocked prefixes</label>
+    <input type="text" class="form-control" name="input-settings-discord-chatchannel-blockedPrefixes" id="input-settings-discord-chatchannel-blockedPrefixes"
+      aria-describedby="input-settings-discord-chatchannel-blockedPrefixes-help" value="<%= config.chatChannelBlockedPrefixes %>">
+    <small id="input-settings-discord-chatchannel-blockedPrefixes-help" class="form-text text-muted">Specify prefixes
+      here that should not show up in the chat bridge. This is useful to protect information from leaking
+      if you have a public chatbridge. Type each prefix and seperate them with ','. So for example: /,!
+    </small>
+  </div>
+
+
+  <button id="input-settings-discord-setchatchannel-btn" type="button" class="btn btn-primary">Set chat channel</button>
+
+  <hr>
+
+
+  <p> CSMM can send notifications to Discord when certain events happen. </p>
+
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#settings-discord-notifications-modal">
+    Notifications
+  </button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="settings-discord-notifications-modal" tabindex="-1" role="dialog" aria-labelledby="settings-discord-notifications-modal-title"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="settings-discord-notifications-modal-title">Discord notifications</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+          <!-- Notification channel select -->
+
+          <div class="form-group">
+            <label for="discord-settings-notifications-reboots-select">CSMM reboots</label>
+            <select class="form-control" name="discord-settings-notifications-reboots-select" id="discord-settings-notifications-reboots-select">
+              <option>Loading</option>
+            </select>
+            <button id="input-settings-discord-setnotification-systemboot-btn" type="button" class="btn btn-primary">Set
+              reboot notification</button>
+          </div>
+
+          <div class="form-group">
+            <label for="discord-settings-notifications-playerconnect-select">Player connect</label>
+            <select class="form-control" name="discord-settings-notifications-playerconnect-select" id="discord-settings-notifications-playerconnect-select">
+              <option>Loading</option>
+            </select>
+            <button id="input-settings-discord-setnotification-playerConnected-btn" type="button" class="btn btn-primary">Set
+              player connect notification</button>
+          </div>
+
+          <div class="form-group">
+            <label for="discord-settings-notifications-playerdisconnect-select">Player disconnect</label>
+            <select class="form-control" name="discord-settings-notifications-playerdisconnect-select" id="discord-settings-notifications-playerdisconnect-select">
+              <option>Loading</option>
+            </select>
+            <button id="input-settings-discord-setnotification-playerDisconnected-btn" type="button" class="btn btn-primary">Set
+              player disconnect notification</button>
+          </div>
+
+          <div class="form-group">
+            <label for="discord-settings-notifications-connectionlost-select">Connection lost</label>
+            <select class="form-control" name="discord-settings-notifications-connectionlost-select" id="discord-settings-notifications-connectionlost-select">
+              <option>Loading</option>
+            </select>
+            <button id="input-settings-discord-setnotification-connectionLost-btn" type="button" class="btn btn-primary">Set
+              CSMM disconnect notification</button>
+          </div>
+
+          <div class="form-group">
+            <label for="discord-settings-notifications-connected-select">(re)connected</label>
+            <select class="form-control" name="discord-settings-notifications-connected-select" id="discord-settings-notifications-connected-select">
+              <option>Loading</option>
+            </select>
+            <button id="input-settings-discord-setnotification-connected-btn" type="button" class="btn btn-primary">Set
+              CSMM connected notification</button>
+          </div>
+
+          <div class="form-group">
+            <label for="discord-settings-notifications-countrybankick-select">Country ban kick</label>
+            <small>Psst, this only makes sense to enable if you have country ban enabled ;)</small>
+            <select class="form-control" name="discord-settings-notifications-countrybankick-select" id="discord-settings-notifications-countrybankick-select">
+              <option>Loading</option>
+            </select>
+            <button id="input-settings-discord-setnotification-countrybankick-btn" type="button" class="btn btn-primary">Set
+              country ban kick notification</button>
+          </div>
+
+          <div class="form-group">
+            <label for="discord-settings-notifications-ticket-select">Tickets</label>
+            <small>Receive notifications for calladmin ticket updates</small>
+            <select class="form-control" name="discord-settings-notifications-ticket-select" id="discord-settings-notifications-ticket-select">
+              <option>Loading</option>
+            </select>
+            <button id="input-settings-discord-setnotification-ticket-btn" type="button" class="btn btn-primary">Set
+              tickets notification</button>
+          </div>
+
+
+          <div class="form-group">
+            <label for="discord-settings-notifications-cronjob-select">Automation jobs</label>
+            <small>Receive notifications when automated jobs run.</small>
+            <select class="form-control" name="discord-settings-notifications-cronjob-select" id="discord-settings-notifications-cronjob-select">
+              <option>Loading</option>
+            </select>
+            <button id="input-settings-discord-setnotification-cronjob-btn" type="button" class="btn btn-primary">Set
+              automation notification</button>
+          </div>
+
+          <div class="form-group">
+            <label for="discord-settings-notifications-gbl-select">Global ban list check</label>
+            <small>Receive notifications a player with more than the configured amount of bans on the GBL joins your
+              server.</small>
+            <select class="form-control" name="discord-settings-notifications-gbl-select" id="discord-settings-notifications-gbl-select">
+              <option>Loading</option>
+            </select>
+            <button id="input-settings-discord-setnotification-gbl-btn" type="button" class="btn btn-primary">Set GBL
+              notification</button>
+          </div>
+
+
+          </li>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%- await include('./customDiscordNotifications.sejs') %>
+
+  <% } %>
+
+  </ul>
+</div>
+
+<script>
+  $(document).ready(function () {
+    let discordGuildId = window.SAILS_LOCALS.config.discordGuildId;
+
+    let writableChannels = new Array();
+    let selectsWithDiscordChannels = [{
+        select: $("#discord-settings-notifications-reboots-select"),
+        option: 'systemboot'
+      },
+      {
+        select: $("#discord-settings-notifications-playerconnect-select"),
+        option: 'playerConnected'
+      },
+      {
+        select: $("#discord-settings-notifications-playerdisconnect-select"),
+        option: 'playerDisconnected'
+      },
+      {
+        select: $("#discord-settings-notifications-connectionlost-select"),
+        option: 'connectionLost'
+      },
+      {
+        select: $("#discord-settings-notifications-connected-select"),
+        option: 'connected'
+      },
+      {
+        select: $("#input-settings-discord-chatchannel"),
+        option: 'chatChannel'
+      },
+      {
+        select: $("#discord-settings-notifications-countrybankick-select"),
+        option: 'countrybanKick'
+      },
+      {
+        select: $("#discord-settings-notifications-ticket-select"),
+        option: 'ticket'
+      },
+      {
+        select: $("#discord-settings-notifications-cronjob-select"),
+        option: 'cronjob'
+      },
+      {
+        select: $("#discord-settings-notifications-gbl-select"),
+        option: 'gblmaxban'
+      },
+    ]
+
+    if (!discordGuildId) {
+      selectsWithDiscordChannels.forEach(select => {
+        select.select.prop('disabled', true)
+      })
+    }
+
+    // Load guilds the user can manage & add them to select
+    $.ajax({
+      url: `/api/user/findguildsmanagedbyuser`,
+      data: {
+        userId: <%= req.session.userId %>
+      },
+      success: (data, status, xhr) => {
+        let foundGuilds = data;
+        foundGuilds.forEach(guild => {
+          $('#input-settings-discord-guild').append($('<option>', {
+              value: guild.id
+            })
+            .text(guild.name));
+        })
+        $('#input-settings-discord-guild').append($('<option>', {
+            value: 0
+          })
+          .text("None"));
+        $(`#input-settings-discord-guild option[value='${discordGuildId}']`).prop('selected', true);
+        if (discordGuildId) {
+          let selectedGuildId = $('#input-settings-discord-guild').val()
+          getWritableChannels(selectedGuildId).then(channels => {
+              writeableChannels = channels
+              selectsWithDiscordChannels.forEach(select => {
+                fillSelectWithDiscordChannels(select, channels)
+              })
+            })
+            .catch(e => {
+              console.log(e)
+            })
+        }
+      },
+      error: function (xhr, status, error) {
+        displayAjaxToSupportData(xhr, this);
+      }
+    })
+
+    $('#inputs-setting-discord-prefix-btn').click(e => {
+      e.preventDefault();
+      let newPrefix = $('#input-settings-discord-prefix').val();
+      let guildId = $('#input-settings-discord-guild').val();
+      if (!validator.isLength(newPrefix, {
+          min: 0,
+          max: 3
+        })) {
+        $('#input-settings-discord-prefix').addClass("bg-danger").removeClass("bg-success");
+        return alert('Prefix is maximum 3 characters long');
+      }
+
+      $.ajax({
+        url: '/api/sdtdserver/discord/prefix',
+        method: 'POST',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          prefix: newPrefix,
+          guildId: guildId,
+          serverId: window.SAILS_LOCALS.server.id
+        },
+        success: (data, status, xhr) => {
+          $('#input-settings-discord-prefix').addClass("bg-success").removeClass("bg-danger");
+        },
+        error: function (xhr, status, error) {
+          $('#input-settings-discord-prefix').addClass("bg-danger").removeClass("bg-success");
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      })
+    })
+
+
+    async function getWritableChannels(guildId) {
+      return new Promise((resolve, reject) => {
+        console.log("guildId " + guildId)
+        if (guildId === 0 || guildId === "0") {
+          return resolve([]);
+        }
+
+        $.ajax({
+          url: `/api/sdtdserver/findwriteablechannelsinguild`,
+          data: {
+            guildId: guildId,
+            serverId: window.SAILS_LOCALS.server.id
+          },
+          success: (data, status, xhr) => {
+            let foundChannels = data;
+            resolve(foundChannels);
+          },
+          error: function (xhr, status, error) {
+            displayAjaxToSupportData(xhr, this);;
+            showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+          }
+        })
+      })
+    }
+
+    function fillSelectWithDiscordChannels(element, channels) {
+      element.select.empty();
+      let idToLookFor
+      idToLookFor = window.SAILS_LOCALS.config.discordNotificationConfig[element.option];
+
+      if (element.option === 'chatChannel') {
+        idToLookFor = window.SAILS_LOCALS.config.chatChannelId;
+      }
+
+
+      if (element.option === 'commandsChannel') {
+        idToLookFor = window.SAILS_LOCALS.config.discordCommandsChannelId;
+      }
+
+      if (!idToLookFor) {
+        idToLookFor = '0'
+      }
+      element.select.append($('<option>', {
+          value: 0
+        })
+        .text('Disabled'));
+      channels.forEach(channel => {
+        element.select.append($('<option>', {
+            value: channel.id
+          })
+          .text("#" + channel.name));
+      })
+      element.select.val(idToLookFor);
+    }
+
+
+    $('#input-settings-discord-setguild-btn').click(e => {
+      e.preventDefault();
+      let newGuildId = $('#input-settings-discord-guild').val();
+      $.ajax({
+        url: '/api/sdtdserver/setGuild',
+        type: 'POST',
+        data: {
+          discordGuildId: newGuildId,
+          serverId: <%= server.id %>,
+          _csrf: window.SAILS_LOCALS._csrf
+        },
+        success: (data, status, xhr) => {
+          $('#input-settings-discord-guild').addClass("bg-success").removeClass("bg-danger");
+          let selectedGuildId = $('#input-settings-discord-guild').val()
+
+          if (selectedGuildId === "0") {
+            return;
+          }
+
+          selectsWithDiscordChannels.forEach(select => {
+            select.select.prop('disabled', false)
+          })
+          getWritableChannels(selectedGuildId)
+            .then(channels => {
+              writeableChannels = channels
+              selectsWithDiscordChannels.forEach(select => {
+                fillSelectWithDiscordChannels(select, channels)
+              })
+            })
+            .catch(e => {
+              console.log(e)
+            })
+        },
+        error: function (xhr, status, error) {
+          $('#input-settings-discord-guild').addClass("bg-danger").removeClass("bg-success");
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      })
+
+    })
+
+    $("#input-settings-discord-setchatchannel-btn").click(e => {
+      e.preventDefault();
+      let newChatChannelId = $('#input-settings-discord-chatchannel').val();
+      let newRichMessages;
+      let newChatChannelGlobalOnly;
+      let blockedPrefixes = $("#input-settings-discord-chatchannel-blockedPrefixes").val();
+
+      if (blockedPrefixes !== "") {
+        $.ajax({
+          url: '/api/sdtdserver/discord/chatbridge/blockedprefixes',
+          type: 'POST',
+          data: {
+            blockedPrefixes: blockedPrefixes,
+            serverId: "<%= server.id %>",
+            _csrf: window.SAILS_LOCALS._csrf
+          },
+          success: (data, status, xhr) => {
+
+          },
+          error: function (xhr, status, error) {
+            $('#input-settings-discord-chatchannel').addClass("bg-danger").removeClass("bg-success");
+            displayAjaxToSupportData(xhr, this);;
+            showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+          }
+        })
+      }
+
+      if ($('#input-settings-discord-chatchannel-richmessages').is(":checked")) {
+        newRichMessages = true
+      } else {
+        newRichMessages = false
+      }
+
+      if ($('#input-settings-discord-chatchannel-chatChannel-GlobalOnly').is(":checked")) {
+        newChatChannelGlobalOnly = true
+      } else {
+        newChatChannelGlobalOnly = false
+      }
+
+      if (!newChatChannelId) {
+        return alert('Error! Make sure you have a guild set and are selecting a valid channel')
+      }
+      $.ajax({
+        url: '/api/sdtdserver/setchatchannel',
+        type: 'POST',
+        data: {
+          chatChannelId: newChatChannelId,
+          serverId: "<%= server.id %>",
+          richMessages: newRichMessages,
+          onlyGlobal: newChatChannelGlobalOnly,
+          _csrf: window.SAILS_LOCALS._csrf
+        },
+        success: (data, status, xhr) => {
+          $('#input-settings-discord-chatchannel').addClass("bg-success").removeClass("bg-danger");
+        },
+        error: function (xhr, status, error) {
+          $('#input-settings-discord-chatchannel').addClass("bg-danger").removeClass("bg-success");
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      })
+    })
+
+    $("#input-settings-discord-setnotification-systemboot-btn").click(e => {
+      let newNotificationChannelId = $('#discord-settings-notifications-reboots-select').val();
+      if (!newNotificationChannelId) {
+        return alert('Error! Make sure you have a guild set and are selecting a valid channel')
+      }
+      $.ajax({
+        url: '/api/sdtdserver/setnotificationchannel',
+        type: 'POST',
+        data: {
+          notificationChannelId: newNotificationChannelId,
+          serverId: <%= server.id %>,
+          notificationType: 'systemboot',
+          _csrf: window.SAILS_LOCALS._csrf
+        },
+        success: (data, status, xhr) => {
+          $('#discord-settings-notifications-reboots-select').addClass("bg-success").removeClass(
+            "bg-danger");
+        },
+        error: function (xhr, status, error) {
+          $('#discord-settings-notifications-reboots-select').addClass("bg-danger").removeClass(
+            "bg-success");
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      })
+    })
+
+    $("#input-settings-discord-setnotification-playerConnected-btn").click(e => {
+      let newNotificationChannelId = $('#discord-settings-notifications-playerconnect-select').val();
+      if (!newNotificationChannelId) {
+        return alert('Error! Make sure you have a guild set and are selecting a valid channel')
+      }
+      $.ajax({
+        url: '/api/sdtdserver/setnotificationchannel',
+        type: 'POST',
+        data: {
+          notificationChannelId: newNotificationChannelId,
+          serverId: <%= server.id %>,
+          notificationType: 'playerConnected',
+          _csrf: window.SAILS_LOCALS._csrf
+        },
+        success: (data, status, xhr) => {
+          $('#discord-settings-notifications-playerconnect-select').addClass("bg-success").removeClass(
+            "bg-danger");
+        },
+        error: function (xhr, status, error) {
+          $('#discord-settings-notifications-playerconnect-select').addClass("bg-danger").removeClass(
+            "bg-success");
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      })
+    })
+
+    $("#input-settings-discord-setnotification-playerDisconnected-btn").click(e => {
+      let newNotificationChannelId = $('#discord-settings-notifications-playerdisconnect-select').val();
+      if (!newNotificationChannelId) {
+        return alert('Error! Make sure you have a guild set and are selecting a valid channel')
+      }
+      $.ajax({
+        url: '/api/sdtdserver/setnotificationchannel',
+        type: 'POST',
+        data: {
+          notificationChannelId: newNotificationChannelId,
+          serverId: <%= server.id %>,
+          notificationType: 'playerDisconnected',
+          _csrf: window.SAILS_LOCALS._csrf
+        },
+        success: (data, status, xhr) => {
+          $('#discord-settings-notifications-playerdisconnect-select').addClass("bg-success").removeClass(
+            "bg-danger");
+        },
+        error: function (xhr, status, error) {
+          $('#discord-settings-notifications-playerdisconnect-select').addClass("bg-danger").removeClass(
+            "bg-success");
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      })
+    })
+
+    $("#input-settings-discord-setnotification-connected-btn").click(e => {
+      let newNotificationChannelId = $('#discord-settings-notifications-connected-select').val();
+      if (!newNotificationChannelId) {
+        return alert('Error! Make sure you have a guild set and are selecting a valid channel')
+      }
+      $.ajax({
+        url: '/api/sdtdserver/setnotificationchannel',
+        type: 'POST',
+        data: {
+          notificationChannelId: newNotificationChannelId,
+          serverId: <%= server.id %>,
+          notificationType: 'connected',
+          _csrf: window.SAILS_LOCALS._csrf
+        },
+        success: (data, status, xhr) => {
+          $('#discord-settings-notifications-connected-select').addClass("bg-success").removeClass(
+            "bg-danger");
+        },
+        error: function (xhr, status, error) {
+          $('#discord-settings-notifications-connected-select').addClass("bg-danger").removeClass(
+            "bg-success");
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      })
+    })
+
+    $("#input-settings-discord-setnotification-connectionLost-btn").click(e => {
+      let newNotificationChannelId = $('#discord-settings-notifications-connectionlost-select').val();
+      if (!newNotificationChannelId) {
+        return alert('Error! Make sure you have a guild set and are selecting a valid channel')
+      }
+      $.ajax({
+        url: '/api/sdtdserver/setnotificationchannel',
+        type: 'POST',
+        data: {
+          notificationChannelId: newNotificationChannelId,
+          serverId: <%= server.id %>,
+          notificationType: 'connectionLost',
+          _csrf: window.SAILS_LOCALS._csrf
+        },
+        success: (data, status, xhr) => {
+          $('#discord-settings-notifications-connectionlost-select').addClass("bg-success").removeClass(
+            "bg-danger");
+        },
+        error: function (xhr, status, error) {
+          $('#discord-settings-notifications-connectionlost-select').addClass("bg-danger").removeClass(
+            "bg-success");
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      })
+    })
+
+
+    $("#input-settings-discord-setnotification-countrybankick-btn").click(e => {
+      let newNotificationChannelId = $('#discord-settings-notifications-countrybankick-select').val();
+      if (!newNotificationChannelId) {
+        return alert('Error! Make sure you have a guild set and are selecting a valid channel')
+      }
+      $.ajax({
+        url: '/api/sdtdserver/setnotificationchannel',
+        type: 'POST',
+        data: {
+          notificationChannelId: newNotificationChannelId,
+          serverId: <%= server.id %>,
+          notificationType: 'countrybanKick',
+          _csrf: window.SAILS_LOCALS._csrf
+        },
+        success: (data, status, xhr) => {
+          $('#discord-settings-notifications-countrybankick-select').addClass("bg-success").removeClass(
+            "bg-danger");
+        },
+        error: function (xhr, status, error) {
+          $('#discord-settings-notifications-countrybankick-select').addClass("bg-danger").removeClass(
+            "bg-success");
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      })
+    })
+
+    $("#input-settings-discord-setnotification-ticket-btn").click(e => {
+      let newNotificationChannelId = $('#discord-settings-notifications-ticket-select').val();
+      if (!newNotificationChannelId) {
+        return alert('Error! Make sure you have a guild set and are selecting a valid channel')
+      }
+      $.ajax({
+        url: '/api/sdtdserver/setnotificationchannel',
+        type: 'POST',
+        data: {
+          notificationChannelId: newNotificationChannelId,
+          serverId: <%= server.id %>,
+          notificationType: 'ticket',
+          _csrf: window.SAILS_LOCALS._csrf
+        },
+        success: (data, status, xhr) => {
+          $('#discord-settings-notifications-ticket-select').addClass("bg-success").removeClass(
+            "bg-danger");
+        },
+        error: function (xhr, status, error) {
+          $('#discord-settings-notifications-ticket-select').addClass("bg-danger").removeClass(
+            "bg-success");
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      })
+    })
+
+
+    $("#input-settings-discord-setnotification-cronjob-btn").click(e => {
+      let newNotificationChannelId = $('#discord-settings-notifications-cronjob-select').val();
+      if (!newNotificationChannelId) {
+        return alert('Error! Make sure you have a guild set and are selecting a valid channel')
+      }
+      $.ajax({
+        url: '/api/sdtdserver/setnotificationchannel',
+        type: 'POST',
+        data: {
+          notificationChannelId: newNotificationChannelId,
+          serverId: <%= server.id %>,
+          notificationType: 'cronjob',
+          _csrf: window.SAILS_LOCALS._csrf
+        },
+        success: (data, status, xhr) => {
+          $('#discord-settings-notifications-cronjob-select').addClass("bg-success").removeClass(
+            "bg-danger");
+        },
+        error: function (xhr, status, error) {
+          $('#discord-settings-notifications-cronjob-select').addClass("bg-danger").removeClass(
+            "bg-success");
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      })
+    })
+
+    $("#input-settings-discord-setnotification-gbl-btn").click(e => {
+      let newNotificationChannelId = $("#discord-settings-notifications-gbl-select").val();
+      if (!newNotificationChannelId) {
+        return alert('Error! Make sure you have a guild set and are selecting a valid channel')
+      }
+      $.ajax({
+        url: '/api/sdtdserver/setnotificationchannel',
+        type: 'POST',
+        data: {
+          notificationChannelId: newNotificationChannelId,
+          serverId: <%= server.id %>,
+          notificationType: 'gblmaxban',
+          _csrf: window.SAILS_LOCALS._csrf
+        },
+        success: (data, status, xhr) => {
+          $("#discord-settings-notifications-gbl-select").addClass("bg-success").removeClass(
+            "bg-danger");
+        },
+        error: function (xhr, status, error) {
+          $("#discord-settings-notifications-gbl-select").addClass("bg-danger").removeClass(
+            "bg-success");
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      })
+    })
+  })
+
+</script>

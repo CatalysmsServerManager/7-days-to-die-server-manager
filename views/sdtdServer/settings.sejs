@@ -1,0 +1,258 @@
+<div class="container-fluid">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= '/user/' + req.session.userId + '/dashboard' %>"> Dashboard </a>
+      </li>
+      <li class="breadcrumb-item">
+        <a href="<%= '/sdtdserver/' + server.id + '/dashboard' %>">
+          <%= server.name %>
+        </a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Settings</li>
+    </ol>
+  </nav>
+  <h1>Settings</h1>
+
+
+  <!-- Basic server settings -->
+
+  <div class="card">
+    <div class="card-header" id="settings-heading-basicServerSettings">
+      <h5 class="mb-0">
+        <button class="btn btn-link" data-toggle="collapse" data-target="#settings-collapse-basicServerSettings">
+          <i class="fas fa-cogs fa-lg"></i> Basic server settings
+        </button>
+      </h5>
+    </div>
+
+    <div id="settings-collapse-basicServerSettings" class="collapse">
+      <div class="card-body">
+        <%- await include('./partials/settings/basicServerSettings.sejs', {server: server, config: config}) %>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Discord settings -->
+
+  <div class="card">
+    <div class="card-header" id="settings-heading-discordSettings">
+      <h5 class="mb-0">
+        <button class="btn btn-link" data-toggle="collapse" data-target="#settings-collapse-discordSettings">
+          <i class="fab fa-discord fa-lg"></i> Discord settings
+        </button>
+      </h5>
+    </div>
+
+    <div id="settings-collapse-discordSettings" class="collapse">
+      <%- await include('./partials/settings/discordSettings.sejs', {server: server, config: config, user: user}) %>
+    </div>
+  </div>
+
+  <!-- Cron settings -->
+
+  <div class="card">
+    <div class="card-header" id="settings-heading-cronSettings">
+      <h5 class="mb-0">
+        <button class="btn btn-link" data-toggle="collapse" data-target="#settings-collapse-cronSettings">
+          <i class="fas fa-arrow-alt-circle-down fa-lg "></i> Server automation
+        </button>
+      </h5>
+    </div>
+
+    <div id="settings-collapse-cronSettings" class="collapse">
+      <div class="card-body">
+
+        <%- await include('./partials/settings/cronSettings.sejs', {server: server, config: config}) %>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <div class="card-header" id="settings-heading-roleSettings">
+      <h5 class="mb-0">
+        <button class="btn btn-link" data-toggle="collapse" data-target="#settings-collapse-roleSettings">
+          <i class="fas fa-user-circle"></i></i> Permissions and roles
+        </button>
+      </h5>
+    </div>
+
+    <div id="settings-collapse-roleSettings" class="collapse">
+      <div class="card-body">
+        <%- await include('./partials/settings/roleSettings.sejs', {server: server, config: config}) %>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- GBL settings -->
+
+  <div class="card">
+    <div class="card-header" id="settings-heading-gblSettings">
+      <h5 class="mb-0">
+        <button class="btn btn-link" data-toggle="collapse" data-target="#settings-collapse-gblSettings">
+          <i class="fas fa-ban"></i> Global ban list
+        </button>
+      </h5>
+    </div>
+
+    <div id="settings-collapse-gblSettings" class="collapse">
+      <div class="card-body">
+
+        <%- await include('./partials/settings/gblSettings.sejs', {server: server, config: config}) %>
+      </div>
+    </div>
+
+  </div>
+
+    <!-- Banned items list settings -->
+
+  <div class="card">
+    <div class="card-header" id="settings-heading-bannedItemList">
+      <h5 class="mb-0">
+        <button class="btn btn-link" data-toggle="collapse" data-target="#settings-collapse-bannedItemList">
+          <i class="fas fa-cube"></i> Banned items
+        </button>
+      </h5>
+    </div>
+
+    <div id="settings-collapse-bannedItemList" class="collapse">
+      <div class="card-body">
+
+        <%- await include('./partials/settings/bannedItemList.sejs', {server: server, config: config}) %>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Max ping kicker settings -->
+
+  <div class="card">
+    <div class="card-header" id="settings-heading-pingKickerSettings">
+      <h5 class="mb-0">
+        <button class="btn btn-link" data-toggle="collapse" data-target="#settings-collapse-pingKickerSettings">
+          <i class="fas fa-wifi"></i> Max ping kick
+        </button>
+      </h5>
+    </div>
+
+    <div id="settings-collapse-pingKickerSettings" class="collapse">
+      <div class="card-body">
+        <%- await include('./partials/settings/pingKickerSettings.sejs', {server: server, config: config}) %>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Country ban settings -->
+
+  <div class="card">
+    <div class="card-header" id="settings-heading-countryBanSettings">
+      <h5 class="mb-0">
+        <button class="btn btn-link" data-toggle="collapse" data-target="#settings-collapse-countryBanSettings">
+          <i class="fas fa-globe fa-lg  "></i> Country ban
+        </button>
+      </h5>
+    </div>
+
+    <div id="settings-collapse-countryBanSettings" class="collapse">
+      <div class="card-body">
+
+        <%- await include('./partials/settings/countryBanSettings.sejs', {server: server, config: config}) %>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Tracking settings -->
+
+  <div class="card">
+    <div class="card-header" id="settings-heading-trackerSettings">
+      <h5 class="mb-0">
+        <button class="btn btn-link" data-toggle="collapse" data-target="#settings-collapse-trackerSettings">
+          <i class="fas fa-search fa-lg  "></i> Player tracking
+        </button>
+      </h5>
+    </div>
+
+    <div id="settings-collapse-trackerSettings" class="collapse">
+      <div class="card-body">
+        <%- await include('./partials/settings/playerTracking.sejs', {server: server, config: config, user: user}) %>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- Ingame commands settings -->
+
+  <div class="card">
+    <div class="card-header" id="settings-heading-ingameCommandsSettings">
+      <h5 class="mb-0">
+        <button class="btn btn-link" data-toggle="collapse" data-target="#settings-collapse-ingameCommandsSettings">
+          <i class="fas fa-gamepad fa-lg"></i> Ingame commands
+        </button>
+      </h5>
+    </div>
+
+    <div id="settings-collapse-ingameCommandsSettings" class="collapse">
+      <div class="card-body">
+
+        <%- await include('./partials/settings/commandSettings.sejs', {server: server, config: config}) %>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <div class="card-header" id="settings-heading-economySettings">
+      <h5 class="mb-0">
+        <button class="btn btn-link" data-toggle="collapse" data-target="#settings-collapse-economySettings">
+          <i class="fas fa-money-bill fa-lg "></i> Economy
+        </button>
+      </h5>
+    </div>
+
+    <div id="settings-collapse-economySettings" class="collapse">
+      <div class="card-body">
+        <%- await include('./partials/settings/economySettings.sejs', {server: server, config: config}) %>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Custom hook settings -->
+
+  <div class="card">
+    <div class="card-header" id="settings-heading-customHooks">
+      <h5 class="mb-0">
+        <button class="btn btn-link" data-toggle="collapse" data-target="#settings-collapse-customHooks">
+          <i class="fas fa-code fa-lg"></i> Custom hooks
+        </button>
+      </h5>
+    </div>
+
+    <div id="settings-collapse-customHooks" class="collapse">
+      <%- await include('./partials/settings/customHooks.sejs', {server: server, config: config, user: user}) %>
+    </div>
+  </div>
+
+  <!-- experiments settings  -->
+
+  <div class="card">
+    <div class="card-header" id="settings-heading-experiments">
+      <h5 class="mb-0">
+        <button class="btn btn-link" data-toggle="collapse" data-target="#settings-collapse-experiments">
+          <i class="fas fa-flask fa-lg"></i> Experiments
+        </button>
+      </h5>
+    </div>
+
+    <div id="settings-collapse-experiments" class="collapse">
+      <%- await include('./partials/settings/experiments.sejs', {server: server, config: config, user: user}) %>
+    </div>
+  </div>
+</div>

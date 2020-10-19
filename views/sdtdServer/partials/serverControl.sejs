@@ -1,0 +1,87 @@
+<div class="btn-group btn-group-vertical btn-group-md">
+
+  <% const consoleLink = '/sdtdserver/' + server.id + '/console' %>
+    <a href='<%= consoleLink %>' class="btn btn-default btn-primary">
+      <em class="glyphicon glyphicon-align-justify"></em>
+      <i class="fa fa-terminal" aria-hidden="true"></i> Console
+    </a>
+
+    <% const chatLink = '/sdtdserver/' + server.id + '/chat' %>
+      <a href='<%= chatLink %>' class="btn btn-default btn-primary">
+        <em class="glyphicon glyphicon-align-justify"></em>
+        <i class="far fa-comments"></i> Chat
+      </a>
+
+      <% const ticketsLink = '/sdtdserver/' + server.id + '/tickets' %>
+        <a href='<%= ticketsLink %>' class="btn btn-default btn-primary">
+          <em class="glyphicon glyphicon-align-justify"></em>
+          <i class="fas fa-question"></i> Tickets
+          <span id="sdtd-server-<%= server.id %>-tickets-badge" class="badge badge-secondary">
+            <i class="fa fa-cog" aria-hidden="true"></i>
+          </span>
+        </a>
+
+        <% const settingsLink = '/sdtdserver/' + server.id + '/settings' %>
+          <a href='<%= settingsLink %>' class="btn btn-default btn-primary">
+            <em class="glyphicon glyphicon-align-justify"></em>
+            <i class="fa fa-cog" aria-hidden="true"></i> Settings
+          </a>
+
+          <% await include('./restartServer.sejs') %>
+
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-server-button">
+                <i class="fas fa-trash-alt"></i> Delete
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="delete-server-button" tabindex="-1" role="dialog" aria-labelledby="delete-server-modal" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title" id="delete-server-modal">Delete server</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="container-fluid">
+                      Are you sure?
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <% const deleteLink = '/sdtdserver/' + server.id + '/delete' %>
+                      <a href='<%= deleteLink %>'>
+                        <button id="delete-server-button" class="btn btn-default btn-danger" type="button">
+                          <em class="glyphicon glyphicon-align-justify"></em>
+                           Delete server
+                        </button>
+                      </a>
+
+                      <button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+</div>
+
+<script>
+  $(document).ready(function () {
+    $.ajax({
+      url: `/api/sdtdticket/opentickets`,
+      data: {
+        serverId: <%= server.id %>
+            },
+      success: (data, status, xhr) => {
+        let opentickets = data;
+        $('#sdtd-server-<%= server.id %>-tickets-badge').text(opentickets.length)
+
+      },
+      error: function (xhr, status, error) {
+        displayAjaxToSupportData(xhr, this);;
+        showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+      }
+    });
+  })
+</script>

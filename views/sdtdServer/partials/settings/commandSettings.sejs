@@ -1,0 +1,543 @@
+<!-- COMMANDS SETTINGS -->
+
+<div class="container">
+
+  <div id='settings-disable-commands-btn' class="btn btn-danger">
+    <i class="fa fa-power-off"></i> Disable
+  </div>
+  <div id='settings-enable-commands-btn' class="btn btn-success">
+    <i class="fa fa-power-off"></i> Enable
+  </div>
+
+  <p>Control the ingame commands used by your players. To see a full list of commands, check the documentation. Not all
+    commands
+    are listed here, they will get enabled automatically when their corresponding module is enabled. For example,
+    enabling
+    economy will automatically enable the balance command </p>
+
+
+  <hr>
+
+  <div class="form-group">
+    <label for="input-settings-commands-prefix">Command prefix</label>
+
+    <input type="text" class="form-control" id="input-settings-commands-prefix" value="<%= config.commandPrefix %>">
+
+    <input name="input-settings-commands-prefix-set-btn" id="input-settings-commands-prefix-set-btn"
+      class="btn btn-primary" type="button" value="Set">
+  </div>
+
+  <hr>
+
+  <h3>Built in commands</h3>
+
+
+
+  <div class="form-check">
+    <label class="form-check-label">
+      <input type="checkbox" class="form-check-input" name="input-settings-commands-calladmin-checkbox"
+        id="input-settings-commands-calladmin-checkbox" value="callAdmin"> Call admin
+    </label>
+    <p class="form-text text-muted">
+      Lets players create support tickets ingame. You can view these from the website.
+    </p>
+  </div>
+  <div class="form-check">
+    <label class="form-check-label">
+      <input type="checkbox" class="form-check-input" name="input-settings-commands-playerTeleports-checkbox"
+        id="input-settings-commands-playerTeleports-checkbox" value="playerTeleports"> Player teleports
+    </label>
+    <p class="form-text text-muted">
+      CSMM's teleport system. Includes a suite of commands to set, remove, make public/private teleports.
+    </p>
+  </div>
+
+  <div class="form-check">
+    <label class="form-check-label">
+      <input type="checkbox" class="form-check-input" name="input-settings-commands-who-checkbox"
+        id="input-settings-commands-who-checkbox">
+      Who
+    </label>
+    <p class="form-text text-muted">
+      Lets players check an area around them to see if other players have been there. Requires location tracking to be
+      enabled.
+    </p>
+  </div>
+
+  <div class="form-check">
+    <label class="form-check-label">
+      <input type="checkbox" class="form-check-input" name="input-settings-commands-gimme-checkbox"
+        id="input-settings-commands-gimme-checkbox">
+      Gimme
+    </label>
+    <p class="form-text text-muted">
+      Give players a random item, spawn an entity or execute an arbitrary command.
+    </p>
+  </div>
+
+
+  <div id="gimme-settings">
+    <hr>
+    <%- await include('./gimmeModal.sejs', gimmeItems) %>
+  </div>
+
+  <div id="voteSettings">
+    <hr>
+    <%- await include('./voteSettings.sejs') %>
+  </div>
+
+  <div id="replySettings">
+    <hr>
+    <%- await include('./commandReplies.sejs') %>
+  </div>
+
+
+  <div id="player-teleport-settings">
+
+    <hr>
+
+    <h4>Player teleport settings</h4>
+
+    <div class="form-group">
+      <label for="">Max locations that players can set</label>
+      <input type="text" class="form-control" name="inputs-settings-commands-playerteleports-maxlocations"
+        id="inputs-settings-commands-playerteleports-maxlocations"
+        placeholder="<%= config.maxPlayerTeleportLocations %>">
+      <input name="inputs-settings-playerteleports-maxlocations-btn"
+        id="inputs-settings-playerteleports-maxlocations-btn" class="btn btn-primary" type="button" value="Set">
+    </div>
+
+    <div class="form-group">
+      <label for="">Time (in seconds) that a player has to wait before teleporting again</label>
+      <input type="text" class="form-control" name="inputs-settings-commands-playerteleports-timeout"
+        id="inputs-settings-commands-playerteleports-timeout" placeholder="<%= config.playerTeleportTimeout %>">
+      <input name="inputs-settings-playerteleports-timeout-btn" id="inputs-settings-playerteleports-timeout-btn"
+        class="btn btn-primary" type="button" value="Set">
+    </div>
+
+    <div class="form-group">
+      <label for="">Time (in seconds) that a teleport will be delayed. This makes sure players cannot use tele to
+        escape a dire situation.</label>
+      <input type="text" class="form-control" name="inputs-settings-commands-playerteleports-delay"
+        id="inputs-settings-commands-playerteleports-delay" placeholder="<%= config.playerTeleportDelay %>">
+      <input name="inputs-settings-playerteleports-delay-btn" id="inputs-settings-playerteleports-delay-btn"
+        class="btn btn-primary" type="button" value="Set">
+    </div>
+
+  </div>
+
+
+  <hr>
+
+  <h3>Custom commands</h3>
+
+  <table id="commands-table" class="table table-striped table-bordered">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Commands</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+
+    <% for(let command of customCommands){%>
+
+      <tr>
+        <td scope="row"><%= command.name %></td>
+        <td><%= command.description %></td>
+        <td><%= command.commandsToExecute %></td>
+        <td><%- await include('./editCommandModal.sejs', { command: command }) %></td>
+      </tr>
+
+      <%}%>
+
+
+    </tbody>
+  </table>
+
+  <hr>
+
+
+  <%- await include('./addCommandModal.sejs') %>
+
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#custom-commands-import-modal">
+    Import
+  </button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="custom-commands-import-modal" tabindex="-1" role="dialog"
+    aria-labelledby="custom-commands-import-modal-title" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="custom-commands-import-modal-title">Import</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="container-fluid">
+
+            <div class="alert alert-warning" role="alert">
+              Importing custom commands is an advanced function. Check the documentation for more info.
+              <br> This will delete the current custom commands you have. Make sure to include them in your import
+              statement.
+              Command arguments are currently not supported to be imported!
+            </div>
+
+            <div class="form-group">
+              <label for="custom-commands-import-json">Custom commands JSON</label>
+              <textarea class="form-control" name="custom-commands-import-json" id="custom-commands-import-json"
+                rows="10"></textarea>
+            </div>
+
+            <div id="custom-commands-import-problems" class="alert alert-warning invisible" role="alert">
+
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button id="custom-commands-import-btn" type="button" class="btn btn-primary">Import</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <a name="export-customcommands" id="export-custom-commands" class="btn btn-secondary"
+    href="/api/sdtdserver/commands/export?serverId=<%= server.id %>" role="button">Export to file</a>
+
+  <%- await include('../commandsHelpButton.sejs') %>
+
+</div>
+
+<script>
+  $(document).ready(function () {
+
+    $('#commands-table').DataTable();
+
+    $("#custom-commands-import-btn").click(e => {
+
+      let json = $("#custom-commands-import-json").val();
+
+      $.ajax({
+        url: "/api/sdtdserver/commands/import",
+        method: "POST",
+        data: {
+          file: json,
+          serverId: window.SAILS_LOCALS.server.id,
+          _csrf: window.SAILS_LOCALS._csrf,
+        },
+        success: (data, status, xhr) => {
+          location.reload();
+        },
+        error: function (xhr, status, error) {
+          $("#custom-commands-import-problems").removeClass('invisible');
+          $("#custom-commands-import-problems").empty();
+          if (_.isArray(xhr.responseJSON)) {
+            $("#custom-commands-import-problems").text(xhr.responseJSON.join(" | "))
+          } else {
+            $("#custom-commands-import-problems").text(xhr.responseJSON)
+          }
+        }
+      })
+    })
+
+    function updateCommandsStatus() {
+
+      $("#input-settings-commands-who-checkbox").prop('checked', window.SAILS_LOCALS.config.enabledWho);
+
+      $.get('/api/sdtdserver/commands', {
+        serverId: window.SAILS_LOCALS.server.id
+      }, status => {
+        if (status) {
+          $('#settings-enable-commands-btn').hide()
+          $('#settings-disable-commands-btn').show()
+        } else {
+          $('#settings-disable-commands-btn').hide()
+          $('#settings-enable-commands-btn').show()
+        }
+      })
+
+      $.get('/api/sdtdserver/commands/calladmin', {
+        serverId: window.SAILS_LOCALS.server.id
+      }, status => {
+        if (status) {
+          $('#input-settings-commands-calladmin-checkbox').prop('checked', true)
+        }
+      })
+
+      $.get('/api/sdtdserver/commands/playerteleports', {
+        serverId: window.SAILS_LOCALS.server.id
+      }, status => {
+        if (status) {
+          $('#input-settings-commands-playerTeleports-checkbox').prop('checked', true);
+        } else {
+          $("#player-teleport-settings").hide();
+        }
+      })
+    }
+
+    updateCommandsStatus()
+
+    $("#input-settings-commands-who-checkbox").click(e => {
+      let newStatus = $(e.target).prop('checked');
+
+      $.ajax({
+        url: '/api/sdtdserver/commands/who',
+        method: 'POST',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+          status: newStatus
+        },
+        success: (data, status, xhr) => {
+
+        },
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      });
+    });
+
+    $("#input-settings-commands-gimme-checkbox").prop('checked', window.SAILS_LOCALS.config.enabledGimme);
+
+
+    $("#input-settings-commands-gimme-checkbox").click(e => {
+      let status = $(e.target).prop('checked');
+      $.ajax({
+        url: '/api/sdtdserver/commands/gimme',
+        method: 'POST',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+          status: status
+        },
+        success: (data, status, xhr) => {
+
+        },
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      });
+    })
+
+    $('#settings-disable-commands-btn').click(e => {
+      e.preventDefault();
+      $.ajax({
+        url: '/api/sdtdserver/commands',
+        method: 'DELETE',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+        },
+        success: (data, status, xhr) => {
+          updateCommandsStatus();
+        },
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      })
+    })
+
+    $('#settings-enable-commands-btn').click(e => {
+      e.preventDefault();
+      $.ajax({
+        url: '/api/sdtdserver/commands',
+        method: 'POST',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+        },
+        success: (data, status, xhr) => {
+          updateCommandsStatus();
+        },
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      })
+    })
+
+    $('#input-settings-commands-prefix-set-btn').click(e => {
+      e.preventDefault();
+
+      let newPrefix = $("#input-settings-commands-prefix").val();
+
+      if (newPrefix.length > 1) {
+        return showErrorModal(`Prefix is maximum one character!`)
+      }
+
+      $.ajax({
+        url: '/api/sdtdserver/commands/prefix',
+        method: 'POST',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+          prefix: newPrefix
+        },
+        success: data => {
+          $("#input-settings-commands-prefix").empty();
+        },
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      })
+    })
+
+    $('#input-settings-commands-playerTeleports-checkbox').change(e => {
+      let currentStatus = $("#input-settings-commands-playerTeleports-checkbox").prop('checked');
+
+      if (!currentStatus) {
+        $.ajax({
+          url: '/api/sdtdserver/commands/playerteleports',
+          method: 'DELETE',
+          data: {
+            _csrf: window.SAILS_LOCALS._csrf,
+            serverId: window.SAILS_LOCALS.server.id,
+          },
+          success: data => {
+            $("#player-teleport-settings").fadeOut();
+          },
+          error: function (xhr, status, error) {
+            displayAjaxToSupportData(xhr, this);;
+            showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+          }
+        })
+      } else {
+        $.ajax({
+          url: '/api/sdtdserver/commands/playerteleports',
+          method: 'POST',
+          data: {
+            _csrf: window.SAILS_LOCALS._csrf,
+            serverId: window.SAILS_LOCALS.server.id,
+          },
+          error: function (xhr, status, error) {
+            displayAjaxToSupportData(xhr, this);;
+            showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+          },
+          success: data => {
+            $("#player-teleport-settings").fadeIn();
+          }
+        })
+      }
+    })
+
+    $('#input-settings-commands-calladmin-checkbox').change(e => {
+      let currentStatus = $("#input-settings-commands-calladmin-checkbox").prop('checked');
+      if (!currentStatus) {
+        $.ajax({
+          url: '/api/sdtdserver/commands/calladmin',
+          method: 'DELETE',
+          data: {
+            _csrf: window.SAILS_LOCALS._csrf,
+            serverId: window.SAILS_LOCALS.server.id,
+          },
+          success: data => {},
+          error: function (xhr, status, error) {
+            displayAjaxToSupportData(xhr, this);;
+            showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+          }
+        })
+      } else {
+        $.ajax({
+          url: '/api/sdtdserver/commands/calladmin',
+          method: 'POST',
+          data: {
+            _csrf: window.SAILS_LOCALS._csrf,
+            serverId: window.SAILS_LOCALS.server.id,
+          },
+          error: function (xhr, status, error) {
+            displayAjaxToSupportData(xhr, this);;
+            showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+          }
+        })
+      }
+    })
+
+    $('#inputs-settings-playerteleports-maxlocations-btn').click(e => {
+      e.preventDefault();
+      let newMax = $('#inputs-settings-commands-playerteleports-maxlocations').val();
+      if (!validator.isInt(newMax, {
+          min: 1
+        })) {
+        return showErrorModal('Please provide a valid value for max locations.')
+      }
+
+      $.ajax({
+        url: '/api/sdtdserver/commands/playerteleports/maxlocations',
+        method: 'POST',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+          maxLocations: newMax
+        },
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      })
+    })
+
+    $('#inputs-settings-playerteleports-timeout-btn').click(e => {
+      e.preventDefault();
+      let newTimeout = $('#inputs-settings-commands-playerteleports-timeout').val();
+      if (!validator.isInt(newTimeout, {
+          min: 3
+        })) {
+        return showErrorModal('Please provide a valid value for timeout. (number larger than 3)')
+      }
+
+      $.ajax({
+        url: '/api/sdtdserver/commands/playerteleports/timeout',
+        method: 'POST',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+          timeout: newTimeout
+        },
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      })
+    })
+
+    $('#inputs-settings-playerteleports-delay-btn').click(e => {
+      e.preventDefault();
+      let newDelay = $('#inputs-settings-commands-playerteleports-delay').val();
+
+      if (!validator.isInt(newDelay, {
+          min: 0
+        })) {
+        return showErrorModal('Please provide a valid value for delay. (number larger than 0)')
+      }
+
+      $.ajax({
+        url: '/api/sdtdserver/commands/playerteleports/delay',
+        method: 'POST',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+          delay: newDelay
+        },
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      })
+    })
+
+
+
+  })
+
+</script>

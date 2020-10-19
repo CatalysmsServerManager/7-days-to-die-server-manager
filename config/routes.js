@@ -24,30 +24,18 @@ module.exports.routes = {
 
   '/': {
     view: 'index',
-    locals: {
-      layout: 'layouts/homepageLayout'
-    }
   },
 
   '/donate': {
     view: 'meta/donate',
-    locals: {
-      layout: 'layouts/homepageLayoutNoFooter'
-    }
   },
 
   '/privacy': {
     view: 'meta/privacy',
-    locals: {
-      layout: 'layouts/homepageLayout'
-    }
   },
 
   '/stats': {
     view: 'meta/stats',
-    locals: {
-      layout: 'layouts/homepageLayoutNoFooter'
-    }
   },
 
   '/auth/steam': {
@@ -137,7 +125,7 @@ module.exports.routes = {
 
   // SDTDSERVER
 
-  'get /api/sdtdserver/executeCommand': 'SdtdServerController.execute-command',
+  'post /api/sdtdserver/executeCommand': 'SdtdServerController.execute-command',
   'get /api/sdtdserver/sendMessage': 'SdtdServerController.send-message',
   'get /api/sdtdserver/loadServerInfo': 'SdtdServerController.load-server-info',
   'get /api/sdtdserver/players': 'SdtdServerController.get-players',
@@ -156,7 +144,7 @@ module.exports.routes = {
   'get /api/sdtdserver/donatorStatus': 'SdtdServerController.check-donator',
   'get /api/sdtdserver/failedstatus': 'SdtdServerController.get-failed-status',
   'get /api/sdtdserver/mod': 'SdtdServerController.get-mod-version',
-  'get /api/sdtdserver/:serverId/tile/:z/:x/:y/.png': 'SdtdServerController.server-tile',
+  'get /api/sdtdserver/:serverId/tile/:z/:x/:y/tile.png': 'SdtdServerController.server-tile',
 
   'delete /api/sdtdserver/players': 'SdtdServerController.delete-players',
   'delete /api/sdtdserver/players/teleports': 'SdtdServerController.wipe-teleports',
@@ -301,6 +289,7 @@ module.exports.routes = {
     'SdtdServerController.update-connection-info',
   'post /api/sdtdserver/toggleLogging': 'SdtdServerController.logging-toggle',
   'post /api/sdtdserver/inactive': 'SdtdServerController.set-active-status',
+  'post /api/sdtdserver/settings': 'SdtdServerController.set-settings',
 
   // Cron
 

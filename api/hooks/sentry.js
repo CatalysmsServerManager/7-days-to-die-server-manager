@@ -37,6 +37,9 @@ module.exports = function Sentry(sails) {
       const util = require('util');
 
       Sentry.init(settings);
+      Sentry.configureScope(function (scope) {
+        scope.setTag('workerProcess', process.env.npm_lifecycle_event || 'sails');
+      });
 
       sails.sentry = Sentry;
 

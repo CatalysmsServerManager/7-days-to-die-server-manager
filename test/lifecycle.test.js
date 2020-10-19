@@ -16,6 +16,7 @@ const {
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
 
+process.env.TZ = 'UTC';
 process.env.IS_TEST = true;
 process.env.NODE_ENV = 'test';
 process.env.CSMM_DONATOR_TIER = 'patron';
@@ -60,7 +61,7 @@ before(async function () {
 
         playerTracking: false,
         discordBot: false,
-        highpingkick: false
+        //highpingkick: false
       },
       log: { level: process.env.CSMM_LOGLEVEL || 'info' },
       security: {
@@ -79,7 +80,7 @@ before(async function () {
           adapter: 'sails-redis',
         },
       }
-    }, (err) => err ? reject(err): resolve());
+    }, (err) => err ? reject(err) : resolve());
   });
 });
 
@@ -126,6 +127,7 @@ beforeEach(async function () {
     server: testServer.id,
     user: testUser.id,
     name: faker.internet.userName(),
+    lastTeleportTime: 0
   }).meta({ skipAllLifecycleCallbacks: true }).fetch();
 
   let testServerConfig = await SdtdConfig.create({
@@ -142,6 +144,7 @@ beforeEach(async function () {
   sails.testServer = testServer;
   sails.testPlayer = testPlayer;
   sails.testServerConfig = testServerConfig;
+  sails.testServer.players = [testPlayer];
 });
 
 function clearRedis() {

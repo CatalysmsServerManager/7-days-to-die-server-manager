@@ -24,7 +24,6 @@
 
 !.eslintrc.js
 assets/dependencies/**/*.js
-./test/**/*.js
 node_modules
 .tmp
 *~

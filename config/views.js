@@ -41,7 +41,9 @@ module.exports.views = {
      *                                                                          *
      ***************************************************************************/
 
-  layout: 'layouts/applicationLayout',
+  extension: 'sejs',
+  layoutTemplate: 'layouts/applicationLayout',
+  getRenderFn: () => require('../api/view-rendering-fn.js'),
 
   locals: {
 

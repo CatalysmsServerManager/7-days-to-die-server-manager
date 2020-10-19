@@ -35,7 +35,9 @@ module.exports = {
     },
 
     badRequest: {
-      responseType: 'badRequest'
+      description: 'The given item name was not found on the server',
+      responseType: 'badRequest',
+      statusCode: 400
     }
   },
 
@@ -52,13 +54,21 @@ module.exports = {
 
       let player = await Player.findOne(inputs.playerId).populate('server');
       let server = await SdtdServer.findOne(player.server.id);
+      inputs.itemName = inputs.itemName.replace(/"/g, '');
       const cpmVersion = await sails.helpers.sdtd.checkCpmVersion(server.id);
 
+      let validItemName = await sails.helpers.sdtd.validateItemName(player.server.id, inputs.itemName);
+
+      if (!validItemName) {
+        return exits.badRequest('You have provided an invalid item name.');
+      }
+
+      // TODO start - this should be a helper
       let cmdToExec;
       if (cpmVersion >= 6.4) {
-        cmdToExec = `giveplus ${player.steamId} ${inputs.itemName} ${inputs.amount} ${inputs.quality ? inputs.quality + ' 0' : ''}`;
+        cmdToExec = `giveplus ${player.steamId} "${inputs.itemName}" ${inputs.amount} ${inputs.quality ? inputs.quality + ' 0' : ''}`;
       } else {
-        cmdToExec = `give ${player.entityId} ${inputs.itemName} ${inputs.amount} ${inputs.quality ? inputs.quality : ''}`;
+        cmdToExec = `give ${player.entityId} "${inputs.itemName}" ${inputs.amount} ${inputs.quality ? inputs.quality : ''}`;
       }
 
       let response = await sails.helpers.sdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(server), cmdToExec);
@@ -66,7 +76,7 @@ module.exports = {
       if (response.result.startsWith('ERR:')) {
         return exits.badRequest(`Error while giving item - ${response.result}`);
       }
-
+      // TODO end - this should be a helper
 
       await sails.helpers.sdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(server), `pm ${player.steamId} "CSMM - You have received ${inputs.amount} of ${inputs.itemName}"`);
 

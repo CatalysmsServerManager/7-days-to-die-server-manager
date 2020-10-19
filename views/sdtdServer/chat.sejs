@@ -1,0 +1,13 @@
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <% await include('./partials/backToDashboard.sejs') %>
+        <div class="col-md-8">
+          <% await include('./partials/chat/chatWindow.sejs') %>
+        </div>
+        <div class="col-md-4">
+          <% await include('./partials/chat/chatControls.sejs') %>
+        </div>
+    </div>
+  </div>
+</body>

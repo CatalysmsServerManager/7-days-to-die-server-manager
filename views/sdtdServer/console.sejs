@@ -1,0 +1,27 @@
+<body>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="page-header">
+          <h1>
+            Console
+            <small>
+              <%= server.ip %>
+            </small>
+          </h1>
+          <% await include('./partials/backToDashboard.sejs') %>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <% await include('./partials/console/consoleWindow.sejs') %>
+        <div class="col-md-4">
+          <% await include('./partials/console/consoleControls.sejs') %>
+        </div>
+    </div>
+  </div>
+</body>
+
+
+
