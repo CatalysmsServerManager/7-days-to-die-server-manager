@@ -104,7 +104,7 @@ module.exports = function definePlayerTrackingHook(sails) {
         } catch (error) {
           sails.log.error(error);
         }
-        loggingObject.emit('trackingUpdate', { server, trackingInfo: initialValues });
+        await sails.hooks.banneditems.run({ server, trackingInfo: initialValues });
       }
       await TrackingInfo.createEach(initialValues);
 

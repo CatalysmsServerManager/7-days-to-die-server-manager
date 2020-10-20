@@ -35,6 +35,7 @@ const configOverrides = {
 
 const logProcessor = require('./processors/logs');
 const notifProcessor = require('./processors/discordNotification');
+const bannedItemsProcessor = require('./processors/bannedItems');
 sails.load(configOverrides, async function (err) {
   if (err) {
     sails.log.error(err);
@@ -53,6 +54,7 @@ sails.load(configOverrides, async function (err) {
     // We can afford a high concurrency here since jobs are only a HTTP fetch. This would be different if they are long running, blocking operations
     sails.helpers.getQueueObject('logs').process(100, logProcessor),
     sails.helpers.getQueueObject('discordNotifications').process(notifProcessor),
+    sails.helpers.getQueueObject('bannedItems').process(bannedItemsProcessor),
   ]);
 
   return;
