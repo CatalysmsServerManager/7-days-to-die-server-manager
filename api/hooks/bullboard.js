@@ -26,6 +26,7 @@ module.exports = function BullBoard(sails) {
         sails.helpers.getQueueObject('cron'),
         sails.helpers.getQueueObject('discordNotifications'),
         sails.helpers.getQueueObject('bannedItems'),
+        sails.helpers.getQueueObject('playerTracking'),
       ]);
 
       sails.after('hook:http:loaded', function () {
