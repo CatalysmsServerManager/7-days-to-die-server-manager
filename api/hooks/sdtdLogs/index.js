@@ -56,7 +56,6 @@ module.exports = function sdtdLogs(sails) {
           sails.log.debug(`HOOKS - sdtdLogs - starting logging for server ${serverID}`);
           let loggingObj = await createLogObject(serverID);
           loggingInfoMap.set(serverID, loggingObj);
-          await sails.hooks.playertracking.start(serverID);
           await sails.hooks.customdiscordnotification.start(serverID);
           return;
         } else {
@@ -239,13 +238,14 @@ module.exports = function sdtdLogs(sails) {
     });
 
     eventEmitter.on('playerDeath', function (deathMessage) {
-      deathMessage.server = _.omit(server, 'authName', 'authToken');;
+      deathMessage.server = _.omit(server, 'authName', 'authToken');
       sails.sockets.broadcast(server.id, 'playerDeath', deathMessage);
     });
 
     eventEmitter.on('memUpdate', (memUpdate) => {
-      memUpdate.server = _.omit(server, 'authName', 'authToken');;
+      memUpdate.server = _.omit(server, 'authName', 'authToken');
       sails.sockets.broadcast(server.id, 'memUpdate', memUpdate);
+      sails.helpers.getQueueObject('playerTracking').add(server.id);
     });
 
     return eventEmitter;

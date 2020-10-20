@@ -36,6 +36,7 @@ const configOverrides = {
 const logProcessor = require('./processors/logs');
 const notifProcessor = require('./processors/discordNotification');
 const bannedItemsProcessor = require('./processors/bannedItems');
+const playerTrackingProcessor = require('./processors/playerTracking');
 sails.load(configOverrides, async function (err) {
   if (err) {
     sails.log.error(err);
@@ -55,6 +56,7 @@ sails.load(configOverrides, async function (err) {
     sails.helpers.getQueueObject('logs').process(100, logProcessor),
     sails.helpers.getQueueObject('discordNotifications').process(notifProcessor),
     sails.helpers.getQueueObject('bannedItems').process(bannedItemsProcessor),
+    sails.helpers.getQueueObject('playerTracking').process(playerTrackingProcessor),
   ]);
 
   return;

@@ -76,9 +76,6 @@ module.exports = {
     // Historical info (aka analytics)
     await sails.hooks.historicalinfo.start(server.id, 'memUpdate');
 
-    // Player tracking
-    await sails.hooks.playertracking.start(server.id);
-
     // SdtdCommands
     await sails.hooks.sdtdcommands.start(server.id);
 

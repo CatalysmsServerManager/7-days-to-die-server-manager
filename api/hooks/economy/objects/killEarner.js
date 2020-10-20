@@ -5,14 +5,18 @@ class KillEarner {
     this.type = 'killEarner';
     this.loggingObject = loggingObject;
     this.listenerFunc = handleKill.bind(this);
+    this.zombieKillSubscriber;
+    this.playerKillSubscriber;
   }
 
   async start() {
     try {
       sails.log.debug(`Started kill earner for server ${this.server.name}`);
-      this.loggingObject.on('zombieKill', this.listenerFunc);
+      this.zombieKillSubscriber = await sails.helpers.redis.subscribe(`server:${this.server.id}:zombieKill`);
+      this.playerKillSubscriber = await sails.helpers.redis.subscribe(`server:${this.server.id}:playerKill`);
 
-      this.loggingObject.on('playerKill', this.listenerFunc);
+      this.zombieKillSubscriber.on('message', this.listenerFunc);
+      this.playerKillSubscriber.on('message', this.listenerFunc);
 
     } catch (error) {
       sails.log.error(error);
@@ -21,13 +25,18 @@ class KillEarner {
 
   async stop() {
     sails.log.debug(`Stopped kill earner for server ${this.server.name}`);
-    this.loggingObject.removeListener('zombieKill', this.listenerFunc);
-    this.loggingObject.removeListener('playerKill', this.listenerFunc);
+    this.zombieKillSubscriber.removeListener('message', this.listenerFunc);
+    this.playerKillSubscriber.removeListener('message', this.listenerFunc);
+
+    await this.zombieKillSubscriber.quit();
+    await this.playerKillSubscriber.quit();
 
   }
 }
 
-async function handleKill(killEvent) {
+async function handleKill(channel, killEvent) {
+  killEvent = JSON.parse(killEvent);
+
   try {
 
     if (killEvent.zombiesKilled) {
