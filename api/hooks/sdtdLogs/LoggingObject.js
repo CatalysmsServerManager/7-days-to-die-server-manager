@@ -46,8 +46,6 @@ class LoggingObject extends EventEmitter {
       },
       {
         timeout: 5000,
-        removeOnComplete: 100,
-        removeOnFail: 100,
         attempts: 0,
         delay: this.intervalTime
       }
