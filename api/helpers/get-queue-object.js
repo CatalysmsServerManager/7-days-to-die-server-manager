@@ -22,7 +22,13 @@ module.exports = {
     }
     const queue = new Bull(
       queueName,
-      process.env.REDISSTRING
+      process.env.REDISSTRING,
+      {
+        defaultJobOptions: {
+          removeOnComplete: 100,
+          removeOnFail: 100,
+        }
+      }
     );
     return exits.success(queue);
   }
