@@ -21,7 +21,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     const publisher = redis.createClient({ url: process.env.REDISSTRING });
-    publisher.publish(inputs.channel, inputs.message);
+    publisher.publish(inputs.channel, JSON.stringify(inputs.message));
     publisher.quit();
     return exits.success(publisher);
   }
