@@ -1,6 +1,4 @@
-const basic = require('./trackingFunctions/basic');
-const location = require('./trackingFunctions/location');
-const inventory = require('./trackingFunctions/inventory');
+const trackingFunctions = require('./trackingFunctions');
 
 
 module.exports = async (job) => {
@@ -45,7 +43,7 @@ async function doTracking(serverId) {
   }
 
   try {
-    await basic(server, onlinePlayers, playerRecords);
+    await trackingFunctions.basic(server, onlinePlayers, playerRecords);
   } catch (error) {
     sails.log.error(error);
   }
@@ -56,7 +54,7 @@ async function doTracking(serverId) {
     if (server.config[0].locationTracking) {
 
       try {
-        initialValues = await location(server, onlinePlayers, initialValues, playerRecords);
+        initialValues = await trackingFunctions.location(server, onlinePlayers, initialValues, playerRecords);
       } catch (error) {
         sails.log.error(error);
       }
@@ -65,7 +63,7 @@ async function doTracking(serverId) {
     if (server.config[0].inventoryTracking) {
 
       try {
-        initialValues = await inventory(server, onlinePlayers, initialValues, playerRecords);
+        initialValues = await trackingFunctions.inventory(server, onlinePlayers, initialValues, playerRecords);
       } catch (error) {
         sails.log.error(error);
       }

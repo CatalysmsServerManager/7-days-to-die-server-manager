@@ -39,14 +39,9 @@ module.exports = async function inventoryTracking(server, playerList, playersArr
 
           trackingRecord[0].inventory = itemsInInventory;
           playersArray[trackingRecordIdx] = trackingRecord[0];
-
-
         }
-
       }
-
     }
-
   }
 
   let dateEnded = new Date();

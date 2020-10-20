@@ -1,25 +1,23 @@
 const { expect } = require('chai');
+const sinon = require('sinon');
+const Bull = require('bull');
 
-let hook;
-let loggingObject;
+const hook = require('../../../../worker/processors/playerTracking');
+
+const trackingFunctions = require('../../../../worker/processors/playerTracking/trackingFunctions');
+
 
 describe('Player tracking', () => {
 
-  before(() => {
-    hook = sails.hooks.playertracking;
-  });
-
   beforeEach(() => {
-    loggingObject = {
-      emit: sandbox.spy(),
-    };
-
-    sandbox.spy(hook, 'locationTracking');
-    sandbox.spy(hook, 'inventoryTracking');
-    sandbox.spy(hook, 'basicTracking');
-    sandbox.spy(hook, 'deleteLocationData');
-    sandbox.spy(sails.hooks.banneditems, 'run');
+    sandbox.spy(trackingFunctions, 'location');
+    sandbox.spy(trackingFunctions, 'inventory');
+    sandbox.spy(trackingFunctions, 'basic');
     sandbox.spy(TrackingInfo, 'createEach');
+    sandbox.stub(Bull.prototype, 'add');
+    sandbox.stub(sails.helpers.sdtdApi, 'getPlayerInventories').returns([]);
+    sandbox.stub(sails.helpers.redis, 'publish').resolves();
+
   });
 
   it('Should call the different tracking functions', async () => {
@@ -37,13 +35,15 @@ describe('Player tracking', () => {
       }
     });
 
-    await hook.intervalFunc(sails.testServer.id, loggingObject);
+    await hook(sails.testServer.id);
 
-    expect(hook.basicTracking).to.have.been.calledOnce;
-    expect(hook.locationTracking).to.have.been.calledOnce;
-    expect(hook.inventoryTracking).to.have.been.calledOnce;
+    expect(trackingFunctions.basic).to.have.been.calledOnce;
+    expect(trackingFunctions.location).to.have.been.calledOnce;
+    expect(trackingFunctions.inventory).to.have.been.calledOnce;
 
-    expect(sails.hooks.banneditems.run).to.have.been.calledOnce;
+    // Adds bannedItems job to queue
+    expect(Bull.prototype.add).to.have.been.calledOnce;
+    // Creates tracking records
     expect(TrackingInfo.createEach).to.have.been.calledOnce;
   });
 
@@ -62,13 +62,13 @@ describe('Player tracking', () => {
       }
     });
 
-    await hook.intervalFunc(sails.testServer.id, loggingObject);
+    await hook(sails.testServer.id);
 
-    expect(hook.basicTracking).to.not.have.been.calledOnce;
-    expect(hook.locationTracking).to.not.have.been.calledOnce;
-    expect(hook.inventoryTracking).to.not.have.been.calledOnce;
+    expect(trackingFunctions.basic).to.not.have.been.calledOnce;
+    expect(trackingFunctions.location).to.not.have.been.calledOnce;
+    expect(trackingFunctions.inventory).to.not.have.been.calledOnce;
 
-    expect(loggingObject.emit).to.not.have.been.calledOnceWith('trackingUpdate');
+    expect(Bull.prototype.add).not.to.have.been.calledOnce;
 
   });
 
@@ -87,7 +87,6 @@ describe('Player tracking', () => {
       }
     });
 
-    sandbox.stub(sails.helpers.sdtdApi, 'getPlayerInventories').returns([]);
     sandbox.stub(sails.helpers.redis, 'get').returns(sails.config.custom.trackingCyclesBeforeDelete + 1);
     sandbox.stub(sails, 'sendNativeQuery').returns({ affectedRows: 1337 });
 
@@ -95,10 +94,9 @@ describe('Player tracking', () => {
     sails.config.custom.donorConfig[sails.config.custom.trackingCyclesBeforeDelete + 1] = {};
     sails.config.custom.donorConfig[sails.config.custom.trackingCyclesBeforeDelete + 1].playerTrackerKeepLocationHours = 8;
 
-    await hook.intervalFunc(sails.testServer.id, loggingObject);
+    await hook(sails.testServer.id);
 
-    expect(hook.deleteLocationData).to.have.been.calledOnce;
-    expect(sails.sendNativeQuery).to.have.been.calledOnce;
+    expect(sails.sendNativeQuery).to.have.been.calledOnceWith(sinon.match(/DELETE FROM trackinginfo WHERE server = 1 AND createdAt < \d*/));
   });
 
   describe('basicTracking', () => {
@@ -120,7 +118,7 @@ describe('Player tracking', () => {
 
       sandbox.spy(Player, 'update');
 
-      await hook.intervalFunc(sails.testServer.id, loggingObject);
+      await hook(sails.testServer.id);
       expect(Player.update).to.have.been.calledOnceWith(sails.testPlayer.id);
     });
 
@@ -146,9 +144,9 @@ describe('Player tracking', () => {
       });
 
       await Player.update(sails.testPlayer.id, { zombieKills: 4 });
-      await hook.intervalFunc(sails.testServer.id, loggingObject);
+      await hook(sails.testServer.id);
 
-      expect(loggingObject.emit).to.have.been.calledOnceWith('zombieKill');
+      expect(sails.helpers.redis.publish).to.have.been.calledOnceWith('server:1:zombieKill', sinon.match.any);
 
     });
 
@@ -174,9 +172,9 @@ describe('Player tracking', () => {
       });
 
       await Player.update(sails.testPlayer.id, { playerKills: 4 });
-      await hook.intervalFunc(sails.testServer.id, loggingObject);
+      await hook(sails.testServer.id);
 
-      expect(loggingObject.emit).to.have.been.calledOnceWith('playerKill');
+      expect(sails.helpers.redis.publish).to.have.been.calledOnceWith('server:1:playerKill', sinon.match.any);
     });
 
     it('Detects player leveled up', async () => {
@@ -200,9 +198,9 @@ describe('Player tracking', () => {
       });
 
       await Player.update(sails.testPlayer.id, { level: 4 });
-      await hook.intervalFunc(sails.testServer.id, loggingObject);
+      await hook(sails.testServer.id);
 
-      expect(loggingObject.emit).to.have.been.calledOnceWith('levelup');
+      expect(sails.helpers.redis.publish).to.have.been.calledOnceWith('server:1:levelup', sinon.match.any);
     });
 
     it('Detects player score gain', async () => {
@@ -227,9 +225,9 @@ describe('Player tracking', () => {
       });
 
       await Player.update(sails.testPlayer.id, { score: 4 });
-      await hook.intervalFunc(sails.testServer.id, loggingObject);
+      await hook(sails.testServer.id);
 
-      expect(loggingObject.emit).to.have.been.calledOnceWith('score');
+      expect(sails.helpers.redis.publish).to.have.been.calledOnceWith('server:1:score', sinon.match.any);
     });
 
   });
