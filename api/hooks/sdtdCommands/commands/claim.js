@@ -65,6 +65,7 @@ class Claim extends SdtdCommand {
       }, cmdToExec);
 
       if (response.result.includes('ERR:')) {
+        sails.log.error(`Error when giving an item via the claim command! Response result: ${response.result}`);
         return chatMessage.reply('error', { error: 'Error while executing give command' });
       }
 
