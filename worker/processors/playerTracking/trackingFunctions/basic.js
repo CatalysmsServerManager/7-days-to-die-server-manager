@@ -26,7 +26,7 @@ module.exports = async function basicTracking(server, onlinePlayers, playerRecor
         let zombiesKilled = playerStats.zombiekills - player.zombieKills;
         sails.log.debug(`Detected a zombie kill! ${player.name} of server ${server.name} has killed ${playerStats.zombiekills} zombies in total. - Detected ${zombiesKilled} kills`);
         player.zombiesKilled = zombiesKilled;
-        await sails.helpers.redis.publish(`server:${server.id}:zombieKill`, player);
+        await sails.helpers.getQueueObject('kill').add(player);
       }
 
       // Detect if player killed any players
@@ -34,7 +34,7 @@ module.exports = async function basicTracking(server, onlinePlayers, playerRecor
         let playersKilled = playerStats.playerkills - player.playerKills;
         sails.log.debug(`Detected a player kill! ${player.name} of server ${server.name} has killed ${playerStats.playerkills} players in total. - Detected ${playersKilled} kills`);
         player.playersKilled = playersKilled;
-        await sails.helpers.redis.publish(`server:${server.id}:playerKill`, player);
+        await sails.helpers.getQueueObject('kill').add(player);
       }
 
       // Detect if player leveled up
@@ -42,14 +42,16 @@ module.exports = async function basicTracking(server, onlinePlayers, playerRecor
         let levels = Math.trunc(playerStats.level) - player.level;
         sails.log.debug(`Detected a level up! ${player.name} of server ${server.name} has leveled up to ${Math.trunc(playerStats.level)}. - Detected ${levels} levels`);
         player.levels = levels;
-        await sails.helpers.redis.publish(`server:${server.id}:levelup`, player);
+        // No processors for this, so disabled for now
+        //await sails.helpers.getQueueObject('levelup').add(player);
       }
 
       // Detect if player gained score
       if (player.score < playerStats.score && player.score !== 0) {
         let scoreGained = playerStats.score - player.score;
         player.scoreGained = scoreGained;
-        await sails.helpers.redis.publish(`server:${server.id}:score`, player);
+        // No processors for this, so disabled for now
+        //await sails.helpers.getQueueObject('score').add(player);
       }
     }
   }

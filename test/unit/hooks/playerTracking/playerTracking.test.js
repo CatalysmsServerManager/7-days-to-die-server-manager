@@ -16,7 +16,6 @@ describe('Player tracking', () => {
     sandbox.spy(TrackingInfo, 'createEach');
     sandbox.stub(Bull.prototype, 'add');
     sandbox.stub(sails.helpers.sdtdApi, 'getPlayerInventories').returns([]);
-    sandbox.stub(sails.helpers.redis, 'publish').resolves();
 
   });
 
@@ -146,7 +145,8 @@ describe('Player tracking', () => {
       await Player.update(sails.testPlayer.id, { zombieKills: 4 });
       await hook(sails.testServer.id);
 
-      expect(sails.helpers.redis.publish).to.have.been.calledOnceWith('server:1:zombieKill', sinon.match.any);
+      expect(Bull.prototype.add).to.have.been.calledOnceWith(sinon.match.has('zombieKills', 4));
+      expect(Bull.prototype.add).to.have.been.calledOnceWith(sinon.match.has('zombiesKilled', 1));
 
     });
 
@@ -174,10 +174,13 @@ describe('Player tracking', () => {
       await Player.update(sails.testPlayer.id, { playerKills: 4 });
       await hook(sails.testServer.id);
 
-      expect(sails.helpers.redis.publish).to.have.been.calledOnceWith('server:1:playerKill', sinon.match.any);
+      expect(Bull.prototype.add).to.have.been.calledOnceWith(sinon.match.has('playerKills', 4));
+      expect(Bull.prototype.add).to.have.been.calledOnceWith(sinon.match.has('playersKilled', 1));
     });
 
-    it('Detects player leveled up', async () => {
+    // Next two tests are disabled because it's disabled in code atm
+
+    xit('Detects player leveled up', async () => {
       sandbox.stub(sails.helpers.sdtd, 'getOnlinePlayers')
         .returns([
           {
@@ -200,10 +203,10 @@ describe('Player tracking', () => {
       await Player.update(sails.testPlayer.id, { level: 4 });
       await hook(sails.testServer.id);
 
-      expect(sails.helpers.redis.publish).to.have.been.calledOnceWith('server:1:levelup', sinon.match.any);
+      expect(Bull.prototype.add).to.have.been.calledOnceWith('levelup', sinon.match.any);
     });
 
-    it('Detects player score gain', async () => {
+    xit('Detects player score gain', async () => {
       sandbox.stub(sails.helpers.sdtd, 'getOnlinePlayers')
         .returns([
           {
@@ -227,7 +230,7 @@ describe('Player tracking', () => {
       await Player.update(sails.testPlayer.id, { score: 4 });
       await hook(sails.testServer.id);
 
-      expect(sails.helpers.redis.publish).to.have.been.calledOnceWith('server:1:score', sinon.match.any);
+      expect(Bull.prototype.add).to.have.been.calledOnceWith('score', sinon.match.any);
     });
 
   });
