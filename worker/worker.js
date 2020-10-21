@@ -54,14 +54,38 @@ sails.load(configOverrides, async function (err) {
     scope.setTag('workerProcess', process.env.npm_lifecycle_event || 'worker');
   });
 
+  const queues = {
+    logs: sails.helpers.getQueueObject('logs'),
+    discordNotifications: sails.helpers.getQueueObject('discordNotifications'),
+    bannedItems: sails.helpers.getQueueObject('bannedItems'),
+    playerTracking: sails.helpers.getQueueObject('playerTracking'),
+    kill: sails.helpers.getQueueObject('kill'),
+
+  };
+
+  for (const queue in queues) {
+    queues[queue].on('error', error => {
+      sails.log.error(`Job with id ${job.id} in queue ${queue} has errored`, error);
+      Sentry.captureException(error);
+    });
+
+    queues[queue].on('failed', (job, error) => {
+      sails.log.error(`Job with id ${job.id} in queue ${queue} has errored`, error);
+      Sentry.captureException(error);
+    });
+
+  }
+
   await Promise.all([
     // We can afford a high concurrency here since jobs are only a HTTP fetch. This would be different if they are long running, blocking operations
-    sails.helpers.getQueueObject('logs').process(100, logProcessor),
-    sails.helpers.getQueueObject('discordNotifications').process(notifProcessor),
-    sails.helpers.getQueueObject('bannedItems').process(bannedItemsProcessor),
-    sails.helpers.getQueueObject('playerTracking').process(playerTrackingProcessor),
-    sails.helpers.getQueueObject('kill').process(killProcessor),
+    queues.logs.process(100, logProcessor),
+    queues.discordNotifications.process(notifProcessor),
+    queues.bannedItems.process(bannedItemsProcessor),
+    queues.playerTracking.process(playerTrackingProcessor),
+    queues.kill.process(killProcessor),
   ]);
+
+
 
   return;
 });
