@@ -7,7 +7,6 @@ module.exports = async (job) => {
 async function handleKill(killEvent) {
 
   const config = await SdtdConfig.findOne({ server: killEvent.server });
-  console.log(config);
   if (!config.killEarnerEnabled) {
     return 'killEarner is disabled';
   }
