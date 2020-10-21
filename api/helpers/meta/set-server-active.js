@@ -69,10 +69,6 @@ module.exports = {
       await sails.hooks.highpingkick.start(server.id);
     }
 
-    if (config.bannedItemsEnabled) {
-      await sails.hooks.banneditems.start(inputs.serverId);
-    }
-
     // Historical info (aka analytics)
     await sails.hooks.historicalinfo.start(server.id, 'memUpdate');
 
