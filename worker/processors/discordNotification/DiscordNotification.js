@@ -35,6 +35,7 @@ class DiscordNotification {
         }
       } catch (error) {
         sails.log.error(`HOOK - discordNotification:DiscordNotification - Error letting owner know of discord issue - ${error}`);
+        throw error;
       }
       sails.log.error(`HOOK - discordNotification:DiscordNotification - ${error}`);
 

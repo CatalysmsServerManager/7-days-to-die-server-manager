@@ -42,31 +42,23 @@ async function doTracking(serverId) {
     });
   }
 
-  try {
-    await trackingFunctions.basic(server, onlinePlayers, playerRecords);
-  } catch (error) {
-    sails.log.error(error);
-  }
+
+  await trackingFunctions.basic(server, onlinePlayers, playerRecords);
+
 
   if (server.config[0].locationTracking || server.config[0].inventoryTracking) {
     // If inventory OR location tracking is enabled, we prepare the tracking info beforehand to improve performance
 
     if (server.config[0].locationTracking) {
 
-      try {
-        initialValues = await trackingFunctions.location(server, onlinePlayers, initialValues, playerRecords);
-      } catch (error) {
-        sails.log.error(error);
-      }
+      initialValues = await trackingFunctions.location(server, onlinePlayers, initialValues, playerRecords);
     }
 
     if (server.config[0].inventoryTracking) {
 
-      try {
-        initialValues = await trackingFunctions.inventory(server, onlinePlayers, initialValues, playerRecords);
-      } catch (error) {
-        sails.log.error(error);
-      }
+
+      initialValues = await trackingFunctions.inventory(server, onlinePlayers, initialValues, playerRecords);
+
       await sails.helpers.getQueueObject('bannedItems').add({ server, trackingInfo: initialValues });
     }
     await TrackingInfo.createEach(initialValues);
@@ -96,22 +88,19 @@ async function doTracking(serverId) {
 async function deleteLocationData(server) {
   let dateNow = Date.now();
   let deleteResult;
-  try {
-    let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({
-      serverId: server.id
-    });
 
-    let hoursToKeepData = sails.config.custom.donorConfig[donatorRole].playerTrackerKeepLocationHours;
-    let milisecondsToKeepData = hoursToKeepData * 3600000;
-    let borderDate = new Date(dateNow.valueOf() - milisecondsToKeepData);
+  let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({
+    serverId: server.id
+  });
 
-    const locationDeleteSQL = `DELETE FROM trackinginfo WHERE server = ${server.id} AND createdAt < ${borderDate.valueOf()};`;
+  let hoursToKeepData = sails.config.custom.donorConfig[donatorRole].playerTrackerKeepLocationHours;
+  let milisecondsToKeepData = hoursToKeepData * 3600000;
+  let borderDate = new Date(dateNow.valueOf() - milisecondsToKeepData);
 
-    deleteResult = await sails.sendNativeQuery(locationDeleteSQL);
+  const locationDeleteSQL = `DELETE FROM trackinginfo WHERE server = ${server.id} AND createdAt < ${borderDate.valueOf()};`;
 
-  } catch (error) {
-    sails.log.error(error);
-  }
+  deleteResult = await sails.sendNativeQuery(locationDeleteSQL);
+
 
   let dateEnded = new Date();
   sails.log.verbose(`Deleted location data for server ${server.name} - deleted ${deleteResult.affectedRows} rows - took ${dateEnded.valueOf() - dateNow.valueOf()} ms`);
