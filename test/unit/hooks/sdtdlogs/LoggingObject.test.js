@@ -242,7 +242,7 @@ describe('LoggingObject', function () {
         ]
       };
       await loggingObject.handleCompletedJob(job, JSON.stringify(result));
-      expect(await sails.helpers.redis.get(`sdtdserver:${sails.testServer.id}:sdtdLogs:lastSuccess`)).to.equal('1588296005000');
+      expect(await sails.helpers.redis.get(`sdtdserver:${sails.testServer.id}:sdtdLogs:lastSuccess`)).to.equal(1588296005000);
       expect(loggingObject.lastLogLine).to.equal(10);
       expect(loggingObject.emptyResponses).to.equal(1);
     });
