@@ -23,26 +23,21 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    const datastore = sails.getDatastore('cache');
-    if (datastore.config.adapter === 'sails-redis') {
-      sails.getDatastore('cache').leaseConnection(function during(redisConnection, proceed) {
-        redisConnection.get(inputs.keyString, (err, reply) => {
-          if (err) {return proceed(err);}
-
-          return proceed(undefined, reply);
-        });
-      }).exec((err, result) => {
-        if (err) {return exits.error(err);}
-
-        return exits.success(result);
-      });
-    } else {
-      if (!sails.cache) {
-        sails.cache = {};
+    const client = sails.hooks.redis.client;
+    client.get(inputs.keyString, (err, reply) => {
+      if (err) {
+        return exits.error(err);
       }
-      return exits.success(sails.cache[inputs.keyString] ? sails.cache[inputs.keyString] : null);
-    }
 
+      const parsedInt = parseInt(reply, 10);
+
+      if (!Number.isNaN(parsedInt)) {
+        return exits.success(parsedInt);
+
+      }
+
+      return exits.success(reply);
+    });
   }
 };
 
