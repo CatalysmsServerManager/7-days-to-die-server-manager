@@ -104,6 +104,11 @@ module.exports.routes = {
     cors: false
   },
 
+  'get /health': {
+    action: 'etc/health',
+    cors: false
+  },
+
   // GBL
   'get /api/gbl/total': 'gbl.get-total-bans',
   'get /api/gbl/find': 'gbl.search-steamid',
