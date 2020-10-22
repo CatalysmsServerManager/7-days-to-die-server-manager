@@ -1,13 +1,11 @@
 const { expect } = require('chai');
 
 describe('countryBan', () => {
-
+  let connectedMessage;
+  let handleCountryBan;
+  let notifSpy;
   beforeEach(() => {
-    sandbox.stub(sails.helpers.sdtdApi, 'executeConsoleCommand').callsFake();
-  });
-
-  it('Kicks a player that connects from a banned country', async () => {
-    const connectedMessage = {
+    connectedMessage = {
       steamId: '76561198028175941',
       playerName: 'Catalysm',
       entityId: '171',
@@ -54,13 +52,76 @@ describe('countryBan', () => {
       server: sails.testServer,
       type: 'playerConnected'
     };
-    const handleCountryBan = sails.hooks.countryban.handleCountryBan;
-    const notifSpy = sandbox.spy(sails.hooks.discordnotifications, 'sendNotification');
 
+    handleCountryBan = sails.hooks.countryban.handleCountryBan;
+    notifSpy = sandbox.spy(sails.hooks.discordnotifications, 'sendNotification');
+    sandbox.stub(sails.helpers.sdtdApi, 'executeConsoleCommand').callsFake();
+  });
+
+  it('Kicks a player that connects from a listed country in blacklist mode', async () => {
     await handleCountryBan(connectedMessage);
 
     expect(notifSpy).to.have.been.calledOnce;
+    expect(sails.helpers.sdtdApi.executeConsoleCommand).to.have.been.calledWith(
+      {
+        ip: connectedMessage.server.ip,
+        port: connectedMessage.server.webPort,
+        adminUser: connectedMessage.server.authName,
+        adminToken: connectedMessage.server.authToken
+      },
+      `kick ${connectedMessage.steamId} "CSMM: Players from your country (${connectedMessage.country}) are not allowed to connect to this server."`
+    );
+  });
 
+  it('Does not kick a player from a un-listed country in blacklist mode', async () => {
+    connectedMessage.country = 'US';
+    await handleCountryBan(connectedMessage);
+
+    expect(notifSpy).to.have.not.been.called;
+    expect(sails.helpers.sdtdApi.executeConsoleCommand).to.have.not.been.called;
+  });
+
+  it('Does not kick an exempt player from listed country in blacklist mode', async () => {
+    connectedMessage.steamId = '76561198028175940';
+    await handleCountryBan(connectedMessage);
+
+    expect(notifSpy).to.have.not.been.called;
+    expect(sails.helpers.sdtdApi.executeConsoleCommand).to.have.not.been.called;
+  });
+
+  it('Does not kick a player from a listed country in whitelist mode', async () => {
+    await SdtdConfig.update({ server: sails.testServer.id }, { countryBanListMode: 1 });
+    await handleCountryBan(connectedMessage);
+
+    expect(notifSpy).to.have.not.been.called;
+    expect(sails.helpers.sdtdApi.executeConsoleCommand).to.have.not.been.called;
+  });
+
+  it('Kicks a player that connects from a un-listed country in whitelist mode', async () => {
+    await SdtdConfig.update({ server: sails.testServer.id }, { countryBanListMode: 1 });
+    connectedMessage.country = 'US';
+    await handleCountryBan(connectedMessage);
+
+    expect(notifSpy).to.have.been.calledOnce;
+    expect(sails.helpers.sdtdApi.executeConsoleCommand).to.have.been.calledWith(
+      {
+        ip: connectedMessage.server.ip,
+        port: connectedMessage.server.webPort,
+        adminUser: connectedMessage.server.authName,
+        adminToken: connectedMessage.server.authToken
+      },
+      `kick ${connectedMessage.steamId} "CSMM: Players from your country (${connectedMessage.country}) are not allowed to connect to this server."`
+    );
+  });
+
+  it('Does not kick an exempt player from un-listed country in whitelist mode', async () => {
+    await SdtdConfig.update({ server: sails.testServer.id }, { countryBanListMode: 1 });
+    connectedMessage.country = 'US';
+    connectedMessage.steamId = '76561198028175940';
+    await handleCountryBan(connectedMessage);
+
+    expect(notifSpy).to.have.not.been.called;
+    expect(sails.helpers.sdtdApi.executeConsoleCommand).to.have.not.been.called;
   });
 
 });

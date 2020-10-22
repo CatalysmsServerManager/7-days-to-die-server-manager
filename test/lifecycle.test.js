@@ -134,7 +134,7 @@ beforeEach(async function () {
     server: testServer.id,
     inactive: false,
     countryBanConfig: {
-      bannedCountries: ['BE'], whiteListedSteamIds: [],
+      bannedCountries: ['BE'], whiteListedSteamIds: ['76561198028175940'],
     },
     discordGuildId: 'testDiscordGuild'
 

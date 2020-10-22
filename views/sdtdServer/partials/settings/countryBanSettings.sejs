@@ -16,12 +16,18 @@
 
   <p>Automatically kick or ban players from certain countries when they join your server. If you select ban, players
     will
-    be banned for 100 years.</p>
+    be banned for 100 years.<br>
+    "Exempt Players" are players that bypass the country check.</p>
   <!-- COUNTRY BAN SETTINGS -->
   <div class="form-check">
     <label class="form-check-label">
       <input type="checkbox" class="form-check-input" name="inputs-settings-countryBan-ban-checkbox"
         id="inputs-settings-countryBan-ban-checkbox"> Ban on join
+    </label>
+    <br>
+    <label class="form-check-label">
+      <input type="checkbox" class="form-check-input" name="inputs-settings-countryBan-mode-checkbox"
+        id="inputs-settings-countryBan-mode-checkbox"> Use as whitelist. This sets the "Banned Countries" list to only allow countries on the list.
     </label>
   </div>
 
@@ -80,7 +86,7 @@
   <!-- Button trigger modal -->
   <button type="button" class="btn btn-primary" data-toggle="modal"
     data-target="#inputs-settings-countryban-whitelist-modal">
-    Manage whitelist
+    Manage exempt players
   </button>
 
   <!-- Modal -->
@@ -89,7 +95,7 @@
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title" id="inputs-settings-countryban-whitelist-modal-title">Countryban whitelist</h4>
+          <h4 class="modal-title" id="inputs-settings-countryban-whitelist-modal-title">Countryban Exempt Players</h4>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -113,7 +119,7 @@
                 class="btn btn-danger btn-lg btn-block">Remove</button>
             </div>
             <div class="col-6">
-              <h4>Whitelist</h4>
+              <h4>Exempt Players</h4>
               <div id="inputs-settings-countryban-whitelist-list">
 
               </div>
@@ -166,7 +172,29 @@
           }
         })
       }
+    })
 
+    $("#inputs-settings-countryBan-mode-checkbox").prop('checked', window.SAILS_LOCALS.config.countryBanListMode);
+
+    $("#inputs-settings-countryBan-mode-checkbox").click(e => {
+        let countryBanListMode = $("#inputs-settings-countryBan-mode-checkbox").is(':checked');
+        $.ajax({
+          url: `/api/sdtdserver/settings`,
+          type: 'POST',
+          data: {
+            _csrf: window.SAILS_LOCALS._csrf,
+            serverId: window.SAILS_LOCALS.server.id,
+            countryBanListMode: countryBanListMode
+          },
+          success: (data, status, xhr) => {
+
+          },
+          error: function (xhr, status, error) {
+            displayAjaxToSupportData(xhr, this);;
+            showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+            reject();
+          }
+        });
     })
 
     updateCountriesList();

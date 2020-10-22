@@ -383,6 +383,11 @@ module.exports = {
       }
     },
 
+    countryBanListMode: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
     /*   _____ _               _    _      _
         |  __ (_)             | |  (_)    | |
         | |__) | _ __   __ _  | | ___  ___| | __
