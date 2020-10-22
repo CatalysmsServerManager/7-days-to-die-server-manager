@@ -1,4 +1,6 @@
-FROM node:14 AS builder
+FROM node:14-alpine AS builder
+
+RUN apk --no-cache add curl
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -16,7 +18,7 @@ RUN npm ci --only=production
 COPY --chown=node:node . .
 
 # Install 7d2d item icons
-RUN bash /usr/src/app/scripts/itemIconsUpdate.sh
+RUN ash /usr/src/app/scripts/itemIconsUpdate.sh
 
 FROM node:14-alpine
 USER node
