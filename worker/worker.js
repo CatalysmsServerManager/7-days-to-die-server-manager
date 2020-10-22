@@ -64,6 +64,11 @@ sails.load(configOverrides, async function (err) {
   };
 
   for (const queue in queues) {
+    // Errors in the logs queue are handled
+    // Failures are expected and do not need to be loged to Sentry
+    if (queue === 'logs') {
+      continue;
+    }
     queues[queue].on('error', error => {
       sails.log.error(`Job with id ${job.id} in queue ${queue} has errored`, error);
       Sentry.captureException(error);
