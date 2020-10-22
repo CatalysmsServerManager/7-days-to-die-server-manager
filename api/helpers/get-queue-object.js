@@ -1,5 +1,9 @@
 const Bull = require('bull');
 
+// Keep track of queues that have already been created
+// This avoids creating new redis connections for each call
+const queues = {};
+
 module.exports = {
   friendlyName: 'Returns a bull queue object',
   inputs: {
@@ -20,16 +24,24 @@ module.exports = {
     if (process.env.IS_TEST) {
       queueName += ':test';
     }
-    const queue = new Bull(
-      queueName,
-      process.env.REDISSTRING,
-      {
-        defaultJobOptions: {
-          removeOnComplete: 100,
-          removeOnFail: 100,
+
+    if (queues[queueName]) {
+      return exits.success(queues[queueName]);
+    } else {
+      const queue = new Bull(
+        queueName,
+        process.env.REDISSTRING,
+        {
+          defaultJobOptions: {
+            removeOnComplete: 100,
+            removeOnFail: 100,
+          }
         }
-      }
-    );
-    return exits.success(queue);
+      );
+      queues[queueName] = queue;
+      return exits.success(queue);
+
+    }
+
   }
 };
