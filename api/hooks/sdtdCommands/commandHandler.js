@@ -132,9 +132,9 @@ class CommandHandler {
             sails.log.info(`HOOK SdtdCommands - command ran by player ${player.name} on server ${server.name}. Took ${dateEnded - dateStarted} ms - ${chatMessage.messageText}`);
             return;
           } catch (error) {
-            sails.log.error(error);
+            Sentry.captureException(error);
+            sails.log.info(`HOOK SdtdCommands - Error attempting to run ${chatMessage.messageText} on serverId ${server.id}: ${error}`);
             chatMessage.reply(`error`, { error: 'An unknown error occured' });
-            Sentry.captureException(err);
             return;
           }
         }
