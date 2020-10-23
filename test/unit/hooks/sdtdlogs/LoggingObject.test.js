@@ -59,6 +59,9 @@ describe('LoggingObject', function () {
     loggingObject.queue = {};
     loggingObject.queue.add = sandbox.stub();
   });
+  afterEach(() => {
+    loggingObject.destroy();
+  });
   describe('handleFailedJob', () => {
     let jobData;
     beforeEach(() => {
@@ -68,6 +71,13 @@ describe('LoggingObject', function () {
         }
       };
       loggingObject.queue.getJob = sandbox.stub().returns(jobData);
+    });
+    it('ignores bad jobs', async () => {
+      delete jobData.data;
+      await loggingObject.handleFailedJob('jobId', new Error('The error that happened'));
+      expect(loggingObject.lastLogLine).to.equal(originalLastLogLine);
+      expect(loggingObject.emptyResponses).to.equal(originalEmptyResponse);
+      expect(loggingObject.queue.add).not.to.have.been.called;
     });
     it('ignores messages for other servers', async () => {
       jobData.data.serverId = -1;
