@@ -70,8 +70,12 @@ class LoggingObject extends EventEmitter {
   async handleFailedJob(jobId, err) {
     const job = await this.queue.getJob(jobId);
 
-    // eslint-disable-next-line eqeqeq
-    if (job.data.serverId != this.serverId) {
+    if (!job || !job.data || !job.data.serverId) {
+      sails.log.debug(`handleFailedJob - Ignoring bad job since theres no data: ${inspect(job)}`);
+      return;
+    }
+
+    if (job.data.serverId.toString() !== this.serverId.toString()) {
       // not one of ours
       return;
     }
@@ -87,9 +91,14 @@ class LoggingObject extends EventEmitter {
       result = JSON.parse(result);
     }
 
+    if (!result) {
+      sails.log.debug(`handleCompletedJob - Ignoring bad job since theres no data: ${inspect(job)}`);
+      return;
+    }
+
 
     // eslint-disable-next-line eqeqeq
-    if (result.serverId != this.serverId) {
+    if (result.serverId.toString() !== this.serverId.toString()) {
       // not one of ours
       return;
     }
