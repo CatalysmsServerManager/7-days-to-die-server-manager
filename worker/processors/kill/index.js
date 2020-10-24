@@ -3,6 +3,24 @@ module.exports = async (job) => {
   return handleKill(job.data);
 };
 
+const KILL_TYPE = {
+  zombie: 'zombie',
+  player: 'player',
+};
+
+const giveKillRewards = (killCount, playerId, amountToGive, killType) => {
+  const promises = [];
+  for (let index = 0; index < killCount; index++) {
+    promises.push(
+      sails.helpers.economy.giveToPlayer.with({
+        playerId,
+        amountToGive,
+        message: `killEarner - Rewarding player for a ${killType} kill`
+      })
+    );
+  }
+  return promises;
+};
 
 async function handleKill(killEvent) {
 
@@ -11,25 +29,19 @@ async function handleKill(killEvent) {
     return 'killEarner is disabled';
   }
 
-  if (killEvent.zombiesKilled) {
-    for (let index = 0; index < killEvent.zombiesKilled; index++) {
-      await sails.helpers.economy.giveToPlayer.with({
-        playerId: killEvent.id,
-        amountToGive: config.zombieKillReward,
-        message: `killEarner - Rewarding player for a zombie kill`
-      });
+  const promisesForZombieKill = giveKillRewards(
+    killEvent.zombiesKilled,
+    killEvent.id,
+    config.zombieKillReward,
+    KILL_TYPE.zombie
+  );
 
-    }
-  }
+  const promisesForPlayerKill = giveKillRewards(
+    killEvent.playersKilled,
+    killEvent.id,
+    config.playerKillReward,
+    KILL_TYPE.player
+  );
 
-  if (killEvent.playersKilled) {
-    for (let index = 0; index < killEvent.playersKilled; index++) {
-      await sails.helpers.economy.giveToPlayer.with({
-        playerId: killEvent.id,
-        amountToGive: config.playerKillReward,
-        message: `killEarner - Rewarding player for a player kill`
-      });
-
-    }
-  }
+  await Promise.all([...promisesForZombieKill, ...promisesForPlayerKill]);
 }
