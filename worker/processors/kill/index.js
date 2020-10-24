@@ -8,7 +8,7 @@ const KILL_TYPE = {
   player: 'player',
 };
 
-const giveRewardsToPlayerForKill = (killCount, playerId, amountToGive, killType) => {
+const giveKillRewards = (killCount, playerId, amountToGive, killType) => {
   const promises = [];
   for (let index = 0; index < killCount; index++) {
     promises.push(
@@ -29,21 +29,19 @@ async function handleKill(killEvent) {
     return 'killEarner is disabled';
   }
 
-  if (killEvent.zombiesKilled) {
-    Promise.all(giveRewardsToPlayerForKill(
-      killEvent.zombiesKilled,
-      killEvent.id,
-      config.zombieKillReward,
-      KILL_TYPE.zombie)
-    ).catch((err) => sails.log.error(err));
-  }
+  const promisesForZombieKill = giveKillRewards(
+    killEvent.zombiesKilled,
+    killEvent.id,
+    config.zombieKillReward,
+    KILL_TYPE.zombie
+  );
 
-  if (killEvent.playersKilled) {
-    Promise.all(giveRewardsToPlayerForKill(
-      killEvent.playersKilled,
-      killEvent.id,
-      config.playerKillReward,
-      KILL_TYPE.player)
-    ).catch((err) => sails.log.error(err));
-  }
+  const promisesForPlayerKill = giveKillRewards(
+    killEvent.playersKilled,
+    killEvent.id,
+    config.playerKillReward,
+    KILL_TYPE.player
+  );
+
+  await Promise.all([...promisesForZombieKill, ...promisesForPlayerKill]);
 }
