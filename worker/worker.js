@@ -86,7 +86,7 @@ sails.load(configOverrides, async function (err) {
     queues.logs.process(100, logProcessor),
     queues.discordNotifications.process(notifProcessor),
     queues.bannedItems.process(bannedItemsProcessor),
-    queues.playerTracking.process(playerTrackingProcessor),
+    queues.playerTracking.process(25, playerTrackingProcessor),
     queues.kill.process(killProcessor),
   ]);
 
