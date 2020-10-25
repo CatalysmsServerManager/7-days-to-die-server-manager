@@ -86,3 +86,6 @@ jobs:
         uses: github/codeql-action/upload-sarif@v1
         with:
           sarif_file: snyk.sarif
+
+      - name: Run Hadolint
+        run: docker run --rm -i hadolint/hadolint < Dockerfile
