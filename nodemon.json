@@ -7,7 +7,8 @@
   ],
   "watch": [
     "api/",
-    "config/"
+    "config/",
+    "worker/"
   ],
   "env": {
     "NODE_ENV": "development"
