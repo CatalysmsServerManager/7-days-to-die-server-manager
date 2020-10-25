@@ -9,6 +9,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Lint Dockerfile
+        uses: brpaz/hadolint-action@master
+        with:
+          dockerfile: "Dockerfile"
+
       - name: Repo metadata
         id: repo
         uses: actions/github-script@v3
@@ -86,6 +91,3 @@ jobs:
         uses: github/codeql-action/upload-sarif@v1
         with:
           sarif_file: snyk.sarif
-
-      - name: Run Hadolint
-        run: docker run --rm -i hadolint/hadolint < Dockerfile
