@@ -80,7 +80,7 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           # Pass the locally built image to Snyk
-          image: ${{steps.docker_build.outputs.digest}}
+          image: catalysm/csmm:${{ steps.prep.outputs.version }}
           args: --file=Dockerfile --debug
       - name: Upload result to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v1
