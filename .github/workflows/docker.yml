@@ -81,7 +81,7 @@ jobs:
         with:
           # Pass the locally built image to Snyk
           image: catalysm/csmm:${{ steps.prep.outputs.version }}
-          args: --file=Dockerfile --debug
+          args: --file=Dockerfile
       - name: Upload result to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v1
         with:
