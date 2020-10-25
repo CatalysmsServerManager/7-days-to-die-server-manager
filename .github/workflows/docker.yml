@@ -81,7 +81,7 @@ jobs:
         with:
           # Pass the locally built image to Snyk
           image: ${{steps.docker_build.outputs.digest}}
-          args: --file=Dockerfile
+          args: --file=Dockerfile --debug
       - name: Upload result to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v1
         with:
