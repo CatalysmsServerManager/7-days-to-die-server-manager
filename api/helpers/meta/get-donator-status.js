@@ -14,7 +14,7 @@ module.exports = {
 
   exits: {},
 
-  fn: async function(inputs, exits) {
+  fn: async function (inputs, exits) {
     switch (process.env.CSMM_DONATOR_TIER) {
       case 'free':
         return exits.success('free');
@@ -35,7 +35,7 @@ module.exports = {
     }
 
     let discordClient = sails.hooks.discordbot.getClient();
-    let developerGuild = discordClient.guilds.get(
+    let developerGuild = discordClient.guilds.cache.get(
       sails.config.custom.donorConfig.devDiscordServer
     );
     let discordUser = undefined;
