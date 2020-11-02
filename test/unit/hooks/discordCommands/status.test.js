@@ -10,7 +10,7 @@ describe('Discord - status', function () {
   beforeEach(() => {
     serverInfoResponse = {
       stats: {
-        gametime: { days: 5, hours: 15, minutes: 33},
+        gametime: { days: 5, hours: 15, minutes: 33 },
         players: 13,
         hostiles: 5,
         animals: 0
@@ -18,7 +18,7 @@ describe('Discord - status', function () {
       serverInfo: {}
     };
     const playerInfoResponse = [
-      {name: 'Player a'}, {name: 'Player b'}
+      { name: 'Player a' }, { name: 'Player b' }
     ];
     consoleCommandResponse = {
       result: 'GameStat.BloodMoonDay = 8'
@@ -29,7 +29,7 @@ describe('Discord - status', function () {
     sandbox.stub(sails.helpers, 'loadSdtdserverInfo').callsFake(async () => serverInfoResponse);
     sandbox.stub(sails.helpers.sdtd, 'loadFps').callsFake(async () => 15);
     sandbox.stub(sails.helpers.sdtd, 'loadPlayerData').value({ with: async () => playerInfoResponse });
-    Command.prototype.client = {customEmbed: customEmbed};
+    Command.prototype.client = { customEmbed: customEmbed };
   });
 
   it('Sends a discord message', async function () {
@@ -38,21 +38,21 @@ describe('Discord - status', function () {
     expect(gametime.value.includes('3'));
   });
 
-  it('Sends a discord message with API call failing', async function(){
+  it('Sends a discord message with API call failing', async function () {
     sandbox.stub(sails.helpers.sdtdApi, 'executeConsoleCommand').callsFake(async () => new Error('Some issue happened here!'));
     const gametime = await doTest(sendStub, serverInfoResponse);
     expect(gametime.value.includes('unknown'));
   });
 });
 
-async function doTest(sendStub, serverInfoResponse){
+async function doTest(sendStub, serverInfoResponse) {
 
   await Command.prototype.run(
     {
-      guild: { id: 'someGuildId'},
-      channel: new Channel({}, {})
+      guild: { id: 'someGuildId' },
+      channel: new Channel({ client: { options: {} } }, {})
     },
-    { server: 1});
+    { server: 1 });
 
   expect(Channel.prototype.send).to.have.been.calledOnce;
   const sendCall = sendStub.getCall(0).firstArg;

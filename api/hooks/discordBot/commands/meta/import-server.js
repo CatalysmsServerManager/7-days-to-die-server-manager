@@ -1,10 +1,10 @@
 const Commando = require('discord.js-commando');
-const RichEmbed = require('discord.js').RichEmbed;
+const MessageEmbed = require('discord.js').MessageEmbed;
 const fs = require('fs');
 const request = require('request-promise-native');
 
 let statusMessage;
-let statusEmbed = new RichEmbed();
+let statusEmbed = new MessageEmbed();
 let embedDescription = new String();
 
 class Import extends Commando.Command {
@@ -33,7 +33,7 @@ class Import extends Commando.Command {
     const importedRoles = new Array();
 
     embedDescription = new String();
-    statusEmbed = new RichEmbed();
+    statusEmbed = new MessageEmbed();
 
     statusEmbed.setFooter(`0/${Object.keys(data).length} tables loaded`);
     statusEmbed.setTitle(`Import status for ${data.server.name}`);

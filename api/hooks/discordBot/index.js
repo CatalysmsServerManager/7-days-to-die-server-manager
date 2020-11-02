@@ -169,7 +169,7 @@ async function initializeGuildPrefixes() {
   });
 
   serversWithDiscordEnabled.forEach(serverConfig => {
-    let guild = client.guilds.get(serverConfig.discordGuildId);
+    let guild = client.guilds.cache.get(serverConfig.discordGuildId);
     if (guild) {
       guild.commandPrefix = serverConfig.discordPrefix;
     }

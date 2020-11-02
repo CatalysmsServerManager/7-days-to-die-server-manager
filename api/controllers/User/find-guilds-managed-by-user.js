@@ -40,14 +40,14 @@ module.exports = {
         return exits.badRequest();
       }
 
-      let discordUser = discordClient.users.get(foundUser.discordId);
+      let discordUser = discordClient.users.cache.get(foundUser.discordId);
 
       if (discordUser === undefined || discordUser === null) {
         return exits.badRequest();
       }
 
-      let foundGuilds = discordClient.guilds.filter(guild => {
-        let member = guild.members.get(discordUser.id);
+      let foundGuilds = discordClient.guilds.cache.filter(guild => {
+        let member = guild.members.cache.get(discordUser.id);
         if (_.isUndefined(member)) {
           return false;
         }
@@ -56,8 +56,8 @@ module.exports = {
 
       let foundGuildsArray = Array.from(foundGuilds.values());
 
-      exits.success(foundGuildsArray);
       sails.log.debug(`API - SdtdServer:find-guilds-managed-by-user - Found ${foundGuildsArray.length} guilds for user ${inputs.userId}!`);
+      return exits.success(foundGuildsArray);
     } catch (error) {
       sails.log.error(`API - SdtdServer:find-guilds-managed-by-user - ${error}`);
       return exits.error(error);

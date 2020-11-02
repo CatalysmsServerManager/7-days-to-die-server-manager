@@ -95,7 +95,7 @@ class ExecCommand extends Commando.Command {
       },
       // OK.
       success: async function (response) {
-        let successEmbed = new Discord.RichEmbed();
+        let successEmbed = new Discord.MessageEmbed();
         successEmbed.addField(':inbox_tray: Input', `${args.command}`)
           .setColor('GREEN');
 

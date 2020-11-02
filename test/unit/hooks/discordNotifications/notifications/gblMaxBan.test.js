@@ -15,7 +15,7 @@ describe('GblMaxBans', function () {
     });
     expect(this.spy.callCount).to.equal(1);
     expect(this.spy.getCall(0).args.length).to.eql(3);
-    expect(this.spy.getCall(0).args[2]).to.have.all.keys('author', 'color', 'description', 'fields', 'file', 'files', 'footer', 'image', 'thumbnail', 'timestamp', 'title', 'url');
+    expect(this.spy.getCall(0).args[2]).to.have.all.keys('author', 'color', 'description', 'fields', 'files', 'footer', 'image', 'thumbnail', 'timestamp', 'title', 'url', 'video', 'type', 'provider');
 
   });
   it('throws when no player supplied', async function () {
@@ -32,7 +32,7 @@ describe('GblMaxBans', function () {
     });
     expect(this.spy.callCount).to.equal(1);
     expect(this.spy.getCall(0).args.length).to.eql(3);
-    expect(this.spy.getCall(0).args[2]).to.have.all.keys('author', 'color', 'description', 'fields', 'file', 'files', 'footer', 'image', 'thumbnail', 'timestamp', 'title', 'url');
+    expect(this.spy.getCall(0).args[2]).to.have.all.keys('author', 'color', 'description', 'fields', 'files', 'footer', 'image', 'thumbnail', 'timestamp', 'title', 'url', 'video', 'type', 'provider');
     expect(this.spy.getCall(0).lastArg.title).to.match(/A player with \d bans on the GBL was kicked/);
 
     await this.notification.sendNotification({
@@ -44,7 +44,7 @@ describe('GblMaxBans', function () {
     });
     expect(this.spy.callCount).to.equal(2);
     expect(this.spy.getCall(1).args.length).to.eql(3);
-    expect(this.spy.getCall(1).args[2]).to.have.all.keys('author', 'color', 'description', 'fields', 'file', 'files', 'footer', 'image', 'thumbnail', 'timestamp', 'title', 'url');
+    expect(this.spy.getCall(1).args[2]).to.have.all.keys('author', 'color', 'description', 'fields', 'files', 'footer', 'image', 'thumbnail', 'timestamp', 'title', 'url', 'video', 'type', 'provider');
     expect(this.spy.getCall(1).lastArg.title).to.match(/A player with \d bans on the GBL has connected/);
 
   });

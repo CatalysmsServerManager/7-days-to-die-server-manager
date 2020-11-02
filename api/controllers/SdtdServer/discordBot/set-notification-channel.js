@@ -35,7 +35,7 @@ module.exports = {
     try {
       let server = await SdtdServer.findOne(inputs.serverId);
       let discordClient = sails.hooks.discordbot.getClient();
-      let notificationChannel = discordClient.channels.get(inputs.notificationChannelId);
+      let notificationChannel = await discordClient.channels.cache.get(inputs.notificationChannelId);
 
       if (_.isUndefined(server)) {
         return exits.notFound();
@@ -50,7 +50,7 @@ module.exports = {
       await SdtdConfig.update({ server: inputs.serverId }, { discordNotificationConfig: currentConfig.discordNotificationConfig });
 
       if (notificationChannel) {
-        notificationChannel.send(`This channel has been selected to receive ${inputs.notificationType} notifications for ${server.name}`);
+        await notificationChannel.send(`This channel has been selected to receive ${inputs.notificationType} notifications for ${server.name}`);
       }
 
       sails.log.info(`API - SdtdServer:set-notification-channel - set notification channel for ${inputs.notificationType} ${inputs.notificationChannelId} for server ${inputs.serverId}`);

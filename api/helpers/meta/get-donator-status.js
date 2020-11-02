@@ -14,7 +14,7 @@ module.exports = {
 
   exits: {},
 
-  fn: async function(inputs, exits) {
+  fn: async function (inputs, exits) {
     switch (process.env.CSMM_DONATOR_TIER) {
       case 'free':
         return exits.success('free');
@@ -35,7 +35,7 @@ module.exports = {
     }
 
     let discordClient = sails.hooks.discordbot.getClient();
-    let developerGuild = discordClient.guilds.get(
+    let developerGuild = discordClient.guilds.cache.get(
       sails.config.custom.donorConfig.devDiscordServer
     );
     let discordUser = undefined;
@@ -58,7 +58,7 @@ module.exports = {
           return exits.success('free');
         }
 
-        foundUser = await developerGuild.fetchMember(server.owner.discordId);
+        foundUser = await developerGuild.members.fetch(server.owner.discordId);
         discordUser = foundUser;
       } catch (error) {
         sails.log.error(error);
@@ -73,7 +73,7 @@ module.exports = {
           return exits.success('free');
         }
 
-        foundUser = await developerGuild.fetchMember(user.discordId);
+        foundUser = await developerGuild.members.fetch(user.discordId);
         if (!_.isUndefined(foundUser)) {
           discordUser = foundUser;
         }
@@ -86,36 +86,36 @@ module.exports = {
       return exits.success('free');
     }
 
-    const patronRole = await developerGuild.roles.get('410545564913238027');
-    const donatorRole = await developerGuild.roles.get('434462571978948608');
-    const contributorRole = await developerGuild.roles.get(
+    const patronRole = await developerGuild.roles.cache.get('410545564913238027');
+    const donatorRole = await developerGuild.roles.cache.get('434462571978948608');
+    const contributorRole = await developerGuild.roles.cache.get(
       '434462681068470272'
     );
-    const sponsorRole = await developerGuild.roles.get('434462786962325504');
-    const premiumRole = await developerGuild.roles.get('615198219122507786');
-    const enterpriseRole = await developerGuild.roles.get('615198261069873154');
+    const sponsorRole = await developerGuild.roles.cache.get('434462786962325504');
+    const premiumRole = await developerGuild.roles.cache.get('615198219122507786');
+    const enterpriseRole = await developerGuild.roles.cache.get('615198261069873154');
 
-    if (discordUser.roles.has(enterpriseRole.id)) {
+    if (discordUser.roles.cache.has(enterpriseRole.id)) {
       return exits.success('enterprise');
     }
 
-    if (discordUser.roles.has(premiumRole.id)) {
+    if (discordUser.roles.cache.has(premiumRole.id)) {
       return exits.success('premium');
     }
 
-    if (discordUser.roles.has(sponsorRole.id)) {
+    if (discordUser.roles.cache.has(sponsorRole.id)) {
       return exits.success('sponsor');
     }
 
-    if (discordUser.roles.has(contributorRole.id)) {
+    if (discordUser.roles.cache.has(contributorRole.id)) {
       return exits.success('contributor');
     }
 
-    if (discordUser.roles.has(donatorRole.id)) {
+    if (discordUser.roles.cache.has(donatorRole.id)) {
       return exits.success('donator');
     }
 
-    if (discordUser.roles.has(patronRole.id)) {
+    if (discordUser.roles.cache.has(patronRole.id)) {
       return exits.success('patron');
     }
 

@@ -22,8 +22,8 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     let discordClient = sails.hooks.discordbot.getClient();
-    let amountOfDiscordGuilds = discordClient.guilds.size;
-    let amountOfOnlineDiscordUsers = discordClient.users.size;
+    let amountOfDiscordGuilds = discordClient.guilds.cache.size;
+    let amountOfOnlineDiscordUsers = discordClient.users.cache.size;
 
     let amountOfServers = await SdtdServer.count();
     let amountOfPlayers = await Player.count();

@@ -117,7 +117,7 @@ module.exports = function SdtdDiscordChatBridge(sails) {
       }
 
       let server = await SdtdServer.findOne(serverId);
-      let textChannel = discordClient.channels.get(config.chatChannelId);
+      let textChannel = await discordClient.channels.cache.get(config.chatChannelId);
 
       if (_.isUndefined(server)) {
         throw new Error(`Unknown server`);

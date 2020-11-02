@@ -45,7 +45,7 @@ describe('CronJob', function () {
     });
     expect(this.spy.callCount).to.equal(1);
     expect(this.spy.getCall(0).args.length).to.eql(3);
-    expect(this.spy.getCall(0).args[2]).to.have.all.keys('author', 'color', 'description', 'fields', 'file', 'files', 'footer', 'image', 'thumbnail', 'timestamp', 'title', 'url');
+    expect(this.spy.getCall(0).args[2]).to.have.all.keys('author', 'color', 'description', 'fields', 'files', 'footer', 'image', 'thumbnail', 'timestamp', 'title', 'url', 'video', 'type', 'provider');
     expect(this.spy.getCall(0).args[2].fields).to.eql([
       {
         'inline': true,
@@ -56,11 +56,6 @@ describe('CronJob', function () {
         'inline': true,
         'name': 'Execution time',
         'value': ' Fri May 01 2020 - 01:20:05 GMT+0000 (Coordinated Universal Time)'
-      },
-      {
-        'inline': false,
-        'name': '​',
-        'value': '​'
       },
       {
         'inline': false,
@@ -83,7 +78,7 @@ describe('CronJob', function () {
     });
     expect(this.spy.callCount).to.equal(1);
     expect(this.spy.getCall(0).args.length).to.eql(3);
-    expect(this.spy.getCall(0).args[2]).to.have.all.keys('author', 'color', 'description', 'fields', 'file', 'files', 'footer', 'image', 'thumbnail', 'timestamp', 'title', 'url');
+    expect(this.spy.getCall(0).args[2]).to.have.all.keys('author', 'color', 'description', 'fields', 'files', 'footer', 'image', 'thumbnail', 'timestamp', 'title', 'url', 'video', 'type', 'provider');
     expect(this.spy.getCall(0).args[2].fields).to.eql([
       {
         'inline': true,
@@ -94,11 +89,6 @@ describe('CronJob', function () {
         'inline': true,
         'name': 'Execution time',
         'value': ' Fri May 01 2020 - 01:20:05 GMT+0000 (Coordinated Universal Time)'
-      },
-      {
-        'inline': false,
-        'name': '​',
-        'value': '​'
       },
       {
         'inline': false,
