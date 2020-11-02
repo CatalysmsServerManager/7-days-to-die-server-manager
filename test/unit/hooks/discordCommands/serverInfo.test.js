@@ -103,7 +103,7 @@ describe('Discord - serverInfo', function () {
     await Command.prototype.run(
       {
         guild: { id: 'doesntmatter' },
-        channel: new Channel({}, {})
+        channel: new Channel({ client: { options: {} } }, {})
       },
       { server: 1 });
 

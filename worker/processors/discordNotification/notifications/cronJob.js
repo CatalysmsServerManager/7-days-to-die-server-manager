@@ -14,8 +14,7 @@ class CronJob extends DiscordNotification {
 
     embed.setTitle('Job ran!')
       .addField('Command', event.job.command, true)
-      .addField('Execution time', ` ${executionTime.toDateString()} - ${executionTime.toTimeString()}`, true)
-      .addBlankField();
+      .addField('Execution time', ` ${executionTime.toDateString()} - ${executionTime.toTimeString()}`, true);
     for (const response of event.job.responses) {
       const fieldName = [response.command, response.parameters].filter(Boolean).join(' ').substr(0, 255); // max length is 256
       embed.addField(
