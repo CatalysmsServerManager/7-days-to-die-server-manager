@@ -16,7 +16,7 @@
     "cron-parser": "^2.7.3",
     "cross-env": "^7.0.2",
     "discord.js": "^12.4.1",
-    "discord.js-commando": "^0.10.0",
+    "discord.js-commando": "github:discordjs/Commando",
     "dotenv": "^8.2.0",
     "ejs": "^3.1.5",
     "geoip-lite": "^1.4.2",
