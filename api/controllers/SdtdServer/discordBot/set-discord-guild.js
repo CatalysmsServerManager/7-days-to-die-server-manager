@@ -33,7 +33,7 @@ module.exports = {
       let discordClient = sails.hooks.discordbot.getClient();
       let chatBridgeHook = sails.hooks.discordchatbridge;
 
-      if (inputs.discordGuildId === '0' ) {
+      if (inputs.discordGuildId === '0') {
         await SdtdConfig.update({
           server: inputs.serverId
         }, {
@@ -42,11 +42,11 @@ module.exports = {
         return exits.success();
       }
 
-      if (!discordClient.guilds.has(inputs.discordGuildId)) {
+      if (!discordClient.guilds.cache.has(inputs.discordGuildId)) {
         return exits.badGuild();
       }
 
-      if (_.isUndefined(server)){
+      if (_.isUndefined(server)) {
         return exits.notFound();
       }
 

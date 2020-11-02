@@ -63,7 +63,7 @@ module.exports = function defineCustomDiscordNotificationHook(sails) {
 async function sendNotification(logLine, server, customNotif) {
 
   let discordClient = sails.hooks.discordbot.getClient();
-  let channel = discordClient.channels.get(customNotif.discordChannelId);
+  let channel = await discordClient.channels.cache.get(customNotif.discordChannelId);
 
   if (!_.isUndefined(channel)) {
     let embed = new Discord.MessageEmbed();
@@ -72,7 +72,7 @@ async function sendNotification(logLine, server, customNotif) {
       .addField('Time', logLine.time, true)
       .addField('Message', logLine.msg.substr(0, 1024))
       .addField('Triggered by', customNotif.stringToSearchFor);
-    channel.send(embed);
+    return channel.send(embed);
   }
 
 

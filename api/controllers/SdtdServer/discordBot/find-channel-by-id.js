@@ -32,9 +32,9 @@ module.exports = {
 
       let discordClient = sails.hooks.discordbot.getClient();
 
-      let foundChannel = discordClient.channels.get(inputs.channelId);
+      let foundChannel = await discordClient.channels.cache.get(inputs.channelId);
 
-      exits.success(foundChannel);
+      return exits.success(foundChannel);
 
     } catch (error) {
       sails.log.error(`API - SdtdServer:find-channel-by-id - ${error}`);

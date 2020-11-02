@@ -35,7 +35,7 @@ module.exports = {
 
       let discordClient = sails.hooks.discordbot.getClient();
 
-      exits.success(discordClient.guilds.has(inputs.guildId));
+      exits.success(discordClient.guilds.cache.has(inputs.guildId));
 
     } catch (error) {
       sails.log.error(`API - SdtdServer:check-if-bot-is-in-guild - ${error}`);

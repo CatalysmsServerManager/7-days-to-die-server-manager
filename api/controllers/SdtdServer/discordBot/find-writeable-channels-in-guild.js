@@ -39,7 +39,7 @@ module.exports = {
         return exits.success([]);
       }
 
-      let foundChannels = guild.channels.filter(channel => {
+      let foundChannels = guild.channels.cache.filter(channel => {
         if (channel.type !== 'text') {
           return false;
         }

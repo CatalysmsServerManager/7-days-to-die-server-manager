@@ -5,7 +5,7 @@ describe('/api/sdtdserver/setchatchannel', function () {
 
   beforeEach(() => {
     const client = sails.hooks.discordbot.getClient();
-    sandbox.stub(client.channels, 'get').returns({ send: sandbox.stub() });
+    sandbox.stub(client.channels.cache, 'get').returns({ send: sandbox.stub() });
     sandbox.stub(sails.hooks.discordchatbridge, 'start').returns(null);
     sandbox.stub(sails.hooks.discordchatbridge, 'stop').returns(null);
   });
@@ -25,7 +25,7 @@ describe('/api/sdtdserver/setchatchannel', function () {
     expect(response.statusCode).to.equal(200);
     expect(response.body).to.deep.eq({});
     expect(sails.hooks.discordchatbridge.start.calledOnce).to.be.true;
-    expect(client.channels.get().send.calledOnce).to.be.true;
+    expect(client.channels.cache.get().send.calledOnce).to.be.true;
 
   });
 
