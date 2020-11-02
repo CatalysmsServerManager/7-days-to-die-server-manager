@@ -66,7 +66,7 @@ async function sendNotification(logLine, server, customNotif) {
   let channel = discordClient.channels.get(customNotif.discordChannelId);
 
   if (!_.isUndefined(channel)) {
-    let embed = new Discord.RichEmbed();
+    let embed = new Discord.MessageEmbed();
 
     embed.setTitle(`Custom notification for ${server.name}`)
       .addField('Time', logLine.time, true)
