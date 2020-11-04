@@ -33,28 +33,28 @@ module.exports = {
 
     try {
 
-      let discordClient = sails.hooks.discordbot.getClient();
-      let foundUser = await User.findOne(inputs.userId);
+      const discordClient = sails.hooks.discordbot.getClient();
+      const foundUser = await User.findOne(inputs.userId);
 
       if (_.isUndefined(foundUser) || '' === foundUser.discordId) {
         return exits.badRequest();
       }
 
-      let discordUser = discordClient.users.cache.get(foundUser.discordId);
+      const discordUser = await discordClient.users.fetch(foundUser.discordId);
 
       if (discordUser === undefined || discordUser === null) {
         return exits.badRequest();
       }
 
-      let foundGuilds = discordClient.guilds.cache.filter(guild => {
-        let member = guild.members.cache.get(discordUser.id);
-        if (_.isUndefined(member)) {
+      const foundGuilds = discordClient.guilds.cache.filter(async guild => {
+        const member = await guild.members.fetch(discordUser.id);
+        if (!member) {
           return false;
         }
         return member.hasPermission('MANAGE_GUILD');
       });
 
-      let foundGuildsArray = Array.from(foundGuilds.values());
+      const foundGuildsArray = Array.from(foundGuilds.values());
 
       sails.log.debug(`API - SdtdServer:find-guilds-managed-by-user - Found ${foundGuildsArray.length} guilds for user ${inputs.userId}!`);
       return exits.success(foundGuildsArray);
