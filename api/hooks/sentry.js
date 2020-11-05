@@ -14,7 +14,7 @@ module.exports = function Sentry(sails) {
         environment: process.env.NODE_ENV || 'development',
         serverName: process.env.CSMM_HOSTNAME || os.hostname(),
         release: require('../../package.json').version,
-        tracesSampleRate: 0.01,
+        tracesSampleRate: 0.001,
       }
     },
 
