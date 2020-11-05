@@ -136,6 +136,7 @@ class LoggingObject extends EventEmitter {
       }
 
       this.emit(newLog.type, enrichedLog.data);
+      sails.helpers.getQueueObject('hooks').add(enrichedLog);
     }
 
     if (this.failed) {

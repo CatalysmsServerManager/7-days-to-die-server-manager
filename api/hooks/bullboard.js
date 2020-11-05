@@ -28,6 +28,7 @@ module.exports = function BullBoard(sails) {
         sails.helpers.getQueueObject('bannedItems'),
         sails.helpers.getQueueObject('playerTracking'),
         sails.helpers.getQueueObject('kill'),
+        sails.helpers.getQueueObject('hooks'),
       ]);
 
       sails.after('hook:http:loaded', function () {
