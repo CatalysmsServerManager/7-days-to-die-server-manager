@@ -150,12 +150,10 @@ function getVariablesValues(variables, logMsg) {
   for (const variable of variables) {
     const regex = new RegExp(variable.regex);
     let matches = logMsg.match(regex);
-
     if (!_.isNull(matches)) {
       customVars[variable.name] = logMsg.match(regex)[0];
     }
   }
-
   return customVars;
 }
 
