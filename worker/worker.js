@@ -89,7 +89,7 @@ sails.load(configOverrides, async function (err) {
     queues.bannedItems.process(bannedItemsProcessor),
     queues.playerTracking.process(25, playerTrackingProcessor),
     queues.kill.process(killProcessor),
-    queues.hooks.process(hookProcessor),
+    queues.hooks.process(25, hookProcessor),
   ]);
 
 

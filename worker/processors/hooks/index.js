@@ -48,16 +48,9 @@ async function handle(data) {
     const stringFound = checkLogLine(`${eventData.time} ${eventData.date} ${eventData.msg}`, hookToExec);
     if (stringFound) {
       if (isNotOnCooldown) {
-        try {
-          const variables = await getHookVariables(hookToExec.id);
-          hookToExec.variables = variables;
-          await executeHook(eventData, hookToExec, eventData.server.id);
-        } catch (error) {
-          sails.log.warn(`Error while executing a custom hook - ${error}`, {
-            eventData,
-            hookToExec
-          });
-        }
+        const variables = await getHookVariables(hookToExec.id);
+        hookToExec.variables = variables;
+        await executeHook(eventData, hookToExec, eventData.server.id);
       }
     }
   }
@@ -66,21 +59,17 @@ async function handle(data) {
 
 
 async function executeHook(eventData, hookToExec, serverId) {
-  try {
-    let server = await SdtdServer.findOne(serverId);
-    eventData.server = server;
-    eventData = await enrichData(eventData);
-    eventData.custom = getVariablesValues(hookToExec.variables, eventData.msg);
-    let results = await sails.helpers.sdtd.executeCustomCmd(server, hookToExec.commandsToExecute.split(';'), eventData);
-    await saveResultsToRedis(hookToExec.id, results);
-    sails.log.debug(`Executed a custom hook for server ${serverId}`, {
-      hook: hookToExec,
-      event: eventData,
-      results: results
-    });
-  } catch (error) {
-    sails.log.error(error);
-  }
+  let server = await SdtdServer.findOne(serverId);
+  eventData.server = server;
+  eventData = await enrichData(eventData);
+  eventData.custom = getVariablesValues(hookToExec.variables, eventData.msg);
+  let results = await sails.helpers.sdtd.executeCustomCmd(server, hookToExec.commandsToExecute.split(';'), eventData);
+  await saveResultsToRedis(hookToExec.id, results);
+  sails.log.debug(`Executed a custom hook for server ${serverId}`, {
+    hook: hookToExec,
+    event: eventData,
+    results: results
+  });
 }
 
 async function executeLogLineHook(eventData, hookToExec, serverId) {
