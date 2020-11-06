@@ -1,10 +1,13 @@
+const safeRegex = require('safe-regex');
+
 module.exports = {
 
   attributes: {
 
     regex: {
       type: 'string',
-      required: true
+      required: true,
+      custom: val => safeRegex(val)
     },
 
     name: {

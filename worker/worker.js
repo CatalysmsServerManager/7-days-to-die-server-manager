@@ -38,6 +38,7 @@ const notifProcessor = require('./processors/discordNotification');
 const bannedItemsProcessor = require('./processors/bannedItems');
 const playerTrackingProcessor = require('./processors/playerTracking');
 const killProcessor = require('./processors/kill');
+const hookProcessor = require('./processors/hooks');
 
 
 sails.load(configOverrides, async function (err) {
@@ -60,12 +61,12 @@ sails.load(configOverrides, async function (err) {
     bannedItems: sails.helpers.getQueueObject('bannedItems'),
     playerTracking: sails.helpers.getQueueObject('playerTracking'),
     kill: sails.helpers.getQueueObject('kill'),
-
+    hooks: sails.helpers.getQueueObject('hooks')
   };
 
   for (const queue in queues) {
     // Errors in the logs queue are handled
-    // Failures are expected and do not need to be loged to Sentry
+    // Failures are expected and do not need to be logged to Sentry
     if (queue === 'logs') {
       continue;
     }
@@ -88,6 +89,7 @@ sails.load(configOverrides, async function (err) {
     queues.bannedItems.process(bannedItemsProcessor),
     queues.playerTracking.process(25, playerTrackingProcessor),
     queues.kill.process(killProcessor),
+    queues.hooks.process(25, hookProcessor),
   ]);
 
 
