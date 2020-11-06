@@ -25,12 +25,9 @@ const event = (type, msg) => {
 
 describe('Custom hooks', () => {
   beforeEach(async () => {
-    this.mock = sinon.stub(sails.helpers.sdtd, 'executeCustomCmd').returns(['something']);
+    this.mock = sandbox.stub(sails.helpers.sdtd, 'executeCustomCmd').returns(['something']);
   });
 
-  afterEach(() => {
-    this.mock.restore();
-  });
   for (const eventType of [
     'playerConnected',
     'playerDisconnected',
