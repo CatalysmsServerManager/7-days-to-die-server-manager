@@ -46,18 +46,21 @@ module.exports = {
         return exits.badRequest();
       }
 
-      const foundGuilds = discordClient.guilds.cache.filter(async guild => {
+      const foundGuilds = [];
+
+      for (const guild of discordClient.guilds.cache.array()) {
         const member = await guild.members.fetch(discordUser.id);
+
         if (!member) {
-          return false;
+          continue;
         }
-        return member.hasPermission('MANAGE_GUILD');
-      });
+        if (member.hasPermission('MANAGE_GUILD')) {
+          foundGuilds.push(guild);
+        }
+      }
 
-      const foundGuildsArray = Array.from(foundGuilds.values());
-
-      sails.log.debug(`API - SdtdServer:find-guilds-managed-by-user - Found ${foundGuildsArray.length} guilds for user ${inputs.userId}!`);
-      return exits.success(foundGuildsArray);
+      sails.log.debug(`API - SdtdServer:find-guilds-managed-by-user - Found ${foundGuilds.length} guilds for user ${inputs.userId}!`);
+      return exits.success(foundGuilds);
     } catch (error) {
       sails.log.error(`API - SdtdServer:find-guilds-managed-by-user - ${error}`);
       return exits.error(error);
