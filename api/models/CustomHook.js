@@ -1,3 +1,5 @@
+const safeRegex = require('safe-regex')
+
 module.exports = {
 
   afterCreate: function (newHook, cb) {
@@ -70,7 +72,8 @@ module.exports = {
     },
 
     regex: {
-      type: 'string'
+      type: 'string',
+      custom: val => safeRegex(val)
     },
 
     cooldown: {

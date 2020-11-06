@@ -1,3 +1,5 @@
+const safeRegex = require('safe-regex');
+
 module.exports = {
 
 
@@ -32,6 +34,7 @@ module.exports = {
 
     regex: {
       type: 'string',
+      custom: val => safeRegex(val)
     },
 
     cooldown: {
