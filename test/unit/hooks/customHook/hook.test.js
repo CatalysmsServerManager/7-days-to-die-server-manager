@@ -132,17 +132,12 @@ describe('Custom hooks', () => {
     });
 
     it(`Handles variables ${eventType}`, async () => {
-      await CustomHook.create({
+      const hook = await CustomHook.create({
         server: sails.testServer.id,
         commandsToExecute: 'say "${custom.testVar}"',
         event: eventType,
         searchString: 'some log line',
-      });
-
-      // A .fetch() on the create call would be better
-      // But sails was throwing internal Waterline errors
-      // cba figuring it out so this is the workaround :)
-      const hook = await CustomHook.findOne({ where: { commandsToExecute: 'say "${custom.testVar}"' } });
+      }).fetch();
 
       await HookVariable.create({
         hook: hook.id,
