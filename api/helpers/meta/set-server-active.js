@@ -47,9 +47,6 @@ module.exports = {
       await sails.hooks.discordchatbridge.start(server.id);
     }
 
-    // Custom hooks
-    await sails.hooks.customhooks.start(server.id);
-
     // Economy
 
     if (config.playtimeEarnerEnabled) {
