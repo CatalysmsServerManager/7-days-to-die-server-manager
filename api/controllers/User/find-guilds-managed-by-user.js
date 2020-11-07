@@ -49,9 +49,17 @@ module.exports = {
       const foundGuilds = [];
 
       for (const guild of discordClient.guilds.cache.array()) {
-        const member = await guild.members.fetch(discordUser.id);
+        let member;
+        try {
+          member = await guild.members.fetch(discordUser.id);
+        } catch (e) {
+          // User is not in guild, skipping
+          continue;
+        }
 
         if (!member) {
+          // Should error out on the previous call
+          // This is a safety to make sure member is defined before continuing
           continue;
         }
         if (member.hasPermission('MANAGE_GUILD')) {
