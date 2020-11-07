@@ -11,7 +11,6 @@ module.exports = {
       .start(newConfig.server)
       .then(() => {
         let modules = [];
-        modules.push(sails.hooks.customhooks.start(newConfig.server));
         modules.push(
           sails.hooks.historicalinfo.start(newConfig.server, 'memUpdate')
         );

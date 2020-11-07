@@ -14,7 +14,6 @@ const configOverrides = {
     cron: false,
     banneditems: false,
     customdiscordnotification: false,
-    customhooks: false,
     discordbot: false,
     discordchatbridge: false,
     discordnotifications: false,
