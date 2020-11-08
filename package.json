@@ -13,6 +13,7 @@
     "async": "2.6.1",
     "bull": "^3.11.0",
     "bull-board": "^0.9.0",
+    "concurrently": "^5.3.0",
     "cron-parser": "^2.7.3",
     "cross-env": "^7.0.2",
     "discord.js": "^12.4.1",
@@ -29,7 +30,6 @@
     "moment": "^2.27.0",
     "morgan": "^1.10.0",
     "mysql2": "^2.2.5",
-    "npm-run-all": "^4.1.5",
     "p-wait-for": "^3.1.0",
     "passport": "^0.4.1",
     "passport-discord": "^0.1.4",
@@ -50,7 +50,7 @@
     "winston": "^2.4.3"
   },
   "scripts": {
-    "start": "cross-env NODE_ENV=production run-p start:*",
+    "start": "cross-env NODE_ENV=production concurrently --kill-others -n 'app,worker' 'npm run start:app' 'npm run start:worker'",
     "start:app": "node app.js",
     "start:worker": "node worker/worker.js",
     "wait-for:db": "node ./scripts/wait-for-db.js",
