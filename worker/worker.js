@@ -3,7 +3,7 @@ const SdtdApi = require('7daystodie-api-wrapper');
 const Sentry = require('@sentry/node');
 
 const configOverrides = {
-  hookTimeout: 2000,
+  hookTimeout: 5000,
   hooks: {
     views: false,
     sockets: false,
@@ -39,10 +39,11 @@ const playerTrackingProcessor = require('./processors/playerTracking');
 const killProcessor = require('./processors/kill');
 const hookProcessor = require('./processors/hooks');
 
-
 sails.load(configOverrides, async function (err) {
   if (err) {
     sails.log.error(err);
+    await new Promise(resolve => process.stdout.once('drain', () => resolve()));
+    await new Promise(resolve => process.stderr.once('drain', () => resolve()));
     process.exit(1);
   }
   sails.helpers.sdtdApi = {};
