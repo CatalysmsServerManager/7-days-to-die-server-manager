@@ -79,6 +79,8 @@ async function clearOldInfo(server) {
       server: server.id
     });
 
+    await sails.sendNativeQuery(`DELETE FROM analytics WHERE server = $1 AND createdAt < $2;`, [server.id, borderDate.valueOf()]);
+
     let dateEnded = Date.now();
 
     sails.log.debug(`Deleted historical data of type memUpdate for server ${server.id} - took ${dateEnded - dateNow} ms`);
