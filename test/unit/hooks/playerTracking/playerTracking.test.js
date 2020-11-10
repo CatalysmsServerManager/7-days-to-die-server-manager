@@ -95,7 +95,7 @@ describe('Player tracking', () => {
 
     await hook(sails.testServer.id);
 
-    expect(sails.sendNativeQuery).to.have.been.calledOnceWith(sinon.match(/DELETE FROM trackinginfo WHERE server = 1 AND createdAt < \d*/));
+    expect(sails.sendNativeQuery).to.have.been.calledOnceWith('DELETE FROM trackinginfo WHERE server = $1 AND createdAt < $2;', sinon.match.any);
   });
 
   describe('basicTracking', () => {

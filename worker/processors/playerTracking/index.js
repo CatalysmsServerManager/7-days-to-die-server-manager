@@ -97,9 +97,9 @@ async function deleteLocationData(server) {
   let milisecondsToKeepData = hoursToKeepData * 3600000;
   let borderDate = new Date(dateNow.valueOf() - milisecondsToKeepData);
 
-  const locationDeleteSQL = `DELETE FROM trackinginfo WHERE server = ${server.id} AND createdAt < ${borderDate.valueOf()};`;
+  const locationDeleteSQL = `DELETE FROM trackinginfo WHERE server = $1 AND createdAt < $2;`;
 
-  deleteResult = await sails.sendNativeQuery(locationDeleteSQL);
+  deleteResult = await sails.sendNativeQuery(locationDeleteSQL, [server.id, borderDate.valueOf()]);
 
 
   let dateEnded = new Date();

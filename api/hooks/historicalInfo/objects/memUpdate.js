@@ -72,12 +72,7 @@ async function clearOldInfo(server) {
     let dateNow = Date.now();
     let borderDate = new Date(dateNow.valueOf() - milisecondsToKeepData);
 
-    await Analytics.destroy({
-      createdAt: {
-        '<': borderDate.valueOf()
-      },
-      server: server.id
-    });
+    await sails.sendNativeQuery(`DELETE FROM analytics WHERE server = $1 AND createdAt < $2;`, [server.id, borderDate.valueOf()]);
 
     let dateEnded = Date.now();
 
