@@ -41,9 +41,6 @@ module.exports = {
     let amountOfCountryBans = sails.hooks.countryban.getAmount();
     let amountOfIngameCommandHandlers = sails.hooks.sdtdcommands.getAmount();
 
-    let currencyTotal = await Player.sum('currency');
-    let currencyAvg = await Player.avg('currency');
-
     let gblEntries = await BanEntry.count();
     let cronJobs = await CronJob.count({
       enabled: true
@@ -76,8 +73,6 @@ module.exports = {
       amountOfTeleports: amountOfTeleports,
       amountOfCustomCommands: amountOfCustomCommands,
       amountOfCustomCommandsExecuted: amountOfCustomCommandsExecuted,
-      currencyTotal: currencyTotal,
-      currencyAvg: currencyAvg,
       gblEntries: gblEntries,
       cronJobs: cronJobs,
       pingKickers: pingKickers,
