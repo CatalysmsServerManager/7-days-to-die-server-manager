@@ -34,19 +34,6 @@ module.exports = {
             discordUsers: currentStats.users,
             servers: currentStats.servers,
             players: currentStats.players,
-            teleportLocations: currentStats.amountOfTeleports,
-            timesTeleported: currentStats.amountOfTimesTeleported,
-            customCommands: currentStats.amountOfCustomCommands,
-            customCommandsUsed: currentStats.amountOfCustomCommandsExecuted,
-            chatBridges: currentStats.chatBridges,
-            countryBans: currentStats.countryBans,
-            ingameCommands: currentStats.guilds,
-            gblEntries: currentStats.gblEntries,
-            cronJobs: currentStats.cronJobs,
-            pingKickers: currentStats.pingKickers,
-            openTickets: currentStats.openTickets,
-            closedTickets: currentStats.closedTickets,
-            gblComments: currentStats.gblComments,
           });
 
           sails.log.info(`Gathered system usage information.`, currentStats);
