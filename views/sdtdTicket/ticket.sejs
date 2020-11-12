@@ -1,36 +1,34 @@
 <div class="container-fluid">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<%= '/user/' + req.session.userId + '/dashboard' %>">
+          Dashboard
+        </a>
+      </li>
+      <li class="breadcrumb-item">
+        <a href="<%= '/sdtdserver/' + server.id + '/dashboard' %>">
+          <%= server.name %>
+        </a>
+      </li>
+      <li class="breadcrumb-item">
+        <a href="<%= '/sdtdserver/' + server.id + '/tickets' %>">
+          Support tickets
+        </a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">
+        <%= ticket.title %>
+      </li>
+    </ol>
+  </nav>
 
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            <a href="<%= '/user/' + req.session.userId + '/dashboard' %>"> Dashboard </a>
-          </li>
-          <li class="breadcrumb-item">
-            <a href="<%= '/sdtdserver/' + server.id + '/dashboard' %>">
-              <%= server.name %>
-            </a>
-          </li>
-          <li class="breadcrumb-item">
-            <a href="<%= '/sdtdserver/' + server.id + '/tickets' %>">
-              Support tickets
-            </a>
-          </li>
-          <li class="breadcrumb-item active" aria-current="page">
-            <%= ticket.title %>
-          </li>
-        </ol>
-      </nav>
   <div class="row">
     <div class="col-md-6">
-      <h1>
-        <%= ticket.title %>
-      </h1>
+      <h1><%= ticket.title %></h1>
 
-      <p>
-        <%= ticket.description %>
-      </p>
+      <p><%= ticket.description %></p>
 
-      <h2> Details </h2>
+      <h2>Details</h2>
       <table class="table">
         <tbody>
           <tr>
@@ -44,76 +42,64 @@
           <tr>
             <td>Location</td>
             <td>
-              <%= ticket.playerInfo.positionX %>
-                <%= ticket.playerInfo.positionY %>
-                  <%= ticket.playerInfo.positionZ %>
+              <%= ticket.playerInfo.positionX %> <%= ticket.playerInfo.positionY
+              %> <%= ticket.playerInfo.positionZ %>
             </td>
           </tr>
           <tr>
             <td>Created on</td>
             <% let ticketDate = new Date(ticket.createdAt) %>
-              <td>
-                <%= ticketDate.toDateString() %>
-                  <%= ticketDate.toTimeString() %>
-              </td>
+            <td>
+              <%= ticketDate.toDateString() %> <%= ticketDate.toTimeString() %>
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
     <div class="col-md-2">
       <div class="btn-group btn-group-sm btn-group-vertical" role="group">
-
         <% if (ticket.status) { %>
-          <%- await include('./partials/editTicketDescriptionButton.sejs', ticket) %>
-            <% } %>
-
-              <% if (ticket.status) { %>
-                <%- await include('./partials/closeTicketButton.sejs', ticket) %>
-                  <% } else { %>
-                    <%- await include('./partials/openTicketButton.sejs', ticket) %>
-                      <% } %>
-                        <!--
+        <%- await include('./partials/editTicketDescriptionButton.sejs', ticket) %>
+        <% } %>
+        <% if (ticket.status) { %>
+        <%- await include('./partials/closeTicketButton.sejs', ticket) %> <% } else { %>
+        <%- await include('./partials/openTicketButton.sejs', ticket) %> <% } %>
+        <!--
                         <button id="btn-toggle-inventory" class="btn btn-secondary" type="button">
                           Toggle inventory
                         </button>
                       -->
-                        <%- await include('./partials/addCommentButton.sejs', ticket) %>
+        <%- await include('./partials/addCommentButton.sejs', ticket) %>
       </div>
     </div>
-
-
-
   </div>
+
   <div class="row">
     <div class="col-12">
       <div id="player-inventory">
         <h2>Inventory</h2>
-        <%- await include('../player/partials/playerInventory.sejs', {player: ticket.playerInfo}) %>
+        <%- await include('../player/partials/playerInventory.sejs', {player:
+        ticket.playerInfo}) %>
       </div>
-
     </div>
-
   </div>
 
   <div class="row">
     <div class="col-md-8">
-      <% comments.forEach(comment => { %>
-        <%- await include('./partials/ticketComment.sejs', {comment: comment, ticket: ticket}) %>
-          <% }) %>
+      <% for(let comment of comments){%>
+      <%- await include('./partials/ticketComment.sejs', {comment: comment, ticket: ticket}) %>
+      <%}%>
     </div>
-    <div class="col-md-4">
-    </div>
+    <div class="col-md-4"></div>
   </div>
 </div>
 
 <script>
-
   $(document).ready(function () {
     //  $('#player-inventory').hide();
-    $('#btn-toggle-inventory').click(e => {
+    $("#btn-toggle-inventory").click((e) => {
       e.preventDefault();
-      $('#player-inventory').fadeToggle();
-    })
-  })
-
+      $("#player-inventory").fadeToggle();
+    });
+  });
 </script>
