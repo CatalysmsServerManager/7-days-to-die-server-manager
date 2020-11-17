@@ -8,6 +8,12 @@ module.exports = function historicalInfo(sails) {
     initialize: function (cb) {
       sails.on('hook:sdtdlogs:loaded', async function () {
         sails.log.info('Initializing custom hook (`historicalInfo`)');
+
+        if (!sails.config.custom.analyticsEnabled) {
+          sails.log.debug('Analytics is disabled via env vars, not initializing');
+          return cb();
+        }
+
         let memUpdateEnabledServers = await SdtdConfig.find({
           memUpdateInfoEnabled: true,
           inactive: false,
