@@ -1,3 +1,8 @@
+require('dd-trace').init({
+  profiling: true,
+  logInjection: true
+});
+
 const sails = require('sails');
 const SdtdApi = require('7daystodie-api-wrapper');
 const Sentry = require('@sentry/node');
