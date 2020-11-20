@@ -25,18 +25,16 @@
 // no matter where we actually lift from.
 // > Note: This is not required in order to lift, but it is a convenient default.
 process.chdir(__dirname);
+require('dotenv').config();
 
-require('dd-trace').init({
-  profiling: true,
-  logInjection: true
-});
+require('./api/utils').loadDatadog();
+
 
 // Attempt to import `sails` dependency, as well as `rc` (for loading `.sailsrc` files).
 var sails;
 var rc;
 try {
   console.log(`CSMM version: ${require('./package.json').version}`);
-  require('dotenv').config();
   sails = require('sails');
   rc = require('sails/accessible/rc');
 } catch (err) {

@@ -1,7 +1,5 @@
-require('dd-trace').init({
-  profiling: true,
-  logInjection: true
-});
+require('dotenv').config();
+require('../api/utils').loadDatadog();
 
 const sails = require('sails');
 const SdtdApi = require('7daystodie-api-wrapper');
