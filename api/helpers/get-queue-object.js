@@ -33,8 +33,8 @@ module.exports = {
         process.env.REDISSTRING,
         {
           defaultJobOptions: {
-            removeOnComplete: 100,
-            removeOnFail: 100,
+            removeOnComplete: 1000,
+            removeOnFail: 1000,
           }
         }
       );
