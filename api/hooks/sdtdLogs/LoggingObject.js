@@ -26,15 +26,20 @@ class LoggingObject extends EventEmitter {
   }
 
   async handleCompletedJob(job, result) {
-
+    result = sails.helpers.safeJsonParse(result, []);
     if (result.setInactive) {
-      return await sails.helpers.meta.setServerInactive(this.serverId);
+      // Cannot call this from the worker
+      // Failedhandler signals
+      return await sails.helpers.meta.setServerInactive(this.server.id);
     }
 
-    // TODO: Emit things so sails hooks in main process pick em up
     if (result.length) {
-      sails.log.debug('Got some logs! yay');
-      console.log(result);
+      sails.log.debug(`Got ${result.length} logs for server ${this.server.id}`);
+    }
+
+    for (const log of result) {
+      log.data.server = this.server;
+      this.emit(log.type, log.data);
     }
   }
 

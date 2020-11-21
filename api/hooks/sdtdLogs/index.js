@@ -69,6 +69,7 @@ module.exports = function sdtdLogs(sails) {
 
       await queue.add({ serverId: serverID },
         {
+          attempts: 1,
           repeat: {
             jobId: serverID,
             every: config.slowMode ? sails.config.custom.logCheckIntervalSlowMode : sails.config.custom.logCheckInterval,

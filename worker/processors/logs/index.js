@@ -36,6 +36,7 @@ async function failedHandler(job, e) {
     // Then add the job again with slowmode interval
     await sails.helpers.getQueueObject('logs').add({ serverId: job.data.serverId },
       {
+        attempts: 1,
         repeat: {
           jobId: job.data.serverId,
           every: sails.config.custom.logCheckIntervalSlowMode,
@@ -92,6 +93,7 @@ module.exports = async (job) => {
     // Then add the job again with normal interval
     await sails.helpers.getQueueObject('logs').add({ serverId: job.data.serverId },
       {
+        attempts: 1,
         repeat: {
           every: sails.config.custom.logCheckInterval,
           jobId: job.data.serverId,
@@ -150,7 +152,7 @@ module.exports = async (job) => {
         sails.log.error(e);
       }
       // We still want to emit these events as log lines as well (for modules like hooks, discord notifications)
-      response.push(enrichedLog);
+      response.push({ type: 'logLine', data: enrichedLog.data });
     }
 
     sails.log.debug(
