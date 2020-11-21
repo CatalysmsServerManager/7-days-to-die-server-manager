@@ -1,11 +1,8 @@
 const winston = require('winston');
-const LokiTransport = require('../api/winston-loki-transport');
 
 const logLevel = process.env.CSMM_LOGLEVEL || 'info';
 
 const infoAndAbove = ['info', 'warn', 'blank', 'crit'];
-
-const shouldLogJSON = JSON.parse((process.env.CSMM_LOG_JSON || 'false').toLowerCase());
 
 const transports = [
   new winston.transports.File({
@@ -22,8 +19,8 @@ const transports = [
   }),
   new winston.transports.Console({
     level: logLevel,
-    json: shouldLogJSON,
-    stringify: !shouldLogJSON ? undefined: (obj) => JSON.stringify(obj),
+    json: false,
+    stringify: JSON.stringify(obj),
     colorize: true,
     timestamp: true,
     humanReadableUnhandledException: true
