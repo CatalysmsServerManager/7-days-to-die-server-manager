@@ -1,5 +1,5 @@
 const handleLogLine = require('./handleLogLine');
-const LastLogLine = require('./lastLogLine');
+const LastLogLine = require('./redisVariables/lastLogLine');
 
 module.exports = async function (job) {
   const resultLogs = [];
@@ -34,8 +34,6 @@ module.exports = async function (job) {
       resultLogs.push(parsedLogLine);
     }
   }
-
-  await LastLogLine.set(job.data.server.id, lastLogLine);
 
   return Promise.resolve({
     serverId: job.data.server.id,

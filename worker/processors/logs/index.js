@@ -1,5 +1,7 @@
 const logProcessor = require('./logProcessor');
 const enrich = require('./enrichEventData');
+const LastLogLine = require('./redisVariables/lastLogLine');
+const EmptyResponses = require('./redisVariables/emptyResponses');
 
 module.exports = async (job) => {
   sails.log.debug('[Worker] Got a `logs` job', job.data);
@@ -22,10 +24,29 @@ module.exports = async (job) => {
     } */
   }
 
-  // TODO: isStalled check
-  // How to get previous lastLogLine? Distributed/persisted via Redis?
-  // Maybe node-cache but if lastLogLine is not distributed, it'll cause errors depending on how many active workers
-  // const LastLogLine = require('./lastLogLine');
+  const prevLastLogLine = LastLogLine.get(job.data.serverId);
+  const isStalled = resultLogs.lastLogLine === prevLastLogLine;
+
+  if (isStalled) {
+    // If the lastLogLine is the same as the previous time we checked,
+    // The log is stalled
+    await EmptyResponses.incr(job.data.serverId);
+
+    const emptyResponses = await EmptyResponses.get(job.data.serverId);
+
+    // If we dont find any new logs for a while
+    // Reset the counter and start from scratch
+    if (emptyResponses > 15) {
+      await LastLogLine.set(job.data.server.id, 0);
+    }
+
+  } else {
+    // If not stalled, we make sure the empty responses counter is 0
+    await EmptyResponses.set(job.data.serverId, 0);
+    // And we set the new lastLog value
+    await LastLogLine.set(job.data.server.id, resultLogs.lastLogLine);
+  }
+
 
   const response = [];
 
