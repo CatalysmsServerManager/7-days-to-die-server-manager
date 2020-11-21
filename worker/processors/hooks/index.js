@@ -6,14 +6,11 @@ module.exports = async (job) => {
 };
 
 
-async function handle(data) {
-  const eventData = data.data;
-  const eventType = data.type;
-
+async function handle({ data: eventData, type: eventType, server }) {
   // First we handle any 'logLine' events.
   if (eventType === 'logLine') {
     const serverLogLineHooks = await CustomHook.find({
-      server: eventData.server.id,
+      server: server.id,
       event: 'logLine'
     });
 
@@ -30,7 +27,7 @@ async function handle(data) {
         if (isNotOnCooldown) {
           const variables = await getHookVariables(serverLogLineHook.id);
           serverLogLineHook.variables = variables;
-          await executeLogLineHook(eventData, serverLogLineHook, eventData.server.id);
+          await executeLogLineHook(eventData, serverLogLineHook, server.id);
         }
       }
     }
@@ -39,7 +36,7 @@ async function handle(data) {
 
   // Handle any built-in events
   const configuredHooks = await CustomHook.find({
-    server: eventData.server.id,
+    server: server.id,
     event: eventType
   });
 
@@ -50,7 +47,7 @@ async function handle(data) {
       if (isNotOnCooldown) {
         const variables = await getHookVariables(hookToExec.id);
         hookToExec.variables = variables;
-        await executeHook(eventData, hookToExec, eventData.server.id);
+        await executeHook(eventData, hookToExec, server.id);
       }
     }
   }

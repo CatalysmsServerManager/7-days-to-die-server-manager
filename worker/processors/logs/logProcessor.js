@@ -1,8 +1,10 @@
 const handleLogLine = require('./handleLogLine');
+const LastLogLine = require('./lastLogLine');
 
 module.exports = async function (job) {
   const resultLogs = [];
-  let lastLogLine = parseInt(job.data.lastLogLine, 10);
+  // TODO: Get lastLogLine from somewhere
+  let lastLogLine = await LastLogLine.get(job.data.server.id);
 
   // If latest log line is not found, get it from the server
   if (!lastLogLine) {
@@ -33,6 +35,8 @@ module.exports = async function (job) {
       resultLogs.push(parsedLogLine);
     }
   }
+
+  await LastLogLine.set(job.data.server.id, lastLogLine);
 
   return Promise.resolve({
     serverId: job.data.server.id,
