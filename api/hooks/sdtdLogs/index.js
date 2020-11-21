@@ -1,5 +1,6 @@
+const Sentry = require('@sentry/node');
+const { server } = require('sinon');
 const LoggingObject = require('./LoggingObject');
-
 /**
  * @module 7dtdLoggingHook
  * @description Detects events on a 7dtd server.
@@ -12,6 +13,7 @@ module.exports = function sdtdLogs(sails) {
    */
 
   let loggingInfoMap = new Map();
+  let queue;
 
   return {
     /**
@@ -24,15 +26,26 @@ module.exports = function sdtdLogs(sails) {
     initialize: function (cb) {
       sails.after('hook:orm:loaded', async () => {
         sails.log.info('Initializing custom hook (`sdtdLogs`)');
-
+        queue = await sails.helpers.getQueueObject('logs');
         try {
-          // Make sure there are no lingering jobs
-          // TODO: Once we scale this to multiple processes, this should happen differently
-          await sails.helpers.getQueueObject('logs').empty();
-          let enabledServers = await SdtdConfig.find({ inactive: false });
+          let enabledServers = await SdtdConfig.find();
+          const promises = [];
           for (let config of enabledServers) {
-            await this.start(config.server);
+            if (!config.inactive) {
+              // Only add the repeated job if the server is not inactive
+              promises.push(this.start(config.server));
+            }
+            // Always create the emitter because other hooks depend on it existing
+            promises.push(createLogObject(config.server));
           }
+
+          try {
+            await Promise.all(promises);
+          } catch (e) {
+            Sentry.captureException(e);
+            sails.log.error(e);
+          }
+
           sails.log.debug(`HOOK: Sdtdlogs - Initialized ${loggingInfoMap.size} logging instances`);
           return cb();
         } catch (error) {
@@ -51,21 +64,16 @@ module.exports = function sdtdLogs(sails) {
 
     start: async function (serverID) {
       serverID = String(serverID);
-      try {
-        if (!loggingInfoMap.has(serverID)) {
-          sails.log.debug(`HOOKS - sdtdLogs - starting logging for server ${serverID}`);
-          let loggingObj = await createLogObject(serverID);
-          loggingInfoMap.set(serverID, loggingObj);
-          await sails.hooks.customdiscordnotification.start(serverID);
-          return;
-        } else {
-          const loggingObj = loggingInfoMap.get(serverID);
-          await loggingObj.init();
-        }
 
-      } catch (error) {
-        sails.log.error(`HOOKS - sdtdLogs`, error);
-      }
+      const config = await SdtdConfig.findOne({ server: serverID });
+
+      await queue.add({ serverId: serverID },
+        {
+          repeat: {
+            jobId: serverID,
+            every: config.slowMode ? sails.config.custom.logCheckIntervalSlowMode : sails.config.custom.logCheckInterval,
+          }
+        });
     },
 
     /**
@@ -76,21 +84,23 @@ module.exports = function sdtdLogs(sails) {
      * @method
      */
 
-    stop: function (serverID) {
-      serverID = String(serverID);
-      try {
-        if (loggingInfoMap.has(serverID)) {
-          sails.log.debug(`HOOKS - sdtdLogs - stopping logging for server ${serverID}`);
-          let loggingObj = loggingInfoMap.get(serverID);
-          loggingInfoMap.delete(serverID);
-          loggingObj.destroy();
-          return;
-        }
-      } catch (error) {
-        sails.log.error(`HOOKS - sdtdLogs`, error);
+    stop: async function (serverID) {
+      sails.log.debug(`HOOKS - sdtdLogs - stopping logging for server ${serverID}`);
+
+      const loggingObj = await this.getLoggingObject(serverID);
+      if (loggingObj) {
+        loggingObj.destroy();
       }
 
-
+      await queue.removeRepeatable({
+        jobId: serverID,
+        every: sails.config.custom.logCheckInterval,
+      });
+      // Make sure the job is also deleted if the server is in slowmode
+      await queue.removeRepeatable({
+        jobId: serverID,
+        every: sails.config.custom.logCheckIntervalSlowMode,
+      });
     },
 
     /**
@@ -103,17 +113,6 @@ module.exports = function sdtdLogs(sails) {
 
     getLoggingObject: async function (serverId) {
       let obj = loggingInfoMap.get(String(serverId));
-      if (_.isUndefined(obj)) {
-        sails.log.warn(`Tried to get a non-existing loggingObject, creating a new loggingObject for server ${serverId}.`);
-        await this.start(serverId);
-        const config = await SdtdConfig.findOne({ where: { server: serverId } });
-        obj = loggingInfoMap.get(String(serverId));
-        // If a server is set to inactive, the created loggingObject should not do anything
-        if (config.inactive) {
-          sails.log.warn(`Created new loggingObject but server ${serverId} was set to inactive, disabling loggingObject`);
-          await obj.stop();
-        }
-      }
       return obj;
     },
 
@@ -142,17 +141,17 @@ module.exports = function sdtdLogs(sails) {
    */
 
   async function createLogObject(serverID) {
-
+    serverID = String(serverID);
     let server = await SdtdServer.findOne(serverID).populate('config');
 
     let eventEmitter = new LoggingObject(server);
 
-    sails.after('lifted', () => {
-      if (!server.config[0].inactive) {
-        eventEmitter.init();
-      }
-    });
+    if (!loggingInfoMap.has(serverID)) {
+      sails.log.debug(`HOOKS - sdtdLogs - Creating loggingObject for server ${serverID}`);
 
+      loggingInfoMap.set(serverID, eventEmitter);
+      await sails.hooks.customdiscordnotification.start(serverID);
+    }
 
     eventEmitter.on('logLine', function (logLine) {
       logLine.server = _.omit(server, 'authName', 'authToken');

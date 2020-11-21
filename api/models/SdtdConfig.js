@@ -33,6 +33,12 @@ module.exports = {
       defaultsTo: false
     },
 
+    // Logging hook slowmode
+    slowMode: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
     mapProxy: {
       type: 'boolean',
       defaultsTo: false

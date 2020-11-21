@@ -25,6 +25,7 @@ module.exports.custom = {
   // stripeSecret: 'sk_test_Zzd814nldl91104qor5911gjald',
 
   logCheckInterval: parseInt(process.env.CSMM_LOG_CHECK_INTERVAL || '3000'),
+  logCheckIntervalSlowMode: 300000,
   logCount: !Number.isNaN(parseInt(process.env.CSMM_LOG_COUNT)) ? parseInt(process.env.CSMM_LOG_COUNT) : 50,
 
   // Discord bot config

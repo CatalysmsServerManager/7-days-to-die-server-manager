@@ -2,9 +2,6 @@ const EventEmitter = require('events');
 const Sentry = require('@sentry/node');
 const { inspect } = require('util');
 
-const defaultIntervalMs = 2000;
-const slowModeIntervalms = 300000;
-
 class LoggingObject extends EventEmitter {
   constructor(server,) {
     super();
@@ -21,17 +18,6 @@ class LoggingObject extends EventEmitter {
     });
   }
 
-  async init(ms = sails.config.custom.logCheckInterval) {
-    // TODO: make sure this is not doubled if server is in slowmode
-    await this.queue.add({ serverId: this.server.id },
-      {
-        repeat: {
-          jobId: this.server.id,
-          every: ms,
-        }
-      });
-  }
-
   async handleError(error) {
     sails.log.error(inspect(error));
     Sentry.captureException(error);
@@ -43,6 +29,11 @@ class LoggingObject extends EventEmitter {
   }
 
   async handleCompletedJob(job, result) {
+
+    if (result.setInactive) {
+      return await sails.helpers.meta.setServerInactive(this.serverId);
+    }
+
     // TODO: Emit things so sails hooks in main process pick em up
     if (result.length) {
       sails.log.debug('Got some logs! yay');
@@ -51,21 +42,8 @@ class LoggingObject extends EventEmitter {
   }
 
   async destroy() {
-    await this.stop();
     this.removeAllListeners();
     return;
-  }
-
-  async stop() {
-    await this.queue.removeRepeatable({
-      jobId: this.server.id,
-      every: sails.config.custom.logCheckInterval,
-    });
-    // Make sure the job is also deleted if the server is in slowmode
-    await this.queue.removeRepeatable({
-      jobId: this.server.id,
-      every: slowModeIntervalms,
-    });
   }
 }
 
