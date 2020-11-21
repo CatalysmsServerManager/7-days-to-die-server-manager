@@ -24,9 +24,14 @@ module.exports = async (job) => {
     } */
   }
 
-  const prevLastLogLine = LastLogLine.get(job.data.serverId);
+  /**
+   * isStalled check looks at the previous logLine and the current one
+   * If these are the same, it means we did not receive any new logs
+   * If that happens many times, it might mean our lastLogLine got desynced with that of the server
+   * At that point, we reset the lastLogLine and sync with the server again
+   */
+  const prevLastLogLine = await LastLogLine.get(job.data.serverId);
   const isStalled = resultLogs.lastLogLine === prevLastLogLine;
-
   if (isStalled) {
     // If the lastLogLine is the same as the previous time we checked,
     // The log is stalled
@@ -37,9 +42,11 @@ module.exports = async (job) => {
     // If we dont find any new logs for a while
     // Reset the counter and start from scratch
     if (emptyResponses > 15) {
+      sails.log.debug(`Havent received new logs from server ${job.data.serverId} for a while, resetting`);
       await LastLogLine.set(job.data.server.id, 0);
+      // Make sure empty responses gets reset so this doesnt continuously fire
+      await EmptyResponses.set(job.data.serverId, 0);
     }
-
   } else {
     // If not stalled, we make sure the empty responses counter is 0
     await EmptyResponses.set(job.data.serverId, 0);
