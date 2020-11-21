@@ -13,9 +13,6 @@ class LoggingObject extends EventEmitter {
     this.queue.on('global:completed', this.handleCompletedJob.bind(this));
     this.queue.on('global:failed', this.handleFailedJob);
     this.queue.on('global:error', this.handleError);
-    this.queue.on('global:cleaned', function (jobs, type) {
-      throw new Error('Shouldnt have cleaned! TODO: Remove this if youre sure it doesnt happen anymore :)');
-    });
   }
 
   async handleError(error) {
