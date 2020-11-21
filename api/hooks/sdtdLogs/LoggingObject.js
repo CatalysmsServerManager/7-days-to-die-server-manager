@@ -22,10 +22,11 @@ class LoggingObject extends EventEmitter {
   }
 
   async init(ms = sails.config.custom.logCheckInterval) {
+    // TODO: make sure this is not doubled if server is in slowmode
     await this.queue.add({ serverId: this.server.id },
       {
         repeat: {
-          serverId: this.server.id,
+          jobId: this.server.id,
           every: ms,
         }
       });
@@ -56,7 +57,15 @@ class LoggingObject extends EventEmitter {
   }
 
   async stop() {
-    // TODO: remove the repeatable job
+    await this.queue.removeRepeatable({
+      jobId: this.server.id,
+      every: sails.config.custom.logCheckInterval,
+    });
+    // Make sure the job is also deleted if the server is in slowmode
+    await this.queue.removeRepeatable({
+      jobId: this.server.id,
+      every: slowModeIntervalms,
+    });
   }
 }
 
