@@ -23,7 +23,7 @@ async function failedHandler(job, e) {
 
   // When this has failed enough times and the server is not in slowmode yet
   // We put the server in slowmode
-  if (currentFails > 5 && !job.data.server.config.slowMode) {
+  if (currentFails > 100 && !job.data.server.config.slowMode) {
     sails.log.debug(`Entering slowmode for server ${job.data.serverId}`);
     // Switch to slow mode
     await SdtdConfig.update({ server: job.data.serverId }, { slowMode: true });
@@ -52,6 +52,8 @@ async function failedHandler(job, e) {
     // Setting inactive has to happen in the main process, so we just signal that here
     return { setInactive: true };
   }
+
+  return {};
 }
 
 module.exports = async (job) => {
@@ -96,6 +98,12 @@ module.exports = async (job) => {
         }
       });
   }
+
+  // We also set the current timestamp as last success
+  await sails.helpers.redis.set(
+    `sdtdserver:${this.serverId}:sdtdLogs:lastSuccess`,
+    Date.now()
+  );
 
 
   /**
