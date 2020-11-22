@@ -1,4 +1,4 @@
-const enrichDataObj = require('../../../../api/hooks/sdtdLogs/enrichEventData');
+const enrichDataObj = require('../../../../worker/processors/logs/enrichEventData');
 const LoggingObject = require('../../../../api/hooks/sdtdLogs/LoggingObject');
 const { expect } = require('chai');
 

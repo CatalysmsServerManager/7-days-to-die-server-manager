@@ -1,7 +1,7 @@
 const chai = require('chai');
 const expect = chai.expect;
 
-const handleLogLine = require('../../../../api/hooks/sdtdLogs/handleLogLine');
+const handleLogLine = require('../../../../worker/processors/logs/handleLogLine');
 
 describe('sdtdLogs#handleLogLine', () => {
   it('Correctly detects a death event', () => {

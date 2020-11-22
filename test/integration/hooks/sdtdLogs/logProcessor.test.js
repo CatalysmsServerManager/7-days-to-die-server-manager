@@ -1,5 +1,5 @@
 const expect = require('chai').expect;
-const logProcessor = require('../../../../api/hooks/sdtdLogs/logProcessor');
+const logProcessor = require('../../../../worker/processors/logs/logProcessor');
 
 describe('logProcessor', function () {
 

@@ -61,7 +61,7 @@ describe('logging hook index', () => {
       type: 'playerConnected'
     };
     await sails.hooks.sdtdlogs.start(sails.testServer.id);
-    const loggingObject = await sails.hooks.sdtdlogs.getLoggingObject(sails.testServer.id);
+    const loggingObject = await sails.hooks.sdtdlogs.createLogObject(sails.testServer.id);
     sandbox.spy(Player, 'update');
     sandbox.stub(sails.hooks.discordnotifications, 'sendNotification').callsFake(() => { });
 
@@ -84,24 +84,6 @@ describe('logging hook index', () => {
       const res = await sails.hooks.sdtdlogs.getLoggingObject(sails.testServer.id);
       expect(res).to.be.instanceOf(LoggingObject);
     });
-
-    it('Creates a loggingObject when one doesnt exist yet', async () => {
-      const LoggingObject = require('../../../../api/hooks/sdtdLogs/LoggingObject');
-      await sails.hooks.sdtdlogs.stop(sails.testServer.id);
-      const res = await sails.hooks.sdtdlogs.getLoggingObject(sails.testServer.id);
-      expect(res).to.be.instanceOf(LoggingObject);
-    });
-
-    it('Returns an inactive loggingObject when a server is inactive', async () => {
-      const LoggingObject = require('../../../../api/hooks/sdtdLogs/LoggingObject');
-
-      //await sails.hooks.sdtdlogs.stop(sails.testServer.id);
-      await sails.helpers.meta.setServerInactive(sails.testServer.id);
-      const res = await sails.hooks.sdtdlogs.getLoggingObject(sails.testServer.id);
-      expect(res).to.be.instanceOf(LoggingObject);
-      expect(res.active).to.not.be.ok;
-    });
-
   });
 
 
@@ -127,11 +109,11 @@ describe('logging hook index', () => {
 
       await initialize();
 
-      const logObjActive = await sails.hooks.sdtdlogs.getLoggingObject(sails.testServer.id);
-      const logObjInactive = await sails.hooks.sdtdlogs.getLoggingObject(inactiveServer.id);
+      const queue = await sails.helpers.getQueueObject('logs');
 
-      expect(logObjActive.active).to.be.true;
-      expect(logObjInactive.active).to.be.false;
+      const jobs = await queue.getRepeatableJobs();
+
+      expect(jobs.length).to.be.equal(1);
 
     });
 
