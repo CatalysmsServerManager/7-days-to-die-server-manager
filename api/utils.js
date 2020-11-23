@@ -17,7 +17,7 @@ module.exports = {
     // Load Datadog integration only if required env vars are set
     if (process.env.DD_AGENT_HOST && process.env.DD_TRACE_AGENT_PORT) {
       console.log(`Loading datadog integration, sending data to agent at ${process.env.DD_AGENT_HOST} && ${process.env.DD_TRACE_AGENT_PORT}`);
-      require('dd-trace').init({
+      return require('dd-trace').init({
         profiling: true,
         logInjection: true
       });
