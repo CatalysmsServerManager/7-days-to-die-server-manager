@@ -92,6 +92,7 @@ module.exports.routes = {
   'get /user/:userId/tickets': 'SdtdTicket.user-tickets-view',
   'get /user/:userId/profile': 'User.profile',
   'get /user/:userId/dashboard': 'User.dashboard',
+  'get /user/me': 'User.me',
 
   'get /sdtdticket/:ticketId': 'SdtdTicket.view-ticket',
 
