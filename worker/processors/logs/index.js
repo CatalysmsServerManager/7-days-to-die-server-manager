@@ -51,10 +51,10 @@ async function failedHandler(job, e) {
       `SdtdLogs - server ${this.serverId} has not responded in over 3 days, setting to inactive`
     );
     // Setting inactive has to happen in the main process, so we just signal that here
-    return { setInactive: true };
+    return { setInactive: true, server: job.data.server };
   }
 
-  return {};
+  return { server: job.data.server };
 }
 
 module.exports = async (job) => {
@@ -76,7 +76,7 @@ module.exports = async (job) => {
       return res;
     }
     // Return an empty array, completion handler expects an array
-    return [];
+    return { server: job.data.server, logs: [] };
   }
 
   // At this point, we know the server was connectable
@@ -163,7 +163,7 @@ module.exports = async (job) => {
     sails.helpers.getQueueObject('hooks').add(enrichedLog);
   }
 
-  return response;
+  return { server: job.data.server, logs: response };
 };
 
 

@@ -62,47 +62,18 @@ describe('LoggingObject', function () {
   afterEach(() => {
     loggingObject.destroy();
   });
-  describe('handleFailedJob', () => {
-    let jobData;
-    beforeEach(() => {
-      jobData = {
-        data: {
-          serverId: loggingObject.serverId
-        }
-      };
-      loggingObject.queue.getJob = sandbox.stub().returns(jobData);
-    });
-    it('ignores bad jobs', async () => {
-      delete jobData.data;
-      await loggingObject.handleFailedJob('jobId', new Error('The error that happened'));
-      expect(loggingObject.lastLogLine).to.equal(originalLastLogLine);
-      expect(loggingObject.emptyResponses).to.equal(originalEmptyResponse);
-      expect(loggingObject.queue.add).not.to.have.been.called;
-    });
-    it('ignores messages for other servers', async () => {
-      jobData.data.serverId = -1;
-      await loggingObject.handleFailedJob('jobId', new Error('The error that happened'));
-      expect(loggingObject.lastLogLine).to.equal(originalLastLogLine);
-      expect(loggingObject.emptyResponses).to.equal(originalEmptyResponse);
-      expect(loggingObject.queue.add).not.to.have.been.called;
-    });
-    it('handles errors', async () => {
-      await loggingObject.handleFailedJob('jobId', new Error('The error that happened'));
-      expect(loggingObject.queue.add).to.have.been.called;
-      expect(loggingObject.lastLogLine).to.equal(originalLastLogLine);
-      expect(loggingObject.emptyResponses).to.equal(originalEmptyResponse);
-    });
-  });
+
   describe('handleCompletedJob', () => {
     it('ignores messages for other servers', async () => {
       const job = {};
       const result = {
-        serverId: -1
+        server: { id: -1 }
       };
-      await loggingObject.handleCompletedJob(job, JSON.stringify(result));
+      const res = await loggingObject.handleCompletedJob(job, JSON.stringify(result));
       expect(loggingObject.lastLogLine).to.equal(originalLastLogLine);
       expect(loggingObject.emptyResponses).to.equal(originalEmptyResponse);
-      expect(loggingObject.queue.add).not.to.have.been.called;
+      // Function returns undefined when nothing happened
+      expect(res).to.be.equal(undefined);
     });
 
     it('empty response should increase empty response ', async () => {
