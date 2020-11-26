@@ -1,5 +1,9 @@
 const enrichDataObj = require('../../../../worker/processors/logs/enrichEventData');
 const LoggingObject = require('../../../../api/hooks/sdtdLogs/LoggingObject');
+const LastLogLine = require('../../../../worker/processors/logs/redisVariables/lastLogLine');
+const EmptyResponses = require('../../../../worker/processors/logs/redisVariables/emptyResponses');
+const FailedCounter = require('../../../../worker/processors/logs/redisVariables/failedCounter');
+
 const { expect } = require('chai');
 
 const LOG_LINES = {
@@ -76,19 +80,6 @@ describe('LoggingObject', function () {
       expect(res).to.be.equal(undefined);
     });
 
-    it('empty response should increase empty response ', async () => {
-      const job = {};
-      const result = {
-        serverId: sails.testServer.id,
-        lastLogLine: originalLastLogLine,
-        logs: []
-      };
-      await loggingObject.handleCompletedJob(job, JSON.stringify(result));
-      expect(loggingObject.lastLogLine).to.equal(10);
-      expect(loggingObject.emptyResponses).to.equal(1);
-      expect(loggingObject.queue.add).to.have.been.called;
-    });
-
     it('fifteenth empty response should reset log last log line and empty response', async () => {
       const job = {};
       const result = {
@@ -113,27 +104,6 @@ describe('LoggingObject', function () {
       loggingObject.queue.add.resetHistory();
     });
 
-    it('Increasing log line number, but not returned rows, it just means its rows we do not care about', async () => {
-      const job = {};
-      const result = {
-        serverId: sails.testServer.id,
-        lastLogLine: 100,
-        logs: []
-      };
-      loggingObject.lastLogLine = 100;
-
-      await loggingObject.handleCompletedJob(job, JSON.stringify(result));
-      expect(loggingObject.lastLogLine).to.equal(100);
-      expect(loggingObject.emptyResponses).to.equal(1);
-      expect(loggingObject.queue.add).to.have.been.called;
-      loggingObject.queue.add.resetHistory();
-
-      await loggingObject.handleCompletedJob(job, JSON.stringify({ ...result, lastLogLine: 150 }));
-      expect(loggingObject.lastLogLine).to.equal(150);
-      expect(loggingObject.emptyResponses).to.equal(0);
-      expect(loggingObject.queue.add).to.have.been.called;
-      loggingObject.queue.add.resetHistory();
-    });
     describe('success with various log types', () => {
       it('chatMessage', async () => {
         const job = {};

@@ -29,20 +29,6 @@ describe('logProcessor', function () {
       });
 
     });
-
-    it('resets lastLogLine if job.data.lastLogLine is 0', async function () {
-      const result = await logProcessor({ data: { lastLogLine: 0, server: sails.testServer } });
-      expect(sails.helpers.sdtdApi.getWebUIUpdates).to.have.been.callCount(1);
-      expect(result.serverId).to.eq(sails.testServer.id);
-      expect(result.lastLogLine).to.eq(5);
-    });
-
-    it('resets lastLogLine if job.data.lastLogLine is "0"', async function () {
-      const result = await logProcessor({ data: { lastLogLine: '0', server: sails.testServer } });
-      expect(sails.helpers.sdtdApi.getWebUIUpdates).to.have.been.callCount(1);
-      expect(result.serverId).to.eq(sails.testServer.id);
-      expect(result.lastLogLine).to.eq(5);
-    });
   });
 
   it('Confirm able to fetch log messages', async function () {
