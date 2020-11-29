@@ -6,10 +6,7 @@ class LoggingObject extends EventEmitter {
   constructor(server,) {
     super();
     this.server = server;
-
     this.queue = sails.helpers.getQueueObject('logs');
-
-
     this.queue.on('global:completed', this.handleCompletedJob.bind(this));
     this.queue.on('global:failed', this.handleFailedJob);
     this.queue.on('global:error', this.handleError);
@@ -37,7 +34,7 @@ class LoggingObject extends EventEmitter {
 
     if (result.setInactive) {
       // Cannot call this from the worker
-      // Failedhandler signals
+      // Failedhandler returns this prop to signal that the server should be set to inactive
       return await sails.helpers.meta.setServerInactive(this.server.id);
     }
 

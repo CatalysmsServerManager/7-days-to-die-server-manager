@@ -87,5 +87,16 @@ describe('Worker processor logs', () => {
 
   });
 
+  it('Last success should get updated whenever a job is completed', async () => {
+    const job = { data: { serverId: sails.testServer.id } };
+
+    expect(await sails.helpers.redis.get(`sdtdserver:${sails.testServer.id}:sdtdLogs:lastSuccess`)).to.equal(null);
+    await processor(job);
+    expect(await sails.helpers.redis.get(`sdtdserver:${sails.testServer.id}:sdtdLogs:lastSuccess`)).to.equal(1588296005000);
+  });
+
+  it('Sets a server slowmode when it fails a lot', async () => { });
+  it('Sets a server inactive when it hasnt responded in 3 days', async () => { });
+
 
 });

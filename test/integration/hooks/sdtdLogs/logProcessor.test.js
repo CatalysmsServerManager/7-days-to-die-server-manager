@@ -3,34 +3,6 @@ const logProcessor = require('../../../../worker/processors/logs/logProcessor');
 
 describe('logProcessor', function () {
 
-  describe('It resets lastLogLine if job.data.lastLogLine is falsey', function () {
-    beforeEach(function () {
-      sails.helpers.sdtdApi.getWebUIUpdates = sandbox.stub().returns({ newlogs: 2 });
-      sails.helpers.sdtdApi.getLog = sandbox.stub().returns({
-        entries: [
-          {
-            date: '2020-07-01',
-            time: '23:58:38',
-            uptime: '127.041',
-            msg: 'Executing command \'say test\' by WebCommandResult_for_say',
-            trace: '',
-            type: 'Log'
-          },
-          {
-            date: '2020-07-01',
-            time: '23:58:38',
-            uptime: '127.065',
-            msg: 'Chat (from \'-non-player-\', entity id \'-1\', to \'Global\'): \'Server\': test',
-            trace: '',
-            type: 'Log'
-          }
-        ],
-        lastLine: 5
-      });
-
-    });
-  });
-
   it('Confirm able to fetch log messages', async function () {
     sandbox.stub(sails.helpers.sdtdApi, 'getWebUIUpdates').callsFake(async function () {
       return {

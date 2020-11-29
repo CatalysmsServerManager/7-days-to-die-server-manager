@@ -57,11 +57,6 @@ describe('LoggingObject', function () {
   let originalEmptyResponse;
   beforeEach(() => {
     loggingObject = new LoggingObject(sails.testServer);
-    loggingObject.lastLogLine = 10;
-    originalLastLogLine = loggingObject.lastLogLine;
-    originalEmptyResponse = loggingObject.emptyResponses;
-    loggingObject.queue = {};
-    loggingObject.queue.add = sandbox.stub();
   });
   afterEach(() => {
     loggingObject.destroy();
@@ -80,35 +75,12 @@ describe('LoggingObject', function () {
       expect(res).to.be.equal(undefined);
     });
 
-    it('fifteenth empty response should reset log last log line and empty response', async () => {
-      const job = {};
-      const result = {
-        serverId: sails.testServer.id,
-        lastLogLine: 100,
-        logs: []
-      };
-
-      for (let i = 1; i < 16; i++) {
-        loggingObject.lastLogLine = 100;
-        await loggingObject.handleCompletedJob(job, JSON.stringify(result));
-        expect(loggingObject.lastLogLine).to.equal(100);
-        expect(loggingObject.emptyResponses).to.equal(i);
-        expect(loggingObject.queue.add).to.have.been.called;
-        loggingObject.queue.add.resetHistory();
-      }
-
-      await loggingObject.handleCompletedJob(job, JSON.stringify(result));
-      expect(loggingObject.lastLogLine).to.equal(0);
-      expect(loggingObject.emptyResponses).to.equal(0);
-      expect(loggingObject.queue.add).to.have.been.called;
-      loggingObject.queue.add.resetHistory();
-    });
 
     describe('success with various log types', () => {
       it('chatMessage', async () => {
         const job = {};
         const result = {
-          serverId: sails.testServer.id,
+          server: { id: sails.testServer.id },
           lastLogLine: 110,
           logs: [
             {
@@ -122,19 +94,13 @@ describe('LoggingObject', function () {
         const emitSpy = sandbox.spy(loggingObject, 'emit');
 
         await loggingObject.handleCompletedJob(job, JSON.stringify(result));
-        expect(loggingObject.lastLogLine).to.equal(110);
-        expect(loggingObject.emptyResponses).to.equal(0);
-        expect(loggingObject.failed).to.equal(false);
-        expect(loggingObject.slowmode).to.equal(false);
-        expect(loggingObject.queue.add).to.have.been.called;
-        expect(emitSpy).to.have.been.callCount(2);
-        expect(emitSpy).to.have.been.calledWith('logLine', sandbox.match.defined);
+        expect(emitSpy).to.have.been.callCount(1);
         expect(emitSpy).to.have.been.calledWith('chatMessage', sandbox.match.defined);
       });
       it('memUpdate', async () => {
         const job = {};
         const result = {
-          serverId: sails.testServer.id,
+          server: { id: sails.testServer.id },
           lastLogLine: 110,
           logs: [
             {
@@ -148,19 +114,13 @@ describe('LoggingObject', function () {
         const emitSpy = sandbox.spy(loggingObject, 'emit');
 
         await loggingObject.handleCompletedJob(job, JSON.stringify(result));
-        expect(loggingObject.lastLogLine).to.equal(110);
-        expect(loggingObject.emptyResponses).to.equal(0);
-        expect(loggingObject.failed).to.equal(false);
-        expect(loggingObject.slowmode).to.equal(false);
-        expect(loggingObject.queue.add).to.have.been.called;
-        expect(emitSpy).to.have.been.callCount(2);
-        expect(emitSpy).to.have.been.calledWith('logLine', sandbox.match.defined);
+        expect(emitSpy).to.have.been.callCount(1);
         expect(emitSpy).to.have.been.calledWith('memUpdate', sandbox.match.defined);
       });
       it('logLine', async () => {
         const job = {};
         const result = {
-          serverId: sails.testServer.id,
+          server: { id: sails.testServer.id },
           lastLogLine: 110,
           logs: [
             {
@@ -174,72 +134,9 @@ describe('LoggingObject', function () {
         const emitSpy = sandbox.spy(loggingObject, 'emit');
 
         await loggingObject.handleCompletedJob(job, JSON.stringify(result));
-        expect(loggingObject.lastLogLine).to.equal(110);
-        expect(loggingObject.emptyResponses).to.equal(0);
-        expect(loggingObject.failed).to.equal(false);
-        expect(loggingObject.slowmode).to.equal(false);
-        expect(loggingObject.queue.add).to.have.been.called;
         expect(emitSpy).to.have.been.callCount(1);
         expect(emitSpy).to.have.been.calledWith('logLine', sandbox.match.defined);
       });
-    });
-
-    it('Last success should get updated whenever a job is completed', async () => {
-      const job = {};
-      const result = {
-        serverId: sails.testServer.id,
-        lastLogLine: 10,
-        logs: [
-        ]
-      };
-      await loggingObject.handleCompletedJob(job, JSON.stringify(result));
-      expect(await sails.helpers.redis.get(`sdtdserver:${sails.testServer.id}:sdtdLogs:lastSuccess`)).to.equal(1588296005000);
-      expect(loggingObject.lastLogLine).to.equal(10);
-      expect(loggingObject.emptyResponses).to.equal(1);
-    });
-
-    it('Sets the active flag to true on start', async () => {
-      await loggingObject.init();
-      expect(loggingObject.active).to.be.true;
-    });
-
-    it('Sets the active flag to false on stop', async () => {
-      await loggingObject.init();
-      await loggingObject.stop();
-      expect(loggingObject.active).to.be.false;
-    });
-
-    it('Does not add new jobs when active flag is false', async () => {
-      await loggingObject.stop();
-      expect(loggingObject.active).to.be.false;
-      await loggingObject.addFetchJob();
-      expect(loggingObject.queue.add).not.to.have.been.called;
-    });
-
-    it('Adds new jobs when active flag is true', async () => {
-      await loggingObject.init();
-      expect(loggingObject.active).to.be.true;
-      await loggingObject.addFetchJob();
-      expect(loggingObject.queue.add).to.have.been.called;
-    });
-
-    it('Adds a job even when enrichData throws', async () => {
-      sandbox.stub(enrichDataObj, 'enrichEventData').throws(new Error('Fake throw ;)'));
-
-      const job = {};
-      const result = {
-        serverId: sails.testServer.id,
-        lastLogLine: 10,
-        logs: [{ data: { msg: 1 } }, { data: { msg: 2 } }, { data: { msg: 3 } }
-        ]
-      };
-      const events = [];
-      loggingObject.on('logLine', _ => events.push(_));
-      await loggingObject.handleCompletedJob(job, JSON.stringify(result));
-
-      expect(events).to.have.length(3);
-      expect(loggingObject.queue.add).to.have.been.called;
-
     });
   });
 });
