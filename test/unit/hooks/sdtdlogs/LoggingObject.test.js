@@ -68,7 +68,8 @@ describe('LoggingObject', function () {
     });
 
     it('sets a server inactive when worker has signalled this', async () => {
-      const inactiveSpy = sandbox.stub(sails.helpers.meta, 'setServerInactive');
+      await sails.hooks.sdtdlogs.createLogObject(sails.testServer.id);
+      const inactiveSpy = sandbox.spy(sails.helpers.meta, 'setServerInactive');
       const job = {};
       const result = {
         server: { id: sails.testServer.id },
