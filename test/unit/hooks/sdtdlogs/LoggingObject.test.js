@@ -1,8 +1,4 @@
-const enrichDataObj = require('../../../../worker/processors/logs/enrichEventData');
 const LoggingObject = require('../../../../api/hooks/sdtdLogs/LoggingObject');
-const LastLogLine = require('../../../../worker/processors/logs/redisVariables/lastLogLine');
-const EmptyResponses = require('../../../../worker/processors/logs/redisVariables/emptyResponses');
-const FailedCounter = require('../../../../worker/processors/logs/redisVariables/failedCounter');
 
 const { expect } = require('chai');
 

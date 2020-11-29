@@ -1,9 +1,6 @@
 const LastLogLine = require('../../../../worker/processors/logs/redisVariables/lastLogLine');
 const EmptyResponses = require('../../../../worker/processors/logs/redisVariables/emptyResponses');
-const FailedCounter = require('../../../../worker/processors/logs/redisVariables/failedCounter');
 const processor = require('../../../../worker/processors/logs');
-
-const logProcessor = require('../../../../worker/processors/logs/logProcessor');
 
 const { expect } = require('chai');
 

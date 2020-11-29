@@ -1,5 +1,4 @@
 const Sentry = require('@sentry/node');
-const { server } = require('sinon');
 const LoggingObject = require('./LoggingObject');
 /**
  * @module 7dtdLoggingHook
