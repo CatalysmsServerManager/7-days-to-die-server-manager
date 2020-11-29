@@ -153,7 +153,7 @@
 
       if (webport === '' || !validator.isPort(webport)) {
         return showErrorModal(
-          `The value you enered (${webport}) is not a valid web API port.`
+          `The value you entered (${webport}) is not a valid web API port.`
         )
       }
       if (authName === '') {
@@ -248,12 +248,19 @@
             } else {
               responseString +=
                 `${successIcon} <p>Mem command response : ${JSON.stringify(response.commandResponse)}</p>`
-            }
-
-
+            }            
           }
 
-
+          if (response.private) {
+            responseString +=
+              `${errorIcon}</i> <p> This instance is private and only CSMM system admins can add servers. <p>`
+            return testResponseElement.html(responseString);
+          }
+          if (response.donors) {
+            responseString +=
+              `${errorIcon}</i> <p> This instance is reserved for donators, please use a public instance instead. <p>`
+            return testResponseElement.html(responseString);
+          }
 
           return showErrorModal(
             `An unexpected error occured! Please let us know about this on the development server. Please provide us with any messages in the result box.`

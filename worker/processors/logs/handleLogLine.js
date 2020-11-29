@@ -1,4 +1,3 @@
-const geoip = require('geoip-lite');
 const _ = require('lodash');
 
 const replaceQuotes = string => string.substring(1, string.length - 1);
@@ -187,7 +186,7 @@ module.exports = logLine => {
       msg: logLine.msg
     };
 
-    const geoIpLookup = geoip.lookup(joinMsg.ip);
+    const geoIpLookup = require('geoip-lite').lookup(joinMsg.ip);
     joinMsg.country = geoIpLookup ? geoIpLookup.country : null;
 
     returnValue.type = 'playerConnected';

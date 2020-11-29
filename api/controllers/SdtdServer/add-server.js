@@ -73,8 +73,22 @@ module.exports = {
       commandResponse: false,
       duplicateCheck: false,
       maxLimitCheck: false,
-      detectedControlPanelPortUsed: false
+      detectedControlPanelPortUsed: false,
+      private: false,
+      donors: false,
     };
+
+    errorResponse.private = !privateCheck(userProfile);
+    errorResponse.donors = !donorCheck(donatorRole);
+
+    if (errorResponse.private) {
+      return exits.badRequest(errorResponse);
+    }
+
+    if (errorResponse.donors) {
+      return exits.badRequest(errorResponse);
+    }
+
 
     let existsCheck = await checkIfServerExists(sdtdServer);
 
@@ -182,7 +196,10 @@ module.exports = {
     } else {
       return exits.error(errorResponse);
     }
-  }
+  },
+
+  privateCheck: privateCheck,
+  donorCheck: donorCheck,
 };
 
 async function checkServerResponse(sdtdServer) {
@@ -269,4 +286,17 @@ async function addServerToDb(sdtdServerToAdd) {
     server: createdServer.id
   });
   return createdServer;
+}
+
+
+function privateCheck(user) {
+  const isPrivateInstance = (process.env.CSMM_PRIVATE_INSTANCE === 'true');
+
+  return !isPrivateInstance || sails.config.custom.adminSteamIds.includes(user.steamId);
+}
+
+function donorCheck(donorLevel) {
+  const isDonorInstance = (process.env.CSMM_DONOR_ONLY === 'true');
+
+  return !isDonorInstance || (donorLevel !== 'free');
 }
