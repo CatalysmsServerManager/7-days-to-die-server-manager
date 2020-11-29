@@ -53,8 +53,6 @@ const LOG_LINES = {
 
 describe('LoggingObject', function () {
   let loggingObject;
-  let originalLastLogLine;
-  let originalEmptyResponse;
   beforeEach(() => {
     loggingObject = new LoggingObject(sails.testServer);
   });
@@ -69,10 +67,24 @@ describe('LoggingObject', function () {
         server: { id: -1 }
       };
       const res = await loggingObject.handleCompletedJob(job, JSON.stringify(result));
-      expect(loggingObject.lastLogLine).to.equal(originalLastLogLine);
-      expect(loggingObject.emptyResponses).to.equal(originalEmptyResponse);
       // Function returns undefined when nothing happened
       expect(res).to.be.equal(undefined);
+    });
+
+    it('sets a server inactive when worker has signalled this', async () => {
+      const inactiveSpy = sandbox.stub(sails.helpers.meta, 'setServerInactive');
+      const job = {};
+      const result = {
+        server: { id: sails.testServer.id },
+        setInactive: false,
+        logs: []
+      };
+      await loggingObject.handleCompletedJob(job, JSON.stringify(result));
+      expect(inactiveSpy).to.not.have.been.calledOnce;
+      result.setInactive = true;
+      await loggingObject.handleCompletedJob(job, JSON.stringify(result));
+      expect(inactiveSpy).to.have.been.calledOnceWith(sails.testServer.id);
+
     });
 
 

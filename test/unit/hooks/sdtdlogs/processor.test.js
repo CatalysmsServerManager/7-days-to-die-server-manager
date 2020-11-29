@@ -95,8 +95,42 @@ describe('Worker processor logs', () => {
     expect(await sails.helpers.redis.get(`sdtdserver:${sails.testServer.id}:sdtdLogs:lastSuccess`)).to.equal(1588296005000);
   });
 
-  it('Sets a server slowmode when it fails a lot', async () => { });
-  it('Sets a server inactive when it hasnt responded in 3 days', async () => { });
+  it('Sets a server slowmode when it fails a lot', async () => {
+    const job = { data: { serverId: sails.testServer.id } };
+
+    sails.helpers.sdtdApi.getLog.rejects(new Error('Oh no bad stuff'));
+    sails.helpers.sdtdApi.getWebUIUpdates.rejects(new Error('Oh no bad stuff'));
+
+    let config = await SdtdConfig.findOne({ server: sails.testServer.id });
+    expect(config.slowMode).to.be.equal(false);
+
+    // Run it 100 times with failing server
+    for (let i = 0; i < 101; i++) {
+      await processor(job);
+    }
+
+    config = await SdtdConfig.findOne({ server: sails.testServer.id });
+    expect(config.slowMode).to.be.equal(true);
+
+  });
+  it('Sets a server inactive when it hasnt responded in 3 days', async () => {
+    // Last active 4 days ago
+    await sails.helpers.redis.set(
+      `sdtdserver:${sails.testServer.id}:sdtdLogs:lastSuccess`,
+      Date.now() - (1000 * 60 * 60 * 24 * 4)
+    );
+
+    const job = { data: { serverId: sails.testServer.id } };
+
+    sails.helpers.sdtdApi.getLog.rejects(new Error('Oh no bad stuff'));
+    sails.helpers.sdtdApi.getWebUIUpdates.rejects(new Error('Oh no bad stuff'));
+
+    await SdtdConfig.update({ server: sails.testServer.id }, { slowMode: true });
+
+    const res = await processor(job);
+    expect(res).to.have.property('setInactive');
+    expect(res.setInactive).to.be.equal(true);
+  });
 
 
 });
