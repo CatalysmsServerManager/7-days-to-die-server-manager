@@ -1,4 +1,5 @@
 const enrichData = require('./enrichEventData');
+const Sentry = require('@sentry/node');
 
 module.exports = async (job) => {
   sails.log.debug('[Worker] Got a `hooks` job', job.data);
@@ -7,6 +8,15 @@ module.exports = async (job) => {
 
 
 async function handle({ data: eventData, type: eventType, server }) {
+  const eventData = data.data;
+  const eventType = data.type;
+
+  if (!eventData.server) {
+    sails.log.warn('Invalid data passed to hooks processor', eventData);
+    Sentry.captureMessage('Invalid data passed to hooks processor', { extra: eventData });
+    return;
+  }
+
   // First we handle any 'logLine' events.
   if (eventType === 'logLine') {
     const serverLogLineHooks = await CustomHook.find({
