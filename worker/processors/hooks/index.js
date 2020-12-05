@@ -8,9 +8,6 @@ module.exports = async (job) => {
 
 
 async function handle({ data: eventData, type: eventType, server }) {
-  const eventData = data.data;
-  const eventType = data.type;
-
   if (!eventData.server) {
     sails.log.warn('Invalid data passed to hooks processor', eventData);
     Sentry.captureMessage('Invalid data passed to hooks processor', { extra: eventData });
