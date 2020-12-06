@@ -40,7 +40,7 @@ services:
     env_file: .env
     healthcheck:
       disable: true
-    entrypoint: ["npx", "run-s", "wait-for:db", "db:migrate"]
+    entrypoint: ["sh", "-c", "npm run wait-for:db && npm run db:migrate"]
 
   cache:
     image: redis
