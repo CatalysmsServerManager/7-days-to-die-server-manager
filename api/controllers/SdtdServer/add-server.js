@@ -191,6 +191,7 @@ module.exports = {
       }
 
       await sails.hooks.sdtdlogs.start(addedServer.id);
+      await sails.hooks.sdtdlogs.createLogObject(addedServer.id);
 
       return exits.success(errorResponse);
     } else {
