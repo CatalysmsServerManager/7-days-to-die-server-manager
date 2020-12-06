@@ -1,18 +1,19 @@
 const handleLogLine = require('./handleLogLine');
 const LastLogLine = require('./redisVariables/lastLogLine');
 
+
 module.exports = async function (job) {
   const resultLogs = [];
   let lastLogLine = await LastLogLine.get(job.data.server.id);
 
   // If latest log line is not found, get it from the server
   if (!lastLogLine) {
-    const webUIUpdate = await sails.helpers.sdtdApi.getWebUIUpdates(SdtdServer.getAPIConfig(job.data.server));
+    const webUIUpdate = await sails.helpers.sdtdApi.getWebUIUpdates(SdtdServer.getAPIConfig(job.data.server), null, { timeout: 3000 });
     lastLogLine = parseInt(webUIUpdate.newlogs) + 1;
   }
 
   // Get new logs from the server
-  const newLogs = await sails.helpers.sdtdApi.getLog(SdtdServer.getAPIConfig(job.data.server), lastLogLine, sails.config.custom.logCount);
+  const newLogs = await sails.helpers.sdtdApi.getLog(SdtdServer.getAPIConfig(job.data.server), lastLogLine, sails.config.custom.logCount, { timeout: 3000 });
 
   // Adjust latest log line based on new logs we got
   lastLogLine = lastLogLine + newLogs.entries.length;

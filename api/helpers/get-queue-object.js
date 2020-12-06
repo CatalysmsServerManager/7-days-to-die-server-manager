@@ -35,7 +35,9 @@ module.exports = {
           defaultJobOptions: {
             removeOnComplete: 1000,
             removeOnFail: 1000,
-            timeout: 3000
+            // This forces a job to fail when it takes too long
+            // This is a fallback, jobs should handle timeouts gracefully themselves
+            timeout: 15000
           }
         }
       );
