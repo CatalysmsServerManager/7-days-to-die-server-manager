@@ -39,7 +39,7 @@ class LoggingObject extends EventEmitter {
     }
 
     if (result.logs.length) {
-      sails.log.debug(`Got ${result.length} logs for server ${this.server.id}`);
+      sails.log.debug(`Got ${result.logs.length} logs for server ${this.server.id}`);
     }
 
     for (const log of result.logs) {
