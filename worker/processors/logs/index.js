@@ -6,7 +6,6 @@ const FailedCounter = require('./redisVariables/failedCounter');
 
 async function waitRandomMs(min = 1, max = 100) {
   const random = Math.random() * (max - min) + min;
-  console.log(`Waiting ${random} ms`);
   return new Promise((resolve) => {
     setInterval(resolve, random);
   });
