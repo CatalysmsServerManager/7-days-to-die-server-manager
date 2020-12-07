@@ -27,15 +27,11 @@ module.exports = function sdtdLogs(sails) {
         sails.log.info('Initializing custom hook (`sdtdLogs`)');
         queue = await sails.helpers.getQueueObject('logs');
         try {
-          let enabledServers = await SdtdConfig.find();
+          let enabledServers = await SdtdConfig.find({ inactive: false });
           const promises = [];
           for (let config of enabledServers) {
-            if (!config.inactive) {
-              // Only add the repeated job if the server is not inactive
-              promises.push(this.start(config.server));
-            }
-            // Always create the emitter because other hooks depend on it existing
-            promises.push(this.createLogObject(config.server));
+            // Only add the repeated job if the server is not inactive
+            promises.push(this.start(config.server));
           }
 
           try {
@@ -63,6 +59,10 @@ module.exports = function sdtdLogs(sails) {
 
     start: async function (serverID) {
       serverID = String(serverID);
+
+      if (!loggingInfoMap.has(serverID)) {
+        this.createLogObject(serverID);
+      }
 
       const config = await SdtdConfig.findOne({ server: serverID });
 
