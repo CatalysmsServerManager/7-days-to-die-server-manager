@@ -5,8 +5,9 @@ const processor = require('../../../../worker/processors/logs');
 const { expect } = require('chai');
 
 describe('Worker processor logs', () => {
-
+  let queue;
   beforeEach(async function () {
+    queue = await sails.helpers.getQueueObject('logs');
     sails.helpers.sdtdApi.getWebUIUpdates = sandbox.stub().returns({ newlogs: 2 });
     sails.helpers.sdtdApi.getLog = sandbox.stub().returns({
       entries: [
@@ -93,6 +94,8 @@ describe('Worker processor logs', () => {
   });
 
   it('Sets a server slowmode when it fails a lot', async () => {
+    await sails.helpers.redis.set(
+      `sdtdserver:${sails.testServer.id}:sdtdLogs:lastSuccess`, Date.now());
     const job = { data: { serverId: sails.testServer.id } };
 
     sails.helpers.sdtdApi.getLog.rejects(new Error('Oh no bad stuff'));
@@ -100,6 +103,13 @@ describe('Worker processor logs', () => {
 
     let config = await SdtdConfig.findOne({ server: sails.testServer.id });
     expect(config.slowMode).to.be.equal(false);
+
+    // Make sure the server is currently in 'active mode' by starting the hook
+    await sails.hooks.sdtdlogs.start(sails.testServer.id);
+    // And assert its correct
+    let jobs = await queue.getRepeatableJobs();
+    expect(jobs.length).to.be.equal(1);
+    expect(jobs[0].every).to.be.equal(sails.config.custom.logCheckInterval);
 
     // Run it 100 times with failing server
     for (let i = 0; i < 101; i++) {
@@ -109,6 +119,9 @@ describe('Worker processor logs', () => {
     config = await SdtdConfig.findOne({ server: sails.testServer.id });
     expect(config.slowMode).to.be.equal(true);
 
+    jobs = await queue.getRepeatableJobs();
+    expect(jobs.length).to.be.equal(1);
+    expect(jobs[0].every).to.be.equal(sails.config.custom.logCheckIntervalSlowMode);
   });
   it('Sets a server inactive when it hasnt responded in 3 days', async () => {
     // Last active 4 days ago
@@ -116,6 +129,11 @@ describe('Worker processor logs', () => {
       `sdtdserver:${sails.testServer.id}:sdtdLogs:lastSuccess`,
       Date.now() - (1000 * 60 * 60 * 24 * 4)
     );
+
+    // Check if there are no current jobs in the queue
+    // There should not be because the hook is not actually running during tests
+    let jobs = await queue.getRepeatableJobs();
+    expect(jobs.length).to.be.equal(0);
 
     const job = { data: { serverId: sails.testServer.id } };
 
@@ -127,6 +145,9 @@ describe('Worker processor logs', () => {
     const res = await processor(job);
     expect(res).to.have.property('setInactive');
     expect(res.setInactive).to.be.equal(true);
+
+    jobs = await queue.getRepeatableJobs();
+    expect(jobs.length).to.be.equal(0);
   });
 
 

@@ -4,6 +4,12 @@ const LastLogLine = require('./redisVariables/lastLogLine');
 const EmptyResponses = require('./redisVariables/emptyResponses');
 const FailedCounter = require('./redisVariables/failedCounter');
 
+async function waitRandomMs(min = 1, max = 100) {
+  const random = Math.random() * (max - min) + min;
+  return new Promise((resolve) => {
+    setInterval(resolve, random);
+  });
+}
 
 async function failedHandler(job, e) {
   // Error getting logs from the server, likely a config error by the user
@@ -58,6 +64,15 @@ async function failedHandler(job, e) {
 }
 
 module.exports = async (job) => {
+  /**
+   * All servers run jobs in the same interval
+   * This means that job execution (and CPU usage) get really spikey
+   * To mitigate that, we add a small wait time to each job
+   * Which will over time cause enough entropy to cause jobs to be spread out
+   */
+  await waitRandomMs();
+
+
   sails.log.debug('[Worker] Got a `logs` job', job.data);
   job.data.server = await SdtdServer.findOne(job.data.serverId);
   job.data.server.config = await SdtdConfig.findOne({ server: job.data.serverId });
