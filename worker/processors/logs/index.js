@@ -70,7 +70,7 @@ module.exports = async (job) => {
    * To mitigate that, we add a small wait time to each job
    * Which will over time cause enough entropy to cause jobs to be spread out
    */
-  waitRandomMs();
+  await waitRandomMs();
 
 
   sails.log.debug('[Worker] Got a `logs` job', job.data);
