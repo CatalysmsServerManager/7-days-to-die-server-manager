@@ -25,7 +25,8 @@ module.exports = {
 
     notLoggedIn: {
       description: '',
-      responseType: 'badRequest',
+      responseType: 'view',
+      viewTemplatePath: 'sdtdServer/economy/shop-logout',
       statusCode: 400
     }
 
@@ -57,12 +58,14 @@ module.exports = {
       }
 
       if (!player) {
-        return exits.notLoggedIn('Not a valid player profile. Make sure you have logged in to this server. You should also try logging out and back in to CSMM. If you think this message is a mistake, please report this issue.');
+        return exits.notLoggedIn({
+          server: server,
+        });
       }
 
       player.role = await sails.helpers.sdtd.getPlayerRole(player.id);
 
-      let unclaimedItems = await PlayerClaimItem.find({player: player.id, claimed: false});
+      let unclaimedItems = await PlayerClaimItem.find({ player: player.id, claimed: false });
 
       let isAdmin = false;
 
