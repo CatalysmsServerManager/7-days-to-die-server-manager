@@ -1,0 +1,28 @@
+<div class="row">
+  <h1>Shop - <%= server.name %></h1>
+</div>
+
+<div>
+  <h2>
+    We are having trouble matching your game account in our system. Logging you
+    out of CSMM, please try accessing this shop again.
+  </h2>
+
+  <p>Logging you out in <span id="countdown">5</span> seconds</p>
+</div>
+
+<script>
+  $(document).ready(function () {
+    let countdown = 5;
+
+    setInterval(() => {
+      if (countdown <= 0) {
+        window.location.replace("/auth/logout");
+      }
+
+      countdown--;
+
+      $("#countdown").text(countdown);
+    }, 1000);
+  });
+</script>
