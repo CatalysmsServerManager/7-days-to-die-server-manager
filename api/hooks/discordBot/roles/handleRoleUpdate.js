@@ -1,8 +1,8 @@
 const shouldSetRole = require('../../../helpers/discord/set-role-from-discord').shouldSetRole;
 
 async function handleRoleUpdate(oldMember, newMember) {
-  let oldRoles = oldMember.roles.array();
-  let newRoles = newMember.roles.array();
+  let oldRoles = oldMember.roles.cache.array();
+  let newRoles = newMember.roles.cache.array();
 
   let deletedRole = _.difference(oldRoles, newRoles);
   let addedRole = _.difference(newRoles, oldRoles);
@@ -72,7 +72,7 @@ async function addCSMMRole(member) {
 
   for (const player of players) {
 
-    let memberRoles = member.roles.array();
+    let memberRoles = member.roles.cache.array();
 
     let currentPlayerRole = player.role;
 

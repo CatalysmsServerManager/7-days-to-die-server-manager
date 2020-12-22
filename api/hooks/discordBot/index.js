@@ -85,7 +85,6 @@ module.exports = function discordBot(sails) {
         });
 
         client.on('guildMemberUpdate', (oldMember, newMember) => {
-
           try {
             handleRoleUpdate(oldMember, newMember);
           } catch (error) {
