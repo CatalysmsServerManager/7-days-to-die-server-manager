@@ -9,7 +9,9 @@ const mockRoleChange = () => {
         tag: 'testPlayer'
       },
       roles: {
-        array: () => []
+        cache: {
+          array: () => []
+        }
       },
       guild: {
         id: 'testDiscordGuild'
@@ -20,7 +22,7 @@ const mockRoleChange = () => {
   const oldMember = getMember();
   const newMember = getMember();
 
-  newMember.roles.array = () => [{ name: 'addedRole', id: 'testDiscordRole' }];
+  newMember.roles.cache.array = () => [{ name: 'addedRole', id: 'testDiscordRole' }];
 
   return [
     oldMember,

@@ -98,14 +98,14 @@ module.exports = {
 
           // Attempt to sync player roles to Discord roles
           // No need to block the player while we are updating his roles
-          try {
-            const players = await Player.find({ where: { steamId: updatedUsers[0].steamId } });
-            for (const player of players) {
+          const players = await Player.find({ where: { steamId: updatedUsers[0].steamId } });
+          for (const player of players) {
+            try {
               await sails.helpers.discord.setRoleFromDiscord(player.id);
+            } catch (e) {
+              // Ok to just let this fail
+              sails.log.error(e);
             }
-          } catch (e) {
-            // Ok to just let this fail
-            sails.log.error(e);
           }
         } catch (error) {
           sails.log.error(`AuthController:discordReturn - Error updating user profile ${error}`);
