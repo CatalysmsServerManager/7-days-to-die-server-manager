@@ -98,11 +98,23 @@ function checkLogLine(logLine, hook) {
   let logLineMatchesSearch = true;
 
   if (!_.isEmpty(hook.searchString)) {
+    if (!hook.caseSensitive) {
+      logLine = logLine.toLowerCase();
+      hook.searchString = hook.searchString.toLowerCase();
+    }
+
     logLineMatchesSearch = logLine.includes(hook.searchString);
   }
 
   if (!_.isEmpty(hook.regex)) {
-    logLineMatchesSearch = (new RegExp(hook.regex)).test(logLine);
+    let regex;
+    if (!hook.caseSensitive) {
+      regex = new RegExp(hook.regex, 'i');
+    } else {
+      regex = new RegExp(hook.regex);
+    }
+
+    logLineMatchesSearch = regex.test(logLine);
   }
 
   return logLineMatchesSearch;

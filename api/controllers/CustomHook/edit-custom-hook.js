@@ -43,6 +43,10 @@ module.exports = {
       defaultsTo: 0
     },
 
+    caseSensitive: {
+      type: 'boolean',
+      defaultsTo: false
+    }
 
   },
 
@@ -74,6 +78,7 @@ module.exports = {
       searchString: inputs.searchString,
       regex: inputs.regex,
       cooldown: inputs.cooldown,
+      caseSensitive: inputs.caseSensitive,
     }).fetch();
     return exits.success();
 

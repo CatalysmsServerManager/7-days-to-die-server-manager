@@ -89,6 +89,29 @@ describe('Custom hooks', () => {
       await handler(event(eventType, 'some log line'));
       expect(this.mock).to.have.been.calledWith(sinon.match.any, [`say "${eventType}"`], sinon.match.any);
     });
+    it(`Fires when search string matches ${eventType} with no caseSensitive`, async () => {
+      await CustomHook.create({
+        server: sails.testServer.id,
+        commandsToExecute: `say "${eventType}"`,
+        event: eventType,
+        searchString: 'sOMe other LOg line',
+        caseSensitive: false
+      });
+
+      await handler(event(eventType, 'some Log LIne'));
+      expect(this.mock).to.not.have.been.calledOnceWith(sinon.match.any, [`say "${eventType}"`], sinon.match.any);;
+
+      await CustomHook.create({
+        server: sails.testServer.id,
+        commandsToExecute: `say "${eventType}"`,
+        event: eventType,
+        searchString: 'sOmE lOg lINe',
+        caseSensitive: false
+      });
+
+      await handler(event(eventType, 'Some loG line'));
+      expect(this.mock).to.have.been.calledWith(sinon.match.any, [`say "${eventType}"`], sinon.match.any);
+    });
     it(`Fires when regex matches ${eventType}`, async () => {
       await CustomHook.create({
         server: sails.testServer.id,
@@ -98,7 +121,7 @@ describe('Custom hooks', () => {
       });
 
       await handler(event(eventType, 'some log line'));
-      expect(this.mock).to.not.have.been.calledOnceWith(sinon.match.any, [`say "${eventType}"`], sinon.match.any);;
+      expect(this.mock).to.not.have.been.calledOnceWith(sinon.match.any, [`say "${eventType}"`], sinon.match.any);
 
       await CustomHook.create({
         server: sails.testServer.id,
@@ -110,6 +133,31 @@ describe('Custom hooks', () => {
       await handler(event(eventType, 'some log line'));
       expect(this.mock).to.have.been.calledWith(sinon.match.any, [`say "${eventType}"`], sinon.match.any);
     });
+
+    it(`Fires when regex matches ${eventType} with no caseSensitive`, async () => {
+      await CustomHook.create({
+        server: sails.testServer.id,
+        commandsToExecute: `say "${eventType}"`,
+        event: eventType,
+        regex: '(sOmE oThEr lOg lINe)',
+        caseSensitive: false
+      });
+
+      await handler(event(eventType, 'some log line'));
+      expect(this.mock).to.not.have.been.calledOnceWith(sinon.match.any, [`say "${eventType}"`], sinon.match.any);
+
+      await CustomHook.create({
+        server: sails.testServer.id,
+        commandsToExecute: `say "${eventType}"`,
+        event: eventType,
+        regex: '(sOmE lOg lINe)',
+        caseSensitive: false
+      });
+
+      await handler(event(eventType, 'SoMe log line'));
+      expect(this.mock).to.have.been.calledWith(sinon.match.any, [`say "${eventType}"`], sinon.match.any);
+    });
+
     it(`Handles cooldowns ${eventType}`, async () => {
 
       await CustomHook.create({
