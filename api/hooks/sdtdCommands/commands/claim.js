@@ -1,12 +1,10 @@
-let SdtdCommand = require('../command.js');
-const SdtdApi = require('7daystodie-api-wrapper');
-
+const SdtdCommand = require('../command.js');
 class Claim extends SdtdCommand {
   constructor(serverId) {
     super(serverId, {
       name: 'claim',
       description: 'Claim items you have bought in the shop',
-      extendedDescription: 'This command will drop the items at your feet. Best to do this in a safe location! You can claim a maximum of 10 items at a time. If you provide the list argument you will instead see a list of items you can claim.',
+      extendedDescription: 'This command will drop the items at your feet. Best to do this in a safe location! If you provide the list argument you will instead see a list of items you can claim. If you pass a number as argument, you will claim that many items',
       aliases: ['claimitems'],
     });
     this.serverId = serverId;
@@ -24,31 +22,28 @@ class Claim extends SdtdCommand {
 
     if (args[0] === 'list') {
 
-      chatMessage.reply('claimList', {
+      await chatMessage.reply('claimList', {
         totalItems: itemsToClaim.length
       });
-      itemsToClaim.forEach(item => {
-        chatMessage.reply(`${item.amount}x ${item.name} - Quality: ${item.quality}`);
-      });
 
+      for (const item of itemsToClaim) {
+        await chatMessage.reply(`${item.amount}x ${item.name} - Quality: ${item.quality}`);
+      }
       return;
     };
+
     const cpmVersion = await sails.helpers.sdtd.checkCpmVersion(this.serverId);
 
     if (itemsToClaim.length === 0) {
       return chatMessage.reply('claimNoItems');
     }
 
-    if (itemsToClaim.length > 10) {
-      chatMessage.reply('claimFullQueue', {
-        totalItems: itemsToClaim.length
-      });
-      itemsToClaim = itemsToClaim.slice(0, 10);
-    }
+    const amountToClaim = isNaN(parseInt(args[0], 10)) ? 10 : parseInt(args[0], 10);
+
+    itemsToClaim = itemsToClaim.slice(0, amountToClaim);
 
 
-    itemsToClaim.forEach(async item => {
-
+    for (const item of itemsToClaim) {
       let cmdToExec;
 
       if (cpmVersion >= 6.4) {
@@ -57,7 +52,7 @@ class Claim extends SdtdCommand {
         cmdToExec = `give ${player.entityId} "${item.name}" ${item.amount} ${item.quality ? item.quality : ''}`;
       }
 
-      let response = await SdtdApi.executeConsoleCommand({
+      const response = await sails.helpers.sdtdApi.executeConsoleCommand({
         ip: server.ip,
         port: server.webPort,
         adminUser: server.authName,
@@ -69,7 +64,7 @@ class Claim extends SdtdCommand {
         return chatMessage.reply('error', { error: 'Error while executing give command' });
       }
 
-      chatMessage.reply('claimItemGiven', {
+      await chatMessage.reply('claimItemGiven', {
         item: item
       });
       await PlayerClaimItem.update({
@@ -77,7 +72,7 @@ class Claim extends SdtdCommand {
       }, {
         claimed: true
       });
-    });
+    }
   }
 }
 
