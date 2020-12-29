@@ -25,6 +25,11 @@ module.exports = {
       custom: val => safeRegex(val)
     },
 
+    caseSensitive: {
+      type: 'boolean',
+      defaultsTo: true
+    },
+
     cooldown: {
       type: 'number',
       min: 0,

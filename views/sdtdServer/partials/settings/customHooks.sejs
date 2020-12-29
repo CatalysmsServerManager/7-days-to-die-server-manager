@@ -1,8 +1,13 @@
 <div>
   <div class="row">
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary btn" data-toggle="modal" data-target="#hooks-new-modal"
-      style="margin: 1%">
+    <button
+      type="button"
+      class="btn btn-primary btn"
+      data-toggle="modal"
+      data-target="#hooks-new-modal"
+      style="margin: 1%"
+    >
       Add new hook
     </button>
   </div>
@@ -16,34 +21,47 @@
         <th>Cooldown</th>
         <th>Edit</th>
         <th>Delete</th>
-
       </tr>
     </thead>
-    <tbody>
-
-    </tbody>
+    <tbody></tbody>
   </table>
 
-
   <!-- Add hook Modal -->
-  <div class="modal fade" id="hooks-new-modal" tabindex="-1" role="dialog" aria-labelledby="hooks-new-modal"
-    aria-hidden="true">
+  <div
+    class="modal fade"
+    id="hooks-new-modal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="hooks-new-modal"
+    aria-hidden="true"
+  >
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Add new hook</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
           <div class="form-group">
-            <label for="hooks-new-event">What event will trigger this hook</label>
-            <select class="form-control" name="hooks-new-event" id="hooks-new-event">
-              <option value="playerConnected"> Player connected </option>
+            <label for="hooks-new-event"
+              >What event will trigger this hook</label
+            >
+            <select
+              class="form-control"
+              name="hooks-new-event"
+              id="hooks-new-event"
+            >
+              <option value="playerConnected">Player connected</option>
               <option value="playerDisconnected">Player disconnected</option>
               <option value="chatMessage">Chat message</option>
-              <option value="playerDeath"> Player death</option>
+              <option value="playerDeath">Player death</option>
               <option value="playerJoined">Player first time join</option>
               <option value="playerLevel">Level up</option>
               <option value="zombieKilled">Player kills zombie</option>
@@ -52,169 +70,326 @@
               <option value="playerSuicide">Player suicide</option>
               <option value="logLine">Log line</option>
             </select>
-            <small id="hooks-new-event-help" class="form-text text-muted">Which event will trigger this hook.</small>
+            <small id="hooks-new-event-help" class="form-text text-muted"
+              >Which event will trigger this hook.</small
+            >
           </div>
 
           <div class="form-group">
             <label for="hooks-new-commands">Commands</label>
-            <textarea class="form-control" name="hooks-new-commands" id="hooks-new-commands"
-              aria-describedby="hooks-new-commands-help" placeholder="" rows="10"></textarea>
-            <small id="hooks-new-commands-help" class="form-text text-muted">Which commands to execute when this hook
-              is triggered.</small>
+            <textarea
+              class="form-control"
+              name="hooks-new-commands"
+              id="hooks-new-commands"
+              aria-describedby="hooks-new-commands-help"
+              placeholder=""
+              rows="10"
+            ></textarea>
+            <small id="hooks-new-commands-help" class="form-text text-muted"
+              >Which commands to execute when this hook is triggered.</small
+            >
           </div>
 
           <label for="hooks-new-cooldown">Cooldown</label>
           <div class="input-group mb-3">
-            <input type="text" class="form-control" name="hooks-new-cooldown" id="hooks-new-cooldown"
-              aria-describedby="hooks-new-cooldown-help" value="0">
-            <select class="form-control" name="hooks-new-cooldown-unit" id="hooks-new-cooldown-unit">
+            <input
+              type="text"
+              class="form-control"
+              name="hooks-new-cooldown"
+              id="hooks-new-cooldown"
+              aria-describedby="hooks-new-cooldown-help"
+              value="0"
+            />
+            <select
+              class="form-control"
+              name="hooks-new-cooldown-unit"
+              id="hooks-new-cooldown-unit"
+            >
               <option value="ms">Ms</option>
               <option value="seconds">Seconds</option>
               <option value="minutes">Minutes</option>
               <option value="hours">Hours</option>
               <option value="days">Days</option>
             </select>
-            <small id="hooks-new-cooldown-help" class="form-text text-muted"> When a hook is fired, it can only be
-              fired again after the cooldown has ended. </small>
+            <small id="hooks-new-cooldown-help" class="form-text text-muted">
+              When a hook is fired, it can only be fired again after the
+              cooldown has ended.
+            </small>
           </div>
 
           <div class="hooks-logLine-settings">
-            <hr>
+            <hr />
 
             <h6>String filtering</h6>
 
             <p>
-              In order to filter hooks, you can use a search string or a regex. This is useful if you want a hook to
-              fire for certain chat messages but not for all. Note that for the 'logLine' event, you
+              In order to filter hooks, you can use a search string or a regex.
+              This is useful if you want a hook to fire for certain chat
+              messages but not for all. Note that for the 'logLine' event, you
               <strong>must</strong>
               provide either a search string or a regex.
             </p>
 
+            <div class="form-check">
+              <label class="form-check-label">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  name="hooks-new-caseSensitive"
+                  id="hooks-new-caseSensitive"
+                  value="true"
+                  checked
+                />
+                Case sensitive
+              </label>
+            </div>
 
             <div class="form-group">
               <label for="hooks-new-searchString">Search string</label>
-              <input type="text" class="form-control" name="hooks-new-searchString" id="hooks-new-searchString"
-                aria-describedby="hooks-new-searchString-help" placeholder="">
-              <small id="hooks-new-searchString-help" class="form-text text-muted">The string to search for in a log
-                line
-                that will trigger this hook.</small>
+              <input
+                type="text"
+                class="form-control"
+                name="hooks-new-searchString"
+                id="hooks-new-searchString"
+                aria-describedby="hooks-new-searchString-help"
+                placeholder=""
+              />
+              <small
+                id="hooks-new-searchString-help"
+                class="form-text text-muted"
+                >The string to search for in a log line that will trigger this
+                hook.</small
+              >
             </div>
 
             <div class="form-group">
               <label for="hooks-new-regex">Regex</label>
-              <input type="text" class="form-control" name="hooks-new-regex" id="hooks-new-regex"
-                aria-describedby="hooks-new-regex-help" placeholder="">
-              <small id="hooks-new-regex-help" class="form-text text-muted">Advanced! a <a
-                  href="https://en.wikipedia.org/wiki/Regular_expression" target="_blank">regex</a> can also be used to
-                test a log line for a match. </small>
+              <input
+                type="text"
+                class="form-control"
+                name="hooks-new-regex"
+                id="hooks-new-regex"
+                aria-describedby="hooks-new-regex-help"
+                placeholder=""
+              />
+              <small id="hooks-new-regex-help" class="form-text text-muted"
+                >Advanced! a
+                <a
+                  href="https://en.wikipedia.org/wiki/Regular_expression"
+                  target="_blank"
+                  >regex</a
+                >
+                can also be used to test a log line for a match.
+              </small>
             </div>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" id="hooks-new-submit" class="btn btn-primary">Save</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Close
+          </button>
+          <button type="button" id="hooks-new-submit" class="btn btn-primary">
+            Save
+          </button>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Edit hook Modal -->
-  <div class="modal fade" id="hooks-edit-modal" tabindex="-1" role="dialog" aria-labelledby="hooks-edit-modal-help"
-    aria-hidden="true">
+  <div
+    class="modal fade"
+    id="hooks-edit-modal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="hooks-edit-modal-help"
+    aria-hidden="true"
+  >
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Edit hook</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
           <div class="form-group">
             <label for="hooks-edit-event">Event</label>
-            <input type="text" class="form-control" name="hooks-edit-event" id="hooks-edit-event"
-              aria-describedby="hooks-edit-event-help" placeholder="">
-            <small id="hooks-edit-event-help" class="form-text text-muted">Which event will trigger this hook.</small>
+            <input
+              type="text"
+              class="form-control"
+              name="hooks-edit-event"
+              id="hooks-edit-event"
+              aria-describedby="hooks-edit-event-help"
+              placeholder=""
+            />
+            <small id="hooks-edit-event-help" class="form-text text-muted"
+              >Which event will trigger this hook.</small
+            >
           </div>
 
           <div class="form-group">
             <label for="hooks-edit-commands">Commands</label>
-            <textarea class="form-control" name="hooks-edit-commands" id="hooks-edit-commands"
-              aria-describedby="hooks-edit-commands-help" placeholder="" rows="10"></textarea>
-            <small id="hooks-edit-commands-help" class="form-text text-muted">Which commands to execute when this
-              hook
-              is triggered.</small>
+            <textarea
+              class="form-control"
+              name="hooks-edit-commands"
+              id="hooks-edit-commands"
+              aria-describedby="hooks-edit-commands-help"
+              placeholder=""
+              rows="10"
+            ></textarea>
+            <small id="hooks-edit-commands-help" class="form-text text-muted"
+              >Which commands to execute when this hook is triggered.</small
+            >
           </div>
 
           <label for="hooks-edit-cooldown">Cooldown</label>
           <div class="input-group mb-3">
-            <input type="text" class="form-control" name="hooks-edit-cooldown" id="hooks-edit-cooldown"
-              aria-describedby="hooks-edit-cooldown-help" value="0">
-            <select class="form-control" name="hooks-edit-cooldown-unit" id="hooks-edit-cooldown-unit">
+            <input
+              type="text"
+              class="form-control"
+              name="hooks-edit-cooldown"
+              id="hooks-edit-cooldown"
+              aria-describedby="hooks-edit-cooldown-help"
+              value="0"
+            />
+            <select
+              class="form-control"
+              name="hooks-edit-cooldown-unit"
+              id="hooks-edit-cooldown-unit"
+            >
               <option value="ms">Ms</option>
               <option value="seconds">Seconds</option>
               <option value="minutes">Minutes</option>
               <option value="hours">Hours</option>
               <option value="days">Days</option>
             </select>
-            <small id="hooks-edit-cooldown-help" class="form-text text-muted"> When a hook is fired, it can only be
-              fired again after the cooldown has ended. </small>
+            <small id="hooks-edit-cooldown-help" class="form-text text-muted">
+              When a hook is fired, it can only be fired again after the
+              cooldown has ended.
+            </small>
           </div>
 
           <div class="hooks-logLine-settings">
-            <hr>
+            <hr />
 
             <h6>String filtering</h6>
 
             <p>
-              In order to filter hooks, you can use a search string or a regex. This is useful if you want a hook to
-              fire for certain chat messages but not for all. Note that for the 'logLine' event, you
+              In order to filter hooks, you can use a search string or a regex.
+              This is useful if you want a hook to fire for certain chat
+              messages but not for all. Note that for the 'logLine' event, you
               <strong>must</strong>
               provide either a search string or a regex.
             </p>
 
+            <div class="form-check">
+              <label class="form-check-label">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  name="hooks-edit-caseSensitive"
+                  id="hooks-edit-caseSensitive"
+                  checked
+                />
+                Case sensitive
+              </label>
+            </div>
+
             <div class="form-group">
               <label for="hooks-edit-searchString">Search string</label>
-              <input type="text" class="form-control" name="hooks-edit-searchString" id="hooks-edit-searchString"
-                aria-describedby="hooks-edit-searchString-help" placeholder="">
-              <small id="hooks-edit-searchString-help" class="form-text text-muted">The string to search for in a log
-                line
-                that will trigger this hook.</small>
+              <input
+                type="text"
+                class="form-control"
+                name="hooks-edit-searchString"
+                id="hooks-edit-searchString"
+                aria-describedby="hooks-edit-searchString-help"
+                placeholder=""
+              />
+              <small
+                id="hooks-edit-searchString-help"
+                class="form-text text-muted"
+                >The string to search for in a log line that will trigger this
+                hook.</small
+              >
             </div>
 
             <div class="form-group">
               <label for="hooks-edit-regex">Regex</label>
-              <input type="text" class="form-control" name="hooks-edit-regex" id="hooks-edit-regex"
-                aria-describedby="hooks-edit-regex-help" placeholder="">
-              <small id="hooks-edit-regex-help" class="form-text text-muted">Advanced! a <a
-                  href="https://en.wikipedia.org/wiki/Regular_expression" target="_blank">regex</a> can also be used to
-                test a log line for a match. </small>
+              <input
+                type="text"
+                class="form-control"
+                name="hooks-edit-regex"
+                id="hooks-edit-regex"
+                aria-describedby="hooks-edit-regex-help"
+                placeholder=""
+              />
+              <small id="hooks-edit-regex-help" class="form-text text-muted"
+                >Advanced! a
+                <a
+                  href="https://en.wikipedia.org/wiki/Regular_expression"
+                  target="_blank"
+                  >regex</a
+                >
+                can also be used to test a log line for a match.
+              </small>
             </div>
           </div>
 
-          <hr>
+          <hr />
 
           <div id="hook-variables">
-
             <h6>Custom variables</h6>
 
             <div class="form-group">
               <label for="hooks-new-variable-name">Name</label>
-              <input type="text" class="form-control" name="hooks-new-variable-name" id="hooks-new-variable-name"
-                aria-describedby="hooks-new-variable-name-help" placeholder="">
-              <small id="hooks-new-variable-name-help" class="form-text text-muted">The name of this variable. You will
-                be able to use this variable in your commands as ${custom.name}</small>
+              <input
+                type="text"
+                class="form-control"
+                name="hooks-new-variable-name"
+                id="hooks-new-variable-name"
+                aria-describedby="hooks-new-variable-name-help"
+                placeholder=""
+              />
+              <small
+                id="hooks-new-variable-name-help"
+                class="form-text text-muted"
+                >The name of this variable. You will be able to use this
+                variable in your commands as ${custom.name}</small
+              >
             </div>
 
             <div class="form-group">
               <label for="hooks-new-variable-regex">Regex</label>
-              <input type="text" class="form-control" name="hooks-new-variable-regex" id="hooks-new-variable-regex"
-                aria-describedby="hooks-new-variable-regex-help" placeholder="">
-              <small id="hooks-new-variable-regex-help" class="form-text text-muted">The regex to be used when selecting
-                a substring from a log line.</small>
+              <input
+                type="text"
+                class="form-control"
+                name="hooks-new-variable-regex"
+                id="hooks-new-variable-regex"
+                aria-describedby="hooks-new-variable-regex-help"
+                placeholder=""
+              />
+              <small
+                id="hooks-new-variable-regex-help"
+                class="form-text text-muted"
+                >The regex to be used when selecting a substring from a log
+                line.</small
+              >
             </div>
 
-            <button type="button" id="save-variable-btn" class="btn btn-primary">Save variable</button>
+            <button
+              type="button"
+              id="save-variable-btn"
+              class="btn btn-primary"
+            >
+              Save variable
+            </button>
 
             <table class="table" id="variables-table">
               <thead>
@@ -226,17 +401,18 @@
               </thead>
               <tbody></tbody>
             </table>
-
           </div>
 
-          <hr>
+          <hr />
 
           <div id="last-result">
-
             <h6>Last result</h6>
 
-            <p>Here you can find the results of the last time this hook fired. If something is not working as you
-              expect, use this table to inspect the commands CSMM ran</p>
+            <p>
+              Here you can find the results of the last time this hook fired. If
+              something is not working as you expect, use this table to inspect
+              the commands CSMM ran
+            </p>
 
             <table class="table" id="last-result-table">
               <thead>
@@ -248,40 +424,54 @@
               </thead>
               <tbody></tbody>
             </table>
-
           </div>
-
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" id="edit-hook-save" class="btn btn-primary">Save</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Close
+          </button>
+          <button type="button" id="edit-hook-save" class="btn btn-primary">
+            Save
+          </button>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Delete hook Modal -->
-  <div class="modal fade" id="hooks-delete-modal" tabindex="-1" role="dialog" aria-labelledby="hooks-delete-modal"
-    aria-hidden="true">
+  <div
+    class="modal fade"
+    id="hooks-delete-modal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="hooks-delete-modal"
+    aria-hidden="true"
+  >
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Are you sure?</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-danger" id="delete-hook-save">Yes</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Close
+          </button>
+          <button type="button" class="btn btn-danger" id="delete-hook-save">
+            Yes
+          </button>
         </div>
       </div>
     </div>
   </div>
-
 </div>
-
-
 
 <script>
   $(document).ready(() => {
@@ -295,127 +485,143 @@
 
     const lastResultTable = $("#last-result-table").DataTable({
       autoWidth: false,
-      dom: 'Bfrtip',
+      dom: "Bfrtip",
       fixedHeader: true,
       responsive: true,
       buttons: [],
-      columns: [{
+      columns: [
+        {
           data: "command",
-        }, {
+        },
+        {
           data: "parameters",
         },
         {
-          data: 'result',
+          data: "result",
         },
-      ]
-    })
+      ],
+    });
 
     const variablesTable = $("#variables-table").DataTable({
       autoWidth: false,
-      dom: 'Bfrtip',
+      dom: "Bfrtip",
       fixedHeader: true,
       responsive: true,
       buttons: [],
-      columns: [{
+      columns: [
+        {
           data: "name",
-        }, {
+        },
+        {
           data: "regex",
         },
         {
           render: function (data, type, row, meta) {
             return `<button type="button" class="btn btn-sm btn-danger delete-variable" data-variableid="${row.id}">Delete</button>`;
-          }
+          },
         },
-      ]
-    })
+      ],
+    });
 
-    const dataTable = $('#hooks-table').DataTable({
+    const dataTable = $("#hooks-table").DataTable({
       autoWidth: false,
-      dom: 'Bfrtip',
+      dom: "Bfrtip",
       fixedHeader: true,
       responsive: true,
       buttons: [],
-      columns: [{
+      columns: [
+        {
           data: "event",
         },
         {
-          data: 'commandsToExecute',
-          width: '50%'
+          data: "commandsToExecute",
+          width: "50%",
         },
         {
           data: "searchString",
-        }, {
+        },
+        {
           data: "regex",
         },
         {
-          data: 'cooldown',
+          data: "cooldown",
           render: function (data, type, row, meta) {
-            let string = `${row.cooldown} ms`
+            let string = `${row.cooldown} ms`;
             // Set the cooldown select to the right unit
             if (!(row.cooldown % daysInMs)) {
-              string = `${row.cooldown / daysInMs} days`
+              string = `${row.cooldown / daysInMs} days`;
             }
 
             if (!(row.cooldown % hoursInMs)) {
-              string = `${row.cooldown / hoursInMs} hours`
+              string = `${row.cooldown / hoursInMs} hours`;
             }
 
             if (!(row.cooldown % minutesInMs)) {
-              string = `${row.cooldown / minutesInMs} minutes`
+              string = `${row.cooldown / minutesInMs} minutes`;
             }
 
             if (!(row.cooldown % secondsInMs)) {
-              string = `${row.cooldown / secondsInMs} seconds`
+              string = `${row.cooldown / secondsInMs} seconds`;
             }
 
             if (row.cooldown === 0) {
-              string = '/'
+              string = "/";
             }
 
             return string;
-          }
+          },
         },
         {
           render: function (data, type, row, meta) {
-            return `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#hooks-edit-modal" data-event="${row.event}" data-commands='${row.commandsToExecute.replace("'", "&apos")}' data-searchstring="${row.searchString}" data-hookid="${row.id}">Edit</button>`;
-          }
+            return `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#hooks-edit-modal" data-event="${
+              row.event
+            }" data-commands='${row.commandsToExecute.replace(
+              "'",
+              "&apos"
+            )}' data-searchstring="${row.searchString}" data-hookid="${
+              row.id
+            }">Edit</button>`;
+          },
         },
         {
           render: function (data, type, row, meta) {
             return `<button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#hooks-delete-modal" data-hookid="${row.id}">Delete</button>`;
-          }
+          },
         },
-      ]
+      ],
     });
 
-    getHooks().then(data => {
-      drawDataTable(data, dataTable);
-    }).catch(error => {
-      console.log(error);
-      showErrorModal(`Error while loading custom hooks - ${error}`);
-    })
+    getHooks()
+      .then((data) => {
+        drawDataTable(data, dataTable);
+      })
+      .catch((error) => {
+        console.log(error);
+        showErrorModal(`Error while loading custom hooks - ${error}`);
+      });
 
     // Create new hook
-    $("#hooks-new-submit").click(e => {
+    $("#hooks-new-submit").click((e) => {
       let event = $("#hooks-new-event").val();
       let commandsToExec = $("#hooks-new-commands").val();
       let searchString = $("#hooks-new-searchString").val();
       let regex = $("#hooks-new-regex").val();
       let cooldown = $("#hooks-new-cooldown").val();
       let cooldownUnit = $("#hooks-new-cooldown-unit").val();
+      let caseSensitive = $("#hooks-new-caseSensitive").is(":checked");
 
       switch (cooldownUnit) {
-        case 'seconds':
-          cooldown = cooldown * secondsInMs
+        case "seconds":
+          cooldown = cooldown * secondsInMs;
           break;
-        case 'minutes':
-          cooldown = cooldown * minutesInMs
+        case "minutes":
+          cooldown = cooldown * minutesInMs;
           break;
-        case 'hours':
-          cooldown = cooldown * hoursInMs
+        case "hours":
+          cooldown = cooldown * hoursInMs;
           break;
-        case 'days':
-          cooldown = cooldown * daysInMs
+        case "days":
+          cooldown = cooldown * daysInMs;
           break;
       }
 
@@ -429,83 +635,89 @@
           searchString: searchString,
           regex: regex,
           cooldown: cooldown,
+          caseSensitive: caseSensitive,
           _csrf: window.SAILS_LOCALS._csrf,
         },
         success: (data, status, xhr) => {
           dataTable.row.add(data);
           dataTable.draw();
-          $('#hooks-new-modal').modal('hide');
+          $("#hooks-new-modal").modal("hide");
         },
         error: function (xhr, status, error) {
           displayAjaxToSupportData(xhr, this);
           showErrorModal(`${error} - ${xhr.responseText}`, xhr);
-        }
-      })
+        },
+      });
     });
 
     // Fill relevant values in the edit hook modal when it is opened
-    $('#hooks-edit-modal').on('show.bs.modal', function (event) {
+    $("#hooks-edit-modal").on("show.bs.modal", function (event) {
       var button = $(event.relatedTarget);
-      activeHookId = button.data('hookid')
-      getHooks(activeHookId).then(data => {
-        var modal = $(this);
-        modal.find('#hooks-edit-event').val(data.event);
-        modal.find('#hooks-edit-commands').val(data.commandsToExecute.replace('&apos', "'"));
-        modal.find('#hooks-edit-searchString').val(data.searchString);
-        modal.find('#hooks-edit-regex').val(data.regex);
-        console.log(data)
-        drawDataTable(data.variables, variablesTable);
-        drawDataTable(data.lastResult, lastResultTable);
+      activeHookId = button.data("hookid");
+      getHooks(activeHookId)
+        .then((data) => {
+          var modal = $(this);
+          modal.find("#hooks-edit-event").val(data.event);
+          modal
+            .find("#hooks-edit-commands")
+            .val(data.commandsToExecute.replace("&apos", "'"));
+          modal.find("#hooks-edit-searchString").val(data.searchString);
+          modal.find("#hooks-edit-regex").val(data.regex);
+          modal
+            .find("#hooks-edit-caseSensitive")
+            .prop("checked", data.caseSensitive);
+          drawDataTable(data.variables, variablesTable);
+          drawDataTable(data.lastResult, lastResultTable);
 
-        // Set the cooldown select to the right unit
-        if (!(data.cooldown % secondsInMs)) {
-          modal.find('#hooks-edit-cooldown').val(data.cooldown / secondsInMs);
-          $("#hooks-edit-cooldown-unit").val("seconds");
-        }
+          // Set the cooldown select to the right unit
+          if (!(data.cooldown % secondsInMs)) {
+            modal.find("#hooks-edit-cooldown").val(data.cooldown / secondsInMs);
+            $("#hooks-edit-cooldown-unit").val("seconds");
+          }
 
-        if (!(data.cooldown % minutesInMs)) {
-          modal.find('#hooks-edit-cooldown').val(data.cooldown / minutesInMs);
-          $("#hooks-edit-cooldown-unit").val("minutes");
-        }
+          if (!(data.cooldown % minutesInMs)) {
+            modal.find("#hooks-edit-cooldown").val(data.cooldown / minutesInMs);
+            $("#hooks-edit-cooldown-unit").val("minutes");
+          }
 
-        if (!(data.cooldown % hoursInMs)) {
-          modal.find('#hooks-edit-cooldown').val(data.cooldown / hoursInMs);
-          $("#hooks-edit-cooldown-unit").val("hours");
-        }
+          if (!(data.cooldown % hoursInMs)) {
+            modal.find("#hooks-edit-cooldown").val(data.cooldown / hoursInMs);
+            $("#hooks-edit-cooldown-unit").val("hours");
+          }
 
-        if (!(data.cooldown % daysInMs)) {
-          modal.find('#hooks-edit-cooldown').val(data.cooldown / daysInMs);
-          $("#hooks-edit-cooldown-unit").val("days");
-        }
+          if (!(data.cooldown % daysInMs)) {
+            modal.find("#hooks-edit-cooldown").val(data.cooldown / daysInMs);
+            $("#hooks-edit-cooldown-unit").val("days");
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    });
 
-
-      }).catch(e => {
-        console.log(e);
-      })
-    })
-
-    $("#edit-hook-save").click(e => {
-      e.preventDefault()
+    $("#edit-hook-save").click((e) => {
+      e.preventDefault();
       let event = $("#hooks-edit-event").val();
       let commandsToExec = $("#hooks-edit-commands").val();
       let searchString = $("#hooks-edit-searchString").val();
       let regex = $("#hooks-edit-regex").val();
       let cooldown = $("#hooks-edit-cooldown").val();
+      let caseSensitive = $("#hooks-edit-caseSensitive").is(":checked");
 
       let cooldownUnit = $("#hooks-edit-cooldown-unit").val();
 
       switch (cooldownUnit) {
-        case 'seconds':
-          cooldown = cooldown * secondsInMs
+        case "seconds":
+          cooldown = cooldown * secondsInMs;
           break;
-        case 'minutes':
-          cooldown = cooldown * minutesInMs
+        case "minutes":
+          cooldown = cooldown * minutesInMs;
           break;
-        case 'hours':
-          cooldown = cooldown * hoursInMs
+        case "hours":
+          cooldown = cooldown * hoursInMs;
           break;
-        case 'days':
-          cooldown = cooldown * daysInMs
+        case "days":
+          cooldown = cooldown * daysInMs;
           break;
       }
 
@@ -521,32 +733,35 @@
           searchString: searchString,
           regex: regex,
           cooldown: cooldown,
+          caseSensitive: caseSensitive,
           _csrf: window.SAILS_LOCALS._csrf,
         },
         success: (data, status, xhr) => {
-          getHooks().then(data => {
-            drawDataTable(data, dataTable);
-          }).catch(error => {
-            console.log(error);
-            showErrorModal(`Error while loading custom hooks - ${error}`);
-          });
-          $('#hooks-edit-modal').modal('hide');
+          getHooks()
+            .then((data) => {
+              drawDataTable(data, dataTable);
+            })
+            .catch((error) => {
+              console.log(error);
+              showErrorModal(`Error while loading custom hooks - ${error}`);
+            });
+          $("#hooks-edit-modal").modal("hide");
         },
         error: function (xhr, status, error) {
           displayAjaxToSupportData(xhr, this);
           showErrorModal(`${error} - ${xhr.responseText}`, xhr);
-        }
-      })
+        },
+      });
     });
 
     // Fill relevant values in the delete hook modal when it is opened
-    $('#hooks-delete-modal').on('show.bs.modal', function (event) {
+    $("#hooks-delete-modal").on("show.bs.modal", function (event) {
       var button = $(event.relatedTarget);
-      activeHookId = button.data('hookid')
+      activeHookId = button.data("hookid");
     });
 
-    $("#delete-hook-save").click(e => {
-      e.preventDefault()
+    $("#delete-hook-save").click((e) => {
+      e.preventDefault();
 
       $.ajax({
         url: "/api/sdtdserver/hook",
@@ -557,22 +772,24 @@
           _csrf: window.SAILS_LOCALS._csrf,
         },
         success: (data, status, xhr) => {
-          getHooks().then(data => {
-            drawDataTable(data, dataTable);
-          }).catch(error => {
-            console.log(error);
-            showErrorModal(`Error while loading custom hooks - ${error}`);
-          });
-          $('#hooks-delete-modal').modal('hide');
+          getHooks()
+            .then((data) => {
+              drawDataTable(data, dataTable);
+            })
+            .catch((error) => {
+              console.log(error);
+              showErrorModal(`Error while loading custom hooks - ${error}`);
+            });
+          $("#hooks-delete-modal").modal("hide");
         },
         error: function (xhr, status, error) {
           displayAjaxToSupportData(xhr, this);
           showErrorModal(`${error} - ${xhr.responseText}`, xhr);
-        }
-      })
+        },
+      });
     });
 
-    $("#save-variable-btn").click(e => {
+    $("#save-variable-btn").click((e) => {
       const regex = $("#hooks-new-variable-regex").val();
       const name = $("#hooks-new-variable-name").val();
 
@@ -595,13 +812,13 @@
         error: function (xhr, status, error) {
           displayAjaxToSupportData(xhr, this);
           showErrorModal(`${error} - ${xhr.responseText}`, xhr);
-        }
+        },
       });
     });
 
-    $("#hooks-edit-modal").on('click', ".delete-variable", function (e) {
+    $("#hooks-edit-modal").on("click", ".delete-variable", function (e) {
       let clickedBtn = $(e.target);
-      let variableId = clickedBtn.data('variableid');
+      let variableId = clickedBtn.data("variableid");
 
       $.ajax({
         url: "/api/sdtdserver/hook/variable",
@@ -612,23 +829,23 @@
           _csrf: window.SAILS_LOCALS._csrf,
         },
         success: (data, status, xhr) => {
-          getHooks().then(data => {
-            let hook = data.filter(d => d.id === activeHookId)[0];
-            drawDataTable(hook.variables, variablesTable);
-          }).catch(error => {
-            console.log(error);
-            showErrorModal(`Error while loading custom hooks - ${error}`);
-          });
+          getHooks()
+            .then((data) => {
+              let hook = data.filter((d) => d.id === activeHookId)[0];
+              drawDataTable(hook.variables, variablesTable);
+            })
+            .catch((error) => {
+              console.log(error);
+              showErrorModal(`Error while loading custom hooks - ${error}`);
+            });
         },
         error: function (xhr, status, error) {
           displayAjaxToSupportData(xhr, this);
           showErrorModal(`${error} - ${xhr.responseText}`, xhr);
-        }
-      })
+        },
+      });
     });
-
   });
-
 
   function getHooks(hookId) {
     return new Promise((resolve, reject) => {
@@ -647,9 +864,9 @@
           displayAjaxToSupportData(xhr, this);
           showErrorModal(`${error} - ${xhr.responseText}`, xhr);
           reject();
-        }
-      })
-    })
+        },
+      });
+    });
   }
 
   function drawDataTable(data, table) {
@@ -660,7 +877,5 @@
       }
     }
     table.draw();
-
   }
-
 </script>
