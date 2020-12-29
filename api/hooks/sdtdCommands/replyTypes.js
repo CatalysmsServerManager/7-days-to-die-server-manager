@@ -64,12 +64,6 @@ module.exports = [{
 },
 {
   command: 'Claim',
-  pretty: 'Claim - More than 10 items in queue',
-  type: 'claimFullQueue',
-  default: 'You have more than 10 items in queue (${totalItems}), only the first 10 will be given.',
-},
-{
-  command: 'Claim',
   pretty: 'Claim - item given',
   type: 'claimItemGiven',
   default: 'Gave ${item.amount}x ${item.name} of quality ${item.quality}.',
