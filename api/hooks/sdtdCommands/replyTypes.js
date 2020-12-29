@@ -317,7 +317,7 @@ module.exports = [{
   command: 'Who',
   pretty: 'Who - Success',
   type: 'whoSuccess',
-  default: '${totalPlayers} players have been in a radius of ${size} blocks around your current location since ${date} ${time}',
+  default: '${totalPlayers} players have been in a radius of ${radius} blocks around your current location since ${date} ${time}',
 },
 {
   command: 'Vote',
