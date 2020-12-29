@@ -40,39 +40,31 @@ module.exports = {
   },
 
   fn: async function (inputs, exits) {
-    try {
-      let playerToGiveTo = await Player.findOne(inputs.playerId);
-      let currentBalance = playerToGiveTo.currency;
+    let playerToGiveTo = await Player.findOne(inputs.playerId);
+    if (inputs.useMultiplier) {
       let playerRole = await sails.helpers.sdtd.getPlayerRole(inputs.playerId);
-
-      if (inputs.useMultiplier) {
-        inputs.amountToGive = (inputs.amountToGive * playerRole.economyGiveMultiplier);
-      }
-
-      let newBalance = currentBalance + inputs.amountToGive;
-
-
-      await Player.update({
-        id: playerToGiveTo.id
-      }, {
-        currency: newBalance
-      });
-      await HistoricalInfo.create({
-        server: playerToGiveTo.server,
-        type: 'economy',
-        message: inputs.message ? inputs.message : `Gave currency to player`,
-        player: inputs.playerId,
-        amount: inputs.amountToGive,
-        economyAction: 'give'
-      });
-
-      await sails.helpers.redis.incr(`server:${playerToGiveTo.server}:economyActionsCompleted`);
-      await sails.helpers.economy.deleteOldData(playerToGiveTo.server);
-
-      return exits.success();
-    } catch (error) {
-      sails.log.error(`HELPER economy:give-to-player - ${error}`);
-      return exits.error(error);
+      inputs.amountToGive = (inputs.amountToGive * playerRole.economyGiveMultiplier);
     }
+
+    // Transactions in sails are weird.
+    // See: https://dev.paygoenergy.co/blog/2019-06-20-sailsjs-transactions-and-exits/
+    await sails
+      .getDatastore()
+      .sendNativeQuery('UPDATE player SET currency=currency+$1 WHERE id=$2', [inputs.amountToGive, playerToGiveTo.id]);
+
+
+    await HistoricalInfo.create({
+      server: playerToGiveTo.server,
+      type: 'economy',
+      message: inputs.message ? inputs.message : `Gave currency to player`,
+      player: inputs.playerId,
+      amount: inputs.amountToGive,
+      economyAction: 'give'
+    });
+
+    await sails.helpers.redis.incr(`server:${playerToGiveTo.server}:economyActionsCompleted`);
+    await sails.helpers.economy.deleteOldData(playerToGiveTo.server);
+
+    return exits.success();
   }
 };
