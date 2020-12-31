@@ -1,4 +1,8 @@
 const SdtdCommand = require('../command.js');
+
+// This prevents a player from spamming the command
+// And effectively duplicating items
+const locks = {};
 class Claim extends SdtdCommand {
   constructor(serverId) {
     super(serverId, {
@@ -42,6 +46,11 @@ class Claim extends SdtdCommand {
 
     itemsToClaim = itemsToClaim.slice(0, amountToClaim);
 
+    if (locks[player.id]) {
+      return chatMessage.reply('claimLock');
+    }
+
+    locks[player.id] = true;
 
     for (const item of itemsToClaim) {
       let cmdToExec;
@@ -73,6 +82,8 @@ class Claim extends SdtdCommand {
         claimed: true
       });
     }
+
+    delete locks[player.id];
   }
 }
 

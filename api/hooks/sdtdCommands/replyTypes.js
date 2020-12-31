@@ -64,6 +64,12 @@ module.exports = [{
 },
 {
   command: 'Claim',
+  pretty: 'Claim - already claiming',
+  type: 'claimLock',
+  default: 'You are already claiming your items, please hold on',
+},
+{
+  command: 'Claim',
   pretty: 'Claim - item given',
   type: 'claimItemGiven',
   default: 'Gave ${item.amount}x ${item.name} of quality ${item.quality}.',
