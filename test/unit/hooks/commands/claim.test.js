@@ -59,5 +59,21 @@ describe('COMMAND claim', () => {
     expect(claimedItems.length).to.be.equal(10);
   });
 
+  it('Handles a player spamming command properly', async () => {
+    let claimedItems = await PlayerClaimItem.find({ claimed: true, player: sails.testPlayer.id });
+    expect(claimedItems.length).to.be.equal(0);
+
+    const promises = [];
+    for (let i = 0; i < 10; i++) {
+      promises.push(command.run(chatMessage, sails.testPlayer, sails.testServer, []));
+    }
+
+    await Promise.all(promises);
+
+    expect(spy).to.have.been.calledWith('claimLock');
+    expect(sails.helpers.sdtdApi.executeConsoleCommand.callCount).to.be.equal(10);
+
+  });
+
 
 });
