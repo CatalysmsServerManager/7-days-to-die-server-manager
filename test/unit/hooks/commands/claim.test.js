@@ -75,5 +75,24 @@ describe('COMMAND claim', () => {
 
   });
 
+  it('Releases the lock after an error giving the items', async () => {
+    let claimedItems = await PlayerClaimItem.find({ claimed: true, player: sails.testPlayer.id });
+    expect(claimedItems.length).to.be.equal(0);
+
+    sails.helpers.sdtdApi.executeConsoleCommand.resolves({ result: 'ERR: fake error' });
+
+    await command.run(chatMessage, sails.testPlayer, sails.testServer, []);
+
+    expect(spy).to.have.been.calledWith('error');
+
+    sails.helpers.sdtdApi.executeConsoleCommand.resolves({ result: 'All good' });
+
+    await command.run(chatMessage, sails.testPlayer, sails.testServer, []);
+    expect(spy).to.not.have.been.calledWith('claimLock');
+    expect(sails.helpers.sdtdApi.executeConsoleCommand.callCount).to.be.equal(11);
+
+
+  });
+
 
 });
