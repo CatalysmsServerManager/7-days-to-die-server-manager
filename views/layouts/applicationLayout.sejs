@@ -198,7 +198,7 @@
 
     <% if(process.env.CSMM_DONOR_ONLY === 'true'){ %>
       <div class="alert alert-warning" role="alert">
-        <strong>(!) Free hosting is being discontinued - join <a href="https://catalysm.net/discord">the Discord</a> for more information</strong>
+        <strong>(!) Free hosting is being discontinued - <a href="https://community.7daystodie.com/topic/5797-csmm-cloud-hosted-server-manager/page/15/?tab=comments#comment-415249">Full post</a> or join <a href="https://catalysm.net/discord">the Discord</a> for more information</strong>
       </div>
     <% } %>
 
