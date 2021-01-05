@@ -5,7 +5,7 @@ class callAdmin extends SdtdCommand {
     super(serverId, {
       name: 'calladmin',
       description: 'Make a support ticket',
-      extendedDescription: 'Creates a support ticket on the website and notifies admins of your call for help',
+      extendedDescription: 'Creates a support ticket on the website and notifies admins of your call for help. Usage: "$calladmin help my bike is stuck"',
       aliases: ['admin', 'admins', 'support']
     });
     this.serverId = serverId;

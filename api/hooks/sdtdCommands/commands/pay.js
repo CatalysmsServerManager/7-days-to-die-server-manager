@@ -5,7 +5,9 @@ class Pay extends SdtdCommand {
     super(serverId, {
       name: 'pay',
       description: 'Send some currency to another player.',
-      extendedDescription: 'Usage: pay <playerName or steamId> amount'
+      extendedDescription: `Transfers currency from your balance to another players balance.
+      You can specify the target player via name or steam ID. If there are multiple players with a similar name, either make the name you type more precise or use the steam ID instead.
+      Usage: "$pay <playerName or steamId> amount"`
     });
     this.serverId = serverId;
   }
