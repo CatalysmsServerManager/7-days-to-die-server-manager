@@ -4,7 +4,7 @@ class Balance extends SdtdCommand {
     super(serverId, {
       name: 'balance',
       description: 'See your current balance',
-      extendedDescription: 'How much money is in your bankaccount!',
+      extendedDescription: `Check how much money is in your bankaccount!`,
       aliases: ['bal', 'wallet']
     });
     this.serverId = serverId;

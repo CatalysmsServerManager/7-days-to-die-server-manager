@@ -8,7 +8,9 @@ class Claim extends SdtdCommand {
     super(serverId, {
       name: 'claim',
       description: 'Claim items you have bought in the shop',
-      extendedDescription: 'This command will drop the items at your feet. Best to do this in a safe location! If you provide the list argument you will instead see a list of items you can claim. If you pass a number as argument, you will claim that many items',
+      extendedDescription: `If you do not have CPM installed, this command will drop the items at your feet. Best to do this in a safe location!
+      If you provide the list argument you will instead see a list of items you can claim. "$claim list"
+      If you pass a number as argument, you will claim that many items, "$claim 5" will claim the first 5 items in your queue`,
       aliases: ['claimitems'],
     });
     this.serverId = serverId;
