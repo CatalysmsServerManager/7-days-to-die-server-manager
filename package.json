@@ -16,7 +16,7 @@
     "concurrently": "^5.3.0",
     "cron-parser": "^2.7.3",
     "cross-env": "^7.0.2",
-    "dd-trace": "^0.28.1",
+    "dd-trace": "^0.29.2",
     "discord.js": "^12.4.1",
     "discord.js-commando": "github:discordjs/Commando",
     "dotenv": "^8.2.0",
