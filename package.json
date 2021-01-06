@@ -57,7 +57,7 @@
     "wait-for:db": "node ./scripts/wait-for-db.js",
     "test": "mocha test ",
     "lint": "eslint --max-warnings 0 .",
-    "dev": "nodemon --exec npm start",
+    "dev": "cross-env NODE_ENV=development nodemon --exec concurrently --kill-others -n 'app,worker' 'npm run start:app' 'npm run start:worker'",
     "debug": "node debug app.js",
     "cover": "nyc npm run test -- --reporter mocha-junit-reporter ",
     "itemIcons:update": "bash ./scripts/itemIconsUpdate.sh",
