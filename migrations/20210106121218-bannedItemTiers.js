@@ -3,7 +3,7 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable(
-      'bannedItemTier',
+      'banneditemtier',
       {
         createdAt: {
           type: Sequelize.DataTypes.BIGINT,
@@ -40,7 +40,7 @@ module.exports = {
     );
 
     await queryInterface.createTable(
-      'bannedItem',
+      'banneditem',
       {
         createdAt: {
           type: Sequelize.DataTypes.BIGINT,
@@ -80,8 +80,8 @@ module.exports = {
     for (const config of configs) {
       const adminRole = await queryInterface.sequelize.query('select * from role where server = :server order by level ASC limit 1', { type: Sequelize.QueryTypes.SELECT, replacements: { server: config.server } })
       const items = JSON.parse(JSON.parse(config.bannedItems));
-      const tier = await queryInterface.bulkInsert('bannedItemTier', [{ role: adminRole[0].id, command: config.bannedItemsCommand, server: config.server }])
-      await queryInterface.bulkInsert('bannedItem', items.map(_ => { return { name: _, tier, server: config.server } }));
+      const tier = await queryInterface.bulkInsert('banneditemtier', [{ role: adminRole[0].id, command: config.bannedItemsCommand, server: config.server }])
+      await queryInterface.bulkInsert('banneditem', items.map(_ => { return { name: _, tier, server: config.server } }));
     }
 
     await queryInterface.removeColumn('sdtdconfig', 'bannedItems')
@@ -89,7 +89,7 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('bannedItem')
-    await queryInterface.dropTable('bannedItemTier')
+    await queryInterface.dropTable('banneditem')
+    await queryInterface.dropTable('banneditemtier')
   }
 };

@@ -3,17 +3,15 @@ module.exports = async function handleItemTrackerUpdate(data) {
   const server = await SdtdServer.findOne(data.server.id).populate('config');
   const { trackingInfo } = data;
   const config = server.config[0] || {};
-  const { bannedItems, bannedItemsEnabled } = config;
+  const { bannedItemsEnabled } = config;
+
+  const bannedItems = await BannedItem.find({ server: server.id }).populate('tier');
 
   if (!bannedItemsEnabled) {
     return 'bannedItems hook is not enabled';
   }
 
-  // config.bannedItems should be an array (cause sails parses it), but we are pretty certain at some point its not, so handle both cases
-  const bannedItemsSet = new Set(Array.isArray(bannedItems) ? bannedItems : sails.helpers.safeJsonParse(bannedItems, [], { serverId: server.id }));
   for (const onlinePlayer of trackingInfo) {
-
-
     try {
 
       if (!onlinePlayer.inventory) {
@@ -25,20 +23,34 @@ module.exports = async function handleItemTrackerUpdate(data) {
         onlinePlayer.inventory = sails.helpers.safeJsonParse(onlinePlayer.inventory, [], { serverId: server.id, playerId: onlinePlayer.name });
       }
 
-      const playerItemsSet = new Set(onlinePlayer.inventory.map(e => e.name));
-      const unionOfSets = intersection(playerItemsSet, bannedItemsSet);
-      if (unionOfSets.size) {
+
+      const unionOfSets = bannedItems.filter(bannedItem => onlinePlayer.inventory.find(inventoryItem => inventoryItem.name.toLowerCase() === bannedItem.name.toLowerCase()));
+      if (unionOfSets.length) {
         const isImmune = await sails.helpers.roles.checkPermission(undefined, server.id, onlinePlayer.player, undefined, 'immuneToBannedItemsList');
 
         if (isImmune.hasPermission) {
           sails.log.debug(`HOOK:bannedItems - banned items detected but player is immune player ${onlinePlayer.player} from server ${onlinePlayer.server}`);
           continue;
         }
-        sails.log.info(
-          `Detected banned item(s) on player ${onlinePlayer.player} from server ${onlinePlayer.server}`
-        );
-        await executePunishment(onlinePlayer.player, server, config);
 
+        for (const bannedItem of unionOfSets) {
+          const bannedItemRole = await Role.findOne(bannedItem.tier.role);
+          const player = await Player.findOne(onlinePlayer.player);
+          let playerRole = null;
+
+          if (player.role) {
+            playerRole = await Role.findOne(player.role);
+          } else {
+            playerRole = await sails.helpers.role.getDefaultRole(server.id);
+          }
+
+          if (bannedItemRole.level < playerRole.level) {
+            sails.log.info(
+              `Detected banned item(s) on player ${onlinePlayer.player} from server ${onlinePlayer.server}`
+            );
+            await executePunishment(onlinePlayer.player, server, bannedItem);
+          }
+        }
       } else {
         sails.log.debug(`HOOK:bannedItems - no banned items detected from player ${onlinePlayer.player} from server ${onlinePlayer.server}`);
       }
@@ -49,24 +61,14 @@ module.exports = async function handleItemTrackerUpdate(data) {
   }
 };
 
-async function executePunishment(playerId, server, config) {
+async function executePunishment(playerId, server, bannedItem) {
   const player = await Player.findOne(playerId);
   sails.log.info(
     `Punishing ${player.name} with id ${player.id} for having a bad item in inventory.`
   );
   await sails.helpers.sdtd.executeCustomCmd(
     server,
-    config.bannedItemsCommand.split(';'),
+    bannedItem.tier.command.split(';'),
     { player: player }
   );
 };
-
-function intersection(setA, setB) {
-  const _intersection = new Set();
-  for (const elem of setB) {
-    if (setA.has(elem)) {
-      _intersection.add(elem);
-    }
-  }
-  return _intersection;
-}
