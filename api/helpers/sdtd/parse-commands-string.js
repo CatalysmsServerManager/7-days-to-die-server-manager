@@ -35,7 +35,8 @@ module.exports = {
     let result = split(inputs.commands, { separator: ';', quotes: ['"'] });
     result = result
       .map(x => x.trim())
-      .filter(x => x !== '');
+      // Filters empty strings
+      .filter(x => x);
     return exits.success(result);
 
   }
