@@ -8,12 +8,10 @@ module.exports = {
         createdAt: {
           type: Sequelize.DataTypes.BIGINT,
           allowNull: true,
-          defaultValue: Sequelize.fn('NOW')
         },
         updatedAt: {
           type: Sequelize.DataTypes.BIGINT,
           allowNull: true,
-          defaultValue: Sequelize.fn('NOW')
         },
         id: {
           autoIncrement: true,
