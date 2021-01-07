@@ -17,6 +17,7 @@ module.exports = {
     },
 
     fn: async function (inputs, exits) {
+        await BannedItem.destroy({ tier: inputs.tierId });
         await BannedItemTier.destroy({ id: inputs.tierId });
         return exits.success();
 
