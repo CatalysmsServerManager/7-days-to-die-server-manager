@@ -16,32 +16,60 @@
     </label>
 
     <div class="form-group">
-      <label for="banned-items-command">Command</label>
-      <input
-        type="text"
-        class="form-control"
-        name="banned-items-command"
-        id="banned-items-command"
-        aria-describedby="banned-items-command-help"
-        value="<%= config.bannedItemsCommand %>"
-      />
-      <small id="banned-items-command-help" class="form-text text-muted"
-        >The command to execute when a player is detected with a banned
-        item</small
-      >
+
+      <div class="form-group">
+        <label for="banned-items-tier">New tier</label>
+        <select class="form-control" name="banned-items-tier" id="banned-items-tier">
+          <% for(const role of roles){ %>
+            <option data-id="<%= role.id %>"><%= role.name %></option>
+          <% }%>
+        </select>
+        <small class="form-text text-muted">If a player has this role, they are allowed to carry the item. If their role level is higher, they will get punished</small>
+        
+        <label for="banned-items-command">Command</label>
+        <input
+          type="text"
+          class="form-control"
+          name="banned-items-command"
+          id="banned-items-command"
+          aria-describedby="banned-items-command-help"
+          value="<%= config.bannedItemsCommand %>"
+        />
+        <small id="banned-items-command-help" class="form-text text-muted"
+          >The command to execute when a player is detected with a banned
+          item</small
+        >
+      </div>
+
       <button
         type="button"
-        id="set-bannedItems-command"
+        id="create-tier"
         class="btn btn-primary"
       >
-        Set
+        Create tier
       </button>
     </div>
+
+    <h3>Tiers</h3>
+
+    <table class="table" id="bannedItemTiers">
+      <thead>
+        <tr>
+          <th>Role name</th>
+          <th>Command</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <h3>Banned items</h3>
 
     <table class="table" id="bannedItems">
       <thead>
         <tr>
           <th>Name</th>
+          <th>Tier</th>
           <th>Delete</th>
         </tr>
       </thead>
@@ -61,6 +89,11 @@
         <small id="bannedItems-new-item-help" class="form-text text-muted"
           >Item name to add to the list, this has to be exact!</small
         >
+
+        <select class="form-control" name="banned-items-bannedItems-new-item-tier" id="banned-items-bannedItems-new-item-tier">
+
+        </select>
+
       </div>
       <button type="button" id="bannedItems-add" class="btn btn-success">
         Add
@@ -88,18 +121,45 @@
           data: "name"
         },
         {
+          data: "tier.role.name"
+        },
+        {
           render: function(data, type, row, meta) {
-            return `<button type="button" class="btn btn-sm btn-danger delete-item" data-itemname="${row.name}">Delete</button>`;
+            console.log(row);
+            return `<button type="button" class="btn btn-sm btn-danger delete-item" data-itemname="${row.id}">Delete</button>`;
+          }
+        }
+      ]
+    });
+
+    const bannedItemTiersTable = $("#bannedItemTiers").DataTable({
+      autoWidth: false,
+      dom: "Bfrtip",
+      fixedHeader: true,
+      responsive: true,
+      buttons: [],
+      columns: [
+        {
+          data: "role.name"
+        },
+        {
+          data: "command"
+        },
+        {
+          render: function(data, type, row, meta) {
+            return `<button type="button" class="btn btn-sm btn-danger delete-item" data-tierid="${row.id}">Delete</button>`;
           }
         }
       ]
     });
 
     getBannedItems().then(data => drawItemsTable(data, bannedItemsTable));
+    getTiers().then(data => drawTiersTable(data, bannedItemTiersTable));
 
-    $("#set-bannedItems-command").click(() => {
+    $("#create-tier").click(() => {
+      const role = $('#banned-items-tier option:selected').data('id')
       const command = $("#banned-items-command").val();
-      setCommand(command);
+      createTier({role,command});
     });
 
     $("#banned-items-enabled").click(() => {
@@ -109,7 +169,8 @@
 
     $("#bannedItems-add").click(async () => {
       const inputBox = $("#bannedItems-new-item");
-      await addNewItem(inputBox.val());
+      const tier = $('#banned-items-bannedItems-new-item-tier option:selected').val()
+      await addNewItem(inputBox.val(), tier);
       getBannedItems().then(data => drawItemsTable(data, bannedItemsTable));
     });
 
@@ -128,18 +189,26 @@
       getBannedItems().then(data => drawItemsTable(data, bannedItemsTable));
     });
 
-    function setCommand(command) {
+
+    $("#bannedItemTiers").on("click", ".delete-item", async e => {
+      await removeTier($(e.target).attr("data-tierId"));
+      getTiers().then(data => drawTiersTable(data, bannedItemTiersTable));
+    });
+
+    function createTier(tier) {
       return new Promise((resolve, reject) => {
         $.ajax({
-          url: "/api/sdtdserver/bannedItems/command",
+          url: "/api/sdtdserver/bannedItems/tier",
           method: "POST",
           data: {
             serverId: window.SAILS_LOCALS.server.id,
             _csrf: window.SAILS_LOCALS._csrf,
-            command: command
+            command: tier.command,
+            role: tier.role,
           },
           success: (data, status, xhr) => {
             resolve(data);
+            getTiers().then(data => drawTiersTable(data, bannedItemTiersTable));
           },
           error: function(xhr, status, error) {
             displayAjaxToSupportData(xhr, this);
@@ -172,7 +241,30 @@
       });
     }
 
-    function addNewItem(bannedItem) {
+    function removeTier(tier) {
+      return new Promise((resolve, reject) => {
+        $.ajax({
+          url: "/api/sdtdserver/bannedItems/tier",
+          method: "DELETE",
+          data: {
+            serverId: window.SAILS_LOCALS.server.id,
+            _csrf: window.SAILS_LOCALS._csrf,
+            tierId: tier
+          },
+          success: (data, status, xhr) => {
+            resolve(data);
+          },
+          error: function(xhr, status, error) {
+            displayAjaxToSupportData(xhr, this);
+            showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+            reject();
+          }
+        });
+      });
+    }
+
+
+    function addNewItem(bannedItem, tier) {
       return new Promise((resolve, reject) => {
         $.ajax({
           url: "/api/sdtdserver/bannedItems/item",
@@ -180,7 +272,8 @@
           data: {
             serverId: window.SAILS_LOCALS.server.id,
             _csrf: window.SAILS_LOCALS._csrf,
-            bannedItem: bannedItem
+            name: bannedItem,
+            tier: tier
           },
           success: (data, status, xhr) => {
             resolve(data);
@@ -198,7 +291,24 @@
       table.clear();
       if (!_.isNull(data)) {
         for (const row of data) {
-          table.row.add({ name: row });
+          table.row.add(row);
+        }
+      }
+      table.draw();
+    }
+
+    function drawTiersTable(data, table) {
+
+      const tierSelect = $("#banned-items-bannedItems-new-item-tier");
+      tierSelect.empty()
+      for (const row of data) {
+        tierSelect.append($("<option />").text(row.role.name).val(row.id));
+      }
+
+      table.clear();
+      if (!_.isNull(data)) {
+        for (const row of data) {
+          table.row.add(row);
         }
       }
       table.draw();
@@ -230,6 +340,26 @@
       return new Promise((resolve, reject) => {
         $.ajax({
           url: "/api/sdtdserver/bannedItems",
+          method: "GET",
+          data: {
+            serverId: window.SAILS_LOCALS.server.id
+          },
+          success: (data, status, xhr) => {
+            resolve(data);
+          },
+          error: function(xhr, status, error) {
+            displayAjaxToSupportData(xhr, this);
+            showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+            reject();
+          }
+        });
+      });
+    }
+
+    function getTiers() {
+      return new Promise((resolve, reject) => {
+        $.ajax({
+          url: "/api/sdtdserver/bannedItems/tier",
           method: "GET",
           data: {
             serverId: window.SAILS_LOCALS.server.id

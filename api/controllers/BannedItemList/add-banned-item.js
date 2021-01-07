@@ -1,10 +1,16 @@
+
 module.exports = {
   friendlyName: 'Add bannedItem',
 
   description: 'Add an item to the list of bannedItems',
 
   inputs: {
-    bannedItem: {
+    name: {
+      required: true,
+      type: 'string'
+    },
+
+    tier: {
       required: true,
       type: 'string'
     },
@@ -17,21 +23,8 @@ module.exports = {
 
   exits: {},
 
-  fn: async function(inputs, exits) {
-    let { bannedItems } = await SdtdConfig.findOne({ server: inputs.serverId });
-
-    try {
-      bannedItems = JSON.parse(bannedItems);
-    } catch (error) {
-      bannedItems = [];
-    }
-
-    bannedItems.push(inputs.bannedItem);
-
-    await SdtdConfig.update(
-      { server: inputs.serverId },
-      { bannedItems: JSON.stringify(bannedItems) }
-    );
+  fn: async function (inputs, exits) {
+    await BannedItem.create({ name: inputs.name, tier: inputs.tier, server: inputs.serverId });
     return exits.success();
   }
 };
