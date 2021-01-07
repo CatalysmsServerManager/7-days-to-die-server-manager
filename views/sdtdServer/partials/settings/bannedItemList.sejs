@@ -33,7 +33,7 @@
           name="banned-items-command"
           id="banned-items-command"
           aria-describedby="banned-items-command-help"
-          value="<%= config.bannedItemsCommand %>"
+          value='kick ${player.steamId} "Unauthorized item detected in inventory"'
         />
         <small id="banned-items-command-help" class="form-text text-muted"
           >The command to execute when a player is detected with a banned
