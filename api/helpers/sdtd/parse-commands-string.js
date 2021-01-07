@@ -1,3 +1,5 @@
+const split = require('split-string');
+
 module.exports = {
 
 
@@ -30,9 +32,10 @@ module.exports = {
 
 
   fn: function (inputs, exits) {
-
-    let result = inputs.commands.split(';');
-    result = result.map(x => x.trim());
+    let result = split(inputs.commands, { separator: ';', quotes: ['"'] });
+    result = result
+      .map(x => x.trim())
+      .filter(x => x !== '');
     return exits.success(result);
 
   }
