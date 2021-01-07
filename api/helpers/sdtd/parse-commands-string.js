@@ -36,7 +36,7 @@ module.exports = {
     result = result
       .map(x => x.trim())
       // Filters empty strings
-      .filter(x => x);
+      .filter(Boolean);
     return exits.success(result);
 
   }
