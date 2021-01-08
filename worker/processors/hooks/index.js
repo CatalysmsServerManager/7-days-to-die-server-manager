@@ -63,7 +63,8 @@ async function executeHook(eventData, hookToExec, serverId) {
   eventData.server = server;
   eventData = await enrichData(eventData);
   eventData.custom = getVariablesValues(hookToExec.variables, eventData.msg);
-  let results = await sails.helpers.sdtd.executeCustomCmd(server, hookToExec.commandsToExecute.split(';'), eventData);
+  const parsedCommands = sails.helpers.sdtd.parseCommandsString(hookToExec.commandsToExecute);
+  let results = await sails.helpers.sdtd.executeCustomCmd(server, parsedCommands, eventData);
   await saveResultsToRedis(hookToExec.id, results);
   sails.log.debug(`Executed a custom hook for server ${serverId}`, {
     hook: hookToExec,
@@ -83,7 +84,8 @@ async function executeLogLineHook(eventData, hookToExec, serverId) {
   eventData.server = server;
   eventData = await enrichData(eventData);
   eventData.custom = getVariablesValues(hookToExec.variables, eventData.msg);
-  let results = await sails.helpers.sdtd.executeCustomCmd(server, hookToExec.commandsToExecute.split(';'), eventData);
+  const parsedCommands = sails.helpers.sdtd.parseCommandsString(hookToExec.commandsToExecute);
+  let results = await sails.helpers.sdtd.executeCustomCmd(server, parsedCommands, eventData);
   await saveResultsToRedis(hookToExec.id, results);
   sails.log.debug(`Executed a custom logLine hook for server ${serverId}`, {
     hook: hookToExec,
