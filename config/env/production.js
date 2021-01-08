@@ -22,6 +22,17 @@
 customLogger = require('../customLog').customLogger;
 
 
+const secureCookie = process.env.CSMM_HOSTNAME.startsWith('https://');
+
+if (!secureCookie) {
+  console.log('--------------------------------------');
+  console.log('WARNING');
+  console.log('You are not using https in your CSMM_HOSTNAME. This is insecure!');
+  console.log('Please consider adding a reverse proxy to your deployment');
+  console.log('WARNING');
+  console.log('--------------------------------------');
+}
+
 let useRedis = false;
 if (process.env.REDISSTRING !== '') {
   useRedis = true;
@@ -199,7 +210,7 @@ let production = {
      *                                                                          *
      ***************************************************************************/
     cookie: {
-      secure: true,
+      secure: secureCookie,
       maxAge: 24 * 60 * 60 * 1000 * 7, // 1 week
     },
 
