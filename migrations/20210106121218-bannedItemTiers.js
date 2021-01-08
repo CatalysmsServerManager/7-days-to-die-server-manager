@@ -76,28 +76,33 @@ module.exports = {
     console.log(configs);
 
     for (const config of configs) {
-      const adminRole = await queryInterface.sequelize.query('select * from role where server = :server order by level ASC limit 1', { type: Sequelize.QueryTypes.SELECT, replacements: { server: config.server } })
-      console.log(config.bannedItems);
-
-      let items = [];
-
       try {
-        // This is the expected behavior
-        items = JSON.parse(JSON.parse(config.bannedItems));
-      } catch (error) {
+        const adminRole = await queryInterface.sequelize.query('select * from role where server = :server order by level ASC limit 1', { type: Sequelize.QueryTypes.SELECT, replacements: { server: config.server } })
+        console.log(config.bannedItems);
+
+        let items = [];
+
         try {
-          // But sails sometimes stored it like this
-          items = JSON.parse(config.bannedItems)
+          // This is the expected behavior
+          items = JSON.parse(JSON.parse(config.bannedItems));
         } catch (error) {
-          // If the above fails, data was in a bugged state so we keep the empty array
+          try {
+            // But sails sometimes stored it like this
+            items = JSON.parse(config.bannedItems)
+          } catch (error) {
+            // If the above fails, data was in a bugged state so we keep the empty array
+          }
         }
+
+        const tier = await queryInterface.bulkInsert('banneditemtier', [{ role: adminRole[0].id, command: config.bannedItemsCommand, server: config.server }])
+
+        if (items.length) {
+          await queryInterface.bulkInsert('banneditem', items.map(_ => { return { name: _, tier, server: config.server } }));
+        }
+      } catch (error) {
+        console.log(`Error migrating server ${config.server}: ${error}`)
       }
 
-      const tier = await queryInterface.bulkInsert('banneditemtier', [{ role: adminRole[0].id, command: config.bannedItemsCommand, server: config.server }])
-
-      if (items.length) {
-        await queryInterface.bulkInsert('banneditem', items.map(_ => { return { name: _, tier, server: config.server } }));
-      }
     }
 
     await queryInterface.removeColumn('sdtdconfig', 'bannedItems')
