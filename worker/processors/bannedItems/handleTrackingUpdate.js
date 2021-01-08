@@ -66,7 +66,7 @@ async function executePunishment(playerId, server, bannedItem) {
   sails.log.info(
     `Punishing ${player.name} with id ${player.id} for having a bad item in inventory.`
   );
-  const parsedCommands = sails.helpers.sdtd.parseCommandsString(config.bannedItemsCommand);
+  const parsedCommands = sails.helpers.sdtd.parseCommandsString(bannedItem.tier.command);
   await sails.helpers.sdtd.executeCustomCmd(
     server,
     parsedCommands,
