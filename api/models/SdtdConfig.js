@@ -472,17 +472,6 @@ module.exports = {
       defaultsTo: false
     },
 
-    bannedItems: {
-      type: 'json',
-      defaultsTo: []
-    },
-
-    bannedItemsCommand: {
-      type: 'string',
-      defaultsTo:
-        'kick ${player.steamId} "Unauthorized item detected in inventory"'
-    },
-
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝

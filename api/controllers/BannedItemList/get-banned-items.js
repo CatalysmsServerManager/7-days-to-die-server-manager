@@ -12,15 +12,15 @@ module.exports = {
 
   exits: {},
 
-  fn: async function(inputs, exits) {
-    let { bannedItems } = await SdtdConfig.findOne({ server: inputs.serverId });
+  fn: async function (inputs, exits) {
+    const bannedItems = await BannedItem.find({ server: inputs.serverId }).populate('tier');
 
-    try {
-      bannedItems = JSON.parse(bannedItems);
-    } catch (error) {
-      bannedItems = [];
-    }
+    const populated = bannedItems.map(async _ => {
+      _.tier.role = await Role.findOne(_.tier.role);
+      return _;
+    });
 
-    return exits.success(bannedItems);
+    const data = await Promise.all(populated);
+    return exits.success(data);
   }
 };

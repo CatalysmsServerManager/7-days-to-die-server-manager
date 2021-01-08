@@ -182,6 +182,13 @@ module.exports.routes = {
   'delete /api/sdtdserver/bannedItems/item':
     'BannedItemListController/remove-banned-item',
 
+  'get /api/sdtdserver/bannedItems/tier':
+    'BannedItemListController/get-tiers',
+  'post /api/sdtdserver/bannedItems/tier':
+    'BannedItemListController/create-banned-item-tier',
+  'delete /api/sdtdserver/bannedItems/tier':
+    'BannedItemListController/delete-banned-item-tier',
+
   // Roles
 
   'get /api/role': 'roleController/get-role',

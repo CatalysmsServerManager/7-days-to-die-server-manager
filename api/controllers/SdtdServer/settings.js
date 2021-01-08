@@ -46,7 +46,9 @@ module.exports = {
 
     user = await User.findOne(this.req.session.userId);
 
-
+    const roles = await Role.find({
+      server: server.id
+    });
 
     const gimmeItems = await GimmeItem.find({
       server: server.id
@@ -70,7 +72,8 @@ module.exports = {
         user: user,
         customCommands: customCommands,
         gimmeItems: gimmeItems,
-        serverTime: Date.now()
+        serverTime: Date.now(),
+        roles
       });
     } catch (error) {
       sails.log.error(`VIEW - SdtdServer:settings - ${error}`);
