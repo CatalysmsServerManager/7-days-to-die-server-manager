@@ -185,6 +185,11 @@ module.exports = {
       defaultsTo: '$'
     },
 
+    replyPrefix: {
+      type: 'string',
+      defaultsTo: ''
+    },
+
     enabledCallAdmin: {
       type: 'boolean',
       defaultsTo: false

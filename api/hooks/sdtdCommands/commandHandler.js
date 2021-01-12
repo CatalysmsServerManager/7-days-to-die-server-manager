@@ -227,6 +227,13 @@ async function sendReplyToPlayer(server, player, type, data) {
 
 
     function sendMsg(message) {
+
+      const { replyPrefix } = server.config;
+
+      if (replyPrefix) {
+        message = `${replyPrefix} ${message}`;
+      }
+
       return sevenDays.sendMessage({
         ip: server.ip,
         port: server.webPort,
