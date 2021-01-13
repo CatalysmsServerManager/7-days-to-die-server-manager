@@ -1,4 +1,3 @@
-const sevenDays = require('machinepack-7daystodiewebapi');
 const CustomCommand = require('./customCommand.js');
 const he = require('he');
 const parseArgs = require('./parseArgs');
@@ -104,6 +103,7 @@ class CommandHandler {
           sails.log.warn(`Did not find player data...`, chatMessage);
         }
 
+
         let playerInfo = await sails.helpers.sdtd.loadPlayerData.with({
           serverId: this.config.server,
           steamId: player[0].steamId
@@ -206,52 +206,32 @@ async function sendReplyToPlayer(server, player, type, data) {
     }
     return response[0].reply;
   }
+  const replyObj = getReplyObj(type);
 
-  return new Promise(async (resolve, reject) => {
+  if (!replyObj) {
+    return sendMsg(type);
+  } else {
 
-    const replyObj = getReplyObj(type);
+    let message = await getMessage(replyObj);
+    if (!data) {
+      data = {};
+    }
+    data.server = server;
+    data.player = player;
+    message = await sails.helpers.sdtd.fillCustomVariables(message, data);
+    return sendMsg(message);
+  }
 
-    if (!replyObj) {
-      return sendMsg(type);
-    } else {
 
-      let message = await getMessage(replyObj);
-      if (!data) {
-        data = {};
-      }
-      data.server = server;
-      data.player = player;
-      message = await sails.helpers.sdtd.fillCustomVariables(message, data);
-      return sendMsg(message);
+  function sendMsg(message) {
+
+    const { replyPrefix } = server.config;
+
+    if (replyPrefix) {
+      message = `${replyPrefix} ${message}`;
     }
 
-
-    function sendMsg(message) {
-
-      const { replyPrefix } = server.config;
-
-      if (replyPrefix) {
-        message = `${replyPrefix} ${message}`;
-      }
-
-      return sevenDays.sendMessage({
-        ip: server.ip,
-        port: server.webPort,
-        authName: server.authName,
-        authToken: server.authToken,
-        message: `${message}`,
-        playerId: player.steamId
-      }).exec({
-        error: (error) => {
-          sails.log.error(`HOOK - SdtdCommands - Failed to respond to player`);
-          reject(error);
-        },
-        success: (result) => {
-          resolve(result);
-        }
-      });
-    }
-
-
-  });
+    command = `pm ${player.steamId} "${message}"`;
+    return sails.helpers.sdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(server), command);
+  }
 }
