@@ -96,7 +96,8 @@
       <input type="text" class="form-control" name="replyPrefix" id="replyPrefix" aria-describedby="replyPrefix-help"
         placeholder="">
       <small id="replyPrefix-help" class="form-text text-muted">This will be added before command replies CSMM does.
-        This is very useful for adding some colour to the messages!</small>
+        This is very useful for adding some colour to the messages! For example, a hexcode like [02f9dd] will turn
+        everything blue</small>
     </div>
 
     <button id="replyPrefix-btn" class="btn btn-primary">Save prefix</button>
