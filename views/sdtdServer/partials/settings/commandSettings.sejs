@@ -89,6 +89,19 @@
   <div id="replySettings">
     <hr>
     <%- await include('./commandReplies.sejs') %>
+
+
+    <div class="form-group">
+      <label for="replyPrefix">Reply prefix</label>
+      <input type="text" class="form-control" name="replyPrefix" id="replyPrefix" aria-describedby="replyPrefix-help"
+        placeholder="">
+      <small id="replyPrefix-help" class="form-text text-muted">This will be added before command replies CSMM does.
+        This is very useful for adding some colour to the messages! For example, a hexcode like [02f9dd] will turn
+        everything blue</small>
+    </div>
+
+    <button id="replyPrefix-btn" class="btn btn-primary">Save prefix</button>
+
   </div>
 
 
@@ -142,7 +155,7 @@
     </thead>
     <tbody>
 
-    <% for(let command of customCommands){%>
+      <% for(let command of customCommands){%>
 
       <tr>
         <td scope="row"><%= command.name %></td>
@@ -162,56 +175,56 @@
 
   <%- await include('./addCommandModal.sejs') %>
 
-  <!-- Button trigger modal -->
-  <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#custom-commands-import-modal">
-    Import
-  </button>
+      <!-- Button trigger modal -->
+      <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#custom-commands-import-modal">
+        Import
+      </button>
 
-  <!-- Modal -->
-  <div class="modal fade" id="custom-commands-import-modal" tabindex="-1" role="dialog"
-    aria-labelledby="custom-commands-import-modal-title" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title" id="custom-commands-import-modal-title">Import</h4>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="container-fluid">
-
-            <div class="alert alert-warning" role="alert">
-              Importing custom commands is an advanced function. Check the documentation for more info.
-              <br> This will delete the current custom commands you have. Make sure to include them in your import
-              statement.
-              Command arguments are currently not supported to be imported!
+      <!-- Modal -->
+      <div class="modal fade" id="custom-commands-import-modal" tabindex="-1" role="dialog"
+        aria-labelledby="custom-commands-import-modal-title" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title" id="custom-commands-import-modal-title">Import</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
             </div>
+            <div class="modal-body">
+              <div class="container-fluid">
 
-            <div class="form-group">
-              <label for="custom-commands-import-json">Custom commands JSON</label>
-              <textarea class="form-control" name="custom-commands-import-json" id="custom-commands-import-json"
-                rows="10"></textarea>
+                <div class="alert alert-warning" role="alert">
+                  Importing custom commands is an advanced function. Check the documentation for more info.
+                  <br> This will delete the current custom commands you have. Make sure to include them in your import
+                  statement.
+                  Command arguments are currently not supported to be imported!
+                </div>
+
+                <div class="form-group">
+                  <label for="custom-commands-import-json">Custom commands JSON</label>
+                  <textarea class="form-control" name="custom-commands-import-json" id="custom-commands-import-json"
+                    rows="10"></textarea>
+                </div>
+
+                <div id="custom-commands-import-problems" class="alert alert-warning invisible" role="alert">
+
+                </div>
+
+              </div>
             </div>
-
-            <div id="custom-commands-import-problems" class="alert alert-warning invisible" role="alert">
-
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button id="custom-commands-import-btn" type="button" class="btn btn-primary">Import</button>
             </div>
-
           </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button id="custom-commands-import-btn" type="button" class="btn btn-primary">Import</button>
-        </div>
       </div>
-    </div>
-  </div>
 
-  <a name="export-customcommands" id="export-custom-commands" class="btn btn-secondary"
-    href="/api/sdtdserver/commands/export?serverId=<%= server.id %>" role="button">Export to file</a>
+      <a name="export-customcommands" id="export-custom-commands" class="btn btn-secondary"
+        href="/api/sdtdserver/commands/export?serverId=<%= server.id %>" role="button">Export to file</a>
 
-  <%- await include('../commandsHelpButton.sejs') %>
+      <%- await include('../commandsHelpButton.sejs') %>
 
 </div>
 
@@ -441,7 +454,7 @@
             _csrf: window.SAILS_LOCALS._csrf,
             serverId: window.SAILS_LOCALS.server.id,
           },
-          success: data => {},
+          success: data => { },
           error: function (xhr, status, error) {
             displayAjaxToSupportData(xhr, this);;
             showErrorModal(`${error} - ${xhr.responseText}`, xhr);
@@ -467,8 +480,8 @@
       e.preventDefault();
       let newMax = $('#inputs-settings-commands-playerteleports-maxlocations').val();
       if (!validator.isInt(newMax, {
-          min: 1
-        })) {
+        min: 1
+      })) {
         return showErrorModal('Please provide a valid value for max locations.')
       }
 
@@ -491,8 +504,8 @@
       e.preventDefault();
       let newTimeout = $('#inputs-settings-commands-playerteleports-timeout').val();
       if (!validator.isInt(newTimeout, {
-          min: 3
-        })) {
+        min: 3
+      })) {
         return showErrorModal('Please provide a valid value for timeout. (number larger than 3)')
       }
 
@@ -516,8 +529,8 @@
       let newDelay = $('#inputs-settings-commands-playerteleports-delay').val();
 
       if (!validator.isInt(newDelay, {
-          min: 0
-        })) {
+        min: 0
+      })) {
         return showErrorModal('Please provide a valid value for delay. (number larger than 0)')
       }
 
@@ -536,7 +549,28 @@
       })
     })
 
+    $("#replyPrefix").val(window.SAILS_LOCALS.config.replyPrefix);
 
+
+    $("#replyPrefix-btn").click(e => {
+      let replyPrefix = $("#replyPrefix").val();
+      $.ajax({
+        url: `/api/sdtdserver/settings`,
+        type: 'POST',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+          replyPrefix: replyPrefix
+        },
+        success: (data, status, xhr) => {
+
+        },
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      });
+    })
 
   })
 

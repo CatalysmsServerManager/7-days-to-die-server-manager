@@ -16,6 +16,10 @@ module.exports = {
     countryBanListMode: {
       type: 'boolean'
     },
+
+    replyPrefix: {
+      type: 'string'
+    }
   },
   exits: {
     badRequest: {
@@ -36,8 +40,13 @@ module.exports = {
     }
     if ('countryBanListMode' in inputs) {
       updates.countryBanListMode = inputs.countryBanListMode;
-      sails.log.info(`ServerId ${inputs.serverId} has set countryBanListMod to ${inputs.countryBanListMode}.`);
     }
+
+    if ('replyPrefix' in inputs) {
+      updates.replyPrefix = inputs.replyPrefix;
+    }
+
+    sails.log.info(`ServerId ${inputs.serverId} updated settings to ${JSON.stringify(updates)}.`);
 
     await SdtdConfig.update(
       { server: server.id },
