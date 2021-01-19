@@ -18,7 +18,7 @@
     "cross-env": "^7.0.2",
     "dd-trace": "^0.28.1",
     "discord.js": "^12.4.1",
-    "discord.js-commando": "github:discordjs/Commando",
+    "discord.js-commando": "^0.11.0",
     "dotenv": "^8.2.0",
     "ejs": "^3.1.5",
     "geoip-lite": "^1.4.2",
