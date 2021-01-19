@@ -58,6 +58,7 @@ module.exports = function discordBot(sails) {
 
         client.on('ready', () => {
           sails.log.info(`Connected to Discord as ${client.user.tag} - ${client.guilds.size} guilds`);
+          sails.log.info(`Discord invite link: https://discordapp.com/oauth2/authorize?client_id=${client.user.id}&scope=bot&permissions=268749889`);
         });
 
         client.on('commandRun', (command, promise, message) => {
