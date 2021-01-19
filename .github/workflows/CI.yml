@@ -55,11 +55,3 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           file: ./reports/coverage/lcov.info
-      - uses: check-run-reporter/action@v2.0.0
-        # always run, otherwise you'll only see results for passing builds
-        if: ${{ always() }}
-        with:
-          # Token in plaintext to allow CRR to run for forked PRs
-          # https://github.com/check-run-reporter/feedback/issues/9
-          token: "01d31e48-772c-4bcb-b5fa-239689ad5419"
-          report: "reports/**/*.xml"
