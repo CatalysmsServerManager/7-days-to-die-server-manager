@@ -1,5 +1,4 @@
 const winston = require('winston');
-const LokiTransport = require('../api/winston-loki-transport');
 
 const logLevel = process.env.CSMM_LOGLEVEL || 'info';
 
@@ -23,24 +22,13 @@ const transports = [
   new winston.transports.Console({
     level: logLevel,
     json: shouldLogJSON,
-    stringify: !shouldLogJSON ? undefined: (obj) => JSON.stringify(obj),
+    stringify: !shouldLogJSON ? undefined : (obj) => JSON.stringify(obj),
     colorize: true,
     timestamp: true,
     humanReadableUnhandledException: true
   })
 ];
 
-if (process.env.LOKI_URL) {
-  transports.push(new LokiTransport({
-    level: logLevel,
-    labels: {
-      app: 'csmm',
-      job: 'csmm',
-      instance: process.env.CSMM_HOSTNAME || os.hostname(),
-    },
-    lokiURL: process.env.LOKI_URL,
-  }));
-}
 
 if (!infoAndAbove.includes(logLevel)) {
   transports.push(
