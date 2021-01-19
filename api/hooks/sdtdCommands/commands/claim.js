@@ -89,7 +89,7 @@ class Claim extends SdtdCommand {
       }
     } catch (error) {
       sails.log.error(error);
-      return chatMessage.reply('error', { error: 'Error while handling your claimed items' });
+      await chatMessage.reply('error', { error: 'Error while handling your claimed items' });
     } finally {
       delete locks[player.id];
     }
