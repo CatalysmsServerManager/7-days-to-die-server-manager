@@ -54,39 +54,46 @@ class Claim extends SdtdCommand {
 
     locks[player.id] = true;
 
-    for (const item of itemsToClaim) {
-      let cmdToExec;
+    try {
+      for (const item of itemsToClaim) {
+        let cmdToExec;
 
-      if (cpmVersion >= 6.4) {
-        cmdToExec = `giveplus ${player.steamId} "${item.name}" ${item.amount} ${item.quality ? item.quality + ' 0' : ''}`;
-      } else {
-        cmdToExec = `give ${player.entityId} "${item.name}" ${item.amount} ${item.quality ? item.quality : ''}`;
+        if (cpmVersion >= 6.4) {
+          cmdToExec = `giveplus ${player.steamId} "${item.name}" ${item.amount} ${item.quality ? item.quality + ' 0' : ''}`;
+        } else {
+          cmdToExec = `give ${player.entityId} "${item.name}" ${item.amount} ${item.quality ? item.quality : ''}`;
+        }
+
+        const response = await sails.helpers.sdtdApi.executeConsoleCommand({
+          ip: server.ip,
+          port: server.webPort,
+          adminUser: server.authName,
+          adminToken: server.authToken
+        }, cmdToExec);
+
+        if (response.result.includes('ERR:')) {
+          sails.log.error(`Error when giving an item via the claim command! Response result: ${response.result}`);
+          return chatMessage.reply('error', { error: 'Error while executing give command' });
+        }
+
+        await PlayerClaimItem.update({
+          id: item.id
+        }, {
+          claimed: true
+        });
+
+        await chatMessage.reply('claimItemGiven', {
+          item: item
+        });
+
       }
-
-      const response = await sails.helpers.sdtdApi.executeConsoleCommand({
-        ip: server.ip,
-        port: server.webPort,
-        adminUser: server.authName,
-        adminToken: server.authToken
-      }, cmdToExec);
-
-      if (response.result.includes('ERR:')) {
-        sails.log.error(`Error when giving an item via the claim command! Response result: ${response.result}`);
-        delete locks[player.id];
-        return chatMessage.reply('error', { error: 'Error while executing give command' });
-      }
-
-      await chatMessage.reply('claimItemGiven', {
-        item: item
-      });
-      await PlayerClaimItem.update({
-        id: item.id
-      }, {
-        claimed: true
-      });
+    } catch (error) {
+      sails.log.error(error);
+      return chatMessage.reply('error', { error: 'Error while handling your claimed items' });
+    } finally {
+      delete locks[player.id];
     }
 
-    delete locks[player.id];
   }
 }
 
