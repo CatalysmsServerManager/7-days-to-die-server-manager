@@ -1,3 +1,10 @@
+const opentelemetry = require('@opentelemetry/api');
+const { NodeTracerProvider } = require('@opentelemetry/node');
+const { BatchSpanProcessor } = require('@opentelemetry/tracing');
+const { JaegerExporter } = require('@opentelemetry/exporter-jaeger');
+
+let tracer;
+
 module.exports = {
   classToHook(obj, exposedFunctions = ['start', 'stop']) {
     function getMethods(o) {
@@ -13,14 +20,48 @@ module.exports = {
       return ret;
     }, {});
   },
-  loadDatadog() {
-    // Load Datadog integration only if required env vars are set
-    if (process.env.DD_AGENT_HOST && process.env.DD_TRACE_AGENT_PORT) {
-      console.log(`Loading datadog integration, sending data to agent at ${process.env.DD_AGENT_HOST} && ${process.env.DD_TRACE_AGENT_PORT}`);
-      return require('dd-trace').init({
-        profiling: true,
-        logInjection: true
-      });
+  loadTracer() {
+    if (tracer) {
+      return tracer;
     }
+    // Load Tracer integration only if required env vars are set
+    if (process.env.JAEGER_ENDPOINT) {
+      console.log(`Loading tracing integration, sending data to agent at ${process.env.JAEGER_ENDPOINT}`);
+
+
+
+      const provider = new NodeTracerProvider({
+        logger: require('../config/customLog').customLogger
+      });
+
+      const exporter = new JaegerExporter({
+        serviceName: 'CSMM',
+        endpoint: process.env.JAEGER_ENDPOINT,
+
+      });
+      provider.addSpanProcessor(new BatchSpanProcessor(exporter));
+      provider.register();
+      tracer = opentelemetry.trace.getTracer('CSMM');
+      return tracer;
+    }
+  },
+  tracerWrapper(fnToWrap) {
+    if (!tracer) {
+      return fnToWrap;
+    }
+
+    return async (...args) => {
+      // Somethings wrong here, it cannot create child spans properly for some reason...
+      // Likely something to do with scoping?
+      // Or this wrapper approach is too naive
+      const ctx = opentelemetry.context.active();
+      const currentSpan = opentelemetry.getActiveSpan(ctx);
+      const spanName = fnToWrap.name ? fnToWrap.name : 'Anonymous';
+      const span = tracer.startSpan(spanName, currentSpan);
+      const res = await fnToWrap(...args);
+      span.end();
+      return res;
+
+    };
   }
 };

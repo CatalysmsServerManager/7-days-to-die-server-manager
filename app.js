@@ -27,8 +27,7 @@
 process.chdir(__dirname);
 require('dotenv').config();
 
-require('./api/utils').loadDatadog();
-
+require('./api/utils').loadTracer();
 
 // Attempt to import `sails` dependency, as well as `rc` (for loading `.sailsrc` files).
 var sails;

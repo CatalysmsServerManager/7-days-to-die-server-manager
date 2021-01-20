@@ -1,3 +1,5 @@
+const { tracerWrapper } = require('../../../api/utils');
+
 async function enrichEventData(event) {
 
   switch (event.type) {
@@ -52,5 +54,5 @@ async function enrichEventData(event) {
 };
 
 module.exports = {
-  enrichEventData
+  enrichEventData: tracerWrapper(enrichEventData)
 };

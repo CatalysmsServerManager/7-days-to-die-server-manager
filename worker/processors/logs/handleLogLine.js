@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const { tracerWrapper } = require('../../../api/utils');
 
 const replaceQuotes = string => string.substring(1, string.length - 1);
 const extractIntegers = string => string.match(/\d*/g).join('');
@@ -17,7 +18,7 @@ const oldLevelRegex = /(was )\d*/g;
 
 const entityKilledRegex = /(killed .*)/g;
 
-module.exports = logLine => {
+function handleLogLine(logLine) {
 
 
   let returnValue = {
@@ -405,3 +406,5 @@ module.exports = logLine => {
   }
   return returnValue;
 };
+
+module.exports = tracerWrapper(handleLogLine);

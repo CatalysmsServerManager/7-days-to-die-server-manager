@@ -1,8 +1,8 @@
+const { tracerWrapper } = require('../../../api/utils');
 const handleLogLine = require('./handleLogLine');
 const LastLogLine = require('./redisVariables/lastLogLine');
 
-
-module.exports = async function (job) {
+async function logProcessor(job) {
   const resultLogs = [];
   let lastLogLine = await LastLogLine.get(job.data.server.id);
 
@@ -42,3 +42,6 @@ module.exports = async function (job) {
     logs: resultLogs
   });
 };
+
+
+module.exports = tracerWrapper(logProcessor);
