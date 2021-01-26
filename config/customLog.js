@@ -6,13 +6,15 @@ const infoAndAbove = ['info', 'warn', 'blank', 'crit'];
 
 const shouldLogJSON = JSON.parse((process.env.CSMM_LOG_JSON || 'false').toLowerCase());
 
+const logDirectory = process.env.LOGGING_DIR ? process.env.LOGGING_DIR : './logs';
+
 const transports = [
   new winston.transports.File({
     level: 'info',
     name: 'infolog',
     timestamp: true,
     humanReadableUnhandledException: false,
-    filename: './logs/prod.log',
+    filename: `${logDirectory}/prod.log`,
     tailable: true,
     maxsize: 10000000,
     maxFiles: 3,
@@ -37,7 +39,7 @@ if (!infoAndAbove.includes(logLevel)) {
       name: 'debuglog',
       timestamp: true,
       humanReadableUnhandledException: true,
-      filename: './logs/debug.log',
+      filename: `${logDirectory}/debug.log`,
       tailable: true,
       maxsize: 10000000,
       maxFiles: 5,
