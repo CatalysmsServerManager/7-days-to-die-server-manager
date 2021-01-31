@@ -41,6 +41,7 @@ const bannedItemsProcessor = require('./processors/bannedItems');
 const playerTrackingProcessor = require('./processors/playerTracking');
 const killProcessor = require('./processors/kill');
 const hookProcessor = require('./processors/hooks');
+const systemProcessor = require('./processors/system');
 
 sails.load(configOverrides, async function (err) {
   if (err) {
@@ -64,7 +65,8 @@ sails.load(configOverrides, async function (err) {
     bannedItems: sails.helpers.getQueueObject('bannedItems'),
     playerTracking: sails.helpers.getQueueObject('playerTracking'),
     kill: sails.helpers.getQueueObject('kill'),
-    hooks: sails.helpers.getQueueObject('hooks')
+    hooks: sails.helpers.getQueueObject('hooks'),
+    system: sails.helpers.getQueueObject('system'),
   };
 
   for (const queue in queues) {
@@ -95,6 +97,7 @@ sails.load(configOverrides, async function (err) {
       queues.playerTracking.process(25, tracer.wrap('job.playerTracking', playerTrackingProcessor)),
       queues.kill.process(tracer.wrap('job.kill', killProcessor)),
       queues.hooks.process(25, tracer.wrap('job.hooks', hookProcessor)),
+      queues.system.process(systemProcessor)
     ]);
   } else {
     await Promise.all([
@@ -105,6 +108,7 @@ sails.load(configOverrides, async function (err) {
       queues.playerTracking.process(25, playerTrackingProcessor),
       queues.kill.process(killProcessor),
       queues.hooks.process(25, hookProcessor),
+      queues.system.process(systemProcessor)
     ]);
   }
 

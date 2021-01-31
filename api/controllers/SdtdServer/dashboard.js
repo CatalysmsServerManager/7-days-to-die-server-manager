@@ -50,6 +50,8 @@ module.exports = {
           return exits.badRequest(error);
         });
 
+      const config = await SdtdConfig.findOne({ server: inputs.serverId });
+
       if (!_.isUndefined(sdtdServerInfo)) {
         sdtdServer = sdtdServerInfo;
       }
@@ -59,6 +61,7 @@ module.exports = {
       sails.log.info(`VIEW - SdtdServer:dashboard - Showing dashboard for ${sdtdServer.name} to user ${this.req.session.userId}`);
       return exits.success({
         server: sdtdServer,
+        config: config,
         userRole: userRole,
         owner: sdtdServer.owner === parseInt(this.req.session.user.id) ? true : false
       });

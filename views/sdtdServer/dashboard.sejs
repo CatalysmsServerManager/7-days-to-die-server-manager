@@ -11,6 +11,14 @@
   </ol>
 </nav>
 
+<% if(config.failedDonorChecks){ %>
+<div class="alert alert-warning" role="alert">
+  <strong>WARNING! The CSMM instance you are using is a donator-only instance. CSMM checks your donator status every day
+    and if your server fails 7 times, it will be automatically deleted. This is check
+    <%= config.failedDonorChecks %>/7</strong>
+</div>
+<% } %>
+
 <h1 id="server-name">
   <%= server.name %> Dashboard</h1>
 
@@ -143,7 +151,6 @@
   .card {
     margin: 1%
   }
-
 </style>
 
 

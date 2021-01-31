@@ -28,6 +28,15 @@ module.exports.bootstrap = async function (done) {
     sails.cache = new Object();
   }
 
+  const queue = await sails.helpers.getQueueObject('system');
+  await queue.add({ type: 'donorCheck' },
+    {
+      attempts: 1,
+      repeat: {
+        cron: '0 0 * * *',
+      }
+    });
+
   setInterval(async () => {
     await sails.helpers.meta.fixDuplicatePlayers();
   }, 360000);

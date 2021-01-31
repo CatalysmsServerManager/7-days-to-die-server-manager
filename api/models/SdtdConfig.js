@@ -477,6 +477,12 @@ module.exports = {
       defaultsTo: false
     },
 
+
+    failedDonorChecks: {
+      type: 'number',
+      defaultsTo: 0
+    },
+
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
