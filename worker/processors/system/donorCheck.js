@@ -41,9 +41,6 @@ module.exports = async function donorCheck() {
         sails.log.error(error);
         continue;
       }
-
-
-
     }
 
   }
@@ -54,7 +51,9 @@ module.exports = async function donorCheck() {
 
 async function destroyServer(server) {
 
-  // What are cascades?
+  await Analytics.destroy({
+    server: server.id
+  });
 
   await CronJob.destroy({
     server: server.id
@@ -68,7 +67,7 @@ async function destroyServer(server) {
     server: server.id
   });
 
-  let ticketsToDestroy = await SdtdTicket.find({
+  const ticketsToDestroy = await SdtdTicket.find({
     server: server.id
   });
 
@@ -80,7 +79,7 @@ async function destroyServer(server) {
     server: server.id
   });
 
-  let playersToDestroy = await Player.find({
+  const playersToDestroy = await Player.find({
     server: server.id
   });
 
