@@ -18,7 +18,8 @@
   <input type="text" class="form-control" name="vote-apiKey" id="vote-apiKey" aria-describedby="vote-apiKey-help"
     value="<%= config.votingApiKey %>">
   <small id="vote-apiKey-help" class="form-text text-muted">The API key for your server. You can get this from <a
-      href="https://7daystodie-servers.com">7daystodie-servers</a></small>
+      href="https://7daystodie-servers.com">7daystodie-servers</a> You can set your personal vote link via the custom
+    command replies below</small>
 </div>
 
 <div class="form-group">
