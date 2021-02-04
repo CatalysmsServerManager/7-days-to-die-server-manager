@@ -1,0 +1,14 @@
+{
+    "noConfig": "No config property makes the import fail",
+    "server": {
+        "createdAt": 1523094728927,
+        "updatedAt": 1593539638465,
+        "id": 19,
+        "name": "Server but no config",
+        "ip": "127.0.0.1",
+        "webPort": 8080,
+        "authName": "redacted",
+        "authToken": "secret:)",
+        "owner": 13
+    },
+}
