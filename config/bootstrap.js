@@ -1,4 +1,7 @@
 const SdtdApi = require('7daystodie-api-wrapper');
+const fs = require('fs');
+const path = require('path');
+
 /**
  * Bootstrap
  * (sails.config.bootstrap)
@@ -36,6 +39,24 @@ module.exports.bootstrap = async function (done) {
         cron: '0 0 * * *',
       }
     });
+
+  if (process.env.CSMM_IMPORT_FROM_DIR) {
+    try {
+      sails.log.info(`Importing files enabled, looking for JSON files at ${process.env.CSMM_IMPORT_FROM_DIR}`);
+      const importFiles = fs.readdirSync(process.env.CSMM_IMPORT_FROM_DIR);
+      for (const file of importFiles) {
+        const filePath = path.join(process.env.CSMM_IMPORT_FROM_DIR, file);
+        sails.log.info(`Reading file ${filePath}`);
+        const data = fs.readFileSync(filePath, 'utf-8');
+        await sails.helpers.meta.importServer(data);
+      }
+    } catch (error) {
+      sails.log.warn('Error while trying to import, continuing with CSMM boot');
+      sails.log.error(error);
+    }
+
+
+  }
 
   setInterval(async () => {
     await sails.helpers.meta.fixDuplicatePlayers();
