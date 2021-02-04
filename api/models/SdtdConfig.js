@@ -187,7 +187,8 @@ module.exports = {
 
     replyPrefix: {
       type: 'string',
-      defaultsTo: ''
+      defaultsTo: '',
+      allowNull: true
     },
 
     enabledCallAdmin: {
