@@ -30,7 +30,7 @@ module.exports = {
   fn: async function (inputs, exits) {
     try {
 
-      let discordClient = sails.hooks.discordbot.getClient();
+      let discordClient = sails.helpers.discord.getClient();
 
       let foundChannel = await discordClient.channels.cache.get(inputs.channelId);
 

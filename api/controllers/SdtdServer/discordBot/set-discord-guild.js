@@ -30,7 +30,7 @@ module.exports = {
 
     try {
       let server = await SdtdServer.findOne(inputs.serverId);
-      let discordClient = sails.hooks.discordbot.getClient();
+      let discordClient = sails.helpers.discord.getClient();
       let chatBridgeHook = sails.hooks.discordchatbridge;
 
       if (inputs.discordGuildId === '0') {

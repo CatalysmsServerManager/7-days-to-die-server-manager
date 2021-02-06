@@ -59,6 +59,11 @@ sails.load(configOverrides, async function (err) {
     scope.setTag('workerProcess', process.env.npm_lifecycle_event || 'worker');
   });
 
+  const discordClient = sails.helpers.discord.getClient();
+  if (process.env.DISCORDBOTTOKEN) {
+    await discordClient.login(sails.config.custom.botToken);
+  }
+
   const queues = {
     logs: sails.helpers.getQueueObject('logs'),
     discordNotifications: sails.helpers.getQueueObject('discordNotifications'),

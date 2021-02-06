@@ -34,7 +34,7 @@ module.exports = {
 
     try {
       let server = await SdtdServer.findOne(inputs.serverId);
-      let discordClient = sails.hooks.discordbot.getClient();
+      let discordClient = sails.helpers.discord.getClient();
       let notificationChannel = await discordClient.channels.cache.get(inputs.notificationChannelId);
 
       if (_.isUndefined(server)) {

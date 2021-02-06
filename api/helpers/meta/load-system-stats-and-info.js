@@ -21,7 +21,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    let discordClient = sails.hooks.discordbot.getClient();
+    let discordClient = sails.helpers.discord.getClient();
     let amountOfDiscordGuilds = discordClient.guilds.cache.size;
     let amountOfOnlineDiscordUsers = discordClient.users.cache.size;
 

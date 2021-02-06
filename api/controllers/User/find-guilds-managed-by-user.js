@@ -33,7 +33,7 @@ module.exports = {
 
     try {
 
-      const discordClient = sails.hooks.discordbot.getClient();
+      const discordClient = sails.helpers.discord.getClient();
       const foundUser = await User.findOne(inputs.userId);
 
       if (_.isUndefined(foundUser) || '' === foundUser.discordId) {

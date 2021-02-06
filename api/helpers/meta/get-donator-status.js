@@ -34,7 +34,7 @@ module.exports = {
         break;
     }
 
-    let discordClient = sails.hooks.discordbot.getClient();
+    let discordClient = sails.helpers.discord.getClient();
     let developerGuild = discordClient.guilds.cache.get(
       sails.config.custom.donorConfig.devDiscordServer
     );

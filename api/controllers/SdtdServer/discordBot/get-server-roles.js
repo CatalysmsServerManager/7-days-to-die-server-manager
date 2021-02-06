@@ -27,7 +27,7 @@ module.exports = {
 
     let foundRoles = new Array();
     if (server.config[0].discordGuildId) {
-      let discordClient = await sails.hooks.discordbot.getClient();
+      let discordClient = await sails.helpers.discord.getClient();
       let discordGuild = await discordClient.guilds.fetch(server.config[0].discordGuildId);
       if (!_.isUndefined(discordGuild)) {
         foundRoles = discordGuild.roles.cache.array();

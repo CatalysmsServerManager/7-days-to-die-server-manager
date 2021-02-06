@@ -4,14 +4,14 @@ const { expect } = require('chai');
 describe('/api/sdtdserver/setchatchannel', function () {
 
   beforeEach(() => {
-    const client = sails.hooks.discordbot.getClient();
+    const client = sails.helpers.discord.getClient();
     sandbox.stub(client.channels.cache, 'get').returns({ send: sandbox.stub() });
     sandbox.stub(sails.hooks.discordchatbridge, 'start').returns(null);
     sandbox.stub(sails.hooks.discordchatbridge, 'stop').returns(null);
   });
 
   it('returns OK with correct data', async function () {
-    const client = sails.hooks.discordbot.getClient();
+    const client = sails.helpers.discord.getClient();
     sandbox.stub(sails.hooks.discordchatbridge, 'getStatus').returns(false);
     const response = await supertest(sails.hooks.http.app)
       .post('/api/sdtdserver/setchatchannel')

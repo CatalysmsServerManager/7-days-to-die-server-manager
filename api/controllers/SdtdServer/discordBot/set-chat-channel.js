@@ -38,7 +38,7 @@ module.exports = {
 
     try {
       let server = await SdtdServer.findOne(inputs.serverId);
-      let discordClient = sails.hooks.discordbot.getClient();
+      let discordClient = sails.helpers.discord.getClient();
       let chatChannel = await discordClient.channels.cache.get(inputs.chatChannelId);
       let chatBridgeHook = sails.hooks.discordchatbridge;
 

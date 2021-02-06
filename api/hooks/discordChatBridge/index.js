@@ -27,7 +27,7 @@ module.exports = function SdtdDiscordChatBridge(sails) {
       sails.after('hook:discordbot:loaded', async function () {
         sails.log.info('Initializing custom hook (`discordChatbridge`)');
 
-        let discordClient = sails.hooks.discordbot.getClient();
+        let discordClient = sails.helpers.discord.getClient();
 
         discordClient.on('ready', async () => {
           try {
@@ -101,7 +101,7 @@ module.exports = function SdtdDiscordChatBridge(sails) {
 
     try {
       sails.log.debug(`HOOK SdtdDiscordChatBridge:start - Starting chatbridge for server ${serverId}`);
-      let discordClient = sails.hooks.discordbot.getClient();
+      let discordClient = sails.helpers.discord.getClient();
       let config = await SdtdConfig.find({
         server: serverId
       }).limit(1);

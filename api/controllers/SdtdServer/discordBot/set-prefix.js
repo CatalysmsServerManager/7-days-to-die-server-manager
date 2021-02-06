@@ -25,7 +25,7 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     await SdtdConfig.update({ server: inputs.serverId }, { discordPrefix: inputs.prefix });
-    let discordClient = sails.hooks.discordbot.getClient();
+    let discordClient = sails.helpers.discord.getClient();
     let guild = discordClient.guilds.cache.get(inputs.guildId);
     if (guild) {
       guild.commandPrefix = inputs.prefix;
