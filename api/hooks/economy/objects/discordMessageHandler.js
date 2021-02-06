@@ -8,8 +8,8 @@ class DiscordMessageHandler {
   }
 
   async init() {
-    let client = sails.hooks.discordbot.getClient();
-    let emitterObj =  new GuildMessageEmitter();
+    let client = sails.helpers.discord.getClient();
+    let emitterObj = new GuildMessageEmitter();
     this.emitter = emitterObj;
 
 

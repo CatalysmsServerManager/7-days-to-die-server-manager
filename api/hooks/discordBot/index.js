@@ -1,4 +1,3 @@
-const Commando = require('discord.js-commando');
 const path = require('path');
 const { handleRoleUpdate } = require('./roles/handleRoleUpdate.js');
 
@@ -26,11 +25,7 @@ module.exports = function discordBot(sails) {
     initialize: function (cb) {
       sails.on('hook:sdtdlogs:loaded', function () {
         sails.log.info('Initializing custom hook (`discordBot`)');
-        client = new Commando.Client({
-          owner: sails.config.custom.botOwners,
-          unknownCommandResponse: false,
-          invite: process.env.INVITELINK
-        });
+        client = sails.helpers.discord.getClient();
 
         sails.discordBotClient = client;
         // eslint-disable-next-line callback-return
@@ -143,17 +138,6 @@ module.exports = function discordBot(sails) {
           sails.log.warn(`No Discord bot token was given, not logging in. This is probably not what you wanted!`);
         }
       });
-    },
-
-    /**
-     * @memberof module:DiscordBot
-     * @method
-     * @name getClient
-     * @description returns the discord client
-     */
-
-    getClient: function () {
-      return sails.discordBotClient;
     },
   };
 

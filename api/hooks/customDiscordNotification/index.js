@@ -62,7 +62,7 @@ module.exports = function defineCustomDiscordNotificationHook(sails) {
 
 async function sendNotification(logLine, server, customNotif) {
 
-  let discordClient = sails.hooks.discordbot.getClient();
+  let discordClient = sails.helpers.discord.getClient();
   let channel = await discordClient.channels.cache.get(customNotif.discordChannelId);
 
   if (!_.isUndefined(channel)) {

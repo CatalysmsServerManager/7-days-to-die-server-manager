@@ -33,7 +33,7 @@ module.exports = {
 
     try {
 
-      let discordClient = sails.hooks.discordbot.getClient();
+      let discordClient = sails.helpers.discord.getClient();
       let guild = discordClient.guilds.cache.get(inputs.guildId);
       if (_.isUndefined(guild)) {
         return exits.success([]);
