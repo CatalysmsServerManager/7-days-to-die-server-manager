@@ -29,8 +29,8 @@ module.exports = async function donorCheck() {
         let current = await SdtdConfig.findOne({ server: server.id });
         current = (await SdtdConfig.update({ server: server.id }, { failedDonorChecks: current.failedDonorChecks + 1 }).fetch())[0];
 
-        sails.log.warn(`[Donor check] server ${server.id} failed donator check. Has failed ${current.failedDonorChecks} times so far`);
         const user = await User.findOne(server.owner);
+        sails.log.warn(`[Donor check] server ${server.id} failed donator check. Has failed ${current.failedDonorChecks} times so far. Sending a DM to user ${user.id}`);
         await sails.helpers.discord.sendDm(user.discordId, `WARNING! The CSMM instance you are using is a donator-only instance. CSMM checks your donator status every day and if your server fails ${checksToFailBeforeDeletion} times, it will be automatically deleted. This is check ${current.failedDonorChecks}/${checksToFailBeforeDeletion} for server ${server.id}`);
 
         if (current.failedDonorChecks >= checksToFailBeforeDeletion) {
