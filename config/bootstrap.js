@@ -36,7 +36,7 @@ module.exports.bootstrap = async function (done) {
     {
       attempts: 1,
       repeat: {
-        cron: '* * * * *',
+        cron: '0 0 * * *',
       }
     });
 
