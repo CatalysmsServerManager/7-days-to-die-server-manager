@@ -26,6 +26,11 @@ module.exports = {
       defaultsTo: false
     },
 
+    message: {
+      type: 'string',
+      allowNull: true
+    },
+
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝

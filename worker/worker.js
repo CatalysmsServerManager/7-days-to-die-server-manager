@@ -1,5 +1,4 @@
 require('dotenv').config();
-const tracer = require('../api/utils').loadDatadog();
 
 const sails = require('sails');
 const SdtdApi = require('7daystodie-api-wrapper');
@@ -42,6 +41,7 @@ const playerTrackingProcessor = require('./processors/playerTracking');
 const killProcessor = require('./processors/kill');
 const hookProcessor = require('./processors/hooks');
 const systemProcessor = require('./processors/system');
+const customNotificationsProcessor = require('./processors/customNotifications');
 
 sails.load(configOverrides, async function (err) {
   if (err) {
@@ -72,6 +72,7 @@ sails.load(configOverrides, async function (err) {
     kill: sails.helpers.getQueueObject('kill'),
     hooks: sails.helpers.getQueueObject('hooks'),
     system: sails.helpers.getQueueObject('system'),
+    customNotifications: sails.helpers.getQueueObject('customNotifications'),
   };
 
   for (const queue in queues) {
@@ -91,35 +92,17 @@ sails.load(configOverrides, async function (err) {
     });
 
   }
-
-  // Only enable tracing when DD variables are defined
-  if (process.env.DD_AGENT_HOST && process.env.DD_TRACE_AGENT_PORT) {
-    await Promise.all([
-      // We can afford a high concurrency here since jobs are only a HTTP fetch. This would be different if they are long running, blocking operations
-      queues.logs.process(100, tracer.wrap('job.logs', logProcessor)),
-      queues.discordNotifications.process(tracer.wrap('job.discordNotifications', notifProcessor)),
-      queues.bannedItems.process(tracer.wrap('job.bannedItems', bannedItemsProcessor)),
-      queues.playerTracking.process(25, tracer.wrap('job.playerTracking', playerTrackingProcessor)),
-      queues.kill.process(tracer.wrap('job.kill', killProcessor)),
-      queues.hooks.process(25, tracer.wrap('job.hooks', hookProcessor)),
-      queues.system.process(systemProcessor)
-    ]);
-  } else {
-    await Promise.all([
-      // We can afford a high concurrency here since jobs are only a HTTP fetch. This would be different if they are long running, blocking operations
-      queues.logs.process(100, logProcessor),
-      queues.discordNotifications.process(notifProcessor),
-      queues.bannedItems.process(bannedItemsProcessor),
-      queues.playerTracking.process(25, playerTrackingProcessor),
-      queues.kill.process(killProcessor),
-      queues.hooks.process(25, hookProcessor),
-      queues.system.process(systemProcessor)
-    ]);
-  }
-
-
-
-
+  await Promise.all([
+    // We can afford a high concurrency here since jobs are only a HTTP fetch. This would be different if they are long running, blocking operations
+    queues.logs.process(100, logProcessor),
+    queues.discordNotifications.process(notifProcessor),
+    queues.bannedItems.process(bannedItemsProcessor),
+    queues.playerTracking.process(25, playerTrackingProcessor),
+    queues.kill.process(killProcessor),
+    queues.hooks.process(25, hookProcessor),
+    queues.system.process(systemProcessor),
+    queues.customNotifications.process(customNotificationsProcessor)
+  ]);
 
   return;
 });

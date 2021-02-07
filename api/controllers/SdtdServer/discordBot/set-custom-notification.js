@@ -1,3 +1,6 @@
+const safeRegex = require('safe-regex');
+
+
 module.exports = {
 
   friendlyName: 'Set custom notification',
@@ -22,6 +25,16 @@ module.exports = {
 
     stringToSearchFor: {
       required: true,
+      type: 'string',
+      custom: (val) => {
+        if (val.startsWith('/') && val.endsWith('/')) {
+          return safeRegex(val.slice(1, val.length - 1));
+        }
+        return true;
+      }
+    },
+
+    message: {
       type: 'string'
     }
 
@@ -52,7 +65,8 @@ module.exports = {
       stringToSearchFor: inputs.stringToSearchFor,
       discordChannelId: inputs.channelId,
       server: inputs.serverId,
-      ignoreServerChat: inputs.ignoreServerChat
+      ignoreServerChat: inputs.ignoreServerChat,
+      message: inputs.message
     });
 
     return exits.success();

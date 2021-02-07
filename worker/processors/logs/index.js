@@ -160,6 +160,7 @@ module.exports = async (job) => {
 
     response.push(enrichedLog);
     sails.helpers.getQueueObject('hooks').add(enrichedLog);
+    sails.helpers.getQueueObject('customNotifications').add(enrichedLog);
   }
 
   return { server: job.data.server, logs: response };
