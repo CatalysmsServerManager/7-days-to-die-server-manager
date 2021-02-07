@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 
 
-module.exports = async (job) => {
+module.exports = async function customNotifications(job) {
   sails.log.debug('[Worker] Got a `customNotification` job', job.data);
   if (!job.data.data.msg) {
     throw new Error(`Must specify a msg`);

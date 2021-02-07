@@ -1,4 +1,4 @@
-module.exports = async (job) => {
+module.exports = async function kill(job) {
   sails.log.debug('[Worker] Got a `kill` job', job.data);
   return handleKill(job.data);
 };

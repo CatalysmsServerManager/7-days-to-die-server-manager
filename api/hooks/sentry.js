@@ -1,5 +1,8 @@
 const os = require('os');
-module.exports = function Sentry(sails) {
+const Sentry = require('@sentry/node');
+const Tracing = require('@sentry/tracing');
+
+module.exports = function SentryHook(sails) {
   return {
     /**
      * Default configuration
@@ -14,7 +17,12 @@ module.exports = function Sentry(sails) {
         environment: process.env.NODE_ENV || 'development',
         serverName: process.env.CSMM_HOSTNAME || os.hostname(),
         release: require('../../package.json').version,
-        tracesSampleRate: 0.001,
+        tracesSampleRate: 0.01,
+        integrations: [
+          new Sentry.Integrations.Http({ tracing: true }),
+          new Tracing.Integrations.Express({ app: sails }),
+          new Tracing.Integrations.Mysql()
+        ]
       }
     },
 
@@ -31,7 +39,7 @@ module.exports = function Sentry(sails) {
         return cb();
       }
 
-      const Sentry = require('@sentry/node');
+
       const { getCurrentHub } = require('@sentry/core');
       const { Severity } = require('@sentry/types');
       const util = require('util');
@@ -80,6 +88,7 @@ module.exports = function Sentry(sails) {
               category: 'sailslog',
               level: sentryLevel,
               message: util.format.apply(undefined, arguments),
+              data: { ...arguments }
             },
             {
               input: [...arguments],
@@ -98,6 +107,25 @@ module.exports = function Sentry(sails) {
 
       // We're done initializing.
       return cb();
+    },
+
+    wrapFn: function wrapFn(fn) {
+      return async function () {
+        const transaction = Sentry.startTransaction({
+          op: 'wrapped',
+          name: fn.name,
+        });
+
+        Sentry.configureScope(scope => {
+          scope.setSpan(transaction);
+        });
+
+        return fn.apply(this, arguments, transaction).then(returnVal => {
+          transaction.finish();
+          return returnVal;
+        });
+
+      };
     }
   };
 };
