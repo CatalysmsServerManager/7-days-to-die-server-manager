@@ -50,7 +50,8 @@
     "sequelize-cli": "^6.2.0",
     "split-string": "^6.1.0",
     "validator": "^10.9.0",
-    "winston": "^2.4.3"
+    "winston": "^2.4.3",
+    "snyk": "^1.446.0"
   },
   "scripts": {
     "start": "cross-env NODE_ENV=production concurrently --kill-others -n 'app,worker' 'npm run start:app' 'npm run start:worker'",
@@ -66,7 +67,9 @@
     "postversion": "git push && git push --tags",
     "sequelize": "sequelize-cli",
     "db:migrate": "npm run sequelize -- db:migrate",
-    "db:migrate:undo": "npm run sequelize -- db:migrate:undo"
+    "db:migrate:undo": "npm run sequelize -- db:migrate:undo",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "main": "app.js",
   "repository": {
@@ -156,5 +159,6 @@
   },
   "lint-staged": {
     "*.js": "npm run lint"
-  }
+  },
+  "snyk": true
 }
