@@ -1,10 +1,14 @@
 const { expect } = require('chai');
-const customDiscordNotification = require('../../../../api/hooks/customDiscordNotification');
+const customNotification = require('../../../../worker/processors/customNotifications');
 
-function logLine(msg) {
+function jobData(msg) {
     return {
-        msg,
-        server: sails.testServer
+        data: {
+            data: {
+                msg
+            },
+            server: sails.testServer
+        }
     };
 }
 
@@ -25,14 +29,14 @@ describe('HOOK Custom Discord notifications', () => {
     });
 
     it('Detects messages with string matching', async function () {
-        await sails.hooks.customdiscordnotification.handleLogLine(logLine('unittest'));
+        await customNotification(jobData('unittest'));
         expect(this.channelSpy).to.have.been.calledOnce;
     });
 
     it('Can ignore server chat', async function () {
-        await sails.hooks.customdiscordnotification.handleLogLine(logLine('unittest'));
+        await customNotification(jobData('unittest'));
         expect(this.channelSpy).to.have.been.calledOnce;
-        await sails.hooks.customdiscordnotification.handleLogLine(logLine('chat (from \'-non-player-\', unittest'));
+        await customNotification(jobData('chat (from \'-non-player-\', unittest'));
         expect(this.channelSpy).to.have.been.calledOnce;
     });
 

@@ -148,7 +148,6 @@ module.exports = function sdtdLogs(sails) {
         sails.log.debug(`HOOKS - sdtdLogs - Creating loggingObject for server ${serverID}`);
 
         loggingInfoMap.set(serverID, eventEmitter);
-        await sails.hooks.customdiscordnotification.start(serverID);
       }
 
       eventEmitter.on('logLine', function (logLine) {
