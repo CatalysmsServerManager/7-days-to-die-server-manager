@@ -96,7 +96,7 @@
     "mockdate": "^3.0.2",
     "nodemon": "^2.0.3",
     "nyc": "^15.0.1",
-    "sails-disk": "^1.1.2",
+    "sails-disk": "^2.1.0",
     "sinon": "^9.0.2",
     "sinon-chai": "^3.5.0",
     "supertest": "^4.0.2"
