@@ -32,33 +32,37 @@ module.exports = function defineCustomDiscordNotificationHook(sails) {
         return;
       }
 
-      loggingObject.on('logLine', async (logLine) => {
-
-        let server = logLine.server;
-        let customNotifs = await CustomDiscordNotification.find({
-          server: server.id
-        });
-
-        for (const notification of customNotifs) {
-
-          let logMessage = logLine.msg.toLowerCase();
-          let stringToSearchFor = notification.stringToSearchFor.toLowerCase();
-
-
-          if (logMessage.includes(stringToSearchFor) && notification.enabled) {
-            if (notification.ignoreServerChat && (logMessage.startsWith('chat (from \'-non-player-\',') || logMessage.includes('webcommandresult_for_say'))) {
-
-            } else {
-              sendNotification(logLine, server, notification);
-            }
-          }
-        }
-
-      });
+      loggingObject.on('logLine', (logLine) => this.handleLogLine(logLine));
     },
+
+    handleLogLine: handleLogLine,
+    sendNotification: sendNotification
   };
 };
 
+
+async function handleLogLine(logLine) {
+
+  let server = logLine.server;
+  let customNotifs = await CustomDiscordNotification.find({
+    server: server.id
+  });
+  for (const notification of customNotifs) {
+
+    let logMessage = logLine.msg.toLowerCase();
+    let stringToSearchFor = notification.stringToSearchFor.toLowerCase();
+
+
+    if (logMessage.includes(stringToSearchFor) && notification.enabled) {
+      if (notification.ignoreServerChat && (logMessage.startsWith('chat (from \'-non-player-\',') || logMessage.includes('webcommandresult_for_say'))) {
+        sails.log.debug('Ignoring message because server chat is ignored');
+      } else {
+        sails.log.debug(`Triggered a custom notification for server ${server.id} - ${logLine.msg}`);
+        this.sendNotification(logLine, server, notification);
+      }
+    }
+  }
+}
 
 async function sendNotification(logLine, server, customNotif) {
 
