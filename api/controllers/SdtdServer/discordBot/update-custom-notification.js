@@ -15,7 +15,13 @@ module.exports = {
     },
 
     stringToSearchFor: {
-      type: 'string'
+      type: 'string',
+      custom: (val) => {
+        if (val.startsWith('/') && val.endsWith('/')) {
+          return safeRegex(val.slice(1, val.length - 1));
+        }
+        return true;
+      }
     },
 
     enabled: {

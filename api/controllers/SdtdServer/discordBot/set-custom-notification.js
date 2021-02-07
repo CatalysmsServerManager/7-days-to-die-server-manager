@@ -1,3 +1,6 @@
+const safeRegex = require('safe-regex');
+
+
 module.exports = {
 
   friendlyName: 'Set custom notification',
@@ -22,7 +25,13 @@ module.exports = {
 
     stringToSearchFor: {
       required: true,
-      type: 'string'
+      type: 'string',
+      custom: (val) => {
+        if (val.startsWith('/') && val.endsWith('/')) {
+          return safeRegex(val.slice(1, val.length - 1));
+        }
+        return true;
+      }
     }
 
   },
