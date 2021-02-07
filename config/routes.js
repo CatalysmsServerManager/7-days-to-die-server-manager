@@ -477,8 +477,6 @@ module.exports.routes = {
     'SdtdServerController/discordBot.set-custom-notification',
   'delete /api/sdtdserver/discord/customNotification':
     'SdtdServerController/discordBot.delete-custom-notification',
-  'patch /api/sdtdserver/discord/customNotification':
-    'SdtdServerController/discordBot.update-custom-notification',
   'get /api/sdtdserver/discord/customNotification':
     'SdtdServerController/discordBot.get-custom-notifications',
 

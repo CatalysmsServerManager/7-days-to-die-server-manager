@@ -4,8 +4,8 @@
 </button>
 
 <!-- Modal -->
-<div class="modal fade" id="custom-notifications-modal" tabindex="-1" role="dialog" aria-labelledby="custom-notifications-title-modal"
-  aria-hidden="true">
+<div class="modal fade" id="custom-notifications-modal" tabindex="-1" role="dialog"
+  aria-labelledby="custom-notifications-title-modal" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -22,17 +22,27 @@
 
         <div class="form-check">
           <label class="form-check-label">
-            <input type="checkbox" class="form-check-input" name="custom-notification-ingoreServer" id="custom-notification-ingoreServer">
+            <input type="checkbox" class="form-check-input" name="custom-notification-ingoreServer"
+              id="custom-notification-ingoreServer">
             Ignore messages sent by server in game chat
           </label>
         </div>
 
         <div class="form-group">
           <label for="custom-notification-stringToSearchFor">Text to search for</label>
-          <input type="text" class="form-control" name="custom-notification-stringToSearchFor" id="custom-notification-stringToSearchFor"
-            aria-describedby="custom-notification-stringToSearchFor-help" placeholder="">
+          <input type="text" class="form-control" name="custom-notification-stringToSearchFor"
+            id="custom-notification-stringToSearchFor" aria-describedby="custom-notification-stringToSearchFor-help"
+            placeholder="">
           <small id="custom-notification-stringToSearchFor-help" class="form-text text-muted">The piece of text that
-            will trigger a notification</small>
+            will trigger a notification. This can also be a regex with named captures!</small>
+        </div>
+
+        <div class="form-group">
+          <label for="custom-notification-message">Message</label>
+          <input type="text" class="form-control" name="custom-notification-message" id="custom-notification-message"
+            aria-describedby="custom-notification-message-help" placeholder="">
+          <small id="custom-notification-message-help" class="form-text text-muted">A custom message to display when the
+            notification triggers</small>
         </div>
 
         <button id="custom-notification-create" type="button" class="btn btn-success">Add</button>
@@ -44,6 +54,7 @@
               <th>Channel</th>
               <th>Enabled</th>
               <th>Ignore server chat</th>
+              <th>Message</th>
             </tr>
           </thead>
           <tbody>
@@ -66,7 +77,39 @@
 <script>
   $(document).ready(e => {
 
-    drawNotificationsTable()
+    const table = $('#custom-notifications-table').DataTable({
+      data: window.SAILS_LOCALS.players,
+      fixedHeader: true,
+      autoWidth: false,
+      //  responsive: true,
+      columns: [{
+        data: 'stringToSearchFor',
+        render: $.fn.dataTable.render.text()
+      },
+      {
+        data: 'discordChannelId'
+      },
+      {
+        data: 'enabled'
+      },
+      {
+        data: 'ignoreServerChat'
+      },
+      {
+        data: 'message',
+        render: $.fn.dataTable.render.text()
+      },
+      {
+        data: 'deleteBtn',
+        width: '20%',
+        render: function (data, type, row, meta) {
+          return `<button type="button" class="btn btn-danger delete-custom-notification" value="${row.id}">Delete</button>`
+        }
+      },
+      ]
+    });
+
+    drawNotificationsTable(table)
 
     getWritableChannels(window.SAILS_LOCALS.config.discordGuildId).then(writeableChannels => {
 
@@ -87,10 +130,11 @@
           serverId: window.SAILS_LOCALS.server.id,
           channelId: $("#custom-notification-channel").val(),
           stringToSearchFor: $("#custom-notification-stringToSearchFor").val(),
+          message: $("#custom-notification-message").val(),
           ignoreServerChat: $("#custom-notification-ingoreServer").prop('checked')
         },
         success: (data, status, xhr) => {
-          drawNotificationsTable()
+          drawNotificationsTable(table)
         },
         error: function (xhr, status, error) {
           displayAjaxToSupportData(xhr, this);;
@@ -109,7 +153,7 @@
           notificationId: $(e.target).val()
         },
         success: (data, status, xhr) => {
-          drawNotificationsTable()
+          drawNotificationsTable(table)
         },
         error: function (xhr, status, error) {
           displayAjaxToSupportData(xhr, this);;
@@ -120,19 +164,16 @@
 
   });
 
-  function drawNotificationsTable() {
-    $("#custom-notifications-table tbody tr").remove();
+  function drawNotificationsTable(table) {
+    table.clear();
     $.ajax({
       url: `/api/sdtdserver/discord/customNotification`,
       data: {
         serverId: window.SAILS_LOCALS.server.id
       },
       success: (data, status, xhr) => {
-        for (const customNotif of data) {
-          $('#custom-notifications-table tbody').append(
-            `<tr><td>${customNotif.stringToSearchFor}</td><td>${customNotif.discordChannelId}</td><td>${customNotif.enabled}</td><td>${customNotif.ignoreServerChat}</td><td><button type="button" class="btn btn-danger delete-custom-notification" value="${customNotif.id}">Delete</button></td></tr>`
-          );
-        }
+        table.rows.add(data);
+        table.draw();
       },
       error: function (xhr, status, error) {
         displayAjaxToSupportData(xhr, this);;
@@ -145,9 +186,9 @@
   async function getWritableChannels(guildId) {
     return new Promise((resolve, reject) => {
 
-        if (!guildId) {
-          return resolve([]);
-        }
+      if (!guildId) {
+        return resolve([]);
+      }
 
       $.ajax({
         url: `/api/sdtdserver/findwriteablechannelsinguild`,
@@ -173,8 +214,8 @@
 
     channels.forEach(channel => {
       element.append($('<option>', {
-          value: channel.id
-        })
+        value: channel.id
+      })
         .text("#" + channel.name));
     })
 

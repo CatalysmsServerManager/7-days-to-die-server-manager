@@ -32,6 +32,10 @@ module.exports = {
         }
         return true;
       }
+    },
+
+    message: {
+      type: 'string'
     }
 
   },
@@ -61,7 +65,8 @@ module.exports = {
       stringToSearchFor: inputs.stringToSearchFor,
       discordChannelId: inputs.channelId,
       server: inputs.serverId,
-      ignoreServerChat: inputs.ignoreServerChat
+      ignoreServerChat: inputs.ignoreServerChat,
+      message: inputs.message
     });
 
     return exits.success();

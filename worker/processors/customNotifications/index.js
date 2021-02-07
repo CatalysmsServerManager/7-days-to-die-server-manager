@@ -25,13 +25,13 @@ async function handleLogLine(logLine) {
         if (!notification.enabled) {
             continue;
         }
-
-        if (matches(logLine.msg, notification.stringToSearchFor)) {
+        const matchResult = matches(logLine.msg, notification.stringToSearchFor);
+        if (matchResult) {
             if (notification.ignoreServerChat && isServerMessage(logLine.msg)) {
                 sails.log.debug('Ignoring message because server chat is ignored');
             } else {
                 sails.log.info(`Triggered a custom notification for server ${server.id} - ${logLine.msg}`);
-                await sendNotification(logLine, server, notification);
+                await sendNotification(logLine, server, notification, matchResult);
             }
         }
     }
@@ -51,25 +51,44 @@ function matchesString(str, msg) {
 
 function matchesRegex(regex, msg) {
     const rgx = new RegExp(regex.slice(1, regex.length - 1), 'i');
-    return rgx.test(msg);
+    const res = msg.match(rgx);
+    if (res) {
+        if (res.groups) {
+            return res.groups;
+        }
+        return res;
+    } else {
+        return null;
+    }
 }
 
 function isServerMessage(msg) {
     return (msg.startsWith('chat (from \'-non-player-\',') || msg.includes('webcommandresult_for_say'));
 }
 
-async function sendNotification(logLine, server, customNotif) {
+async function sendNotification(logLine, server, customNotif, matches) {
 
     const discordClient = sails.helpers.discord.getClient();
     const channel = await discordClient.channels.cache.get(customNotif.discordChannelId);
 
-    if (!_.isUndefined(channel)) {
-        const embed = new Discord.MessageEmbed();
-
-        embed.setTitle(`Custom notification for ${server.name}`)
-            .addField('Time', logLine.time, true)
-            .addField('Message', logLine.msg.substr(0, 1024))
-            .setFooter(`Triggered by "${customNotif.stringToSearchFor}"`);
-        return channel.send(embed);
+    if (!channel) {
+        return;
     }
+
+    const embed = new Discord.MessageEmbed();
+
+    embed.setTitle(`Custom notification for ${server.name}`);
+
+    if (customNotif.message) {
+        const message = await sails.helpers.sdtd.fillCustomVariables(
+            customNotif.message,
+            matches
+        );
+        embed.setDescription(message);
+    } else {
+        embed.addField('Message', logLine.msg.substr(0, 1024));
+    }
+
+    return channel.send(embed);
+
 }
