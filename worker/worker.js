@@ -1,5 +1,4 @@
 require('dotenv').config();
-const tracer = require('../api/utils').loadDatadog();
 
 const sails = require('sails');
 const SdtdApi = require('7daystodie-api-wrapper');
