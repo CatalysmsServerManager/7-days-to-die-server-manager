@@ -28,7 +28,7 @@ async function handleLogLine(logLine) {
 
 
         if (logMessage.includes(stringToSearchFor) && notification.enabled) {
-            if (notification.ignoreServerChat && (logMessage.startsWith('chat (from \'-non-player-\',') || logMessage.includes('webcommandresult_for_say'))) {
+            if (notification.ignoreServerChat && isServerMessage(logLine.msg)) {
                 sails.log.debug('Ignoring message because server chat is ignored');
             } else {
                 sails.log.debug(`Triggered a custom notification for server ${server.id} - ${logLine.msg}`);
@@ -36,6 +36,10 @@ async function handleLogLine(logLine) {
             }
         }
     }
+}
+
+function isServerMessage(msg) {
+    return (msg.startsWith('chat (from \'-non-player-\',') || msg.includes('webcommandresult_for_say'));
 }
 
 async function sendNotification(logLine, server, customNotif) {
