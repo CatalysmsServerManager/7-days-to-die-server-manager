@@ -50,7 +50,7 @@
     "sequelize-cli": "^6.2.0",
     "split-string": "^6.1.0",
     "validator": "^10.9.0",
-    "winston": "^2.4.3"
+    "winston": "^3.3.3"
   },
   "scripts": {
     "start": "cross-env NODE_ENV=production concurrently --kill-others -n 'app,worker' 'npm run start:app' 'npm run start:worker'",
