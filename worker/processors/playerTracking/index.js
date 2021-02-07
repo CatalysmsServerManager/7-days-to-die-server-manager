@@ -1,7 +1,7 @@
 const trackingFunctions = require('./trackingFunctions');
 
 
-module.exports = async (job) => {
+module.exports = async function playerTracking(job) {
   sails.log.debug('[Worker] Got a `playerTracking` job', job.data);
   return doTracking(job.data);
 };

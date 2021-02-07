@@ -1,7 +1,7 @@
 const notifications = require('./notifications');
 
 
-module.exports = async (job) => {
+module.exports = async function discordNotification(job) {
   sails.log.debug('[Worker] Got a `discordNotification` job', job.data);
   if (!job.data.serverId) {
     throw new Error(`Must specify a serverId in options to send notification`);

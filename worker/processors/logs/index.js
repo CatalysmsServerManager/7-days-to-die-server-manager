@@ -56,7 +56,7 @@ async function failedHandler(job, e) {
   return { server: job.data.server };
 }
 
-module.exports = async (job) => {
+module.exports = async function logs(job) {
   sails.log.debug('[Worker] Got a `logs` job', job.data);
   job.data.server = await SdtdServer.findOne(job.data.serverId);
   job.data.server.config = await SdtdConfig.findOne({ server: job.data.serverId });

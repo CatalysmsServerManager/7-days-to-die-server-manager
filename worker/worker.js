@@ -90,18 +90,18 @@ sails.load(configOverrides, async function (err) {
       sails.log.error(`Job with id ${job.id} in queue ${queue} has errored`, error);
       Sentry.captureException(error);
     });
-
   }
+
   await Promise.all([
     // We can afford a high concurrency here since jobs are only a HTTP fetch. This would be different if they are long running, blocking operations
-    queues.logs.process(100, logProcessor),
-    queues.discordNotifications.process(notifProcessor),
-    queues.bannedItems.process(bannedItemsProcessor),
-    queues.playerTracking.process(25, playerTrackingProcessor),
-    queues.kill.process(killProcessor),
-    queues.hooks.process(25, hookProcessor),
-    queues.system.process(systemProcessor),
-    queues.customNotifications.process(customNotificationsProcessor)
+    queues.logs.process(100, sails.hooks.sentry.wrapFn(logProcessor)),
+    queues.discordNotifications.process(sails.hooks.sentry.wrapFn(notifProcessor)),
+    queues.bannedItems.process(sails.hooks.sentry.wrapFn(bannedItemsProcessor)),
+    queues.playerTracking.process(25, sails.hooks.sentry.wrapFn(playerTrackingProcessor)),
+    queues.kill.process(sails.hooks.sentry.wrapFn(killProcessor)),
+    queues.hooks.process(25, sails.hooks.sentry.wrapFn(hookProcessor)),
+    queues.system.process(sails.hooks.sentry.wrapFn(systemProcessor)),
+    queues.customNotifications.process(sails.hooks.sentry.wrapFn(customNotificationsProcessor))
   ]);
 
   return;
