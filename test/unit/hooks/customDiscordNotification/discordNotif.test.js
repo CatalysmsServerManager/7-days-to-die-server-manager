@@ -1,4 +1,5 @@
 const { expect } = require('chai');
+const { it } = require('mocha');
 const customNotification = require('../../../../worker/processors/customNotifications');
 
 function jobData(msg) {
@@ -26,10 +27,22 @@ describe('HOOK Custom Discord notifications', () => {
             discordChannelId: 'test-channel',
             server: sails.testServer.id
         });
+
+        await CustomDiscordNotification.create({
+            stringToSearchFor: '/regex-test/',
+            ignoreServerChat: true,
+            discordChannelId: 'test-channel',
+            server: sails.testServer.id
+        });
     });
 
     it('Detects messages with string matching', async function () {
         await customNotification(jobData('unittest'));
+        expect(this.channelSpy).to.have.been.calledOnce;
+    });
+
+    it('Detects messages with regex matching', async function () {
+        await customNotification(jobData('regex-test'));
         expect(this.channelSpy).to.have.been.calledOnce;
     });
 

@@ -26,8 +26,11 @@ async function handleLogLine(logLine) {
         let logMessage = logLine.msg.toLowerCase();
         let stringToSearchFor = notification.stringToSearchFor.toLowerCase();
 
+        if (!notification.enabled) {
+            continue;
+        }
 
-        if (logMessage.includes(stringToSearchFor) && notification.enabled) {
+        if (matches(logLine.msg, notification.stringToSearchFor)) {
             if (notification.ignoreServerChat && isServerMessage(logLine.msg)) {
                 sails.log.debug('Ignoring message because server chat is ignored');
             } else {
@@ -36,6 +39,23 @@ async function handleLogLine(logLine) {
             }
         }
     }
+}
+
+function matches(msg, test) {
+    if (test.startsWith('/') && test.endsWith('/')) {
+        return matchesRegex(test, msg);
+    } else {
+        return matchesString(test, msg);
+    }
+}
+
+function matchesString(str, msg) {
+    return msg.includes(str);
+}
+
+function matchesRegex(regex, msg) {
+    const rgx = new RegExp(regex.slice(1, regex.length - 1));
+    return rgx.test(msg);
 }
 
 function isServerMessage(msg) {
