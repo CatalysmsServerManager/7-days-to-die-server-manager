@@ -211,6 +211,83 @@ describe('HELPER roles/check-permission', () => {
 
     return Promise.all(checks);
   });
+
+  describe('Caching', () => {
+    it('Caches when playerId is given', async () => {
+      const spy = sandbox.spy( sails.helpers.sdtd, 'getPlayerRole');
+      // First do a normal run of checks
+
+      let playerRole = testRoles.filter(r => r.name === 'Player')[0];
+      let player = await mockPlayer({
+        roleId: playerRole.id
+      });
+      let promises = permissionFields.map(async function (field) {
+
+        let result = await sails.helpers.roles.checkPermission.with({
+          serverId: sails.testServer.id,
+          playerId: player.id,
+          permission: field
+        });
+
+        return expect(result.hasPermission).to.be.eq(false);
+      });
+      await Promise.all(promises);
+      expect(spy).to.have.callCount(permissionFields.length);
+
+      // Now do another run, these should all be cached
+
+      promises = permissionFields.map(async function (field) {
+
+        let result = await sails.helpers.roles.checkPermission.with({
+          serverId: sails.testServer.id,
+          playerId: player.id,
+          permission: field
+        });
+
+        return expect(result.hasPermission).to.be.eq(false);
+      });
+      await Promise.all(promises);
+      expect(spy).to.have.callCount(permissionFields.length);
+
+
+    });
+    it('Caches when userId and serverId are given', async () => {
+      const spy = sandbox.spy( sails.helpers.roles, 'getUserRole');
+
+      // First, a normal run
+      let playerRole = testRoles.filter(r => r.name === 'Admin')[0];
+      let player = await mockPlayer({
+        roleId: playerRole.id
+      });
+      let promises = permissionFields.map(async function (field) {
+
+        let result = await sails.helpers.roles.checkPermission.with({
+          userId: player.user,
+          serverId: sails.testServer.id,
+          permission: field
+        });
+        return expect(result.hasPermission).to.be.eq(true);
+      });
+      await Promise.all(promises);
+      expect(spy).to.have.callCount(permissionFields.length);
+
+      // After that, the same run again but now they should be cached
+      promises = permissionFields.map(async function (field) {
+
+        let result = await sails.helpers.roles.checkPermission.with({
+          userId: player.user,
+          serverId: sails.testServer.id,
+          permission: field
+        });
+        return expect(result.hasPermission).to.be.eq(true);
+      });
+      await Promise.all(promises);
+      expect(spy).to.have.callCount(permissionFields.length);
+
+    });
+
+  });
+
 });
 
 async function mockPlayer({
