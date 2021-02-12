@@ -58,6 +58,20 @@ module.exports = {
       }
     }
 
+    // Cache checks
+    if (inputs.playerId) {
+      const cachedRes = await sails.helpers.redis.get(`player:${inputs.playerId}:hasPermission:${inputs.permission}`);
+      if (cachedRes) {
+        return exits.success(JSON.parse(cachedRes));
+      }
+    }
+
+    if (inputs.userId) {
+      const cachedRes = await sails.helpers.redis.get(`user:${inputs.userId}:server:${inputs.serverId}:hasPermission:${inputs.permission}`);
+      if (cachedRes) {
+        return exits.success(JSON.parse(cachedRes));
+      }
+    }
 
     if (inputs.playerId) {
       try {
@@ -117,15 +131,23 @@ module.exports = {
       }
     }
 
+    const result = {
+      hasPermission,
+      role
+    };
+
+    if (inputs.playerId) {
+      await sails.helpers.redis.set(`player:${inputs.playerId}:hasPermission:${inputs.permission}`, JSON.stringify(result), true, 60);
+    }
+
+    if (inputs.userId) {
+      await sails.helpers.redis.set(`user:${inputs.userId}:server:${inputs.serverId}:hasPermission:${inputs.permission}`, JSON.stringify(result), true, 60);
+    }
+
+
     sails.log.debug(`Checked if ${inputs.playerId ? `player ${inputs.playerId}` : `user ${inputs.userId}`} has permission ${inputs.permission} - ${hasPermission}`);
 
     // All done.
-    return exits.success({
-      hasPermission,
-      role
-    });
-
+    return exits.success(result);
   }
-
-
 };
