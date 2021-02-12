@@ -15,7 +15,7 @@ module.exports = async function handleItemTrackerUpdate(data) {
     try {
 
       if (!onlinePlayer.inventory) {
-        sails.log.warning('HOOK:bannedItems - onlinePlayer does not have inventory property', onlinePlayer);
+        sails.log.warn('HOOK:bannedItems - onlinePlayer does not have inventory property', onlinePlayer);
         continue;
       }
 
