@@ -61,13 +61,17 @@ class CustomCommand extends SdtdCommand {
     // Deduct money if configured
     if (server.config.economyEnabled && this.options.costToExecute) {
       let notEnoughMoney = false;
-      await sails.helpers.economy.deductFromPlayer.with({
-        playerId: player.id,
-        amountToDeduct: this.options.costToExecute,
-        message: `COMMAND - ${this.options.name}`
-      }).tolerate('notEnoughCurrency', () => {
+
+      try {
+        await sails.helpers.economy.deductFromPlayer.with({
+          playerId: player.id,
+          amountToDeduct: this.options.costToExecute,
+          message: `COMMAND - ${this.options.name}`
+        });
+      } catch (error) {
         notEnoughMoney = true;
-      });
+      }
+
       if (notEnoughMoney) {
         return chatMessage.reply(`You do not have enough money to do that! ${this.options.name} costs ${this.options.costToExecute} ${server.config.currencyName}`);
       }

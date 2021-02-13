@@ -58,13 +58,19 @@ class telePublic extends SdtdCommand {
 
     if (server.config.economyEnabled && server.config.costToMakeTeleportPublic) {
       let notEnoughMoney = false;
-      await sails.helpers.economy.deductFromPlayer.with({
-        playerId: player.id,
-        amountToDeduct: server.config.costToMakeTeleportPublic,
-        message: `COMMAND - ${this.name}`
-      }).tolerate('notEnoughCurrency', () => {
+
+
+      try {
+        await sails.helpers.economy.deductFromPlayer.with({
+          playerId: player.id,
+          amountToDeduct: server.config.costToMakeTeleportPublic,
+          message: `COMMAND - ${this.name}`
+        });
+      } catch (error) {
         notEnoughMoney = true;
-      });
+      }
+
+
       if (notEnoughMoney) {
         return chatMessage.reply(`notEnoughMoney`, {
           cost: server.config.costToMakeTeleportPublic

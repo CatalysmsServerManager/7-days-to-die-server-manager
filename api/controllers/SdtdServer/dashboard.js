@@ -41,14 +41,12 @@ module.exports = {
 
     try {
 
-      sdtdServerInfo = await sails.helpers.loadSdtdserverInfo(inputs.serverId)
-        .tolerate('unauthorized', (error) => {
-          sails.log.warn(`VIEW - SdtdServer:dashboard - unauthorized for server cannot load serverInfo ${inputs.serverId}`);
-          return exits.badRequest(error);
-        })
-        .tolerate('connectionRefused', error => {
-          return exits.badRequest(error);
-        });
+      try {
+        sdtdServerInfo = await sails.helpers.loadSdtdserverInfo(inputs.serverId);
+      } catch (error) {
+        sails.log.warn(error);
+        return exits.badRequest(error);
+      }
 
       const config = await SdtdConfig.findOne({ server: inputs.serverId });
 
