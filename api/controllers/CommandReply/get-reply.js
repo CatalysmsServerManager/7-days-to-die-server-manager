@@ -39,7 +39,7 @@ module.exports = {
     });
 
     if (response.length === 0 && !_.isEmpty(inputs.type)) {
-      let defaultConfig = sails.hooks.sdtdcommands.replyTypes.filter(r => r.type === inputs.type)[0];
+      let defaultConfig = replyTypes.filter(r => r.type === inputs.type)[0];
       response = [{
         type: defaultConfig.type,
         reply: defaultConfig.default,
