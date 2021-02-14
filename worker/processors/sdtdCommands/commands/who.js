@@ -1,4 +1,4 @@
-let SdtdCommand = require('../command.js');
+const SdtdCommand = require('../command.js');
 const validator = require('validator');
 const he = require('he');
 

@@ -1,4 +1,4 @@
-let SdtdCommand = require('../command.js');
+const SdtdCommand = require('../command.js');
 const SdtdApi = require('7daystodie-api-wrapper');
 
 class Shop extends SdtdCommand {

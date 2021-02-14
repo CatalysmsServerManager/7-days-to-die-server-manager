@@ -1,4 +1,4 @@
-let SdtdCommand = require('../command.js');
+const SdtdCommand = require('../command.js');
 var validator = require('validator');
 
 class renameTele extends SdtdCommand {
