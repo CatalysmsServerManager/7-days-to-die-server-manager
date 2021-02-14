@@ -20,7 +20,6 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     await SdtdConfig.update({ server: inputs.serverId }, { enabledPlayerTeleports: false });
-    await sails.hooks.sdtdcommands.reload(inputs.serverId);
     return exits.success();
 
   }
