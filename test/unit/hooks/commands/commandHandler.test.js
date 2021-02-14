@@ -62,21 +62,14 @@ describe('COMMAND CommandHandler', () => {
   });
   it('Runs all the built in commands', async () => {
     // This is just a sanity check
-    let i = 1;
-    for (const [name, command] of commands.entries()) {
+    // The commands should gracefully exit
+    for (const name of commands.keys()) {
       const chatMessage = {
         messageText: `$${name}`,
         steamId: sails.testPlayer.steamId
       };
-      command.isEnabled = () => false;
       await commandListener({data: {data: chatMessage, server: sails.testServer}});
-      expect(this.executeCommandStub.callCount).to.be.equal(i);
-      i++;
     }
-    for (const call of this.executeCommandStub.getCalls()) {
-      expect(call.lastArg).to.match(/This command is disabled! Ask your server admin to enable it/);
-    }
-
   });
   it('Can run custom commands', async () => {
     await CustomCommand.create({
