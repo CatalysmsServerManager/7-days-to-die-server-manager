@@ -15,7 +15,7 @@ class Ping extends SdtdCommand {
   }
 
   async run(chatMessage) {
-    chatMessage.reply('PONG');
+    return chatMessage.reply('PONG');
   }
 }
 
