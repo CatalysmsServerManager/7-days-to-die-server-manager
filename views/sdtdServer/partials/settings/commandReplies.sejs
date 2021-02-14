@@ -19,7 +19,7 @@
         <div class="form-group">
           <label for="reply-type">Reply type</label>
           <select class="form-control" name="reply-type" id="reply-type">
-            <% sails.hooks.sdtdcommands.replyTypes.forEach(reply => { %>
+            <% replyTypes.forEach(reply => { %>
             <option value="<%= reply.type %>"><%= reply.pretty %></option>
             <% }) %>
           </select>

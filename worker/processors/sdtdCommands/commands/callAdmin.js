@@ -1,4 +1,4 @@
-let SdtdCommand = require('../command.js');
+const SdtdCommand = require('../command.js');
 
 class callAdmin extends SdtdCommand {
   constructor(serverId) {

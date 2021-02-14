@@ -1,4 +1,5 @@
-const replyTypes = require('../../../api/hooks/sdtdCommands/replyTypes.js');
+const replyTypes = require('../../../worker/processors/sdtdCommands/replyTypes');
+
 module.exports = {
   friendlyName: 'Get reply',
   description: '',

@@ -18,11 +18,7 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-
-    let sdtdConfig = await SdtdConfig.findOne({ server: inputs.serverId });
-    let hookStatus = sails.hooks.sdtdcommands.getStatus(inputs.serverId);
-    let status = (sdtdConfig.commandsEnabled && hookStatus);
-    return exits.success(status);
-
+    const {commandsEnabled} = await SdtdConfig.findOne({ server: inputs.serverId });
+    return exits.success(commandsEnabled);
   }
 };

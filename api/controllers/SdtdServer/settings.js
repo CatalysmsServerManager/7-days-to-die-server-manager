@@ -1,3 +1,5 @@
+const replyTypes = require('../../../worker/processors/sdtdCommands/replyTypes');
+
 module.exports = {
 
   friendlyName: 'Settings',
@@ -73,7 +75,8 @@ module.exports = {
         customCommands: customCommands,
         gimmeItems: gimmeItems,
         serverTime: Date.now(),
-        roles
+        roles,
+        replyTypes
       });
     } catch (error) {
       sails.log.error(`VIEW - SdtdServer:settings - ${error}`);
