@@ -345,8 +345,6 @@ module.exports.routes = {
     'SdtdServerController/countryBan.remove-from-whitelist',
 
   // Commands
-  'post /api/sdtdserver/commands/reload':
-    'SdtdServerController/commands.commands-reload',
 
   'post /api/sdtdserver/commands':
     'SdtdServerController/commands.enable-commands',
