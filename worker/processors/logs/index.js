@@ -60,6 +60,7 @@ module.exports = async function logs(job) {
     // Server does not exist in the database
     // We should delete this repeatable job
     await sails.helpers.redis.bull.removeRepeatable(job.data.serverId);
+    return;
   }
 
   job.data.server.config = await SdtdConfig.findOne({ server: job.data.serverId });
