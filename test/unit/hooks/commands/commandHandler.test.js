@@ -1,6 +1,7 @@
 const commandListener = require('../../../../worker/processors/sdtdCommands');
 const { expect } = require('chai');
 const EventEmitter = require('events');
+const commands = require('../../../../worker/processors/sdtdCommands/commands');
 
 describe('COMMAND CommandHandler', () => {
   beforeEach(async () => {
@@ -59,9 +60,23 @@ describe('COMMAND CommandHandler', () => {
     await commandListener({data: {data: chatMessage, server: sails.testServer}});
     expect(this.executeCommandStub.callCount).to.be.equal(0);
   });
-  xit('Runs all the built in commands', async () => {
-    // loop over commands
-    // maybe force them disabled to not have to mock too much here
+  it('Runs all the built in commands', async () => {
+    // This is just a sanity check
+    let i = 1;
+    for (const [name, command] of commands.entries()) {
+      const chatMessage = {
+        messageText: `$${name}`,
+        steamId: sails.testPlayer.steamId
+      };
+      command.isEnabled = () => false;
+      await commandListener({data: {data: chatMessage, server: sails.testServer}});
+      expect(this.executeCommandStub.callCount).to.be.equal(i);
+      i++;
+    }
+    for (const call of this.executeCommandStub.getCalls()) {
+      expect(call.lastArg).to.match(/This command is disabled! Ask your server admin to enable it/);
+    }
+
   });
   xit('Can run custom commands', async () => {});
   xit('', async () => {});
