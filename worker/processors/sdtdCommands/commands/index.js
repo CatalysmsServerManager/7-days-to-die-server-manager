@@ -1,4 +1,4 @@
-module.exports = new Map([
+const commands = new Map([
   ['balance', require('./balance')],
   ['calladmin', require('./callAdmin')],
   ['claim', require('./claim')],
@@ -18,3 +18,5 @@ module.exports = new Map([
   ['vote', require('./vote')],
   ['who', require('./who')],
 ]);
+
+module.exports = commands;
