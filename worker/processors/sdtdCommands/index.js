@@ -34,7 +34,7 @@ async function commandListener(job) {
     });
   } else {
     player = await Player.find({
-      name: he.encode(_.trim(chatMessage.playerName)),
+      name: _.trim(chatMessage.playerName),
       server: server.id
     });
   }
@@ -42,6 +42,7 @@ async function commandListener(job) {
 
   if (player.length === 0) {
     sails.log.warn(`Did not find player data...`, chatMessage);
+    return;
   }
 
 
