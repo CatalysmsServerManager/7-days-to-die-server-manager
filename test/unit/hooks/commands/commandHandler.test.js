@@ -7,7 +7,7 @@ describe('COMMAND CommandHandler', () => {
   beforeEach(async () => {
     this.executeCommandStub = sandbox.stub(sails.helpers.sdtdApi, 'executeConsoleCommand').callsFake(async () => {
       return {
-        result: ''
+        result: 'Mock called'
       };
     });
     sails.testServerConfig = (await SdtdConfig.update(sails.testServerConfig.id, { replyPrefix: 'test',commandsEnabled: true }).fetch())[0];
@@ -78,10 +78,22 @@ describe('COMMAND CommandHandler', () => {
     }
 
   });
-  xit('Can run custom commands', async () => {});
-  xit('', async () => {});
-  xit('', async () => {});
-  xit('', async () => {});
+  it('Can run custom commands', async () => {
+    await CustomCommand.create({
+      name: 'test',
+      commandsToExecute: 'say test',
+      server: sails.testServer.id
+    });
+
+    const chatMessage = {
+      messageText: `$test`,
+      steamId: sails.testPlayer.steamId
+    };
+    await commandListener({data: {data: chatMessage, server: sails.testServer}});
+
+    expect(this.executeCommandStub.callCount).to.be.equal(1);
 
 
+
+  });
 });

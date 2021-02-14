@@ -20,20 +20,14 @@ module.exports = async function findCommandToExecute(commandName, server) {
     return aliasFound;
   }
 
-  let customCommands = await sails.models.customcommand.find({
+  const command = await sails.models.customcommand.findOne({
     server: server.id,
     enabled: true,
     name: commandName
   }).populate('arguments');
 
-  let customCommandFound = false;
-
-  customCommands.forEach(command => {
-    customCommandFound = new CustomCommand(server.id, command);
-  });
-
-  if (customCommandFound) {
-    return customCommandFound;
+  if (command) {
+    return new CustomCommand(command);
   }
 
   return undefined;
