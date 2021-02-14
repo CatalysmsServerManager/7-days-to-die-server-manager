@@ -10,6 +10,7 @@ const renameTele = require('./renameTele');
 const seen = require('./seen');
 const setTele = require('./setTele');
 const shop = require('./shop');
+const ping = require('./ping');
 const tele = require('./tele');
 const teleprivate = require('./teleprivate');
 const telePublic = require('./telePublic');
@@ -34,6 +35,7 @@ const commands = new Map([
   ['telePublic', new telePublic() ],
   ['vote', new vote() ],
   ['who', new who() ],
+  ['ping', new ping() ],
 ]);
 
 module.exports = commands;
