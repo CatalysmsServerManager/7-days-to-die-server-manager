@@ -91,16 +91,7 @@ module.exports = function sdtdLogs(sails) {
       if (loggingObj) {
         loggingObj.destroy();
       }
-
-      await queue.removeRepeatable({
-        jobId: serverID,
-        every: sails.config.custom.logCheckInterval,
-      });
-      // Make sure the job is also deleted if the server is in slowmode
-      await queue.removeRepeatable({
-        jobId: serverID,
-        every: sails.config.custom.logCheckIntervalSlowMode,
-      });
+      await sails.helpers.redis.bull.removeRepeatable(serverID);
     },
 
     /**
