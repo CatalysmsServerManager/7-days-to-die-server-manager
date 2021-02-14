@@ -27,10 +27,7 @@ async function failedHandler(job, e) {
     // Switch to slow mode
     await SdtdConfig.update({ server: job.data.serverId }, { slowMode: true });
     // First delete the current job
-    await sails.helpers.getQueueObject('logs').removeRepeatable({
-      jobId: job.data.serverId,
-      every: sails.config.custom.logCheckInterval,
-    });
+    await sails.helpers.redis.bull.removeRepeatable(job.data.serverId);
 
     // Then add the job again with slowmode interval
     await sails.helpers.getQueueObject('logs').add({ serverId: job.data.serverId },
@@ -59,6 +56,12 @@ async function failedHandler(job, e) {
 module.exports = async function logs(job) {
   sails.log.debug('[Worker] Got a `logs` job', job.data);
   job.data.server = await SdtdServer.findOne(job.data.serverId);
+  if (!job.data.server) {
+    // Server does not exist in the database
+    // We should delete this repeatable job
+    await sails.helpers.redis.bull.removeRepeatable(job.data.serverId);
+  }
+
   job.data.server.config = await SdtdConfig.findOne({ server: job.data.serverId });
   // Get new log lines from the server
   let resultLogs;
