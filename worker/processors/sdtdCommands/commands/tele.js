@@ -1,14 +1,13 @@
 const SdtdCommand = require('../command.js');
 
 class tele extends SdtdCommand {
-  constructor(serverId) {
-    super(serverId, {
+  constructor() {
+    super({
       name: 'tele',
       description: 'Teleport to a set location.',
       extendedDescription: 'Provide the name of where you want to go',
       aliases: ['tp', 'teleport']
     });
-    this.serverId = serverId;
   }
 
   async isEnabled(chatMessage, player, server) {

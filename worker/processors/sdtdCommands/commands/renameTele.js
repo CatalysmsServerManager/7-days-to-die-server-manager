@@ -2,14 +2,13 @@ let SdtdCommand = require('../command.js');
 var validator = require('validator');
 
 class renameTele extends SdtdCommand {
-  constructor(serverId) {
-    super(serverId, {
+  constructor() {
+    super({
       name: 'renametele',
       description: 'Rename a teleport location',
       extendedDescription: 'Arguments: oldname newname',
       aliases: ['telerename']
     });
-    this.serverId = serverId;
   }
 
   async isEnabled(chatMessage, player, server) {

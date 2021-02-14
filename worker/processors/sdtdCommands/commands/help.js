@@ -1,12 +1,11 @@
 const SdtdCommand = require('../command.js');
 
 class help extends SdtdCommand {
-  constructor(serverId) {
-    super(serverId, {
+  constructor() {
+    super({
       name: 'help',
       description: 'Get some help'
     });
-    this.serverId = serverId;
   }
 
   async isEnabled() {

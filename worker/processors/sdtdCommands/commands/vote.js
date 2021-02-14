@@ -2,14 +2,13 @@ const SdtdCommand = require('../command.js');
 const request = require('request-promise-native');
 
 class Vote extends SdtdCommand {
-  constructor(serverId) {
-    super(serverId, {
+  constructor() {
+    super({
       name: 'vote',
       description: 'Claim vote rewards',
       extendedDescription: 'Vote at https://7daystodie-servers.com/ to claim rewards!',
       aliases: []
     });
-    this.serverId = serverId;
   }
 
   async isEnabled(chatMessage, player, server) {

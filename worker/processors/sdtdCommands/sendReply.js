@@ -1,7 +1,9 @@
+const replyTypes = require('./replyTypes');
+
 module.exports = async function sendReplyToPlayer(server, player, type, data) {
 
   function getReplyObj(type) {
-    return sails.hooks.sdtdcommands.replyTypes.filter(r => r.type === type)[0];
+    return replyTypes.filter(r => r.type === type)[0];
   }
 
   async function getMessage(replyObj) {

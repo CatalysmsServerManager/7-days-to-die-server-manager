@@ -1,14 +1,13 @@
 let SdtdCommand = require('../command.js');
 
 class Seen extends SdtdCommand {
-  constructor(serverId) {
-    super(serverId, {
+  constructor() {
+    super({
       name: 'seen',
       description: 'Check when a player was last online',
       extendedDescription: 'Arguments: playername or steam/entity ID',
       aliases: ['lastseen', 'lastonline']
     });
-    this.serverId = serverId;
   }
 
   async isEnabled() {

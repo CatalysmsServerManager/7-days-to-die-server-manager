@@ -1,6 +1,8 @@
 //const commands = require('./commands');
 const parseArgs = require('./parseArgs');
 const findCommandToExecute = require('./findCommandToExecute');
+const Sentry = require('@sentry/node');
+const sendReplyToPlayer = require('./sendReply');
 
 async function commandListener(job) {
   const chatMessage = job.data.data;

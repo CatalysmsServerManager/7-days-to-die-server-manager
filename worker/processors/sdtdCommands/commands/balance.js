@@ -1,13 +1,12 @@
 let SdtdCommand = require('../command.js');
 class Balance extends SdtdCommand {
-  constructor(serverId) {
-    super(serverId, {
+  constructor() {
+    super({
       name: 'balance',
       description: 'See your current balance',
       extendedDescription: `Check how much money is in your bankaccount!`,
       aliases: ['bal', 'wallet']
     });
-    this.serverId = serverId;
   }
 
   async isEnabled(chatMessage, player, server) {

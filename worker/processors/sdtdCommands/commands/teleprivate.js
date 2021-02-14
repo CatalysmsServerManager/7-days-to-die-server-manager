@@ -1,14 +1,13 @@
 let SdtdCommand = require('../command.js');
 
 class telePrivate extends SdtdCommand {
-  constructor(serverId) {
-    super(serverId, {
+  constructor() {
+    super( {
       name: 'teleprivate',
       description: 'Make a teleport private',
       extendedDescription: 'When a teleport is private, only you can use it.',
       aliases: ['privatetele', 'privtele', 'telepriv']
     });
-    this.serverId = serverId;
   }
 
   async isEnabled(chatMessage, player, server) {

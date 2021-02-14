@@ -2,14 +2,13 @@ let SdtdCommand = require('../command.js');
 const SdtdApi = require('7daystodie-api-wrapper');
 
 class Shop extends SdtdCommand {
-  constructor(serverId) {
-    super(serverId, {
+  constructor() {
+    super({
       name: 'shop',
       description: 'Ingame shop',
       extendedDescription: '',
       aliases: ['store']
     });
-    this.serverId = serverId;
   }
 
   async isEnabled(chatMessage, player, server) {
@@ -17,7 +16,7 @@ class Shop extends SdtdCommand {
   }
 
   async _buyItem(listing, player, server, chatMessage) {
-    const cpmVersion = await sails.helpers.sdtd.checkCpmVersion(this.serverId);
+    const cpmVersion = await sails.helpers.sdtd.checkCpmVersion(server.id);
     let cmdToExec;
 
 

@@ -6,12 +6,7 @@
      */
 
 class SdtdCommand {
-  constructor(serverId, options) {
-    /**
-         * @param {number} serverId
-         * @name SdtdCommand#serverId
-         */
-    this.serverId;
+  constructor(options) {
     this.name = options.name;
     this.description = options.description;
     this.extendedDescription = options.extendedDescription;
