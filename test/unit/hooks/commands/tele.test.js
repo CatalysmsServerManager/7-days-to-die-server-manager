@@ -1,4 +1,4 @@
-const Command = require('../../../../api/hooks/sdtdCommands/commands/tele');
+const Command = require('../../../../worker/processors/sdtdCommands/commands/tele');
 const sinon = require('sinon');
 const { expect } = require('chai');
 

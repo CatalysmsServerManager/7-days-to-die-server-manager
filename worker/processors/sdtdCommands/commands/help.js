@@ -1,5 +1,6 @@
 const SdtdCommand = require('../command.js');
 
+
 class help extends SdtdCommand {
   constructor() {
     super({
@@ -13,6 +14,8 @@ class help extends SdtdCommand {
   }
 
   async run(chatMessage, player, server, args) {
+    const findCommandToExecute = require('../findCommandToExecute');
+    const commands = require('./index');
 
     if (player.role) {
       player.role = await Role.findOne({
@@ -23,7 +26,7 @@ class help extends SdtdCommand {
     }
 
     if (args[0]) {
-      let commandToGetHelp = await this.commandHandler.findCommandToExecute(args[0]);
+      let commandToGetHelp = await findCommandToExecute(args[0]);
 
       if (commandToGetHelp) {
 
@@ -42,7 +45,7 @@ class help extends SdtdCommand {
       return;
     }
 
-    const commandsArr = this.commandHandler.commands.values();
+    const commandsArr = commands.values();
     const customCommands = await CustomCommand.find({
       where: {
         server: server.id,

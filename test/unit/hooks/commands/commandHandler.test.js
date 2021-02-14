@@ -1,4 +1,4 @@
-const CommandHandler = require('../../../../api/hooks/sdtdCommands/commandHandler');
+const commandListener = require('../../../../worker/processors/sdtdCommands');
 const { expect } = require('chai');
 const EventEmitter = require('events');
 
@@ -18,20 +18,15 @@ describe('COMMAND CommandHandler', () => {
     });
 
     this.emitter = new EventEmitter();
-    this.commandHandler = new CommandHandler(sails.testServer.id, this.emitter, sails.testServerConfig);
-    this.commandHandler.start();
   });
 
-  afterEach(() => {
-    this.commandHandler.stop();
-  });
 
   it('Respects the replyPrefix', async () => {
     const chatMessage = {
       messageText: `${sails.testServerConfig.commandPrefix}help`,
       steamId: sails.testPlayer.steamId
     };
-    await this.commandHandler.commandListener(chatMessage);
+    await commandListener({data: {data: chatMessage, server: sails.testServer}});
     expect(this.stub.callCount).to.be.equal(11);
     for (const call of this.stub.getCalls()) {
       expect(call.lastArg).to.match(/pm \d* "test/);
