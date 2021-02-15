@@ -23,10 +23,16 @@ module.exports = {
       viewTemplatePath: 'sdtdServer/economy/shop'
     },
 
-    notLoggedIn: {
+    noPlayerProfile: {
       description: '',
       responseType: 'view',
       viewTemplatePath: 'sdtdServer/economy/shop-logout',
+      statusCode: 400
+    },
+
+    badRequest: {
+      description: 'Bad request',
+      responseType: 'badRequest',
       statusCode: 400
     }
 
@@ -41,11 +47,11 @@ module.exports = {
       let listings = await ShopListing.find({ server: inputs.serverId });
 
       if (_.isUndefined(this.req.session.userId)) {
-        return exits.notLoggedIn('You must be logged in to view a shop.');
+        return exits.badRequest('You must be logged in to view a shop.');
       }
 
       if (!server.config[0].economyEnabled) {
-        return exits.notLoggedIn('This server does not have economy enabled!');
+        return exits.badRequest('This server does not have economy enabled!');
       }
 
       let user = await User.findOne(this.req.session.userId).populate('players');
@@ -58,7 +64,7 @@ module.exports = {
       }
 
       if (!player) {
-        return exits.notLoggedIn({
+        return exits.noPlayerProfile({
           server: server,
         });
       }
