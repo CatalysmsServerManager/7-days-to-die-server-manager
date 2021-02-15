@@ -16,9 +16,9 @@ class tele extends SdtdCommand {
 
   async run(chatMessage, player, server, args) {
     let publicTeleports = new Array();
-
+    const playerIds = await Player.find({where: {server: server.id}, select: ['id']});
     let publicTelesByPlayer = await PlayerTeleport.find({
-      player: server.players.map(player => player.id),
+      player: playerIds.map(_ => _.id),
       publicEnabled: true
     });
     publicTeleports = publicTeleports.concat(publicTelesByPlayer);
@@ -47,10 +47,6 @@ class tele extends SdtdCommand {
       });
     }
 
-    if (server.config.playerTeleportDelay) {
-      chatMessage.reply(`teleDelay`);
-    }
-
     if (server.config.economyEnabled && server.config.costToTeleport) {
       let playerBalance = await sails.helpers.economy.getPlayerBalance(player.id);
 
@@ -59,6 +55,10 @@ class tele extends SdtdCommand {
           cost: server.config.costToTeleport
         });
       }
+    }
+
+    if (server.config.playerTeleportDelay) {
+      await chatMessage.reply(`teleDelay`);
     }
 
     return new Promise((resolve, reject) => {

@@ -30,6 +30,7 @@ module.exports = function BullBoard(sails) {
         sails.helpers.getQueueObject('kill'),
         sails.helpers.getQueueObject('hooks'),
         sails.helpers.getQueueObject('system'),
+        sails.helpers.getQueueObject('sdtdCommands'),
       ]);
 
       sails.after('hook:http:loaded', function () {

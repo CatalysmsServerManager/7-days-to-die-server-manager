@@ -64,14 +64,13 @@ class Who extends SdtdCommand {
       playersnames += he.decode(foundPlayer.name) + ', ';
     }
 
-    chatMessage.reply(`whoSuccess`, {
+    await chatMessage.reply(`whoSuccess`, {
       totalPlayers: uniquePlayers.length,
       radius: size,
       date: dateOldest.toLocaleDateString(),
       time: dateOldest.toLocaleTimeString()
     });
-    chatMessage.reply(playersnames);
-
+    await chatMessage.reply(playersnames);
   }
 }
 
