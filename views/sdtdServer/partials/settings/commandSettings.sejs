@@ -1,13 +1,11 @@
 <!-- COMMANDS SETTINGS -->
 
 <div class="container">
+  <label class="form-check-label">
+    <input type="checkbox" class="form-check-input" name="commands-enabled" id="commands-enabled">
+    Enabled
+  </label>
 
-  <div id='settings-disable-commands-btn' class="btn btn-danger">
-    <i class="fa fa-power-off"></i> Disable
-  </div>
-  <div id='settings-enable-commands-btn' class="btn btn-success">
-    <i class="fa fa-power-off"></i> Enable
-  </div>
 
   <p>Control the ingame commands used by your players. To see a full list of commands, check the documentation. Not all
     commands
@@ -263,18 +261,7 @@
     function updateCommandsStatus() {
 
       $("#input-settings-commands-who-checkbox").prop('checked', window.SAILS_LOCALS.config.enabledWho);
-
-      $.get('/api/sdtdserver/commands', {
-        serverId: window.SAILS_LOCALS.server.id
-      }, status => {
-        if (status) {
-          $('#settings-enable-commands-btn').hide()
-          $('#settings-disable-commands-btn').show()
-        } else {
-          $('#settings-disable-commands-btn').hide()
-          $('#settings-enable-commands-btn').show()
-        }
-      })
+      $("#commands-enabled").prop('checked', window.SAILS_LOCALS.config.commandsEnabled);
 
       $.get('/api/sdtdserver/commands/calladmin', {
         serverId: window.SAILS_LOCALS.server.id
@@ -341,42 +328,35 @@
       });
     })
 
-    $('#settings-disable-commands-btn').click(e => {
-      e.preventDefault();
-      $.ajax({
-        url: '/api/sdtdserver/commands',
-        method: 'DELETE',
-        data: {
-          _csrf: window.SAILS_LOCALS._csrf,
-          serverId: window.SAILS_LOCALS.server.id,
-        },
-        success: (data, status, xhr) => {
-          updateCommandsStatus();
-        },
-        error: function (xhr, status, error) {
-          displayAjaxToSupportData(xhr, this);;
-          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
-        }
-      })
-    })
 
-    $('#settings-enable-commands-btn').click(e => {
-      e.preventDefault();
-      $.ajax({
-        url: '/api/sdtdserver/commands',
-        method: 'POST',
-        data: {
-          _csrf: window.SAILS_LOCALS._csrf,
-          serverId: window.SAILS_LOCALS.server.id,
-        },
-        success: (data, status, xhr) => {
-          updateCommandsStatus();
-        },
-        error: function (xhr, status, error) {
-          displayAjaxToSupportData(xhr, this);;
-          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
-        }
-      })
+    $('#commands-enabled').change(function () {
+      if (this.checked) {
+        $.ajax({
+          url: '/api/sdtdserver/commands',
+          method: 'POST',
+          data: {
+            _csrf: window.SAILS_LOCALS._csrf,
+            serverId: window.SAILS_LOCALS.server.id,
+          },
+          error: function (xhr, status, error) {
+            displayAjaxToSupportData(xhr, this);;
+            showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+          }
+        })
+      } else {
+        $.ajax({
+          url: '/api/sdtdserver/commands',
+          method: 'DELETE',
+          data: {
+            _csrf: window.SAILS_LOCALS._csrf,
+            serverId: window.SAILS_LOCALS.server.id,
+          },
+          error: function (xhr, status, error) {
+            displayAjaxToSupportData(xhr, this);;
+            showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+          }
+        })
+      }
     })
 
     $('#input-settings-commands-prefix-set-btn').click(e => {
