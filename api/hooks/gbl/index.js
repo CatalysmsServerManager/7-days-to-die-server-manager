@@ -94,7 +94,7 @@ async function refreshBans() {
           foundBans.length >= config.gblNotificationBans &&
           config.gblNotificationBans !== 0
         ) {
-          await sails.hooks.discordnotifications.sendNotification({
+          await sails.helpers.discord.sendNotification({
             serverId: connectedMsg.server.id,
             notificationType: 'gblmaxban',
             player: player,

@@ -1,14 +1,13 @@
-let SdtdCommand = require('../command.js');
+const SdtdCommand = require('../command.js');
 
 class callAdmin extends SdtdCommand {
-  constructor(serverId) {
-    super(serverId, {
+  constructor() {
+    super({
       name: 'calladmin',
       description: 'Make a support ticket',
       extendedDescription: 'Creates a support ticket on the website and notifies admins of your call for help. Usage: "$calladmin help my bike is stuck"',
       aliases: ['admin', 'admins', 'support']
     });
-    this.serverId = serverId;
   }
 
   async isEnabled(chatMessage, player, server) {

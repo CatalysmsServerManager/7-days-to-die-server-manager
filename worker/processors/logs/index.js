@@ -165,6 +165,12 @@ module.exports = async function logs(job) {
     response.push(enrichedLog);
     sails.helpers.getQueueObject('hooks').add(enrichedLog);
     sails.helpers.getQueueObject('customNotifications').add(enrichedLog);
+
+    if (newLog.type === 'chatMessage') {
+      sails.helpers.getQueueObject('sdtdCommands').add(enrichedLog);
+
+    }
+
   }
 
   return { server: job.data.server, logs: response };

@@ -1,12 +1,13 @@
-var expect = require('chai').expect;
+const expect = require('chai').expect;
+const replyTypes = require('../../worker/processors/sdtdCommands/replyTypes');
 
 describe('HELPER Command reply types', () => {
   it('Returns an array', () => {
-    return expect(sails.hooks.sdtdcommands.replyTypes).to.be.an('array');
+    return expect(replyTypes).to.be.an('array');
   });
   it('Does not contain duplicate types', () => {
 
-    const currentTypes = sails.hooks.sdtdcommands.replyTypes.map(o => o.type);
+    const currentTypes = replyTypes.map(o => o.type);
     const unique = new Set();
 
     currentTypes.forEach(function (type) {

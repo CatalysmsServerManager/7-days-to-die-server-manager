@@ -1,14 +1,13 @@
-let SdtdCommand = require('../command.js');
+const SdtdCommand = require('../command.js');
 
 class removeTele extends SdtdCommand {
-  constructor(serverId) {
-    super(serverId, {
+  constructor() {
+    super({
       name: 'removetele',
       description: 'Remove a teleport location',
       extendedDescription: 'Delete a teleport location from the system',
       aliases: ['deltele', 'teledelete', 'deletetele', 'teleremove']
     });
-    this.serverId = serverId;
   }
 
   async isEnabled(chatMessage, player, server) {

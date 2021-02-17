@@ -33,7 +33,7 @@ module.exports = {
     }).fetch();
     let ticket = await SdtdTicket.findOne(inputs.ticketId);
 
-    await sails.hooks.discordnotifications.sendNotification({
+    await sails.helpers.discord.sendNotification({
       serverId: ticket.server,
       notificationType: 'ticket',
       ticketNotificationType: 'New comment',

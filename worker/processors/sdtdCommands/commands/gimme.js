@@ -1,16 +1,15 @@
-let SdtdCommand = require('../command.js');
+const SdtdCommand = require('../command.js');
 const SdtdApi = require('7daystodie-api-wrapper');
 
 class Gimme extends SdtdCommand {
-  constructor(serverId) {
-    super(serverId, {
+  constructor() {
+    super({
       name: 'gimme',
       description: 'Get a random item, command or entity.',
       extendedDescription:
         'Get a random item, entity or command. An admin must configure possible items via the webinterface before you can use this command.',
       aliases: ['gimmie']
     });
-    this.serverId = serverId;
   }
 
   async isEnabled(chatMessage, player, server) {
@@ -18,7 +17,7 @@ class Gimme extends SdtdCommand {
   }
 
   async run(chatMessage, player, server) {
-    const cpmVersion = await sails.helpers.sdtd.checkCpmVersion(this.serverId);
+    const cpmVersion = await sails.helpers.sdtd.checkCpmVersion(server.id);
     const possibleGimmeItems = await GimmeItem.find({
       server: server.id
     });

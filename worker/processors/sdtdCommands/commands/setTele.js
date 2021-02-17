@@ -1,15 +1,14 @@
-let SdtdCommand = require('../command.js');
+const SdtdCommand = require('../command.js');
 var validator = require('validator');
 
 class setTele extends SdtdCommand {
-  constructor(serverId) {
-    super(serverId, {
+  constructor() {
+    super({
       name: 'settele',
       description: 'Create a teleport location',
       extendedDescription: 'Creates a teleport location at your current position. Arguments: name',
       aliases: ['teleset', 'telecreate']
     });
-    this.serverId = serverId;
   }
 
   async isEnabled(chatMessage, player, server) {

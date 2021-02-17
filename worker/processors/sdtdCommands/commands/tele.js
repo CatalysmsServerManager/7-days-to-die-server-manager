@@ -1,14 +1,13 @@
 const SdtdCommand = require('../command.js');
 
 class tele extends SdtdCommand {
-  constructor(serverId) {
-    super(serverId, {
+  constructor() {
+    super({
       name: 'tele',
       description: 'Teleport to a set location.',
       extendedDescription: 'Provide the name of where you want to go',
       aliases: ['tp', 'teleport']
     });
-    this.serverId = serverId;
   }
 
   async isEnabled(chatMessage, player, server) {
@@ -17,9 +16,9 @@ class tele extends SdtdCommand {
 
   async run(chatMessage, player, server, args) {
     let publicTeleports = new Array();
-
+    const playerIds = await Player.find({where: {server: server.id}, select: ['id']});
     let publicTelesByPlayer = await PlayerTeleport.find({
-      player: server.players.map(player => player.id),
+      player: playerIds.map(_ => _.id),
       publicEnabled: true
     });
     publicTeleports = publicTeleports.concat(publicTelesByPlayer);
@@ -48,10 +47,6 @@ class tele extends SdtdCommand {
       });
     }
 
-    if (server.config.playerTeleportDelay) {
-      chatMessage.reply(`teleDelay`);
-    }
-
     if (server.config.economyEnabled && server.config.costToTeleport) {
       let playerBalance = await sails.helpers.economy.getPlayerBalance(player.id);
 
@@ -62,51 +57,45 @@ class tele extends SdtdCommand {
       }
     }
 
-    return new Promise((resolve, reject) => {
-      setTimeout(async function () {
-        try {
-          await sails.helpers.sdtdApi.executeConsoleCommand(
-            SdtdServer.getAPIConfig(server),
-            `tele ${player.steamId} ${teleportFound.x} ${teleportFound.y} ${teleportFound.z}`
-          );
+    if (server.config.playerTeleportDelay) {
+      await chatMessage.reply(`teleDelay`);
+      await wait(server.config.playerTeleportDelay);
+    }
 
-        } catch (error) {
-          sails.log.warn(`Hook - sdtdCommands:teleport - ${error}`);
-          sails.log.error(error);
-          await chatMessage.reply(`error`);
-          return reject(error);
-        }
+    await sails.helpers.sdtdApi.executeConsoleCommand(
+      SdtdServer.getAPIConfig(server),
+      `tele ${player.steamId} ${teleportFound.x} ${teleportFound.y} ${teleportFound.z}`
+    );
 
-        chatMessage.reply(`teleSuccess`, {
-          teleport: teleportFound
-        });
-
-        await Player.update({
-          id: player.id
-        }, {
-          lastTeleportTime: new Date()
-        });
-        await PlayerTeleport.update({
-          id: teleportFound.id
-        }, {
-          timesUsed: teleportFound.timesUsed + 1
-        });
-
-        if (server.config.economyEnabled && server.config.costToTeleport) {
-          await sails.helpers.economy.deductFromPlayer.with({
-            playerId: player.id,
-            amountToDeduct: server.config.costToTeleport,
-            message: `COMMAND - ${this.name}`
-          });
-        }
-
-        return resolve();
-      }, server.config.playerTeleportDelay * 1000);
+    await chatMessage.reply(`teleSuccess`, {
+      teleport: teleportFound
     });
 
+    await Player.update({
+      id: player.id
+    }, {
+      lastTeleportTime: new Date()
+    });
+    await PlayerTeleport.update({
+      id: teleportFound.id
+    }, {
+      timesUsed: teleportFound.timesUsed + 1
+    });
 
+    if (server.config.economyEnabled && server.config.costToTeleport) {
+      await sails.helpers.economy.deductFromPlayer.with({
+        playerId: player.id,
+        amountToDeduct: server.config.costToTeleport,
+        message: `COMMAND - ${this.name}`
+      });
+    }
   }
 
+}
+
+
+function wait(seconds) {
+  return new Promise(resolve => setTimeout(resolve, seconds * 1000));
 }
 
 module.exports = tele;

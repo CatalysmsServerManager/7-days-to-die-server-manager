@@ -1,11 +1,10 @@
 let SdtdCommand = require('./command.js');
 
 class CustomCommand extends SdtdCommand {
-  constructor(serverId, command) {
-    super(serverId, {
+  constructor(command) {
+    super({
       name: 'customCommand',
     });
-    this.serverId = serverId;
     this.options = command;
   }
 
@@ -77,10 +76,7 @@ class CustomCommand extends SdtdCommand {
       }
     }
 
-    // If delayed, let the player know the command is about to be executed
-    if (this.options.delay) {
-      chatMessage.reply(`The command will be executed in ${this.options.delay} seconds`);
-    }
+
 
     // Create a record of the player executing the command
     await PlayerUsedCommand.create({
@@ -88,11 +84,16 @@ class CustomCommand extends SdtdCommand {
       player: player.id
     });
 
+    // If delayed, let the player know the command is about to be executed
+    if (this.options.delay) {
+      chatMessage.reply(`The command will be executed in ${this.options.delay} seconds`);
+      let delayInMs = this.options.delay * 1000;
+      setTimeout(function () {
+        runCustomCommand(chatMessage, player, server, args, options);
+      }, delayInMs);
+    }
 
-    let delayInMs = this.options.delay * 1000;
-    setTimeout(function () {
-      runCustomCommand(chatMessage, player, server, args, options);
-    }, delayInMs);
+    await  runCustomCommand(chatMessage, player, server, args, options);
 
     async function runCustomCommand(chatMessage, player, server, args, options) {
       try {

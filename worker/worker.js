@@ -42,6 +42,7 @@ const killProcessor = require('./processors/kill');
 const hookProcessor = require('./processors/hooks');
 const systemProcessor = require('./processors/system');
 const customNotificationsProcessor = require('./processors/customNotifications');
+const sdtdCommandsProcessor = require('./processors/sdtdCommands');
 
 sails.load(configOverrides, async function (err) {
   if (err) {
@@ -73,6 +74,7 @@ sails.load(configOverrides, async function (err) {
     hooks: sails.helpers.getQueueObject('hooks'),
     system: sails.helpers.getQueueObject('system'),
     customNotifications: sails.helpers.getQueueObject('customNotifications'),
+    sdtdCommands: sails.helpers.getQueueObject('sdtdCommands'),
   };
 
   for (const queue in queues) {
@@ -101,7 +103,8 @@ sails.load(configOverrides, async function (err) {
     queues.kill.process(sails.hooks.sentry.wrapWorkerJob(killProcessor)),
     queues.hooks.process(25, sails.hooks.sentry.wrapWorkerJob(hookProcessor)),
     queues.system.process(sails.hooks.sentry.wrapWorkerJob(systemProcessor)),
-    queues.customNotifications.process(sails.hooks.sentry.wrapWorkerJob(customNotificationsProcessor))
+    queues.customNotifications.process(sails.hooks.sentry.wrapWorkerJob(customNotificationsProcessor)),
+    queues.sdtdCommands.process(sails.hooks.sentry.wrapWorkerJob(sdtdCommandsProcessor))
   ]);
 
   return;

@@ -1,4 +1,5 @@
-const replyTypes = require('../../../api/hooks/sdtdCommands/replyTypes.js');
+const replyTypes = require('../../../worker/processors/sdtdCommands/replyTypes');
+
 module.exports = {
   friendlyName: 'Get reply',
   description: '',
@@ -38,7 +39,7 @@ module.exports = {
     });
 
     if (response.length === 0 && !_.isEmpty(inputs.type)) {
-      let defaultConfig = sails.hooks.sdtdcommands.replyTypes.filter(r => r.type === inputs.type)[0];
+      let defaultConfig = replyTypes.filter(r => r.type === inputs.type)[0];
       response = [{
         type: defaultConfig.type,
         reply: defaultConfig.default,

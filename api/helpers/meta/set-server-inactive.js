@@ -69,9 +69,6 @@ module.exports = {
     // Historical info (aka analytics)
     await sails.hooks.historicalinfo.stop(server.id, 'memUpdate');
 
-    // SdtdCommands
-    await sails.hooks.sdtdcommands.stop(server.id);
-
     // Logs
     await sails.hooks.sdtdlogs.stop(server.id);
 

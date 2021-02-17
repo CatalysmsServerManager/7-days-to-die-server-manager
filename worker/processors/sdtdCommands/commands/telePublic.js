@@ -1,14 +1,13 @@
-let SdtdCommand = require('../command.js');
+const SdtdCommand = require('../command.js');
 
 class telePublic extends SdtdCommand {
-  constructor(serverId) {
-    super(serverId, {
+  constructor() {
+    super({
       name: 'telepublic',
       description: 'Make a teleport public',
       extendedDescription: 'Let everyone on the server teleport to a location',
       aliases: ['telepub', 'pubtele', 'publictele']
     });
-    this.serverId = serverId;
   }
 
   async isEnabled(chatMessage, player, server) {

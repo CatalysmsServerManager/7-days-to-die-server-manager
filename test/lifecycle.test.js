@@ -124,6 +124,7 @@ beforeEach(async function () {
 
   let testPlayer = await Player.create({
     steamId: testUser.steamId,
+    entityId: 1,
     server: testServer.id,
     user: testUser.id,
     name: faker.internet.userName(),

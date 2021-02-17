@@ -4,8 +4,8 @@ const SdtdCommand = require('../command.js');
 // And effectively duplicating items
 const locks = {};
 class Claim extends SdtdCommand {
-  constructor(serverId) {
-    super(serverId, {
+  constructor() {
+    super({
       name: 'claim',
       description: 'Claim items you have bought in the shop',
       extendedDescription: `If you do not have CPM installed, this command will drop the items at your feet. Best to do this in a safe location!
@@ -13,7 +13,6 @@ class Claim extends SdtdCommand {
       If you pass a number as argument, you will claim that many items, "$claim 5" will claim the first 5 items in your queue`,
       aliases: ['claimitems'],
     });
-    this.serverId = serverId;
   }
 
   async isEnabled(chatMessage, player, server) {
@@ -38,7 +37,7 @@ class Claim extends SdtdCommand {
       return;
     };
 
-    const cpmVersion = await sails.helpers.sdtd.checkCpmVersion(this.serverId);
+    const cpmVersion = await sails.helpers.sdtd.checkCpmVersion(server.id);
 
     if (itemsToClaim.length === 0) {
       return chatMessage.reply('claimNoItems');

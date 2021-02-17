@@ -1,16 +1,15 @@
-let SdtdCommand = require('../command.js');
+const SdtdCommand = require('../command.js');
 const validator = require('validator');
 const he = require('he');
 
 class Who extends SdtdCommand {
-  constructor(serverId) {
-    super(serverId, {
+  constructor() {
+    super({
       name: 'who',
       description: 'See who was in your area',
       extendedDescription: 'You can provide a optional size argument. For most accurate results, try to keep the size as small as possible',
       aliases: ['track', 'search']
     });
-    this.serverId = serverId;
   }
 
   async isEnabled(chatMessage, player, server) {
@@ -65,14 +64,13 @@ class Who extends SdtdCommand {
       playersnames += he.decode(foundPlayer.name) + ', ';
     }
 
-    chatMessage.reply(`whoSuccess`, {
+    await chatMessage.reply(`whoSuccess`, {
       totalPlayers: uniquePlayers.length,
       radius: size,
       date: dateOldest.toLocaleDateString(),
       time: dateOldest.toLocaleTimeString()
     });
-    chatMessage.reply(playersnames);
-
+    await chatMessage.reply(playersnames);
   }
 }
 

@@ -1,4 +1,3 @@
-const sdtdApi = require('7daystodie-api-wrapper');
 const supportedFunctions = ['wait', 'addCurrency', 'setRole'];
 
 module.exports = {
@@ -160,7 +159,7 @@ function checkForCustomFunction(command) {
 
 async function executeCommand(server, command) {
   try {
-    let result = await sdtdApi.executeConsoleCommand(
+    let result = await sails.helpers.sdtdApi.executeConsoleCommand(
       {
         ip: server.ip,
         port: server.webPort,
