@@ -60,46 +60,33 @@ module.exports = {
    */
 
   fn: async function (inputs, exits) {
+    const sdtdServer = await SdtdServer.findOne({
+      id: inputs.serverId
+    });
+    const player = await Player.findOne(inputs.playerId);
+    const playerInfo = await sails.helpers.sdtd.loadPlayerData(inputs.serverId, player.steamId);
 
-    try {
-      let sdtdServer = await SdtdServer.findOne({
-        id: inputs.serverId
-      });
-      let player = await Player.findOne(inputs.playerId);
-      let playerInfo = await sails.helpers.sdtd.loadPlayerData(inputs.serverId, player.steamId);
-
-      if (_.isUndefined(sdtdServer) || _.isUndefined(player)) {
-        return exits.error(new Error(`HELPER - createTicket - Invalid server or player ID`));
-      }
-
-      let ticket = await SdtdTicket.create({
-        description: inputs.description,
-        title: inputs.title,
-        playerInfo: playerInfo[0],
-        server: inputs.serverId,
-        player: inputs.playerId
-      }).fetch();
-
-      await sails.hooks.discordnotifications.sendNotification({
-        serverId: ticket.server,
-        notificationType: 'ticket',
-        ticketNotificationType: 'New ticket',
-        ticket: ticket
-      });
-
-      sails.log.info(`HELPER - createTicket - Created a ticket for server ${sdtdServer.name} by player ${player.name} titled "${ticket.title}"`);
-      return exits.success(ticket);
-
-    } catch (error) {
-      sails.log.error(`HELPER - createTicket - ${error}`);
-      return exits.error(error);
+    if (_.isUndefined(sdtdServer) || _.isUndefined(player)) {
+      return exits.error(new Error(`HELPER - createTicket - Invalid server or player ID`));
     }
 
+    const ticket = await SdtdTicket.create({
+      description: inputs.description,
+      title: inputs.title,
+      playerInfo: playerInfo[0],
+      server: inputs.serverId,
+      player: inputs.playerId
+    }).fetch();
 
+    await sails.helpers.discord.sendNotification({
+      serverId: ticket.server,
+      notificationType: 'ticket',
+      ticketNotificationType: 'New ticket',
+      ticket: ticket
+    });
 
-
+    sails.log.info(`HELPER - createTicket - Created a ticket for server ${sdtdServer.name} by player ${player.name} titled "${ticket.title}"`);
+    return exits.success(ticket);
 
   }
-
-
 };
