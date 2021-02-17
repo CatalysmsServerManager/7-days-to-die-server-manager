@@ -17,7 +17,7 @@ const telePublic = require('./telePublic');
 const vote = require('./vote');
 const who = require('./who');
 
-const commands = new Map([
+const commandsArr =[
   ['balance', new balance() ],
   ['calladmin', new callAdmin() ],
   ['claim', new claim() ],
@@ -36,6 +36,13 @@ const commands = new Map([
   ['vote', new vote() ],
   ['who', new who() ],
   ['ping', new ping() ],
-]);
+]
+// Make sure it's all lowercase..
+  .map(command => {
+    return [command[0].toLowerCase(), command[1]];
+  });
+
+
+const commands = new Map(commandsArr);
 
 module.exports = commands;
