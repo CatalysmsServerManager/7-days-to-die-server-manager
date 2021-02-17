@@ -16,13 +16,13 @@ class SdtdCommand {
 
 
   // Make sure the command has valid options
-  async validateCommand() {
+  validateCommand() {
 
-    if (_.isUndefined(this.name)) {
+    if (!this.name) {
       throw new Error(`Implementation error! Must provide a name for 7dtd commands.`);
     }
 
-    if (!_.isUndefined(this.aliases) && !_.isArray(this.aliases)) {
+    if (this.aliases && !Array.isArray(this.aliases)) {
       throw new Error(`Aliases must be an array or undefined.`);
     }
   }
