@@ -54,7 +54,7 @@ describe('countryBan', () => {
     };
 
     handleCountryBan = sails.hooks.countryban.handleCountryBan;
-    notifSpy = sandbox.spy(sails.hooks.discordnotifications, 'sendNotification');
+    notifSpy = sandbox.spy(sails.helpers.discord, 'sendNotification');
     sandbox.stub(sails.helpers.sdtdApi, 'executeConsoleCommand').callsFake();
   });
 

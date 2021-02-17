@@ -49,7 +49,7 @@ module.exports = {
 
       ticket = ticket[0];
 
-      await sails.hooks.discordnotifications.sendNotification({
+      await sails.helpers.discord.sendNotification({
         serverId: ticket.server,
         notificationType: 'ticket',
         ticketNotificationType: `${inputs.status ? 'Open' : 'Closed'}`,

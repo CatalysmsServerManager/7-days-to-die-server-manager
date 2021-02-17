@@ -157,7 +157,7 @@ module.exports = function sdtdLogs(sails) {
       eventEmitter.on('playerConnected', async function (connectedMsg) {
 
         connectedMsg.server = _.omit(server, 'authName', 'authToken');
-        await sails.hooks.discordnotifications.sendNotification({
+        await sails.helpers.discord.sendNotification({
           serverId: server.id,
           notificationType: 'playerConnected',
           player: connectedMsg.player
@@ -186,7 +186,7 @@ module.exports = function sdtdLogs(sails) {
 
       eventEmitter.on('playerDisconnected', async function (disconnectedMsg) {
         disconnectedMsg.server = _.omit(server, 'authName', 'authToken');
-        await sails.hooks.discordnotifications.sendNotification({
+        await sails.helpers.discord.sendNotification({
           serverId: server.id,
           notificationType: 'playerDisconnected',
           player: disconnectedMsg.player
@@ -202,7 +202,7 @@ module.exports = function sdtdLogs(sails) {
         }
 
         sails.sockets.broadcast(server.id, 'connectionLost', eventMsg);
-        await sails.hooks.discordnotifications.sendNotification({
+        await sails.helpers.discord.sendNotification({
           serverId: server.id,
           notificationType: 'connectionLost',
           msg: eventMsg
@@ -216,7 +216,7 @@ module.exports = function sdtdLogs(sails) {
         }
 
         sails.sockets.broadcast(server.id, 'connected', eventMsg);
-        await sails.hooks.discordnotifications.sendNotification({
+        await sails.helpers.discord.sendNotification({
           serverId: server.id,
           notificationType: 'connected'
         });

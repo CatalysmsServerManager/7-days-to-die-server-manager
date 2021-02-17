@@ -465,7 +465,7 @@ module.exports = function sdtdCountryBan(sails) {
           );
         }
 
-        await sails.hooks.discordnotifications.sendNotification({
+        await sails.helpers.discord.sendNotification({
           serverId: server.id,
           notificationType: 'countrybanKick',
           player: connectedMessage

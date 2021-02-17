@@ -81,7 +81,7 @@ describe('Cron hook', () => {
       const testJobFound = foundJobs.find(job => job.data.id === testJob.id);
 
       queue.on('global:completed', () => {
-        expect(sails.hooks.discordnotifications.sendNotification).to.have.been.calledOnce;
+        expect(sails.helpers.discord.sendNotification).to.have.been.calledOnce;
         // Have to call resolve like this otherwise the test always succeeds
         resolve();
       });
@@ -90,7 +90,7 @@ describe('Cron hook', () => {
         reject(err);
       });
 
-      sandbox.spy(sails.hooks.discordnotifications, 'sendNotification');
+      sandbox.spy(sails.helpers.discord, 'sendNotification');
       await testJobFound.promote();
       await queue.resume();
     });

@@ -45,7 +45,7 @@ module.exports = {
       sails.log.debug(`Executed a cron job for server ${foundJob.server.name} - took ${dateEnded - dateStarted} ms`, _.omit(foundJob, 'server'));
 
       if (foundJob.notificationEnabled) {
-        await sails.hooks.discordnotifications.sendNotification({
+        await sails.helpers.discord.sendNotification({
           serverId: foundJob.server.id,
           job: foundJob,
           notificationType: 'cronjob'
