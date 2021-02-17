@@ -2,6 +2,7 @@ const commands = require('./commands');
 const CustomCommand = require('./customCommand');
 
 module.exports = async function findCommandToExecute(commandName, server) {
+  commandName = commandName.toLowerCase();
   if (commands.has(commandName)) {
     const commandToRun = commands.get(commandName);
     return commandToRun;

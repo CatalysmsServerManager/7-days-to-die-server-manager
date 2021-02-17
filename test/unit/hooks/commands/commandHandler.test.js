@@ -85,8 +85,17 @@ describe('COMMAND CommandHandler', () => {
     await commandListener({data: {data: chatMessage, server: sails.testServer}});
 
     expect(this.executeCommandStub.callCount).to.be.equal(1);
+  });
 
-
-
+  it('Commands are case insensitive', async () => {
+    const chatMessage = {
+      messageText: `$PiNg`,
+      steamId: sails.testPlayer.steamId
+    };
+    await commandListener({data: {data: chatMessage, server: sails.testServer}});
+    expect(this.executeCommandStub.callCount).to.be.equal(1);
+    for (const call of this.executeCommandStub.getCalls()) {
+      expect(call.lastArg).to.match(/pm \d* .* PONG/);
+    }
   });
 });
