@@ -79,19 +79,14 @@ describe('COMMAND tele', () => {
 
   it('Delays a teleport if configured', async () => {
     sails.testPlayer.lastTeleportTime = 1;
-    const clock = sinon.useFakeTimers(Date.now());
     sails.testServer.config.playerTeleportDelay = 1;
     sandbox.stub(PlayerTeleport, 'find').resolves([{ name: 'teleportName', timesUsed: 5 }]);
 
-    command.run(chatMessage, sails.testPlayer, sails.testServer, ['teleportName']);
-    expect(sails.helpers.sdtdApi.executeConsoleCommand).to.not.have.been.called;
-    await clock.runAllAsync();
-
+    await command.run(chatMessage, sails.testPlayer, sails.testServer, ['teleportName']);
     expect(spy).to.have.been.calledWith('teleDelay');
     expect(spy).to.have.been.calledWith('teleSuccess');
     expect(spy).to.have.been.calledTwice;
     expect(sails.helpers.sdtdApi.executeConsoleCommand).to.have.been.called;
-    clock.restore();
   });
 
   // https://github.com/CatalysmsServerManager/7-days-to-die-server-manager/issues/291

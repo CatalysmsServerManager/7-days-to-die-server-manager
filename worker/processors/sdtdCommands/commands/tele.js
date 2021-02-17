@@ -59,53 +59,43 @@ class tele extends SdtdCommand {
 
     if (server.config.playerTeleportDelay) {
       await chatMessage.reply(`teleDelay`);
+      await wait(server.config.playerTeleportDelay);
     }
 
-    return new Promise((resolve, reject) => {
-      setTimeout(async function () {
-        try {
-          await sails.helpers.sdtdApi.executeConsoleCommand(
-            SdtdServer.getAPIConfig(server),
-            `tele ${player.steamId} ${teleportFound.x} ${teleportFound.y} ${teleportFound.z}`
-          );
+    await sails.helpers.sdtdApi.executeConsoleCommand(
+      SdtdServer.getAPIConfig(server),
+      `tele ${player.steamId} ${teleportFound.x} ${teleportFound.y} ${teleportFound.z}`
+    );
 
-        } catch (error) {
-          sails.log.warn(`Hook - sdtdCommands:teleport - ${error}`);
-          sails.log.error(error);
-          await chatMessage.reply(`error`);
-          return reject(error);
-        }
-
-        chatMessage.reply(`teleSuccess`, {
-          teleport: teleportFound
-        });
-
-        await Player.update({
-          id: player.id
-        }, {
-          lastTeleportTime: new Date()
-        });
-        await PlayerTeleport.update({
-          id: teleportFound.id
-        }, {
-          timesUsed: teleportFound.timesUsed + 1
-        });
-
-        if (server.config.economyEnabled && server.config.costToTeleport) {
-          await sails.helpers.economy.deductFromPlayer.with({
-            playerId: player.id,
-            amountToDeduct: server.config.costToTeleport,
-            message: `COMMAND - ${this.name}`
-          });
-        }
-
-        return resolve();
-      }, server.config.playerTeleportDelay * 1000);
+    await chatMessage.reply(`teleSuccess`, {
+      teleport: teleportFound
     });
 
+    await Player.update({
+      id: player.id
+    }, {
+      lastTeleportTime: new Date()
+    });
+    await PlayerTeleport.update({
+      id: teleportFound.id
+    }, {
+      timesUsed: teleportFound.timesUsed + 1
+    });
 
+    if (server.config.economyEnabled && server.config.costToTeleport) {
+      await sails.helpers.economy.deductFromPlayer.with({
+        playerId: player.id,
+        amountToDeduct: server.config.costToTeleport,
+        message: `COMMAND - ${this.name}`
+      });
+    }
   }
 
+}
+
+
+function wait(seconds) {
+  return new Promise(resolve => setTimeout(resolve, seconds * 1000));
 }
 
 module.exports = tele;
