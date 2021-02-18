@@ -50,7 +50,6 @@ module.exports = {
         server: server.id
       });
 
-
       sails.log.info(`Showing tracking for ${server.name} - ${players.length} players`);
 
       exits.success({
@@ -59,6 +58,7 @@ module.exports = {
       });
     } catch (error) {
       sails.log.error(error);
+      return exits.error(error);
     }
 
   }
