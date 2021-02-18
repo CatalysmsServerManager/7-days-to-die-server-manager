@@ -25,20 +25,11 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-
-    let totalRecords = await TrackingInfo.count({
-      server: inputs.serverId
-    });
-
     await TrackingInfo.destroy({
       server: inputs.serverId
     });
-
-
-    sails.log.info(`Deleted ${totalRecords} records of player tracking data for server ${inputs.serverId}`);
-
-    return exits.success(deletedInfo);
-
+    sails.log.info(`Deleted player tracking data for server ${inputs.serverId}`);
+    return exits.success();
   }
 
 
