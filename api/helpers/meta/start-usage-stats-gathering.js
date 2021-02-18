@@ -38,8 +38,6 @@ module.exports = {
 
           sails.log.info(`Gathered system usage information.`, currentStats);
         }
-
-        sails.log.debug(`Checked if we need to get system stats - ${(Date.now() - sails.config.custom.usageStatsInterval) > (_.isUndefined(lastStatsEntry[0]) ? 0 : lastStatsEntry[0].createdAt)}`);
       } catch (error) {
         sails.log.error(error);
       }
