@@ -1,4 +1,5 @@
 const SdtdCommand = require('../command.js');
+const wait = require('../../../util/wait');
 
 class tele extends SdtdCommand {
   constructor() {
@@ -16,7 +17,7 @@ class tele extends SdtdCommand {
 
   async run(chatMessage, player, server, args) {
     let publicTeleports = new Array();
-    const playerIds = await Player.find({where: {server: server.id}, select: ['id']});
+    const playerIds = await Player.find({ where: { server: server.id }, select: ['id'] });
     let publicTelesByPlayer = await PlayerTeleport.find({
       player: playerIds.map(_ => _.id),
       publicEnabled: true
@@ -90,12 +91,6 @@ class tele extends SdtdCommand {
       });
     }
   }
-
-}
-
-
-function wait(seconds) {
-  return new Promise(resolve => setTimeout(resolve, seconds * 1000));
 }
 
 module.exports = tele;

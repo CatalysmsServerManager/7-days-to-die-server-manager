@@ -1,4 +1,5 @@
-let SdtdCommand = require('./command.js');
+const SdtdCommand = require('./command.js');
+const wait = require('../../util/wait');
 
 class CustomCommand extends SdtdCommand {
   constructor(command) {
@@ -86,14 +87,11 @@ class CustomCommand extends SdtdCommand {
 
     // If delayed, let the player know the command is about to be executed
     if (this.options.delay) {
-      chatMessage.reply(`The command will be executed in ${this.options.delay} seconds`);
-      let delayInMs = this.options.delay * 1000;
-      setTimeout(function () {
-        runCustomCommand(chatMessage, player, server, args, options);
-      }, delayInMs);
+      await chatMessage.reply(`The command will be executed in ${this.options.delay} seconds`);
+      await wait(this.options.delay);
     }
 
-    await  runCustomCommand(chatMessage, player, server, args, options);
+    await runCustomCommand(chatMessage, player, server, args, options);
 
     async function runCustomCommand(chatMessage, player, server, args, options) {
       try {
