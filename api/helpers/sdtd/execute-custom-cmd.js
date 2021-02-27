@@ -31,36 +31,13 @@ module.exports = {
   fn: async function (inputs, exits) {
     const commandsExecuted = new Array();
 
-    inputs.commands = sails.helpers.sdtd.parseCommandsString(
+    inputs.commands = await sails.helpers.sdtd.parseCommandsString(
       inputs.commands,
       inputs.data
     );
 
     for (const command of inputs.commands) {
       let commandToExec = command;
-
-      try {
-        // Fill any variables in the command
-        if (!_.isUndefined(inputs.data)) {
-          if (!_.isUndefined(inputs.data.player)) {
-            commandToExec = await sails.helpers.sdtd.fillPlayerVariables(
-              commandToExec,
-              inputs.data.player
-            );
-          }
-          commandToExec = await sails.helpers.sdtd.fillCustomVariables(
-            commandToExec,
-            inputs.data
-          );
-        }
-      } catch (error) {
-        sails.log.error(error);
-        commandsExecuted.push({
-          command,
-          parameters: '',
-          result: 'Error filling in variables - please check your variable syntax'
-        });
-      }
 
       // Check if the command matches any custom functions
       let customFunction = checkForCustomFunction(commandToExec);

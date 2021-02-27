@@ -29,8 +29,6 @@ module.exports = {
 
   description: 'Takes a string of commands separated with ; and returns an array of commands to execute',
 
-  sync: true,
-
   inputs: {
 
     commands: {
@@ -73,9 +71,34 @@ module.exports = {
       .map(x => x.trim())
       // Filters empty strings
       .filter(Boolean);
-    return exits.success(result);
+
+    // Fill any legacy variables syntax in the command
+    result = result.map(async commandToExec => {
+      try {
+        if (!_.isUndefined(inputs.data)) {
+          if (!_.isUndefined(inputs.data.player)) {
+            commandToExec = await sails.helpers.sdtd.fillPlayerVariables(
+              commandToExec,
+              inputs.data.player
+            );
+          }
+          commandToExec = await sails.helpers.sdtd.fillCustomVariables(
+            commandToExec,
+            inputs.data
+          );
+        }
+      } catch (error) {
+        sails.log.error(error);
+      } finally {
+        return commandToExec;
+      }
+    });
+
+    return exits.success(Promise.all(result));
 
   }
 
 
 };
+
+
