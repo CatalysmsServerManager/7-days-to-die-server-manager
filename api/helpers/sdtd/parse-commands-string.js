@@ -56,8 +56,8 @@ module.exports = {
 
   fn: function (inputs, exits) {
 
+
     let result;
-    // TODO: create onlinePlayers datapoint
     try {
       const compiledTemplate = Handlebars.compile(inputs.commands);
       result = compiledTemplate(inputs.data);
