@@ -1,4 +1,25 @@
 const split = require('split-string');
+const Handlebars = require('handlebars');
+
+Handlebars.registerHelper('eq', function (a, b) {
+  return (a === b);
+});
+Handlebars.registerHelper('gt', function (a, b) {
+  return (a > b);
+});
+Handlebars.registerHelper('gte', function (a, b) {
+  return (a >= b);
+});
+Handlebars.registerHelper('lt', function (a, b) {
+  return (a < b);
+});
+Handlebars.registerHelper('lte', function (a, b) {
+  return (a <= b);
+});
+Handlebars.registerHelper('ne', function (a, b) {
+  return (a !== b);
+});
+
 
 module.exports = {
 
@@ -17,6 +38,10 @@ module.exports = {
       required: true
     },
 
+    data: {
+      type: 'ref'
+    }
+
   },
 
 
@@ -32,7 +57,18 @@ module.exports = {
 
 
   fn: function (inputs, exits) {
-    let result = split(inputs.commands, { separator: ';', quotes: ['"'] });
+
+    let result;
+    // TODO: create onlinePlayers datapoint
+    try {
+      const compiledTemplate = Handlebars.compile(inputs.commands);
+      result = compiledTemplate(inputs.data);
+    } catch (error) {
+      sails.log.warn(`Invalid handlebars template! Falling back to "dumb parsing" - ${error.message}`);
+      result = inputs.commands;
+    }
+
+    result = split(result, { separator: ';', quotes: ['"'] });
     result = result
       .map(x => x.trim())
       // Filters empty strings

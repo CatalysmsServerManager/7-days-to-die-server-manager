@@ -12,7 +12,7 @@ module.exports = {
     },
 
     commands: {
-      type: 'ref',
+      type: 'string',
       required: true
     },
 
@@ -31,9 +31,10 @@ module.exports = {
   fn: async function (inputs, exits) {
     const commandsExecuted = new Array();
 
-    if (!_.isArray(inputs.commands)) {
-      return exits.error(`Commands input must be an array`);
-    }
+    inputs.commands = sails.helpers.sdtd.parseCommandsString(
+      inputs.commands,
+      inputs.data
+    );
 
     for (const command of inputs.commands) {
       let commandToExec = command;
