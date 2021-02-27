@@ -26,3 +26,9 @@ Handlebars.registerHelper('or', function (a, b) {
 Handlebars.registerHelper('and', function (a, b) {
   return (a && b);
 });
+
+Handlebars.registerHelper('not', function (a) {
+  return !a;
+});
+
+module.exports = Handlebars;
