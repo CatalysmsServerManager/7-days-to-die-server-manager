@@ -31,6 +31,10 @@ module.exports = {
   fn: async function (inputs, exits) {
     const commandsExecuted = new Array();
 
+    if (!inputs.data) {
+      inputs.data = {};
+    }
+
     inputs.data.onlinePlayers = await sails.helpers.sdtd.loadPlayerData.with({
       serverId: inputs.server.id,
       onlyOnline: true

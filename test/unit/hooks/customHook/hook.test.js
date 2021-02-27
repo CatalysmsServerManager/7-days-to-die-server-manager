@@ -66,7 +66,7 @@ describe('Custom hooks', () => {
       });
 
       await handler(event(eventType, 'some log line'));
-      expect(this.mock).to.have.been.calledWith(sinon.match.any, [`say "${eventType}"`], sinon.match.any);
+      expect(this.mock).to.have.been.calledWith(sinon.match.any, `say "${eventType}"`, sinon.match.any);
     });
     it(`Fires when search string matches ${eventType}`, async () => {
       await CustomHook.create({
@@ -77,7 +77,7 @@ describe('Custom hooks', () => {
       });
 
       await handler(event(eventType, 'some log line'));
-      expect(this.mock).to.not.have.been.calledOnceWith(sinon.match.any, [`say "${eventType}"`], sinon.match.any);;
+      expect(this.mock).to.not.have.been.calledOnceWith(sinon.match.any, `say "${eventType}"`, sinon.match.any);
 
       await CustomHook.create({
         server: sails.testServer.id,
@@ -87,7 +87,7 @@ describe('Custom hooks', () => {
       });
 
       await handler(event(eventType, 'some log line'));
-      expect(this.mock).to.have.been.calledWith(sinon.match.any, [`say "${eventType}"`], sinon.match.any);
+      expect(this.mock).to.have.been.calledWith(sinon.match.any, `say "${eventType}"`, sinon.match.any);
     });
     it(`Fires when search string matches ${eventType} with no caseSensitive`, async () => {
       await CustomHook.create({
@@ -99,7 +99,7 @@ describe('Custom hooks', () => {
       });
 
       await handler(event(eventType, 'some Log LIne'));
-      expect(this.mock).to.not.have.been.calledOnceWith(sinon.match.any, [`say "${eventType}"`], sinon.match.any);;
+      expect(this.mock).to.not.have.been.calledOnceWith(sinon.match.any, `say "${eventType}"`, sinon.match.any);;
 
       await CustomHook.create({
         server: sails.testServer.id,
@@ -110,7 +110,7 @@ describe('Custom hooks', () => {
       });
 
       await handler(event(eventType, 'Some loG line'));
-      expect(this.mock).to.have.been.calledWith(sinon.match.any, [`say "${eventType}"`], sinon.match.any);
+      expect(this.mock).to.have.been.calledWith(sinon.match.any, `say "${eventType}"`, sinon.match.any);
     });
     it(`Fires when regex matches ${eventType}`, async () => {
       await CustomHook.create({
@@ -121,7 +121,7 @@ describe('Custom hooks', () => {
       });
 
       await handler(event(eventType, 'some log line'));
-      expect(this.mock).to.not.have.been.calledOnceWith(sinon.match.any, [`say "${eventType}"`], sinon.match.any);
+      expect(this.mock).to.not.have.been.calledOnceWith(sinon.match.any, `say "${eventType}"`, sinon.match.any);
 
       await CustomHook.create({
         server: sails.testServer.id,
@@ -131,7 +131,7 @@ describe('Custom hooks', () => {
       });
 
       await handler(event(eventType, 'some log line'));
-      expect(this.mock).to.have.been.calledWith(sinon.match.any, [`say "${eventType}"`], sinon.match.any);
+      expect(this.mock).to.have.been.calledWith(sinon.match.any, `say "${eventType}"`, sinon.match.any);
     });
 
     it(`Fires when regex matches ${eventType} with no caseSensitive`, async () => {
@@ -144,7 +144,7 @@ describe('Custom hooks', () => {
       });
 
       await handler(event(eventType, 'some log line'));
-      expect(this.mock).to.not.have.been.calledOnceWith(sinon.match.any, [`say "${eventType}"`], sinon.match.any);
+      expect(this.mock).to.not.have.been.calledOnceWith(sinon.match.any, `say "${eventType}"`, sinon.match.any);
 
       await CustomHook.create({
         server: sails.testServer.id,
@@ -155,7 +155,7 @@ describe('Custom hooks', () => {
       });
 
       await handler(event(eventType, 'SoMe log line'));
-      expect(this.mock).to.have.been.calledWith(sinon.match.any, [`say "${eventType}"`], sinon.match.any);
+      expect(this.mock).to.have.been.calledWith(sinon.match.any, `say "${eventType}"`, sinon.match.any);
     });
 
     it(`Handles cooldowns ${eventType}`, async () => {
@@ -192,7 +192,7 @@ describe('Custom hooks', () => {
 
 
       await handler(event(eventType, 'some log line 12345'));
-      expect(this.mock).to.have.been.calledOnceWith(sinon.match.any, ['say "${custom.testVar}"'], sinon.match({ custom: { testVar: '1234' } }));
+      expect(this.mock).to.have.been.calledOnceWith(sinon.match.any, 'say "${custom.testVar}"', sinon.match({ custom: { testVar: '1234' } }));
     });
   }
 
