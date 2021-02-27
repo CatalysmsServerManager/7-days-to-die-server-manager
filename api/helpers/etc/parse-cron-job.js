@@ -33,12 +33,9 @@ module.exports = {
         return;
       }
 
-      let commandsToExecute = sails.helpers.sdtd.parseCommandsString(
-        foundJob.command
-      );
       const dateStarted = Date.now();
       sails.log.debug(`Executing a cron job for server ${foundJob.server.name}`, _.omit(foundJob, 'server'));
-      let responses = await sails.helpers.sdtd.executeCustomCmd(foundJob.server, commandsToExecute);
+      let responses = await sails.helpers.sdtd.executeCustomCmd(foundJob.server, foundJob.command);
 
       foundJob.responses = responses;
       const dateEnded = Date.now();
