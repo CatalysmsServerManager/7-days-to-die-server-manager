@@ -5,11 +5,11 @@ async function enrichEventData(event) {
       event.data.victim = await Player.findOne({
         server: event.server.id,
         name: event.data.victimName
-      });
+      }).populate('role');
       event.data.killer = await Player.findOne({
         server: event.server.id,
         name: event.data.killerName
-      });
+      }).populate('role');
       break;
     default:
       break;
@@ -44,7 +44,7 @@ async function enrichEventData(event) {
       player = await Player.findOne({
         name: event.data.playerName,
         server: event.server.id
-      });
+      }).populate('role');
     }
   }
   event.data.player = player;

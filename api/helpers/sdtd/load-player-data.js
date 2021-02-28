@@ -85,7 +85,6 @@ module.exports = {
       for (const player of playerList.players) {
 
         let playerProfile = await findOrCreatePlayer(player, inputs.serverId);
-
         // Inventory & stats data is only available when a player is online, so we only load it then.
         let playerInventory;
         let steamAvatar;
@@ -193,7 +192,7 @@ async function findOrCreatePlayer(player, serverId) {
         steamId: player.steamid
       },
       limit: 1
-    });
+    }).populate('role');;
     return foundPlayer[0];
   }
 }
