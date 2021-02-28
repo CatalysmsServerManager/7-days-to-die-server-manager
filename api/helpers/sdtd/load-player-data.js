@@ -184,7 +184,7 @@ async function findOrCreatePlayer(player, serverId) {
       lastOnline: player.lastonline,
       name: player.name ? he.encode(player.name) : 'Unknown',
       ip: player.ip,
-    });
+    }).populate('role');
     return foundOrCreatedPlayer;
   } catch (error) {
     let foundPlayer = await Player.find({
