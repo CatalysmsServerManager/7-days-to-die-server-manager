@@ -192,7 +192,7 @@ async function findOrCreatePlayer(player, serverId) {
         steamId: player.steamid
       },
       limit: 1
-    }).populate('role');;
+    }).populate('role');
     return foundPlayer[0];
   }
 }
