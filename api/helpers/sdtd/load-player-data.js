@@ -128,6 +128,8 @@ module.exports = {
           playerProfile[0].online = true;
         }
 
+        playerProfile[0].role = await sails.helpers.sdtd.getPlayerRole(playerProfile[0].id);
+
         sails.log.verbose(`Loaded a player - ${playerProfile[0].id} - ${playerProfile[0].name} - server: ${server.name}`);
         playerProfile[0].name = he.decode(playerProfile[0].name);
         playersToSend.push(playerProfile[0]);
@@ -183,7 +185,7 @@ async function findOrCreatePlayer(player, serverId) {
       lastOnline: player.lastonline,
       name: player.name ? he.encode(player.name) : 'Unknown',
       ip: player.ip,
-    }).populate('role');
+    });
     return foundOrCreatedPlayer;
   } catch (error) {
     let foundPlayer = await Player.find({
@@ -192,7 +194,7 @@ async function findOrCreatePlayer(player, serverId) {
         steamId: player.steamid
       },
       limit: 1
-    }).populate('role');
+    });
     return foundPlayer[0];
   }
 }

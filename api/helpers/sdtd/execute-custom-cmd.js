@@ -35,7 +35,9 @@ module.exports = {
       inputs.data = {};
     }
 
-    inputs.data.onlinePlayers = await sails.helpers.sdtd.loadPlayerData.with({
+    inputs.data.server = inputs.server;
+
+    inputs.data.server.onlinePlayers = await sails.helpers.sdtd.loadPlayerData.with({
       serverId: inputs.server.id,
       onlyOnline: true
     });
