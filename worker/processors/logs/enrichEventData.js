@@ -5,11 +5,14 @@ async function enrichEventData(event) {
       event.data.victim = await Player.findOne({
         server: event.server.id,
         name: event.data.victimName
-      }).populate('role');
+      });
       event.data.killer = await Player.findOne({
         server: event.server.id,
         name: event.data.killerName
-      }).populate('role');
+      });
+      event.data.victim.role = await sails.helpers.sdtd.getPlayerRole(event.data.victim.id);
+      event.data.killer.role = await sails.helpers.sdtd.getPlayerRole(event.data.killer.id);
+
       break;
     default:
       break;
@@ -44,9 +47,14 @@ async function enrichEventData(event) {
       player = await Player.findOne({
         name: event.data.playerName,
         server: event.server.id
-      }).populate('role');
+      });
     }
   }
+
+  if (player) {
+    player.role = await sails.helpers.sdtd.getPlayerRole(player.id);
+  }
+
   event.data.player = player;
   return event;
 };
