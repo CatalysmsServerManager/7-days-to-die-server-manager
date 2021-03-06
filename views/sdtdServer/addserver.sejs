@@ -9,25 +9,6 @@
 
         <a class="lead" href="https://docs.csmm.app/en/CSMM/installation.html">Quick start guide</a>
 
-
-        <div>
-          <hr>
-          <p class="lead">Looking for a server host?</p>
-          
-          <a href="https://pingperfect.com/aff.php?aff=897" target="_blank">
-            <img src="/images/meta/pingperfect.png" alt="Ping Perfect logo" width="25%">
-          </a>
-
-
-
-          <p> Try out           
-            <a href="https://pingperfect.com/aff.php?aff=897" target="_blank">
-            Ping Perfect
-          </a> 
-          with the promocode "<strong>CSMM10</strong>" for <strong>10% off your first billing period</strong>.</p>
-          <hr>
-        </div>
-
         <form id="addServer">
           <div class="form-group">
             <label for="servername">Name</label>
@@ -248,7 +229,7 @@
             } else {
               responseString +=
                 `${successIcon} <p>Mem command response : ${JSON.stringify(response.commandResponse)}</p>`
-            }            
+            }
           }
 
           if (response.private) {

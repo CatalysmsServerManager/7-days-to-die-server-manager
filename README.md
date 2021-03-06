@@ -50,15 +50,6 @@ We are happy to help you on our [Discord server](http://catalysm.net/discord).
 
 ## Sponsors
 
-<a href="https://pingperfect.com/aff.php?aff=897" target="_blank">
-  <img src="assets/images/meta/pingperfect.png" alt="Ping Perfect logo" width="40%">
-</a>
-   <p> Try out           
-            <a href="https://pingperfect.com/aff.php?aff=897" target="_blank">
-            Ping Perfect
-          </a> 
-          with the promocode "<strong>CSMM10</strong>" for <strong>10% off your first billing period</strong>.</p>
-
 [![Sentry](assets/images/meta/sentry.png)](https://sentry.io)
 
 </div>
