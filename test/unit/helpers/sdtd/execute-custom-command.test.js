@@ -14,7 +14,7 @@ describe('HELPER execute-custom-command', function () {
       animals: faker.random.number({ min: 1, max: 100 })
     });
     sandbox.stub(sails.helpers.sdtdApi, 'executeConsoleCommand').resolves({ result: 'it worked yay' });
-    sandbox.stub(sails.helpers.sdtd.loadPlayerData, 'with').resolves([sails.testPlayer]);
+    sandbox.stub(sails.helpers.sdtd, 'loadPlayerData').resolves([sails.testPlayer]);
   });
 
   it('Parses and executes a command string', async function () {
