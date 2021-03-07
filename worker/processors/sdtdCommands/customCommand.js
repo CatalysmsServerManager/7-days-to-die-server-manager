@@ -95,8 +95,7 @@ class CustomCommand extends SdtdCommand {
 
     async function runCustomCommand(chatMessage, player, server, args, options) {
       try {
-        const parsedCmds = sails.helpers.sdtd.parseCommandsString(options.commandsToExecute);
-        let executedCmds = await sails.helpers.sdtd.executeCustomCmd(server, parsedCmds, {
+        let executedCmds = await sails.helpers.sdtd.executeCustomCmd(server, options.commandsToExecute, {
           player: player,
           command: options
         });
@@ -114,7 +113,8 @@ class CustomCommand extends SdtdCommand {
 
 
       } catch (error) {
-        sails.log.error(`Custom command error - server ${server.id} - ${chatMessage.messageText} - ${error}`);
+        sails.log.error(`Custom command error - server ${server.id} - ${chatMessage.messageText}`);
+        sails.log.error(error);
         chatMessage.reply(`Error, please contact your server admin!`);
       }
     }

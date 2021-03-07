@@ -10,6 +10,9 @@ async function enrichEventData(event) {
         server: event.server.id,
         name: event.data.killerName
       });
+      event.data.victim.role = await sails.helpers.sdtd.getPlayerRole(event.data.victim.id);
+      event.data.killer.role = await sails.helpers.sdtd.getPlayerRole(event.data.killer.id);
+
       break;
     default:
       break;
@@ -47,6 +50,11 @@ async function enrichEventData(event) {
       });
     }
   }
+
+  if (player) {
+    player.role = await sails.helpers.sdtd.getPlayerRole(player.id);
+  }
+
   event.data.player = player;
   return event;
 };

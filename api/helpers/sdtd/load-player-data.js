@@ -85,7 +85,6 @@ module.exports = {
       for (const player of playerList.players) {
 
         let playerProfile = await findOrCreatePlayer(player, inputs.serverId);
-
         // Inventory & stats data is only available when a player is online, so we only load it then.
         let playerInventory;
         let steamAvatar;
@@ -128,6 +127,8 @@ module.exports = {
         if (player.online) {
           playerProfile[0].online = true;
         }
+
+        playerProfile[0].role = await sails.helpers.sdtd.getPlayerRole(playerProfile[0].id);
 
         sails.log.verbose(`Loaded a player - ${playerProfile[0].id} - ${playerProfile[0].name} - server: ${server.name}`);
         playerProfile[0].name = he.decode(playerProfile[0].name);

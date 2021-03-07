@@ -66,10 +66,7 @@ class Vote extends SdtdCommand {
   }
 
   async awardVoteReward(player, server, command) {
-
-    let parsedCommands = sails.helpers.sdtd.parseCommandsString(command);
-
-    await sails.helpers.sdtd.executeCustomCmd(server, parsedCommands, {
+    await sails.helpers.sdtd.executeCustomCmd(server, command, {
       player: player,
       server: server,
     });

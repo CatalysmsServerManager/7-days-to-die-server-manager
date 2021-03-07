@@ -1,4 +1,6 @@
 const split = require('split-string');
+const Handlebars = require('../../../worker/util/Handlebars');
+
 
 module.exports = {
 
@@ -8,14 +10,16 @@ module.exports = {
 
   description: 'Takes a string of commands separated with ; and returns an array of commands to execute',
 
-  sync: true,
-
   inputs: {
 
     commands: {
       type: 'string',
       required: true
     },
+
+    data: {
+      type: 'ref'
+    }
 
   },
 
@@ -32,14 +36,50 @@ module.exports = {
 
 
   fn: function (inputs, exits) {
-    let result = split(inputs.commands, { separator: ';', quotes: ['"'] });
+
+
+    let result;
+    try {
+      const compiledTemplate = Handlebars.compile(inputs.commands);
+      result = compiledTemplate(inputs.data);
+    } catch (error) {
+      sails.log.warn(`Invalid handlebars template! Falling back to "dumb parsing" - ${error.message}`);
+      result = inputs.commands;
+    }
+
+    result = split(result, { separator: ';', quotes: ['"'] });
     result = result
       .map(x => x.trim())
       // Filters empty strings
       .filter(Boolean);
-    return exits.success(result);
+
+    // Fill any legacy variables syntax in the command
+    result = result.map(async commandToExec => {
+      try {
+        if (!_.isUndefined(inputs.data)) {
+          if (!_.isUndefined(inputs.data.player)) {
+            commandToExec = await sails.helpers.sdtd.fillPlayerVariables(
+              commandToExec,
+              inputs.data.player
+            );
+          }
+          commandToExec = await sails.helpers.sdtd.fillCustomVariables(
+            commandToExec,
+            inputs.data
+          );
+        }
+      } catch (error) {
+        sails.log.error(error);
+      } finally {
+        return commandToExec;
+      }
+    });
+
+    return exits.success(Promise.all(result));
 
   }
 
 
 };
+
+

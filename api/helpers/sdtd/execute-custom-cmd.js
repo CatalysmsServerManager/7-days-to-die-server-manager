@@ -12,7 +12,7 @@ module.exports = {
     },
 
     commands: {
-      type: 'ref',
+      type: 'string',
       required: true
     },
 
@@ -31,35 +31,22 @@ module.exports = {
   fn: async function (inputs, exits) {
     const commandsExecuted = new Array();
 
-    if (!_.isArray(inputs.commands)) {
-      return exits.error(`Commands input must be an array`);
+    if (!inputs.data) {
+      inputs.data = {};
     }
+
+    inputs.data.server = inputs.server;
+    inputs.data.server.onlinePlayers = await sails.helpers.sdtd.loadPlayerData(inputs.server.id, undefined, true);
+
+    inputs.data.server.stats = await sails.helpers.sdtdApi.getStats(SdtdServer.getAPIConfig(inputs.server));
+
+    inputs.commands = await sails.helpers.sdtd.parseCommandsString(
+      inputs.commands,
+      inputs.data
+    );
 
     for (const command of inputs.commands) {
       let commandToExec = command;
-
-      try {
-        // Fill any variables in the command
-        if (!_.isUndefined(inputs.data)) {
-          if (!_.isUndefined(inputs.data.player)) {
-            commandToExec = await sails.helpers.sdtd.fillPlayerVariables(
-              commandToExec,
-              inputs.data.player
-            );
-          }
-          commandToExec = await sails.helpers.sdtd.fillCustomVariables(
-            commandToExec,
-            inputs.data
-          );
-        }
-      } catch (error) {
-        sails.log.error(error);
-        commandsExecuted.push({
-          command,
-          parameters: '',
-          result: 'Error filling in variables - please check your variable syntax'
-        });
-      }
 
       // Check if the command matches any custom functions
       let customFunction = checkForCustomFunction(commandToExec);
