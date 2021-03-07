@@ -42,6 +42,7 @@ module.exports = {
       onlyOnline: true
     });
 
+    inputs.data.server.stats = await sails.helpers.sdtdApi.getStats(SdtdServer.getAPIConfig(inputs.server));
 
     inputs.commands = await sails.helpers.sdtd.parseCommandsString(
       inputs.commands,

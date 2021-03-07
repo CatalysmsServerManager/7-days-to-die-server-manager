@@ -29,6 +29,17 @@ describe('Cron hook', () => {
     }).fetch();
     // By default, no jobs run in these tests
     await queue.pause();
+
+    sandbox.stub(sails.helpers.sdtdApi, 'getStats').resolves({
+      gametime: {
+        days: 42,
+        hours: 13,
+        minutes: 7
+      },
+      players: 1,
+      hostiles: 5,
+      animals: 2
+    });
   });
 
   it('Can queue a new job', async () => {
