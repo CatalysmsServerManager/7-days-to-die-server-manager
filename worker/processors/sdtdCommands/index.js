@@ -72,7 +72,7 @@ async function commandListener(job) {
     } catch (error) {
       Sentry.captureException(error);
       sails.log.error(`HOOK SdtdCommands - Error attempting to run ${chatMessage.messageText} on serverId ${server.id}: ${error}`);
-      chatMessage.reply(`error`, { error: 'An unknown error occured' });
+      chatMessage.reply(`error`, { error: 'Unknown error' });
       return;
     }
   }

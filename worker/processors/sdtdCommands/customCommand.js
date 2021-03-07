@@ -94,29 +94,21 @@ class CustomCommand extends SdtdCommand {
     await runCustomCommand(chatMessage, player, server, args, options);
 
     async function runCustomCommand(chatMessage, player, server, args, options) {
-      try {
-        let executedCmds = await sails.helpers.sdtd.executeCustomCmd(server, options.commandsToExecute, {
-          player: player,
-          command: options
-        });
+      let executedCmds = await sails.helpers.sdtd.executeCustomCmd(server, options.commandsToExecute, {
+        player: player,
+        command: options
+      });
 
-        if (options.sendOutput) {
+      if (options.sendOutput) {
 
-          for (const cmd of executedCmds) {
-            if (!_.isEmpty(cmd.result)) {
-              await chatMessage.reply(cmd.result);
-            }
+        for (const cmd of executedCmds) {
+          if (!_.isEmpty(cmd.result)) {
+            await chatMessage.reply(cmd.result);
           }
         }
-
-        sails.log.debug(`HOOK SdtdCommands - custom command ran by player ${player.name} on server ${server.name} - ${chatMessage.messageText}`, chatMessage, executedCmds);
-
-
-      } catch (error) {
-        sails.log.error(`Custom command error - server ${server.id} - ${chatMessage.messageText}`);
-        sails.log.error(error);
-        chatMessage.reply(`Error, please contact your server admin!`);
       }
+
+      sails.log.debug(`HOOK SdtdCommands - custom command ran by player ${player.name} on server ${server.name} - ${chatMessage.messageText}`, chatMessage, executedCmds);
     }
   }
 }

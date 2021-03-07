@@ -145,21 +145,13 @@ function checkForCustomFunction(command) {
 }
 
 async function executeCommand(server, command) {
-  try {
-    let result = await sails.helpers.sdtdApi.executeConsoleCommand(
-      {
-        ip: server.ip,
-        port: server.webPort,
-        adminToken: server.authToken,
-        adminUser: server.authName
-      },
-      _.trim(command)
-    );
-    return result;
-  } catch (error) {
-    sails.log.error(error);
-    return {
-      result: 'An error occurred executing the API request to the 7D2D server'
-    };
-  }
+  return sails.helpers.sdtdApi.executeConsoleCommand(
+    {
+      ip: server.ip,
+      port: server.webPort,
+      adminToken: server.authToken,
+      adminUser: server.authName
+    },
+    _.trim(command)
+  );
 }
