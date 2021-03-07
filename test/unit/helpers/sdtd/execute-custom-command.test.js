@@ -76,7 +76,41 @@ say "Current time is: {{server.stats.gametime.hours}}:{{server.stats.gametime.mi
     expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.match(/say "Current time is: \d+:\d+"/);
   });
 
+
+  it('Can do sum', async function () {
+    const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+say "1 + 1 = {{sum 1 1}}"
+    `, { player: sails.testPlayer });
+    expect(res).to.have.length(1);
+    expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.be.eq(`say "1 + 1 = 2"`);
+  });
+
+  it('Can subtract', async function () {
+    const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+say "1 - 1 = {{subtract 1 1}}"
+    `, { player: sails.testPlayer });
+    expect(res).to.have.length(1);
+    expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.be.eq(`say "1 - 1 = 0"`);
+  });
+
+  it('Can multiply', async function () {
+    const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+say "2 * 3 = {{multiply 2 3}}"
+    `, { player: sails.testPlayer });
+    expect(res).to.have.length(1);
+    expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.be.eq(`say "2 * 3 = 6"`);
+  });
+
+  it('Can divide', async function () {
+    const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+say "6 / 3 = {{divide 6 3}}"
+    `, { player: sails.testPlayer });
+    expect(res).to.have.length(1);
+    expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.be.eq(`say "6 / 3 = 2"`);
+  });
+
 });
+
 
 
 

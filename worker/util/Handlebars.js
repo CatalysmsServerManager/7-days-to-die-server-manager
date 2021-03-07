@@ -31,4 +31,20 @@ Handlebars.registerHelper('not', function (a) {
   return !a;
 });
 
+Handlebars.registerHelper('sum', function (a, b) {
+  return a + b;
+});
+
+Handlebars.registerHelper('subtract', function (a, b) {
+  return a - b;
+});
+
+Handlebars.registerHelper('multiply', function (a, b) {
+  return a * b;
+});
+
+Handlebars.registerHelper('divide', function (a, b) {
+  return a / b;
+});
+
 module.exports = Handlebars;
