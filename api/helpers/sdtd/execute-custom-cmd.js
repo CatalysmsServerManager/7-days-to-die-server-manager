@@ -36,7 +36,7 @@ module.exports = {
     }
 
     inputs.data.server = inputs.server;
-    inputs.data.server.onlinePlayers = await sails.helpers.sdtd.loadPlayerData(inputs.server.id, null, true);
+    inputs.data.server.onlinePlayers = await sails.helpers.sdtd.loadPlayerData(inputs.server.id, undefined, true);
 
     inputs.data.server.stats = await sails.helpers.sdtdApi.getStats(SdtdServer.getAPIConfig(inputs.server));
 
