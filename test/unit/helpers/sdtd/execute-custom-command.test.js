@@ -117,6 +117,33 @@ say "8 % 6 = {{mod 8 6}}"
     expect(res).to.have.length(1);
     expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.be.eq(`say "8 % 6 = 2"`);
   });
+
+  it('Can round', async function () {
+    let res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+{{round 8.123456789 1}}
+    `, { player: sails.testPlayer });
+    expect(res).to.have.length(1);
+    expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.be.eq(`8.1`);
+
+
+    res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+    {{round 8.123456789 -1}}
+        `, { player: sails.testPlayer });
+    expect(res).to.have.length(1);
+    expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(1).lastArg).to.be.eq(`8.1`);
+
+    res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+{{round 8.123456789 5}}
+    `, { player: sails.testPlayer });
+    expect(res).to.have.length(1);
+    expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(2).lastArg).to.be.eq(`8.12346`);
+
+    res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+    {{round 8.123456789}}
+        `, { player: sails.testPlayer });
+    expect(res).to.have.length(1);
+    expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(3).lastArg).to.be.eq(`8`);
+  });
 });
 
 
