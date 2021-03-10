@@ -430,9 +430,9 @@
       }
     });
 
-    $("#add-name").on('keydown', (e) => {
-      let subString = $("#add-name").val();
-      let possibleItems = availableItems.filter(item => item.includes(subString));
+    $("#add-name").on('keyup', (e) => {
+      let subString = $("#add-name").val().toLowerCase();
+      let possibleItems = availableItems.filter(item => item.toLowerCase().includes(subString));
       $("#possibleItems").empty();
       possibleItems.forEach(item => {
         $("#possibleItems").append(`<span class="itemName">${item} </span>`);
