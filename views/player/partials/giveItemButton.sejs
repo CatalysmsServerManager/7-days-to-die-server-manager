@@ -23,7 +23,8 @@
           <div class="form-group">
 
             <label class="sr-only" for="player-give-item-input-amount">Amount</label>
-            <input type="text" class="form-control mb-2 mr-sm-2" id="player-give-item-input-amount" placeholder="Amount">
+            <input type="text" class="form-control mb-2 mr-sm-2" id="player-give-item-input-amount"
+              placeholder="Amount">
           </div>
 
           <label class="sr-only" for="player-give-item-input-itemName">Item Name</label>
@@ -37,7 +38,8 @@
           </div>
           <div><small>For items that do not support quality, use '0'.</small></div>
 
-          <input type="submit" class="btn btn-primary" data-dismiss="modal" aria-hidden="true" id="player-give-item-submit">
+          <input type="submit" class="btn btn-primary" data-dismiss="modal" aria-hidden="true"
+            id="player-give-item-submit">
 
         </form>
 
@@ -77,8 +79,8 @@
     });
 
     $("#player-give-item-input-itemName").on('keyup', (e) => {
-      let subString = $("#player-give-item-input-itemName").val();
-      let possibleItems = availableItems.filter(item => item.includes(subString));
+      let subString = $("#player-give-item-input-itemName").val().toLowerCase();
+      let possibleItems = availableItems.filter(item => item.toLowerCase().includes(subString));
       $("#player-give-item-possible-items").empty();
       possibleItems.forEach(item => {
         $("#player-give-item-possible-items").append(`<span class="itemName">${item} </span>`);
