@@ -109,6 +109,14 @@ say "6 / 3 = {{divide 6 3}}"
     expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.be.eq(`say "6 / 3 = 2"`);
   });
 
+
+  it('Can modulo', async function () {
+    const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+say "8 % 6 = {{mod 8 6}}"
+    `, { player: sails.testPlayer });
+    expect(res).to.have.length(1);
+    expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.be.eq(`say "8 % 6 = 2"`);
+  });
 });
 
 

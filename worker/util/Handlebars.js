@@ -47,4 +47,8 @@ Handlebars.registerHelper('divide', function (a, b) {
   return a / b;
 });
 
+Handlebars.registerHelper('mod', function (a, b) {
+  return a % b;
+});
+
 module.exports = Handlebars;
