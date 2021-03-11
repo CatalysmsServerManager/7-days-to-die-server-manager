@@ -19,7 +19,7 @@ class help extends SdtdCommand {
 
     if (player.role) {
       player.role = await Role.findOne({
-        id: player.role
+        id: player.role.id
       });
     } else {
       player.role = await sails.helpers.roles.getDefaultRole(server.id);
