@@ -1,7 +1,7 @@
 const enrichData = require('./enrichEventData');
 
 module.exports = async function hooks(job) {
-  sails.log.debug('[Worker] Got a `hooks` job', job.data);
+  sails.log.debug(`[Worker] Got a \`hooks\` job of type ${job.data.type}`);
   return handle(job.data);
 };
 
