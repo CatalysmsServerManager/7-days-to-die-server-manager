@@ -1,7 +1,7 @@
 const donorCheck = require('./donorCheck');
 
 module.exports = async function system(job) {
-  sails.log.debug('[Worker] Got a `system` job', job.data);
+  sails.log.debug('[Worker] Got a `system` job');
 
   switch (job.data.type) {
     case 'donorCheck':
