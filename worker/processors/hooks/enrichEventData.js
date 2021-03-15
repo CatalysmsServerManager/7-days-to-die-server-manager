@@ -35,19 +35,17 @@ module.exports = async function enrichEventData(event) {
   }
 
   if (!_.isEmpty(event.steamId)) {
-    player = await sails.helpers.sdtd.loadPlayerData.with({
-      serverId: event.server.id,
-      steamId: event.steamId
+    player = await Player.findOne({
+      steamId: event.steamId,
+      server: event.server.id
     });
-    player = player[0];
   }
 
   if (!_.isEmpty(event.steamID)) {
-    player = await sails.helpers.sdtd.loadPlayerData.with({
-      serverId: event.server.id,
-      steamId: event.steamID
+    player = await Player.findOne({
+      steamId: event.steamID,
+      server: event.server.id
     });
-    player = player[0];
   }
 
   // If we do not find the player via steamId, we try via name.
@@ -59,7 +57,10 @@ module.exports = async function enrichEventData(event) {
       });
     }
   }
-  newData.player = player;
+  newData.player = (await sails.helpers.sdtd.loadPlayerData.with({
+    serverId: event.server.id,
+    steamId: player.steamId
+  }))[0];
   return newData;
 
 };
