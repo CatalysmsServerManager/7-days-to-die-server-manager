@@ -57,10 +57,14 @@ module.exports = async function enrichEventData(event) {
       });
     }
   }
-  newData.player = (await sails.helpers.sdtd.loadPlayerData.with({
-    serverId: event.server.id,
-    steamId: player.steamId
-  }))[0];
+
+  if (player) {
+    newData.player = (await sails.helpers.sdtd.loadPlayerData.with({
+      serverId: event.server.id,
+      steamId: player.steamId
+    }))[0];
+  }
+
   return newData;
 
 };
