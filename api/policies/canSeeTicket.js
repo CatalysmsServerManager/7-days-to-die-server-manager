@@ -16,8 +16,13 @@ module.exports = async function canSeeTicket(req, res, next) {
 
     let userRole = await sails.helpers.roles.getUserRole(user.id, server.id);
 
+    const permCheck = await sails.helpers.roles.checkPermission.with({
+      userId: user.id,
+      serverId: server.id,
+      permission: 'manageTickets'
+    });
 
-    if (user.steamId.toString() === ticket.player.steamId.toString() || userRole.manageTickets || userRole.manageServer) {
+    if (user.steamId.toString() === ticket.player.steamId.toString() || permCheck.hasPermission) {
       return next();
     } else {
       return res.view('meta/notauthorized', {
