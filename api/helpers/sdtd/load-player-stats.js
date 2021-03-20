@@ -1,5 +1,3 @@
-var sevenDays = require('machinepack-7daystodiewebapi');
-
 module.exports = {
 
 
@@ -29,92 +27,35 @@ module.exports = {
   },
 
   fn: async function (inputs, exits) {
-    let server = await SdtdServer.findOne({ id: inputs.serverId });
-    let response = new Array();
+    const sdtdServer = await SdtdServer.findOne({ id: inputs.serverId });
 
-    sevenDays.executeCommand({
-      ip: server.ip,
-      port: server.webPort,
-      authName: server.authName,
-      authToken: server.authToken,
-      command: 'listplayers'
-    }).exec({
-      error: error => {
-        console.log(error);
-        exits.error(error);
-      },
-      success: data => {
+    const playersResponse = await sails.helpers.sdtdApi.getOnlinePlayers(SdtdServer.getAPIConfig(sdtdServer));
 
-        if (!data) {
-          return exits.error();
-        }
 
-        let playerSplitResult = data.result.split('\n');
-        playerSplitResult = _.drop(playerSplitResult, 2);
-        playerSplitResult.forEach(async playerInfo => {
-
-          let splitResult = playerInfo.split(', ');
-          let playerStats = {
-            deaths: 0,
-            zombieKills: 0,
-            playerKills: 0,
-            score: 0,
-            level: 0,
-            steamId: undefined
-          };
-
-          splitResult.forEach(dataPoint => {
-            if (dataPoint.startsWith('deaths=')) {
-              dataPoint = dataPoint.replace('deaths=', '');
-              parseInt(dataPoint, 10);
-              playerStats.deaths = dataPoint;
-            }
-
-            if (dataPoint.startsWith('steamid=')) {
-              dataPoint = dataPoint.replace('steamid=', '');
-              parseInt(dataPoint, 10);
-              playerStats.steamId = dataPoint;
-            }
-
-            if (dataPoint.startsWith('zombies=')) {
-              dataPoint = dataPoint.replace('zombies=', '');
-              parseInt(dataPoint, 10);
-              playerStats.zombieKills = dataPoint;
-            }
-
-            if (dataPoint.startsWith('players=')) {
-              dataPoint = dataPoint.replace('players=', '');
-              parseInt(dataPoint, 10);
-              playerStats.playerKills = dataPoint;
-            }
-
-            if (dataPoint.startsWith('score=')) {
-              dataPoint = dataPoint.replace('score=', '');
-              parseInt(dataPoint, 10);
-              playerStats.score = dataPoint;
-            }
-            if (dataPoint.startsWith('level=')) {
-              dataPoint = dataPoint.replace('level=', '');
-              parseInt(dataPoint, 10);
-              playerStats.level = dataPoint;
-            }
-
-          });
-          response.push(playerStats);
-
-        });
-
-        if (inputs.steamId) {
-          response = response.filter(playerStats => {
-            return playerStats.steamId === inputs.steamId;
-          })[0];
-        }
-
-        exits.success(response);
+    const promises = [];
+    for (const player of playersResponse) {
+      if (!player.steamid) {
+        continue;
       }
-    });
+      const updateObj = {
+        deaths: player.playerdeaths,
+        score: player.score,
+        level: Math.floor(player.level),
+        positionX: player.position.x,
+        positionY: player.position.y,
+        positionZ: player.position.z,
 
+      };
+      promises.push(Player.update({ server: inputs.serverId, steamId: player.steamid }, updateObj).fetch());
+    }
+
+    const players = (await Promise.all(promises)).filter(_ => _.length).map(_ => _[0]);
+
+    if (inputs.steamId) {
+      const player = players.filter(_ => _.steamId === inputs.steamId)[0];
+      return exits.success(player);
+    }
+
+    return exits.success(players);
   }
-
-
 };
