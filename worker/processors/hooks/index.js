@@ -66,7 +66,7 @@ async function executeHook(eventData, hookToExec, serverId, eventType = 'logLine
   // Ugly hack to work around some data inconsistency
   // When a hook fires, Allocs hasnt always updated internal data yet
   // So API requests get stale data back
-  if (eventType === 'playerLevel') {
+  if (eventType === 'playerLevel' && eventData.player) {
     eventData.player.level = eventData.newLvl;
   }
 
