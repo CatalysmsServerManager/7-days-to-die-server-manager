@@ -76,8 +76,13 @@
         <td>
           <%= player.playtime %>
         </td>
+
         <td>
+          <% if(player.server) { %>
           <%= player.server.name %>
+          <% } else { %>
+          <%= "No server connected" %>
+          <% } %>
         </td>
         <td>
           <% if(player.role) { %>
