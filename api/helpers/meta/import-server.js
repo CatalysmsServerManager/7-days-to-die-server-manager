@@ -164,7 +164,7 @@ module.exports = {
       sails.log.info('Imported custom hooks');
     }
 
-    return exits.success();
+    return exits.success(server);
   },
 
 
