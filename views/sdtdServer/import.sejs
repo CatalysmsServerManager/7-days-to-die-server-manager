@@ -22,7 +22,7 @@
                     <input type="text" class="form-control" name="userId" id="userId" aria-describedby="userIdHelp"
                         placeholder="">
                     <small id="userIdHelp" class="form-text text-muted">The user ID this imported server should belong
-                        to</small>
+                        to. When empty, it defaults to the currently logged in user</small>
                     <input type="hidden" name="_csrf" value="<%= _csrf %>" />
                     <input class="btn btn-primary" type="submit" name="submit">
                 </form>
