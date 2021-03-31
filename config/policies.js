@@ -20,6 +20,8 @@ let policyObject = {
 
   sdtdServerController: {
     '*': ['isLoggedIn', 'roles/manageServer'],
+    'import': ['isCsmmAdmin'],
+    'export': ['isCsmmAdmin'],
     'get-players-view': ['isLoggedIn', 'roles/managePlayers'],
     'add-server': 'isLoggedIn',
     'add-server-view': 'isLoggedIn',
