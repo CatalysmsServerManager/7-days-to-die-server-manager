@@ -7,7 +7,7 @@ module.exports = {
 
     userId: {
       type: 'string',
-      required: true
+      required: false
     }
   },
 
@@ -31,7 +31,9 @@ module.exports = {
       return exits.error(new Error('A server with this IP and port already exists'));
     }
 
-    json.server.owner = inputs.userId;
+    if (inputs.userId) {
+      json.server.owner = inputs.userId;
+    }
 
     const server = await SdtdServer.create(omitId(json.server)).fetch();
     json.config.server = server.id;
