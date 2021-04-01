@@ -14,7 +14,7 @@
                 <h1>Import</h1>
 
 
-                <form action="/api/sdtdserver/import" method="post" class="form-group" enctype="multipart/form-data">
+                <form action="/api/admin/import" method="post" class="form-group" enctype="multipart/form-data">
                     <label for="file">Input JSON</label>
                     <input type="file" class="form-control-file" name="file" id="file" aria-describedby="fileHelpId">
                     <small id="fileHelpId" class="form-text text-muted">The JSON file to import</small>
@@ -39,7 +39,7 @@
     $(document).ready(() => {
         $('#export').on('click', () => {
             const serverId = $('#serverId').val();
-            window.location = `/api/sdtdserver/export?serverId=${serverId}`
+            window.location = `/api/admin/export?serverId=${serverId}`
         })
     })
 </script>

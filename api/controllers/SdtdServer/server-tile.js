@@ -48,12 +48,13 @@ module.exports = {
     const baseUrl = sails.helpers.sdtdApi.getBaseUrl(SdtdServer.getAPIConfig(server));
     const url = `${baseUrl}/map/${inputs.z}/${inputs.x}/${inputs.y}.png?adminuser=${server.authName}&admintoken=${server.authToken}`;
 
-    const reqHeaders = {...this.req.headers};
+    const reqHeaders = { ...this.req.headers };
     delete reqHeaders.host;
     delete reqHeaders.connection;
     delete reqHeaders['upgrade-insecure-requests'];
 
     try {
+      return exits.success();
       request({ url: url, headers: reqHeaders }).pipe(this.res);
     } catch (error) {
       sails.log.error(`Error getting server-tile for ${url}`, error);

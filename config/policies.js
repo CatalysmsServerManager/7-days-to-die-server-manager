@@ -15,13 +15,14 @@
 
 
 let policyObject = {
-
   // isLoggedIn gets included in most of these because it contains the redirect logic
+
+  adminController: {
+    '*': ['isCsmmAdmin']
+  },
 
   sdtdServerController: {
     '*': ['isLoggedIn', 'roles/manageServer'],
-    'import': ['isCsmmAdmin'],
-    'export': ['isCsmmAdmin'],
     'get-players-view': ['isLoggedIn', 'roles/managePlayers'],
     'add-server': 'isLoggedIn',
     'add-server-view': 'isLoggedIn',
