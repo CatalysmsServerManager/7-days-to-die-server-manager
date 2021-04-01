@@ -15,6 +15,7 @@
 
 
                 <form action="/api/admin/import" method="post" class="form-group" enctype="multipart/form-data">
+                    <input type="hidden" name="_csrf" value="<%= _csrf %>" />
                     <label for="file">Input JSON</label>
                     <input type="file" class="form-control-file" name="file" id="file" aria-describedby="fileHelpId">
                     <small id="fileHelpId" class="form-text text-muted">The JSON file to import</small>
@@ -23,7 +24,6 @@
                         placeholder="">
                     <small id="userIdHelp" class="form-text text-muted">The user ID this imported server should belong
                         to. When empty, it defaults to the currently logged in user</small>
-                    <input type="hidden" name="_csrf" value="<%= _csrf %>" />
                     <input class="btn btn-primary" type="submit" name="submit">
                 </form>
 
