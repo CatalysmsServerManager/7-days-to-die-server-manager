@@ -28,10 +28,10 @@ module.exports = {
 
     file.upload({
       maxBytes: 50000000
-    }, async (err, uploadedFiles) => {
-      if (err) {
-        sails.log.err(err);
-        return exits.error(err);
+    }, async (error, uploadedFiles) => {
+      if (error) {
+        sails.log.error(error);
+        return exits.error(error);
       }
 
       if (!uploadedFiles[0]) {
@@ -40,9 +40,15 @@ module.exports = {
       sails.log.warn(`Importing a new server!`);
 
       const data = await fs.readFile(uploadedFiles[0].fd);
-      const server = await sails.helpers.meta.importServer(data, userId || this.req.session.userId);
-      await fs.unlink(uploadedFiles[0].fd);
-      return exits.success(server);
+
+      try {
+        const server = await sails.helpers.meta.importServer(data, userId || this.req.session.userId);
+        await fs.unlink(uploadedFiles[0].fd);
+        return exits.success(server);
+      } catch (error) {
+        sails.log.error(error);
+        return exits.badRequest('Error while importing server, see logs for details');
+      }
     });
 
   }
