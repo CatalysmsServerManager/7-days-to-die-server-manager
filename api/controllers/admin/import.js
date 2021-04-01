@@ -17,7 +17,9 @@ module.exports = {
 
 
   exits: {
-
+    badRequest: {
+      responseType: 'badRequest'
+    }
   },
 
 
@@ -28,14 +30,18 @@ module.exports = {
       maxBytes: 50000000
     }, async (err, uploadedFiles) => {
       if (err) {
+        sails.log.err(err);
         return exits.error(err);
       }
+
+      if (!uploadedFiles[0]) {
+        return exits.badRequest('No files uploaded');
+      }
+      sails.log.warn(`Importing a new server!`);
 
       const data = await fs.readFile(uploadedFiles[0].fd);
       const server = await sails.helpers.meta.importServer(data, userId || this.req.session.userId);
       await fs.unlink(uploadedFiles[0].fd);
-      console.log(server);
-
       return exits.success(server);
     });
 
