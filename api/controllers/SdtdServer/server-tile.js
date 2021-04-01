@@ -53,13 +53,10 @@ module.exports = {
     delete reqHeaders.connection;
     delete reqHeaders['upgrade-insecure-requests'];
 
-    try {
-      return exits.success();
-      request({ url: url, headers: reqHeaders }).pipe(this.res);
-    } catch (error) {
-      sails.log.error(`Error getting server-tile for ${url}`, error);
 
-      return exits.unknownError();
-    }
+    request({ url: url, headers: reqHeaders })
+      .on('error', function (err) {
+        return exits.unknownError(err);
+      }).pipe(this.res);
   }
 };
