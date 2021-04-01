@@ -50,6 +50,15 @@ describe('Import export', function () {
     expect(response.body).to.deep.equal('No files uploaded');
   });
 
+  it('Can export files', async function () {
+
+    const response = await supertest(sails.hooks.http.app)
+      .get(`/api/admin/export?serverId=${sails.testServer.id}`);
+
+    expect(response.body.server.name).to.be.equal(sails.testServer.name);
+
+  });
+
 
 });
 
