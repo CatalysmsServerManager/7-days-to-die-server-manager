@@ -1,32 +1,15 @@
-const Commando = require('discord.js-commando');
-const fs = require('fs');
+module.exports = {
+  friendlyName: 'Export server',
+  inputs: {
+    serverId: {
+      type: 'number'
+    },
+  },
 
-class Export extends Commando.Command {
-  constructor(client) {
-    super(client, {
-      name: 'export',
-      group: 'meta',
-      memberName: 'export',
-      description: 'Export server database rows',
-      hidden: true,
-      ownerOnly: true,
-      args: [
-        {
-          key: 'serverId',
-          label: 'ID of the server, duh',
-          required: true,
-          type: 'string',
-          prompt: 'I need the server ID, dummy.'
-        }
-      ]
-    });
-  }
+  exits: {},
 
-  async run(msg, args) {
-
-    await msg.channel.send('This command is deprecated and will be removed in a future version of CSMM. https://github.com/CatalysmsServerManager/7-days-to-die-server-manager/milestone/1');
-
-    const server = await SdtdServer.findOne(args.serverId);
+  fn: async function (inputs, exits) {
+    const server = await SdtdServer.findOne(inputs.serverId);
 
     if (_.isUndefined(server)) {
       throw new Error(`Unknown server`);
@@ -85,7 +68,7 @@ class Export extends Commando.Command {
 
     server.toJSON = undefined;
 
-    const exportData = {
+    return exits.success({
       server: server,
       config: sdtdConfig,
       cronJobs: cronJobs,
@@ -103,35 +86,8 @@ class Export extends Commando.Command {
       roles: roles,
       shopListings: shopListings,
       customHooks: customHooks
-    };
+    });
+  },
+};
 
-    Object.getOwnPropertyNames(exportData).map(e => omitDates(e));
 
-    fs.writeFile(
-      `${server.name}_export.json`,
-      JSON.stringify(exportData),
-      async function () {
-        await msg.channel.send({
-          files: [
-            {
-              attachment: `${server.name}_export.json`,
-              name: `${server.name}_export.json`
-            }
-          ]
-        });
-
-        fs.unlinkSync(`${server.name}_export.json`);
-      }
-    );
-  }
-}
-
-module.exports = Export;
-
-function omitDates(object) {
-  if (_.isArray(object)) {
-    return object.map(e => _.omit(e, 'createdAt', 'updatedAt'));
-  } else {
-    return _.omit(object, 'createdAt', 'updatedAt');
-  }
-}

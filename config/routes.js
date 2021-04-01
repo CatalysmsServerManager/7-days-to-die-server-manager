@@ -53,6 +53,7 @@ module.exports.routes = {
     action: 'logout'
   },
 
+
   '/gbl': 'SdtdServerController.view-gbl',
   '/gbl/profile': 'PlayerController.view-gbl',
 
@@ -130,6 +131,10 @@ module.exports.routes = {
   'post /api/sdtdserver/gbl/notification/bans': 'gbl.set-notification-bans',
 
   // SDTDSERVER
+
+  'get /admin/import': 'AdminController.import-view',
+  'get /api/admin/export': 'AdminController.export',
+  'post /api/admin/import': 'AdminController.import',
 
   'post /api/sdtdserver/executeCommand': 'SdtdServerController.execute-command',
   'get /api/sdtdserver/sendMessage': 'SdtdServerController.send-message',
