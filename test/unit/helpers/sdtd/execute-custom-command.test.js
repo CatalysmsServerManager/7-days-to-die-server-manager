@@ -159,7 +159,7 @@ say "8 % 6 = {{mod 8 6}}"
       .filter(_ => !isNaN(_));
     expect(resNumbers).to.have.length(50);
     for (let i = 0; i < resNumbers.length - 1; i++) {
-      expect(resNumbers[i]).to.be.lessThan(resNumbers[i + 1]);
+      expect(resNumbers[i]).to.be.at.most(resNumbers[i + 1]);
     }
   });
 
@@ -177,7 +177,7 @@ say "8 % 6 = {{mod 8 6}}"
       .filter(_ => !isNaN(_));
     expect(resNumbers).to.have.length(50);
     for (let i = 0; i < resNumbers.length - 1; i++) {
-      expect(resNumbers[i]).to.be.greaterThan(resNumbers[i + 1]);
+      expect(resNumbers[i]).to.be.at.least(resNumbers[i + 1]);
     }
   });
 });
