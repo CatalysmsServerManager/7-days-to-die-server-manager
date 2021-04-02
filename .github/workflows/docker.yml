@@ -96,5 +96,5 @@ jobs:
         with:
           token: ${{ secrets.REPO_DISPATCH_PAT_TOKEN }}
           event-type: my-build_application
-          repository: CatalysmsServerManager/Pterodactyl
+          repository: catalysmsservermanager/pterodactyl
           client-payload: '{"event_type": "build_application"}'
