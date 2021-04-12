@@ -115,4 +115,21 @@ describe('HOOK bannedItems', () => {
       { player: sinon.match.has('id', this.testPlayer.id) }
     );
   });
+
+  it('Works for a player with no role set', async () => {
+    sandbox.stub(sails.helpers.roles, 'checkPermission').returns({ hasPermission: false });
+    const newPlayer = await Player.create({
+      steamId: sails.testUser.steamId + 2,
+      server: sails.testServer.id,
+      user: sails.testUser.id,
+      name: faker.internet.userName(),
+      lastTeleportTime: 0,
+      // No role!
+      role: null
+    }).meta({ skipAllLifecycleCallbacks: true }).fetch();
+
+    await handleItemTrackerUpdate({ server: sails.testServer, trackingInfo: [{ player: newPlayer.id, inventory: [{ name: 'bannedItem' }] }] });
+    expect(this.spy).to.have.been.calledOnce;
+
+  });
 });
