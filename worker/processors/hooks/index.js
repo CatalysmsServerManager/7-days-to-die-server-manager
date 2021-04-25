@@ -1,7 +1,7 @@
 const enrichData = require('./enrichEventData');
 
 module.exports = async function hooks(job) {
-  sails.log.debug('[Worker] Got a `hooks` job', job.data);
+  sails.log.debug(`[Worker] Got a \`hooks\` job of type ${job.data.type}`);
   return handle(job.data);
 };
 
@@ -50,7 +50,7 @@ async function handle({ data: eventData, type: eventType, server }) {
       if (isNotOnCooldown) {
         const variables = await getHookVariables(hookToExec.id);
         hookToExec.variables = variables;
-        await executeHook(eventData, hookToExec, server.id);
+        await executeHook(eventData, hookToExec, server.id, eventType);
       }
     }
   }
@@ -58,10 +58,18 @@ async function handle({ data: eventData, type: eventType, server }) {
 
 
 
-async function executeHook(eventData, hookToExec, serverId) {
+async function executeHook(eventData, hookToExec, serverId, eventType = 'logLine') {
   let server = await SdtdServer.findOne(serverId);
   eventData.server = server;
   eventData = await enrichData(eventData);
+
+  // Ugly hack to work around some data inconsistency
+  // When a hook fires, Allocs hasnt always updated internal data yet
+  // So API requests get stale data back
+  if (eventType === 'playerLevel' && eventData.player) {
+    eventData.player.level = eventData.newLvl;
+  }
+
   eventData.custom = getVariablesValues(hookToExec.variables, eventData.msg);
   let results = await sails.helpers.sdtd.executeCustomCmd(server, hookToExec.commandsToExecute, eventData);
   await saveResultsToRedis(hookToExec.id, results);

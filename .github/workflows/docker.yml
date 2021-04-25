@@ -91,3 +91,10 @@ jobs:
         uses: github/codeql-action/upload-sarif@v1
         with:
           sarif_file: snyk.sarif
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.REPO_DISPATCH_PAT_TOKEN }}
+          event-type: my-build_application
+          repository: catalysmsservermanager/pterodactyl
+          client-payload: '{"event_type": "build_application"}'

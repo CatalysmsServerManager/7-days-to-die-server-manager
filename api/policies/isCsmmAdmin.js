@@ -1,5 +1,5 @@
 module.exports = function isCsmmAdmin(req, res, next) {
-  return sails.hooks.policies.middleware.isloggedin(req, res, async function(err) {
+  return sails.hooks.policies.middleware.isloggedin(req, res, async function (err) {
     if (err) { return next(err); }
     if (req.session && req.session.userId) {
       const foundUser = await User.findOne(req.session.userId);

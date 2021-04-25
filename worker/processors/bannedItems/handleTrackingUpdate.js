@@ -1,3 +1,5 @@
+const Sentry = require('@sentry/node');
+
 module.exports = async function handleItemTrackerUpdate(data) {
   // Server auth data gets stripped when JSON'ified through bull so we got to get the data from DB again
   const server = await SdtdServer.findOne(data.server.id).populate('config');
@@ -41,7 +43,7 @@ module.exports = async function handleItemTrackerUpdate(data) {
           if (player.role) {
             playerRole = await Role.findOne(player.role);
           } else {
-            playerRole = await sails.helpers.role.getDefaultRole(server.id);
+            playerRole = await sails.helpers.roles.getDefaultRole(server.id);
           }
 
           if (bannedItemRole.level < playerRole.level) {
@@ -56,6 +58,7 @@ module.exports = async function handleItemTrackerUpdate(data) {
       }
 
     } catch (e) {
+      Sentry.captureException(e);
       sails.log.error(`HOOK:bannedItems - Error while checking player ${onlinePlayer.player} from server ${onlinePlayer.server}`, e);
     }
   }

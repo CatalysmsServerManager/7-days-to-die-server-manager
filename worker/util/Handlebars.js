@@ -47,4 +47,30 @@ Handlebars.registerHelper('divide', function (a, b) {
   return a / b;
 });
 
+Handlebars.registerHelper('mod', function (a, b) {
+  return a % b;
+});
+
+Handlebars.registerHelper('round', function (original, decimals = 1) {
+  if (decimals < 0) {
+    decimals = 1;
+  }
+  return original.toFixed(decimals);
+});
+
+Handlebars.registerHelper('sort', function (array, propertyPath, order) {
+  order = order.toLowerCase();
+
+  const props = propertyPath.split('.');
+
+  switch (order) {
+    case 'asc':
+      return array.sort((a, b) => _.get(a, props) - _.get(b, props));
+    case 'desc':
+      return array.sort((a, b) => _.get(b, props) - _.get(a, props));
+    default:
+      throw new Error('Order must be either asc or desc');
+  }
+});
+
 module.exports = Handlebars;

@@ -109,6 +109,77 @@ say "6 / 3 = {{divide 6 3}}"
     expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.be.eq(`say "6 / 3 = 2"`);
   });
 
+
+  it('Can modulo', async function () {
+    const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+say "8 % 6 = {{mod 8 6}}"
+    `, { player: sails.testPlayer });
+    expect(res).to.have.length(1);
+    expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.be.eq(`say "8 % 6 = 2"`);
+  });
+
+  it('Can round', async function () {
+    let res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+{{round 8.123456789 1}}
+    `, { player: sails.testPlayer });
+    expect(res).to.have.length(1);
+    expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.be.eq(`8.1`);
+
+
+    res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+    {{round 8.123456789 -1}}
+        `, { player: sails.testPlayer });
+    expect(res).to.have.length(1);
+    expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(1).lastArg).to.be.eq(`8.1`);
+
+    res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+{{round 8.123456789 5}}
+    `, { player: sails.testPlayer });
+    expect(res).to.have.length(1);
+    expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(2).lastArg).to.be.eq(`8.12346`);
+
+    res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+    {{round 8.123456789}}
+        `, { player: sails.testPlayer });
+    expect(res).to.have.length(1);
+    expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(3).lastArg).to.be.eq(`8`);
+  });
+
+  it('Can sort arrays asc', async function () {
+    const randomPlayerLevel = () => ({ ...sails.testPlayer, role: { level: faker.random.number() } });
+    const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+    {{#each (sort players "role.level" "asc")}}
+          {{this.role.level}}
+    {{/each}}"`, { players: Array.from({ length: 50 }, () => randomPlayerLevel()) });
+    expect(res).to.have.length(1);
+    const resNumbers = sails.helpers.sdtdApi.executeConsoleCommand
+      .getCall(0).lastArg
+      .split('\n')
+      .map(_ => parseInt(_, 10))
+      .filter(_ => !isNaN(_));
+    expect(resNumbers).to.have.length(50);
+    for (let i = 0; i < resNumbers.length - 1; i++) {
+      expect(resNumbers[i]).to.be.at.most(resNumbers[i + 1]);
+    }
+  });
+
+  it('Can sort arrays desc', async function () {
+    const randomPlayerLevel = () => ({ ...sails.testPlayer, role: { level: faker.random.number() } });
+    const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+    {{#each (sort players "role.level" "desc")}}
+          {{this.role.level}}
+    {{/each}}"`, { players: Array.from({ length: 50 }, () => randomPlayerLevel()) });
+    expect(res).to.have.length(1);
+    const resNumbers = sails.helpers.sdtdApi.executeConsoleCommand
+      .getCall(0).lastArg
+      .split('\n')
+      .map(_ => parseInt(_, 10))
+      .filter(_ => !isNaN(_));
+    expect(resNumbers).to.have.length(50);
+    for (let i = 0; i < resNumbers.length - 1; i++) {
+      expect(resNumbers[i]).to.be.at.least(resNumbers[i + 1]);
+    }
+  });
 });
 
 

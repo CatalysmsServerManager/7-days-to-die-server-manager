@@ -1,5 +1,6 @@
 var supertest = require('supertest');
 var expect = require('chai').expect;
+const sinon = require('sinon');
 
 let queue;
 
@@ -61,7 +62,7 @@ describe('PATCH /api/sdtdserver/cron', function () {
       server: sails.testServer.id
     }).fetch();
 
-    const response =  await supertest(sails.hooks.http.app)
+    const response = await supertest(sails.hooks.http.app)
       .patch('/api/sdtdserver/cron')
       .send({
         jobId: job.id,
@@ -223,3 +224,47 @@ describe('DELETE /api/sdtdserver/cron', function () {
     expect(await queue.count()).to.be.eql(0);
   });
 });
+
+
+describe('POST /api/sdtdserver/cron/test', function () {
+  let mock;
+  beforeEach(async () => {
+    mock = sandbox.stub(sails.helpers.sdtdApi, 'executeConsoleCommand').returns(['something']);
+    sandbox.stub(sails.helpers.sdtd, 'loadPlayerData').callsFake(() => []);
+    sandbox.stub(sails.helpers.sdtdApi, 'getStats').returns({});
+  });
+
+  it('should return 200 with valid info', async function () {
+    let job = await CronJob.create({
+      command: 'say "aaa"',
+      temporalValue: '* * * * *',
+      server: sails.testServer.id
+    }).fetch();
+    const response = await supertest(sails.hooks.http.app)
+      .post('/api/sdtdserver/cron/test')
+      .send({
+        jobId: job.id,
+      });
+    expect(response.statusCode).to.equal(200);
+    expect(mock).to.have.been.calledWith(sinon.match.any, 'say "aaa"');
+
+  });
+
+  it('should return 200 with valid info', async function () {
+    let job = await CronJob.create({
+      command: 'give TestPlayer ${randList:1,2,3} 5;',
+      temporalValue: '* * * * *',
+      server: sails.testServer.id
+    }).fetch();
+    const response = await supertest(sails.hooks.http.app)
+      .post('/api/sdtdserver/cron/test')
+      .send({
+        jobId: job.id,
+      });
+    expect(response.statusCode).to.equal(200);
+    expect(mock).to.have.been.calledWith(sinon.match.any, sinon.match(/give TestPlayer [1-3] 5/));
+
+  });
+
+});
+

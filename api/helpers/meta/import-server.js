@@ -4,6 +4,11 @@ module.exports = {
     data: {
       type: 'ref'
     },
+
+    userId: {
+      type: 'string',
+      required: false
+    }
   },
 
   exits: {},
@@ -24,6 +29,10 @@ module.exports = {
 
     if (existingServer) {
       return exits.error(new Error('A server with this IP and port already exists'));
+    }
+
+    if (inputs.userId) {
+      json.server.owner = inputs.userId;
     }
 
     const server = await SdtdServer.create(omitId(json.server)).fetch();
@@ -164,7 +173,7 @@ module.exports = {
       sails.log.info('Imported custom hooks');
     }
 
-    return exits.success();
+    return exits.success(server);
   },
 
 
