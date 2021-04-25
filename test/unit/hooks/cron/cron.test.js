@@ -85,6 +85,11 @@ describe('Cron hook', () => {
   });
 
   it('Sends a notification', () => {
+    sandbox.stub(sails.helpers.sdtdApi, 'executeConsoleCommand').callsFake(async () => {
+      return {
+        result: 'Mock called'
+      };
+    });
     return new Promise(async (resolve, reject) => {
       await hook.start(testJob.id);
 

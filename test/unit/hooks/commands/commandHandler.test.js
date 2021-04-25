@@ -2,6 +2,7 @@ const commandListener = require('../../../../worker/processors/sdtdCommands');
 const { expect } = require('chai');
 const EventEmitter = require('events');
 const commands = require('../../../../worker/processors/sdtdCommands/commands');
+const faker = require('faker');
 
 describe('COMMAND CommandHandler', () => {
   beforeEach(async () => {
@@ -10,7 +11,18 @@ describe('COMMAND CommandHandler', () => {
         result: 'Mock called'
       };
     });
-    sails.testServerConfig = (await SdtdConfig.update(sails.testServerConfig.id, { replyPrefix: 'test',commandsEnabled: true }).fetch())[0];
+    sandbox.stub(sails.helpers.sdtd, 'loadPlayerData').resolves([sails.testPlayer]);
+    sandbox.stub(sails.helpers.sdtdApi, 'getStats').resolves({
+      gametime: {
+        days: faker.random.number({ min: 1, max: 250 }),
+        hours: faker.random.number({ min: 0, max: 24 }),
+        minutes: faker.random.number({ min: 1, max: 60 })
+      },
+      players: faker.random.number({ min: 1, max: 20 }),
+      hostiles: faker.random.number({ min: 1, max: 100 }),
+      animals: faker.random.number({ min: 1, max: 100 })
+    });
+    sails.testServerConfig = (await SdtdConfig.update(sails.testServerConfig.id, { replyPrefix: 'test', commandsEnabled: true }).fetch())[0];
     await Role.create({
       server: sails.testServer.id,
       name: 'Admin',
@@ -27,7 +39,7 @@ describe('COMMAND CommandHandler', () => {
       messageText: `$ping`,
       steamId: sails.testPlayer.steamId
     };
-    await commandListener({data: {data: chatMessage, server: sails.testServer}});
+    await commandListener({ data: { data: chatMessage, server: sails.testServer } });
     expect(this.executeCommandStub.callCount).to.be.equal(1);
     for (const call of this.executeCommandStub.getCalls()) {
       expect(call.lastArg).to.match(/pm \d* "test/);
@@ -35,12 +47,12 @@ describe('COMMAND CommandHandler', () => {
   });
 
   it('Does not execute a command if commands are disabled on server', async () => {
-    await SdtdConfig.update({server: sails.testServer.id}, {commandsEnabled: false});
+    await SdtdConfig.update({ server: sails.testServer.id }, { commandsEnabled: false });
     const chatMessage = {
       messageText: `$ping`,
       steamId: sails.testPlayer.steamId
     };
-    await commandListener({data: {data: chatMessage, server: sails.testServer}});
+    await commandListener({ data: { data: chatMessage, server: sails.testServer } });
     expect(this.executeCommandStub.callCount).to.be.equal(1);
   });
   it('Ignores chat messages sent by server', async () => {
@@ -48,7 +60,7 @@ describe('COMMAND CommandHandler', () => {
       messageText: `$ping`,
       playerName: 'Server'
     };
-    await commandListener({data: {data: chatMessage, server: sails.testServer}});
+    await commandListener({ data: { data: chatMessage, server: sails.testServer } });
     expect(this.executeCommandStub.callCount).to.be.equal(0);
   });
   it('Exits gracefully when an invalid player was detected', async () => {
@@ -57,7 +69,7 @@ describe('COMMAND CommandHandler', () => {
       steamId: null,
       playerName: null
     };
-    await commandListener({data: {data: chatMessage, server: sails.testServer}});
+    await commandListener({ data: { data: chatMessage, server: sails.testServer } });
     expect(this.executeCommandStub.callCount).to.be.equal(0);
   });
   it('Runs all the built in commands', async () => {
@@ -68,7 +80,7 @@ describe('COMMAND CommandHandler', () => {
         messageText: `$${name}`,
         steamId: sails.testPlayer.steamId
       };
-      await commandListener({data: {data: chatMessage, server: sails.testServer}});
+      await commandListener({ data: { data: chatMessage, server: sails.testServer } });
     }
   });
   it('Can run custom commands', async () => {
@@ -82,7 +94,7 @@ describe('COMMAND CommandHandler', () => {
       messageText: `$test`,
       steamId: sails.testPlayer.steamId
     };
-    await commandListener({data: {data: chatMessage, server: sails.testServer}});
+    await commandListener({ data: { data: chatMessage, server: sails.testServer } });
 
     expect(this.executeCommandStub.callCount).to.be.equal(1);
   });
@@ -92,7 +104,7 @@ describe('COMMAND CommandHandler', () => {
       messageText: `$PiNg`,
       steamId: sails.testPlayer.steamId
     };
-    await commandListener({data: {data: chatMessage, server: sails.testServer}});
+    await commandListener({ data: { data: chatMessage, server: sails.testServer } });
     expect(this.executeCommandStub.callCount).to.be.equal(1);
     for (const call of this.executeCommandStub.getCalls()) {
       expect(call.lastArg).to.match(/pm \d* .* PONG/);
