@@ -6,7 +6,7 @@ const sendReplyToPlayer = require('./sendReply');
 
 async function commandListener(job) {
   const chatMessage = job.data.data;
-  const server = await SdtdServer.findOne(job.data.server.id).populate('config');
+  const server = await SdtdServer.findOne(job.data.server.id).populate('config').populate('players');
   server.config = server.config[0];
 
   let dateStarted = Date.now();
