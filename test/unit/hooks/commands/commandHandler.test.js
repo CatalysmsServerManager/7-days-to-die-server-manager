@@ -11,7 +11,7 @@ describe('COMMAND CommandHandler', () => {
         result: 'Mock called'
       };
     });
-    sandbox.stub(sails.helpers.sdtd, 'loadPlayerData').resolves([sails.testPlayer]);
+    sandbox.stub(sails.helpers.sdtd.loadPlayerData, 'with').resolves([sails.testPlayer]);
     sandbox.stub(sails.helpers.sdtdApi, 'getStats').resolves({
       gametime: {
         days: faker.random.number({ min: 1, max: 250 }),
