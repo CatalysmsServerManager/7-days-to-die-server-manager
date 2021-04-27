@@ -31,9 +31,12 @@ Handlebars.registerHelper('not', function (a) {
   return !a;
 });
 
-Handlebars.registerHelper('sum', function (a, b) {
+const add = (a, b) => {
   return a + b;
-});
+};
+
+Handlebars.registerHelper('sum', add);
+Handlebars.registerHelper('add', add);
 
 Handlebars.registerHelper('subtract', function (a, b) {
   return a - b;

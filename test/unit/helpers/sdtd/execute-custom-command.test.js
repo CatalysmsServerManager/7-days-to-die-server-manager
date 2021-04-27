@@ -78,9 +78,16 @@ say "Current time is: {{server.stats.gametime.hours}}:{{server.stats.gametime.mi
 
 
   it('Can do sum', async function () {
-    const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+    let res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
 say "1 + 1 = {{sum 1 1}}"
     `, { player: sails.testPlayer });
+    expect(res).to.have.length(1);
+    expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.be.eq(`say "1 + 1 = 2"`);
+
+    // Check the alias too
+    res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+    say "1 + 1 = {{add 1 1}}"
+        `, { player: sails.testPlayer });
     expect(res).to.have.length(1);
     expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.be.eq(`say "1 + 1 = 2"`);
   });
