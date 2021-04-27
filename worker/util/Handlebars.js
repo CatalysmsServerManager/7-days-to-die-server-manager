@@ -32,7 +32,10 @@ Handlebars.registerHelper('not', function (a) {
 });
 
 const add = (a, b) => {
-  return a + b;
+  // We parse the arguments to numbers here
+  // because in 99% of the cases, the user wants to do numeric addition
+  // "1" + 1 should not equal 11
+  return parseInt(a, 10) + parseInt(b, 10);
 };
 
 Handlebars.registerHelper('sum', add);

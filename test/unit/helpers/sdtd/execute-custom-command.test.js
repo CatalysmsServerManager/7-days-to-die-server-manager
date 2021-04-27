@@ -92,6 +92,16 @@ say "1 + 1 = {{sum 1 1}}"
     expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.be.eq(`say "1 + 1 = 2"`);
   });
 
+  it('sum defaults to numeric addition, even when one of the arguments is a string', async function () {
+    const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+    say "1 + 1 = {{sum "1" 1}}"
+        `, { player: sails.testPlayer });
+    expect(res).to.have.length(1);
+    expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.be.eq(`say "1 + 1 = 2"`);
+
+  });
+
+
   it('Can subtract', async function () {
     const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
 say "1 - 1 = {{subtract 1 1}}"
