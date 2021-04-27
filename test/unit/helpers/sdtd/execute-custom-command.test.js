@@ -78,12 +78,29 @@ say "Current time is: {{server.stats.gametime.hours}}:{{server.stats.gametime.mi
 
 
   it('Can do sum', async function () {
-    const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+    let res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
 say "1 + 1 = {{sum 1 1}}"
     `, { player: sails.testPlayer });
     expect(res).to.have.length(1);
     expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.be.eq(`say "1 + 1 = 2"`);
+
+    // Check the alias too
+    res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+    say "1 + 1 = {{add 1 1}}"
+        `, { player: sails.testPlayer });
+    expect(res).to.have.length(1);
+    expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.be.eq(`say "1 + 1 = 2"`);
   });
+
+  it('sum defaults to numeric addition, even when one of the arguments is a string', async function () {
+    const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+    say "1 + 1 = {{sum "1" 1}}"
+        `, { player: sails.testPlayer });
+    expect(res).to.have.length(1);
+    expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.be.eq(`say "1 + 1 = 2"`);
+
+  });
+
 
   it('Can subtract', async function () {
     const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
@@ -179,6 +196,54 @@ say "8 % 6 = {{mod 8 6}}"
     for (let i = 0; i < resNumbers.length - 1; i++) {
       expect(resNumbers[i]).to.be.at.least(resNumbers[i + 1]);
     }
+  });
+
+  describe('randNum helper', function () {
+
+    it('Can do randNum', async function () {
+      for (let i = 0; i < 500; i++) {
+        const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+        say "randNum = {{ randNum 1 9 }}"
+            `, { player: sails.testPlayer });
+        expect(res).to.have.length(1);
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(i).lastArg).to.match(/say "randNum = [1-9]"/);
+      }
+    });
+
+    it('randNum has protection against max < min', async function () {
+      for (let i = 0; i < 500; i++) {
+        const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+        say "randNum = {{ randNum 9 1 }}"
+            `, { player: sails.testPlayer });
+        expect(res).to.have.length(1);
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(i).lastArg).to.match(/say "randNum = [1-9]"/);
+      }
+    });
+
+    it('randNum can handle negatives', async function () {
+      for (let i = 0; i < 500; i++) {
+        const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+        say "randNum = {{ randNum -9 -1 }}"
+            `, { player: sails.testPlayer });
+        expect(res).to.have.length(1);
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(i).lastArg).to.match(/say "randNum = -[1-9]"/);
+      }
+    });
+  });
+
+
+  describe('randList helper', function () {
+
+    it('Can select a random string from a list', async function () {
+      for (let i = 0; i < 500; i++) {
+        const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer,
+          `say randList = {{ randList "a,b,c,d,e" }}`, { player: sails.testPlayer });
+
+        expect(res).to.have.length(1);
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(i).lastArg)
+          .to.match(/randList = [a-e]/);
+      }
+    });
   });
 });
 

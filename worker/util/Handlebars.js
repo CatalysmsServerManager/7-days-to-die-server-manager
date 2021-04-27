@@ -31,9 +31,15 @@ Handlebars.registerHelper('not', function (a) {
   return !a;
 });
 
-Handlebars.registerHelper('sum', function (a, b) {
-  return a + b;
-});
+const add = (a, b) => {
+  // We parse the arguments to numbers here
+  // because in 99% of the cases, the user wants to do numeric addition
+  // "1" + 1 should not equal 11
+  return parseInt(a, 10) + parseInt(b, 10);
+};
+
+Handlebars.registerHelper('sum', add);
+Handlebars.registerHelper('add', add);
 
 Handlebars.registerHelper('subtract', function (a, b) {
   return a - b;
@@ -72,5 +78,16 @@ Handlebars.registerHelper('sort', function (array, propertyPath, order) {
       throw new Error('Order must be either asc or desc');
   }
 });
+
+
+Handlebars.registerHelper('randNum', function (min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+});
+
+Handlebars.registerHelper('randList', function (options) {
+  const choices = options.split(',').map(s => s.trim());
+  return choices[Math.floor(Math.random() * choices.length)];
+});
+
 
 module.exports = Handlebars;
