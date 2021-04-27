@@ -197,6 +197,42 @@ say "8 % 6 = {{mod 8 6}}"
       expect(resNumbers[i]).to.be.at.least(resNumbers[i + 1]);
     }
   });
+
+  describe('randNum helper', function () {
+
+    it('Can do randNum', async function () {
+      for (let i = 0; i < 500; i++) {
+        const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+        say "randNum = {{ randNum 1 9 }}"
+            `, { player: sails.testPlayer });
+        expect(res).to.have.length(1);
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(i).lastArg).to.match(/say "randNum = [1-9]"/);
+      }
+    });
+
+    it('randNum has protection against max < min', async function () {
+      for (let i = 0; i < 500; i++) {
+        const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+        say "randNum = {{ randNum 9 1 }}"
+            `, { player: sails.testPlayer });
+        expect(res).to.have.length(1);
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(i).lastArg).to.match(/say "randNum = [1-9]"/);
+      }
+    });
+
+    it('randNum can handle negatives', async function () {
+      for (let i = 0; i < 500; i++) {
+        const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+        say "randNum = {{ randNum -9 -1 }}"
+            `, { player: sails.testPlayer });
+        expect(res).to.have.length(1);
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(i).lastArg).to.match(/say "randNum = -[1-9]"/);
+      }
+    });
+  });
+
+
+
 });
 
 
