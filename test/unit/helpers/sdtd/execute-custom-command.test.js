@@ -232,7 +232,19 @@ say "8 % 6 = {{mod 8 6}}"
   });
 
 
+  describe('randList helper', function () {
 
+    it('Can select a random string from a list', async function () {
+      for (let i = 0; i < 500; i++) {
+        const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer,
+          `say randList = {{ randList "a,b,c,d,e" }}`, { player: sails.testPlayer });
+
+        expect(res).to.have.length(1);
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(i).lastArg)
+          .to.match(/randList = [a-e]/);
+      }
+    });
+  });
 });
 
 

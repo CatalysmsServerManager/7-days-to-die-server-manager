@@ -84,4 +84,10 @@ Handlebars.registerHelper('randNum', function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 });
 
+Handlebars.registerHelper('randList', function (options) {
+  const choices = options.split(',').map(s => s.trim());
+  return choices[Math.floor(Math.random() * choices.length)];
+});
+
+
 module.exports = Handlebars;
