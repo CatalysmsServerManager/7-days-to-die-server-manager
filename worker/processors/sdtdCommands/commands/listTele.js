@@ -19,6 +19,7 @@ class listTele extends SdtdCommand {
     async function loadTeleports() {
       let playerTeleports = new Array();
       if (args[0] === 'public') {
+        server.players = await Player.find({ server: server.id });
         for (const player of server.players) {
           let publicTelesByPlayer = await PlayerTeleport.find({
             player: player.id,
