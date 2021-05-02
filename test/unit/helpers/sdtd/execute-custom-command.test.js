@@ -101,6 +101,15 @@ say "1 + 1 = {{sum 1 1}}"
 
   });
 
+  it('sum can do string concatenation', async function () {
+    const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+    say "Hello world = {{sum "Hello " "world"}}"
+        `, { player: sails.testPlayer });
+    expect(res).to.have.length(1);
+    expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.be.eq(`say "Hello world = Hello world"`);
+
+  });
+
 
   it('Can subtract', async function () {
     const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
