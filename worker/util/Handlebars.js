@@ -35,7 +35,14 @@ const add = (a, b) => {
   // We parse the arguments to numbers here
   // because in 99% of the cases, the user wants to do numeric addition
   // "1" + 1 should not equal 11
-  return parseInt(a, 10) + parseInt(b, 10);
+  const result = parseInt(a, 10) + parseInt(b, 10);
+
+  if (isNaN(result)) {
+    // If the result is not a number, we'll assume the users wants to do string concatenation instead
+    return a + b;
+  }
+
+  return result;
 };
 
 Handlebars.registerHelper('sum', add);
