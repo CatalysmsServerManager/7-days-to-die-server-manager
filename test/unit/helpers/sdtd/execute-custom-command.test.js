@@ -254,6 +254,22 @@ say "8 % 6 = {{mod 8 6}}"
       }
     });
   });
+
+
+  it('Can do a thing with custom vars inside a loop', async () => {
+    const template = `
+      {{#each server.onlinePlayers}}
+        w2l "test X:{{../custom.PositionX}} Z:{{../custom.PositionZ}} X:{{this.positionX}} Z:{{this.positionZ}}"
+      {{/each}}
+    `;
+
+    await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template, { player: sails.testPlayer, custom: { PositionX: 1, PositionZ: 2 } });
+
+    expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg)
+      .to.equal('w2l "test X:1 Z:2 X:0 Z:0"');
+
+  });
+
 });
 
 
