@@ -14,8 +14,14 @@ describe('CustomFunction wait', function () {
     expect(stub).to.have.been.calledOnce;
   });
 
+  it('Calls the wait helpers with the correct arguments', async () => {
+    instance.run(5);
+    expect(stub).to.have.been.calledOnceWith(5);
+  });
+
   it('Parses strings to int', async () => {
     instance.run('5');
     expect(stub).to.have.been.calledOnceWith(5);
   });
+
 });

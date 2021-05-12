@@ -21,6 +21,5 @@ describe('CustomFunction addCurrency', function () {
   });
   it('Errors when player not found', async () => {
     return expect(instance.run([1337, 50].join(','))).to.be.rejectedWith('Unknown player');
-
   });
 });
