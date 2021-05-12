@@ -1,34 +1,36 @@
 const CustomFunction = require('./base');
 
 class AddCurrency extends CustomFunction {
+  constructor(server) { super(server); }
+  async exec(args) {
+    const playerId = args[0];
+    const currencyToAdd = args[1];
 
-  async exec() {
     let player = await Player.find({
       or: [
-        { id: idAsInt },
-        { steamId: inputs.playerId, server: inputs.serverId },
-        { name: inputs.playerId, server: inputs.serverId }
+        { id: playerId },
+        { steamId: playerId, server: this.server.id },
+        { name: playerId, server: this.server.id }
       ]
     });
 
     player = player[0];
 
-    if (_.isUndefined(player)) {
-      return exits.error(new Error(`Unknown player`));
-    }
+    if (!player) { throw new Error(`Unknown player`); }
 
-    if (inputs.currencyToAdd > 0) {
+
+    if (currencyToAdd > 0) {
       await sails.helpers.economy.giveToPlayer(
         player.id,
-        inputs.currencyToAdd,
+        currencyToAdd,
         'Function call from a custom command - add'
       );
     }
 
-    if (inputs.currencyToAdd < 0) {
+    if (currencyToAdd < 0) {
       await sails.helpers.economy.deductFromPlayer(
         player.id,
-        Math.abs(inputs.currencyToAdd),
+        Math.abs(currencyToAdd),
         'Function call from a custom command - deduct'
       );
     }
