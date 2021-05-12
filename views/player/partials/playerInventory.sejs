@@ -30,6 +30,9 @@
     const prepareInvDataForDataTable = (inventoryData) => {
       let inventoryDataArr = new Array();
 
+      // When there is no inventory data, return early with empty arr
+      if (!inventoryData) return inventoryDataArr
+
       if (inventoryData.bag) {
         inventoryData.bag.forEach(item => {
           if (!_.isNull(item)) {
@@ -62,7 +65,7 @@
       return inventoryDataArr
     }
 
-    let inventoryData = prepareInvDataForDataTable(<%- JSON.stringify(player.inventory) %>) ;
+    let inventoryData = prepareInvDataForDataTable(<%- JSON.stringify(player.inventory) %>);
 
     let inventoryTable = $('#player-inventory-table').DataTable({
       data: inventoryData,
