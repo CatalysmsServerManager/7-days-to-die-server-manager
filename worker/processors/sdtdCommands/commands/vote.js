@@ -1,7 +1,9 @@
 const SdtdCommand = require('../command.js');
 const request = require('request-promise-native');
 
+const locks = {};
 class Vote extends SdtdCommand {
+
   constructor() {
     super({
       name: 'vote',
@@ -9,6 +11,7 @@ class Vote extends SdtdCommand {
       extendedDescription: 'Vote at https://7daystodie-servers.com/ to claim rewards!',
       aliases: []
     });
+    this.voteUrl = 'https://7daystodie-servers.com/api/';
   }
 
   async isEnabled(chatMessage, player, server) {
@@ -24,25 +27,38 @@ class Vote extends SdtdCommand {
       return chatMessage.reply('error', { error: 'No API key configured' });
     }
 
-    let voteCheck = await this.checkIfUserVoted(player.steamId, apiKey);
-
-    switch (voteCheck) {
-      case '0':
-        return chatMessage.reply('notVoted');
-      case '1':
-        await this.awardVoteReward(player, server, server.config.votingCommand);
-        return this.setVoteClaimed(player.steamId, apiKey);
-      case '2':
-        return chatMessage.reply('alreadyClaimed');
-      default:
-        sails.log.error(`Unexpected response after checking vote status: ${voteCheck}`);
-        return chatMessage.reply('error', { error: 'Unexpected response after checking vote status' });
+    if (locks[player.id]) {
+      return chatMessage.reply('voteLock');
     }
 
+    locks[player.id] = true;
+
+    try {
+      let voteCheck = await this.checkIfUserVoted(player.steamId, apiKey);
+
+      switch (voteCheck) {
+        case '0':
+          return chatMessage.reply('notVoted');
+        case '1':
+          await this.awardVoteReward(player, server, server.config.votingCommand);
+          return this.setVoteClaimed(player.steamId, apiKey);
+        case '2':
+          return chatMessage.reply('alreadyClaimed');
+        default:
+          sails.log.error(`Unexpected response after checking vote status: ${voteCheck}`);
+          return chatMessage.reply('error', { error: 'Unexpected response after checking vote status' });
+      }
+    } catch (error) {
+      // We're mostly interested in the finally here
+      // Regular error handling can handle this
+      throw error;
+    } finally {
+      delete locks[player.id];
+    }
   }
 
   setVoteClaimed(steamId, apiKey) {
-    return request('https://7daystodie-servers.com/api/', {
+    return request(this.voteUrl, {
       method: 'POST',
       qs: {
         key: apiKey,
@@ -55,7 +71,7 @@ class Vote extends SdtdCommand {
   }
 
   checkIfUserVoted(steamId, apiKey) {
-    return request('https://7daystodie-servers.com/api/', {
+    return request(this.voteUrl, {
       qs: {
         key: apiKey,
         steamid: steamId,

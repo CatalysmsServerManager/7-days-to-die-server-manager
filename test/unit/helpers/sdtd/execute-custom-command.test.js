@@ -79,19 +79,47 @@ describe('HELPER execute-custom-command', function () {
     });
 
 
-    it('Can handle complex handlebars template syntax', async function () {
-      const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
-      {{#each server.onlinePlayers}}
-  {{#if (eq this.role.level 5)}}
-  pm {{this.steamId}} "Hey {{this.name}} Test1";
-  {{else}}
-  pm {{this.steamId}} "Hey {{this.name}} Test2";
-  {{/if}}
-  {{/each}}
-      `, { player: sails.testPlayer });
+
+    it('Can do sum', async function () {
+      let res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+say "1 + 1 = {{sum 1 1}}"
+    `, { player: sails.testPlayer });
       expect(res).to.have.length(1);
-      expect(res[0]).to.be.eql({ result: 'it worked yay' });
-      expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.be.equal(`pm ${sails.testPlayer.steamId} "Hey ${sails.testPlayer.name} Test2"`);
+      expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.be.eq(`say "1 + 1 = 2"`);
+
+      // Check the alias too
+      res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+    say "1 + 1 = {{add 1 1}}"
+        `, { player: sails.testPlayer });
+      expect(res).to.have.length(1);
+      expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.be.eq(`say "1 + 1 = 2"`);
+    });
+
+    it('sum defaults to numeric addition, even when one of the arguments is a string', async function () {
+      const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+    say "1 + 1 = {{sum "1" 1}}"
+        `, { player: sails.testPlayer });
+      expect(res).to.have.length(1);
+      expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.be.eq(`say "1 + 1 = 2"`);
+
+    });
+
+    it('sum can do string concatenation', async function () {
+      const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+    say "Hello world = {{sum "Hello " "world"}}"
+        `, { player: sails.testPlayer });
+      expect(res).to.have.length(1);
+      expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.be.eq(`say "Hello world = Hello world"`);
+
+    });
+
+
+    it('Can subtract', async function () {
+      const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+say "1 - 1 = {{subtract 1 1}}"
+    `, { player: sails.testPlayer });
+      expect(res).to.have.length(1);
+      expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.be.eq(`say "1 - 1 = 0"`);
     });
 
     it('Handles server.stats varaibles', async function () {
@@ -209,6 +237,68 @@ describe('HELPER execute-custom-command', function () {
     });
   });
 
+  describe('randNum helper', function () {
+
+    it('Can do randNum', async function () {
+      for (let i = 0; i < 500; i++) {
+        const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+        say "randNum = {{ randNum 1 9 }}"
+            `, { player: sails.testPlayer });
+        expect(res).to.have.length(1);
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(i).lastArg).to.match(/say "randNum = [1-9]"/);
+      }
+    });
+
+    it('randNum has protection against max < min', async function () {
+      for (let i = 0; i < 500; i++) {
+        const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+        say "randNum = {{ randNum 9 1 }}"
+            `, { player: sails.testPlayer });
+        expect(res).to.have.length(1);
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(i).lastArg).to.match(/say "randNum = [1-9]"/);
+      }
+    });
+
+    it('randNum can handle negatives', async function () {
+      for (let i = 0; i < 500; i++) {
+        const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+        say "randNum = {{ randNum -9 -1 }}"
+            `, { player: sails.testPlayer });
+        expect(res).to.have.length(1);
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(i).lastArg).to.match(/say "randNum = -[1-9]"/);
+      }
+    });
+  });
+
+
+  describe('randList helper', function () {
+
+    it('Can select a random string from a list', async function () {
+      for (let i = 0; i < 500; i++) {
+        const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer,
+          `say randList = {{ randList "a" "b" "c" "d" "e" }}`, { player: sails.testPlayer });
+
+        expect(res).to.have.length(1);
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(i).lastArg)
+          .to.match(/randList = [a-e]/);
+      }
+    });
+  });
+
+
+  it('Can do a thing with custom vars inside a loop', async () => {
+    const template = `
+      {{#each server.onlinePlayers}}
+        w2l "test X:{{../custom.PositionX}} Z:{{../custom.PositionZ}} X:{{this.positionX}} Z:{{this.positionZ}}"
+      {{/each}}
+    `;
+
+    await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template, { player: sails.testPlayer, custom: { PositionX: 1, PositionZ: 2 } });
+
+    expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg)
+      .to.equal('w2l "test X:1 Z:2 X:0 Z:0"');
+
+  });
 
 });
 

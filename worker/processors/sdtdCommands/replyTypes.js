@@ -331,4 +331,10 @@ module.exports = [{
   type: 'alreadyClaimed',
   default: 'You have already claimed your reward today!',
 },
+{
+  command: 'Vote',
+  pretty: 'Vote - lock',
+  type: 'voteLock',
+  default: 'CSMM is still checking if you voted or not, please hold on',
+},
 ];

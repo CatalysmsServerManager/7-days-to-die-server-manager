@@ -594,7 +594,7 @@
         let playerHasRole = false;
         for (const role of roles) {
           let content
-          if (window.SAILS_LOCALS.player.role.id === role.id) {
+          if (window.SAILS_LOCALS.player.role && window.SAILS_LOCALS.player.role.id === role.id) {
             content = `<option value="${role.id}" selected>${role.name}</option>`;
             playerHasRole = true
           } else {
