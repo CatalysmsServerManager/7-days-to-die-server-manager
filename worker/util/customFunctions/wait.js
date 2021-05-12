@@ -2,10 +2,13 @@ const wait = require('../wait');
 const CustomFunction = require('./base');
 
 class Wait extends CustomFunction {
-  constructor(server) { super(server); }
+  constructor() { super('wait'); }
 
-  exec(args) {
-    return wait.wait(parseInt(args[0], 10));
+  async exec(server, args) {
+    const seconds = args[0];
+    await wait.wait(parseInt(seconds, 10));
+    return `Waited for ${seconds} seconds`;
+
   }
 }
 

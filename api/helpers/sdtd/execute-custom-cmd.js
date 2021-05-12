@@ -1,4 +1,12 @@
-const supportedFunctions = ['wait', 'addCurrency', 'setRole'];
+const AddCurrency = require('../../../worker/util/customFunctions/addCurrency');
+const SetRole = require('../../../worker/util/customFunctions/setRole');
+const Wait = require('../../../worker/util/customFunctions/wait');
+
+const supportedFunctions = [
+  new Wait(),
+  new AddCurrency(),
+  new SetRole()
+];
 
 module.exports = {
   friendlyName: 'Execute custom command',
@@ -46,88 +54,20 @@ module.exports = {
     );
 
     for (const command of inputs.commands) {
-      let commandToExec = command;
-
       // Check if the command matches any custom functions
-      let customFunction = checkForCustomFunction(commandToExec);
+      const customFunction = checkForCustomFunction(command);
       if (customFunction) {
-        // These variables are created so the error handler has access to more info about where the custom function failed
-        let command;
-        let parameters;
-        let splitArgs;
-        let playerId;
-
-        try {
-          switch (customFunction) {
-            case 'wait':
-              command = 'wait';
-              parameters = commandToExec.replace('wait(', '').replace(')', '');
-              let secondsToWait;
-
-              secondsToWait = parseInt(parameters);
-
-              await sails.helpers.sdtd.customfunctions.wait(secondsToWait);
-              commandsExecuted.push({
-                command,
-                parameters,
-                result: `Waited for ${secondsToWait} seconds`
-              });
-              break;
-            case 'addCurrency':
-              command = 'addCurrency';
-              parameters = commandToExec
-                .replace('addCurrency(', '')
-                .replace(')', '');
-              splitArgs = parameters.split(',');
-              playerId = splitArgs[0].trim();
-              let currency = parseInt(splitArgs[1]);
-
-              await sails.helpers.sdtd.customfunctions.addCurrency(
-                playerId,
-                currency,
-                inputs.server.id
-              );
-              commandsExecuted.push({
-                command,
-                parameters,
-                result: `Adjusted currency of players by ${currency}`
-              });
-              break;
-            case 'setRole':
-              command = 'setRole';
-              parameters = commandToExec
-                .replace('setRole(', '')
-                .replace(')', '');
-              splitArgs = parameters.split(',');
-              playerId = splitArgs[0].trim();
-              let role = splitArgs[1].trim();
-              await sails.helpers.sdtd.customfunctions.setRole(
-                playerId,
-                role,
-                inputs.server
-              );
-              commandsExecuted.push({
-                command,
-                parameters,
-                result: `Set role of player ${playerId} to ${role}`
-              });
-              break;
-            default:
-              break;
-          }
-        } catch (error) {
-          sails.log.error(error);
-          commandsExecuted.push({
-            command,
-            parameters,
-            result: 'An internal error occurred'
-          });
-        }
-
-        // If the command is not a custom function, execute it as a sdtd command
+        const result = await executeCustomFunction(customFunction, command, inputs.server);
+        commandsExecuted.push({
+          command: customFunction.name,
+          parameters: command,
+          result
+        });
       } else {
-        let commandResult = await executeCommand(inputs.server, commandToExec);
+        // If the command is not a custom function, execute it as a sdtd command
+        let commandResult = await executeCommand(inputs.server, command);
         commandsExecuted.push(commandResult);
+
       }
     }
 
@@ -135,9 +75,25 @@ module.exports = {
   }
 };
 
+function getArgs(fnc, command) {
+  const regex = new RegExp(`${fnc.name}\((.*)\)`);
+  const res = command.match(regex);
+  return res[1].slice(1, res[1].length - 1);
+}
+
+async function executeCustomFunction(fnc, command, server) {
+  const args = getArgs(fnc, command);
+  try {
+    const res = await fnc.run(server, args);
+    return res;
+  } catch (error) {
+    return error.message;
+  }
+}
+
 function checkForCustomFunction(command) {
   for (const fnc of supportedFunctions) {
-    if (command.includes(fnc + '(')) {
+    if (command.includes(fnc.name + '(')) {
       return fnc;
     }
   }
@@ -159,6 +115,7 @@ async function executeCommand(server, command) {
   } catch (error) {
     sails.log.error(error);
     return {
+      command,
       result: 'An error occurred executing the API request to the 7D2D server'
     };
   }

@@ -1,16 +1,16 @@
 const CustomFunction = require('./base');
 
 class AddCurrency extends CustomFunction {
-  constructor(server) { super(server); }
-  async exec(args) {
+  constructor() { super('AddCurrency'); }
+  async exec(server, args) {
     const playerId = args[0];
     const currencyToAdd = args[1];
 
     let player = await Player.find({
       or: [
         { id: playerId },
-        { steamId: playerId, server: this.server.id },
-        { name: playerId, server: this.server.id }
+        { steamId: playerId, server: server.id },
+        { name: playerId, server: server.id }
       ]
     });
 

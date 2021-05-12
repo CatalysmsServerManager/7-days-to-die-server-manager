@@ -2,10 +2,9 @@ const split = require('split-string');
 
 class CustomFunction {
 
-  constructor(server) {
-    if (!server) { throw new Error('Must provide a server'); }
-    this.server = server;
-
+  constructor(name) {
+    if (!name) { throw new Error('Must provide a name'); }
+    this.name = name;
   }
 
   _parseArgs(args) {
@@ -14,7 +13,7 @@ class CustomFunction {
     return splitArgs.map(x => {
       const num = parseInt(x, 10);
       if (Number.isNaN(num)) {
-        return x;
+        return x.trim().split('"').join('');
       } else {
         return num;
       }
@@ -25,8 +24,9 @@ class CustomFunction {
     throw new Error('Must be implemented');
   }
 
-  async run(args) {
-    return this.exec(this._parseArgs(args));
+  async run(server, args) {
+    sails.log.debug(`Executing custom function ${this.name} with args ${args}`);
+    return this.exec(server, this._parseArgs(args));
   }
 
 }
