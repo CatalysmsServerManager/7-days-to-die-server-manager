@@ -1,3 +1,4 @@
+const { expect } = require('chai');
 const fn = require('../../../worker/util/customFunctions/base');
 
 describe('CustomFunction base', function () {
@@ -22,6 +23,14 @@ describe('CustomFunction base', function () {
   it('Handles quotes properly', async () => {
     instance.run(sails.testServer, '"hello with", "some spaces"');
     expect(stub).to.have.been.calledOnceWith(sails.testServer, ['hello with', 'some spaces']);
+  });
+
+  it('Doesnt parse numbers larger than MAX_SAFE_INTEGER', async () => {
+    const x = `${Number.MAX_SAFE_INTEGER + 100}`;
+    instance.run(sails.testServer, x);
+    expect(stub).to.have.been.calledOnceWith(sails.testServer, [x]);
+
+
   });
 
 });
