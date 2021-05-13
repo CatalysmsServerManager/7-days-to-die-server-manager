@@ -1,11 +1,13 @@
 const AddCurrency = require('../../../worker/util/customFunctions/addCurrency');
+const SendDiscord = require('../../../worker/util/customFunctions/sendDiscord');
 const SetRole = require('../../../worker/util/customFunctions/setRole');
 const Wait = require('../../../worker/util/customFunctions/wait');
 
 const supportedFunctions = [
   new Wait(),
   new AddCurrency(),
-  new SetRole()
+  new SetRole(),
+  new SendDiscord()
 ];
 
 module.exports = {
@@ -57,6 +59,7 @@ module.exports = {
       // Check if the command matches any custom functions
       const customFunction = checkForCustomFunction(command);
       if (customFunction) {
+        // If we find a custom function, execute it
         const result = await executeCustomFunction(customFunction, command, inputs.server);
         commandsExecuted.push({
           command: customFunction.name,
@@ -64,7 +67,7 @@ module.exports = {
           result
         });
       } else {
-        // If the command is not a custom function, execute it as a sdtd command
+        // If the command is not a custom function, execute it as a game command
         let commandResult = await executeCommand(inputs.server, command);
         commandsExecuted.push(commandResult);
 
