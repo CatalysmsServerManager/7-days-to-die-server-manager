@@ -3,7 +3,7 @@ name: Docker
 on: [push]
 
 jobs:
-  build:
+  docker:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
