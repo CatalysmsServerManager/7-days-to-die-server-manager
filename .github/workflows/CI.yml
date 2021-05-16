@@ -3,7 +3,7 @@ name: Node.js CI
 on: [push, pull_request]
 
 jobs:
-  build:
+  node-ci:
     runs-on: ubuntu-latest
 
     strategy:
