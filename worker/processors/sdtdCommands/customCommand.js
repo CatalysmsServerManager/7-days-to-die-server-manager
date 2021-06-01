@@ -1,5 +1,5 @@
 const SdtdCommand = require('./command.js');
-const wait = require('../../util/wait');
+const wait = require('../../util/wait').wait;
 
 class CustomCommand extends SdtdCommand {
   constructor(command) {
