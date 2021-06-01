@@ -1,12 +1,6 @@
 name: DB migrations
 
-on:
-  push:
-    paths:
-      - "migrations/**"
-  pull_request:
-    paths:
-      - "migrations/**"
+on: [push]
 
 jobs:
   migrations:
