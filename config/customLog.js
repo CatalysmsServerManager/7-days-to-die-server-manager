@@ -8,6 +8,12 @@ const shouldLogJSON = JSON.parse((process.env.CSMM_LOG_JSON || 'false').toLowerC
 
 const logDirectory = process.env.LOGGING_DIR ? process.env.LOGGING_DIR : './logs';
 
+const simpleFormat = winston.format.combine(
+  winston.format.colorize(),
+  winston.format.simple()
+);
+
+
 const transports = [
   new winston.transports.File({
     level: 'info',
@@ -18,16 +24,13 @@ const transports = [
     tailable: true,
     maxsize: 10000000,
     maxFiles: 3,
-    json: false,
-    colorize: false
+    format: shouldLogJSON ? winston.format.json() : simpleFormat,
   }),
   new winston.transports.Console({
     level: logLevel,
-    json: shouldLogJSON,
-    stringify: !shouldLogJSON ? undefined : (obj) => JSON.stringify(obj),
-    colorize: true,
     timestamp: true,
-    humanReadableUnhandledException: true
+    humanReadableUnhandledException: true,
+    format: shouldLogJSON ? winston.format.json() : simpleFormat,
   })
 ];
 
@@ -43,14 +46,13 @@ if (!infoAndAbove.includes(logLevel)) {
       tailable: true,
       maxsize: 10000000,
       maxFiles: 5,
-      json: false,
-      colorize: true
+      format: shouldLogJSON ? winston.format.json() : simpleFormat
     })
   );
 }
 
-const customLogger = new winston.Logger({
-  transports: transports
+const customLogger = new winston.createLogger({
+  transports: transports,
 });
 
 customLogger.stream = {
