@@ -85,7 +85,7 @@
     "chai-as-promised": "^7.1.1",
     "codecov": "^3.8.2",
     "coveralls": "^3.1.0",
-    "eslint": "^7.4.0",
+    "eslint": "^7.27.0",
     "faker": "^4.1.0",
     "grunt-bower-task": "^0.5.0",
     "husky": "^4.3.0",
