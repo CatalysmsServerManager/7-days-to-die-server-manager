@@ -266,6 +266,12 @@ module.exports.routes = {
 
   'delete /api/shop/claim': 'ShopController.delete-claim',
 
+  // Saved teleports
+
+  'get /api/sdtdserver/teleport': 'SdtdServerController/teleports.get-teleport',
+  'post /api/sdtdserver/teleport': 'SdtdServerController/teleports.add-teleport',
+  'delete /api/sdtdserver/teleport': 'SdtdServerController/teleports.delete-teleport',
+
   // Historical data
 
   'get /api/sdtdserver/data/memupdate':
