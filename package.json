@@ -9,7 +9,7 @@
     "@sailshq/socket.io-redis": "^5.2.0",
     "@sentry/core": "^6.5.0",
     "@sentry/node": "^6.5.0",
-    "@sentry/tracing": "^6.1.0",
+    "@sentry/tracing": "^6.5.1",
     "@streammedev/hhmmss": "^1.0.0",
     "async": "2.6.1",
     "bull": "^3.22.7",
