@@ -85,7 +85,7 @@
     "codecov": "^3.8.2",
     "coveralls": "^3.1.0",
     "eslint": "^7.27.0",
-    "faker": "^4.1.0",
+    "faker": "^5.5.3",
     "grunt-bower-task": "^0.5.0",
     "husky": "^4.3.0",
     "lint-staged": "^11.0.0",
