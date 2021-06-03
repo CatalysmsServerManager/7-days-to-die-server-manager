@@ -1,5 +1,4 @@
-var sevenDays = require('machinepack-7daystodiewebapi');
-var moment = require('moment');
+const sevenDays = require('machinepack-7daystodiewebapi');
 
 const countryBanRegex = new RegExp('^(CSMM: Players from your country )(\(.*\))( are not allowed to connect to this server)');
 
@@ -65,7 +64,7 @@ module.exports = {
 
         for (const ban of banRows) {
           let splitBan = _.split(ban, ' - ');
-          let bannedUntil = moment(splitBan[0]);
+          let bannedUntil = new Date(splitBan[0]);
           let steamId = splitBan[1];
           let banReason = _.join(_.drop(splitBan, 2), ' ');
 
