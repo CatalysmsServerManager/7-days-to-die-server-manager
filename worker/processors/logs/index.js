@@ -156,6 +156,7 @@ module.exports = async function logs(job) {
       }
       // We still want to emit these events as log lines as well (for modules like hooks, discord notifications)
       response.push({ type: 'logLine', data: enrichedLog.data });
+      sails.helpers.getQueueObject('hooks').add({ type: 'logLine', data: enrichedLog.data, server: enrichedLog.server });
     }
 
     sails.log.debug(

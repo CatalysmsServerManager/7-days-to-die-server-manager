@@ -61,6 +61,27 @@ describe('HELPER execute-custom-command', function () {
       if (!player.role) { throw new Error('Player has no role set'); }
       expect(player.role.id).to.be.equal(role.id);
     });
+
+    it('Can execute a custom function case insensitive', async function () {
+      const stub = sandbox.stub(wait, 'wait');
+      const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, 'wait(5)', { player: sails.testPlayer });
+      expect(res).to.have.length(1);
+      expect(res[0].parameters).to.be.equal('wait(5)');
+      expect(res[0].result).to.be.equal('Waited for 5 seconds');
+      expect(stub.calledOnce).to.be.true;
+      expect(stub).to.have.been.calledOnceWith(5);
+
+      const resCase = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, 'WaIt(5)', { player: sails.testPlayer });
+      expect(resCase).to.have.length(1);
+      expect(resCase[0].parameters).to.be.equal('WaIt(5)');
+      expect(resCase[0].result).to.be.equal('Waited for 5 seconds');
+      const calls = stub.getCalls();
+      expect(calls).to.have.lengthOf(2);
+      for (const call of calls) {
+        expect(call.firstArg).to.be.equal(5);
+
+      }
+    });
   });
 
   describe('handlebars', () => {

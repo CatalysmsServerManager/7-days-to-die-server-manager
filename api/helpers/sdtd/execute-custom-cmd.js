@@ -79,8 +79,8 @@ module.exports = {
 };
 
 function getArgs(fnc, command) {
-  const regex = new RegExp(`${fnc.name}\((.*)\)`);
-  const res = command.match(regex);
+  const regex = new RegExp(`${fnc.name.toLowerCase()}\((.*)\)`);
+  const res = command.toLowerCase().match(regex);
   return res[1].slice(1, res[1].length - 1);
 }
 
@@ -96,7 +96,7 @@ async function executeCustomFunction(fnc, command, server) {
 
 function checkForCustomFunction(command) {
   for (const fnc of supportedFunctions) {
-    if (command.includes(fnc.name + '(')) {
+    if (command.toLowerCase().includes(fnc.name.toLowerCase() + '(')) {
       return fnc;
     }
   }

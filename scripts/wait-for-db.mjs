@@ -1,7 +1,8 @@
-const { Sequelize } = require('sequelize');
-const pWaitFor = require('p-wait-for');
+import pWaitFor from 'p-wait-for';
+import { Sequelize } from 'sequelize';
 
-const config = require('../sequelize.config.js');
+import config from '../sequelize.config.js';
+
 const envConfig = config[process.env.NODE_ENV || 'development'];
 
 const sequelize = new Sequelize(envConfig.url, { logging: false });

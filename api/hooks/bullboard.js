@@ -1,5 +1,6 @@
-const { UI, setQueues } = require('bull-board');
+const { createBullBoard } = require('bull-board');
 const path = require('path');
+const { BullAdapter } = require('bull-board/bullAdapter');
 
 module.exports = function BullBoard(sails) {
   return {
@@ -21,17 +22,21 @@ module.exports = function BullBoard(sails) {
      * @return {Function} cb Callback for when we're done initializing
      */
     initialize: function (cb) {
-      setQueues([
-        sails.helpers.getQueueObject('logs'),
-        sails.helpers.getQueueObject('cron'),
-        sails.helpers.getQueueObject('discordNotifications'),
-        sails.helpers.getQueueObject('bannedItems'),
-        sails.helpers.getQueueObject('playerTracking'),
-        sails.helpers.getQueueObject('kill'),
-        sails.helpers.getQueueObject('hooks'),
-        sails.helpers.getQueueObject('system'),
-        sails.helpers.getQueueObject('sdtdCommands'),
+
+      const { router } = createBullBoard([
+        new BullAdapter(sails.helpers.getQueueObject('logs')),
+        new BullAdapter(sails.helpers.getQueueObject('cron')),
+        new BullAdapter(sails.helpers.getQueueObject('discordNotifications')),
+        new BullAdapter(sails.helpers.getQueueObject('bannedItems')),
+        new BullAdapter(sails.helpers.getQueueObject('playerTracking')),
+        new BullAdapter(sails.helpers.getQueueObject('kill')),
+        new BullAdapter(sails.helpers.getQueueObject('hooks')),
+        new BullAdapter(sails.helpers.getQueueObject('system')),
+        new BullAdapter(sails.helpers.getQueueObject('sdtdCommands')),
       ]);
+
+
+
 
       sails.after('hook:http:loaded', function () {
         sails.hooks.http.app.use(
@@ -43,7 +48,7 @@ module.exports = function BullBoard(sails) {
             }
             return sails.hooks.policies.middleware.iscsmmadmin(req, res, next);
           },
-          UI
+          router
         );
 
       });
