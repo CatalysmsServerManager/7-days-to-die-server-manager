@@ -110,6 +110,9 @@
     "file": [
       "./test/lifecycle.test.js"
     ],
+    "exclude": [
+      "test/e2e.js"
+    ],
     "watch-files": [
       "api/**/*",
       "assets/**/*s",
