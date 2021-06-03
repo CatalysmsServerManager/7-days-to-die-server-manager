@@ -26,10 +26,9 @@
     "handlebars": "^4.7.7",
     "he": "^1.2.0",
     "lodash": "^4.17.19",
-    "lusca": "^1.6.1",
+    "lusca": "^1.7.0",
     "machinepack-7daystodiewebapi": "^0.3.4",
     "minimist": "^1.2.3",
-    "moment": "^2.27.0",
     "morgan": "^1.10.0",
     "mysql2": "^2.2.5",
     "p-wait-for": "^3.1.0",
@@ -79,7 +78,7 @@
     "node": "8"
   },
   "devDependencies": {
-    "@types/bull": "^3.10.3",
+    "@types/bull": "^3.15.1",
     "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",
     "codecov": "^3.8.2",
