@@ -1,9 +1,9 @@
-name: Node.js CI
+name: Integration
 
 on: [push]
 
 jobs:
-  node-ci:
+  e2e-ci:
     runs-on: ubuntu-latest
 
     steps:
