@@ -31,7 +31,7 @@
     "minimist": "^1.2.3",
     "morgan": "^1.10.0",
     "mysql2": "^2.2.5",
-    "p-wait-for": "^3.1.0",
+    "p-wait-for": "^4.0.0",
     "passport": "^0.4.1",
     "passport-discord": "^0.1.4",
     "passport-steam": "^1.0.15",
@@ -55,7 +55,7 @@
     "start": "cross-env NODE_ENV=production concurrently --kill-others -n 'app,worker' 'npm run start:app' 'npm run start:worker'",
     "start:app": "node app.js",
     "start:worker": "node worker/worker.js",
-    "wait-for:db": "node ./scripts/wait-for-db.js",
+    "wait-for:db": "node ./scripts/wait-for-db.mjs",
     "test": "mocha test ",
     "lint": "eslint --max-warnings 0 .",
     "dev": "cross-env NODE_ENV=development nodemon --exec concurrently --kill-others -n 'app,worker' 'npm run start:app' 'npm run start:worker'",
@@ -83,6 +83,7 @@
     "chai-as-promised": "^7.1.1",
     "codecov": "^3.8.2",
     "coveralls": "^3.1.0",
+    "docker-compose": "^0.23.10",
     "eslint": "^7.27.0",
     "faker": "^5.5.3",
     "grunt-bower-task": "^0.5.0",
@@ -108,6 +109,9 @@
     },
     "file": [
       "./test/lifecycle.test.js"
+    ],
+    "exclude": [
+      "test/e2e.js"
     ],
     "watch-files": [
       "api/**/*",
