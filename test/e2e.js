@@ -8,8 +8,8 @@ const composeOpts = { cwd: path.join(__dirname), log: true };
 
 async function main() {
   await upAll(composeOpts);
-  console.log('Waiting 30 seconds for everything to initialize');
-  await wait(30);
+  console.log('Waiting 60 seconds for everything to initialize');
+  await countdown(60);
   await logs(['csmm-web', 'csmm-worker', 'csmm-migrations', 'db', 'cache'],composeOpts);
   const response = await fetch('http://127.0.0.1:1337');
   assert.equal(response.status, 200);
@@ -26,3 +26,10 @@ main()
     process.exit(1);
   });
 
+async function countdown(seconds) {
+  if (seconds === 0) {return;}
+
+  console.log(seconds);
+  await wait(1);
+  return countdown(seconds -1 );
+}
