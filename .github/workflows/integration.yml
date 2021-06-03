@@ -1,0 +1,32 @@
+name: Node.js CI
+
+on: [push]
+
+jobs:
+  node-ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.x   
+      - run: npm ci   
+
+      - run: echo "CSMM_HOSTNAME=http://127.0.0.1:1337" >> .env
+      - run: echo "MYSQL_USER=csmm" >> .env
+      - run: echo "MYSQL_PASSWORD=mysecretpasswordissosecure" >> .env
+      - run: echo "MYSQL_DATABASE=csmm" >> .env
+      - run: echo "MYSQL_RANDOM_ROOT_PASSWORD=true" >> .env
+      - run: echo "DBSTRING=mysql2://csmm:mysecretpasswordissosecure@db:3306/csmm" >> .env
+      - run: echo "REDISSTRING=redis://cache:6379" >> .env
+
+      - run: cat .env
+
+      # Start the production compose file
+      - run: node test/e2e.js
+        env:
+          DBSTRING: mysql2://root@127.0.0.1:3306/csmm
+          REDISSTRING: redis://127.0.0.1:6379
+          CSMM_LOGLEVEL: debug
