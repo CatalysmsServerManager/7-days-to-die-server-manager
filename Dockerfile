@@ -21,12 +21,12 @@ COPY --chown=node:node . .
 RUN ash /usr/src/app/scripts/itemIconsUpdate.sh
 
 FROM node:14-alpine
-USER node
 WORKDIR /usr/src/app
 
 COPY --chown=node:node --from=builder /usr/src/app .
 
 RUN chown -R node:node /usr/src/app
+USER node
 
 HEALTHCHECK --interval=10s --timeout=2s --start-period=10s --retries=3 CMD [ "node", "/usr/src/app/scripts/healthcheck.js" ]
 
