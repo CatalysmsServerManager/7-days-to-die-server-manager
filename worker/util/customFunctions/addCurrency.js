@@ -34,6 +34,8 @@ class AddCurrency extends CustomFunction {
         'Function call from a custom command - deduct'
       );
     }
+
+    return `Adjusted player ${playerId} currency by ${currencyToAdd}`;
   }
 }
 
