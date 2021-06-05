@@ -15,7 +15,8 @@ updates:
     labels:
       - "dependencies"
     target-branch: "development"
-
+    open-pull-requests-limit: 10
+    
   # Enable version updates for Docker
   - package-ecosystem: "docker"
     # Look for a `Dockerfile` in the `root` directory
