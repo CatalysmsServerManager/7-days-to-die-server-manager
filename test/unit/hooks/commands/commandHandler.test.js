@@ -29,9 +29,8 @@ describe('COMMAND CommandHandler', () => {
     };
     await commandListener({data: {data: chatMessage, server: sails.testServer}});
     expect(this.executeCommandStub.callCount).to.be.equal(2);
-    for (const call of this.executeCommandStub.getCalls()) {
-      expect(call.lastArg).to.match(/pm \d* "test/);
-    }
+    const calls = this.executeCommandStub.getCalls();
+    expect(calls[1].lastArg).to.match(/pm \d* "test/);
   });
 
   it('Does not execute a command if commands are disabled on server', async () => {
@@ -72,6 +71,7 @@ describe('COMMAND CommandHandler', () => {
     }
   });
   it('Can run custom commands', async () => {
+    sandbox.stub(sails.helpers.sdtdApi,'getStats').resolves({});
     await CustomCommand.create({
       name: 'test',
       commandsToExecute: 'say test',
@@ -84,7 +84,7 @@ describe('COMMAND CommandHandler', () => {
     };
     await commandListener({data: {data: chatMessage, server: sails.testServer}});
 
-    expect(this.executeCommandStub.callCount).to.be.equal(2);
+    expect(this.executeCommandStub.callCount).to.be.equal(1);
   });
 
   it('Commands are case insensitive', async () => {
@@ -94,8 +94,7 @@ describe('COMMAND CommandHandler', () => {
     };
     await commandListener({data: {data: chatMessage, server: sails.testServer}});
     expect(this.executeCommandStub.callCount).to.be.equal(2);
-    for (const call of this.executeCommandStub.getCalls()) {
-      expect(call.lastArg).to.match(/pm \d* .* PONG/);
-    }
+    const calls = this.executeCommandStub.getCalls();
+    expect(calls[1].lastArg).to.match(/pm \d* .* PONG/);
   });
 });
