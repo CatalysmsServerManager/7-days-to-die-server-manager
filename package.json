@@ -83,7 +83,7 @@
     "chai-as-promised": "^7.1.1",
     "codecov": "^3.8.2",
     "coveralls": "^3.1.0",
-    "docker-compose": "^0.23.10",
+    "docker-compose": "^0.23.11",
     "eslint": "^7.28.0",
     "faker": "^5.5.3",
     "grunt-bower-task": "^0.5.0",
