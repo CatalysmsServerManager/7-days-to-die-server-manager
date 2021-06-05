@@ -38,8 +38,6 @@ async function sendMsg(server, message, player) {
   const { replyPrefix, replyServerName } = server.config;
   const cpmVersion = await sails.helpers.sdtd.checkCpmVersion(server.id);
 
-  console.log(replyServerName);
-
   if (replyPrefix) {
     message = `${replyPrefix} ${message}`;
   }
