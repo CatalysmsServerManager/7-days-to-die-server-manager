@@ -100,6 +100,20 @@
 
     <button id="replyPrefix-btn" class="btn btn-primary">Save prefix</button>
 
+
+    <div class="form-group">
+      <label for="replyServerName">Reply server name</label>
+      <input type="text" class="form-control" name="replyServerName" id="replyServerName" aria-describedby="replyServerName-help"
+        placeholder="">
+      <small id="replyServerName-help" class="form-text text-muted">
+        <b>Requires CPM to be installed since this uses the "pm2" command</b>. 
+        Whenever CSMM replies to a player from a command, this will be the sender name.
+      </small>
+    </div>
+
+    <button id="replyServerName-btn" class="btn btn-primary">Save server name</button>
+
+
   </div>
 
 
@@ -551,6 +565,31 @@
         }
       });
     })
+
+    $("#replyServerName").val(window.SAILS_LOCALS.config.replyServerName);
+
+
+    $("#replyServerName-btn").click(e => {
+      let replyServerName = $("#replyServerName").val();
+      $.ajax({
+        url: `/api/sdtdserver/settings`,
+        type: 'POST',
+        data: {
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+          replyServerName: replyServerName
+        },
+        success: (data, status, xhr) => {
+
+        },
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      });
+    })
+
+    
 
   })
 
