@@ -25,7 +25,7 @@
     "grunt": "1.4.1",
     "handlebars": "^4.7.7",
     "he": "^1.2.0",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "lusca": "^1.7.0",
     "machinepack-7daystodiewebapi": "^0.3.4",
     "minimist": "^1.2.3",
@@ -75,7 +75,7 @@
   "author": "Catalysm",
   "license": "",
   "engines": {
-    "node": "8"
+    "node": "12"
   },
   "devDependencies": {
     "@types/bull": "^3.15.1",
