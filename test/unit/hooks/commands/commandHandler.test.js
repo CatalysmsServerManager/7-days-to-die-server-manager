@@ -28,7 +28,7 @@ describe('COMMAND CommandHandler', () => {
       steamId: sails.testPlayer.steamId
     };
     await commandListener({data: {data: chatMessage, server: sails.testServer}});
-    expect(this.executeCommandStub.callCount).to.be.equal(1);
+    expect(this.executeCommandStub.callCount).to.be.equal(2);
     for (const call of this.executeCommandStub.getCalls()) {
       expect(call.lastArg).to.match(/pm \d* "test/);
     }
@@ -41,7 +41,7 @@ describe('COMMAND CommandHandler', () => {
       steamId: sails.testPlayer.steamId
     };
     await commandListener({data: {data: chatMessage, server: sails.testServer}});
-    expect(this.executeCommandStub.callCount).to.be.equal(1);
+    expect(this.executeCommandStub.callCount).to.be.equal(2);
   });
   it('Ignores chat messages sent by server', async () => {
     const chatMessage = {
@@ -84,7 +84,7 @@ describe('COMMAND CommandHandler', () => {
     };
     await commandListener({data: {data: chatMessage, server: sails.testServer}});
 
-    expect(this.executeCommandStub.callCount).to.be.equal(1);
+    expect(this.executeCommandStub.callCount).to.be.equal(2);
   });
 
   it('Commands are case insensitive', async () => {
@@ -93,7 +93,7 @@ describe('COMMAND CommandHandler', () => {
       steamId: sails.testPlayer.steamId
     };
     await commandListener({data: {data: chatMessage, server: sails.testServer}});
-    expect(this.executeCommandStub.callCount).to.be.equal(1);
+    expect(this.executeCommandStub.callCount).to.be.equal(2);
     for (const call of this.executeCommandStub.getCalls()) {
       expect(call.lastArg).to.match(/pm \d* .* PONG/);
     }
