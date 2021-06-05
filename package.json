@@ -75,7 +75,7 @@
   "author": "Catalysm",
   "license": "",
   "engines": {
-    "node": "8"
+    "node": "12"
   },
   "devDependencies": {
     "@types/bull": "^3.15.1",
