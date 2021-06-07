@@ -24,7 +24,7 @@ function getReplyObj(type) {
 
 
 async function getMessage(server, replyObj) {
-  let response = await CommandReply.find({
+  const response = await CommandReply.find({
     type: replyObj.type,
     server: server.id
   });
