@@ -191,6 +191,12 @@ module.exports = {
       allowNull: true
     },
 
+    replyServerName: {
+      type: 'string',
+      defaultsTo: '',
+      allowNull: true
+    },
+
     enabledCallAdmin: {
       type: 'boolean',
       defaultsTo: false

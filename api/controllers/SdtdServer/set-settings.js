@@ -19,7 +19,12 @@ module.exports = {
 
     replyPrefix: {
       type: 'string'
-    }
+    },
+
+    replyServerName: {
+      type: 'string',
+      maxLength: 25
+    },
   },
   exits: {
     badRequest: {
@@ -44,6 +49,10 @@ module.exports = {
 
     if ('replyPrefix' in inputs) {
       updates.replyPrefix = inputs.replyPrefix;
+    }
+
+    if ('replyServerName' in inputs) {
+      updates.replyServerName = inputs.replyServerName;
     }
 
     sails.log.info(`ServerId ${inputs.serverId} updated settings to ${JSON.stringify(updates)}.`);
