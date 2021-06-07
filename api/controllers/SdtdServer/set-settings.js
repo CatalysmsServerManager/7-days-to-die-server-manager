@@ -25,6 +25,10 @@ module.exports = {
       type: 'string',
       maxLength: 25
     },
+
+    serverSentEvents: {
+      type: 'boolean',
+    },
   },
   exits: {
     badRequest: {
@@ -55,6 +59,9 @@ module.exports = {
       updates.replyServerName = inputs.replyServerName;
     }
 
+    if ('serverSentEvents' in inputs) {
+      updates.serverSentEvents = inputs.serverSentEvents;
+    }
     sails.log.info(`ServerId ${inputs.serverId} updated settings to ${JSON.stringify(updates)}.`);
 
     await SdtdConfig.update(

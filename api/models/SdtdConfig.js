@@ -44,6 +44,11 @@ module.exports = {
       defaultsTo: false
     },
 
+    serverSentEvents: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
     //  _______             _    _
     // |__   __|           | |  (_)
     //    | |_ __ __ _  ___| | ___ _ __   __ _

@@ -12,7 +12,6 @@ module.exports = function sdtdLogs(sails) {
    */
 
   let loggingInfoMap = new Map();
-  let queue;
 
   return {
     /**
@@ -38,7 +37,7 @@ module.exports = function sdtdLogs(sails) {
             await Promise.all(promises);
           } catch (e) {
             Sentry.captureException(e);
-            sails.log.error(e);
+            sails.log.error(e.message);
           }
 
           sails.log.debug(`HOOK: Sdtdlogs - Initialized ${loggingInfoMap.size} logging instances`);
@@ -61,19 +60,8 @@ module.exports = function sdtdLogs(sails) {
       serverID = String(serverID);
 
       if (!loggingInfoMap.has(serverID)) {
-        this.createLogObject(serverID);
+        await this.createLogObject(serverID);
       }
-
-      const config = await SdtdConfig.findOne({ server: serverID });
-
-      await queue.add({ serverId: serverID },
-        {
-          attempts: 1,
-          repeat: {
-            jobId: serverID,
-            every: config.slowMode ? sails.config.custom.logCheckIntervalSlowMode : sails.config.custom.logCheckInterval,
-          }
-        });
     },
 
     /**
@@ -134,6 +122,7 @@ module.exports = function sdtdLogs(sails) {
       let server = await SdtdServer.findOne(serverID).populate('config');
 
       let eventEmitter = new LoggingObject(server);
+      await eventEmitter.init();
 
       if (!loggingInfoMap.has(serverID)) {
         sails.log.debug(`HOOKS - sdtdLogs - Creating loggingObject for server ${serverID}`);
