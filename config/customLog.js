@@ -22,7 +22,7 @@ const transports = [
     humanReadableUnhandledException: false,
     filename: `${logDirectory}/prod.log`,
     tailable: true,
-    maxsize: 10000000,
+    maxsize: 1000000,
     maxFiles: 3,
     format: shouldLogJSON ? winston.format.json() : simpleFormat,
   }),
@@ -44,7 +44,7 @@ if (!infoAndAbove.includes(logLevel)) {
       humanReadableUnhandledException: true,
       filename: `${logDirectory}/debug.log`,
       tailable: true,
-      maxsize: 10000000,
+      maxsize: 1000000,
       maxFiles: 5,
       format: shouldLogJSON ? winston.format.json() : simpleFormat
     })
