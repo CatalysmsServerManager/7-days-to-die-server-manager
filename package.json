@@ -1,6 +1,6 @@
 {
   "name": "csmm",
-  "version": "1.24.1",
+  "version": "1.24.2",
   "description": "A 7dtd server manager made with Sails.js",
   "keywords": [],
   "dependencies": {
