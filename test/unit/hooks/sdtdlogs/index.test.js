@@ -110,10 +110,11 @@ describe('logging hook index', () => {
 
       await initialize();
 
-      const queue = await sails.helpers.getQueueObject('logs');
-      const jobs = await queue.getRepeatableJobs();
+      const testServerStatus = sails.hooks.sdtdlogs.getStatus(sails.testServer.id);
+      expect(testServerStatus).to.be.ok;
 
-      expect(jobs.length).to.be.equal(1);
+      const inactiveServerStatus = sails.hooks.sdtdlogs.getStatus(inactiveServer.id);
+      expect(inactiveServerStatus).to.not.be.ok;
 
     });
 
