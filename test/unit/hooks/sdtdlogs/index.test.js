@@ -79,13 +79,11 @@ describe('logging hook index', () => {
 
   describe('getLoggingObject', () => {
 
-    it('Returns an instance of LoggingObject', async () => {
-      // Have to require inside the test because sails does weird stuff
-      // See: https://github.com/CatalysmsServerManager/7-days-to-die-server-manager/pull/370
-      const LoggingObject = require('../../../../api/hooks/sdtdLogs/LoggingObject');
+    it('Returns an instance of SdtdPolling', async () => {
+      // SSE is disabled by default, so we expect a Polling object here
       await sails.hooks.sdtdlogs.start(sails.testServer.id);
       const res = await sails.hooks.sdtdlogs.getLoggingObject(sails.testServer.id);
-      expect(res).to.be.instanceOf(LoggingObject);
+      expect(res).to.be.instanceOf(SdtdPolling);
     });
   });
 
