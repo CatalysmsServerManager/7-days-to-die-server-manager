@@ -111,7 +111,6 @@ describe('logging hook index', () => {
       await initialize();
 
       const queue = await sails.helpers.getQueueObject('logs');
-
       const jobs = await queue.getRepeatableJobs();
 
       expect(jobs.length).to.be.equal(1);

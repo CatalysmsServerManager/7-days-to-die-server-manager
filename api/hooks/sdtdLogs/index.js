@@ -30,7 +30,6 @@ module.exports = function sdtdLogs(sails) {
           let enabledServers = await SdtdConfig.find({ inactive: false });
           const promises = [];
           for (let config of enabledServers) {
-            // Only add the repeated job if the server is not inactive
             promises.push(this.start(config.server));
           }
 
@@ -61,7 +60,7 @@ module.exports = function sdtdLogs(sails) {
       serverID = String(serverID);
 
       if (!loggingInfoMap.has(serverID)) {
-        await this.createLogObject(serverID);
+        return this.createLogObject(serverID);
       }
     },
 
