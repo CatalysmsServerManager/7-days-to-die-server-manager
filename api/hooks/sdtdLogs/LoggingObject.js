@@ -4,6 +4,7 @@ const { inspect } = require('util');
 const EventSource = require('eventsource');
 const handleLogLine = require('../../../worker/processors/logs/handleLogLine');
 const enrich = require('../../../worker/processors/logs/enrichEventData');
+const LastLogLine = require('../../../worker/processors/logs/redisVariables/lastLogLine');
 
 const SSERegex = /\d+-\d+-\d+T\d+:\d+:\d+ \d+\.\d+ INF (.+)/;
 class LoggingObject extends EventEmitter {
@@ -18,6 +19,7 @@ class LoggingObject extends EventEmitter {
     const { serverSentEvents } = config;
 
     if (!serverSentEvents) {
+      await LastLogLine.set(this.server.id, 0);
       this.queue = sails.helpers.getQueueObject('logs');
       this.queue.on('global:completed', this.handleCompletedJob.bind(this));
       this.queue.on('global:failed', this.handleFailedJob);
@@ -142,6 +144,7 @@ class LoggingObject extends EventEmitter {
 
   async destroy() {
     this.removeAllListeners();
+    this.stopSSE();
     return;
   }
 }

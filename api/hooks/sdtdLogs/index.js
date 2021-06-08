@@ -73,12 +73,19 @@ module.exports = function sdtdLogs(sails) {
      */
 
     stop: async function (serverID) {
+      serverID = String(serverID);
+
       sails.log.debug(`HOOKS - sdtdLogs - stopping logging for server ${serverID}`);
 
       const loggingObj = await this.getLoggingObject(serverID);
       if (loggingObj) {
         loggingObj.destroy();
       }
+
+      if (loggingInfoMap.has(serverID)) {
+        loggingInfoMap.delete(serverID);
+      }
+
       await sails.helpers.redis.bull.removeRepeatable(serverID);
     },
 
@@ -105,8 +112,7 @@ module.exports = function sdtdLogs(sails) {
 
     getStatus: function (serverId) {
       serverId = String(serverId);
-      let status = loggingInfoMap.has(serverId);
-      return status;
+      return loggingInfoMap.has(serverId);
     },
     /**
    * @name createLoggingObject

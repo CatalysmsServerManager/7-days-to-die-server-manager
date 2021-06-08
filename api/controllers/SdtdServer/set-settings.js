@@ -69,6 +69,11 @@ module.exports = {
       updates
     );
 
+    if ('serverSentEvents' in inputs) {
+      await sails.helpers.meta.setServerInactive(server.id);
+      await sails.helpers.meta.setServerActive(server.id);
+    }
+
     return exits.success();
 
   }
