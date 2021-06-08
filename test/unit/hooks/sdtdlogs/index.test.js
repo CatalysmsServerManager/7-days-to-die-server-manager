@@ -1,6 +1,8 @@
 const { expect } = require('chai');
 const faker = require('faker');
 const util = require('util');
+const SdtdPolling = require('../../../../api/hooks/sdtdLogs/eventDetectors/7d2dPolling');
+const SdtdSSE = require('../../../../api/hooks/sdtdLogs/eventDetectors/7d2dSSE');
 
 describe('logging hook index', () => {
 
@@ -116,6 +118,23 @@ describe('logging hook index', () => {
 
       expect(jobs.length).to.be.equal(1);
 
+    });
+
+  });
+
+  describe('getEventDetectorClass', () => {
+    it('Selects SSE when enabled', () => {
+      sails.testServer.config = sails.testServerConfig;
+      sails.testServer.config.serverSentEvents = true;
+      const cls = sails.hooks.sdtdlogs.getEventDetectorClass(sails.testServer);
+      expect(cls).to.be.equal(SdtdSSE);
+    });
+
+    it('Selects polling when SSE not enabled', () => {
+      sails.testServer.config = sails.testServerConfig;
+      sails.testServer.config.serverSentEvents = false;
+      const cls = sails.hooks.sdtdlogs.getEventDetectorClass(sails.testServer);
+      expect(cls).to.be.equal(SdtdPolling);
     });
 
   });

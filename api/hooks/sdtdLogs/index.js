@@ -1,5 +1,6 @@
 const Sentry = require('@sentry/node');
-const LoggingObject = require('./LoggingObject');
+const SdtdSSE = require('./eventDetectors/7d2dSSE');
+const SdtdPolling = require('./eventDetectors/7d2dPolling');
 /**
  * @module 7dtdLoggingHook
  * @description Detects events on a 7dtd server.
@@ -37,7 +38,7 @@ module.exports = function sdtdLogs(sails) {
             await Promise.all(promises);
           } catch (e) {
             Sentry.captureException(e);
-            sails.log.error(e.message);
+            sails.log.error(e.stack);
           }
 
           sails.log.debug(`HOOK: Sdtdlogs - Initialized ${loggingInfoMap.size} logging instances`);
@@ -79,7 +80,7 @@ module.exports = function sdtdLogs(sails) {
 
       const loggingObj = await this.getLoggingObject(serverID);
       if (loggingObj) {
-        loggingObj.destroy();
+        await loggingObj.stop();
       }
 
       if (loggingInfoMap.has(serverID)) {
@@ -114,6 +115,15 @@ module.exports = function sdtdLogs(sails) {
       serverId = String(serverId);
       return loggingInfoMap.has(serverId);
     },
+
+    getEventDetectorClass(server) {
+      if (server.config.serverSentEvents) {
+        return SdtdSSE;
+      } else {
+        return SdtdPolling;
+      }
+    },
+
     /**
    * @name createLoggingObject
    * @memberof module:7dtdLoggingHook
@@ -125,10 +135,13 @@ module.exports = function sdtdLogs(sails) {
 
     createLogObject: async function createLogObject(serverID) {
       serverID = String(serverID);
-      let server = await SdtdServer.findOne(serverID).populate('config');
+      const server = await SdtdServer.findOne(serverID);
+      const config = await SdtdConfig.findOne({server: serverID});
+      server.config = config;
 
-      let eventEmitter = new LoggingObject(server);
-      await eventEmitter.init();
+      const detectorClass = this.getEventDetectorClass(server);
+      const eventEmitter = new detectorClass(server);
+      await eventEmitter.start();
 
       if (!loggingInfoMap.has(serverID)) {
         sails.log.debug(`HOOKS - sdtdLogs - Creating loggingObject for server ${serverID}`);
