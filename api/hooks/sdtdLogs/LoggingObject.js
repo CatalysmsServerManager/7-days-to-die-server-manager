@@ -3,6 +3,7 @@ const Sentry = require('@sentry/node');
 const { inspect } = require('util');
 const EventSource = require('eventsource');
 const handleLogLine = require('../../../worker/processors/logs/handleLogLine');
+const enrich = require('../../../worker/processors/logs/enrichEventData');
 
 const SSERegex = /\d+-\d+-\d+T\d+:\d+:\d+ \d+\.\d+ INF (.+)/;
 class LoggingObject extends EventEmitter {
@@ -31,30 +32,73 @@ class LoggingObject extends EventEmitter {
           }
         });
     } else {
-      this.eventSource = new EventSource(`http://${this.server.ip}:${this.server.webPort}/sse/`);
-      this.eventSource.addEventListener('logLine', data => {
-        try {
-          console.log(data);
-          const parsed = JSON.parse(data.data);
-          const messageMatch = SSERegex.exec(parsed.msg);
-          if (messageMatch[1]) {
-            parsed.msg = messageMatch[1];
-          }
-          const log = handleLogLine(parsed);
-          console.log(log);
-          this.emit(log.type, log.data);
-        } catch (error) {
-          sails.log.error(error.message);
-        }
-
-      });
-      this.eventSource.onerror = e => {
-        sails.log.warn(e);
-      };
-      this.eventSource.onopen = () => {
-        sails.log.debug(`Opened a SSE channel for server ${this.server.id}`);
-      };
+      this.startSSE();
     }
+  }
+
+  startSSE() {
+    this.eventSource = new EventSource(`http://${this.server.ip}:${this.server.webPort}/sse/`);
+    this.eventSource.addEventListener('logLine', async data => {
+      try {
+        const parsed = JSON.parse(data.data);
+        const messageMatch = SSERegex.exec(parsed.msg);
+        if (messageMatch && messageMatch[1]) {
+          parsed.msg = messageMatch[1];
+        }
+        const log = handleLogLine(parsed);
+        if (log) {
+          await this.handleMessage(log);
+        }
+      } catch (error) {
+        sails.log.error(error.stack);
+      }
+
+    });
+    this.eventSource.onerror = e => {
+      sails.log.warn(e);
+    };
+    this.eventSource.onopen = () => {
+      sails.log.debug(`Opened a SSE channel for server ${this.server.id}`);
+    };
+  }
+
+  stopSSE() {
+    if (!this.eventSource) {
+      return;
+    }
+
+    this.eventSource.close();
+  }
+
+  async handleMessage(newLog) {
+    let enrichedLog = newLog;
+    enrichedLog.server = this.server;
+
+    if (newLog.type !== 'logLine') {
+      try {
+        // Add some more data to the log line if possible
+        enrichedLog = await enrich.enrichEventData(enrichedLog);
+      } catch (e) {
+        sails.log.warn('Error trying to enrich a log line, this should be OK to fail...');
+        sails.log.error(e);
+      }
+      sails.helpers.getQueueObject('hooks').add({ type: 'logLine', data: enrichedLog.data, server: this.server });
+    }
+
+    sails.log.debug(
+      `Log line for server ${this.server.id} - ${newLog.type} - ${newLog.data.msg}`
+    );
+
+    sails.helpers.getQueueObject('hooks').add(enrichedLog);
+    sails.helpers.getQueueObject('customNotifications').add(enrichedLog);
+
+
+    if (newLog.type === 'chatMessage') {
+      sails.helpers.getQueueObject('sdtdCommands').add(enrichedLog);
+    }
+
+    this.emit(enrichedLog.type, enrichedLog.data);
+
   }
 
   async handleError(error) {
@@ -88,8 +132,7 @@ class LoggingObject extends EventEmitter {
     }
 
     for (const log of result.logs) {
-      log.data.server = this.server;
-      this.emit(log.type, log.data);
+      this.handleMessage(log);
     }
     // This return is not really used
     // The purpose for this is to use it in tests
