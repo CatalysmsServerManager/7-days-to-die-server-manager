@@ -81,6 +81,7 @@ describe('logging hook index', () => {
       // Have to require inside the test because sails does weird stuff
       // See: https://github.com/CatalysmsServerManager/7-days-to-die-server-manager/pull/370
       const LoggingObject = require('../../../../api/hooks/sdtdLogs/LoggingObject');
+      await sails.hooks.sdtdlogs.start(sails.testServer.id);
       const res = await sails.hooks.sdtdlogs.getLoggingObject(sails.testServer.id);
       expect(res).to.be.instanceOf(LoggingObject);
     });

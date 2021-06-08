@@ -133,9 +133,10 @@ class LoggingObject extends EventEmitter {
       sails.log.debug(`Got ${result.logs.length} logs for server ${this.server.id}`);
     }
 
-    for (const log of result.logs) {
-      this.handleMessage(log);
-    }
+
+    const promises = result.logs.map(l => this.handleMessage(l));
+
+    await Promise.all(promises);
     // This return is not really used
     // The purpose for this is to use it in tests
     // to help assert that 'nothing happened'
