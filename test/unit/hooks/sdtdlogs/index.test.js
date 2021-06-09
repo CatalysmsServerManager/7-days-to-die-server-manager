@@ -92,6 +92,7 @@ describe('logging hook index', () => {
 
     it('Only starts servers that are active', async () => {
       const initialize = util.promisify(sails.hooks.sdtdlogs.initialize);
+      sails.hooks.sdtdlogs.loggingInfoMap.clear();
 
       const inactiveServer = await SdtdServer.create({
         name: faker.company.companyName(),
