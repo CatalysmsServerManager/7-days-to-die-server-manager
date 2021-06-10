@@ -11,6 +11,7 @@ class SdtdSSE extends LoggingObject {
 
   async start() {
     this.eventSource = new EventSource(`http://${this.server.ip}:${this.server.webPort}/sse/?adminuser=${this.server.authName}&admintoken=${this.server.authToken}`);
+    this.eventSource.reconnectInterval = 30000;
     this.eventSource.addEventListener('logLine', async data => {
       try {
         const parsed = JSON.parse(data.data);
@@ -28,6 +29,7 @@ class SdtdSSE extends LoggingObject {
 
     });
     this.eventSource.onerror = e => {
+      sails.log.warn(`SSE error for server ${this.server.id}`);
       sails.log.warn(e);
     };
     this.eventSource.onopen = () => {
