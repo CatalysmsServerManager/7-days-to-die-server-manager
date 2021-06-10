@@ -23,7 +23,7 @@ const transports = [
   })
 ];
 
-if (!process.env.DISBLE_LOG_FILE) {
+if (!process.env.DISABLE_LOG_FILE) {
   transports.push(new winston.transports.File({
     level: 'info',
     name: 'infolog',
@@ -38,7 +38,7 @@ if (!process.env.DISBLE_LOG_FILE) {
 }
 
 
-if (!infoAndAbove.includes(logLevel) && !process.env.DISBLE_LOG_FILE) {
+if (!infoAndAbove.includes(logLevel) && !process.env.DISABLE_LOG_FILE) {
   transports.push(
     new winston.transports.File({
       level: logLevel,
