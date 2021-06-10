@@ -5,6 +5,7 @@ const logLevel = process.env.CSMM_LOGLEVEL || 'info';
 const infoAndAbove = ['info', 'warn', 'blank', 'crit'];
 
 const shouldLogJSON = JSON.parse((process.env.CSMM_LOG_JSON || 'false').toLowerCase());
+const disableFileLog = JSON.parse((process.env.DISABLE_LOG_FILE || 'false').toLowerCase());
 
 const logDirectory = process.env.LOGGING_DIR ? process.env.LOGGING_DIR : './logs';
 
@@ -23,7 +24,7 @@ const transports = [
   })
 ];
 
-if (!process.env.DISABLE_LOG_FILE) {
+if (!disableFileLog) {
   transports.push(new winston.transports.File({
     level: 'info',
     name: 'infolog',
@@ -38,7 +39,7 @@ if (!process.env.DISABLE_LOG_FILE) {
 }
 
 
-if (!infoAndAbove.includes(logLevel) && !process.env.DISABLE_LOG_FILE) {
+if (!infoAndAbove.includes(logLevel) && !disableFileLog) {
   transports.push(
     new winston.transports.File({
       level: logLevel,
