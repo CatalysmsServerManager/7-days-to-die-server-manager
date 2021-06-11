@@ -46,7 +46,6 @@ module.exports = {
     }
 
     let newData = JSON.parse(inputs.file);
-    let allowedCommands = await sails.helpers.sdtd.getAllowedCommands(server);
 
     let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({ serverId: server.id });
     let maxCronJobs = sails.config.custom.donorConfig[donatorRole].maxCronJobs;
@@ -58,17 +57,6 @@ module.exports = {
 
 
     for (const newCron of newData) {
-
-      let splitCommand = newCron.command.split(' ');
-
-      splitCommand[0] = splitCommand[0].toLowerCase();
-      let commandIdx = allowedCommands.indexOf(splitCommand[0].trim());
-
-      if (commandIdx === -1) {
-        problems.push(`${splitCommand[0]} is not a valid command.`);
-      }
-
-
       let interval;
 
       try {
