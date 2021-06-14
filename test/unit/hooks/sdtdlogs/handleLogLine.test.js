@@ -118,4 +118,22 @@ describe('sdtdLogs#handleLogLine', () => {
     expect(result.data.entityName).to.eq('cuteBambi');
 
   });
+
+  it('correctly detects a non-player chatmessage as a logline', () => {
+    const logLine = {
+      'date': '2017-11-14',
+      'time': '14:50:49',
+      'uptime': '133.559',
+      'msg': `Chat (from '-non-player-', entity id '-1', to 'Global'): 'Server': Catalysm: Server will restart in 13 MINUTES`,
+      'trace': '',
+      'type': 'Log'
+    };
+    const result = handleLogLine(logLine);
+
+    expect(result.type).to.eq('logLine');
+    expect(result.data.steamId).to.eq('-non-player-');
+    expect(result.data.playerName).to.eq('Server');
+    expect(result.data.entityId).to.eq('-1');
+
+  });
 });
