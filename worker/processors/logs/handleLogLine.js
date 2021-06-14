@@ -104,11 +104,15 @@ module.exports = logLine => {
       (data.steamId === '-non-player-' && data.playerName !== 'Server') ||
       data.entityId === '-1'
     ) {
-      return;
+
+      returnValue.type = 'logLine';
+      returnValue.data = data;
+
+    } else {
+      returnValue.type = 'chatMessage';
+      returnValue.data = data;
     }
 
-    returnValue.type = 'chatMessage';
-    returnValue.data = data;
   }
 
   // pre A17 chat
