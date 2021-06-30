@@ -36,7 +36,6 @@ describe('Player cleanup', () => {
     expect(afterPlayer).to.be.eqls(newPlayer[0]);
   });
 
-  // TODO: needs some DB migrations to work properly
   it('Removes aux data (tracking, teleports, ...)', async () => {
     await TrackingInfo.create({ x: 1, y: 2, z: 3, inventory: {}, server: sails.testServer.id, player: sails.testPlayer.id }).fetch();
     await PlayerTeleport.create({ name: 'test', x: 1, y: 2, z: 3, player: sails.testPlayer.id });
