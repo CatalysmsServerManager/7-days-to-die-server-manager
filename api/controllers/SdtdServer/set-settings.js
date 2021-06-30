@@ -65,8 +65,6 @@ module.exports = {
       updates.playerCleanupLastOnline = inputs.playerCleanupLastOnline;
     }
 
-    console.log(inputs);
-
     sails.log.info(`ServerId ${inputs.serverId} updated settings to ${JSON.stringify(updates)}.`);
 
     await SdtdConfig.update(
