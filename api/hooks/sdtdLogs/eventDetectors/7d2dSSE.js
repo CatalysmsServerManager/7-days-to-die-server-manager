@@ -10,7 +10,7 @@ class SdtdSSE extends LoggingObject {
 
 
   async start() {
-    this.eventSource = new EventSource(`http://${this.server.ip}:${this.server.webPort}/sse/?adminuser=${this.server.authName}&admintoken=${this.server.authToken}`);
+    this.eventSource = new EventSource(`http://${this.server.ip}:${this.server.webPort}/sse/log?adminuser=${this.server.authName}&admintoken=${this.server.authToken}`);
     this.eventSource.reconnectInterval = 30000;
     this.eventSource.addEventListener('logLine', async data => {
       try {
