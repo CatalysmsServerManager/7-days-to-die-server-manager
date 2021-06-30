@@ -57,7 +57,7 @@ module.exports = {
 
     await queryInterface.sequelize.query(`
     DELETE
-    FROM countryBan 
+    FROM countryban 
     WHERE player NOT IN (SELECT id FROM player)
     OR server NOT IN (SELECT id FROM sdtdserver)
 `)
