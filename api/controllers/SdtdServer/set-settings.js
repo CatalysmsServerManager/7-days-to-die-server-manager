@@ -25,6 +25,12 @@ module.exports = {
       type: 'string',
       maxLength: 25
     },
+
+    playerCleanupLastOnline: {
+      type: 'number',
+      min: 7,
+      allowNull: true
+    }
   },
   exits: {
     badRequest: {
@@ -53,6 +59,10 @@ module.exports = {
 
     if ('replyServerName' in inputs) {
       updates.replyServerName = inputs.replyServerName;
+    }
+
+    if ('playerCleanupLastOnline' in inputs) {
+      updates.playerCleanupLastOnline = inputs.playerCleanupLastOnline;
     }
 
     sails.log.info(`ServerId ${inputs.serverId} updated settings to ${JSON.stringify(updates)}.`);

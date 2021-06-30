@@ -123,6 +123,10 @@
         },
         {
           data: "lastOnline",
+          render: function (data, type, row, meta) {
+            const date = new Date(row.lastOnline)
+            return date.toLocaleString()
+          },
         },
         {
           data: "level",

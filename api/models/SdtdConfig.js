@@ -44,6 +44,11 @@ module.exports = {
       defaultsTo: false
     },
 
+    playerCleanupLastOnline: {
+      type: 'number',
+      allowNull: true
+    },
+
     //  _______             _    _
     // |__   __|           | |  (_)
     //    | |_ __ __ _  ___| | ___ _ __   __ _
