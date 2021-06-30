@@ -97,11 +97,11 @@ jobs:
         if: ${{ !startsWith(github.actor, 'dependabot') }}
         with:
           sarif_file: snyk.sarif
+      # This will trigger a new build for the Pterodactyl CSMM image
       - name: Repository Dispatch
         uses: peter-evans/repository-dispatch@v1
         if: ${{ !startsWith(github.actor, 'dependabot') }}
         with:
           token: ${{ secrets.REPO_DISPATCH_PAT_TOKEN }}
-          event-type: my-build_application
+          event-type: build_application
           repository: catalysmsservermanager/pterodactyl
-          client-payload: '{"event_type": "build_application"}'

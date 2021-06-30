@@ -48,6 +48,10 @@ module.exports = {
       type: 'boolean',
       defaultsTo: false
     },
+    playerCleanupLastOnline: {
+      type: 'number',
+      allowNull: true
+    },
 
     //  _______             _    _
     // |__   __|           | |  (_)

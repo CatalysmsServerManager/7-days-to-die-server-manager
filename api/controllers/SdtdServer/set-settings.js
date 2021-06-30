@@ -29,6 +29,11 @@ module.exports = {
     serverSentEvents: {
       type: 'boolean',
     },
+    playerCleanupLastOnline: {
+      type: 'number',
+      min: 7,
+      allowNull: true
+    }
   },
   exits: {
     badRequest: {
@@ -62,6 +67,10 @@ module.exports = {
     if ('serverSentEvents' in inputs) {
       updates.serverSentEvents = inputs.serverSentEvents;
     }
+    if ('playerCleanupLastOnline' in inputs) {
+      updates.playerCleanupLastOnline = inputs.playerCleanupLastOnline;
+    }
+
     sails.log.info(`ServerId ${inputs.serverId} updated settings to ${JSON.stringify(updates)}.`);
 
     await SdtdConfig.update(
