@@ -40,6 +40,14 @@ module.exports.bootstrap = async function (done) {
       }
     });
 
+  await queue.add({ type: 'playerCleanup' },
+    {
+      attempts: 1,
+      repeat: {
+        cron: '0 * * * *',
+      }
+    });
+
   if (process.env.CSMM_IMPORT_FROM_DIR) {
     try {
       sails.log.info(`Importing files enabled, looking for JSON files at ${process.env.CSMM_IMPORT_FROM_DIR}`);

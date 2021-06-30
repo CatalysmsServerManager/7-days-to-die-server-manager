@@ -90,20 +90,17 @@ after(function (done) {
 });
 
 afterEach(async function () {
-  const promises = [];
-  for (modelName in sails.models) {
-    // make sure any hooks are called
-    //await new Promise((resolve, reject) => {
-    //  sails.models[modelName].destroy({})
-    //    .exec(function (err) {
-    //      if (err) { return reject(err); }
-    //      return resolve();
-    //    });
-    //});
-    // reset the db from scratch
-    promises.push(sequelize.query(`truncate ${sails.models[modelName].tableName}`, []));
-  }
-  await Promise.all(promises);
+
+  await sequelize.transaction({}, async transaction => {
+    await sequelize.query('SET FOREIGN_KEY_CHECKS = 0', { transaction });
+    const promises = [];
+    for (modelName in sails.models) {
+      promises.push(sequelize.query(`truncate ${sails.models[modelName].tableName}`, { transaction }));
+    }
+    await Promise.all(promises);
+    await sequelize.query('SET FOREIGN_KEY_CHECKS = 1', { transaction });
+  });
+
 });
 
 beforeEach(async function () {

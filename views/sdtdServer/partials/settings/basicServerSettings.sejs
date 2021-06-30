@@ -22,6 +22,15 @@
     checkbox above.
   </div>
 
+  <div class="form-group">
+    <label for="playerCleanupLastOnline">Player data cleanup</label>
+    <input type="text" class="form-control" name="playerCleanupLastOnline" id="playerCleanupLastOnline" aria-describedby="playerCleanupLastOnline-help"
+      placeholder="">
+    <small id="playerCleanupLastOnline-help" class="form-text text-muted">
+      Periodically removes players from the database that have not been online for x days.
+    </small>
+  </div>
+
   <hr>
 
   <label for="input-settings-server-servername">Server name</label>
@@ -81,8 +90,37 @@
       })
 
     })
-  })
+    $("#playerCleanupLastOnline").val(window.SAILS_LOCALS.config.playerCleanupLastOnline);
+  
+  
+    $("#input-settings-server-update").click(e => {
+      let playerCleanupLastOnline = $("#playerCleanupLastOnline").val();
+      
+      if (playerCleanupLastOnline === '') {
+        playerCleanupLastOnline = null
+      } else {
+        playerCleanupLastOnline = parseInt(playerCleanupLastOnline, 10)
+      }
 
+      $.ajax({
+        url: `/api/sdtdserver/settings`,
+        type: 'POST',
+        data: JSON.stringify({
+          _csrf: window.SAILS_LOCALS._csrf,
+          serverId: window.SAILS_LOCALS.server.id,
+          playerCleanupLastOnline: playerCleanupLastOnline
+        }),
+        contentType: 'application/json',
+        success: (data, status, xhr) => {
+  
+        },
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      });
+    })
+  })
 
   function handleConnectionInfo() {
     return new Promise((resolve, reject) => {
