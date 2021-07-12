@@ -1,4 +1,4 @@
-FROM node:14-alpine AS builder
+FROM node:16-alpine AS builder
 
 RUN apk --no-cache add curl=7.67.0-r4 git=2.24.4-r0
 
@@ -20,7 +20,7 @@ COPY --chown=node:node . .
 # Install 7d2d item icons
 RUN ash /usr/src/app/scripts/itemIconsUpdate.sh
 
-FROM node:14-alpine
+FROM node:16-alpine
 WORKDIR /usr/src/app
 
 COPY --chown=node:node --from=builder /usr/src/app .
