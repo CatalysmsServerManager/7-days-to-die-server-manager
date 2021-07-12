@@ -117,7 +117,7 @@ module.exports = function sdtdLogs(sails) {
     },
 
     getEventDetectorClass(server) {
-      if (server.config.serverSentEvents) {
+      if (server.config.serverSentEvents && process.env.SSE_ENABLED === 'true') {
         return SdtdSSE;
       } else {
         return SdtdPolling;
@@ -137,7 +137,7 @@ module.exports = function sdtdLogs(sails) {
       sails.log.debug(`HOOKS - sdtdLogs - Creating loggingObject for server ${serverID}`);
       serverID = String(serverID);
       const server = await SdtdServer.findOne(serverID);
-      const config = await SdtdConfig.findOne({server: serverID});
+      const config = await SdtdConfig.findOne({ server: serverID });
       server.config = config;
 
       const detectorClass = this.getEventDetectorClass(server);
