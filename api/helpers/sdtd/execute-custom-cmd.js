@@ -79,8 +79,8 @@ module.exports = {
 };
 
 function getArgs(fnc, command) {
-  const regex = new RegExp(`${fnc.name.toLowerCase()}\((.*)\)`);
-  const res = command.toLowerCase().match(regex);
+  const regex = new RegExp(`${fnc.name}\((.*)\)`, 'i');
+  const res = command.match(regex);
   return res[1].slice(1, res[1].length - 1);
 }
 
