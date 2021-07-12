@@ -125,6 +125,7 @@ describe('logging hook index', () => {
     it('Selects SSE when enabled', () => {
       sails.testServer.config = sails.testServerConfig;
       sails.testServer.config.serverSentEvents = true;
+      process.env.SSE_ENABLED = 'true';
       const cls = sails.hooks.sdtdlogs.getEventDetectorClass(sails.testServer);
       expect(cls).to.be.equal(SdtdSSE);
     });
