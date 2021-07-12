@@ -10,6 +10,10 @@ class SdtdSSE extends LoggingObject {
 
 
   async start() {
+    if (process.env.SSE_ENABLED !== 'true') {
+      throw new Error('SSE is disabled on this instance. To enable SSE, ask your CSMM server admin to set SSE_ENABLED to true in the environment variables.');
+    }
+
     this.eventSource = new EventSource(`http://${this.server.ip}:${this.server.webPort}/sse/log?adminuser=${this.server.authName}&admintoken=${this.server.authToken}`);
     this.eventSource.reconnectInterval = 30000;
     this.eventSource.addEventListener('logLine', async data => {
