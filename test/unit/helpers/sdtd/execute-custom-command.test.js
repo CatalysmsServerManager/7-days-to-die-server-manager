@@ -82,6 +82,13 @@ describe('HELPER execute-custom-command', function () {
 
       }
     });
+
+    it('Persists case after passing through function', async function () {
+      const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, 'sendDiscord(12345, "heLlO wItH caSe")', { player: sails.testPlayer });
+      expect(res).to.have.length(1);
+      expect(res[0].customFunctionArgs).to.be.equal('12345, "heLlO wItH caSe"');
+      expect(res[0].result).to.be.equal('Invalid channel ID');
+    });
   });
 
   describe('handlebars', () => {
