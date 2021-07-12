@@ -104,6 +104,8 @@ describe('Worker processor logs', () => {
     let config = await SdtdConfig.findOne({ server: sails.testServer.id });
     expect(config.slowMode).to.be.equal(false);
 
+    sails.hooks.sdtdlogs.loggingInfoMap.clear();
+
     // Make sure the server is currently in 'active mode' by starting the hook
     await sails.hooks.sdtdlogs.start(sails.testServer.id);
     // And assert its correct

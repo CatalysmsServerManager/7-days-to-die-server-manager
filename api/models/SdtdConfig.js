@@ -44,6 +44,10 @@ module.exports = {
       defaultsTo: false
     },
 
+    serverSentEvents: {
+      type: 'boolean',
+      defaultsTo: false
+    },
     playerCleanupLastOnline: {
       type: 'number',
       allowNull: true

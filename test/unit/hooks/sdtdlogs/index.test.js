@@ -1,6 +1,8 @@
 const { expect } = require('chai');
 const faker = require('faker');
 const util = require('util');
+const SdtdPolling = require('../../../../api/hooks/sdtdLogs/eventDetectors/7d2dPolling');
+const SdtdSSE = require('../../../../api/hooks/sdtdLogs/eventDetectors/7d2dSSE');
 
 describe('logging hook index', () => {
 
@@ -77,12 +79,11 @@ describe('logging hook index', () => {
 
   describe('getLoggingObject', () => {
 
-    it('Returns an instance of LoggingObject', async () => {
-      // Have to require inside the test because sails does weird stuff
-      // See: https://github.com/CatalysmsServerManager/7-days-to-die-server-manager/pull/370
-      const LoggingObject = require('../../../../api/hooks/sdtdLogs/LoggingObject');
+    it('Returns an instance of SdtdPolling', async () => {
+      // SSE is disabled by default, so we expect a Polling object here
+      await sails.hooks.sdtdlogs.start(sails.testServer.id);
       const res = await sails.hooks.sdtdlogs.getLoggingObject(sails.testServer.id);
-      expect(res).to.be.instanceOf(LoggingObject);
+      expect(res).to.be.instanceOf(SdtdPolling);
     });
   });
 
@@ -91,6 +92,7 @@ describe('logging hook index', () => {
 
     it('Only starts servers that are active', async () => {
       const initialize = util.promisify(sails.hooks.sdtdlogs.initialize);
+      sails.hooks.sdtdlogs.loggingInfoMap.clear();
 
       const inactiveServer = await SdtdServer.create({
         name: faker.company.companyName(),
@@ -109,12 +111,30 @@ describe('logging hook index', () => {
 
       await initialize();
 
-      const queue = await sails.helpers.getQueueObject('logs');
+      const testServerStatus = sails.hooks.sdtdlogs.getStatus(sails.testServer.id);
+      expect(testServerStatus).to.be.ok;
 
-      const jobs = await queue.getRepeatableJobs();
+      const inactiveServerStatus = sails.hooks.sdtdlogs.getStatus(inactiveServer.id);
+      expect(inactiveServerStatus).to.not.be.ok;
 
-      expect(jobs.length).to.be.equal(1);
+    });
 
+  });
+
+  describe('getEventDetectorClass', () => {
+    it('Selects SSE when enabled', () => {
+      sails.testServer.config = sails.testServerConfig;
+      sails.testServer.config.serverSentEvents = true;
+      process.env.SSE_ENABLED = 'true';
+      const cls = sails.hooks.sdtdlogs.getEventDetectorClass(sails.testServer);
+      expect(cls).to.be.equal(SdtdSSE);
+    });
+
+    it('Selects polling when SSE not enabled', () => {
+      sails.testServer.config = sails.testServerConfig;
+      sails.testServer.config.serverSentEvents = false;
+      const cls = sails.hooks.sdtdlogs.getEventDetectorClass(sails.testServer);
+      expect(cls).to.be.equal(SdtdPolling);
     });
 
   });

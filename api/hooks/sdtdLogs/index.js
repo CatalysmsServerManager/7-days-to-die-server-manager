@@ -1,20 +1,21 @@
 const Sentry = require('@sentry/node');
-const LoggingObject = require('./LoggingObject');
+const SdtdSSE = require('./eventDetectors/7d2dSSE');
+const SdtdPolling = require('./eventDetectors/7d2dPolling');
 /**
  * @module 7dtdLoggingHook
  * @description Detects events on a 7dtd server.
  */
 module.exports = function sdtdLogs(sails) {
 
-  /**
+
+
+  return {
+    /**
    * @var {Map} loggingInfoMap Keeps track of servers with logging activated
    * @private
    */
 
-  let loggingInfoMap = new Map();
-  let queue;
-
-  return {
+    loggingInfoMap: new Map(),
     /**
      * @name initialize
      * @memberof module:7dtdLoggingHook
@@ -30,7 +31,6 @@ module.exports = function sdtdLogs(sails) {
           let enabledServers = await SdtdConfig.find({ inactive: false });
           const promises = [];
           for (let config of enabledServers) {
-            // Only add the repeated job if the server is not inactive
             promises.push(this.start(config.server));
           }
 
@@ -38,10 +38,10 @@ module.exports = function sdtdLogs(sails) {
             await Promise.all(promises);
           } catch (e) {
             Sentry.captureException(e);
-            sails.log.error(e);
+            sails.log.error(e.stack);
           }
 
-          sails.log.debug(`HOOK: Sdtdlogs - Initialized ${loggingInfoMap.size} logging instances`);
+          sails.log.debug(`HOOK: Sdtdlogs - Initialized ${this.loggingInfoMap.size} logging instances`);
           return cb();
         } catch (error) {
           sails.log.error(`HOOKS - sdtdLogs`, error);
@@ -60,20 +60,9 @@ module.exports = function sdtdLogs(sails) {
     start: async function (serverID) {
       serverID = String(serverID);
 
-      if (!loggingInfoMap.has(serverID)) {
-        this.createLogObject(serverID);
+      if (!this.loggingInfoMap.has(serverID)) {
+        return this.createLogObject(serverID);
       }
-
-      const config = await SdtdConfig.findOne({ server: serverID });
-
-      await queue.add({ serverId: serverID },
-        {
-          attempts: 1,
-          repeat: {
-            jobId: serverID,
-            every: config.slowMode ? sails.config.custom.logCheckIntervalSlowMode : sails.config.custom.logCheckInterval,
-          }
-        });
     },
 
     /**
@@ -85,12 +74,19 @@ module.exports = function sdtdLogs(sails) {
      */
 
     stop: async function (serverID) {
+      serverID = String(serverID);
+
       sails.log.debug(`HOOKS - sdtdLogs - stopping logging for server ${serverID}`);
 
       const loggingObj = await this.getLoggingObject(serverID);
       if (loggingObj) {
-        loggingObj.destroy();
+        await loggingObj.stop();
       }
+
+      if (this.loggingInfoMap.has(serverID)) {
+        this.loggingInfoMap.delete(serverID);
+      }
+
       await sails.helpers.redis.bull.removeRepeatable(serverID);
     },
 
@@ -103,7 +99,7 @@ module.exports = function sdtdLogs(sails) {
      */
 
     getLoggingObject: async function (serverId) {
-      let obj = loggingInfoMap.get(String(serverId));
+      let obj = this.loggingInfoMap.get(String(serverId));
       return obj;
     },
 
@@ -117,9 +113,17 @@ module.exports = function sdtdLogs(sails) {
 
     getStatus: function (serverId) {
       serverId = String(serverId);
-      let status = loggingInfoMap.has(serverId);
-      return status;
+      return this.loggingInfoMap.has(serverId);
     },
+
+    getEventDetectorClass(server) {
+      if (server.config.serverSentEvents && process.env.SSE_ENABLED === 'true') {
+        return SdtdSSE;
+      } else {
+        return SdtdPolling;
+      }
+    },
+
     /**
    * @name createLoggingObject
    * @memberof module:7dtdLoggingHook
@@ -130,16 +134,17 @@ module.exports = function sdtdLogs(sails) {
    */
 
     createLogObject: async function createLogObject(serverID) {
+      sails.log.debug(`HOOKS - sdtdLogs - Creating loggingObject for server ${serverID}`);
       serverID = String(serverID);
-      let server = await SdtdServer.findOne(serverID).populate('config');
+      const server = await SdtdServer.findOne(serverID);
+      const config = await SdtdConfig.findOne({ server: serverID });
+      server.config = config;
 
-      let eventEmitter = new LoggingObject(server);
+      const detectorClass = this.getEventDetectorClass(server);
+      const eventEmitter = new detectorClass(server);
+      await eventEmitter.start();
 
-      if (!loggingInfoMap.has(serverID)) {
-        sails.log.debug(`HOOKS - sdtdLogs - Creating loggingObject for server ${serverID}`);
-
-        loggingInfoMap.set(serverID, eventEmitter);
-      }
+      this.loggingInfoMap.set(serverID, eventEmitter);
 
       eventEmitter.on('logLine', function (logLine) {
         logLine.server = _.omit(server, 'authName', 'authToken');
