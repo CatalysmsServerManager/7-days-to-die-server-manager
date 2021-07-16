@@ -1,18 +1,19 @@
 const EventEmitter = require('events');
+const { enrichEventData } = require('../../../worker/processors/logs/enrichEventData');
 
 class LoggingObject extends EventEmitter {
   constructor(server) {
     super();
 
-    if(!server.config) {
+    if (!server.config) {
       throw new Error('Must provide a server with a config property');
     }
 
     this.server = server;
   }
 
-  async start() {throw new Error('Not implemented');}
-  async destroy() {throw new Error('Not implemented');}
+  async start() { throw new Error('Not implemented'); }
+  async destroy() { throw new Error('Not implemented'); }
   async stop() {
     this.removeAllListeners();
     await this.destroy();
@@ -26,7 +27,7 @@ class LoggingObject extends EventEmitter {
     if (newLog.type !== 'logLine') {
       try {
         // Add some more data to the log line if possible
-        enrichedLog = await enrich.enrichEventData(enrichedLog);
+        enrichedLog = await enrichEventData(enrichedLog);
       } catch (e) {
         sails.log.warn('Error trying to enrich a log line, this should be OK to fail...');
         sails.log.error(e);
