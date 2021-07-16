@@ -1,4 +1,5 @@
 const Bull = require('bull');
+const Sentry = require('@sentry/node');
 
 // Keep track of queues that have already been created
 // This avoids creating new redis connections for each call
@@ -41,6 +42,10 @@ module.exports = {
           }
         }
       );
+
+      queue.on('error', errorHandler);
+      queue.on('failed', failedHandler);
+
       queues[queueName] = queue;
       return exits.success(queue);
 
@@ -48,3 +53,28 @@ module.exports = {
 
   }
 };
+
+
+function errorHandler(err) {
+  sails.log.error(err);
+  Sentry.captureException(err);
+}
+
+function failedHandler(job, err) {
+  sails.log.error(`Job ${job.id} failed`, err);
+
+  if (job.data.serverId) {
+    const user = {};
+    user.id = `${process.env.CSMM_HOSTNAME}/sdtdserver/${job.data.serverId}/dashboard`;
+    if (job.data.server && job.data.server.name) {
+      user.name = job.data.server.name;
+    }
+    Sentry.setUser(user);
+  }
+
+  Sentry.captureException(err, {
+    jobData: job.data,
+    jobName: job.name,
+    jobId: job.id,
+  });
+}
