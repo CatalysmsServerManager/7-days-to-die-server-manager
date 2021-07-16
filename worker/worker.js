@@ -77,23 +77,6 @@ sails.load(configOverrides, async function (err) {
     sdtdCommands: sails.helpers.getQueueObject('sdtdCommands'),
   };
 
-  for (const queue in queues) {
-    // Errors in the logs queue are handled
-    // Failures are expected and do not need to be logged to Sentry
-    if (queue === 'logs') {
-      continue;
-    }
-    queues[queue].on('error', error => {
-      sails.log.error(`Job with id ${job.id} in queue ${queue} has errored`, error);
-      Sentry.captureException(error);
-    });
-
-    queues[queue].on('failed', (job, error) => {
-      sails.log.error(`Job with id ${job.id} in queue ${queue} has errored`, error);
-      Sentry.captureException(error);
-    });
-  }
-
   await Promise.all([
     // We can afford a high concurrency here since jobs are only a HTTP fetch. This would be different if they are long running, blocking operations
     queues.logs.process(100, sails.hooks.sentry.wrapWorkerJob(logProcessor)),

@@ -6,12 +6,10 @@ class SdtdPolling extends LoggingObject {
     super(server);
   }
   async start() {
-    const {config} = this.server;
+    const { config } = this.server;
     await LastLogLine.set(this.server.id, 0);
     this.queue = sails.helpers.getQueueObject('logs');
     this.queue.on('global:completed', this.handleCompletedJob.bind(this));
-    this.queue.on('global:failed', this.handleFailedJob);
-    this.queue.on('global:error', this.handleError);
 
     await this.queue.add({ serverId: this.server.id },
       {
@@ -25,16 +23,6 @@ class SdtdPolling extends LoggingObject {
 
   async destroy() {
     await sails.helpers.redis.bull.removeRepeatable(this.server.id);
-  }
-
-  async handleError(error) {
-    sails.log.error(inspect(error));
-    Sentry.captureException(error);
-  }
-
-  async handleFailedJob(jobId, error) {
-    sails.log.error(inspect(error));
-    Sentry.captureException(error);
   }
 
   async handleCompletedJob(job, result) {
