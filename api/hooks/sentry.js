@@ -105,74 +105,8 @@ module.exports = function SentryHook(sails) {
         Sentry.captureException(reason);
       });
 
-      this.wrapHelpers();
-
       // We're done initializing.
       return cb();
-    },
-
-    wrapHelpers: function wrapHelpers() {
-      const iterate = (obj, prevKey) => {
-        Object.keys(obj).forEach(key => {
-          const value= obj[key];
-          // This means we are dealing with a built action-as-machine from sails
-          // We should wrap this!
-          const name = prevKey ? `${prevKey}/${key}` : key;
-          if (value.name === 'runFn') {
-            obj[key] = this.wrapMachine(obj[key], {name,op:name });
-          }
-
-          if (typeof obj[key] === 'object') {
-            iterate(obj[key], name);
-          }
-        });
-      };
-
-      iterate(sails.helpers);
-    },
-
-    wrapMachine: function wrapMachine(machine, options) {
-      const resultFn = function () {
-
-        const existingTransaction = Sentry.getCurrentHub()
-          .getScope()
-          .getTransaction();
-
-        let transaction;
-        const txOptions = {
-          op: options.op || 'machine',
-          name: options.name || fn.name || 'anonymous',
-        };
-
-        if (existingTransaction) {
-          transaction = existingTransaction.startChild(txOptions);
-        } else {
-          transaction = Sentry.startTransaction(txOptions);
-        }
-
-        Sentry.configureScope(scope => {
-          scope.setSpan(transaction);
-        });
-        transaction.setData('arguments', arguments);
-        let res = machine(...arguments);
-
-        if (res.then) {
-          res = res.then(result => {
-            transaction.finish();
-            return result;
-          });
-        } else {
-          transaction.finish();
-        }
-
-        return res;
-      };
-
-      // This is a sails action specific thing to allow passing args as object
-      // A lot easier to do this than refactor all the usage of .with ...
-      resultFn.with = machine.with;
-
-      return resultFn;
     },
 
     wrapWorkerJob: function wrapWorkerJob(fn, options = {}) {
