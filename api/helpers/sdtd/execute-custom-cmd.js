@@ -12,7 +12,6 @@ const supportedFunctions = [
 
 module.exports = {
   friendlyName: 'Execute custom command',
-
   description: 'Takes an array of commands and executes them for a server',
 
   inputs: {
@@ -60,11 +59,12 @@ module.exports = {
       const customFunction = checkForCustomFunction(command);
       if (customFunction) {
         // If we find a custom function, execute it
-        const result = await executeCustomFunction(customFunction, command, inputs.server);
+        const [result, customFunctionArgs] = await executeCustomFunction(customFunction, command, inputs.server);
         commandsExecuted.push({
           command: customFunction.name,
           parameters: command,
-          result
+          result,
+          customFunctionArgs
         });
       } else {
         // If the command is not a custom function, execute it as a game command
@@ -79,8 +79,8 @@ module.exports = {
 };
 
 function getArgs(fnc, command) {
-  const regex = new RegExp(`${fnc.name.toLowerCase()}\((.*)\)`);
-  const res = command.toLowerCase().match(regex);
+  const regex = new RegExp(`${fnc.name}\((.*)\)`, 'i');
+  const res = command.match(regex);
   return res[1].slice(1, res[1].length - 1);
 }
 
@@ -88,9 +88,9 @@ async function executeCustomFunction(fnc, command, server) {
   const args = getArgs(fnc, command);
   try {
     const res = await fnc.run(server, args);
-    return res;
+    return [res, args];
   } catch (error) {
-    return error.message;
+    return [error.message, args];
   }
 }
 

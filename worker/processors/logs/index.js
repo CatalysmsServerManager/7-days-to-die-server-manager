@@ -1,5 +1,4 @@
 const logProcessor = require('./logProcessor');
-const enrich = require('./enrichEventData');
 const LastLogLine = require('./redisVariables/lastLogLine');
 const EmptyResponses = require('./redisVariables/emptyResponses');
 const FailedCounter = require('./redisVariables/failedCounter');
@@ -64,6 +63,13 @@ module.exports = async function logs(job) {
   }
 
   job.data.server.config = await SdtdConfig.findOne({ server: job.data.serverId });
+
+  if (job.data.server.config.serverSentEvents) {
+    // Server is using SSE, we should abort
+    await sails.helpers.redis.bull.removeRepeatable(job.data.serverId);
+    return;
+  }
+
   // Get new log lines from the server
   let resultLogs;
   try {
@@ -141,40 +147,7 @@ module.exports = async function logs(job) {
     await LastLogLine.set(job.data.server.id, resultLogs.lastLogLine);
   }
 
-
-  const response = [];
-  // At this point, we have a bunch of parsed logLines
-  for (const newLog of resultLogs.logs) {
-    let enrichedLog = newLog;
-    if (newLog.type !== 'logLine') {
-      try {
-        // Add some more data to the log line if possible
-        enrichedLog = await enrich.enrichEventData(newLog);
-      } catch (e) {
-        sails.log.warn('Error trying to enrich a log line, this should be OK to fail...');
-        sails.log.error(e);
-      }
-      // We still want to emit these events as log lines as well (for modules like hooks, discord notifications)
-      response.push({ type: 'logLine', data: enrichedLog.data });
-      sails.helpers.getQueueObject('hooks').add({ type: 'logLine', data: enrichedLog.data, server: enrichedLog.server });
-    }
-
-    sails.log.debug(
-      `Log line for server ${job.data.serverId} - ${newLog.type} - ${newLog.data.msg}`
-    );
-
-    response.push(enrichedLog);
-    sails.helpers.getQueueObject('hooks').add(enrichedLog);
-    sails.helpers.getQueueObject('customNotifications').add(enrichedLog);
-
-    if (newLog.type === 'chatMessage') {
-      sails.helpers.getQueueObject('sdtdCommands').add(enrichedLog);
-
-    }
-
-  }
-
-  return { server: job.data.server, logs: response };
+  return { server: job.data.server, logs: resultLogs.logs };
 };
 
 

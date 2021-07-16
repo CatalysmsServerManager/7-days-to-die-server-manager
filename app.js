@@ -1,3 +1,5 @@
+const Sentry = require('@sentry/node');
+
 /**
  * app.js
  *
@@ -47,8 +49,11 @@ try {
   console.error('but if it doesn\'t, the app will run with the global sails instead!');
 } //-•
 
-process.on('unhandledRejection', (reason, p) => {
-  sails.log.error('Unhandled Rejection at: Promise', p, 'reason:', reason);
+process.on('unhandledRejection', (reason) => {
+  sails.log.error(`Unhandled Promise rejection ${reason}`);
+  sails.log.error(reason.stack);
+  Sentry.captureException(reason);
+
 });
 
 process.on('SIGINT', function () {

@@ -9,6 +9,15 @@
       <div>Proxy all map tiles through CSMM.</div>
       <small>This allows users to view the map in CSMM even if network problems prevent access to Alloc's webmap. Loading may be slightly slower due to proxying, but more secure thanks to HTTPS.</small>
     </label>
+    <label class="form-check-label">
+      <input type="checkbox" class="form-check-input" id="input-experiment-server-sent-events" <%= config.serverSentEvents ? 'checked' : '' %>>
+      <div>Use server sent events</div>
+      <small>
+        This allows CSMM to receive events directly from your server, resulting in much faster response times. 
+        <b>You must be using the modified Allocs Fixes version!!</b>
+        Please toggle CSMM features after changing this setting (under basic server settings)
+      </small>
+    </label>
   </div>
 
   <hr />
@@ -36,13 +45,15 @@
     function saveData() {
       return new Promise((resolve, reject) => {
         let mapProxy = $("#input-experiment-map-proxy").is(':checked');
+        let serverSentEvents = $("#input-experiment-server-sent-events").is(':checked');
         $.ajax({
           url: `/api/sdtdserver/settings`,
           type: 'POST',
           data: {
             _csrf: window.SAILS_LOCALS._csrf,
             serverId: window.SAILS_LOCALS.server.id,
-            mapProxy: mapProxy
+            mapProxy,
+            serverSentEvents
           },
           success: (data, status, xhr) => {
             resolve()

@@ -1,4 +1,4 @@
-const LoggingObject = require('../../../../api/hooks/sdtdLogs/LoggingObject');
+const SdtdPolling = require('../../../../api/hooks/sdtdLogs/eventDetectors/7d2dPolling');
 
 const { expect } = require('chai');
 
@@ -47,10 +47,11 @@ const LOG_LINES = {
   }
 };
 
-describe('LoggingObject', function () {
+describe('SdtdPolling', function () {
   let loggingObject;
   beforeEach(() => {
-    loggingObject = new LoggingObject(sails.testServer);
+    sails.testServer.config = sails.testServerConfig;
+    loggingObject = new SdtdPolling(sails.testServer);
   });
   afterEach(() => {
     loggingObject.destroy();

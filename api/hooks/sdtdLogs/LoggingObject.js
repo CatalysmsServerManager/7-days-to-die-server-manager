@@ -1,61 +1,56 @@
 const EventEmitter = require('events');
-const Sentry = require('@sentry/node');
-const { inspect } = require('util');
 
 class LoggingObject extends EventEmitter {
-  constructor(server,) {
+  constructor(server) {
     super();
+
+    if(!server.config) {
+      throw new Error('Must provide a server with a config property');
+    }
+
     this.server = server;
-    this.queue = sails.helpers.getQueueObject('logs');
-    this.queue.on('global:completed', this.handleCompletedJob.bind(this));
-    this.queue.on('global:failed', this.handleFailedJob);
-    this.queue.on('global:error', this.handleError);
   }
 
-  async handleError(error) {
-    sails.log.error(inspect(error));
-    Sentry.captureException(error);
-  }
-
-  async handleFailedJob(jobId, error) {
-    sails.log.error(inspect(error));
-    Sentry.captureException(error);
-  }
-
-  async handleCompletedJob(job, result) {
-    result = sails.helpers.safeJsonParse(result, []);
-
-    // This handler fires every time a job completes
-    // We have to check if the completed job was meant for this LoggingObject
-    if (result.server.id !== this.server.id) {
-      // Not for this server
-      return;
-    }
-
-    if (result.setInactive) {
-      // Cannot call this from the worker
-      // Failedhandler returns this prop to signal that the server should be set to inactive
-      return await sails.helpers.meta.setServerInactive(this.server.id);
-    }
-
-    if (result.logs.length) {
-      sails.log.debug(`Got ${result.logs.length} logs for server ${this.server.id}`);
-    }
-
-    for (const log of result.logs) {
-      log.data.server = this.server;
-      this.emit(log.type, log.data);
-    }
-    // This return is not really used
-    // The purpose for this is to use it in tests
-    // to help assert that 'nothing happened'
-    return result.logs;
-  }
-
-  async destroy() {
+  async start() {throw new Error('Not implemented');}
+  async destroy() {throw new Error('Not implemented');}
+  async stop() {
     this.removeAllListeners();
-    return;
+    await this.destroy();
   }
+
+
+  async handleMessage(newLog) {
+    let enrichedLog = newLog;
+    enrichedLog.server = this.server;
+
+    if (newLog.type !== 'logLine') {
+      try {
+        // Add some more data to the log line if possible
+        enrichedLog = await enrich.enrichEventData(enrichedLog);
+      } catch (e) {
+        sails.log.warn('Error trying to enrich a log line, this should be OK to fail...');
+        sails.log.error(e);
+      }
+      sails.helpers.getQueueObject('hooks').add({ type: 'logLine', data: enrichedLog.data, server: this.server });
+    }
+
+    sails.log.debug(
+      `Log line for server ${this.server.id} - ${newLog.type} - ${newLog.data.msg}`
+    );
+
+    sails.helpers.getQueueObject('hooks').add(enrichedLog);
+    sails.helpers.getQueueObject('customNotifications').add(enrichedLog);
+
+
+    if (newLog.type === 'chatMessage') {
+      sails.helpers.getQueueObject('sdtdCommands').add(enrichedLog);
+    }
+
+    this.emit(enrichedLog.type, enrichedLog.data);
+
+  }
+
 }
+
 
 module.exports = LoggingObject;
