@@ -87,7 +87,7 @@ sails.load(configOverrides, async function (err) {
     queues.hooks.process(25, sails.hooks.sentry.wrapWorkerJob(hookProcessor)),
     queues.system.process(sails.hooks.sentry.wrapWorkerJob(systemProcessor)),
     queues.customNotifications.process(sails.hooks.sentry.wrapWorkerJob(customNotificationsProcessor)),
-    queues.sdtdCommands.process(sails.hooks.sentry.wrapWorkerJob(sdtdCommandsProcessor))
+    queues.sdtdCommands.process(sails.hooks.sentry.wrapWorkerJob(sdtdCommandsProcessor, { sampled: true }))
   ]);
 
   return;
