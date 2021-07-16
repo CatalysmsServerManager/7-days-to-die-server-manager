@@ -114,6 +114,7 @@ module.exports = function SentryHook(sails) {
         const transaction = Sentry.startTransaction({
           op: options.op || options.name || fn.name || 'anonymous',
           name: options.name || fn.name || 'anonymous',
+          sampled: options.sampled
         });
         transaction.setData('arguments', arguments);
 
