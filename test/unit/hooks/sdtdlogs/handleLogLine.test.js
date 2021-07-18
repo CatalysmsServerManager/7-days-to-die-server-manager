@@ -134,6 +134,20 @@ describe('sdtdLogs#handleLogLine', () => {
     expect(result.data.steamId).to.eq('-non-player-');
     expect(result.data.playerName).to.eq('Server');
     expect(result.data.entityId).to.eq('-1');
+  });
 
+  it('correctly parses chat messages', () => {
+    const logLine = {
+      msg: 'Chat (from \'123456789\', entity id \'171\', to \'Global\'): \'Catalysm\':/test',
+      type: 'Log',
+      trace: '',
+    };
+
+    const result = handleLogLine(logLine);
+    expect(result.type).to.eq('chatMessage');
+    expect(result.data.steamId).to.eq('123456789');
+    expect(result.data.playerName).to.eq('Catalysm');
+    expect(result.data.entityId).to.eq('171');
+    expect(result.data.messageText).to.eq('/test');
   });
 });
