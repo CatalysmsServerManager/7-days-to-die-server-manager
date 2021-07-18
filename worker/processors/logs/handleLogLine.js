@@ -96,7 +96,8 @@ module.exports = logLine => {
       messageText: splitMessage
         .slice(8)
         .join(' ')
-        .replace(': ', '')
+        .replace(':', '')
+        .trim()
     };
 
     // Filter out chatmessages that have been handled by some API mod already
