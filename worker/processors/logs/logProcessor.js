@@ -10,6 +10,7 @@ module.exports = async function (job) {
   if (!lastLogLine) {
     const webUIUpdate = await sails.helpers.sdtdApi.getWebUIUpdates(SdtdServer.getAPIConfig(job.data.server), null, { timeout: 3000 });
     lastLogLine = parseInt(webUIUpdate.newlogs) + 1;
+    sails.log.debug(`lastLogLine not found for server ${job.data.server.id}, fetched current latestLogLine: ${lastLogLine}`);
   }
 
   // Get new logs from the server
