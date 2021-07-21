@@ -47,7 +47,7 @@ module.exports = {
 
 
     if (_.isUndefined(highestRole[0])) {
-      sails.log.warn(`[setRoleFromDiscord] No highest role found for server ${player.server}. Something is wrong`);
+      sails.log.warn(`[setRoleFromDiscord] No highest role found for server ${player.server}. If there are no Discord roles linked to CSMM roles, this is normal.`);
       return exits.success(player, undefined);
     }
 
