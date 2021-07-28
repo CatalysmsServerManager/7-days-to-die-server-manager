@@ -101,14 +101,9 @@ module.exports = logLine => {
     };
 
     // Filter out chatmessages that have been handled by some API mod already
-    if (
-      (data.steamId === '-non-player-' && data.playerName !== 'Server') ||
-      data.entityId === '-1'
-    ) {
-
+    if ((data.steamId === '-non-player-' && data.playerName !== 'Server') || data.entityId === '-1') {
       returnValue.type = 'logLine';
       returnValue.data = data;
-
     } else {
       returnValue.type = 'chatMessage';
       returnValue.data = data;
