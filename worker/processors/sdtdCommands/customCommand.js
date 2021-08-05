@@ -98,10 +98,11 @@ class CustomCommand extends SdtdCommand {
     async function runCustomCommand(chatMessage, player, server, args, options) {
       try {
         let executedCmds = await sails.helpers.sdtd.executeCustomCmd(server, options.commandsToExecute, {
+          // argsKV is listed first here so that built in data gets priority
+          ...argsKV,
           player: player,
           command: options,
           custom: argsKV,
-          ...argsKV
         });
 
         if (options.sendOutput) {
