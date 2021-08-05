@@ -1,4 +1,4 @@
-const enrichEventData = require('../../../../worker/processors/logs/enrichEventData').enrichEventData;
+const enrichEventData = require('../../../../api/hooks/sdtdLogs/enrichers');
 
 describe('enrichEventData', () => {
 

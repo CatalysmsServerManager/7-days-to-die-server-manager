@@ -1,22 +1,4 @@
-async function enrichEventData(event) {
-
-  switch (event.type) {
-    case 'playerKilled':
-      event.data.victim = await Player.findOne({
-        server: event.server.id,
-        name: event.data.victimName
-      });
-      event.data.killer = await Player.findOne({
-        server: event.server.id,
-        name: event.data.killerName
-      });
-      event.data.victim.role = await sails.helpers.sdtd.getPlayerRole(event.data.victim.id);
-      event.data.killer.role = await sails.helpers.sdtd.getPlayerRole(event.data.killer.id);
-
-      break;
-    default:
-      break;
-  }
+module.exports = async (event) => {
 
   if (!_.isEmpty(event.data.playerID)) {
     event.data.steamId = event.data.playerID;
@@ -57,8 +39,4 @@ async function enrichEventData(event) {
 
   event.data.player = player;
   return event;
-};
-
-module.exports = {
-  enrichEventData
 };

@@ -1,5 +1,5 @@
 const EventEmitter = require('events');
-const { enrichEventData } = require('../../../worker/processors/logs/enrichEventData');
+const enrichEventData = require('./enrichers');
 
 class LoggingObject extends EventEmitter {
   constructor(server) {
@@ -25,13 +25,7 @@ class LoggingObject extends EventEmitter {
     enrichedLog.server = this.server;
 
     if (newLog.type !== 'logLine') {
-      try {
-        // Add some more data to the log line if possible
-        enrichedLog = await enrichEventData(enrichedLog);
-      } catch (e) {
-        sails.log.warn('Error trying to enrich a log line, this should be OK to fail...');
-        sails.log.error(e);
-      }
+      enrichedLog = await enrichEventData(enrichedLog);
       sails.helpers.getQueueObject('hooks').add({ type: 'logLine', data: enrichedLog.data, server: this.server });
     }
 
