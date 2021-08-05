@@ -16,6 +16,7 @@ class CustomCommand extends SdtdCommand {
   async run(chatMessage, player, server, args, options) {
     let argumentIterator = 0;
     let playerRole = await sails.helpers.sdtd.getPlayerRole(player.id);
+    const argsKV = {};
 
     if (playerRole.level > this.options.level) {
       return chatMessage.reply(`You do not have the correct role to execute this command. Ask your server admin for elevated permissions.`);
@@ -37,6 +38,7 @@ class CustomCommand extends SdtdCommand {
 
 
       options.commandsToExecute = replaceAllInString(options.commandsToExecute, `\${${argument.key}}`, valueToFill);
+      argsKV[argument.key] = valueToFill;
       argumentIterator++;
     }
 
@@ -82,7 +84,7 @@ class CustomCommand extends SdtdCommand {
     // Create a record of the player executing the command
     await PlayerUsedCommand.create({
       command: options.id,
-      player: player.id
+      player: player.id,
     });
 
     // If delayed, let the player know the command is about to be executed
@@ -97,7 +99,9 @@ class CustomCommand extends SdtdCommand {
       try {
         let executedCmds = await sails.helpers.sdtd.executeCustomCmd(server, options.commandsToExecute, {
           player: player,
-          command: options
+          command: options,
+          custom: argsKV,
+          ...argsKV
         });
 
         if (options.sendOutput) {
