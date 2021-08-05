@@ -7,6 +7,7 @@ class SdtdSSE extends LoggingObject {
     super(server);
     this.SSERegex = /\d+-\d+-\d+T\d+:\d+:\d+ \d+\.\d+ INF (.+)/;
     this.listener = this.SSEListener.bind(this);
+    this.queuedChatMessages = [];
   }
 
 
@@ -40,13 +41,48 @@ class SdtdSSE extends LoggingObject {
       }
       const log = handleLogLine(parsed);
       if (log) {
+        if (log.type === 'chatMessage' || log.data.msg.includes('-non-player-')) {
+          return this.pushChatMessage(log);
+        }
+
         await this.handleMessage(log);
       }
     } catch (error) {
       sails.log.error(error.stack);
     }
-
   }
+
+  /**
+   * When a mod intercepts a chat message, it will send out two messages
+   * One is the original chat message
+   * and the other is the modified message
+   * The modified message is not interesting to us, so we should ignore it
+   * The original message will include all the data we need (steamId, chat text, ...)
+   */
+  async pushChatMessage(chatMessage) {
+    const previouslyQueued = this.queuedChatMessages[this.queuedChatMessages.length - 1];
+    if (previouslyQueued) {
+      if (previouslyQueued.data.messageText === chatMessage.data.messageText) {
+        previouslyQueued.type = 'logLine';
+        this.queuedChatMessages = [];
+        await this.handleMessage(previouslyQueued);
+        await this.handleMessage(chatMessage);
+      }
+    } else {
+      this.queuedChatMessages.push(chatMessage);
+      // If a chatmessage does not get handled by a mod, we still need some way to react to it
+      // This is achieved by setting a timeout
+      // If no messages comes in before the timeout, it will send out the original chat message
+      this.chatMsgLock = setTimeout(() => {
+        const previouslyQueued = this.queuedChatMessages[this.queuedChatMessages.length - 1];
+        this.queuedChatMessages = [];
+        if (previouslyQueued) {
+          return this.handleMessage(previouslyQueued);
+        }
+      }, 250);
+    }
+  };
+
 
 }
 

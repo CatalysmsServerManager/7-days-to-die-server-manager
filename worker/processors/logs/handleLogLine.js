@@ -67,7 +67,6 @@ module.exports = logLine => {
 
   // A17 Chat
   if (_.startsWith(logLine.msg, 'Chat') && logLine.msg.includes('(from')) {
-    let isHandledByMod = false;
     /*
     {
        date: '2018-11-20',
@@ -83,7 +82,6 @@ module.exports = logLine => {
 
     if (logLine.msg.includes('Chat handled by mod')) {
       splitMessage = splitMessage.slice(2);
-      isHandledByMod = true;
     }
 
     let data = {
@@ -103,10 +101,9 @@ module.exports = logLine => {
     };
 
     // Filter out chatmessages that have been handled by some API mod already
-    if (isHandledByMod || (data.steamId === '-non-player-' && data.playerName !== 'Server') || data.entityId === '-1') {
+    if ((data.steamId === '-non-player-' && data.playerName !== 'Server') || data.entityId === '-1') {
       returnValue.type = 'logLine';
       returnValue.data = data;
-
     } else {
       returnValue.type = 'chatMessage';
       returnValue.data = data;
