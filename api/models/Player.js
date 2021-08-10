@@ -211,6 +211,21 @@ module.exports = {
       defaultsTo: new Date()
     },
 
+    lastDeathLocationX: {
+      type: 'number',
+      allowNull: true
+    },
+
+    lastDeathLocationY: {
+      type: 'number',
+      allowNull: true
+    },
+
+    lastDeathLocationZ: {
+      type: 'number',
+      allowNull: true
+    },
+
 
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
