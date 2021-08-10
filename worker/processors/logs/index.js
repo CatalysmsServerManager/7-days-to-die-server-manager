@@ -6,10 +6,11 @@ const FailedCounter = require('./redisVariables/failedCounter');
 async function failedHandler(job, e) {
   // Error getting logs from the server, likely a config error by the user
   sails.log.debug(`Server ${job.data.serverId} has failed! Handling failure logic`);
-  // Only log this error if it is not a FetchError
-  // If it is a FetchError, we could leak server data
+  // Only handle this error if it is a FetchError
+  // FetchError indicates something is wrong with the connection
+  // Other errors are server side and should be handled as such (eg propagating to Sentry)
   if (!e.stack.includes('FetchError')) {
-    sails.log.error(e);
+    throw e;
   }
 
   await FailedCounter.incr(job.data.serverId);

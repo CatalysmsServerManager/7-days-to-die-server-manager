@@ -150,4 +150,34 @@ describe('sdtdLogs#handleLogLine', () => {
     expect(result.data.entityId).to.eq('171');
     expect(result.data.messageText).to.eq('/test');
   });
+
+  it('Correctly detects a playerDied event with PvE death', () => {
+    const logLine = {
+      date: '2017-11-14',
+      time: '14:50:49',
+      uptime: '133.559',
+      msg: `GMSG: Player 'Catalysm' died`,
+      trace: '',
+      type: 'Log'
+    };
+
+    const result = handleLogLine(logLine);
+
+    console.log(result);
+  });
+
+  it('Correctly detects a playerDied event with PvP death', () => {
+    const logLine = {
+      date: '2017-11-14',
+      time: '14:50:49',
+      uptime: '133.559',
+      msg: `GameMessage handled by mod 'CSMM Patrons': GMSG: Player 'Catalysm' killed by 'Catalysm'`,
+      trace: '',
+      type: 'Log'
+    };
+
+    const result = handleLogLine(logLine);
+
+    console.log(result);
+  });
 });

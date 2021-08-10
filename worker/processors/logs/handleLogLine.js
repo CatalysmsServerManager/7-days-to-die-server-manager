@@ -17,6 +17,8 @@ const oldLevelRegex = /(was )\d*/g;
 
 const entityKilledRegex = /(killed .*)/g;
 
+const gmsgDeathRegex = /GMSG: Player '(\w+)' died|GMSG: Player '(\w+)' killed by/;
+
 module.exports = logLine => {
 
 
@@ -403,5 +405,27 @@ module.exports = logLine => {
       returnValue.data = killMessage;
     }
   }
+
+  if (gmsgDeathRegex.test(logLine.msg)) {
+    /*
+      GMSG: Player 'Catalysm' died
+      GameMessage handled by mod 'CSMM Patrons': GMSG: Player 'Catalysm' killed by 'Catalysm'
+    */
+
+    const deathArray = logLine.msg.match(gmsgDeathRegex);
+    const playerName = deathArray[1] || deathArray[2];
+    const deathMessage = {
+      date: logLine.date,
+      time: logLine.time,
+      uptime: logLine.uptime,
+      msg: logLine.msg,
+      playerName: playerName,
+    };
+
+    returnValue.type = 'playerDied';
+    returnValue.data = deathMessage;
+  }
+
+
   return returnValue;
 };

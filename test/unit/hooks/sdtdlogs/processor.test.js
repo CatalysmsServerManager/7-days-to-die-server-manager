@@ -98,8 +98,8 @@ describe('Worker processor logs', () => {
       `sdtdserver:${sails.testServer.id}:sdtdLogs:lastSuccess`, Date.now());
     const job = { data: { serverId: sails.testServer.id } };
 
-    sails.helpers.sdtdApi.getLog.rejects(new Error('Oh no bad stuff'));
-    sails.helpers.sdtdApi.getWebUIUpdates.rejects(new Error('Oh no bad stuff'));
+    sails.helpers.sdtdApi.getLog.rejects(new Error('FetchError: Oh no bad stuff'));
+    sails.helpers.sdtdApi.getWebUIUpdates.rejects(new Error('FetchError: Oh no bad stuff'));
 
     let config = await SdtdConfig.findOne({ server: sails.testServer.id });
     expect(config.slowMode).to.be.equal(false);
@@ -139,8 +139,8 @@ describe('Worker processor logs', () => {
 
     const job = { data: { serverId: sails.testServer.id } };
 
-    sails.helpers.sdtdApi.getLog.rejects(new Error('Oh no bad stuff'));
-    sails.helpers.sdtdApi.getWebUIUpdates.rejects(new Error('Oh no bad stuff'));
+    sails.helpers.sdtdApi.getLog.rejects(new Error('FetchError: Oh no bad stuff'));
+    sails.helpers.sdtdApi.getWebUIUpdates.rejects(new Error('FetchError: Oh no bad stuff'));
 
     await SdtdConfig.update({ server: sails.testServer.id }, { slowMode: true });
 
