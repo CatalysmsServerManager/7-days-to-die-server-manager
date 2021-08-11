@@ -8,7 +8,7 @@ describe('HELPER Import server', function () {
   const testImportFilesValid = fs.readdirSync(validPaths);
   const testImportFilesInvalid = fs.readdirSync(invalidPaths);
 
-  this.beforeEach(() => {
+  beforeEach(() => {
     sandbox.stub(sails.helpers.sdtd, 'checkModVersion').resolves(38);
   });
 

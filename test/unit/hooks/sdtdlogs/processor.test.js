@@ -94,6 +94,7 @@ describe('Worker processor logs', () => {
   });
 
   it('Sets a server slowmode when it fails a lot', async () => {
+    sandbox.stub(sails.helpers.sdtd, 'checkModVersion').resolves(30);
     await sails.helpers.redis.set(
       `sdtdserver:${sails.testServer.id}:sdtdLogs:lastSuccess`, Date.now());
     const job = { data: { serverId: sails.testServer.id } };
