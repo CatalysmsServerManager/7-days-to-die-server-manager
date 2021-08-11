@@ -284,15 +284,14 @@
 
   function GetSdtdTileLayer(mapinfo, initTime, isMiniMap) {
     if (typeof isMiniMap == "undefined") isMiniMap = false;
-
     var tileLayer = L.tileLayer(
-      <%- JSON.stringify(await serverMapUrl(server.id)) -%>,
+      `/api/sdtdserver/<%- JSON.stringify(server.id) -%>/tile/{z}/{x}/{y}/tile.png`,
       {
         maxZoom: mapinfo.maxzoom + 1,
         minZoom: Math.max(0, mapinfo.maxzoom - 5),
         maxNativeZoom: mapinfo.maxzoom,
         minNativeZoom: 0,
-        tileSize: mapinfo.tilesize
+        tileSize: mapinfo.tilesize,
       }
     );
 
