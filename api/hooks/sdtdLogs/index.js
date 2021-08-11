@@ -116,11 +116,12 @@ module.exports = function sdtdLogs(sails) {
       return this.loggingInfoMap.has(serverId);
     },
 
-    getEventDetectorClass(server) {
-      if (server.config.serverSentEvents && process.env.SSE_ENABLED === 'true') {
-        return SdtdSSE;
-      } else {
+    async getEventDetectorClass(server) {
+      const allocsVersion = await sails.helpers.sdtd.checkModVersion('Mod Allocs MapRendering and Webinterface', server.id);
+      if (allocsVersion < 38) {
         return SdtdPolling;
+      } else {
+        return SdtdSSE;
       }
     },
 
@@ -140,7 +141,7 @@ module.exports = function sdtdLogs(sails) {
       const config = await SdtdConfig.findOne({ server: serverID });
       server.config = config;
 
-      const detectorClass = this.getEventDetectorClass(server);
+      const detectorClass = await this.getEventDetectorClass(server);
       const eventEmitter = new detectorClass(server);
       await eventEmitter.start();
 

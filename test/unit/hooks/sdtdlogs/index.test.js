@@ -122,17 +122,21 @@ describe('logging hook index', () => {
   });
 
   describe('getEventDetectorClass', () => {
-    it('Selects SSE when enabled', () => {
-      sails.testServer.config = sails.testServerConfig;
-      sails.testServer.config.serverSentEvents = true;
-      process.env.SSE_ENABLED = 'true';
+    it('Selects SSE when allocs version is 38', () => {
+      sandbox.stub(sails.helpers.sdtd, 'checkModVersion').resolves(38);
       const cls = sails.hooks.sdtdlogs.getEventDetectorClass(sails.testServer);
       expect(cls).to.be.equal(SdtdSSE);
     });
 
-    it('Selects polling when SSE not enabled', () => {
+    it('Selects SSE when allocs version is 39', () => {
+      sandbox.stub(sails.helpers.sdtd, 'checkModVersion').resolves(38);
+      const cls = sails.hooks.sdtdlogs.getEventDetectorClass(sails.testServer);
+      expect(cls).to.be.equal(SdtdSSE);
+    });
+
+    it('Selects polling when allocs version is 37', () => {
       sails.testServer.config = sails.testServerConfig;
-      sails.testServer.config.serverSentEvents = false;
+      sandbox.stub(sails.helpers.sdtd, 'checkModVersion').resolves(37);
       const cls = sails.hooks.sdtdlogs.getEventDetectorClass(sails.testServer);
       expect(cls).to.be.equal(SdtdPolling);
     });
