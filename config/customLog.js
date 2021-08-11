@@ -1,4 +1,7 @@
+const os = require('os');
+
 const winston = require('winston');
+const LokiTransport = require('winston-loki');
 
 const logLevel = process.env.CSMM_LOGLEVEL || 'info';
 
@@ -21,8 +24,25 @@ const transports = [
     timestamp: true,
     humanReadableUnhandledException: true,
     format: shouldLogJSON ? winston.format.json() : simpleFormat,
-  })
+  }),
 ];
+
+
+if (process.env.LOKI_URL && process.env.LOKI_BASIC_AUTH) {
+  transports.push(new LokiTransport({
+    host: process.env.LOKI_URL,
+    basicAuth: process.env.LOKI_BASIC_AUTH,
+    level: logLevel,
+    labels: {
+      serverName: process.env.CSMM_HOSTNAME || os.hostname(),
+      release: require('../package.json').version,
+      script: process.env.npm_lifecycle_event || 'unknown',
+    },
+    format: winston.format.json(),
+    batching: false,
+    json: true
+  }));
+}
 
 if (!disableFileLog) {
   transports.push(new winston.transports.File({
@@ -57,6 +77,7 @@ if (!infoAndAbove.includes(logLevel) && !disableFileLog) {
 
 const customLogger = new winston.createLogger({
   transports: transports,
+
 });
 
 customLogger.stream = {

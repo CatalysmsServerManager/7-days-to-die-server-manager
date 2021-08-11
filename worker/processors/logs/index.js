@@ -54,7 +54,11 @@ async function failedHandler(job, e) {
 }
 
 module.exports = async function logs(job) {
-  sails.log.debug('[Worker] Got a `logs` job');
+  //sails.log.debug('[Worker] Got a `logs` job', { serverId: job.data.serverId });
+  sails.log.debug({
+    message: '[Worker] Got a `logs` job',
+    labels: { serverId: job.data.serverId.toString() }
+  });
   job.data.server = await SdtdServer.findOne(job.data.serverId);
   if (!job.data.server) {
     // Server does not exist in the database
