@@ -1,4 +1,3 @@
-const SdtdApi = require('7daystodie-api-wrapper');
 const fs = require('fs');
 const path = require('path');
 
@@ -14,10 +13,6 @@ const path = require('path');
  */
 
 module.exports.bootstrap = async function (done) {
-  sails.helpers.sdtdApi = {};
-  for (const func of Object.keys(SdtdApi)) {
-    sails.helpers.sdtdApi[func] = SdtdApi[func];
-  }
 
   if (process.env.IS_TEST) {
     sails.cache = new Object();

@@ -52,6 +52,7 @@ describe('SdtdPolling', function () {
   beforeEach(() => {
     sails.testServer.config = sails.testServerConfig;
     loggingObject = new SdtdPolling(sails.testServer);
+    sandbox.stub(sails.helpers.sdtd, 'checkModVersion').resolves(38);
   });
   afterEach(() => {
     loggingObject.destroy();

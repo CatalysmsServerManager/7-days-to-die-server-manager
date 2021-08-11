@@ -1,7 +1,7 @@
 <!-- EXPERIMENTS SETTINGS -->
 
 <div class="container">
-  <div></div>
+  <!--   <div></div>
 
   <div class="form-check">
     <label class="form-check-label">
@@ -27,45 +27,46 @@
     <i class="fas fa-sync-alt"></i> Apply changes
   </button>
 
-  <div id="experiment-experiment-result"></div>
+  <div id="experiment-experiment-result"></div> -->
+  There are no experiments running right now.
 </div>
 
 <script>
   $(document).ready(function () {
-    $('#input-experiment-server-update').click((event) => {
+    $("#input-experiment-server-update").click((event) => {
       event.preventDefault();
 
-      saveData().then(() => {
-        $("#experiment-experiment-result").text('Changes saved.')
-      }).catch(e => {
-        $("#experiment-experiment-result").text('An error occured!.')
-      })
-    })
+      saveData()
+        .then(() => {
+          $("#experiment-experiment-result").text("Changes saved.");
+        })
+        .catch((e) => {
+          $("#experiment-experiment-result").text("An error occured!.");
+        });
+    });
 
     function saveData() {
       return new Promise((resolve, reject) => {
-        let mapProxy = $("#input-experiment-map-proxy").is(':checked');
-        let serverSentEvents = $("#input-experiment-server-sent-events").is(':checked');
+        let mapProxy = $("#input-experiment-map-proxy").is(":checked");
         $.ajax({
           url: `/api/sdtdserver/settings`,
-          type: 'POST',
+          type: "POST",
           data: {
             _csrf: window.SAILS_LOCALS._csrf,
             serverId: window.SAILS_LOCALS.server.id,
             mapProxy,
-            serverSentEvents
+            serverSentEvents,
           },
           success: (data, status, xhr) => {
-            resolve()
+            resolve();
           },
           error: function (xhr, status, error) {
-            displayAjaxToSupportData(xhr, this);;
+            displayAjaxToSupportData(xhr, this);
             showErrorModal(`${error} - ${xhr.responseText}`, xhr);
             reject();
-          }
+          },
         });
-      })
+      });
     }
   });
 </script>
-

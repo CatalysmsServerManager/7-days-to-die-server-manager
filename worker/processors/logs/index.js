@@ -65,12 +65,6 @@ module.exports = async function logs(job) {
 
   job.data.server.config = await SdtdConfig.findOne({ server: job.data.serverId });
 
-  if (job.data.server.config.serverSentEvents) {
-    // Server is using SSE, we should abort
-    await sails.helpers.redis.bull.removeRepeatable(job.data.serverId);
-    return;
-  }
-
   // Get new log lines from the server
   let resultLogs;
   try {

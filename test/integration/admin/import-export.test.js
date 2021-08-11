@@ -12,6 +12,9 @@ describe('Import export', function () {
   const testImportFilesValid = fs.readdirSync(validPaths);
   const testImportFilesInvalid = fs.readdirSync(invalidPaths);
 
+  beforeEach(() => {
+    sandbox.stub(sails.helpers.sdtd, 'checkModVersion').resolves(38);
+  });
 
   for (const fileName of testImportFilesValid) {
     const filePath = path.join(__dirname, dirPath, 'valid', fileName);
