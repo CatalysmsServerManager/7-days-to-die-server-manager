@@ -1,12 +1,13 @@
 const { expect } = require('chai');
 const faker = require('faker');
 const util = require('util');
-const SdtdPolling = require('../../../../api/hooks/sdtdLogs/eventDetectors/7d2dPolling');
 const SdtdSSE = require('../../../../api/hooks/sdtdLogs/eventDetectors/7d2dSSE');
+const SdtdPolling = require('../../../../api/hooks/sdtdLogs/eventDetectors/7d2dPolling');
 
 describe('logging hook index', () => {
 
   it('Updates a Players country on connectedMessage event', async () => {
+    sandbox.stub(sails.helpers.sdtd, 'checkModVersion').resolves(38);
     const playerConnectedEvent = {
       steamId: '76561198028175941',
       playerName: 'Catalysm',
@@ -79,11 +80,11 @@ describe('logging hook index', () => {
 
   describe('getLoggingObject', () => {
 
-    it('Returns an instance of SdtdPolling', async () => {
-      // SSE is disabled by default, so we expect a Polling object here
+    it('Returns an instance of SdtdSSE', async () => {
+      sandbox.stub(sails.helpers.sdtd, 'checkModVersion').resolves(38);
       await sails.hooks.sdtdlogs.start(sails.testServer.id);
       const res = await sails.hooks.sdtdlogs.getLoggingObject(sails.testServer.id);
-      expect(res).to.be.instanceOf(SdtdPolling);
+      expect(res).to.be.instanceOf(SdtdSSE);
     });
   });
 
@@ -91,6 +92,7 @@ describe('logging hook index', () => {
   describe('initialize', () => {
 
     it('Only starts servers that are active', async () => {
+      sandbox.stub(sails.helpers.sdtd, 'checkModVersion').resolves(38);
       const initialize = util.promisify(sails.hooks.sdtdlogs.initialize);
       sails.hooks.sdtdlogs.loggingInfoMap.clear();
 
@@ -122,18 +124,21 @@ describe('logging hook index', () => {
   });
 
   describe('getEventDetectorClass', () => {
-    it('Selects SSE when enabled', () => {
-      sails.testServer.config = sails.testServerConfig;
-      sails.testServer.config.serverSentEvents = true;
-      process.env.SSE_ENABLED = 'true';
-      const cls = sails.hooks.sdtdlogs.getEventDetectorClass(sails.testServer);
+    it('Selects SSE when allocs version is 38', async () => {
+      sandbox.stub(sails.helpers.sdtd, 'checkModVersion').resolves(38);
+      const cls = await sails.hooks.sdtdlogs.getEventDetectorClass(sails.testServer);
       expect(cls).to.be.equal(SdtdSSE);
     });
 
-    it('Selects polling when SSE not enabled', () => {
-      sails.testServer.config = sails.testServerConfig;
-      sails.testServer.config.serverSentEvents = false;
-      const cls = sails.hooks.sdtdlogs.getEventDetectorClass(sails.testServer);
+    it('Selects SSE when allocs version is 39', async () => {
+      sandbox.stub(sails.helpers.sdtd, 'checkModVersion').resolves(38);
+      const cls = await sails.hooks.sdtdlogs.getEventDetectorClass(sails.testServer);
+      expect(cls).to.be.equal(SdtdSSE);
+    });
+
+    it('Selects polling when allocs version is 37', async () => {
+      sandbox.stub(sails.helpers.sdtd, 'checkModVersion').resolves(37);
+      const cls = await sails.hooks.sdtdlogs.getEventDetectorClass(sails.testServer);
       expect(cls).to.be.equal(SdtdPolling);
     });
 

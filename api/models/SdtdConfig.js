@@ -39,15 +39,6 @@ module.exports = {
       defaultsTo: false
     },
 
-    mapProxy: {
-      type: 'boolean',
-      defaultsTo: false
-    },
-
-    serverSentEvents: {
-      type: 'boolean',
-      defaultsTo: false
-    },
     playerCleanupLastOnline: {
       type: 'number',
       allowNull: true

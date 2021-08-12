@@ -9,10 +9,6 @@ module.exports = {
       type: 'string'
     },
 
-    mapProxy: {
-      type: 'boolean',
-    },
-
     countryBanListMode: {
       type: 'boolean'
     },
@@ -26,9 +22,6 @@ module.exports = {
       maxLength: 25
     },
 
-    serverSentEvents: {
-      type: 'boolean',
-    },
     playerCleanupLastOnline: {
       type: 'number',
       min: 7,
@@ -49,9 +42,6 @@ module.exports = {
 
     const updates = {};
 
-    if ('mapProxy' in inputs) {
-      updates.mapProxy = inputs.mapProxy;
-    }
     if ('countryBanListMode' in inputs) {
       updates.countryBanListMode = inputs.countryBanListMode;
     }
@@ -64,9 +54,6 @@ module.exports = {
       updates.replyServerName = inputs.replyServerName;
     }
 
-    if ('serverSentEvents' in inputs) {
-      updates.serverSentEvents = inputs.serverSentEvents;
-    }
     if ('playerCleanupLastOnline' in inputs) {
       updates.playerCleanupLastOnline = inputs.playerCleanupLastOnline;
     }
@@ -77,11 +64,6 @@ module.exports = {
       { server: server.id },
       updates
     );
-
-    if ('serverSentEvents' in inputs) {
-      await sails.helpers.meta.setServerInactive(server.id);
-      await sails.helpers.meta.setServerActive(server.id);
-    }
 
     return exits.success();
 
