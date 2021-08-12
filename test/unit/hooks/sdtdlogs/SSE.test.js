@@ -44,4 +44,18 @@ describe('7d2dSSE', function () {
 
   });
 
+  it('Correctly parses chat messages from server', async () => {
+    const sse = new SdtdSSE({ ...sails.testServer, config: sails.testServerConfig });
+    const stub = sandbox.stub(sse, 'handleMessage');
+
+    // With hccp enabled
+    sse.listener({ data: `{"msg":"Chat (from '-non-player-', entity id '-1', to 'Global'): '[B43104]{Server-Auto}[-]': Nighttime in 2 hours !!!","type":"Log","trace":"","date":"2021-08-12","time":"16:45:01","uptime":"889.056"}` });
+    sse.listener({ data: `{"msg":"Chat (from '-non-player-', entity id '-1', to 'Global'): '[B43104]{Server-Auto}[-]': Better hurry! Its bloodmoon TONIGHT !!!","type":"Log","trace":"","date":"2021-08-12","time":"16:45:01","uptime":"889.057"}` });
+
+    await wait(1);
+    expect(stub).to.have.been.calledTwice;
+    expect(stub.firstCall.firstArg.type).to.be.equal('logLine');
+    expect(stub.secondCall.firstArg.type).to.be.equal('logLine');
+  });
+
 });

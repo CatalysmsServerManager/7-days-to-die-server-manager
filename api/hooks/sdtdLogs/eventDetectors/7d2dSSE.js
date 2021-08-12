@@ -64,10 +64,10 @@ class SdtdSSE extends LoggingObject {
     if (previouslyQueued) {
       if (previouslyQueued.data.messageText === chatMessage.data.messageText) {
         previouslyQueued.type = 'logLine';
-        this.queuedChatMessages = [];
-        await this.handleMessage(previouslyQueued);
-        await this.handleMessage(chatMessage);
       }
+      await this.handleMessage(previouslyQueued);
+      await this.handleMessage(chatMessage);
+      this.queuedChatMessages = [];
     } else {
       this.queuedChatMessages.push(chatMessage);
       // If a chatmessage does not get handled by a mod, we still need some way to react to it
