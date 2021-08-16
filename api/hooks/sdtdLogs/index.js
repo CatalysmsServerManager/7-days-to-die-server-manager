@@ -117,12 +117,23 @@ module.exports = function sdtdLogs(sails) {
     },
 
     async getEventDetectorClass(server) {
-      const allocsVersion = await sails.helpers.sdtd.checkModVersion('Mod Allocs MapRendering and Webinterface', server.id);
-      if (allocsVersion < 38) {
+
+      try {
+        const allocsVersion = await sails.helpers.sdtd.checkModVersion('Mod Allocs MapRendering and Webinterface', server.id);
+        if (allocsVersion < 38) {
+          return SdtdPolling;
+        } else {
+          return SdtdSSE;
+        }
+      } catch (error) {
+        sails.log.warn('Could not get allocs version, falling back to polling');
+        // If we cannot get the allocs version, it likely means the server is offline right now
+        // We fall back to polling
+        // TODO: In like a month or something, when more people have updated to latests allocs fixes we can default to SSE
         return SdtdPolling;
-      } else {
-        return SdtdSSE;
       }
+
+
     },
 
     /**
@@ -136,6 +147,11 @@ module.exports = function sdtdLogs(sails) {
 
     createLogObject: async function createLogObject(serverID) {
       sails.log.debug(`HOOKS - sdtdLogs - Creating loggingObject for server ${serverID}`);
+
+      // Remove any lingering repeatable jobs
+      await sails.helpers.redis.bull.removeRepeatable(serverID);
+
+
       serverID = String(serverID);
       const server = await SdtdServer.findOne(serverID);
       const config = await SdtdConfig.findOne({ server: serverID });
