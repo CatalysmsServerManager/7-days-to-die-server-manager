@@ -101,6 +101,11 @@ module.exports.routes = {
   //  ╠═╣╠═╝║  ║╣ ║║║ ║║╠═╝║ ║║║║║ ║ ╚═╗
   //  ╩ ╩╩  ╩  ╚═╝╝╚╝═╩╝╩  ╚═╝╩╝╚╝ ╩ ╚═╝
 
+  'post /api/playground/execute': {
+    action: 'Playground/execute',
+    csrf: process.env.NODE_ENV === 'production' ? true : false
+  },
+
   'get /api/stats': {
     action: 'etc/get-system-stats',
     cors: false

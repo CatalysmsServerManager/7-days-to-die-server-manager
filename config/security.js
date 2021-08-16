@@ -1,3 +1,11 @@
+
+const corsOptions = {};
+
+if (process.env.NODE_ENV !== 'production') {
+  corsOptions.allRoutes = true;
+  corsOptions.allowOrigins = '*';
+}
+
 /**
  * Security Settings
  * (sails.config.security)
@@ -28,11 +36,7 @@ module.exports.security = {
    *                                                                          *
    ***************************************************************************/
 
-  // cors: {
-  //   allRoutes: true,
-  //   allowOrigins: ['http://localhost:1337'],
-  //   allowCredentials: false,
-  // },
+  cors: corsOptions,
 
 
   /****************************************************************************
