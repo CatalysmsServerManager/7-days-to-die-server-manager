@@ -16,9 +16,6 @@ async function failedHandler(job, e) {
   await FailedCounter.incr(job.data.serverId);
 
   const currentFails = await FailedCounter.get(job.data.serverId);
-  const lastSuccess = await sails.helpers.redis.get(
-    `sdtdserver:${job.data.serverId}:sdtdLogs:lastSuccess`
-  );
 
   // When this has failed enough times and the server is not in slowmode yet
   // We put the server in slowmode
@@ -38,16 +35,6 @@ async function failedHandler(job, e) {
           every: sails.config.custom.logCheckIntervalSlowMode,
         }
       });
-  }
-
-  // If the server hasnt responded in over three days, we change the status to inactive
-  const threeDaysInMs = 1000 * 60 * 60 * 24 * 3;
-  if (lastSuccess + threeDaysInMs < Date.now()) {
-    sails.log.warn(
-      `SdtdLogs - server ${job.data.serverId} has not responded in over 3 days, setting to inactive`
-    );
-    // Setting inactive has to happen in the main process, so we just signal that here
-    return { setInactive: true, server: job.data.server };
   }
 
   return { server: job.data.server };
@@ -104,12 +91,6 @@ module.exports = async function logs(job) {
         }
       });
   }
-
-  // We also set the current timestamp as last success
-  await sails.helpers.redis.set(
-    `sdtdserver:${job.data.serverId}:sdtdLogs:lastSuccess`,
-    Date.now()
-  );
 
 
   /**
