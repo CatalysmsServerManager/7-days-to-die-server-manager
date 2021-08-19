@@ -17,7 +17,9 @@ class SdtdSSE extends LoggingObject {
     this.eventSource.addEventListener('logLine', this.listener);
     this.eventSource.onerror = e => {
       sails.log.warn(`SSE error for server ${this.server.id}`);
-      sails.log.warn(e);
+      if (e.message) {
+        sails.log.warn(e.message);
+      }
     };
     this.eventSource.onopen = () => {
       sails.log.debug(`Opened a SSE channel for server ${this.server.id}`);
