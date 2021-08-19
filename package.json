@@ -62,8 +62,10 @@
     "dev": "cross-env NODE_ENV=development nodemon --exec concurrently --kill-others -n 'app,worker' 'npm run start:app' 'npm run start:worker'",
     "debug": "node debug app.js",
     "cover": "nyc npm run test",
-    "itemIcons:update": "bash ./scripts/itemIconsUpdate.sh",
+    "itemIcons:update": "sh ./scripts/itemIconsUpdate.sh",
+    "playground:update": "sh ./scripts/get-playground.sh",
     "postversion": "git push && git push --tags",
+    "postinstall": "npm run itemIcons:update && npm run playground:update",
     "sequelize": "sequelize-cli",
     "db:migrate": "npm run sequelize -- db:migrate",
     "db:migrate:undo": "npm run sequelize -- db:migrate:undo"
