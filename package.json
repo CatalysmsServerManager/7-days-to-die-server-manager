@@ -99,7 +99,7 @@
     "nyc": "^15.0.1",
     "sinon": "^11.1.2",
     "sinon-chai": "^3.7.0",
-    "supertest": "^6.1.4"
+    "supertest": "^6.1.6"
   },
   "mocha": {
     "timeout": 10000,
