@@ -12,10 +12,14 @@ class CustomFunction {
     const splitArgs = split(args, { separator: ',', quotes: ['"', '\''] });
     return splitArgs.map(x => {
       x = x.trim().split('"').join('');
-      // To to parse as number
+      // Try to parse as number
       const num = parseInt(x, 10);
       if (Number.isNaN(num)) {
         // If it's not a number, just return the raw string
+        return x;
+        // If the length of x is larger than the amount of numbers in the string,
+        // We know parseInt truncated some part of the original string
+      } else if (x.length > num.toString().length) {
         return x;
       } else {
         // If it is a number, check if it's a safe integer
