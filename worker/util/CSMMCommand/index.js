@@ -2,6 +2,7 @@ const AddCurrency = require('../../../worker/util/customFunctions/addCurrency');
 const SendDiscord = require('../../../worker/util/customFunctions/sendDiscord');
 const SetRole = require('../../../worker/util/customFunctions/setRole');
 const Wait = require('../../../worker/util/customFunctions/wait');
+const Handlebars = require('../Handlebars');
 
 const supportedFunctions = [
   new Wait(),
@@ -27,13 +28,29 @@ module.exports = class CSMMCommand {
     return this.data;
   }
 
+  _renderHandlebars() {
+    const compiledTemplate = Handlebars.compile(this.template);
+    return compiledTemplate(this.data);
+  }
 
   async render() {
-    this.template = await sails.helpers.sdtd.parseCommandsString(
-      this.template,
-      this.data
-    );
-    return this.template;
+    const errors = [];
+    try {
+      this.template = this._renderHandlebars();
+    } catch (error) {
+      errors.push(error.message);
+    }
+
+
+    try {
+      this.template = await sails.helpers.sdtd.parseCommandsString(
+        this.template,
+        this.data
+      );
+    } catch (error) {
+      errors.push(error.message);
+    }
+    return {template: this.template, errors};
   }
 
 

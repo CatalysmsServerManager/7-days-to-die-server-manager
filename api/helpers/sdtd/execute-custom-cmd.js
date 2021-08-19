@@ -1,5 +1,4 @@
 const CSMMCommand = require('../../../worker/util/CSMMCommand');
-c;
 
 module.exports = {
   friendlyName: 'Execute custom command',

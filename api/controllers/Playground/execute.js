@@ -24,11 +24,7 @@ module.exports = {
 
     command.data = inputs.data;
 
-    try {
-      const result =  await command.render();
-      return exits.success({ output: result, errors: [] });
-    } catch (error) {
-      return exits.success({ output: null, errors: [error] });
-    }
+    const {template, errors} =  await command.render();
+    return exits.success({ output: template, errors });
   }
 };
