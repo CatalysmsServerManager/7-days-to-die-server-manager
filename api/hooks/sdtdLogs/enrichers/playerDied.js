@@ -1,5 +1,9 @@
 module.exports = async (event) => {
-  if (event.type !== 'playerDied') { return event; }
+  if (
+    event.type !== 'playerDied' ||
+    event.type !== 'playerKilled' ||
+    event.type !== 'playerSuicide'
+  ) { return event; }
 
   if (!event.data.player) { throw new Error('Cannot store last death location when no player defined'); }
 
