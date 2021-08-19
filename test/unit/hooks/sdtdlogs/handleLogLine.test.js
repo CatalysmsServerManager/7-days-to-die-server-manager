@@ -163,10 +163,11 @@ describe('sdtdLogs#handleLogLine', () => {
 
     const result = handleLogLine(logLine);
 
-    console.log(result);
+    expect(result.type).to.eq('playerDied');
+    expect(result.data.playerName).to.eq('Catalysm');
   });
 
-  it('Correctly detects a playerDied event with PvP death', () => {
+  it('Correctly detects a playerSuicide event', () => {
     const logLine = {
       date: '2017-11-14',
       time: '14:50:49',
@@ -178,6 +179,39 @@ describe('sdtdLogs#handleLogLine', () => {
 
     const result = handleLogLine(logLine);
 
-    console.log(result);
+    expect(result.type).to.eq('playerSuicide');
+    expect(result.data.playerName).to.eq('Catalysm');
+  });
+
+  it('Correctly detects a playerKilled event', () => {
+    const logLine = {
+      date: '2017-11-14',
+      time: '14:50:49',
+      uptime: '133.559',
+      msg: `GMSG: Player 'Tricia' killed by 'Catalysm'`,
+      trace: '',
+      type: 'Log'
+    };
+
+    const result = handleLogLine(logLine);
+
+    expect(result.type).to.eq('playerKilled');
+    expect(result.data.killerName).to.eq('Catalysm');
+    expect(result.data.victimName).to.eq('Tricia');
+  });
+
+  it('Does not detect this line as a player killed event', () => {
+    const logLine = {
+      date: '2017-11-14',
+      time: '14:50:49',
+      uptime: '133.559',
+      msg: `GMSG: Player '2skilled4u' joined the game`,
+      trace: '',
+      type: 'Log'
+    };
+
+    const result = handleLogLine(logLine);
+
+    expect(result.type).to.be.eq('logLine');
   });
 });
