@@ -1,14 +1,4 @@
-const AddCurrency = require('../../../worker/util/customFunctions/addCurrency');
-const SendDiscord = require('../../../worker/util/customFunctions/sendDiscord');
-const SetRole = require('../../../worker/util/customFunctions/setRole');
-const Wait = require('../../../worker/util/customFunctions/wait');
-
-const supportedFunctions = [
-  new Wait(),
-  new AddCurrency(),
-  new SetRole(),
-  new SendDiscord()
-];
+const CSMMCommand = require('../../../worker/util/CSMMCommand');
 
 module.exports = {
   friendlyName: 'Execute custom command',
@@ -38,88 +28,13 @@ module.exports = {
   },
 
   fn: async function (inputs, exits) {
-    const commandsExecuted = new Array();
+    const command = new CSMMCommand(inputs.server, inputs.commands, inputs.data);
 
-    if (!inputs.data) {
-      inputs.data = {};
-    }
+    await command.loadData();
+    await command.render();
+    const result = await command.execute();
 
-    inputs.data.server = inputs.server;
-    inputs.data.server.onlinePlayers = await sails.helpers.sdtd.loadPlayerData(inputs.server.id, undefined, true);
-
-    inputs.data.server.stats = await sails.helpers.sdtdApi.getStats(SdtdServer.getAPIConfig(inputs.server));
-
-    inputs.commands = await sails.helpers.sdtd.parseCommandsString(
-      inputs.commands,
-      inputs.data
-    );
-
-    for (const command of inputs.commands) {
-      // Check if the command matches any custom functions
-      const customFunction = checkForCustomFunction(command);
-      if (customFunction) {
-        // If we find a custom function, execute it
-        const [result, customFunctionArgs] = await executeCustomFunction(customFunction, command, inputs.server);
-        commandsExecuted.push({
-          command: customFunction.name,
-          parameters: command,
-          result,
-          customFunctionArgs
-        });
-      } else {
-        // If the command is not a custom function, execute it as a game command
-        let commandResult = await executeCommand(inputs.server, command);
-        commandsExecuted.push(commandResult);
-
-      }
-    }
-
-    return exits.success(commandsExecuted);
+    return exits.success(result);
   }
 };
 
-function getArgs(fnc, command) {
-  const regex = new RegExp(`${fnc.name}\((.*)\)`, 'i');
-  const res = command.match(regex);
-  return res[1].slice(1, res[1].length - 1);
-}
-
-async function executeCustomFunction(fnc, command, server) {
-  const args = getArgs(fnc, command);
-  try {
-    const res = await fnc.run(server, args);
-    return [res, args];
-  } catch (error) {
-    return [error.message, args];
-  }
-}
-
-function checkForCustomFunction(command) {
-  for (const fnc of supportedFunctions) {
-    if (command.toLowerCase().includes(fnc.name.toLowerCase() + '(')) {
-      return fnc;
-    }
-  }
-  return false;
-}
-
-async function executeCommand(server, command) {
-  try {
-    let result = await sails.helpers.sdtdApi.executeConsoleCommand(
-      {
-        ip: server.ip,
-        port: server.webPort,
-        adminToken: server.authToken,
-        adminUser: server.authName
-      },
-      _.trim(command)
-    );
-    return result;
-  } catch (error) {
-    sails.log.error(error);
-    return {
-      command,
-      result: 'An error occurred executing the API request to the 7D2D server'
-    };
-  }
-}
