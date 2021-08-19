@@ -17,7 +17,8 @@ const oldLevelRegex = /(was )\d*/g;
 
 const entityKilledRegex = /(killed .*)/g;
 
-const gmsgDeathRegex = /GMSG: Player '(\w+)' died|GMSG: Player '(\w+)' killed by/;
+const gmsgDeathRegex = /GMSG: Player '(\w+)' died/;
+const gmsgPvPDeathRegex = /GMSG: Player (.+) killed by (.+)/;
 
 module.exports = logLine => {
 
@@ -361,10 +362,7 @@ module.exports = logLine => {
     returnValue.data = killMessage;
   }
 
-  if (
-    logLine.msg.startsWith('GMSG: Player') &&
-    logLine.msg.includes('killed')
-  ) {
+  if (gmsgPvPDeathRegex.test(logLine.msg)) {
     /*
     {
       "date": "2017-11-14",
@@ -375,10 +373,11 @@ module.exports = logLine => {
       "type": "Log"
     }
     */
-    let killMessage = logLine.msg.split('\'');
 
-    let victimName = killMessage[1].trim();
-    let killerName = killMessage[3].trim();
+    let killMessage = logLine.msg.match(gmsgPvPDeathRegex);
+
+    const victimName = killMessage[1].split('\'').join('');
+    const killerName = killMessage[2].split('\'').join('');
 
     if (victimName === killerName) {
       suicideMessage = {
