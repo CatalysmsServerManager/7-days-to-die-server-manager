@@ -11,15 +11,21 @@ module.exports = async (event) => {
 
   const player = onlinePlayers.find(p => p.steamid === event.data.player.steamId);
 
-  await Player.update(
+  const updatedPlayers = await Player.update(
     { id: event.data.player.id },
     {
       lastDeathLocationX: player.position.x,
       lastDeathLocationY: player.position.y,
       lastDeathLocationZ: player.position.z,
-    });
+    }).fetch();
 
+  if (!updatedPlayers[0]) {
+    throw new Error('Player not found? Shouldnt happen, watcha doin mate..');
+  }
+
+  event.data.player = updatedPlayers[0];
   sails.log.debug(`Updated player ${event.data.player.id} last death location to ${event.data.player.positionX},${event.data.player.positionY},${event.data.player.positionZ}`);
+
 
   return event;
 };
