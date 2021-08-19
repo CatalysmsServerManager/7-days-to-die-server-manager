@@ -103,7 +103,7 @@ module.exports.routes = {
 
   'post /api/playground/execute': {
     action: 'Playground/execute',
-    csrf: process.env.NODE_ENV === 'production' ? true : false
+    csrf: false
   },
 
   'get /api/stats': {
