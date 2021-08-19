@@ -14,7 +14,7 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    return exits.success(inputs.template);
+    return exits.success({ output: inputs.template, errors: [] });
 
   }
 
