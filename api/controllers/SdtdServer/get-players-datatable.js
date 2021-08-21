@@ -42,14 +42,26 @@ async function getPlayersDataTable(req, res) {
   }
 
 
-  const players = await Player.find(queryObj).populate('role');
+  const players = await Player.find(queryObj);
+
+  // Sails doesnt let us sort and populate at the same time
+  // So we load the role associations separately
+  const playersWithRoles = await Promise.all(players.map(async player => {
+    const role = await sails.helpers.sdtd.getPlayerRole(player.id);
+
+    return {
+      ...player,
+      role
+    };
+  }));
+
   const totalFilter = await Player.count(whereObj);
 
   const result = {
     draw: parseInt(req.body.draw),
     recordsFiltered: totalFilter,
     recordsTotal: totalPlayers,
-    data: players
+    data: playersWithRoles
   };
 
 
