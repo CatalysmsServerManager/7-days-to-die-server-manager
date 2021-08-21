@@ -106,6 +106,10 @@ module.exports.routes = {
     csrf: false
   },
 
+  'get /api/playground/meta': {
+    action: 'Playground/get-meta',
+  },
+
   'get /api/stats': {
     action: 'etc/get-system-stats',
     cors: false
