@@ -11,6 +11,21 @@ const supportedFunctions = [
   new SendDiscord()
 ];
 
+const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
+const ARGUMENT_NAMES = /([^\s,]+)/g;
+
+
+// :)
+// https://stackoverflow.com/questions/1007981/how-to-get-function-parameter-names-values-dynamically
+function getParamNames(func) {
+  const fnStr = func.toString().replace(STRIP_COMMENTS, '');
+  let result = fnStr.slice(fnStr.indexOf('(')+1, fnStr.indexOf(')')).match(ARGUMENT_NAMES);
+  if(result === null)  {
+    result = [];
+  }
+  return result;
+}
+
 module.exports = class CSMMCommand {
 
   constructor(server, template, data) {
@@ -31,6 +46,27 @@ module.exports = class CSMMCommand {
   _renderHandlebars() {
     const compiledTemplate = Handlebars.compile(this.template);
     return compiledTemplate(this.data);
+  }
+
+  static getHelpers() {
+    const helperBlacklist = [
+      'each',
+      'if',
+      'helperMissing',
+      'blockHelperMissing',
+      'log',
+    ];
+    const response = [];
+    for (const helper in Handlebars.helpers) {
+      if (helperBlacklist.indexOf(helper) !== -1) {
+        continue;
+      }
+
+      const element = Handlebars.helpers[helper];
+      const parameters = getParamNames(element);
+      response.push({name: helper, parameters});
+    }
+    return response;
   }
 
   async render() {
