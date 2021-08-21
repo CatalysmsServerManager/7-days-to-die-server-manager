@@ -13,7 +13,7 @@
     "@streammedev/hhmmss": "^1.0.0",
     "7daystodie-api-wrapper": "1.5.6",
     "async": "3.2.1",
-    "bull": "^3.28.1",
+    "bull": "^3.29.0",
     "bull-board": "^2.1.2",
     "concurrently": "^6.2.1",
     "cron-parser": "^3.5.0",
