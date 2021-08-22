@@ -1,0 +1,22 @@
+<button id="export-button" type="button" class="btn btn-primary">CSV export</button>
+
+<script>
+  $(document).ready(() => {
+    $("#export-button").click(e => {
+      fetch('/api/sdtdserver/<%= server.id %>/players/export', {credentials: "include"})
+        .then(resp => resp.blob())
+        .then(blob => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.style.display = 'none';
+          a.href = url;
+          a.download = 'export.csv';
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+        })
+        .catch((e) => alert(e)); 
+    })
+  })
+
+</script>
