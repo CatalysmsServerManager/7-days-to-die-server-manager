@@ -101,6 +101,15 @@ module.exports.routes = {
   //  ╠═╣╠═╝║  ║╣ ║║║ ║║╠═╝║ ║║║║║ ║ ╚═╗
   //  ╩ ╩╩  ╩  ╚═╝╝╚╝═╩╝╩  ╚═╝╩╝╚╝ ╩ ╚═╝
 
+  'post /api/playground/execute': {
+    action: 'Playground/execute',
+    csrf: false
+  },
+
+  'get /api/playground/meta': {
+    action: 'Playground/get-meta',
+  },
+
   'get /api/stats': {
     action: 'etc/get-system-stats',
     cors: false

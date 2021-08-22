@@ -93,14 +93,10 @@
         },
         {
           data: "role",
-          render: function (data, type, row, meta) {
-            if (_.isNull(data)) {
-              return SAILS_LOCALS.defaultRole.name;
-            } else {
-              return data.name;
-            }
-          },
-          orderable: false,
+          render: {
+              _: "name",
+              sort: "level",
+            },
         },
         {
           data: "ip",
