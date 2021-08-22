@@ -143,6 +143,8 @@ module.exports.routes = {
   // This is a post because actions2 is stupid about query string parsing ¯\_(ツ)_/¯
   'post /api/sdtdserver/players/datatable':
     'SdtdServerController.get-players-datatable',
+  'get /api/sdtdserver/:serverId/players/export':
+    'SdtdServerController.get-players-export',
   'get /api/sdtdserver/players/all': 'SdtdServerController.load-all-players',
   'get /api/sdtdserver/info': 'SdtdServerController.load-server-info',
   'get /api/sdtdserver/availableItems': 'SdtdServerController.available-items',
