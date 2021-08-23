@@ -22,6 +22,7 @@
 
     <br />
 
+    <%- await include('./partials/exportPlayersButton.sejs') %>
     <%- await include('./partials/deletePlayersButton.sejs') %>
     <%- await include('./partials/wipeTeleports.sejs') %>
     <%- await include('./partials/wipeCurrencyBtn.sejs') %>
@@ -73,10 +74,10 @@
           _csrf: window.SAILS_LOCALS._csrf,
         },
       },
+      buttons: [],
       fixedHeader: true,
       responsive: true,
       serverSide: true,
-      buttons: ["copy", "excel", "pdf", "print"],
       columns: [
         {
           data: "name",
@@ -92,14 +93,10 @@
         },
         {
           data: "role",
-          render: function (data, type, row, meta) {
-            if (_.isNull(data)) {
-              return SAILS_LOCALS.defaultRole.name;
-            } else {
-              return data.name;
-            }
-          },
-          orderable: false,
+          render: {
+              _: "name",
+              sort: "level",
+            },
         },
         {
           data: "ip",

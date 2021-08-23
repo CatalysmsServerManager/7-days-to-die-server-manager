@@ -39,6 +39,7 @@ dump.rdb
 .nyc_output/*
 coverage
 assets/images/sdtdIcons
+assets/playground
 db-data/
 test/output
 

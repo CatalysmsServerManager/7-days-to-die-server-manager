@@ -1,7 +1,13 @@
 <!-- EXPERIMENTS SETTINGS -->
 
 <div class="container">
+  <a class="btn btn-primary" href="/playground" role="button">Playground</a>
+  <label for="">
+    <small>The playground is an application for debugging and creating CSMM commands.</small>
+  </label>
+
   <!--   <div></div>
+
 
   <div class="form-check">
     <label class="form-check-label">
@@ -28,7 +34,6 @@
   </button>
 
   <div id="experiment-experiment-result"></div> -->
-  There are no experiments running right now.
 </div>
 
 <script>

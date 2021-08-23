@@ -8,12 +8,25 @@ class SdtdSSE extends LoggingObject {
     this.SSERegex = /\d+-\d+-\d+T\d+:\d+:\d+ \d+\.\d+ INF (.+)/;
     this.listener = this.SSEListener.bind(this);
     this.queuedChatMessages = [];
+    this.lastMessage = Date.now();
+
+    this.reconnectInterval = setInterval(() => {
+      if (this.eventSource.readyState === EventSource.OPEN && (this.lastMessage > (Date.now() - 60000))) {
+        return;
+      }
+      sails.log.debug(`Trying to reconnect SSE for server ${this.server.id}`);
+      this.destroy();
+      this.start();
+    }, 30000);
   }
 
+  get url() {
+    return `http://${this.server.ip}:${this.server.webPort}/sse/log?adminuser=${this.server.authName}&admintoken=${this.server.authToken}`;
+  }
 
   async start() {
-    this.eventSource = new EventSource(`http://${this.server.ip}:${this.server.webPort}/sse/log?adminuser=${this.server.authName}&admintoken=${this.server.authToken}`);
-    this.eventSource.reconnectInterval = 30000;
+    this.eventSource = new EventSource(this.url);
+    this.eventSource.reconnectInterval = 5000;
     this.eventSource.addEventListener('logLine', this.listener);
     this.eventSource.onerror = e => {
       sails.log.warn(`SSE error for server ${this.server.id}`);
@@ -35,6 +48,7 @@ class SdtdSSE extends LoggingObject {
   }
 
   async SSEListener(data) {
+    this.lastMessage = Date.now();
     try {
       const parsed = JSON.parse(data.data);
       const messageMatch = this.SSERegex.exec(parsed.msg);
