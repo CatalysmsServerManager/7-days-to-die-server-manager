@@ -9,7 +9,6 @@ async function getInventory(req, res) {
   const steamId = req.query.steamId;
   const serverId = req.query.serverId;
 
-  sails.log.debug(`Showing inventory for player ${steamId} on server ${serverId}`);
 
   if (_.isUndefined(steamId)) {
     return res.badRequest('No steam ID given');
@@ -29,6 +28,7 @@ async function getInventory(req, res) {
     toSend.steamId = player.steamId;
     toSend.serverId = player.server;
     toSend.inventory = player.inventory;
+    sails.log.debug(`Showing inventory for player ${steamId} on server ${serverId}`, {serverId, player});
     return res.json(toSend);
   } catch (error) {
     sails.log.error(error);
@@ -47,7 +47,6 @@ async function getBanStatus(req, res) {
   const steamId = req.query.steamId;
   const serverId = req.query.serverId;
 
-  sails.log.debug(`Showing ban status for player ${steamId} on server ${serverId}`);
 
   if (_.isUndefined(steamId)) {
     return res.badRequest('No steam ID given');
@@ -68,6 +67,7 @@ async function getBanStatus(req, res) {
     toSend.steamId = player.steamId;
     toSend.serverId = player.server;
     toSend.banned = player.banned;
+    sails.log.debug(`Showing ban status for player ${steamId} on server ${serverId}`, {serverId, player});
     return res.json(toSend);
   } catch (error) {
     sails.log.error(error);
@@ -86,7 +86,6 @@ async function getLocation(req, res) {
   const steamId = req.query.steamId;
   const serverId = req.query.serverId;
 
-  sails.log.debug(`Showing location info for player ${steamId} on server ${serverId}`);
 
   if (_.isUndefined(steamId)) {
     return res.badRequest('No steam ID given');
@@ -107,6 +106,7 @@ async function getLocation(req, res) {
     toSend.steamId = player.steamId;
     toSend.serverId = player.server;
     toSend.location = player.location;
+    sails.log.debug(`Showing location info for player ${steamId} on server ${serverId}`, {serverId, player});
     return res.json(toSend);
   } catch (error) {
     sails.log.error(error);

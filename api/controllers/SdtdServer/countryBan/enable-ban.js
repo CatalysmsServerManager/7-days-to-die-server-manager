@@ -24,7 +24,7 @@ module.exports = {
     countryBanConfig.ban = true;
 
     await SdtdConfig.update({id: config.id}, {countryBanConfig: countryBanConfig});
-    sails.log.debug(`Enabled ban for country ban - server ${inputs.serverId}`);
+    sails.log.debug(`Enabled ban for country ban - server ${inputs.serverId}`, {serverId: inputs.serverId});
     return exits.success();
   }
 };

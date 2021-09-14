@@ -38,7 +38,7 @@ module.exports = {
 
     try {
 
-      sails.log.debug(`API - SdtdServer:restart-server - Restarting server ${inputs.serverId} in ${inputs.delay} minutes`);
+      sails.log.debug(`API - SdtdServer:restart-server - Restarting server ${inputs.serverId} in ${inputs.delay} minutes`, {serverId: inputs.serverId});
 
       if (_.isUndefined(inputs.delay)) {
         inputs.delay = 5;
@@ -55,10 +55,10 @@ module.exports = {
           command: `shutdown`
         }).exec({
           error: (error) => {
-            sails.log.error(`API - SdtdServer:restart-server - ${error}`);
+            sails.log.error(`API - SdtdServer:restart-server - ${error}`, {serverId: inputs.serverId});
           },
           success: () => {
-            sails.log.info(`API - SdtdServer:restart-server - Successful restart for server ${inputs.serverId} in ${inputs.delay} ${inputs.delay > 1 ? 'minutes' : 'minute'}`);
+            sails.log.info(`API - SdtdServer:restart-server - Successful restart for server ${inputs.serverId} in ${inputs.delay} ${inputs.delay > 1 ? 'minutes' : 'minute'}`, {serverId: inputs.serverId});
 
           }
         });
@@ -78,7 +78,7 @@ module.exports = {
 
 
     } catch (error) {
-      sails.log.error(`API - SdtdServer:restart-server - ${error}`);
+      sails.log.error(`API - SdtdServer:restart-server - ${error}`, {serverId: inputs.serverId});
       return exits.error(error);
     }
 

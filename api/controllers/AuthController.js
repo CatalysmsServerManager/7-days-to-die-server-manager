@@ -44,7 +44,7 @@ module.exports = {
           sails.log.error(`Steam auth error - ${err}`);
           return res.serverError(err);
         };
-        sails.log.info(`User ${user.username} successfully logged in`);
+        sails.log.info(`User ${user.username} successfully logged in`, {user});
         req.session.userId = user.id;
         req.session.user = user;
         try {
@@ -63,7 +63,7 @@ module.exports = {
           }
 
         } catch (error) {
-          sails.log.error(`AuthController - Error updating user profile ${error}`);
+          sails.log.error(`AuthController - Error updating user profile ${error}`, {user});
         }
       })(req, res);
     } catch (error) {
@@ -93,7 +93,7 @@ module.exports = {
             discordId: discordProfile.id,
           }).fetch();
 
-          sails.log.debug(`User ${req.session.userId} updated discord info successfully`);
+          sails.log.debug(`User ${req.session.userId} updated discord info successfully`, {userId: req.session.userId});
           res.redirect(`/user/${req.session.userId}/dashboard`);
 
           // Attempt to sync player roles to Discord roles
@@ -104,7 +104,7 @@ module.exports = {
               await sails.helpers.discord.setRoleFromDiscord(player.id);
             } catch (e) {
               // Ok to just let this fail
-              sails.log.error(e);
+              sails.log.error(e, {player});
             }
           }
         } catch (error) {

@@ -50,7 +50,7 @@ module.exports = {
       await GblComment.addToCollection(foundComment.id, 'heartedBy').members(user.id);
     }
 
-    sails.log.info(`User #${user.id} ${user.username} has toggled a heart to ${alreadyHearted ? 'off' : 'on'} for comment #${inputs.commentId}`);
+    sails.log.info(`User #${user.id} ${user.username} has toggled a heart to ${alreadyHearted ? 'off' : 'on'} for comment #${inputs.commentId}`, {user});
 
     return exits.success(foundComment);
 

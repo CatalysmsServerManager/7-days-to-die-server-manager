@@ -42,7 +42,7 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     try {
-      sails.log.debug(`API - SdtdServer:country-ban-reload - Reloading config for server ${inputs.serverId}`);
+      sails.log.debug(`API - SdtdServer:country-ban-reload - Reloading config for server ${inputs.serverId}`, {serverId: inputs.serverId});
       let server = await SdtdServer.findOne({
         id: inputs.serverId
       });
@@ -82,11 +82,11 @@ module.exports = {
         sails.hooks.countryban.reload(inputs.serverId, configToSend);
       }
 
-      sails.log.debug(`API - SdtdServer:country-ban-reload - Reloaded config for server ${inputs.serverId}`);
+      sails.log.debug(`API - SdtdServer:country-ban-reload - Reloaded config for server ${inputs.serverId}`, {serverId: inputs.serverId});
 
       return exits.success();
     } catch (error) {
-      sails.log.error(`API - SdtdServer:country-ban-reload - ${error}`);
+      sails.log.error(`API - SdtdServer:country-ban-reload - ${error}`, {serverId: inputs.serverId});
       return exits.error(error);
     }
 

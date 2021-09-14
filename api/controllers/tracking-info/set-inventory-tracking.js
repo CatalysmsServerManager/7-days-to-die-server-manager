@@ -51,7 +51,7 @@ module.exports = {
     }, {
       inventoryTracking: inputs.newStatus
     });
-    sails.log.info(`Set inventory tracking for server ${inputs.serverId} to ${inputs.newStatus}`);
+    sails.log.info(`Set inventory tracking for server ${inputs.serverId} to ${inputs.newStatus}`, {serverId: inputs.serverId});
     return exits.success();
   }
 };

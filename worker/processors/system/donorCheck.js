@@ -21,7 +21,7 @@ module.exports = async function donorCheck() {
         const donorStatus = await sails.helpers.meta.checkDonatorStatus(server.id);
 
         if (donorStatus !== 'free') {
-          sails.log.debug(`[Donor check] server ${server.id} is a donator! Yay`);
+          sails.log.debug(`[Donor check] server ${server.id} is a donator! Yay`, {server});
           await SdtdConfig.update({ server: server.id }, { failedDonorChecks: 0 });
           continue;
         }
@@ -30,21 +30,21 @@ module.exports = async function donorCheck() {
         current = (await SdtdConfig.update({ server: server.id }, { failedDonorChecks: current.failedDonorChecks + 1 }).fetch())[0];
 
         const user = await User.findOne(server.owner);
-        sails.log.warn(`[Donor check] server ${server.id} failed donator check. Has failed ${current.failedDonorChecks} times so far. Sending a DM to user ${user.id}`);
+        sails.log.warn(`[Donor check] server ${server.id} failed donator check. Has failed ${current.failedDonorChecks} times so far. Sending a DM to user ${user.id}`, {server});
 
         try {
           await sails.helpers.discord.sendDm(user.discordId, `WARNING! The CSMM instance you are using is a donator-only instance. CSMM checks your donator status every day and if your server fails ${checksToFailBeforeDeletion} times, it will be automatically deleted. This is check ${current.failedDonorChecks}/${checksToFailBeforeDeletion} for server ${server.id}. If this is not correct please contact support as soon as possible. If the maximum checks are reached, your server data will be deleted WITHOUT ANY CHANCE OF RECOVERY`);
         } catch (error) {
-          sails.log.warn(`[Donor check] Failed to send a DM to a user`, { user });
+          sails.log.warn(`[Donor check] Failed to send a DM to a user`, { user, server });
         }
 
 
         if (current.failedDonorChecks >= checksToFailBeforeDeletion) {
-          sails.log.info(`[Donor check] server ${server.id} has failed too many times, deleting the server from the system :(.`);
+          sails.log.info(`[Donor check] server ${server.id} has failed too many times, deleting the server from the system :(.`, {server});
           await destroyServer(server);
         }
       } catch (error) {
-        sails.log.error(error);
+        sails.log.error(error, {server});
         continue;
       }
     }

@@ -157,7 +157,7 @@ async function startKillEarner(serverId) {
     setMap(server.id, killEarnerObject);
     return true;
   } catch (error) {
-    sails.log.error(`HOOK - economy - Error starting killEarner ${error}`);
+    sails.log.error(`HOOK - economy - Error starting killEarner ${error}`, {serverId});
     return false;
   }
 }
@@ -173,7 +173,7 @@ async function stopKillEarner(serverId) {
     deleteMap(serverId, killEarnerObject);
     return true;
   } catch (error) {
-    sails.log.error(`HOOK - economy - Error stopping killEarner ${error}`);
+    sails.log.error(`HOOK - economy - Error stopping killEarner ${error}`, {serverId});
   }
 }
 
@@ -191,7 +191,7 @@ async function startPlaytimeEarner(serverId) {
     setMap(server.id, playtimeEarnerObject);
     return true;
   } catch (error) {
-    sails.log.error(`HOOK - economy - Error starting playtimeEarner ${error}`);
+    sails.log.error(`HOOK - economy - Error starting playtimeEarner ${error}`, {serverId});
     return false;
   }
 }
@@ -207,7 +207,7 @@ async function stopPlaytimeEarner(serverId) {
     playtimeEarnerObject.stop();
     deleteMap(serverId, playtimeEarnerObject);
   } catch (error) {
-    sails.log.error(`HOOK - economy - Error stopping playtimeEarner ${error}`);
+    sails.log.error(`HOOK - economy - Error stopping playtimeEarner ${error}`, {serverId});
   }
 }
 
@@ -226,7 +226,7 @@ async function startDiscordTextEarner(serverId) {
     setMap(server.id, discordTextEarnerObject);
     return true;
   } catch (error) {
-    sails.log.error(`HOOK - economy - Error starting discordTextEarner ${error}`);
+    sails.log.error(`HOOK - economy - Error starting discordTextEarner ${error}`, {serverId});
     return false;
   }
 }
@@ -242,7 +242,7 @@ async function stopDiscordTextEarner(serverId) {
     discordTextEarnerObject.stop();
     deleteMap(serverId, discordTextEarnerObject);
   } catch (error) {
-    sails.log.error(`HOOK - economy - Error stopping discordTextEarner ${error}`);
+    sails.log.error(`HOOK - economy - Error stopping discordTextEarner ${error}`, {serverId});
   }
 }
 

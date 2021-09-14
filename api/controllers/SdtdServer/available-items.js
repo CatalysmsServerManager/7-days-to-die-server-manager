@@ -41,7 +41,7 @@ module.exports = {
      */
 
   fn: async function (inputs, exits) {
-    sails.log.debug(`API - SdtdServer:available-items - Loading available items!`);
+    sails.log.debug(`API - SdtdServer:available-items - Loading available items!`, {serverId: inputs.serverId});
     try {
       let server = await SdtdServer.findOne({
         id: inputs.serverId
@@ -73,7 +73,7 @@ module.exports = {
       });
 
     } catch (error) {
-      sails.log.error(`API - SdtdServer:available-items - ${error}`);
+      sails.log.error(`API - SdtdServer:available-items - ${error}`, {serverId: inputs.serverId});
       return exits.error(error);
     }
 

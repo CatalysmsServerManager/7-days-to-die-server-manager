@@ -11,11 +11,11 @@ class PlaytimeEarner {
 
   async start() {
     try {
-      sails.log.debug(`Started playtime earner for server ${this.server.name}`);
+      sails.log.debug(`Started playtime earner for server ${this.server.name}`, {server: this.server});
 
       if (this.config.playtimeEarnerInterval < 1) {
         sails.log.error(
-          `Cannot use interval ${this.config.playtimeEarnerInterval} for playtimeEarner, it is too small!`
+          `Cannot use interval ${this.config.playtimeEarnerInterval} for playtimeEarner, it is too small!`, {server: this.server}
         );
         return;
       }
@@ -25,12 +25,12 @@ class PlaytimeEarner {
         this.config.playtimeEarnerInterval * 60000
       );
     } catch (error) {
-      sails.log.error(error);
+      sails.log.error(error, {server: this.server});
     }
   }
 
   async stop() {
-    sails.log.debug(`Stopped playtime earner for server ${this.server.name}`);
+    sails.log.debug(`Stopped playtime earner for server ${this.server.name}`, {server: this.server});
     clearInterval(this.interval);
   }
 }
@@ -49,7 +49,7 @@ async function loadOnlinePlayersAndAwardMoney() {
       });
     });
   } catch (error) {
-    sails.log.error(error);
+    sails.log.error(error, {server: this.server});
   }
 }
 

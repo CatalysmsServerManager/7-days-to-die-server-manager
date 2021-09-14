@@ -28,7 +28,7 @@ module.exports = {
    */
 
   fn: async function (inputs, exits) {
-    sails.log.debug(`API - User:getOwnedServers - Getting servers for user ${inputs.userId}`);
+    sails.log.debug(`API - User:getOwnedServers - Getting servers for user ${inputs.userId}`, {userId: inputs.userId});
 
     try {
       let foundUser = await User.findOne({id: inputs.userId}).populate('adminOf').populate('servers');
@@ -36,7 +36,7 @@ module.exports = {
       return exits.success(ownedServers);
 
     } catch (error) {
-      sails.log.error(`API - SdtdServer:sendMessage - ${error}`);
+      sails.log.error(`API - SdtdServer:sendMessage - ${error}`, {userId: inputs.userId});
       return exits.error(error);
     }
 

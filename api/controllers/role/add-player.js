@@ -52,7 +52,8 @@ module.exports = {
 
     let updatedPlayer = await Player.update({ id: inputs.playerId }, { role: role.id }).fetch();
 
-    sails.log.info(`Updated a players role on server ${updatedPlayer[0].server} for player ${updatedPlayer[0].id} - ${updatedPlayer[0].name} to ${role.name}`);
+    sails.log.info(`Updated a players role on server ${updatedPlayer[0].server} for player ${updatedPlayer[0].id} - ${updatedPlayer[0].name} to ${role.name}`,
+      {player: updatedPlayer[0]});
 
     return exits.success(updatedPlayer);
 

@@ -81,7 +81,7 @@ module.exports = {
 
       sails.log.info(
         `${player.name} has purchased ${inputs.amount} of a listing from shop.`,
-        listing
+        {listing, player}
       );
       return exits.success(itemClaim);
     } catch (error) {
@@ -90,7 +90,7 @@ module.exports = {
         return exits.notEnoughCurrency('You do not have enough money to buy this!');
       }
 
-      sails.log.error(error);
+      sails.log.error(error, {playerId: inputs.playerId});
       return exits.error(error);
     }
   }

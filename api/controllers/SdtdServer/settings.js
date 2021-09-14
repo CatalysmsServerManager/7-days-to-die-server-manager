@@ -60,14 +60,14 @@ module.exports = {
     sails.helpers.sdtd.checkCpmVersion(server.id, true)
       // No need to do anything
       .then(() => { })
-      .catch(e => sails.log.warn(e));
+      .catch(e => sails.log.warn(e, {server}));
 
     try {
 
       let customCommands = await CustomCommand.find({
         server: server.id,
       }).populate('arguments');
-      sails.log.info(`VIEW - SdtdServer:settings - Showing settings for ${server.id}`);
+      sails.log.info(`VIEW - SdtdServer:settings - Showing settings for ${server.id}`, {server});
       return exits.success({
         server: server,
         config: serverConfig,
@@ -79,7 +79,7 @@ module.exports = {
         replyTypes
       });
     } catch (error) {
-      sails.log.error(`VIEW - SdtdServer:settings - ${error}`);
+      sails.log.error(`VIEW - SdtdServer:settings - ${error}`, {serverId: inputs.serverId});
       throw 'notFound';
     }
 

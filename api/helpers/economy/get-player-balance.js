@@ -33,7 +33,7 @@ module.exports = {
       let currentCurrency = Math.round(player.currency);
       return exits.success(currentCurrency);
     } catch (error) {
-      sails.log.error(`HELPER economy:get-player-balance - ${error}`);
+      sails.log.error(`HELPER economy:get-player-balance - ${error}`, {playerId: inputs.playerId});
       return exits.error(error);
     }
 

@@ -21,6 +21,6 @@ module.exports = async function locationTracking(server, playerList, playersArra
   }
 
   let dateEnded = new Date();
-  sails.log.verbose(`Performed locationTracking for server ${server.name} - ${playerRecords.length} players online - took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`);
+  sails.log.debug(`Performed locationTracking for server ${server.name} - ${playerRecords.length} players online - took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`, {server});
   return playersArray;
 };

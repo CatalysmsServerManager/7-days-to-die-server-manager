@@ -45,7 +45,7 @@ class Vote extends SdtdCommand {
         case '2':
           return chatMessage.reply('alreadyClaimed');
         default:
-          sails.log.error(`Unexpected response after checking vote status: ${voteCheck}`);
+          sails.log.error(`Unexpected response after checking vote status: ${voteCheck}`, {server, player});
           return chatMessage.reply('error', { error: 'Unexpected response after checking vote status' });
       }
     } catch (error) {

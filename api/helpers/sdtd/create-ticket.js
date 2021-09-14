@@ -85,7 +85,7 @@ module.exports = {
       ticket: ticket
     });
 
-    sails.log.info(`HELPER - createTicket - Created a ticket for server ${sdtdServer.name} by player ${player.name} titled "${ticket.title}"`);
+    sails.log.info(`HELPER - createTicket - Created a ticket for server ${sdtdServer.name} by player ${player.name} titled "${ticket.title}"`, {serverId: inputs.serverId});
     return exits.success(ticket);
 
   }

@@ -31,7 +31,7 @@ module.exports = {
    */
 
   fn: async function (inputs, exits) {
-    sails.log.debug(`API - User:profile - Getting profile for user ${inputs.userId}`);
+    sails.log.debug(`API - User:profile - Getting profile for user ${inputs.userId}`, {userId: inputs.userId});
 
     try {
       let user = await User.findOne(inputs.userId);
@@ -49,7 +49,7 @@ module.exports = {
       });
 
     } catch (error) {
-      sails.log.error(`API - SdtdServer:profile - ${error}`);
+      sails.log.error(`API - SdtdServer:profile - ${error}`, {userId: inputs.userId});
       return exits.error(error);
     }
 

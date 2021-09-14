@@ -46,7 +46,7 @@ module.exports = {
 
 
 
-    sails.log.debug(`API - SdtdServer:send message - sending a message on server ${inputs.serverId} to player: ${inputs.destinationPlayer}`);
+    sails.log.debug(`API - SdtdServer:send message - sending a message on server ${inputs.serverId} to player: ${inputs.destinationPlayer}`, {serverId: inputs.serverId});
 
     try {
       let sdtdServer = await SdtdServer.findOne(inputs.serverId);
@@ -67,7 +67,7 @@ module.exports = {
       });
 
     } catch (error) {
-      sails.log.error(`API - SdtdServer:sendMessage - ${error}`);
+      sails.log.error(`API - SdtdServer:sendMessage - ${error}`, {serverId: inputs.serverId});
       return exits.error(error);
     }
 

@@ -16,8 +16,8 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    let user = await User.findOne(this.req.session.userId);
-    sails.log.info(`Serving add-server view to ${user.username}`);
+    const user = await User.findOne(this.req.session.userId);
+    sails.log.info(`Serving add-server view to ${user.username}`, {user});
     return exits.success();
 
   }

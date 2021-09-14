@@ -32,7 +32,7 @@ module.exports = {
       });
       return exits.success();
     } catch (error) {
-      sails.log.error(`API set-discordTextEarner-timeout - ${error}`);
+      sails.log.error(`API set-discordTextEarner-timeout - ${error}`, {serverId: inputs.serverId});
       return exits.error();
     }
 

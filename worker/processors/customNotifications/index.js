@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 
 
 module.exports = async function customNotifications(job) {
-  sails.log.debug('[Worker] Got a `customNotification` job');
+  sails.log.debug('[Worker] Got a `customNotification` job', {server: job.data.server});
   if (!job.data.data.msg) {
     throw new Error(`Must specify a msg`);
   }
@@ -28,9 +28,9 @@ async function handleLogLine(logLine) {
     const matchResult = matches(logLine.msg, notification.stringToSearchFor);
     if (matchResult) {
       if (notification.ignoreServerChat && isServerMessage(logLine.msg)) {
-        sails.log.debug('Ignoring message because server chat is ignored');
+        sails.log.debug('Ignoring message because server chat is ignored', {server});
       } else {
-        sails.log.info(`Triggered a custom notification for server ${server.id} - ${logLine.msg}`);
+        sails.log.info(`Triggered a custom notification for server ${server.id} - ${logLine.msg}`, {server});
         await sendNotification(logLine, server, notification, matchResult);
       }
     }

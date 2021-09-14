@@ -39,7 +39,7 @@ class CustomFunction {
   }
 
   async run(server, args) {
-    sails.log.debug(`Executing custom function ${this.name} with args ${args}`);
+    sails.log.debug(`Executing custom function ${this.name} with args ${args}`, {server});
     return this.exec(server, this._parseArgs(args));
   }
 

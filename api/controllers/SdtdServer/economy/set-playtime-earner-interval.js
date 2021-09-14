@@ -31,7 +31,7 @@ module.exports = {
       });
       return exits.success();
     } catch (error) {
-      sails.log.error(`API set-playtimeEarner-interval - ${error}`);
+      sails.log.error(`API set-playtimeEarner-interval - ${error}`, {serverId: inputs.serverId});
       return exits.error();
     }
   }

@@ -30,7 +30,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    sails.log.info(`Setting checks to fail of pingKicker to ${inputs.checksToFail} for server ${inputs.serverId}`);
+    sails.log.info(`Setting checks to fail of pingKicker to ${inputs.checksToFail} for server ${inputs.serverId}`, {serverId: inputs.serverId});
 
     await SdtdConfig.update({server: inputs.serverId}, {pingChecksToFail: inputs.checksToFail});
 

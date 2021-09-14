@@ -1,4 +1,9 @@
+const os = require('os');
+
 const winston = require('winston');
+const { format } = require('winston');
+const LokiTransport = require('winston-loki');
+const getRegexMatch = require('../worker/util/getRegexMatch');
 
 const logLevel = process.env.CSMM_LOGLEVEL || 'info';
 
@@ -9,9 +14,45 @@ const disableFileLog = JSON.parse((process.env.DISABLE_LOG_FILE || 'false').toLo
 
 const logDirectory = process.env.LOGGING_DIR ? process.env.LOGGING_DIR : './logs';
 
+const handleInfo = format((info) => {
+  if (!info.labels) { info.labels = {}; };
+
+  if (info.userId) {
+    info.labels.user = info.userId.toString();
+  }
+
+  if (info.user) {
+    info.labels.user = info.user.id.toString();
+  }
+
+  if (info.serverId) {
+    info.labels.server = info.serverId.toString();
+  }
+
+  if (info.server) {
+    info.labels.server = info.server.id.toString();
+  }
+
+  if (info.playerId) {
+    info.labels.player = info.playerId.toString();
+  }
+
+  if (info.player) {
+    info.labels.player = info.player.id.toString();
+  }
+
+  return info;
+});
+
 const simpleFormat = winston.format.combine(
+  handleInfo(),
   winston.format.colorize(),
   winston.format.simple()
+);
+
+const jsonFormat = winston.format.combine(
+  handleInfo(),
+  winston.format.json()
 );
 
 
@@ -20,9 +61,24 @@ const transports = [
     level: logLevel,
     timestamp: true,
     humanReadableUnhandledException: true,
-    format: shouldLogJSON ? winston.format.json() : simpleFormat,
-  })
+    format: shouldLogJSON ? jsonFormat : simpleFormat,
+  }),
 ];
+
+
+if (process.env.LOKI_URL && process.env.LOKI_BASIC_AUTH) {
+  transports.push(new LokiTransport({
+    host: process.env.LOKI_URL,
+    basicAuth: process.env.LOKI_BASIC_AUTH,
+    level: logLevel,
+    labels: {
+      serverName: process.env.CSMM_HOSTNAME || os.hostname(),
+      release: require('../package.json').version,
+      script: process.env.npm_lifecycle_event || 'unknown',
+    },
+    format: jsonFormat,
+  }));
+}
 
 if (!disableFileLog) {
   transports.push(new winston.transports.File({
@@ -34,7 +90,7 @@ if (!disableFileLog) {
     tailable: true,
     maxsize: 1000000,
     maxFiles: 3,
-    format: shouldLogJSON ? winston.format.json() : simpleFormat,
+    format: shouldLogJSON ? jsonFormat : simpleFormat,
   }));
 }
 
@@ -50,18 +106,35 @@ if (!infoAndAbove.includes(logLevel) && !disableFileLog) {
       tailable: true,
       maxsize: 1000000,
       maxFiles: 5,
-      format: shouldLogJSON ? winston.format.json() : simpleFormat
+      format: shouldLogJSON ? jsonFormat : simpleFormat
     })
   );
 }
 
 const customLogger = new winston.createLogger({
   transports: transports,
+
 });
 
 customLogger.stream = {
   write: function (message) {
-    customLogger.info(message);
+    const parsed = JSON.parse(message);
+
+    const userId = parsed.userId ? parsed.userId.toString() : undefined;
+    const serverId = parsed.serverId ? parsed.serverId.toString() : undefined;
+    const playerId = parsed.playerId ? parsed.playerId.toString() : undefined;
+    const url = parsed.url.split('?')[0];
+
+    customLogger.info(message,
+      {
+        labels: {
+          user: userId,
+          server: serverId,
+          player: playerId,
+          httpMethod: parsed.method,
+          url: url,
+        }
+      });
   }
 };
 

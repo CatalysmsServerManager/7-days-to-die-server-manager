@@ -49,7 +49,7 @@ class HighPingCount {
 
     if (_.isUndefined(loggingObject)) {
       this.sails.log.warn(`Tried to start ping kicker for a server without a loggingObject - ${server.name}`, {
-        server: server.id
+        server
       });
       return;
     }
@@ -73,7 +73,7 @@ class HighPingCount {
     try {
       pingWhitelist = JSON.parse(config.pingWhitelist);
     } catch (error) {
-      return this.sails.log.error(`Error parsing ping whitelist entries for ${server.name}`);
+      return this.sails.log.error(`Error parsing ping whitelist entries for ${server.name}`, {server});
     }
 
     let onlinePlayers = await this.sails.helpers.sdtdApi.getOnlinePlayers(SdtdServer.getAPIConfig(server));
@@ -89,13 +89,13 @@ class HighPingCount {
         });
 
         if (_.isUndefined(playerRecord)) {
-          this.sails.log.warn(`Did not find player data for ${JSON.stringify(onlinePlayer)}`);
+          this.sails.log.warn(`Did not find player data for ${JSON.stringify(onlinePlayer)}`, {player: playerRecord, server});
           continue;
         }
 
         const isWhitelisted = pingWhitelist.includes(playerRecord.steamId);
         if (isWhitelisted) {
-          this.sails.log.warn(`Whitelisted player(${playerRecord.steamId}) has too high of ping count`);
+          this.sails.log.warn(`Whitelisted player(${playerRecord.steamId}) has too high of ping count`, {player: playerRecord, server});
           continue;
         }
 
@@ -106,7 +106,7 @@ class HighPingCount {
           if (currentFailedChecks >= config.pingChecksToFail) {
             await this.kickPlayer(playerRecord, server, config.pingKickMessage);
             await this.setPlayerFails(playerRecord.id, 0);
-            this.sails.log.debug(`Kicked player ${playerRecord.id} from server ${server.name} for high ping! ping = ${onlinePlayer.ping}`);
+            this.sails.log.debug(`Kicked player ${playerRecord.id} from server ${server.name} for high ping! ping = ${onlinePlayer.ping}`, {player: playerRecord, server});
           } else {
             await this.setPlayerFails(playerRecord.id, currentFailedChecks + 1);
           }
@@ -119,11 +119,11 @@ class HighPingCount {
     }
 
     let dateEnded = new Date();
-    this.sails.log.debug(`Performed maxPingCheck for ${server.name} - ${failedChecksForServer} / ${onlinePlayers.length} players failed the check - took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`);
+    this.sails.log.debug(`Performed maxPingCheck for ${server.name} - ${failedChecksForServer} / ${onlinePlayers.length} players failed the check - took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`, {server});
   }
 
   async kickPlayer(player, server, reason) {
-    await this.sails.helpers.sdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(server), `kick ${player.steamId} "${reason}"`);
+    await this.sails.helpers.sdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(server), `kick ${player.steamId} "${reason}"`, {server,player});
   }
 
   getPlayerFails(playerId) {

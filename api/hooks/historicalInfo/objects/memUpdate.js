@@ -8,17 +8,17 @@ class MemUpdate {
   }
 
   async start() {
-    sails.log.silly(`started memUpdate for server ${this.server.name}`);
+    sails.log.debug(`started memUpdate for server ${this.server.name}`, {server: this.server});
     this.loggingObject.on('memUpdate', this.updateListener);
   }
 
   async stop() {
-    sails.log.silly(`stopped memUpdate  for server ${this.server.name}`);
+    sails.log.debug(`stopped memUpdate  for server ${this.server.name}`, {server: this.server});
     this.loggingObject.removeListener('memUpdate', this.updateListener);
   }
 
   async _updateListener(memUpdate) {
-    sails.log.silly(`Received a mem update for server ${this.server.name}`);
+    sails.log.debug(`Received a mem update for server ${this.server.name}`, {server: this.server});
     await sails.helpers.redis.set(`server:${this.server.id}:fps`, memUpdate.fps);
     await saveInfoToDatabase(this.server, memUpdate);
 
@@ -28,7 +28,7 @@ class MemUpdate {
     if (!currentCycles) {
       currentCycles = 1;
     }
-    sails.log.debug(`HOOK - historicalInfo - checking if we need to delete data - ${currentCycles}/${sails.config.custom.trackingCyclesBeforeDelete} cycles`);
+    sails.log.debug(`HOOK - historicalInfo - checking if we need to delete data - ${currentCycles}/${sails.config.custom.trackingCyclesBeforeDelete} cycles`, {server: this.server});
     if (currentCycles >= sails.config.custom.trackingCyclesBeforeDelete) {
       await clearOldInfo(this.server, this.config);
     }
@@ -58,7 +58,7 @@ async function saveInfoToDatabase(server, memUpdate) {
       uptime: memUpdate.uptime
     });
   } catch (error) {
-    sails.log.error(`HOOKS - Analytics:memUpdate - Error saving data -${error}`);
+    sails.log.error(`HOOKS - Analytics:memUpdate - Error saving data -${error}`, {server});
   }
 }
 
@@ -76,9 +76,9 @@ async function clearOldInfo(server) {
 
     let dateEnded = Date.now();
 
-    sails.log.debug(`Deleted historical data of type memUpdate for server ${server.id} - took ${dateEnded - dateNow} ms`);
+    sails.log.debug(`Deleted historical data of type memUpdate for server ${server.id} - took ${dateEnded - dateNow} ms`, {server});
   } catch (error) {
-    sails.log.error(`HOOKS - Analytics:memUpdate - Error deleting data - ${error}`);
+    sails.log.error(`HOOKS - Analytics:memUpdate - Error deleting data - ${error}`, {server});
   }
 
 }

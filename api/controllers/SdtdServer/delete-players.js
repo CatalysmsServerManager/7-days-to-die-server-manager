@@ -46,7 +46,7 @@ module.exports = {
       id: playersToDestroyIds
     });
 
-    sails.log.info(`Deleted ${playersToDestroy.length} player(s) from server ${server.name}`);
+    sails.log.info(`Deleted ${playersToDestroy.length} player(s) from server ${server.name}`, {server});
 
     return exits.success(playersToDestroy);
   }

@@ -107,11 +107,11 @@ module.exports = {
 
       sails.log.info(
         `API - SdtdServer:update-connection-info - Updated connection info for server ${inputs.serverId}`,
-        _.omit(inputs, ['authName', 'authToken'])
+        {newSettings: _.omit(inputs, ['authName', 'authToken']),  serverId: inputs.serverId}
       );
       return exits.success();
     } catch (error) {
-      sails.log.error(`API - SdtdServer:update-connection-info - ${error}`);
+      sails.log.error(`API - SdtdServer:update-connection-info - ${error}`, {serverId: inputs.serverId});
       return exits.error(error);
     }
   }

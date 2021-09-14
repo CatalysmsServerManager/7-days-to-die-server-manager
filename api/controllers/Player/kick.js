@@ -55,13 +55,13 @@ module.exports = {
           return exits.notFound('Cannot kick player, invalid ID given!');
         },
         success: function (response) {
-          sails.log.info(`API - Player:kick - Kicking player from server ${inputs.serverId}`, player);
+          sails.log.info(`API - Player:kick - Kicking player from server ${inputs.serverId}`, {player});
           return exits.success(response);
         }
       });
 
     } catch (error) {
-      sails.log.error(`API - Player:kick - ${error}`);
+      sails.log.error(`API - Player:kick - ${error}`, {playerId: inputs.playerId});
       return exits.error(error);
     }
 

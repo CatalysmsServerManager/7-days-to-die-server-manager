@@ -30,7 +30,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    sails.log.info(`Setting message of pingKicker to ${inputs.message} for server ${inputs.serverId}`);
+    sails.log.info(`Setting message of pingKicker to ${inputs.message} for server ${inputs.serverId}`, {serverId: inputs.serverId});
 
     await SdtdConfig.update({server: inputs.serverId}, {pingKickMessage: inputs.message});
 

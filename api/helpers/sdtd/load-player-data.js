@@ -130,16 +130,14 @@ module.exports = {
 
         playerProfile[0].role = await sails.helpers.sdtd.getPlayerRole(playerProfile[0].id);
 
-        sails.log.verbose(`Loaded a player - ${playerProfile[0].id} - ${playerProfile[0].name} - server: ${server.name}`);
+        sails.log.verbose(`Loaded a player - ${playerProfile[0].id} - ${playerProfile[0].name} - server: ${server.name}`, {serverId: inputs.serverId, player: playerProfile[0]});
         playerProfile[0].name = he.decode(playerProfile[0].name);
         playersToSend.push(playerProfile[0]);
       }
       let dateEnded = new Date();
 
       if (playersToSend.length > 0) {
-        sails.log.debug(`HELPER - loadPlayerData - Loaded player data for ${server.name}! Took ${dateEnded.valueOf() - dateStarted.valueOf()} ms - SteamId: ${inputs.steamId}`, playersToSend.map(player => {
-          return player.name;
-        }), inputs);
+        sails.log.debug(`HELPER - loadPlayerData - Loaded player data for ${server.name}! Took ${dateEnded.valueOf() - dateStarted.valueOf()} ms - SteamId: ${inputs.steamId}`, {serverId: inputs.serverId});
       }
       return exits.success(playersToSend);
 
@@ -209,7 +207,7 @@ function loadPlayerInventory(steamId, server) {
       steamId: steamId
     }).exec({
       error: function (err) {
-        sails.log.error(`HELPER - loadPlayerData:loadPlayerInventory ${err}`);
+        sails.log.error(`HELPER - loadPlayerData:loadPlayerInventory ${err}`, {server});
         resolve(undefined);
       },
       success: function (data) {

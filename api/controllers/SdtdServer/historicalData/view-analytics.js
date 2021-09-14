@@ -27,12 +27,12 @@ module.exports = {
         id: inputs.serverId
       });
 
-      sails.log.info(`VIEW - SdtdServer:analytics-view - serving analytics view for server ${server.name}`);
+      sails.log.info(`VIEW - SdtdServer:analytics-view - serving analytics view for server ${server.name}`, {serverId: inputs.serverId});
       exits.success({
         server: server
       });
     } catch (error) {
-      sails.log.error(`VIEW - SdtdServer:analytics-view - ${error}`);
+      sails.log.error(`VIEW - SdtdServer:analytics-view - ${error}`, {serverId: inputs.serverId});
     }
 
   }
