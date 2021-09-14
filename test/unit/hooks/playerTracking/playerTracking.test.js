@@ -34,7 +34,7 @@ describe('Player tracking', () => {
       }
     });
 
-    await hook(sails.testServer.id);
+    await hook({data: {serverId: sails.testServer.id}});
 
     expect(trackingFunctions.basic).to.have.been.calledOnce;
     expect(trackingFunctions.location).to.have.been.calledOnce;
@@ -61,7 +61,7 @@ describe('Player tracking', () => {
       }
     });
 
-    await hook(sails.testServer.id);
+    await hook({data: {serverId: sails.testServer.id}});
 
     expect(trackingFunctions.basic).to.not.have.been.calledOnce;
     expect(trackingFunctions.location).to.not.have.been.calledOnce;
@@ -93,7 +93,7 @@ describe('Player tracking', () => {
     sails.config.custom.donorConfig[sails.config.custom.trackingCyclesBeforeDelete + 1] = {};
     sails.config.custom.donorConfig[sails.config.custom.trackingCyclesBeforeDelete + 1].playerTrackerKeepLocationHours = 8;
 
-    await hook(sails.testServer.id);
+    await hook({data: {serverId: sails.testServer.id}});
 
     expect(sails.sendNativeQuery).to.have.been.calledOnceWith('DELETE FROM trackinginfo WHERE server = $1 AND createdAt < $2;', sinon.match.any);
   });
@@ -117,7 +117,7 @@ describe('Player tracking', () => {
 
       sandbox.spy(Player, 'update');
 
-      await hook(sails.testServer.id);
+      await hook({data: {serverId: sails.testServer.id}});
       expect(Player.update).to.have.been.calledOnceWith(sails.testPlayer.id);
     });
 
@@ -143,7 +143,7 @@ describe('Player tracking', () => {
       });
 
       await Player.update(sails.testPlayer.id, { zombieKills: 4 });
-      await hook(sails.testServer.id);
+      await hook({data: {serverId: sails.testServer.id}});
 
       expect(Bull.prototype.add).to.have.been.calledOnceWith(sinon.match.has('zombieKills', 4));
       expect(Bull.prototype.add).to.have.been.calledOnceWith(sinon.match.has('zombiesKilled', 1));
@@ -172,7 +172,7 @@ describe('Player tracking', () => {
       });
 
       await Player.update(sails.testPlayer.id, { playerKills: 4 });
-      await hook(sails.testServer.id);
+      await hook({data: {serverId: sails.testServer.id}});
 
       expect(Bull.prototype.add).to.have.been.calledOnceWith(sinon.match.has('playerKills', 4));
       expect(Bull.prototype.add).to.have.been.calledOnceWith(sinon.match.has('playersKilled', 1));
@@ -201,7 +201,7 @@ describe('Player tracking', () => {
       });
 
       await Player.update(sails.testPlayer.id, { level: 4 });
-      await hook(sails.testServer.id);
+      await hook({data: {serverId: sails.testServer.id}});
 
       expect(Bull.prototype.add).to.have.been.calledOnceWith('levelup', sinon.match.any);
     });
@@ -228,7 +228,7 @@ describe('Player tracking', () => {
       });
 
       await Player.update(sails.testPlayer.id, { score: 4 });
-      await hook(sails.testServer.id);
+      await hook({data: {serverId: sails.testServer.id}});
 
       expect(Bull.prototype.add).to.have.been.calledOnceWith('score', sinon.match.any);
     });

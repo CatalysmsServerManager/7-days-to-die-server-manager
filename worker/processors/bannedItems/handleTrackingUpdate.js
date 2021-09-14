@@ -17,7 +17,7 @@ module.exports = async function handleItemTrackerUpdate(data) {
     try {
 
       if (!onlinePlayer.inventory) {
-        sails.log.warn('HOOK:bannedItems - onlinePlayer does not have inventory property', {player: onlinePlayer, server});
+        sails.log.warn('HOOK:bannedItems - onlinePlayer does not have inventory property', {playerId: onlinePlayer.player, server});
         continue;
       }
 
@@ -31,7 +31,7 @@ module.exports = async function handleItemTrackerUpdate(data) {
         const isImmune = await sails.helpers.roles.checkPermission(undefined, server.id, onlinePlayer.player, undefined, 'immuneToBannedItemsList');
 
         if (isImmune.hasPermission) {
-          sails.log.debug(`HOOK:bannedItems - banned items detected but player is immune player ${onlinePlayer.player} from server ${onlinePlayer.server}`, {player: onlinePlayer, server});
+          sails.log.debug(`HOOK:bannedItems - banned items detected but player is immune player ${onlinePlayer.player} from server ${onlinePlayer.server}`, {playerId: onlinePlayer.player, server});
           continue;
         }
 
@@ -48,18 +48,18 @@ module.exports = async function handleItemTrackerUpdate(data) {
 
           if (bannedItemRole.level < playerRole.level) {
             sails.log.info(
-              `Detected banned item(s) on player ${onlinePlayer.player} from server ${onlinePlayer.server}`, {player: onlinePlayer, server}
+              `Detected banned item(s) on player ${onlinePlayer.player} from server ${onlinePlayer.server}`, {player, server}
             );
             await executePunishment(onlinePlayer.player, server, bannedItem);
           }
         }
       } else {
-        sails.log.debug(`HOOK:bannedItems - no banned items detected from player ${onlinePlayer.player} from server ${onlinePlayer.server}`, {player: onlinePlayer, server});
+        sails.log.debug(`HOOK:bannedItems - no banned items detected from player ${onlinePlayer.player} from server ${onlinePlayer.server}`, {playerId: onlinePlayer.player, server});
       }
 
     } catch (e) {
       Sentry.captureException(e);
-      sails.log.error(`HOOK:bannedItems - Error while checking player ${onlinePlayer.player} from server ${onlinePlayer.server}`, {player: onlinePlayer, server});
+      sails.log.error(`HOOK:bannedItems - Error while checking player ${onlinePlayer.player} from server ${onlinePlayer.server}`, {playerId: onlinePlayer.player, server});
     }
   }
 };
