@@ -1,7 +1,6 @@
 require('dotenv').config();
 
 const sails = require('sails');
-const SdtdApi = require('7daystodie-api-wrapper');
 const Sentry = require('@sentry/node');
 
 const configOverrides = {
@@ -51,10 +50,7 @@ sails.load(configOverrides, async function (err) {
     await new Promise(resolve => process.stderr.once('drain', () => resolve()));
     process.exit(1);
   }
-  sails.helpers.sdtdApi = {};
-  for (const func of Object.keys(SdtdApi)) {
-    sails.helpers.sdtdApi[func] = SdtdApi[func];
-  }
+
   sails.log('Running bulls worker');
   Sentry.configureScope(function (scope) {
     scope.setTag('workerProcess', process.env.npm_lifecycle_event || 'worker');

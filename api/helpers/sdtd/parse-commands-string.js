@@ -1,6 +1,4 @@
 const split = require('split-string');
-const Handlebars = require('../../../worker/util/Handlebars');
-
 
 module.exports = {
 
@@ -36,16 +34,7 @@ module.exports = {
 
 
   fn: function (inputs, exits) {
-
-
-    let result;
-    try {
-      const compiledTemplate = Handlebars.compile(inputs.commands);
-      result = compiledTemplate(inputs.data);
-    } catch (error) {
-      sails.log.warn(`Invalid handlebars template! Falling back to "dumb parsing" - ${error.message}`);
-      result = inputs.commands;
-    }
+    result = inputs.commands;
 
     result = split(result, { separator: ';', quotes: ['"'] });
     result = result

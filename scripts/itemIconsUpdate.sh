@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 set -ex
 rm -rf assets/images/sdtdIcons/
 mkdir -p assets/images/sdtdIcons/

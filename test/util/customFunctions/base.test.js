@@ -29,8 +29,11 @@ describe('CustomFunction base', function () {
     const x = `${Number.MAX_SAFE_INTEGER + 100}`;
     instance.run(sails.testServer, x);
     expect(stub).to.have.been.calledOnceWith(sails.testServer, [x]);
+  });
 
-
+  it('Returns a string without truncating if the message starts with an integer', async () => {
+    instance.run(sails.testServer, '12345 bla bla bla');
+    expect(stub).to.have.been.calledOnceWith(sails.testServer, ['12345 bla bla bla']);
   });
 
 });

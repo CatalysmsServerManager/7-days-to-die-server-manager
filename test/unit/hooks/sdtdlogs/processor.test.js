@@ -94,6 +94,7 @@ describe('Worker processor logs', () => {
   });
 
   it('Sets a server slowmode when it fails a lot', async () => {
+    sandbox.stub(sails.helpers.sdtd, 'checkModVersion').resolves(30);
     await sails.helpers.redis.set(
       `sdtdserver:${sails.testServer.id}:sdtdLogs:lastSuccess`, Date.now());
     const job = { data: { serverId: sails.testServer.id } };
@@ -125,32 +126,4 @@ describe('Worker processor logs', () => {
     expect(jobs.length).to.be.equal(1);
     expect(jobs[0].every).to.be.equal(sails.config.custom.logCheckIntervalSlowMode);
   });
-  it('Sets a server inactive when it hasnt responded in 3 days', async () => {
-    // Last active 4 days ago
-    await sails.helpers.redis.set(
-      `sdtdserver:${sails.testServer.id}:sdtdLogs:lastSuccess`,
-      Date.now() - (1000 * 60 * 60 * 24 * 4)
-    );
-
-    // Check if there are no current jobs in the queue
-    // There should not be because the hook is not actually running during tests
-    let jobs = await queue.getRepeatableJobs();
-    expect(jobs.length).to.be.equal(0);
-
-    const job = { data: { serverId: sails.testServer.id } };
-
-    sails.helpers.sdtdApi.getLog.rejects(new Error('FetchError: Oh no bad stuff'));
-    sails.helpers.sdtdApi.getWebUIUpdates.rejects(new Error('FetchError: Oh no bad stuff'));
-
-    await SdtdConfig.update({ server: sails.testServer.id }, { slowMode: true });
-
-    const res = await processor(job);
-    expect(res).to.have.property('setInactive');
-    expect(res.setInactive).to.be.equal(true);
-
-    jobs = await queue.getRepeatableJobs();
-    expect(jobs.length).to.be.equal(0);
-  });
-
-
 });

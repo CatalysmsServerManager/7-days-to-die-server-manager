@@ -1,24 +1,26 @@
 FROM node:14-alpine AS builder
 
-RUN apk --no-cache add curl=7.67.0-r5 git=2.24.4-r0
+RUN apk --no-cache add curl=7.67.0-r5 git=2.24.4-r0 jq=1.6-r0
 
 # Create app directory
 WORKDIR /usr/src/app
 RUN chown -R node:node /usr/src/app
 USER node
 
+COPY scripts/ ./scripts
+
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
 COPY package*.json ./
 
+ARG PLAYGROUND_VERSION=latest
+RUN echo "Using playground version $PLAYGROUND_VERSION"
+
 RUN npm ci --only=production
 
 # Bundle app source
 COPY --chown=node:node . .
-
-# Install 7d2d item icons
-RUN ash /usr/src/app/scripts/itemIconsUpdate.sh
 
 FROM node:14-alpine
 WORKDIR /usr/src/app
