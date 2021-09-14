@@ -101,18 +101,39 @@ morgan.token('userId', function (req) {
   }
 });
 
-
-const morganLogger = morgan(':remote-addr - :userId - [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"', {
-  'stream': customLogger.stream,
-  skip: (req) => {
-    if (process.env.IS_TEST) { return true; }
-    return !req.originalUrl.includes('api');
+morgan.token('serverId', function (req) {
+  if (req.params && req.params.serverId) {
+    return req.params.serverId;
   }
+
+  if (req.query && req.query.serverId) {
+    return req.query.serverId;
+  }
+
 });
 
+function morganJson(tokens, req,res) {
+  return JSON.stringify({
+    'remote-address': tokens['remote-addr'](req, res),
+    'time': tokens['date'](req, res, 'iso'),
+    'method': tokens['method'](req, res),
+    'url': tokens['url'](req, res),
+    'http-version': tokens['http-version'](req, res),
+    'status-code': tokens['status'](req, res),
+    'content-length': tokens['res'](req, res, 'content-length'),
+    'referrer': tokens['referrer'](req, res),
+    'user-agent': tokens['user-agent'](req, res),
+    'userId': tokens['userId'](req, res),
+    'serverId': tokens['serverId'](req, res),
+  });
+}
 
-
-
+const morganLogger = morgan(morganJson, {
+  'stream': customLogger.stream,
+  skip: (req) => {
+    return !!process.env.IS_TEST;
+  }
+});
 
 module.exports.http = {
 
