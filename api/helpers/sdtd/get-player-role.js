@@ -45,7 +45,7 @@ module.exports = {
       foundRole = await sails.helpers.roles.getDefaultRole(player.server);
     }
 
-    sails.log.debug(`Found role ${foundRole.name} for player ${player.name}`, {player});
+    sails.log.debug(`Found role ${foundRole.name} for player ${player.name}`, {player, serverId: player.server});
     return exits.success(foundRole);
 
   }
