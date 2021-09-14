@@ -97,7 +97,7 @@ morgan.token('userId', function (req) {
   if (req.session) {
     return req.session.userId;
   } else {
-    return 'Not logged in';
+    return undefined;
   }
 });
 
@@ -109,7 +109,16 @@ morgan.token('serverId', function (req) {
   if (req.query && req.query.serverId) {
     return req.query.serverId;
   }
+});
 
+morgan.token('playerId', function (req) {
+  if (req.params && req.params.playerId) {
+    return req.params.playerId;
+  }
+
+  if (req.query && req.query.playerId) {
+    return req.query.playerId;
+  }
 });
 
 function morganJson(tokens, req,res) {
@@ -125,6 +134,7 @@ function morganJson(tokens, req,res) {
     'user-agent': tokens['user-agent'](req, res),
     'userId': tokens['userId'](req, res),
     'serverId': tokens['serverId'](req, res),
+    'playerId': tokens['playerId'](req, res),
   });
 }
 

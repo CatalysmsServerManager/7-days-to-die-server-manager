@@ -122,6 +122,7 @@ customLogger.stream = {
 
     const userId = parsed.userId ? parsed.userId.toString() : undefined;
     const serverId = parsed.serverId ? parsed.serverId.toString() : undefined;
+    const playerId = parsed.playerId ? parsed.playerId.toString() : undefined;
     const url = parsed.url.split('?')[0];
 
     customLogger.info(message,
@@ -129,6 +130,7 @@ customLogger.stream = {
         labels: {
           user: userId,
           server: serverId,
+          player: playerId,
           httpMethod: parsed.method,
           url: url,
         }
