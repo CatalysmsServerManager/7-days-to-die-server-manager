@@ -30,7 +30,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    sails.log.info(`Setting status of GBL autoban to ${inputs.status} for server ${inputs.serverId}`);
+    sails.log.info(`Setting status of GBL autoban to ${inputs.status} for server ${inputs.serverId}`, {serverId: inputs.serverId});
 
     await SdtdConfig.update({server: inputs.serverId}, {gblAutoBanEnabled: inputs.status});
 

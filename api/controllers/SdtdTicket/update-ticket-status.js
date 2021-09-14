@@ -58,7 +58,7 @@ module.exports = {
 
       return exits.success();
     } catch (error) {
-      sails.log.error(`API - SdtdTicket:update-ticket-status - ${error}`);
+      sails.log.error(`API - SdtdTicket:update-ticket-status - ${error}`, {serverId: inputs.serverId});
       return exits.error(error);
     }
 

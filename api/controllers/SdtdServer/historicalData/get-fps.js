@@ -30,7 +30,7 @@ module.exports = {
         limit: 5000
       });
       let dateEnded = new Date();
-      sails.log.debug(`Retrieved FPS data - took ${dateEnded - dateStarted} ms`);
+      sails.log.debug(`Retrieved FPS data - took ${dateEnded - dateStarted} ms`, {serverId: inputs.serverId});
       return exits.success(dataToSend.map(dataPoint => {
         return {
           createdAt: dataPoint.createdAt,

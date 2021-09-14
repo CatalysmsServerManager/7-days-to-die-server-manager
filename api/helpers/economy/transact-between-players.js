@@ -44,7 +44,7 @@ module.exports = {
       await sails.helpers.economy.giveToPlayer(inputs.toPlayerId, inputs.amount);
       await sails.helpers.economy.deductFromPlayer(inputs.fromPlayerId, inputs.amount);
     } catch (error) {
-      sails.log.error(`HELPER economy:transact-between-players - ${error}`);
+      sails.log.error(`HELPER economy:transact-between-players - ${error}`, {playerId: inputs.fromPlayerId});
       return exits.error(error);
     }
 

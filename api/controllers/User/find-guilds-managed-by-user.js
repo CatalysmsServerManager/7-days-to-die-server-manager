@@ -67,10 +67,10 @@ module.exports = {
         }
       }
 
-      sails.log.debug(`API - SdtdServer:find-guilds-managed-by-user - Found ${foundGuilds.length} guilds for user ${inputs.userId}!`);
+      sails.log.debug(`API - SdtdServer:find-guilds-managed-by-user - Found ${foundGuilds.length} guilds for user ${inputs.userId}!`, {userId: inputs.userId});
       return exits.success(foundGuilds);
     } catch (error) {
-      sails.log.error(`API - SdtdServer:find-guilds-managed-by-user - ${error}`);
+      sails.log.error(`API - SdtdServer:find-guilds-managed-by-user - ${error}`, {userId: inputs.userId});
       return exits.error(error);
     }
 

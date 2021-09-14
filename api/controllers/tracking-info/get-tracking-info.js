@@ -115,7 +115,7 @@ module.exports = {
     let infoToSend = await TrackingInfo.find(waterlineQuery);
 
     let endDate = new Date();
-    sails.log.info(`Loaded ${infoToSend.length} records of player tracking data for server ${inputs.serverId} - Took ${endDate.valueOf() - startDate.valueOf()} ms`, JSON.stringify(waterlineQuery));
+    sails.log.info(`Loaded ${infoToSend.length} records of player tracking data for server ${inputs.serverId} - Took ${endDate.valueOf() - startDate.valueOf()} ms`, {waterlineQuery, serverId: inputs.serverId});
 
     return exits.success(infoToSend);
 

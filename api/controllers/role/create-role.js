@@ -48,7 +48,7 @@ module.exports = {
       server: inputs.serverId
     }).fetch();
 
-    sails.log.info(`Created a role with name ${inputs.name} and level ${inputs.level} for server ${server.name}`);
+    sails.log.info(`Created a role with name ${inputs.name} and level ${inputs.level} for server ${server.name}`, {server});
 
     return exits.success(createdRole);
 

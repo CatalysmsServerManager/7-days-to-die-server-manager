@@ -29,7 +29,7 @@ module.exports = {
       });
       return exits.success();
     } catch (error) {
-      sails.log.error(`API - Sdtdserver:enable-economy - ${error}`);
+      sails.log.error(`API - Sdtdserver:enable-economy - ${error}`, {serverId: inputs.serverId});
       return exits.error(error);
     }
 

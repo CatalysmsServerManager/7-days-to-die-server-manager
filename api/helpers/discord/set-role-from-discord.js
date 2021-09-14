@@ -26,7 +26,7 @@ module.exports = {
     }).populate('server');
 
     if (!user.discordId) {
-      sails.log.debug('[setRoleFromDiscord] User has no discord ID linked, exiting');
+      sails.log.debug('[setRoleFromDiscord] User has no discord ID linked, exiting', {player, user});
       return exits.success(player, undefined);
     }
 
@@ -47,7 +47,7 @@ module.exports = {
 
 
     if (_.isUndefined(highestRole[0])) {
-      sails.log.warn(`[setRoleFromDiscord] No highest role found for server ${player.server}. If there are no Discord roles linked to CSMM roles, this is normal.`);
+      sails.log.warn(`[setRoleFromDiscord] No highest role found for server ${player.server}. If there are no Discord roles linked to CSMM roles, this is normal.`, {player, server: player.server});
       return exits.success(player, undefined);
     }
 
@@ -57,7 +57,7 @@ module.exports = {
       }, {
         role: highestRole[0].id
       });
-      sails.log.debug(`[setRoleFromDiscord] Modified a players role - player ${player.id}. ${player.name} to role ${highestRole[0] ? highestRole[0].name : null}`);
+      sails.log.debug(`[setRoleFromDiscord] Modified a players role - player ${player.id}. ${player.name} to role ${highestRole[0] ? highestRole[0].name : null}`, {player, server: player.server});
     }
     return exits.success(player, highestRole[0]);
   },

@@ -7,7 +7,7 @@ module.exports = function isCsmmAdmin(req, res, next) {
         if (sails.config.custom.adminSteamIds.includes(foundUser.steamId)) {
           return next();
         }
-        sails.log.warn(`POLICY - isCsmmAdmin - ${req.ip} - ${foundUser.steamId} is not a csmm admin, redirecting to root`);
+        sails.log.warn(`POLICY - isCsmmAdmin - ${req.ip} - ${foundUser.steamId} is not a csmm admin, redirecting to root`, {user: foundUser});
         return res.redirect('/');
       }
     }

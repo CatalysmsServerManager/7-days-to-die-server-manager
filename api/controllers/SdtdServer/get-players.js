@@ -73,7 +73,7 @@ module.exports = {
       }
 
     } catch (error) {
-      sails.log.error(`API - SdtdServer:getPlayers - ${error}`);
+      sails.log.error(`API - SdtdServer:getPlayers - ${error}`, {serverId: inputs.serverId});
       return exits.error(error);
     }
 

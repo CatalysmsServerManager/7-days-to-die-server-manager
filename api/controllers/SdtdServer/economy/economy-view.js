@@ -27,13 +27,13 @@ module.exports = {
     try {
       let server = await SdtdServer.findOne(inputs.serverId);
       let config = await SdtdConfig.findOne({ server: server.id });
-      sails.log.info(`VIEW - SdtdServer:economy - Showing economy overview for ${server.name}`);
+      sails.log.info(`VIEW - SdtdServer:economy - Showing economy overview for ${server.name}`, {server});
       return exits.success({
         server: server,
         config: config,
       });
     } catch (error) {
-      sails.log.error(`VIEW - SdtdServer:economy - ${error}`);
+      sails.log.error(`VIEW - SdtdServer:economy - ${error}`, {serverId: inputs.serverId});
       throw 'notFound';
     }
 

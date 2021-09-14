@@ -63,16 +63,16 @@ module.exports = {
           return exits.error(error);
         },
         unknownPlayer: function () {
-          return exits.notFound('Cannot ban player, invalid ID given!');
+          return exits.notFound('Cannot ban player, invalid ID given!', {player, server});
         },
         success: function (response) {
-          sails.log.info(`API - Player:ban - banned player on server ${inputs.serverId}`, player);
+          sails.log.info(`API - Player:ban - banned player on server ${inputs.serverId}`, {player, server});
           return exits.success(response);
         }
       });
 
     } catch (error) {
-      sails.log.error(`API - Player:ban - ${error}`);
+      sails.log.error(`API - Player:ban - ${error}`, {playerId: inputs.playerId});
       return exits.error(error);
     }
 

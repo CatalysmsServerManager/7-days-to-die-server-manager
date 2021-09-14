@@ -77,7 +77,7 @@ module.exports = {
       try {
         await sails.helpers.discord.setRoleFromDiscord(inputs.playerId);
       } catch (error) {
-        sails.log.debug(`Couldn't update players roles via discord - ${error}`);
+        sails.log.debug(`Couldn't update players roles via discord - ${error}`, {playerId: inputs.playerId, serverId: inputs.serverId, userId: inputs.userId});
       }
     }
 
@@ -145,7 +145,7 @@ module.exports = {
     }
 
 
-    sails.log.debug(`Checked if ${inputs.playerId ? `player ${inputs.playerId}` : `user ${inputs.userId}`} has permission ${inputs.permission} - ${hasPermission}`);
+    sails.log.debug(`Checked if ${inputs.playerId ? `player ${inputs.playerId}` : `user ${inputs.userId}`} has permission ${inputs.permission} - ${hasPermission}`, {playerId: inputs.playerId, serverId: inputs.serverId, userId: inputs.userId});
 
     // All done.
     return exits.success(result);

@@ -61,7 +61,7 @@ module.exports = {
         foundUser = await developerGuild.members.fetch(server.owner.discordId);
         discordUser = foundUser;
       } catch (error) {
-        sails.log.error(error);
+        sails.log.error(error, {userId: inputs.userId, serverId: inputs.serverId});
       }
     }
 
@@ -78,7 +78,7 @@ module.exports = {
           discordUser = foundUser;
         }
       } catch (error) {
-        sails.log.error(error);
+        sails.log.error(error, {userId: inputs.userId, serverId: inputs.serverId});
       }
     }
 

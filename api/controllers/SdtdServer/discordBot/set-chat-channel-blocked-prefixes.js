@@ -37,10 +37,11 @@ module.exports = {
       inputs.blockedPrefixes = inputs.blockedPrefixes.split(',');
 
       await SdtdConfig.update({ server: server.id }, { chatChannelBlockedPrefixes: inputs.blockedPrefixes });
-      sails.log.info(`Configured chat bridge blocked prefixes for ${server.name} - ${inputs.blockedPrefixes}`);
+      sails.log.info(`Configured chat bridge blocked prefixes for ${server.name} - ${inputs.blockedPrefixes}`, {serverId: inputs.serverId});
       return exits.success();
 
     } catch (error) {
+      sails.log.error(error, {serverId: inputs.serverId});
       return exits.error(error);
     }
 

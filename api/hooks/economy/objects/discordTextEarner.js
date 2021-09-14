@@ -10,16 +10,16 @@ class DiscordTextEarner {
 
   async start() {
     try {
-      sails.log.debug(`Started discord text earner for server ${this.server.name}`);
+      sails.log.debug(`Started discord text earner for server ${this.server.name}`, {server: this.server});
       this.messageEmitter.on(this.config.discordGuildId, this.messageHandler);
 
     } catch (error) {
-      sails.log.error(error);
+      sails.log.error(error, {server: this.server});
     }
   }
 
   async stop() {
-    sails.log.debug(`Stopped discord text earner for server ${this.server.name}`);
+    sails.log.debug(`Stopped discord text earner for server ${this.server.name}`, {server: this.server});
     this.messageEmitter.removeListener(this.config.discordGuildId, this.messageHandler);
 
 

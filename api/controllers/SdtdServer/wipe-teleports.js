@@ -34,7 +34,7 @@ module.exports = {
 
     await PlayerTeleport.destroy({ id: reduced });
 
-    sails.log.info(`Deleted all teleports for server ${server.name}`);
+    sails.log.info(`Deleted all teleports for server ${server.name}`, {server});
 
     return exits.success(playersToDestroy);
   }

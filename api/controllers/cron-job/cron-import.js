@@ -91,7 +91,7 @@ module.exports = {
         newCron.server = inputs.serverId;
         return newCron;
       }));
-      sails.log.info(`Imported ${newData.length} cron jobs for server ${inputs.serverId}`);
+      sails.log.info(`Imported ${newData.length} cron jobs for server ${inputs.serverId}`, {serverId: inputs.serverId});
       return exits.success();
     } else {
       return exits.invalidInput(problems);

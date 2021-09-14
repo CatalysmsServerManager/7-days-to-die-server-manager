@@ -33,13 +33,13 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    sails.log.debug(`API - SdtdServer:loadServerInfo - loading info for server ${inputs.serverId}`);
+    sails.log.debug(`API - SdtdServer:loadServerInfo - loading info for server ${inputs.serverId}`, {serverId: inputs.serverId});
 
     try {
       let serverInfo = await sails.helpers.loadSdtdserverInfo(inputs.serverId);
       exits.success(serverInfo);
     } catch (error) {
-      sails.log.error(`API - SdtdServer:loadServerInfo - ${error}`);
+      sails.log.error(`API - SdtdServer:loadServerInfo - ${error}`, {serverId: inputs.serverId});
     }
   }
 

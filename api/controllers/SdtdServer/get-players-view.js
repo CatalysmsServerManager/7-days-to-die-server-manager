@@ -42,14 +42,14 @@ module.exports = {
     const defaultRole = await sails.helpers.roles.getDefaultRole(inputs.serverId);
     let server = await SdtdServer.findOne(inputs.serverId);
     try {
-      sails.log.info(`VIEW - SdtdServer:players - Showing players for ${server.name}`);
+      sails.log.info(`VIEW - SdtdServer:players - Showing players for ${server.name}`, {server});
 
       exits.success({
         server: server,
         defaultRole: defaultRole
       });
     } catch (error) {
-      sails.log.error(`VIEW - SdtdServer:players - ${error}`);
+      sails.log.error(`VIEW - SdtdServer:players - ${error}`, {serverId: inputs.serverId});
     }
 
   }

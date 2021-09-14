@@ -88,7 +88,7 @@ module.exports = {
     });
 
     let endDate = new Date();
-    sails.log.info(`Loaded ${infoToSend.length} records of player tracking data for server ${inputs.serverId}. Searched for ${inputs.x} ${inputs.z} and radius ${inputs.radius} - Took ${endDate.valueOf() - startDate.valueOf()} ms`);
+    sails.log.info(`Loaded ${infoToSend.length} records of player tracking data for server ${inputs.serverId}. Searched for ${inputs.x} ${inputs.z} and radius ${inputs.radius} - Took ${endDate.valueOf() - startDate.valueOf()} ms`, {serverId: inputs.serverId});
 
     return exits.success(infoToSend);
 

@@ -37,7 +37,7 @@ module.exports = {
         await sails.hooks.cron.start(jobToStart.id);
       } catch (error) {
         sails.log.error(
-          `Error initializing cronjob ${jobToStart.id} - ${error}`
+          `Error initializing cronjob ${jobToStart.id} - ${error}`, {server}
         );
       }
     }
@@ -79,7 +79,7 @@ module.exports = {
     );
     sails.log.info(
       `Server has been marked as active.`,
-      _.omit(server, 'authName', 'authToken')
+      {server}
     );
 
     return exits.success();

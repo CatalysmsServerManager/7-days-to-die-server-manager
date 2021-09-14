@@ -29,7 +29,7 @@ module.exports = {
 
     await Player.update({ id: playersToDestroy.map(_ => _.id) }, { currency: 0 });
 
-    sails.log.info(`Set currency of ${playersToDestroy.length} player(s) from server ${server.name} to 0`);
+    sails.log.info(`Set currency of ${playersToDestroy.length} player(s) from server ${server.name} to 0`, {server});
 
     return exits.success(playersToDestroy);
   }

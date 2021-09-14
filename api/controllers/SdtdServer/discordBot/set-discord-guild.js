@@ -60,10 +60,10 @@ module.exports = {
         discordGuildId: inputs.discordGuildId
       });
 
-      sails.log.info(`API - SdtdServer:set-discord-guid - set guild ${inputs.discordGuildId} for server ${inputs.serverId}`);
+      sails.log.info(`API - SdtdServer:set-discord-guid - set guild ${inputs.discordGuildId} for server ${inputs.serverId}`, {serverId: inputs.serverId});
       return exits.success();
     } catch (error) {
-      sails.log.error(`API - SdtdServer:set-discord-guid - ${error}`);
+      sails.log.error(`API - SdtdServer:set-discord-guid - ${error}`, {serverId: inputs.serverId});
       return exits.error(error);
     }
   }

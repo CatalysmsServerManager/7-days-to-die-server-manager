@@ -50,11 +50,11 @@ module.exports = {
   },
 
   fn: async function (inputs, exits) {
-    let userProfile = await User.findOne(this.req.session.userId).populate(
+    let user = await User.findOne(this.req.session.userId).populate(
       'servers'
     );
     let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({
-      userId: userProfile.id
+      userId: user.id
     });
     let maxServers = sails.config.custom.donorConfig[donatorRole].maxServers;
 
@@ -64,7 +64,7 @@ module.exports = {
       authName: inputs.authName,
       authToken: inputs.authToken,
       name: inputs.serverName,
-      owner: userProfile.id
+      owner: user.id
     };
 
     let errorResponse = {
@@ -78,7 +78,7 @@ module.exports = {
       donors: false,
     };
 
-    errorResponse.private = !privateCheck(userProfile);
+    errorResponse.private = !privateCheck(user);
     errorResponse.donors = !donorCheck(donatorRole);
 
     if (errorResponse.private) {
@@ -94,16 +94,16 @@ module.exports = {
 
     if (existsCheck) {
       sails.log.info(
-        `${userProfile.username} tried to add a new server - ${sdtdServer.name} - but it is duplicate`
+        `${user.username} tried to add a new server - ${sdtdServer.name} - but it is duplicate`, {user}
       );
       errorResponse.duplicateCheck = true;
       return exits.badRequest(errorResponse);
     }
 
-    if (userProfile.servers) {
-      if (userProfile.servers.length >= maxServers) {
+    if (user.servers) {
+      if (user.servers.length >= maxServers) {
         sails.log.info(
-          `${userProfile.username} tried to add a new server - ${sdtdServer.name} - Max server limit (${maxServers}) reached! `
+          `${user.username} tried to add a new server - ${sdtdServer.name} - Max server limit (${maxServers}) reached!`, {user}
         );
         errorResponse.maxLimitCheck = true;
         return exits.badRequest(errorResponse);
@@ -114,7 +114,7 @@ module.exports = {
 
     if (!serverCheck.statsResponse || !serverCheck.memResponse) {
       sails.log.info(
-        `${userProfile.username} tried to add a new server - ${sdtdServer.name} - but cannot connect - ${sdtdServer.ip}:${sdtdServer.webPort}`
+        `${user.username} tried to add a new server - ${sdtdServer.name} - but cannot connect - ${sdtdServer.ip}:${sdtdServer.webPort}`, {user}
       );
       errorResponse.statsResponse = serverCheck.statsResponse;
       errorResponse.commandResponse = serverCheck.memResponse;
@@ -130,7 +130,7 @@ module.exports = {
 
     if (addedServer) {
       sails.log.warn(
-        `${userProfile.username} added a new server - ${addedServer.name}`
+        `${user.username} added a new server - ${addedServer.name}`, {user, server: addedServer}
       );
       await sails.helpers.sdtd.loadAllPlayerData(addedServer.id);
       errorResponse.server = addedServer;
@@ -176,7 +176,7 @@ module.exports = {
       // Add server owner to admins group
       let ownerPlayerProfile = await Player.findOne({
         server: addedServer.id,
-        steamId: userProfile.steamId
+        steamId: user.steamId
       });
 
       if (ownerPlayerProfile) {

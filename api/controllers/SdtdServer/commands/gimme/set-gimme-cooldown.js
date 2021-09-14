@@ -29,7 +29,7 @@ module.exports = {
     }, {
       gimmeCooldown: inputs.cooldown
     });
-    sails.log.info(`Set cooldown of gimme to ${inputs.cooldown} for server ${inputs.serverId}`);
+    sails.log.info(`Set cooldown of gimme to ${inputs.cooldown} for server ${inputs.serverId}`, {serverId: inputs.serverId});
     return exits.success();
 
   }

@@ -41,7 +41,7 @@ module.exports = {
       economyAction: 'set'
     });
 
-    sails.log.info(`Set balance of player ${updatedPlayer[0].id} - ${updatedPlayer[0].name} to ${inputs.newBalance} on server ${updatedPlayer[0].server}`);
+    sails.log.info(`Set balance of player ${updatedPlayer[0].id} - ${updatedPlayer[0].name} to ${inputs.newBalance} on server ${updatedPlayer[0].server}`, {player: updatedPlayer[0], server: updatedPlayer[0].server});
     return exits.success();
 
   }

@@ -56,10 +56,10 @@ module.exports = {
 
 
 
-      sails.log.info(`Enabled a ${inputs.moduleType} module for server ${inputs.serverId}`);
+      sails.log.info(`Enabled a ${inputs.moduleType} module for server ${inputs.serverId}`, {serverId: inputs.serverId});
       return exits.success();
     } catch (error) {
-      sails.log.error(`API - Sdtdserver:enable-economy - ${error}`);
+      sails.log.error(`API - Sdtdserver:enable-economy - ${error}`, {serverId: inputs.serverId});
       return exits.error(error);
     }
 

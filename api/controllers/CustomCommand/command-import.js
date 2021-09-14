@@ -105,7 +105,7 @@ module.exports = {
         })
       );
       sails.log.info(
-        `Imported ${newData.length} commands for server ${inputs.serverId}`
+        `Imported ${newData.length} commands for server ${inputs.serverId}`, {serverId: inputs.serverId}
       );
       return exits.success();
     } else {

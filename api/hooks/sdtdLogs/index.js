@@ -69,25 +69,25 @@ module.exports = function sdtdLogs(sails) {
      * @name stop
      * @memberof module:7dtdLoggingHook
      * @description Stops logging for a server
-     * @param {number} serverID - Id of the server
+     * @param {number} serverId - Id of the server
      * @method
      */
 
-    stop: async function (serverID) {
-      serverID = String(serverID);
+    stop: async function (serverId) {
+      serverId = String(serverId);
 
-      sails.log.debug(`HOOKS - sdtdLogs - stopping logging for server ${serverID}`);
+      sails.log.debug(`HOOKS - sdtdLogs - stopping logging for server ${serverId}`, {serverId});
 
-      const loggingObj = await this.getLoggingObject(serverID);
+      const loggingObj = await this.getLoggingObject(serverId);
       if (loggingObj) {
         await loggingObj.stop();
       }
 
-      if (this.loggingInfoMap.has(serverID)) {
-        this.loggingInfoMap.delete(serverID);
+      if (this.loggingInfoMap.has(serverId)) {
+        this.loggingInfoMap.delete(serverId);
       }
 
-      await sails.helpers.redis.bull.removeRepeatable(serverID);
+      await sails.helpers.redis.bull.removeRepeatable(serverId);
     },
 
     /**
@@ -126,7 +126,7 @@ module.exports = function sdtdLogs(sails) {
           return SdtdSSE;
         }
       } catch (error) {
-        sails.log.warn('Could not get allocs version, falling back to polling');
+        sails.log.warn('Could not get allocs version, falling back to polling', {server});
         // If we cannot get the allocs version, it likely means the server is offline right now
         // We fall back to polling
         // TODO: In like a month or something, when more people have updated to latests allocs fixes we can default to SSE
@@ -140,28 +140,28 @@ module.exports = function sdtdLogs(sails) {
    * @name createLoggingObject
    * @memberof module:7dtdLoggingHook
    * @description Creates a logging object for a 7dtd server
-   * @param {number} serverID - Id of the server
+   * @param {number} serverId - Id of the server
    * @method
    * @private
    */
 
-    createLogObject: async function createLogObject(serverID) {
-      sails.log.debug(`HOOKS - sdtdLogs - Creating loggingObject for server ${serverID}`);
+    createLogObject: async function createLogObject(serverId) {
+      sails.log.debug(`HOOKS - sdtdLogs - Creating loggingObject for server ${serverId}`, {serverId});
 
       // Remove any lingering repeatable jobs
-      await sails.helpers.redis.bull.removeRepeatable(serverID);
+      await sails.helpers.redis.bull.removeRepeatable(serverId);
 
 
-      serverID = String(serverID);
-      const server = await SdtdServer.findOne(serverID);
-      const config = await SdtdConfig.findOne({ server: serverID });
+      serverId = String(serverId);
+      const server = await SdtdServer.findOne(serverId);
+      const config = await SdtdConfig.findOne({ server: serverId });
       server.config = config;
 
       const detectorClass = await this.getEventDetectorClass(server);
       const eventEmitter = new detectorClass(server);
       await eventEmitter.start();
 
-      this.loggingInfoMap.set(serverID, eventEmitter);
+      this.loggingInfoMap.set(serverId, eventEmitter);
 
       eventEmitter.on('logLine', function (logLine) {
         logLine.server = _.omit(server, 'authName', 'authToken');
@@ -173,7 +173,7 @@ module.exports = function sdtdLogs(sails) {
         chatMessage.player = _.omit(chatMessage.player, 'inventory');
 
         sails.sockets.broadcast(server.id, 'chatMessage', chatMessage);
-        sails.log.verbose(`Detected a chat message`, chatMessage);
+        sails.log.debug(`Detected a chat message`, {server});
       });
 
       eventEmitter.on('playerConnected', async function (connectedMsg) {
@@ -194,7 +194,7 @@ module.exports = function sdtdLogs(sails) {
         }
         sails.sockets.broadcast(server.id, 'playerConnected', connectedMsg);
         connectedMsg.player = _.omit(connectedMsg.player, 'inventory');
-        sails.log.verbose(`Detected a player connected`, connectedMsg);
+        sails.log.debug(`Detected a player connected`, {server, player: connectedMsg.player});
       });
 
 
@@ -203,7 +203,7 @@ module.exports = function sdtdLogs(sails) {
         joinMsg.player = _.omit(joinMsg.player, 'inventory');
 
         sails.sockets.broadcast(server.id, 'playerJoined', joinMsg);
-        sails.log.verbose(`Detected a player joined`, joinMsg);
+        sails.log.debug(`Detected a player joined`, {server, player: joinMsg.player});
       });
 
       eventEmitter.on('playerDisconnected', async function (disconnectedMsg) {
@@ -215,7 +215,7 @@ module.exports = function sdtdLogs(sails) {
         });
         sails.sockets.broadcast(server.id, 'playerDisconnected', disconnectedMsg);
         disconnectedMsg.player = _.omit(disconnectedMsg.player, 'inventory');
-        sails.log.verbose(`Detected a player disconnected`, disconnectedMsg);
+        sails.log.debug(`Detected a player disconnected`, {server, player: disconnectedMsg.player});
       });
 
       eventEmitter.on('connectionLost', async function (eventMsg) {
@@ -229,7 +229,7 @@ module.exports = function sdtdLogs(sails) {
           notificationType: 'connectionLost',
           msg: eventMsg
         });
-        sails.log.debug(`Lost connection to server ${server.name}`);
+        sails.log.debug(`Lost connection to server ${server.name}`, {server});
       });
 
       eventEmitter.on('connected', async function (eventMsg) {
@@ -243,7 +243,7 @@ module.exports = function sdtdLogs(sails) {
           notificationType: 'connected'
         });
 
-        sails.log.debug(`Connected to server ${server.name}`);
+        sails.log.debug(`Connected to server ${server.name}`, {server});
       });
 
       eventEmitter.on('playerDeath', function (deathMessage) {

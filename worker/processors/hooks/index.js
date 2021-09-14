@@ -1,7 +1,7 @@
 const enrichData = require('./enrichEventData');
 
 module.exports = async function hooks(job) {
-  sails.log.debug(`[Worker] Got a \`hooks\` job of type ${job.data.type}`);
+  sails.log.debug(`[Worker] Got a \`hooks\` job of type ${job.data.type}`, {serverId: job.data.serverId});
   return handle(job.data);
 };
 
@@ -25,7 +25,7 @@ async function handle({ data: eventData, type: eventType, server }) {
       const stringFound = checkLogLine(`${eventData.time} ${eventData.date} ${eventData.msg}`, serverLogLineHook);
 
       if (stringFound) {
-        sails.log.debug(`Found the string! Executing hook ${serverLogLineHook.id}`);
+        sails.log.debug(`Found the string! Executing hook ${serverLogLineHook.id}`, {server});
         const isNotOnCooldown = await handleCooldown(serverLogLineHook);
         if (isNotOnCooldown) {
           const variables = await getHookVariables(serverLogLineHook.id);
@@ -76,7 +76,8 @@ async function executeHook(eventData, hookToExec, serverId, eventType = 'logLine
   sails.log.debug(`Executed a custom hook for server ${serverId}`, {
     hook: hookToExec,
     event: eventData,
-    results: results
+    results: results,
+    serverId
   });
 }
 
@@ -96,7 +97,8 @@ async function executeLogLineHook(eventData, hookToExec, serverId) {
   sails.log.debug(`Executed a custom logLine hook for server ${serverId}`, {
     hook: hookToExec,
     event: eventData,
-    results: results
+    results: results,
+    serverId
   });
 }
 

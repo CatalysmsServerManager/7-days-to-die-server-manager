@@ -97,7 +97,7 @@ module.exports = {
       });
 
     } catch (error) {
-      sails.log.error(error);
+      sails.log.error(error, {serverId: inputs.serverId});
       return exits.error(error);
     }
 

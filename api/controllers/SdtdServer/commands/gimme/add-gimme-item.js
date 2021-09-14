@@ -50,7 +50,7 @@ module.exports = {
     }
 
     let createdItem = await GimmeItem.create(databaseObject).fetch();
-    sails.log.info(`Added a new gimme items for server ${inputs.server} - ${JSON.stringify(createdItem)}`);
+    sails.log.info(`Added a new gimme items for server ${inputs.serverId}`, {serverId: inputs.serverId});
     return exits.success(createdItem);
 
   }

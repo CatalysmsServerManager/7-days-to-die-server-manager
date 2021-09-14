@@ -43,7 +43,7 @@ module.exports = {
       await sails.helpers.redis.set(`server:${inputs.serverId}:cpm-version`, apiResponse, true, 600);
       version = apiResponse;
     }
-    sails.log.debug(`Detected CPM version ${version} for server ${inputs.serverId}`);
+    sails.log.debug(`Detected CPM version ${version} for server ${inputs.serverId}`, {serverId: inputs.serverId});
     return exits.success(parseFloat(version));
 
   }

@@ -63,8 +63,8 @@ class Status extends Commando.Command {
       );
       nextHorde = parseInt(bloodMoonDay.result.split(` = `)[1], 10);
     } catch (error) {
-      sails.log.warn(`Hook - discordBot:status - ${error}`);
-      sails.log.error(error);
+      sails.log.warn(`Hook - discordBot:status - ${error}`, {server: sdtdServer});
+      sails.log.error(error, {server: sdtdServer});
     }
     const daysUntilHorde = nextHorde - serverInfo.stats.gametime.days;
 

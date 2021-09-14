@@ -43,7 +43,7 @@ module.exports = {
         }
 
       } catch (error) {
-        sails.log.error(error);
+        sails.log.error(error, {userId: inputs.userId});
       }
     });
 
@@ -68,7 +68,7 @@ module.exports = {
 
     objectToSend = _.uniqBy(objectToSend, 'id');
 
-    sails.log.debug(`API - User:getServersWithPermissions - Found ${objectToSend.length} servers for user ${inputs.userId}`);
+    sails.log.debug(`API - User:getServersWithPermissions - Found ${objectToSend.length} servers for user ${inputs.userId}`, {userId: inputs.userId});
     return exits.success(objectToSend);
   }
 

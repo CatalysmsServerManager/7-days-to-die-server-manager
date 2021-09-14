@@ -47,10 +47,10 @@ module.exports = {
       let server = await SdtdServer.findOne(inputs.serverId);
       server.stats = await loadStats(server);
       server.serverInfo = await loadServerInfo(server);
-      sails.log.debug(`HELPER - loadSdtdserverInfo - Loaded server info for server ${server.name}`);
+      sails.log.debug(`HELPER - loadSdtdserverInfo - Loaded server info for server ${server.name}`, {server});
       exits.success(server);
     } catch (error) {
-      sails.log.warn(`HELPER - load-sdtdServer-info - Failed to load info ${error}`);
+      sails.log.warn(`HELPER - load-sdtdServer-info - Failed to load info ${error}`, {serverId: inputs.serverId});
       return exits.error(error);
     }
 

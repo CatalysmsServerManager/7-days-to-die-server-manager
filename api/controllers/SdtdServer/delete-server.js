@@ -41,7 +41,7 @@ module.exports = {
       }
 
       await sails.hooks.sdtdlogs.stop(server.id);
-      sails.log.warn(`VIEW - SdtdServer:delete - Deleting server ${server.name}`);
+      sails.log.warn(`VIEW - SdtdServer:delete - Deleting server ${server.name}`, {server});
 
       await CronJob.destroy({
         server: server.id
@@ -121,7 +121,7 @@ module.exports = {
       exits.success();
 
     } catch (error) {
-      sails.log.error(`VIEW - SdtdServer:delete - ${error}`);
+      sails.log.error(`VIEW - SdtdServer:delete - ${error}`, {serverId: inputs.serverId});
       exits.error(error);
     }
 

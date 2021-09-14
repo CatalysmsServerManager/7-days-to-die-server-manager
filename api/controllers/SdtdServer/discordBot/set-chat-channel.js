@@ -72,10 +72,10 @@ module.exports = {
         chatChannel.send(embed);
       }
 
-      sails.log.info(`API - SdtdServer:set-chat-channel - set chat channel ${inputs.chatChannelId} for server ${inputs.serverId}`);
+      sails.log.info(`API - SdtdServer:set-chat-channel - set chat channel ${inputs.chatChannelId} for server ${inputs.serverId}`, {serverId: inputs.serverId});
       return exits.success();
     } catch (error) {
-      sails.log.error(`API - SdtdServer:set-chat-channel - ${error}`);
+      sails.log.error(`API - SdtdServer:set-chat-channel - ${error}`, {serverId: inputs.serverId});
       return exits.error(error);
     }
   }

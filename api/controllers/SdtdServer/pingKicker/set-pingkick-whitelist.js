@@ -40,7 +40,7 @@ module.exports = {
       pingWhitelist: JSON.stringify(inputs.whitelist)
     });
 
-    sails.log.info(`Setting whitelist of pingKicker to ${inputs.whitelist} for server ${inputs.serverId}`);
+    sails.log.info(`Setting whitelist of pingKicker to ${inputs.whitelist} for server ${inputs.serverId}`, {serverId: inputs.serverId});
     return exits.success();
 
   }

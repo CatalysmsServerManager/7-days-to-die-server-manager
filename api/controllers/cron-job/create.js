@@ -111,7 +111,7 @@ module.exports = {
 
     await sails.hooks.cron.start(createdJob.id);
 
-    sails.log.info(`Created a cron job`, createdJob);
+    sails.log.info(`Created a cron job`, {createdJob, server});
 
     return exits.success(createdJob);
 

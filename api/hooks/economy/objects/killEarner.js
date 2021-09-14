@@ -13,11 +13,11 @@ class KillEarner {
   }
 
   async start() {
-    sails.log.debug(`Started kill earner for server ${this.server.name}`);
+    sails.log.debug(`Started kill earner for server ${this.server.name}`, {server: this.server});
   }
 
   async stop() {
-    sails.log.debug(`Stopped kill earner for server ${this.server.name}`);
+    sails.log.debug(`Stopped kill earner for server ${this.server.name}`, {server: this.server});
   }
 }
 

@@ -4,7 +4,7 @@ module.exports = async function inventoryTracking(server, playerList, playersArr
   try {
     inventories = await sails.helpers.sdtdApi.getPlayerInventories(SdtdServer.getAPIConfig(server));
   } catch (error) {
-    sails.log.warn(`${server.name} Errored during inventory tracking - ${error}.`);
+    sails.log.warn(`${server.name} Errored during inventory tracking - ${error}.`, {server});
   }
 
 
@@ -45,6 +45,6 @@ module.exports = async function inventoryTracking(server, playerList, playersArr
   }
 
   let dateEnded = new Date();
-  sails.log.verbose(`Performed inventory tracking for ${server.name} - ${playerList.length} players, took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`);
+  sails.log.debug(`Performed inventory tracking for ${server.name} - ${playerList.length} players, took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`, {server});
   return playersArray;
 };

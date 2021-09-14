@@ -51,7 +51,7 @@ module.exports = {
 
     try {
 
-      sails.log.debug(`API - Player:teleport - teleporting player ${inputs.playerId}`);
+      sails.log.debug(`API - Player:teleport - teleporting player ${inputs.playerId}`, {playerId: inputs.playerId});
 
       let player = await Player.findOne(inputs.playerId).populate('server');
       let server = player.server;
@@ -65,18 +65,18 @@ module.exports = {
         coordinates: `${inputs.coordX} ${inputs.coordY} ${inputs.coordZ}`
       }).exec({
         success: () => {
-          sails.log.debug(`API - Player:teleport - Successfully teleported player ${inputs.playerId} to ${inputs.coordX} ${inputs.coordY} ${inputs.coordZ}`);
+          sails.log.debug(`API - Player:teleport - Successfully teleported player ${inputs.playerId} to ${inputs.coordX} ${inputs.coordY} ${inputs.coordZ}`, {player, server});
           return exits.success();
         },
         error: (error) => {
-          sails.log.error(`API - Player:teleport - ${error}`);
+          sails.log.error(`API - Player:teleport - ${error}`, {playerId: inputs.playerId});
           return exits.error(error);
         }
       });
 
 
     } catch (error) {
-      sails.log.error(`API - Player:teleport - ${error}`);
+      sails.log.error(`API - Player:teleport - ${error}`, {playerId: inputs.playerId});
       return exits.error(error);
     }
 

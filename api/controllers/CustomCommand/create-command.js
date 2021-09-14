@@ -56,7 +56,7 @@ module.exports = {
       });
       if (!sails.config.custom.donorConfig[donatorRole]) {
         const err = new Error(`Donator status of ${donatorRole} is unmanaged, contact an admin`);
-        sails.log.error(err);
+        sails.log.error(err, {server});
         return exists.brokenDonator(err.message);
       }
       let maxCustomCommands = sails.config.custom.donorConfig[donatorRole].maxCustomCommands;
@@ -86,13 +86,13 @@ module.exports = {
         server: inputs.serverId
       }).fetch();
 
-      sails.log.info(`Created a custom command`, createdCommand);
+      sails.log.info(`Created a custom command`, {createdCommand, server});
       return exits.success(createdCommand);
 
 
 
     } catch (error) {
-      sails.log.error(`${error}`);
+      sails.log.error(`${error}`, {serverId: inputs.serverId});
       return exits.error(error);
     }
 
