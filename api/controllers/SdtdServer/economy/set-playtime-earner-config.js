@@ -11,6 +11,12 @@ module.exports = {
       type: 'number',
       required: true,
       min: 1
+    },
+
+    interval: {
+      type: 'number',
+      required: true,
+      min: 1
     }
   },
 
@@ -20,7 +26,10 @@ module.exports = {
     try {
       await SdtdConfig.update(
         { server: inputs.serverId },
-        { playtimeEarnerAmount: inputs.amount }
+        {
+          playtimeEarnerAmount: inputs.amount,
+          playtimeEarnerInterval: inputs.interval
+        }
       );
       await sails.hooks.economy.reload(inputs.serverId, 'playtimeEarner');
       await HistoricalInfo.create({
