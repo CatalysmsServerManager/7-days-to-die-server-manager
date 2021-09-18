@@ -83,10 +83,10 @@ module.exports = {
         iconName: inputs.customIcon,
       }).fetch();
 
-      sails.log.info(`Created a new listing for server ${inputs.serverId}`, createdListing);
+      sails.log.info(`Created a new listing for server ${inputs.serverId}`, {createdListing, serverId: inputs.serverId});
       return exits.success(createdListing);
     } catch (error) {
-      sails.log.error(error);
+      sails.log.error(error, {serverId: inputs.serverId});
       return exits.error(error);
     }
 

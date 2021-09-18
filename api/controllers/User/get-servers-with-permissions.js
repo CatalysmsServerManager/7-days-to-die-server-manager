@@ -23,7 +23,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     const objectToSend = await sails.helpers.user.getServersWithPermission(inputs.userId);
-    sails.log.debug(`API - User:getServersWithPermissions - Found ${objectToSend.length} servers for user ${inputs.userId}`);
+    sails.log.debug(`API - User:getServersWithPermissions - Found ${objectToSend.length} servers for user ${inputs.userId}`, {userId: inputs.userId});
     return exits.success(objectToSend);
   }
 };

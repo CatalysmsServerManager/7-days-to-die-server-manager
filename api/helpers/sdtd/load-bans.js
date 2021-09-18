@@ -89,7 +89,7 @@ module.exports = {
             }).fetch();
 
             updatedServerBansInDB.push(updatedEntry[0]);
-            sails.log.verbose(`Handled a ban for ${sdtdServer.name} - ${foundBanRecord.steamId} until ${bannedUntil.toString()} because "${banReason}"`);
+            sails.log.verbose(`Handled a ban for ${sdtdServer.name} - ${foundBanRecord.steamId} until ${bannedUntil.toString()} because "${banReason}"`, {serverId: inputs.serverId});
           }
         }
 
@@ -106,17 +106,17 @@ module.exports = {
           }, {
             unbanned: true
           }).fetch();
-          sails.log.debug(`Detected unban of ${unBannedRecords.length} player${unBannedRecords.length === 1 ? '' : 's'} on server ${sdtdServer.name}`);
+          sails.log.debug(`Detected unban of ${unBannedRecords.length} player${unBannedRecords.length === 1 ? '' : 's'} on server ${sdtdServer.name}`, {serverId: inputs.serverId});
         }
 
 
         let dateEnded = new Date();
-        sails.log.info(`Updated a servers entries in GBL - ${sdtdServer.name} - ${updatedServerBansInDB.length} total bans - Took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`);
+        sails.log.info(`Updated a servers entries in GBL - ${sdtdServer.name} - ${updatedServerBansInDB.length} total bans - Took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`, {serverId: inputs.serverId});
         return exits.success(updatedServerBansInDB);
 
       },
       error: error => {
-        sails.log.verbose(`Error loading bans for server ${sdtdServer.name} because ${error} - Skipping...`);
+        sails.log.verbose(`Error loading bans for server ${sdtdServer.name} because ${error} - Skipping...`, {serverId: inputs.serverId});
         return exits.success([]);
       }
     });

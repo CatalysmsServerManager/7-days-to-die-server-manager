@@ -53,7 +53,7 @@ module.exports = {
 
     createdComment.user = this.req.session.user;
 
-    sails.log.info(`User #${this.req.session.user.id} ${this.req.session.user.username} has placed a comment on ban #${inputs.banId}`, createdComment);
+    sails.log.info(`User #${this.req.session.user.id} ${this.req.session.user.username} has placed a comment on ban #${inputs.banId}`, {user: this.req.session.user, createdComment});
 
     return exits.success(createdComment);
 

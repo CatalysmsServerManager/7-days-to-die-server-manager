@@ -39,7 +39,7 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     try {
-      sails.log.debug(`API - SdtdServer:country-ban-toggle - Toggling country ban for server ${inputs.serverId}`);
+      sails.log.debug(`API - SdtdServer:country-ban-toggle - Toggling country ban for server ${inputs.serverId}`, {serverId: inputs.serverId});
       const server = await SdtdServer.findOne({
         id: inputs.serverId
       }).populate('config');
@@ -65,11 +65,11 @@ module.exports = {
       });
       let status = await sails.hooks.countryban.getStatus(inputs.serverId);
 
-      sails.log.debug(`API - SdtdServer:country-ban-toggle - New status for server ${inputs.serverId} is ${status}`);
+      sails.log.debug(`API - SdtdServer:country-ban-toggle - New status for server ${inputs.serverId} is ${status}`, {serverId: inputs.serverId});
 
       return exits.success(status);
     } catch (error) {
-      sails.log.error(`API - SdtdServer:country-ban-toggle - ${error}`);
+      sails.log.error(`API - SdtdServer:country-ban-toggle - ${error}`, {serverId: inputs.serverId});
       return exits.error(error);
     }
 

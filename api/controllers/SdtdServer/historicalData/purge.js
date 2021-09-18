@@ -28,7 +28,7 @@ module.exports = {
       type: inputs.type
     }).fetch();
 
-    sails.log.info(`Deleted ${deletedRecords.length} ${inputs.type} records for server ${inputs.serverId}`);
+    sails.log.info(`Deleted ${deletedRecords.length} ${inputs.type} records for server ${inputs.serverId}`, {serverId: inputs.serverId});
 
     return exits.success();
 

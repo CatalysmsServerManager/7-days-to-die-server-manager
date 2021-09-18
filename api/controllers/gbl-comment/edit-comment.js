@@ -57,7 +57,7 @@ module.exports = {
       content: inputs.comment,
     }).fetch();
 
-    sails.log.info(`User #${this.req.session.user.id} ${this.req.session.username} has edited a comment on ban #${inputs.banId}`, updatedComment);
+    sails.log.info(`User #${this.req.session.user.id} ${this.req.session.username} has edited a comment on ban #${inputs.banId}`, {updatedComment, user: this.req.session.user});
 
     return exits.success(updatedComment);
 

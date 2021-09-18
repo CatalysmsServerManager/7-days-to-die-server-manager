@@ -33,7 +33,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    sails.log.debug(`VIEW - SdtdServer:chat - Showing chat for ${inputs.serverId}`);
+    sails.log.debug(`VIEW - SdtdServer:chat - Showing chat for ${inputs.serverId}`, {serverId: inputs.serverId});
 
     try {
       let server = await SdtdServer.findOne(inputs.serverId);
@@ -41,7 +41,7 @@ module.exports = {
         server: server
       });
     } catch (error) {
-      sails.log.error(`VIEW - SdtdServer:chat - ${error}`);
+      sails.log.error(`VIEW - SdtdServer:chat - ${error}`, {serverId: inputs.serverId});
       throw 'notFound';
     }
 

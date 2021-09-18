@@ -36,7 +36,7 @@ module.exports = {
       });
       return exits.success();
     } catch (error) {
-      sails.log.error(`API - Sdtdserver:set-currency-name - ${error}`);
+      sails.log.error(`API - Sdtdserver:set-currency-name - ${error}`, {serverId: inputs.serverId});
       return exits.error(error);
     }
 

@@ -39,7 +39,7 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     try {
-      sails.log.debug(`API - SdtdServer:logging-toggle - Toggling logging for server ${inputs.serverId}`);
+      sails.log.debug(`API - SdtdServer:logging-toggle - Toggling logging for server ${inputs.serverId}`, {serverId: inputs.serverId});
       let server = await SdtdServer.findOne({
         id: inputs.serverId
       });
@@ -52,10 +52,10 @@ module.exports = {
         await sails.hooks.sdtdlogs.stop(inputs.serverId);
       }
       let status = sails.hooks.sdtdlogs.getStatus(inputs.serverId);
-      sails.log.debug(`API - SdtdServer:logging-toggle - New status for server ${inputs.serverId} is ${status}`);
+      sails.log.debug(`API - SdtdServer:logging-toggle - New status for server ${inputs.serverId} is ${status}`, {serverId: inputs.serverId});
       return exits.success(status);
     } catch (error) {
-      sails.log.error(`API - SdtdServer:logging-toggle - ${error}`);
+      sails.log.error(`API - SdtdServer:logging-toggle - ${error}`, {serverId: inputs.serverId});
     }
 
 

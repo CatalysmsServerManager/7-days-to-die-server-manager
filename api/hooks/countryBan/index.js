@@ -283,7 +283,7 @@ module.exports = function sdtdCountryBan(sails) {
                 await startCountryBan(config.server);
               } catch (error) {
                 sails.log.error(
-                  `Error initializing countryban for server ${config.server} - ${error}`
+                  `Error initializing countryban for server ${config.server} - ${error}`, {serverId: config.server}
                 );
               }
             }
@@ -309,7 +309,7 @@ module.exports = function sdtdCountryBan(sails) {
 
     start: async function start(serverId) {
       sails.log.debug(
-        `HOOK:countryBan Starting countryBan for server ${serverId}`
+        `HOOK:countryBan Starting countryBan for server ${serverId}`, {serverId}
       );
       startCountryBan(serverId);
     },
@@ -324,7 +324,7 @@ module.exports = function sdtdCountryBan(sails) {
 
     stop: async function (serverId) {
       sails.log.debug(
-        `HOOK:countryBan Stopping countryBan for server ${serverId} `
+        `HOOK:countryBan Stopping countryBan for server ${serverId}`, {serverId}
       );
 
       let loggingObj = await sails.hooks.sdtdlogs.getLoggingObject(serverId);
@@ -347,7 +347,7 @@ module.exports = function sdtdCountryBan(sails) {
 
     getStatus: function (serverId) {
       sails.log.debug(
-        `HOOK:countryBan Getting countryBan status for server ${serverId} `
+        `HOOK:countryBan Getting countryBan status for server ${serverId}`, {serverId}
       );
       return countryBanInfoMap.get(String(serverId));
     },
@@ -367,7 +367,7 @@ module.exports = function sdtdCountryBan(sails) {
     reload: async function (serverId, newConfig) {
       try {
         sails.log.debug(
-          `HOOK:countryBan Reloading country ban for server ${serverId} `
+          `HOOK:countryBan Reloading country ban for server ${serverId}`, {serverId}
         );
 
         let config = await SdtdConfig.findOne({
@@ -418,7 +418,7 @@ module.exports = function sdtdCountryBan(sails) {
 
       sails.log.debug(
         `HOOK:countryBan - Player from ${country} connected to server ${server.name}, checking if needs to be kicked`,
-        connectedMessage
+        {player, server}
       );
       let config = await SdtdConfig.find({
         server: server.id
@@ -471,11 +471,11 @@ module.exports = function sdtdCountryBan(sails) {
           player: connectedMessage
         });
         sails.log.info(
-          `HOOK:countryBan - Kicked player ${connectedMessage.playerName} from ${country} server ${server.name}`
+          `HOOK:countryBan - Kicked player ${connectedMessage.playerName} from ${country} server ${server.name}`, {server, player: connectedMessage}
         );
       }
     } catch (error) {
-      sails.log.error(`HOOK:countryBan failed to handle player connnect`);
+      sails.log.error(`HOOK:countryBan failed to handle player connnect`, {serverId});
       sails.log.error(error);
     }
   }
@@ -489,14 +489,14 @@ module.exports = function sdtdCountryBan(sails) {
 
       let loggingObj = await sails.hooks.sdtdlogs.getLoggingObject(serverId);
       if (_.isUndefined(loggingObj)) {
-        return sails.log.error('Could not find logging object for server');
+        return sails.log.error('Could not find logging object for server', {serverId});
       }
 
       loggingObj.on('playerConnected', handleCountryBan);
 
       return countryBanInfoMap.set(String(serverId), currentConfig);
     } catch (error) {
-      sails.log.error(`HOOK:countryBan ${error}`);
+      sails.log.error(`HOOK:countryBan ${error}`, {serverId});
       throw error;
     }
   }

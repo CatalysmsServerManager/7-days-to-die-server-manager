@@ -28,7 +28,7 @@ module.exports = {
     await TrackingInfo.destroy({
       server: inputs.serverId
     });
-    sails.log.info(`Deleted player tracking data for server ${inputs.serverId}`);
+    sails.log.info(`Deleted player tracking data for server ${inputs.serverId}`, {serverId: inputs.serverId});
     return exits.success();
   }
 

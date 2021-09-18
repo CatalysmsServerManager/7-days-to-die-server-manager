@@ -34,10 +34,10 @@ class DiscordNotification {
           await sails.helpers.discord.sendDm(owner.discordId, `There was an error sending a CSMM notification to your channel and thus the notification has been disabled: \`${error}\``);
         }
       } catch (error) {
-        sails.log.error(`HOOK - discordNotification:DiscordNotification - Error letting owner know of discord issue - ${error}`);
+        sails.log.error(`HOOK - discordNotification:DiscordNotification - Error letting owner know of discord issue - ${error}`, {server: enrichedOptions.server});
         throw error;
       }
-      sails.log.error(`HOOK - discordNotification:DiscordNotification - ${error}`);
+      sails.log.error(`HOOK - discordNotification:DiscordNotification - ${error}`, {server: enrichedOptions.server});
 
       delete enrichedOptions.server.config.discordNotificationConfig[notificationOptions.notificationType];
       await SdtdConfig.update({ server: enrichedOptions.server.id }, { discordNotificationConfig: enrichedOptions.server.config.discordNotificationConfig });

@@ -36,10 +36,10 @@ module.exports = async function isServerOwner(req, res, next) {
     });
 
     if (isOwner) {
-      sails.log.silly(`POLICY - isServerOwner - User ${user.id} is owner of the server, approving request`);
+      sails.log.debug(`POLICY - isServerOwner - User ${user.id} is owner of the server, approving request`, {user, server});
       return next();
     } else {
-      sails.log.warn(`POLICY - isServerOwner - User ${user.id} tried to access a server without being owner ${req.originalUrl}`);
+      sails.log.warn(`POLICY - isServerOwner - User ${user.id} tried to access a server without being owner ${req.originalUrl}`, {user, server});
       return res.forbidden('You are not the server owner.');
     }
 

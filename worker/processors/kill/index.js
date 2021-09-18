@@ -1,5 +1,5 @@
 module.exports = async function kill(job) {
-  sails.log.debug('[Worker] Got a `kill` job');
+  sails.log.debug('[Worker] Got a `kill` job', {serverId: job.data.serverId});
   return handleKill(job.data);
 };
 

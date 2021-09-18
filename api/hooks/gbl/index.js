@@ -56,7 +56,7 @@ async function refreshBans() {
         foundBans = _.uniqBy(foundBans, ban => ban.server.owner);
 
         sails.log.debug(
-          `Found ${foundBans.length} total bans for player ${connectedMsg.steamID} on the GBL`
+          `Found ${foundBans.length} total bans for player ${connectedMsg.steamID} on the GBL`, {server}
         );
 
         let config = await SdtdConfig.findOne({
@@ -86,7 +86,7 @@ async function refreshBans() {
           playerAutoKicked = true;
           sails.log.info(
             `Autobanned a player for being on GBL too often`,
-            connectedMsg
+            {player: connectedMsg, server }
           );
         }
 
@@ -107,7 +107,7 @@ async function refreshBans() {
       await sails.helpers.sdtd.loadBans(server.id);
     } catch (error) {
       sails.log.warn(
-        `Error refreshing ban info for server ${server.name}`,
+        `Error refreshing ban info for server ${server.name}`, {server},
         error
       );
     }

@@ -65,7 +65,7 @@ module.exports = {
         steamId: player.steamId
       });
 
-      sails.log.info(`Loading player profile ${player.id} - ${player.name} for server ${server.name}`);
+      sails.log.info(`Loading player profile ${player.id} - ${player.name} for server ${server.name}`, {server,player});
 
       return exits.success({
         player: player,
@@ -74,7 +74,7 @@ module.exports = {
         bans: bans
       });
     } catch (error) {
-      sails.log.error(`VIEW - Player:profile - ${error}`);
+      sails.log.error(`VIEW - Player:profile - ${error}`, {playerId: inputs.playerId});
       throw 'notFound';
     }
 

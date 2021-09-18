@@ -52,7 +52,7 @@ module.exports = {
         server: inputs.serverId
       });
 
-      sails.log.warn(`Detected ${amountOfRoles} roles for server ${inputs.serverId}. Creating a default one`);
+      sails.log.warn(`Detected ${amountOfRoles} roles for server ${inputs.serverId}. Creating a default one`, {serverId: inputs.serverId});
       if (amountOfRoles === 0) {
         let createdRole = await Role.create({
           server: inputs.serverId,

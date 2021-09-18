@@ -14,7 +14,7 @@ module.exports = function defineCronHook(sails) {
       this.queue = sails.helpers.getQueueObject('cron');
 
       this.queue.process(100, async (job) => {
-        sails.log.debug('[Worker] Got a `cron` job', job.data);
+        sails.log.debug('[Worker] Got a `cron` job', {serverId: job.data.server});
         const functionToExecute = await sails.helpers.etc.parseCronJob(job.data.id);
         return functionToExecute();
       });
@@ -31,7 +31,7 @@ module.exports = function defineCronHook(sails) {
         try {
           await this.start(job.id);
         } catch (e) {
-          sails.log.error(`Error starting job ${job.id}`, e);
+          sails.log.error(`Error starting job ${job.id}`, {serverId: job.server});
         }
       }
     },
@@ -52,7 +52,7 @@ module.exports = function defineCronHook(sails) {
         },
         timeout: 2500
       });
-      sails.log.debug(`Started cron job ${job.id}`);
+      sails.log.debug(`Started cron job ${job.id}`, {serverId: job.server});
     },
 
     stop: async function (jobId) {

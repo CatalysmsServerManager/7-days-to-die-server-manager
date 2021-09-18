@@ -247,10 +247,8 @@ module.exports.routes = {
   'post /api/sdtdserver/economy/currencyname':
     'SdtdServerController/economy.set-currency-name',
 
-  'post /api/sdtdserver/economy/module/playtimeearner/amount':
-    'SdtdServerController/economy.set-playtime-earner-amount',
-  'post /api/sdtdserver/economy/module/playtimeearner/interval':
-    'SdtdServerController/economy.set-playtime-earner-interval',
+  'post /api/sdtdserver/economy/module/playtimeearner/config':
+    'SdtdServerController/economy.set-playtime-earner-config',
 
   'post /api/sdtdserver/economy/module/discordtextearner/amount':
     'SdtdServerController/economy.set-discord-text-earner-amount',

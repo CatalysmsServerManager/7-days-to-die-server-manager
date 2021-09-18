@@ -148,7 +148,7 @@ async function executeCommand(server, command) {
     );
     return result;
   } catch (error) {
-    sails.log.error(error);
+    sails.log.error(error, {server});
     return {
       command,
       result: 'An error occurred executing the API request to the 7D2D server'

@@ -34,12 +34,12 @@ module.exports = {
       }
 
       const dateStarted = Date.now();
-      sails.log.debug(`Executing a cron job for server ${foundJob.server.name}`, _.omit(foundJob, 'server'));
+      sails.log.debug(`Executing a cron job for server ${foundJob.server.name}`, {server: foundJob.server});
       let responses = await sails.helpers.sdtd.executeCustomCmd(foundJob.server, foundJob.command);
 
       foundJob.responses = responses;
       const dateEnded = Date.now();
-      sails.log.debug(`Executed a cron job for server ${foundJob.server.name} - took ${dateEnded - dateStarted} ms`, _.omit(foundJob, 'server'));
+      sails.log.debug(`Executed a cron job for server ${foundJob.server.name} - took ${dateEnded - dateStarted} ms`, {server: foundJob.server});
 
       if (foundJob.notificationEnabled) {
         await sails.helpers.discord.sendNotification({

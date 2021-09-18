@@ -31,7 +31,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    sails.log.info(`Setting amount of bans for GBL notification to ${inputs.bans} for server ${inputs.serverId}`);
+    sails.log.info(`Setting amount of bans for GBL notification to ${inputs.bans} for server ${inputs.serverId}`, {serverId: inputs.serverId});
 
     await SdtdConfig.update({server: inputs.serverId}, {gblNotificationBans: inputs.bans});
 

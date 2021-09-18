@@ -40,12 +40,12 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     try {
-      let sdtdServer = await SdtdServer.findOne(inputs.serverId);
-      if (_.isUndefined(sdtdServer)) {
+      let server = await SdtdServer.findOne(inputs.serverId);
+      if (_.isUndefined(server)) {
         return exits.notFound();
       }
 
-      const response = await sails.helpers.sdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(sdtdServer), inputs.command);
+      const response = await sails.helpers.sdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(server), inputs.command);
 
       if (!response) {
         return exits.error();
@@ -56,7 +56,7 @@ module.exports = {
         date: new Date(),
         type: 'commandResponse'
       };
-      sails.log.info(`API - Executed a command on ${sdtdServer.name} by user ${this.req.session.userId} - ${inputs.command}`);
+      sails.log.info(`API - Executed a command on ${server.name} by user ${this.req.session.userId} - ${inputs.command}`, {server});
       return exits.success(logLine);
 
     } catch (error) {
@@ -68,7 +68,7 @@ module.exports = {
         });
       }
 
-      sails.log.error(`API - SdtdServer:executeCommand - ${error}`);
+      sails.log.error(`API - SdtdServer:executeCommand - ${error}`, {serverId: inputs.serverId});
       return exits.commandError(error);
     }
 

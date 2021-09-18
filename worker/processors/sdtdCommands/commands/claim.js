@@ -71,7 +71,7 @@ class Claim extends SdtdCommand {
         }, cmdToExec);
 
         if (response.result.includes('ERR:')) {
-          sails.log.error(`Error when giving an item via the claim command! Response result: ${response.result}`);
+          sails.log.error(`Error when giving an item via the claim command! Response result: ${response.result}`, {server, player});
           return chatMessage.reply('error', { error: 'Error while executing give command' });
         }
 
@@ -87,7 +87,7 @@ class Claim extends SdtdCommand {
 
       }
     } catch (error) {
-      sails.log.error(error);
+      sails.log.error(error, {server, player});
       await chatMessage.reply('error', { error: 'Error while handling your claimed items' });
     } finally {
       delete locks[player.id];

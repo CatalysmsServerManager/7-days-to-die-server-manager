@@ -28,7 +28,7 @@ module.exports = {
       return exits.success(allowedCommands);
 
     } catch (error) {
-      sails.log.error(`${error}`);
+      sails.log.error(`${error}`, {serverId: inputs.serverId});
       return exits.error(error);
     }
 

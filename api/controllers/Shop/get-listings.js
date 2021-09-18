@@ -45,7 +45,7 @@ module.exports = {
 
       return exits.success(foundListings);
     } catch (error) {
-      sails.log.error(error);
+      sails.log.error(error, {serverId: inputs.serverId});
       return exits.error(error);
     }
 

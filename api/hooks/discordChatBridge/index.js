@@ -44,7 +44,7 @@ module.exports = function SdtdDiscordChatBridge(sails) {
               try {
                 await start(serverConfig.server);
               } catch (error) {
-                sails.log.error(`HOOK - DiscordChatBridge:initialize - Error for server ${serverConfig.server} - ${error}`);
+                sails.log.error(`HOOK - DiscordChatBridge:initialize - Error for server ${serverConfig.server} - ${error}`, {serverId: serverConfig.server});
               }
             }
             sails.log.info(`HOOK SdtdDiscordChatBridge:initialize - Initialized ${chatBridgeInfoMap.size} chatbridge(s)`);
@@ -100,7 +100,7 @@ module.exports = function SdtdDiscordChatBridge(sails) {
   async function start(serverId) {
 
     try {
-      sails.log.debug(`HOOK SdtdDiscordChatBridge:start - Starting chatbridge for server ${serverId}`);
+      sails.log.debug(`HOOK SdtdDiscordChatBridge:start - Starting chatbridge for server ${serverId}`, {serverId});
       let discordClient = sails.helpers.discord.getClient();
       let config = await SdtdConfig.find({
         server: serverId
@@ -137,14 +137,14 @@ module.exports = function SdtdDiscordChatBridge(sails) {
       setChatBridge(serverId, chatBridge);
       return;
     } catch (error) {
-      sails.log.error(`HOOK SdtdDiscordChatBridge:start - ${error}`);
+      sails.log.error(`HOOK SdtdDiscordChatBridge:start - ${error}`, {serverId});
       throw error;
     }
   }
 
   async function stop(serverId) {
     try {
-      sails.log.debug(`HOOK SdtdDiscordChatBridge:stop - Stopping chatbridge for server ${serverId}`);
+      sails.log.debug(`HOOK SdtdDiscordChatBridge:stop - Stopping chatbridge for server ${serverId}`, {serverId});
       let chatBridge = getChatBridge(serverId);
       if (!_.isUndefined(chatBridge)) {
         chatBridge.stop();
@@ -152,7 +152,7 @@ module.exports = function SdtdDiscordChatBridge(sails) {
       }
       return;
     } catch (error) {
-      sails.log.error(`HOOK SdtdDiscordChatBridge:stop - ${error}`);
+      sails.log.error(`HOOK SdtdDiscordChatBridge:stop - ${error}`, {serverId});
       throw error;
     }
   }

@@ -80,10 +80,10 @@ module.exports = {
 
       await sails.helpers.sdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(server), `pm ${player.steamId} "CSMM - You have received ${inputs.amount} of ${inputs.itemName}"`);
 
-      sails.log.info(`API - Player:give-item - giving ${inputs.amount} of ${inputs.itemName} to ${inputs.playerId} with quality: ${inputs.quality}`);
+      sails.log.info(`API - Player:give-item - giving ${inputs.amount} of ${inputs.itemName} to ${inputs.playerId} with quality: ${inputs.quality}`, {player, server});
       return exits.success();
     } catch (error) {
-      sails.log.error(`API - Player:give-item - ${error}`);
+      sails.log.error(`API - Player:give-item - ${error}`, {playerId: inputs.playerId});
       return exits.error(error);
     }
 

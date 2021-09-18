@@ -5,7 +5,7 @@ const FailedCounter = require('./redisVariables/failedCounter');
 
 async function failedHandler(job, e) {
   // Error getting logs from the server, likely a config error by the user
-  sails.log.debug(`Server ${job.data.serverId} has failed! Handling failure logic`);
+  sails.log.debug(`Server ${job.data.serverId} has failed! Handling failure logic`, {serverId: job.data.serverId});
   // Only handle this error if it is a FetchError
   // FetchError indicates something is wrong with the connection
   // Other errors are server side and should be handled as such (eg propagating to Sentry)
@@ -20,7 +20,7 @@ async function failedHandler(job, e) {
   // When this has failed enough times and the server is not in slowmode yet
   // We put the server in slowmode
   if (currentFails > 100 && !job.data.server.config.slowMode) {
-    sails.log.debug(`Entering slowmode for server ${job.data.serverId}`);
+    sails.log.debug(`Entering slowmode for server ${job.data.serverId}`, {serverId: job.data.serverId});
     // Switch to slow mode
     await SdtdConfig.update({ server: job.data.serverId }, { slowMode: true });
     // First delete the current job
@@ -41,7 +41,7 @@ async function failedHandler(job, e) {
 }
 
 module.exports = async function logs(job) {
-  sails.log.debug('[Worker] Got a `logs` job');
+  sails.log.debug('[Worker] Got a `logs` job',{ serverId: job.data.serverId });
   job.data.server = await SdtdServer.findOne(job.data.serverId);
   if (!job.data.server) {
     // Server does not exist in the database
@@ -111,7 +111,7 @@ module.exports = async function logs(job) {
     // If we dont find any new logs for a while
     // Reset the counter and start from scratch
     if (emptyResponses > 15) {
-      sails.log.debug(`Havent received new logs from server ${job.data.serverId} for a while, resetting`);
+      sails.log.debug(`Havent received new logs from server ${job.data.serverId} for a while, resetting`, {serverId: job.data.serverId});
       await LastLogLine.set(job.data.server.id, 0);
       // Make sure empty responses gets reset so this doesnt continuously fire
       await EmptyResponses.set(job.data.serverId, 0);

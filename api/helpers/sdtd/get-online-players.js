@@ -35,7 +35,7 @@ module.exports = {
       const onlinePlayers = await sails.helpers.sdtdApi.getOnlinePlayers(SdtdServer.getAPIConfig(server));
       return exits.success(onlinePlayers);
     } catch (e) {
-      sails.log.warn(e);
+      sails.log.warn(e, {serverId: inputs.serverId});
       return exits.success([]);
     }
   }

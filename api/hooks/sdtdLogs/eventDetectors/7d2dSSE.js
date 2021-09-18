@@ -14,7 +14,7 @@ class SdtdSSE extends LoggingObject {
       if (this.eventSource.readyState === EventSource.OPEN && (this.lastMessage > (Date.now() - 60000))) {
         return;
       }
-      sails.log.debug(`Trying to reconnect SSE for server ${this.server.id}`);
+      sails.log.debug(`Trying to reconnect SSE for server ${this.server.id}`, {serverId: this.server.id});
       this.destroy();
       this.start();
     }, 30000);
@@ -29,13 +29,13 @@ class SdtdSSE extends LoggingObject {
     this.eventSource.reconnectInterval = 5000;
     this.eventSource.addEventListener('logLine', this.listener);
     this.eventSource.onerror = e => {
-      sails.log.warn(`SSE error for server ${this.server.id}`);
+      sails.log.warn(`SSE error for server ${this.server.id}`, {server: this.server});
       if (e.message) {
-        sails.log.warn(e.message);
+        sails.log.warn(e.message, {server: this.server});
       }
     };
     this.eventSource.onopen = () => {
-      sails.log.debug(`Opened a SSE channel for server ${this.server.id}`);
+      sails.log.debug(`Opened a SSE channel for server ${this.server.id}`, {server: this.server});
     };
   }
 
@@ -64,7 +64,7 @@ class SdtdSSE extends LoggingObject {
         await this.handleMessage(log);
       }
     } catch (error) {
-      sails.log.error(error.stack);
+      sails.log.error(error.stack, {server: this.server});
     }
   }
 

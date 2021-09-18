@@ -66,12 +66,8 @@
             let newInterval = $('#economy-module-playtimeEarner-config-interval').val();
             let newAmount = $('#economy-module-playtimeEarner-config-amount').val();
 
-            if (newInterval != '') {
-                updatePlaytimeEarnerInterval(newInterval)
-            }
-
-            if (newAmount != '') {
-                updatePlaytimeEarnerAmount(newAmount)
+            if (newInterval != '' || newAmount != '') {
+                updatePlaytimeEarnerConfig(newInterval, newAmount)
             }
 
         })
@@ -119,22 +115,28 @@
 
         }
 
-        function updatePlaytimeEarnerInterval(newInterval) {
+        function updatePlaytimeEarnerConfig(newInterval, newAmount) {
 
             if (!validator.isInt(newInterval)) {
                 return $('#economy-module-playtimeEarner-config-interval').addClass('bg-danger').removeClass('bg-success');
             }
 
+            if (!validator.isInt(newAmount)) {
+                return $('#economy-module-playtimeEarner-config-amount').addClass('bg-danger').removeClass('bg-success');
+            }
+
             $.ajax({
-                url: '/api/sdtdserver/economy/module/playtimeearner/interval',
+                url: '/api/sdtdserver/economy/module/playtimeearner/config',
                 method: 'POST',
                 data: {
                     _csrf: window.SAILS_LOCALS._csrf,
                     serverId: window.SAILS_LOCALS.server.id,
-                    interval: newInterval
+                    interval: newInterval,
+                    amount: newAmount
                 },
                 success: (data, status, xhr) => {
                     $('#economy-module-playtimeEarner-config-interval').addClass('bg-success').removeClass('bg-danger');
+                    $('#economy-module-playtimeEarner-config-amount').addClass('bg-success').removeClass('bg-danger');
                 },
                 error: function (xhr, status, error) {
                     displayAjaxToSupportData(xhr, this);;
@@ -143,34 +145,6 @@
             })
         }
 
-
-
-
-
-        function updatePlaytimeEarnerAmount(newAmount) {
-
-            if (!validator.isInt(newAmount)) {
-                return $('#economy-module-playtimeEarner-config-amount').addClass('bg-danger').removeClass('bg-success');
-            }
-
-            $.ajax({
-                url: '/api/sdtdserver/economy/module/playtimeearner/amount',
-                method: 'POST',
-                data: {
-                    _csrf: window.SAILS_LOCALS._csrf,
-                    serverId: window.SAILS_LOCALS.server.id,
-                    amount: newAmount
-                },
-                success: (data, status, xhr) => {
-                    $('#economy-module-playtimeEarner-config-amount').addClass('bg-success').removeClass('bg-danger');
-                },
-                error: function (xhr, status, error) {
-                    displayAjaxToSupportData(xhr, this);
-                    showErrorModal(`${error} - ${xhr.responseText}`, xhr);
-                }
-            })
-
-        }
     })
 
 </script>

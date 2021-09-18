@@ -10,7 +10,7 @@ module.exports = async function isPatron(req, res, next) {
     if (serverId) {
       let donatorStatus = await sails.helpers.meta.checkDonatorStatus.with({ serverId: parseInt(serverId, 10) });
       if (donatorStatus === 'free') {
-        sails.log.warn(`POLICY - isPatron - ${req.session.userId} tried to access a patron-only route! ${req.originalUrl}`);
+        sails.log.warn(`POLICY - isPatron - ${req.session.userId} tried to access a patron-only route! ${req.originalUrl}`, {userId: req.session.userId});
         return res.badRequest('You must donate to access this feature.');
       } else {
         return next();
@@ -18,7 +18,7 @@ module.exports = async function isPatron(req, res, next) {
     } else {
       let donatorStatus = await sails.helpers.meta.checkDonatorStatus.with({ userId: req.session.userId });
       if (donatorStatus === 'free') {
-        sails.log.warn(`POLICY - isPatron - ${req.session.userId} tried to access a patron-only route! ${req.originalUrl}`);
+        sails.log.warn(`POLICY - isPatron - ${req.session.userId} tried to access a patron-only route! ${req.originalUrl}`, {userId: req.session.userId});
         return res.badRequest('You must donate to access this feature.');
       } else {
         return next();
@@ -28,7 +28,7 @@ module.exports = async function isPatron(req, res, next) {
 
 
   } catch (error) {
-    sails.log.error(`POLICY - isPatron - ${error}`);
+    sails.log.error(`POLICY - isPatron - ${error}`, {userId: req.session.userId});
     return res.badRequest();
   }
 };

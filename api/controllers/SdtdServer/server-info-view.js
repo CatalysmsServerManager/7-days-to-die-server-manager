@@ -33,7 +33,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    sails.log.debug(`VIEW - SdtdServer:info - Showing info for ${inputs.serverId}`);
+    sails.log.debug(`VIEW - SdtdServer:info - Showing info for ${inputs.serverId}`, {serverId: inputs.serverId});
 
     try {
       let server = await sails.helpers.loadSdtdserverInfo(inputs.serverId);
@@ -41,7 +41,7 @@ module.exports = {
         server: server
       });
     } catch (error) {
-      sails.log.error(`VIEW - SdtdServer:info - ${error}`);
+      sails.log.error(`VIEW - SdtdServer:info - ${error}`, {serverId: inputs.serverId});
       throw 'notFound';
     }
 

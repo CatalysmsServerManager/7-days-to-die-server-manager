@@ -11,7 +11,7 @@ async function commandListener(job) {
 
   let dateStarted = Date.now();
   if (!chatMessage.messageText.startsWith(server.config.commandPrefix)) {
-    sails.log.debug(`HOOK SdtdCommands:commandListener - Unknown command used by ${chatMessage.playerName} on server ${server.name} - ${chatMessage.messageText}`);
+    sails.log.debug(`HOOK SdtdCommands:commandListener - Unknown command used by ${chatMessage.playerName} on server ${server.name} - ${chatMessage.messageText}`, {server});
     return;
   }
   // Cut out the prefix
@@ -41,7 +41,7 @@ async function commandListener(job) {
 
 
   if (player.length === 0) {
-    sails.log.warn(`Did not find player data...`, chatMessage);
+    sails.log.warn(`Did not find player data...`, {server});
     return;
   }
 
@@ -67,11 +67,11 @@ async function commandListener(job) {
     try {
       await commandToRun.run(chatMessage, player, server, args, commandToRun.options);
       let dateEnded = Date.now();
-      sails.log.info(`HOOK SdtdCommands - command ran by player ${player.name} on server ${server.name}. Took ${dateEnded - dateStarted} ms - ${chatMessage.messageText}`);
+      sails.log.info(`HOOK SdtdCommands - command ran by player ${player.name} on server ${server.name}. Took ${dateEnded - dateStarted} ms - ${chatMessage.messageText}`, {player,server});
       return;
     } catch (error) {
       Sentry.captureException(error);
-      sails.log.error(`HOOK SdtdCommands - Error attempting to run ${chatMessage.messageText} on serverId ${server.id}: ${error}`);
+      sails.log.error(`HOOK SdtdCommands - Error attempting to run ${chatMessage.messageText} on serverId ${server.id}: ${error}`, {server, player});
       chatMessage.reply(`error`, { error: 'An unknown error occured' });
       return;
     }

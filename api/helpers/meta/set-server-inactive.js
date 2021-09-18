@@ -44,7 +44,7 @@ module.exports = {
       try {
         await sails.hooks.cron.stop(jobToStop.id);
       } catch (error) {
-        sails.log.error(`Error initializing cronjob ${jobToStop.id} - ${error}`);
+        sails.log.error(`Error initializing cronjob ${jobToStop.id} - ${error}`, {serverId: inputs.serverId});
       }
     }
 
@@ -77,7 +77,7 @@ module.exports = {
     }, {
       inactive: true
     });
-    sails.log.info(`Server has been marked as inactive.`, _.omit(server, 'authName', 'authToken'));
+    sails.log.info(`Server has been marked as inactive.`, {serverId: inputs.serverId});
     return exits.success();
 
   }

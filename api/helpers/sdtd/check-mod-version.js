@@ -70,7 +70,7 @@ module.exports = {
       versionNumber = 0;
     }
 
-    sails.log.debug(`Checked mod version of server ${inputs.serverId} for mod ${inputs.modName}. Found version ${versionNumber}`);
+    sails.log.debug(`Checked mod version of server ${inputs.serverId} for mod ${inputs.modName}. Found version ${versionNumber}`, {serverId: inputs.serverId});
     return exits.success(parseFloat(versionNumber));
 
   }

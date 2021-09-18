@@ -33,7 +33,7 @@ module.exports = {
       enabledWho: inputs.status
     });
 
-    sails.log.info(`Set status of who command to ${inputs.status} for server ${inputs.serverId}`);
+    sails.log.info(`Set status of who command to ${inputs.status} for server ${inputs.serverId}`, {serverId: inputs.serverId});
 
     return exits.success();
 

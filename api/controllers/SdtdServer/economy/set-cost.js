@@ -45,7 +45,7 @@ module.exports = {
       });
       return exits.success();
     } catch (error) {
-      sails.log.error(`API - Sdtdserver:set-cost - ${error}`);
+      sails.log.error(`API - Sdtdserver:set-cost - ${error}`, {serverId: inputs.serverId});
       return exits.error(error);
     }
 

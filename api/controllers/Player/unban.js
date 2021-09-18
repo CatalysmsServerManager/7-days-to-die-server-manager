@@ -34,9 +34,9 @@ module.exports = {
 
     try {
 
-      sails.log.debug(`API - Player:unban - unbanning player ${inputs.playerId}`);
       let player = await Player.findOne(inputs.playerId).populate('server');
       let server = await SdtdServer.findOne(player.server.id);
+      sails.log.debug(`API - Player:unban - unbanning player ${inputs.playerId}`, {player, server});
       return sevenDays.unbanPlayer({
         ip: server.ip,
         port: server.webPort,
@@ -56,7 +56,7 @@ module.exports = {
       });
 
     } catch (error) {
-      sails.log.error(`API - Player:unban - ${error}`);
+      sails.log.error(`API - Player:unban - ${error}`, {playerId: inputs.playerId});
       return exits.error(error);
     }
 

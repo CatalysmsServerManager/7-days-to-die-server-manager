@@ -28,14 +28,14 @@ module.exports = {
    */
 
   fn: async function (inputs, exits) {
-    sails.log.debug(`API - User:get-user-info - Getting profile for user ${inputs.userId}`);
+    sails.log.debug(`API - User:get-user-info - Getting profile for user ${inputs.userId}`, {userId: inputs.userId});
 
     try {
       let user = await User.findOne(inputs.userId);
       return exits.success(user);
 
     } catch (error) {
-      sails.log.error(`API - SdtdServer:get-user-info - ${error}`);
+      sails.log.error(`API - SdtdServer:get-user-info - ${error}`, {userId: inputs.userId});
       return exits.error(error);
     }
 

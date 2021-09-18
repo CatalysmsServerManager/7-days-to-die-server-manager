@@ -21,7 +21,7 @@ module.exports = {
           .catch(e => cb(e));
       })
       .catch(e => {
-        sails.log.error(e);
+        sails.log.error(e, {server: newConfig.server});
         return cb(e);
       });
   },

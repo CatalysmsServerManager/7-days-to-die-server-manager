@@ -83,7 +83,7 @@ class ChatBridgeChannel {
       }
     } catch (error) {
       sails.log.error(
-        `HOOK discordChatBridge:chatBridgeChannel:start`, error
+        `HOOK discordChatBridge:chatBridgeChannel:start`, {server: this.sdtdServer}
       );
     }
   }
@@ -272,7 +272,7 @@ class ChatBridgeChannel {
         .exec({
           error: error => {
             sails.log.error(
-              `HOOK discordBot:chatBridgeChannel - sending discord message to game ${error}`
+              `HOOK discordBot:chatBridgeChannel - sending discord message to game ${error}`, {server: this.sdtdServer}
             );
             message.react('⚠');
           },

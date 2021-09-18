@@ -112,7 +112,7 @@ class Lookup extends Commando.Command {
     if (foundPlayer.inventory) {
       fs.writeFile(`${sdtdServer.name}_${foundPlayer.id}_inventory.txt`, JSON.stringify(foundPlayer.inventory), err => {
         if (err) {
-          sails.log.error(err);
+          sails.log.error(err, {server: sdtdServer});
         }
         msg.channel.send({
           embed: embed,
@@ -123,11 +123,11 @@ class Lookup extends Commando.Command {
         }).then(() => {
           fs.unlink(`${sdtdServer.name}_${foundPlayer.id}_inventory.txt`, err => {
             if (err) {
-              sails.log.error(err);
+              sails.log.error(err, {server: sdtdServer});
             }
           });
         }).catch(e => {
-          sails.log.error(`DISCORD COMMAND - LOOKUP - ${e}`);
+          sails.log.error(`DISCORD COMMAND - LOOKUP - ${e}`, {server: sdtdServer});
         });
       });
     } else {

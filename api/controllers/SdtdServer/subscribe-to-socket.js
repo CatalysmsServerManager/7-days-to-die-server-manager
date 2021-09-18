@@ -48,9 +48,9 @@ module.exports = {
         throw 'serverNotFound';
       }
       sails.sockets.join(this.req, inputs.serverId);
-      sails.log.debug(`API - SdtdServer:subscribeToSocket - Successfully connected server ${inputs.serverId}`);
+      sails.log.debug(`API - SdtdServer:subscribeToSocket - Successfully connected server ${inputs.serverId}`, {serverId: inputs.serverId});
     } catch (error) {
-      sails.log.error(`API - SdtdServer:subscribeToSocket - ${error}`);
+      sails.log.error(`API - SdtdServer:subscribeToSocket - ${error}`, {serverId: inputs.serverId});
       return exits.error(error);
     }
 

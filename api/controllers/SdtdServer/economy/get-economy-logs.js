@@ -69,12 +69,12 @@ module.exports = {
       }).populate('player');
 
       let dateEnded = Date.now();
-      sails.log.info(`API - SdtdServer:economy:get-economy-logs - Got ${historicalInfo.length} records of economy logs for server ${inputs.serverId} - Took ${dateEnded - dateStarted} ms`);
+      sails.log.info(`API - SdtdServer:economy:get-economy-logs - Got ${historicalInfo.length} records of economy logs for server ${inputs.serverId} - Took ${dateEnded - dateStarted} ms`, {serverId: inputs.serverId});
 
       return exits.success(historicalInfo);
 
     } catch (error) {
-      sails.log.error(`API - SdtdServer:economy:get-economy-logs - ${error}`);
+      sails.log.error(`API - SdtdServer:economy:get-economy-logs - ${error}`, {serverId: inputs.serverId});
       throw 'notFound';
     }
 

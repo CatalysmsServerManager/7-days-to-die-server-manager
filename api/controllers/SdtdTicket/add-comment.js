@@ -40,7 +40,7 @@ module.exports = {
       ticket: ticket
     });
 
-    sails.log.info(`New comment on ticket ${inputs.ticketId}`, createdComment);
+    sails.log.info(`New comment on ticket ${inputs.ticketId}`, {serverId: ticket.server});
     return exits.success();
 
   }

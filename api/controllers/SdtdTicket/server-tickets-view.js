@@ -54,14 +54,14 @@ module.exports = {
         return exits.notFound();
       }
 
-      sails.log.info(`API - SdtdServer:tickets-view - Success, loaded ${tickets.length} tickets for server ${server.name}`);
+      sails.log.info(`API - SdtdServer:tickets-view - Success, loaded ${tickets.length} tickets for server ${server.name}`, {serverId: inputs.serverId});
       return exits.success({
         server: _.omit(server, 'authName', 'authToken'),
         tickets: tickets
       });
 
     } catch (error) {
-      sails.log.error(`API - SdtdServer:tickets-view - ${error}`);
+      sails.log.error(`API - SdtdServer:tickets-view - ${error}`, {serverId: inputs.serverId});
       return exits.error(error);
     }
 

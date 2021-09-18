@@ -114,12 +114,12 @@ class CustomCommand extends SdtdCommand {
           }
         }
 
-        sails.log.debug(`HOOK SdtdCommands - custom command ran by player ${player.name} on server ${server.name} - ${chatMessage.messageText}`, chatMessage, executedCmds);
+        sails.log.debug(`HOOK SdtdCommands - custom command ran by player ${player.name} on server ${server.name} - ${chatMessage.messageText}`, {server,player});
 
 
       } catch (error) {
-        sails.log.error(`Custom command error - server ${server.id} - ${chatMessage.messageText}`);
-        sails.log.error(error);
+        sails.log.error(`Custom command error - server ${server.id} - ${chatMessage.messageText}`, {server});
+        sails.log.error(error, {server});
         chatMessage.reply(`Error, please contact your server admin!`);
       }
     }

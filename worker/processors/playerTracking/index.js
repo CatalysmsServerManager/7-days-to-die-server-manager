@@ -2,7 +2,7 @@ const trackingFunctions = require('./trackingFunctions');
 
 
 module.exports = async function playerTracking(job) {
-  sails.log.debug('[Worker] Got a `playerTracking` job');
+  sails.log.debug('[Worker] Got a `playerTracking` job', {serverId: job.data.serverId});
   return doTracking(job.data);
 };
 
@@ -19,7 +19,7 @@ async function doTracking(serverId) {
   let onlinePlayers = await sails.helpers.sdtd.getOnlinePlayers(server.id);
 
   if (!onlinePlayers) {
-    sails.log.error(`Unexpected value for onlinePlayers: ${onlinePlayers}`);
+    sails.log.error(`Unexpected value for onlinePlayers: ${onlinePlayers}`, {serverId});
     return;
   }
 
@@ -80,7 +80,7 @@ async function doTracking(serverId) {
   }
 
   let dateEnded = new Date();
-  sails.log.debug(`Player tracking - Performed tracking for server ${server.name} - ${playerRecords.length} players online - ${currentCycles}/${sails.config.custom.trackingCyclesBeforeDelete} tracking cycles - took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`);
+  sails.log.debug(`Player tracking - Performed tracking for server ${server.name} - ${playerRecords.length} players online - ${currentCycles}/${sails.config.custom.trackingCyclesBeforeDelete} tracking cycles - took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`, {server});
 
 }
 
@@ -103,5 +103,5 @@ async function deleteLocationData(server) {
 
 
   let dateEnded = new Date();
-  sails.log.verbose(`Deleted location data for server ${server.name} - deleted ${deleteResult.affectedRows} rows - took ${dateEnded.valueOf() - dateNow.valueOf()} ms`);
+  sails.log.debug(`Deleted location data for server ${server.name} - deleted ${deleteResult.affectedRows} rows - took ${dateEnded.valueOf() - dateNow.valueOf()} ms`, {server});
 }

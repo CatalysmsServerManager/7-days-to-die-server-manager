@@ -37,11 +37,10 @@ module.exports = {
      * @param {string} userId
      */
 
-
   fn: async function (inputs, exits) {
 
     try {
-      sails.log.debug(`API - SdtdServer:user-tickets-view - Loading tickets view for user ${inputs.userId}`);
+      sails.log.debug(`API - SdtdServer:user-tickets-view - Loading tickets view for user ${inputs.userId}`, {userId: inputs.userId});
 
       let user = await User.findOne({
         id: inputs.userId
@@ -57,14 +56,14 @@ module.exports = {
         player: playerIds
       });
 
-      sails.log.debug(`API - SdtdServer:user-tickets-view - Success, loaded ${tickets.length} tickets`);
+      sails.log.debug(`API - SdtdServer:user-tickets-view - Success, loaded ${tickets.length} tickets`, {userId: inputs.userId});
       return exits.success({
         user: user,
         tickets: tickets
       });
 
     } catch (error) {
-      sails.log.error(`API - SdtdServer:user-tickets-view - ${error}`);
+      sails.log.error(`API - SdtdServer:user-tickets-view - ${error}`, {userId: inputs.userId});
       return exits.error(error);
     }
 

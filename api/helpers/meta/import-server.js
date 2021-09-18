@@ -39,7 +39,7 @@ module.exports = {
     json.config.server = server.id;
     await SdtdConfig.create(omitId(json.config)).fetch();
 
-    sails.log.info(`Imported server and config`);
+    sails.log.info(`Imported server and config`, {userId: inputs.userId, server});
 
     if (json.cronJobs) {
       json.cronJobs = setServerIdForArray(json.cronJobs, server.id);
@@ -48,7 +48,7 @@ module.exports = {
         await CronJob.create(omitId(cronJob));
       }
 
-      sails.log.info('Imported cronjobs');
+      sails.log.info('Imported cronjobs', {userId: inputs.userId, server});
     }
 
     if (json.customCommands) {
@@ -74,7 +74,7 @@ module.exports = {
         }
       }
 
-      sails.log.info('Imported custom commands');
+      sails.log.info('Imported custom commands', {userId: inputs.userId, server});
     }
 
     if (json.customDiscordNotifications) {
@@ -86,7 +86,7 @@ module.exports = {
         await CustomDiscordNotification.create(omitId(notification));
       }
 
-      sails.log.info('Imported custom Discord notifications');
+      sails.log.info('Imported custom Discord notifications', {userId: inputs.userId, server});
     }
 
 
@@ -96,7 +96,7 @@ module.exports = {
       for (const gimmeItem of json.gimmeItems) {
         await GimmeItem.create(omitId(gimmeItem));
       }
-      sails.log.info('Imported gimme items');
+      sails.log.info('Imported gimme items', {userId: inputs.userId, server});
 
     }
 
@@ -108,7 +108,7 @@ module.exports = {
         let createdRole = await Role.create(omitId(role)).fetch();
         importedRoles.push(createdRole);
       }
-      sails.log.info('Imported roles');
+      sails.log.info('Imported roles', {userId: inputs.userId, server});
 
     }
 
@@ -146,7 +146,7 @@ module.exports = {
           await PlayerTeleport.create(omitId(teleport));
         }
       }
-      sails.log.info('Imported players');
+      sails.log.info('Imported players', {userId: inputs.userId, server});
 
     }
 
@@ -160,7 +160,7 @@ module.exports = {
       for (const listing of json.shopListings) {
         await ShopListing.create(omitId(listing));
       }
-      sails.log.info('Imported shop listings');
+      sails.log.info('Imported shop listings', {userId: inputs.userId, server});
 
     }
 
@@ -170,7 +170,7 @@ module.exports = {
       for (const hook of json.customHooks) {
         await CustomHook.create(omitId(hook));
       }
-      sails.log.info('Imported custom hooks');
+      sails.log.info('Imported custom hooks', {userId: inputs.userId, server});
     }
 
     return exits.success(server);

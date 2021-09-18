@@ -86,7 +86,7 @@ async function addCSMMRole(member) {
     });
 
     if (_.isUndefined(highestRole[0])) {
-      sails.log.warn(`[handleRoleUpdate] No highest role found for server ${player.server}. Something is wrong`);
+      sails.log.warn(`[handleRoleUpdate] No highest role found for server ${player.server}. Something is wrong`, {player});
       continue;
     }
 
@@ -96,7 +96,7 @@ async function addCSMMRole(member) {
       }, {
         role: highestRole[0].id
       });
-      sails.log.debug(`[handleRoleUpdate] Modified a players role based on discord role change - player ${player.id}. ${player.name} to role ${highestRole[0] ? highestRole[0].name : null}`);
+      sails.log.debug(`[handleRoleUpdate] Modified a players role based on discord role change - player ${player.id}. ${player.name} to role ${highestRole[0] ? highestRole[0].name : null}`, {player});
     }
   }
 }

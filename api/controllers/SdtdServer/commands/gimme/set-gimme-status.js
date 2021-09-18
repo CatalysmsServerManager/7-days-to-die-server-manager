@@ -28,7 +28,7 @@ module.exports = {
     }, {
       enabledGimme: inputs.status
     });
-    sails.log.info(`Set status of gimme to ${inputs.status} for server ${inputs.serverId}`);
+    sails.log.info(`Set status of gimme to ${inputs.status} for server ${inputs.serverId}`, {serverId: inputs.serverId});
     return exits.success();
 
   }

@@ -44,7 +44,7 @@ class SdtdPolling extends LoggingObject {
     }
 
     if (result.logs.length) {
-      sails.log.debug(`Got ${result.logs.length} logs for server ${this.server.id}`);
+      sails.log.debug(`Got ${result.logs.length} logs for server ${this.server.id}`, {server: this.server});
     }
 
 
