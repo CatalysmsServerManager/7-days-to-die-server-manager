@@ -133,6 +133,8 @@ customLogger.stream = {
           player: playerId,
           httpMethod: parsed.method,
           url: url,
+          status: parsed['status-code'],
+          type: 'http'
         }
       });
   }
