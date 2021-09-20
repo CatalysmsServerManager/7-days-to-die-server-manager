@@ -92,32 +92,39 @@ describe('logging hook index', () => {
   describe('initialize', () => {
 
     it('Only starts servers that are active', async () => {
-      sandbox.stub(sails.helpers.sdtd, 'checkModVersion').resolves(38);
-      const initialize = util.promisify(sails.hooks.sdtdlogs.initialize);
-      sails.hooks.sdtdlogs.loggingInfoMap.clear();
+      return new Promise(async (resolve, reject) => {
+        sandbox.stub(sails.helpers.sdtd, 'checkModVersion').resolves(38);
+        const initialize = util.promisify(sails.hooks.sdtdlogs.initialize);
+        sails.hooks.sdtdlogs.loggingInfoMap.clear();
 
-      const inactiveServer = await SdtdServer.create({
-        name: faker.company.companyName(),
-        ip: 'localhost',
-        webPort: '8082',
-        authName: faker.random.alphaNumeric(20),
-        authToken: faker.random.alphaNumeric(20),
-        owner: sails.testUser.id
-      }).meta({ skipAllLifecycleCallbacks: true }).fetch();
+        const inactiveServer = await SdtdServer.create({
+          name: faker.company.companyName(),
+          ip: 'localhost',
+          webPort: '8082',
+          authName: faker.random.alphaNumeric(20),
+          authToken: faker.random.alphaNumeric(20),
+          owner: sails.testUser.id
+        }).meta({ skipAllLifecycleCallbacks: true }).fetch();
 
-      await SdtdConfig.create({
-        server: inactiveServer.id,
-        inactive: true,
+        await SdtdConfig.create({
+          server: inactiveServer.id,
+          inactive: true,
 
-      }).meta({ skipAllLifecycleCallbacks: true }).fetch();
+        }).meta({ skipAllLifecycleCallbacks: true }).fetch();
 
-      await initialize();
+        sandbox.stub(sails, 'emit').callsFake(() => {
+          const testServerStatus = sails.hooks.sdtdlogs.getStatus(sails.testServer.id);
+          expect(testServerStatus).to.be.ok;
 
-      const testServerStatus = sails.hooks.sdtdlogs.getStatus(sails.testServer.id);
-      expect(testServerStatus).to.be.ok;
+          const inactiveServerStatus = sails.hooks.sdtdlogs.getStatus(inactiveServer.id);
+          expect(inactiveServerStatus).to.not.be.ok;
+          resolve();
+        });
 
-      const inactiveServerStatus = sails.hooks.sdtdlogs.getStatus(inactiveServer.id);
-      expect(inactiveServerStatus).to.not.be.ok;
+
+        await initialize();
+      });
+
 
     });
 

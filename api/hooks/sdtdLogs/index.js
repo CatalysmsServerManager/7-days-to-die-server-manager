@@ -24,7 +24,9 @@ module.exports = function sdtdLogs(sails) {
      * @private
      */
     initialize: function (cb) {
-      sails.after('hook:orm:loaded', async () => {
+      // eslint-disable-next-line callback-return
+      cb();
+      sails.after('lifted', async () => {
         sails.log.info('Initializing custom hook (`sdtdLogs`)');
         queue = await sails.helpers.getQueueObject('logs');
         try {
@@ -42,7 +44,7 @@ module.exports = function sdtdLogs(sails) {
           }
 
           sails.log.debug(`HOOK: Sdtdlogs - Initialized ${this.loggingInfoMap.size} logging instances`);
-          return cb();
+          sails.emit('hook:sdtdLogs:ready');
         } catch (error) {
           sails.log.error(`HOOKS - sdtdLogs`, error);
         }

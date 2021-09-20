@@ -6,13 +6,10 @@ module.exports = function historicalInfo(sails) {
 
   return {
     initialize: function (cb) {
-      sails.on('hook:sdtdlogs:loaded', async function () {
+      // eslint-disable-next-line callback-return
+      cb();
+      sails.on('hook:sdtdLogs:ready', async function () {
         sails.log.info('Initializing custom hook (`historicalInfo`)');
-
-        if (!sails.config.custom.analyticsEnabled) {
-          sails.log.debug('Analytics is disabled via env vars, not initializing');
-          return cb();
-        }
 
         let memUpdateEnabledServers = await SdtdConfig.find({
           memUpdateInfoEnabled: true,
@@ -21,9 +18,6 @@ module.exports = function historicalInfo(sails) {
         for (let config of memUpdateEnabledServers) {
           await startMemUpdate(config.server);
         }
-        return cb();
-
-
       });
     },
 

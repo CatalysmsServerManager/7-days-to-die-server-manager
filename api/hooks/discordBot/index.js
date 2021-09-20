@@ -23,13 +23,14 @@ module.exports = function discordBot(sails) {
      * @description Starts the discord bot & logs in
      */
     initialize: function (cb) {
-      sails.on('hook:sdtdlogs:loaded', function () {
+      // eslint-disable-next-line callback-return
+      cb();
+
+      sails.on('hook:sdtdLogs:ready', function () {
         sails.log.info('Initializing custom hook (`discordBot`)');
         client = sails.helpers.discord.getClient();
 
         sails.discordBotClient = client;
-        // eslint-disable-next-line callback-return
-        cb();
 
         // Register custom embed messages
 
