@@ -18,7 +18,7 @@ module.exports = function defineCronHook(sails) {
         const functionToExecute = await sails.helpers.etc.parseCronJob(job.data.id);
         return functionToExecute();
       });
-      sails.after('hook:sdtdlogs:loaded', this.ensureJobsAreQueuedOnStart);
+      sails.after('hook:sdtdLogs:ready', this.ensureJobsAreQueuedOnStart);
       return done();
     },
 
