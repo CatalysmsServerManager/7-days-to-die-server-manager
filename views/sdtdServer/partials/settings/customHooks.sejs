@@ -575,10 +575,7 @@
           render: function (data, type, row, meta) {
             return `<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#hooks-edit-modal" data-event="${
               row.event
-            }" data-commands='${row.commandsToExecute.replace(
-              "'",
-              "&apos"
-            )}' data-searchstring="${row.searchString}" data-hookid="${
+            }" data-commands='${row.commandsToExecute.split("'").join("&apos")}' data-searchstring="${row.searchString}" data-hookid="${
               row.id
             }">Edit</button>`;
           },
