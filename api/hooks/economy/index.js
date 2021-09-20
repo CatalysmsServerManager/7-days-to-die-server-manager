@@ -14,10 +14,12 @@ module.exports = function economy(sails) {
   return {
     initialize: function (cb) {
 
-      sails.on('hook:sdtdlogs:loaded', async function () {
+      // eslint-disable-next-line callback-return
+      cb();
+
+      sails.on('hook:sdtdLogs:ready', async function () {
         sails.log.info('Initializing custom hook (`economy`)');
-        // eslint-disable-next-line callback-return
-        cb();
+
 
         discordMessageEmitter = new DiscordMessageHandler();
 

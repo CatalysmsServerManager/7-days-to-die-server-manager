@@ -24,6 +24,8 @@ module.exports = function SdtdDiscordChatBridge(sails) {
      * @description Initializes the chatbridges(s)
      */
     initialize: async function (cb) {
+      // eslint-disable-next-line callback-return
+      cb();
       sails.after('hook:discordbot:loaded', async function () {
         sails.log.info('Initializing custom hook (`discordChatbridge`)');
 
@@ -55,7 +57,6 @@ module.exports = function SdtdDiscordChatBridge(sails) {
           }
         });
 
-        return cb();
 
       });
 

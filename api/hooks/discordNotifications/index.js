@@ -1,6 +1,8 @@
 module.exports = function SdtdDiscordNotification(sails) {
   return {
     initialize: async function (cb) {
+      // eslint-disable-next-line callback-return
+      cb();
       sails.on('hook:discordbot:loaded', async function () {
         const configs = await SdtdConfig.find({});
         for (const serverConfig of configs) {
@@ -9,7 +11,6 @@ module.exports = function SdtdDiscordNotification(sails) {
             notificationType: 'systemboot'
           });
         }
-        cb();
       });
     },
   };

@@ -18,7 +18,9 @@ class HighPingCount {
    * @param {Function} done
    */
   initialize(done) {
-    this.sails.after('hook:sdtdlogs:loaded', async () => {
+    // eslint-disable-next-line callback-return
+    done();
+    this.sails.after('hook:sdtdLogs:ready', async () => {
       this.sails.log.info('Initializing custom hook (`highPingKick`)');
 
       let enabledConfigs = await SdtdConfig.find({
@@ -28,8 +30,6 @@ class HighPingCount {
       for (const configToStart of enabledConfigs) {
         await this.start(configToStart.server);
       }
-
-      done();
     });
   }
 
