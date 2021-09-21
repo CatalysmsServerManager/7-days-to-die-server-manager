@@ -17,7 +17,7 @@ module.exports = function economy(sails) {
       // eslint-disable-next-line callback-return
       cb();
 
-      sails.on('hook:sdtdLogs:ready', async function () {
+      sails.after('hook:sdtdLogs:ready', async function () {
         sails.log.info('Initializing custom hook (`economy`)');
 
 
