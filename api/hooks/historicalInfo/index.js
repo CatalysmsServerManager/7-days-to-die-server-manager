@@ -8,7 +8,7 @@ module.exports = function historicalInfo(sails) {
     initialize: function (cb) {
       // eslint-disable-next-line callback-return
       cb();
-      sails.on('hook:sdtdLogs:ready', async function () {
+      sails.after('hook:sdtdLogs:ready', async function () {
         sails.log.info('Initializing custom hook (`historicalInfo`)');
 
         let memUpdateEnabledServers = await SdtdConfig.find({
