@@ -273,7 +273,7 @@ module.exports = function sdtdCountryBan(sails) {
     initialize: function (cb) {
       // eslint-disable-next-line callback-return
       cb();
-      sails.on('hook:sdtdLogs:ready', async function () {
+      sails.after('hook:sdtdLogs:ready', async function () {
         try {
           let configs = await SdtdConfig.find({
             inactive: false

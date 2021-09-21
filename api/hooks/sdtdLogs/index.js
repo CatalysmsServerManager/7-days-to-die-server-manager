@@ -36,6 +36,9 @@ module.exports = function sdtdLogs(sails) {
             promises.push(this.start(config.server));
           }
 
+          // If after 10 seconds the promises are not fulfilled yet, we continue initialization anyways
+          setTimeout(() => sails.emit('hook:sdtdLogs:ready'), 10000);
+
           try {
             await Promise.all(promises);
           } catch (e) {
@@ -262,10 +265,4 @@ module.exports = function sdtdLogs(sails) {
       return eventEmitter;
     }
   };
-
-
-
-
-
-
 };
