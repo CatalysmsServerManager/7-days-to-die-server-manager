@@ -19,26 +19,32 @@ const handleInfo = format((info) => {
 
   if (info.userId) {
     info.labels.user = info.userId.toString();
+    delete info.userId;
   }
 
   if (info.user) {
     info.labels.user = info.user.id.toString();
+    delete info.user;
   }
 
   if (info.serverId) {
     info.labels.server = info.serverId.toString();
+    delete info.serverId;
   }
 
   if (info.server) {
     info.labels.server = info.server.id.toString();
+    delete info.server;
   }
 
   if (info.playerId) {
     info.labels.player = info.playerId.toString();
+    delete info.playerId;
   }
 
   if (info.player) {
     info.labels.player = info.player.id.toString();
+    delete info.player;
   }
 
   return info;
