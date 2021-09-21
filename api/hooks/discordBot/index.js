@@ -26,7 +26,7 @@ module.exports = function discordBot(sails) {
       // eslint-disable-next-line callback-return
       cb();
 
-      sails.on('hook:sdtdLogs:ready', function () {
+      sails.after('hook:sdtdLogs:ready', function () {
         sails.log.info('Initializing custom hook (`discordBot`)');
         client = sails.helpers.discord.getClient();
 
