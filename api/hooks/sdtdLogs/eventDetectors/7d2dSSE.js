@@ -11,7 +11,7 @@ class SdtdSSE extends LoggingObject {
     this.lastMessage = Date.now();
 
     this.reconnectInterval = setInterval(() => {
-      if (this.eventSource.readyState === EventSource.OPEN && (this.lastMessage > (Date.now() - 60000))) {
+      if (this.eventSource.readyState === EventSource.OPEN && (this.lastMessage > (Date.now() - 300000))) {
         return;
       }
       sails.log.debug(`Trying to reconnect SSE for server ${this.server.id}`, {serverId: this.server.id});
