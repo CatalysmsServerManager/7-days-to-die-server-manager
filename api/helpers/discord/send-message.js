@@ -37,7 +37,7 @@ module.exports = {
         return exits.error(new Error('Invalid usage, must provide either content or embed'));
       }
 
-      await sails.helpers.discord.discordrequest(
+      const response = await sails.helpers.discord.discordrequest(
         `channels/${inputs.channelId}/messages`,
         'post',
         {
@@ -46,7 +46,9 @@ module.exports = {
           'embed': inputs.embed
         }
       );
+      sails.log.debug(`Sent a message to channel ${inputs.channelId}`,{...response, labels: {type: 'discord'}});
     } catch (e) {
+      sails.log.error(`Error sending message to ${inputs.channelId}`,{error: e, labels: {type: 'discord'}});
       return exits.error(e);
     }
 
