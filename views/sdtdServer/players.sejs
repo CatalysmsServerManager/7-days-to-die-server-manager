@@ -77,10 +77,10 @@
       responsive: true,
       serverSide: true,
       columns: [
-        {
+        {g
           data: "name",
           render: function (data, type, row, meta) {
-            return`<a href="/player/${row.id}/profile">${data}</a>`;
+            return `<a href="/player/${row.id}/profile">${data}</a>`;
           }
         },
         {
