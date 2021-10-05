@@ -58,11 +58,13 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production concurrently --kill-others -n 'app,worker' 'npm run start:app' 'npm run start:worker'",
     "start:app": "node app.js",
+    "start:app:inspect": "node --inspect-brk=localhost:9229 app.js",
     "start:worker": "node worker/worker.js",
     "wait-for:db": "node ./scripts/wait-for-db.mjs",
     "test": "mocha test ",
     "lint": "eslint .",
     "dev": "cross-env NODE_ENV=development nodemon --exec concurrently --kill-others -n 'app,worker' 'npm run start:app' 'npm run start:worker'",
+    "dev:inspect": "cross-env NODE_ENV=development nodemon --exec concurrently --kill-others -n 'app,worker' 'npm run start:app:inspect' 'npm run start:worker'",
     "debug": "node debug app.js",
     "cover": "nyc npm run test",
     "itemIcons:update": "sh ./scripts/itemIconsUpdate.sh",
