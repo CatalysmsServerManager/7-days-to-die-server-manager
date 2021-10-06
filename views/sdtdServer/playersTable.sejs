@@ -1,0 +1,173 @@
+<div class="card">
+  <div class="card-header">
+    <%- await include('./partials/exportPlayersButton.sejs') %>
+    <%- await include('./partials/deletePlayersButton.sejs') %>
+    <%- await include('./partials/wipeTeleports.sejs') %>
+    <%- await include('./partials/wipeCurrencyBtn.sejs') %>
+    <div style="width: 275px" class="input-group float-right">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1"><i class="fa fa-search"></i></span>
+      </div>
+      <input id="search-input" type="text" class="form-control" placeholder="Search...">
+    </div>
+  </div>
+  <div class="card-body" style="padding: 0">
+    <div id="players-table" style="height: 100px; width: 100%;" class="ag-theme-alpine"></div>
+  </div>
+</div>
+
+<style>
+    .ag-root-wrapper {
+        border: 0!important;
+    }
+</style>
+
+<script>
+  let lastEndRow = null;
+  const columnDefs = [
+    { headerName: 'Name', field: 'name', cellRenderer: (p) => {
+      if (!!p.value) {
+        return '<span>' + p.value + '</span>';
+      }
+    } },
+    { headerName: 'Entity ID', field: 'entityId' },
+    { headerName: 'Steam ID', field: 'steamId' },
+    { headerName: 'Role', field: 'role.name' },
+    { headerName: 'IP', field: 'ip' },
+    { headerName: 'Country', field: 'country', cellRenderer: (p) => {
+      if (!!p.value) {
+        let flagImg = '<img src="../../images/flags/blank.gif" class="flag flag-' + p.value.toLowerCase() + '"/>';
+        return flagImg + ' ' + p.value;
+      }
+    } },
+    { headerName: 'Playtime', field: 'playtime', cellRenderer: (p) => {
+      if (!!p.value) {
+        return (p.value / 3600).toFixed(1) + ' h';
+      }
+    } },
+    { headerName: 'Last online', field: 'lastOnline', cellRenderer: (p) => {
+      if (!!p.value) {
+        return new Date(p.value).toLocaleString();
+      }
+    } },
+    { headerName: 'Level', field: 'level' },
+    { headerName: 'Currency', field: 'currency' },
+    { headerName: 'Score', field: 'score' },
+    { headerName: 'Deaths', field: 'deaths' },
+    { headerName: 'Player Kills', field: 'playerKills' },
+    { headerName: 'Zombie Kills', field: 'zombieKills' },
+  ];
+
+  let gridOptions = {
+    columnDefs: columnDefs,
+    rowData: [],
+    defaultColDef: {
+      filter: true,
+      resizable: true,
+      sortable: true
+    },
+    enableSorting: true,
+    enableFilter: true,
+    enableColResize: true,
+    enableCellTextSelection: true,
+    rowModelType: 'infinite',
+    cacheBlockSize: 25,
+    maxConcurrentDatasourceRequests: 1,
+    infiniteInitialRowCount: 50,
+    onGridReady: function (params) {
+      params.api.setDatasource(createDatasource());
+      params.api.sizeColumnsToFit();
+    },
+  };
+  $(document).ready(() => {
+    // loadData();
+    autoSizeTable();
+    const gridDiv = document.querySelector('#players-table');
+    new agGrid.Grid(gridDiv, gridOptions);
+  });
+
+  async function loadData () {
+    let xhr = null;
+    let data = await $.ajax({
+      url: '/api/sdtdserver/players/datatable',
+      type: 'POST',
+      data: {
+        _csrf: window.SAILS_LOCALS._csrf,
+        serverId: window.SAILS_LOCALS.server.id,
+      },
+      error: function (xhr, status, error) {
+        $('#modal-set-note').modal('hide');
+        showErrorModal(`Error while processing an API request. ${xhr.responseText}`)
+        displayAjaxToSupportData(xhr, this);
+
+      }
+    });
+    if (data) {
+      gridOptions.rowData = data.data;
+      autoSizeTable();
+
+      const gridDiv = document.querySelector('#players-table');
+      new agGrid.Grid(gridDiv, gridOptions);
+    }
+  }
+
+  /**
+   * Get DataSource
+   */
+  function createDatasource () {
+    return {
+      rowCount: null,
+      // called by the grid when more rows are required
+      getRows: async (params) => {
+        if (!params.startRow) {
+          gridOptions.api.showLoadingOverlay();
+        }
+        let endRow;
+        if (lastEndRow !== null && lastEndRow >= params.endRow) {
+            endRow = lastEndRow;
+        } else {
+            endRow = params.endRow;
+        }
+        lastEndRow = params.endRow;
+        let data = await $.ajax({
+          url: '/api/sdtdserver/players/datatable',
+          type: 'POST',
+            data: {
+              _csrf: window.SAILS_LOCALS._csrf,
+              serverId: window.SAILS_LOCALS.server.id,
+              startRow: params.startRow,
+              endRow: endRow,
+              sortModel: params.sortModel
+            },
+            error: function (xhr, status, error) {
+              params.failCallback();
+              $('#modal-set-note').modal('hide');
+              showErrorModal(`Error while processing an API request. ${xhr.responseText}`)
+              displayAjaxToSupportData(xhr, this);
+
+            }
+        });
+        if (data) {
+          lastRow = params.startRow + data.data.length;
+          let response = {
+            status: true,
+            rows: data.data,
+            lastRow: null
+          };
+          if (response.rows.length === 0) {
+            gridOptions.api?.showNoRowsOverlay();
+          }
+          gridOptions.api.hideOverlay();
+          params.successCallback(response.rows, response.lastRow);
+
+        }
+      }
+    };
+  }
+
+  function autoSizeTable () {
+    let windowHeight = $(window).height();
+    let tableHeight = windowHeight - 300;
+    $('#players-table').css({height: tableHeight + 'px'});
+  }
+</script>
