@@ -1,5 +1,8 @@
-<div class="card">
+<div class="card" style="margin: 0;">
   <div class="card-header">
+    <span style="margin-right: 10px;" class="badge badge-pill badge-light">
+      <span id="countFiltered">0</span> / <span id="countTotal">0</span> Entries
+    </span>
     <%- await include('./partials/exportPlayersButton.sejs') %>
     <%- await include('./partials/deletePlayersButton.sejs') %>
     <%- await include('./partials/wipeTeleports.sejs') %>
@@ -23,7 +26,10 @@
 </style>
 
 <script>
+  let onlyOnline = null;
+  let height = null;
   let lastEndRow = null;
+  let searchValue = '';
   const columnDefs = [
     { headerName: 'Name', field: 'name', cellRenderer: (p) => {
       if (!!p.value) {
@@ -32,7 +38,11 @@
     } },
     { headerName: 'Entity ID', field: 'entityId' },
     { headerName: 'Steam ID', field: 'steamId' },
-    { headerName: 'Role', field: 'role.name' },
+    { headerName: 'Role', field: 'role', cellRenderer: (p) => {
+      if (!!p.value) {
+        return p.value.name;
+      }
+    } },
     { headerName: 'IP', field: 'ip' },
     { headerName: 'Country', field: 'country', cellRenderer: (p) => {
       if (!!p.value) {
@@ -62,12 +72,10 @@
     columnDefs: columnDefs,
     rowData: [],
     defaultColDef: {
-      filter: true,
       resizable: true,
       sortable: true
     },
     enableSorting: true,
-    enableFilter: true,
     enableColResize: true,
     enableCellTextSelection: true,
     rowModelType: 'infinite',
@@ -80,10 +88,24 @@
     },
   };
   $(document).ready(() => {
-    // loadData();
+    onlyOnline = <%= onlyOnline %>;
+    height = <%= height %>;
     autoSizeTable();
     const gridDiv = document.querySelector('#players-table');
     new agGrid.Grid(gridDiv, gridOptions);
+
+    $('#search-input')
+      .change(function () {
+        searchValue = $('#search-input').val();
+        gridOptions.api.refreshInfiniteCache();
+    })
+    io.socket.on('playerConnected', (connectedMessage) => {
+      // Stub
+    })
+
+    io.socket.on('playerDisconnected', (disconnectedMessage) => {
+      // Stub
+    })
   });
 
   async function loadData () {
@@ -137,14 +159,16 @@
               serverId: window.SAILS_LOCALS.server.id,
               startRow: params.startRow,
               endRow: endRow,
-              sortModel: params.sortModel
+              sortModel: params.sortModel,
+              searchText: searchValue,
+              fields: columnDefs.map(def => def.field),
+              onlyOnline: onlyOnline
             },
             error: function (xhr, status, error) {
               params.failCallback();
               $('#modal-set-note').modal('hide');
               showErrorModal(`Error while processing an API request. ${xhr.responseText}`)
               displayAjaxToSupportData(xhr, this);
-
             }
         });
         if (data) {
@@ -157,8 +181,10 @@
           if (response.rows.length === 0) {
             gridOptions.api?.showNoRowsOverlay();
           }
+          $('#countFiltered').text(data.recordsFiltered);
+          $('#countTotal').text(data.recordsTotal);
           gridOptions.api.hideOverlay();
-          params.successCallback(response.rows, response.lastRow);
+          params.successCallback(response.rows, data.recordsFiltered);
 
         }
       }
@@ -166,8 +192,13 @@
   }
 
   function autoSizeTable () {
-    let windowHeight = $(window).height();
-    let tableHeight = windowHeight - 300;
+    let tableHeight;
+    if (height) {
+      tableHeight = height
+    } else {
+      let windowHeight = $(window).height();
+      tableHeight = windowHeight - 300;
+    }
     $('#players-table').css({height: tableHeight + 'px'});
   }
 </script>

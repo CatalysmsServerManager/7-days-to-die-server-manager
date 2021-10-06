@@ -22,7 +22,7 @@
 
     <div class="row">
       <div class="col-md-12">
-        <%- await include('./playersTable.sejs') %>
+        <%- await include('./playersTable.sejs', { onlyOnline: false, height: false }) %>
       </div>
     </div>
   </div>
