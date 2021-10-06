@@ -4,7 +4,7 @@
   "description": "A 7dtd server manager made with Sails.js",
   "keywords": [],
   "dependencies": {
-    "@budibase/handlebars-helpers": "^0.11.5",
+    "@budibase/handlebars-helpers": "^0.11.6",
     "@sailshq/connect-redis": "^3.2.1",
     "@sailshq/socket.io-redis": "^5.2.0",
     "@sentry/core": "^6.13.2",
