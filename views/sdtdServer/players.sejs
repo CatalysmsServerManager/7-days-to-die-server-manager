@@ -61,9 +61,7 @@
 
 <script>
   $(document).ready(function () {
-    let players = [];
-
-    let playerDataTable = $("#players-overview").DataTable({
+    $("#players-overview").DataTable({
       data: window.SAILS_LOCALS.players,
       dom: "Bfrtip",
       ajax: {
@@ -83,7 +81,7 @@
           data: "name",
           render: function (data, type, row, meta) {
             return `<a href="/player/${row.id}/profile">${data}</a>`;
-          },
+          }
         },
         {
           data: "entityId",
@@ -96,7 +94,7 @@
           render: {
               _: "name",
               sort: "level",
-            },
+          },
         },
         {
           data: "ip",

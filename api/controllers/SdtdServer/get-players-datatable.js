@@ -34,10 +34,10 @@ async function getPlayersDataTable(req, res) {
 
 
   }
-
-  if (parseInt(req.body.order[0].column)) {
+  if (req.body.order.length) {
+    const colNumToSort = parseInt(req.body.order[0].column);
     const sortObj = {};
-    sortObj[req.body.columns[parseInt(req.body.order[0].column)].data] = req.body.order[0].dir;
+    sortObj[req.body.columns[colNumToSort].data] = req.body.order[0].dir;
     queryObj.sort = [sortObj];
   }
 
