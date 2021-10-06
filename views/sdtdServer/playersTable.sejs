@@ -31,20 +31,20 @@
   let lastEndRow = null;
   let searchValue = '';
   const columnDefs = [
-    { headerName: 'Name', field: 'name', cellRenderer: (p) => {
+    { headerName: 'Name', field: 'name', width: 300, cellRenderer: (p) => {
       if (!!p.value) {
         return '<span>' + p.value + '</span>';
       }
     } },
     { headerName: 'Entity ID', field: 'entityId' },
-    { headerName: 'Steam ID', field: 'steamId' },
-    { headerName: 'Role', field: 'role', cellRenderer: (p) => {
+    { headerName: 'Steam ID', field: 'steamId', width: 300 },
+    { headerName: 'Role', field: 'role', width: 150, cellRenderer: (p) => {
       if (!!p.value) {
         return p.value.name;
       }
     } },
-    { headerName: 'IP', field: 'ip' },
-    { headerName: 'Country', field: 'country', cellRenderer: (p) => {
+    { headerName: 'IP', field: 'ip', width: 200 },
+    { headerName: 'Country', field: 'country', width: 140, cellRenderer: (p) => {
       if (!!p.value) {
         let flagImg = '<img src="../../images/flags/blank.gif" class="flag flag-' + p.value.toLowerCase() + '"/>';
         return flagImg + ' ' + p.value;
@@ -60,12 +60,12 @@
         return new Date(p.value).toLocaleString();
       }
     } },
-    { headerName: 'Level', field: 'level' },
-    { headerName: 'Currency', field: 'currency' },
-    { headerName: 'Score', field: 'score' },
-    { headerName: 'Deaths', field: 'deaths' },
-    { headerName: 'Player Kills', field: 'playerKills' },
-    { headerName: 'Zombie Kills', field: 'zombieKills' },
+    { headerName: 'Level', field: 'level', width: 130 },
+    { headerName: 'Currency', field: 'currency', width: 150 },
+    { headerName: 'Score', field: 'score', width: 130 },
+    { headerName: 'Deaths', field: 'deaths', width: 130 },
+    { headerName: 'Player Kills', field: 'playerKills', width: 170 },
+    { headerName: 'Zombie Kills', field: 'zombieKills', width: 170 },
   ];
 
   let gridOptions = {
