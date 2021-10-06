@@ -29,5 +29,15 @@ services:
       MYSQL_DATABASE: csmm
       MYSQL_RANDOM_ROOT_PASSWORD: "true"
 
+  csmm-phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: csmm-phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+    ports:
+      - "15500:80"
+    volumes:
+      - /sessions
+
 volumes:
   mysql:
