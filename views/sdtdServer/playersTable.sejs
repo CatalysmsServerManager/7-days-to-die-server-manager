@@ -33,17 +33,25 @@
   const columnDefs = [
     { headerName: 'Name', field: 'name', width: 300, cellRenderer: (p) => {
       if (!!p.value) {
-        return '<span>' + p.value + '</span>';
+        return '<span><a target="_blank" href="/player/' + p.data.id + '/profile">' + p.value + '</a></span>';
       }
     } },
     { headerName: 'Entity ID', field: 'entityId' },
-    { headerName: 'Steam ID', field: 'steamId', width: 300 },
+    { headerName: 'Steam ID', field: 'steamId', width: 300, cellRenderer: (p) => {
+      if (!!p.value) {
+        return '<a target="_blank" href="https://steamcommunity.com/profiles/' + p.value + '">' + p.value + '</a>';
+      }
+    } },
     { headerName: 'Role', field: 'role', width: 150, cellRenderer: (p) => {
       if (!!p.value) {
         return p.value.name;
       }
     } },
-    { headerName: 'IP', field: 'ip', width: 200 },
+    { headerName: 'IP', field: 'ip', width: 200, cellRenderer: (p) => {
+      if (!!p.value) {
+        return '<a target="_blank" href="https://scamalytics.com/ip/' + p.value + '">' + p.value + '</a>';
+      }
+    } },
     { headerName: 'Country', field: 'country', width: 140, cellRenderer: (p) => {
       if (!!p.value) {
         let flagImg = '<img src="../../images/flags/blank.gif" class="flag flag-' + p.value.toLowerCase() + '"/>';

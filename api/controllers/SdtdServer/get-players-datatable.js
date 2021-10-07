@@ -29,7 +29,7 @@ async function getPlayersDataTable(req, res) {
   };
 
   if (req.body.sortModel) {
-    queryObj.sort = req.body.sortModel?.map(col => { return  getSortCondition(col); });
+    queryObj.sort = req.body.sortModel.map(col => { return  getSortCondition(col); });
   }
 
   const players = await Player.find(queryObj);
