@@ -1,5 +1,17 @@
 const Handlebars = require('handlebars');
 // The library will automatically register the helpers with Handlebars
+require('@budibase/handlebars-helpers')([
+  'array',
+  'collection',
+  'comparison',
+  'date',
+  'inflection',
+  'match',
+  'math',
+  'number',
+  'regex',
+  'string',
+]);
 
 Handlebars.registerHelper('eq', function (a, b) {
   return (a === b);

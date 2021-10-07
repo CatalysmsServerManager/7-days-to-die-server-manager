@@ -25,6 +25,12 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
+
+    await TicketComment.create({
+      commentText: inputs.commentText,
+      ticket: inputs.ticketId,
+      userThatPlacedTheComment: this.req.session.userId
+    }).fetch();
     let ticket = await SdtdTicket.findOne(inputs.ticketId);
 
     await sails.helpers.discord.sendNotification({
