@@ -1,8 +1,3 @@
-// If you don't know wtf is going on here
-// https://datatables.net/manual/server-side
-
-const sevenDays = require('machinepack-7daystodiewebapi');
-
 async function getPlayersDataTable(req, res) {
 
   const whereObj = {
@@ -15,22 +10,21 @@ async function getPlayersDataTable(req, res) {
       { name: { contains: req.body.searchText } },
       { steamId: { contains: req.body.searchText } },
       { ip: { contains: req.body.searchText } }
-    ]
+    ];
     if (!isNaN(req.body.searchText)) {
       whereObj.or.push({ entityId: req.body.searchText });
     }
   }
   if (req.body.onlyOnline === 'true') {
-    const server = await SdtdServer.findOne(req.body.serverId);
-    const playerList = await getPlayerList(server);
-    let steamIds = playerList.players.filter(p => p.online).map(p => p.steamid);
-    whereObj.steamId = { in: steamIds }
+    const steamIds = (await sails.helpers.sdtd.getOnlinePlayers(req.body.serverId))
+      .filter(p => p.online).map(p => p.steamid);
+    whereObj.steamId = { in: steamIds };
   }
   const rowCount = parseInt(req.body.endRow) - parseInt(req.body.startRow);
   const queryObj = {
     where: whereObj,
     select: req.body.fields,
-    sort: req.body.sortModel?.map(col => { return  getSortCondition(col) }),
+    sort: req.body.sortModel?.map(col => { return  getSortCondition(col); }),
     skip: req.body.startRow,
     limit: rowCount,
   };
@@ -71,33 +65,9 @@ function getSortCondition (col) {
     const parts = col.colId.split('.');
     condition = { [parts[0]]: col.sort };
   } else {
-      condition = { [col.colId]: col.sort }
+    condition = { [col.colId]: col.sort };
   }
   return condition;
-}
-
-/**
- * Get Players List from 7dtd Server
- * @param server
- */
-async function getPlayerList(server) {
-  return new Promise((resolve) => {
-    sevenDays.getPlayerList({
-      ip: server.ip,
-      port: server.webPort,
-      authName: server.authName,
-      authToken: server.authToken
-    }).exec({
-      error: function () {
-        resolve({
-          players: []
-        });
-      },
-      success: function (playerList) {
-        resolve(playerList);
-      }
-    });
-  });
 }
 
 module.exports = getPlayersDataTable;
