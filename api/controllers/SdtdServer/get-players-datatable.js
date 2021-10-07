@@ -24,10 +24,13 @@ async function getPlayersDataTable(req, res) {
   const queryObj = {
     where: whereObj,
     select: req.body.fields,
-    sort: req.body.sortModel?.map(col => { return  getSortCondition(col); }),
     skip: req.body.startRow,
     limit: rowCount,
   };
+
+  if (req.body.sortModel) {
+    queryObj.sort = req.body.sortModel?.map(col => { return  getSortCondition(col); });
+  }
 
   const players = await Player.find(queryObj);
 
