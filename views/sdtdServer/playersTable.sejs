@@ -86,6 +86,15 @@
       params.api.setDatasource(createDatasource());
       params.api.sizeColumnsToFit();
     },
+    onSortChanged: (p) => {
+      localStorage.setItem('playersOverview.sortModel', JSON.stringify(p.api.getSortModel()));
+    },
+    columnVisible: (p) => {
+      localStorage.setItem('playersOverview.columnState', JSON.stringify(p.api.getColumnState()));
+    },
+    columnResized: (p) => {
+      localStorage.setItem('playersOverview.columnState', JSON.stringify(p.api.getColumnState()));
+    },
   };
   $(document).ready(() => {
     onlyOnline = <%= onlyOnline %>;
@@ -93,6 +102,8 @@
     autoSizeTable();
     const gridDiv = document.querySelector('#players-table');
     new agGrid.Grid(gridDiv, gridOptions);
+    gridOptions.api.setSortModel(JSON.parse(localStorage.getItem('playersOverview.SortModel')));
+    gridOptions.api.setColumnState(JSON.parse(localStorage.getItem('playersOverview.columnState')));
 
     $('#search-input')
       .change(function () {
