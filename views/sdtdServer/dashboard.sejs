@@ -70,7 +70,7 @@
   <h2>
     Online players
   </h2>
-  <%- await include('./playersTable.sejs', { onlyOnline: true, height: 300 }) %>
+  <%- await include('./playersTable.sejs', { onlyOnline: true, height: 300, identifier: 'identifier' }) %>
 </div>
 
 
@@ -147,6 +147,7 @@
 
 
 <script>
+  identifier = 'playersDashboard';
   $(document).ready(function () {
 
     $("#reload-gbl-entries").click(e => {

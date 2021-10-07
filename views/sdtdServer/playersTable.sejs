@@ -13,6 +13,7 @@
       </div>
       <input id="search-input" type="text" class="form-control" placeholder="Search...">
     </div>
+    <button title="Reset Table" onclick="resetColumnState()" style="margin-right: 50px;" class="btn btn-outline-danger btn-sm float-right"><i class="fa fa-table"></i></button>
   </div>
   <div class="card-body" style="padding: 0">
     <div id="players-table" style="height: 100px; width: 100%;" class="ag-theme-alpine"></div>
@@ -28,6 +29,7 @@
 <script>
   let onlyOnline = null;
   let height = null;
+  let identifier = null;
   let lastEndRow = null;
   let searchValue = '';
   const columnDefs = [
@@ -82,28 +84,40 @@
     cacheBlockSize: 25,
     maxConcurrentDatasourceRequests: 1,
     infiniteInitialRowCount: 50,
-    onGridReady: function (params) {
+    onGridReady: (params) => {
+      const sortModel = JSON.parse(localStorage.getItem(identifier + '.SortModel'));
+      const columnState = JSON.parse(localStorage.getItem(identifier + '.columnState'));
+      gridOptions.api.setSortModel(sortModel);
+      gridOptions.columnApi.applyColumnState({ state: columnState, applyOrder: true });
+      if (!columnState) {
+        params.api.sizeColumnsToFit();
+      }
       params.api.setDatasource(createDatasource());
-      params.api.sizeColumnsToFit();
     },
     onSortChanged: (p) => {
-      localStorage.setItem('playersOverview.sortModel', JSON.stringify(p.api.getSortModel()));
+      localStorage.setItem(identifier + '.sortModel', JSON.stringify(p.api.getSortModel()));
     },
-    columnVisible: (p) => {
-      localStorage.setItem('playersOverview.columnState', JSON.stringify(p.api.getColumnState()));
+    onColumnVisible: (p) => {
+      saveColumnState();
     },
-    columnResized: (p) => {
-      localStorage.setItem('playersOverview.columnState', JSON.stringify(p.api.getColumnState()));
+    onColumnMoved: (p) => {
+      if (p.finished) {
+        saveColumnState();
+      }
+    },
+    onColumnResized: (p) => {
+      if (p.finished) {
+        saveColumnState();
+      }
     },
   };
   $(document).ready(() => {
     onlyOnline = <%= onlyOnline %>;
     height = <%= height %>;
+    identifier = <%= identifier %>;
     autoSizeTable();
     const gridDiv = document.querySelector('#players-table');
     new agGrid.Grid(gridDiv, gridOptions);
-    gridOptions.api.setSortModel(JSON.parse(localStorage.getItem('playersOverview.SortModel')));
-    gridOptions.api.setColumnState(JSON.parse(localStorage.getItem('playersOverview.columnState')));
 
     $('#search-input')
       .change(function () {
@@ -210,5 +224,17 @@
       tableHeight = windowHeight - 300;
     }
     $('#players-table').css({height: tableHeight + 'px'});
+  }
+
+  /**
+   * Save Aggrid ColumnState to Localstorage
+   */
+  function saveColumnState () {
+    localStorage.setItem(identifier + '.columnState', JSON.stringify(gridOptions.columnApi.getColumnState()));
+  }
+
+  function resetColumnState () {
+    gridOptions.columnApi.resetColumnState();
+    gridOptions.api.sizeColumnsToFit();
   }
 </script>
