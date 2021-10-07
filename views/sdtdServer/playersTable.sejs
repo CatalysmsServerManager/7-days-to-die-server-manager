@@ -68,7 +68,7 @@
     { headerName: 'Zombie Kills', field: 'zombieKills', width: 170 },
   ];
 
-  let gridOptions = {
+  const gridOptions = {
     columnDefs: columnDefs,
     rowData: [],
     defaultColDef: {
@@ -109,7 +109,6 @@
   });
 
   async function loadData () {
-    let xhr = null;
     let data = await $.ajax({
       url: '/api/sdtdserver/players/datatable',
       type: 'POST',
