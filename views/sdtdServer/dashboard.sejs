@@ -63,27 +63,18 @@
   </div>
 </div>
 
+<% if(!_.isUndefined(server.stats) && !_.isUndefined(server.serverInfo)) { %>
+
+
+<div style="margin-top: 15px;">
+  <h2>
+    Online players
+  </h2>
+  <%- await include('./playersTable.sejs', { onlyOnline: true, height: 300, identifier: 'identifier' }) %>
+</div>
+
+
 <div class="card-columns">
-
-  <% if(!_.isUndefined(server.stats) && !_.isUndefined(server.serverInfo)) { %>
-
-
-  <div class="card">
-    <div class="card-header">
-      <i class="fas fa-users"></i> Online players
-    </div>
-    <div class="card-body">
-      <p class="card-text">
-
-        <%- await include('./partials/onlinePlayers.sejs', {server: server}) %>
-
-
-      </p>
-    </div>
-  </div>
-
-
-
   <div class="card">
     <div class="card-header">
       <i class="fas fa-info"></i> Server info
@@ -156,6 +147,7 @@
 
 
 <script>
+  identifier = 'playersDashboard';
   $(document).ready(function () {
 
     $("#reload-gbl-entries").click(e => {

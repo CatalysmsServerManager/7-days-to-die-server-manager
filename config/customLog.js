@@ -3,7 +3,6 @@ const os = require('os');
 const winston = require('winston');
 const { format } = require('winston');
 const LokiTransport = require('winston-loki');
-const getRegexMatch = require('../worker/util/getRegexMatch');
 
 const logLevel = process.env.CSMM_LOGLEVEL || 'info';
 

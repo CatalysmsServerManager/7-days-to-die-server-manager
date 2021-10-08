@@ -140,7 +140,7 @@ function morganJson(tokens, req,res) {
 
 const morganLogger = morgan(morganJson, {
   'stream': customLogger.stream,
-  skip: (req) => {
+  skip: () => {
     return !!process.env.IS_TEST;
   }
 });

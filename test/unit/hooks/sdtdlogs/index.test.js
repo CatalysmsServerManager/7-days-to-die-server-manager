@@ -92,7 +92,7 @@ describe('logging hook index', () => {
   describe('initialize', () => {
 
     it('Only starts servers that are active', async () => {
-      return new Promise(async (resolve, reject) => {
+      return new Promise(async (resolve) => {
         sandbox.stub(sails.helpers.sdtd, 'checkModVersion').resolves(38);
         const initialize = util.promisify(sails.hooks.sdtdlogs.initialize);
         sails.hooks.sdtdlogs.loggingInfoMap.clear();

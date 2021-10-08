@@ -26,7 +26,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    let createdComment = await TicketComment.create({
+    await TicketComment.create({
       commentText: inputs.commentText,
       ticket: inputs.ticketId,
       userThatPlacedTheComment: this.req.session.userId
