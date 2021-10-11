@@ -328,6 +328,15 @@ say "1 - 1 = {{subtract 1 1}}"
 
   });
 
+  it('Populates server.config.something', async () => {
+    const template = 'say "Test: ${server.config.currencyName}"';
+
+    await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template, { player: sails.testPlayer });
+
+    expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.equal('say "Test: dolla dolla billz"');
+
+  });
+
 });
 
 
