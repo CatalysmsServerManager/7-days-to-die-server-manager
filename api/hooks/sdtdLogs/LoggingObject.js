@@ -30,7 +30,7 @@ class LoggingObject extends EventEmitter {
     }
 
     sails.log.debug(
-      `Log line for server ${this.server.id} - ${newLog.type} - ${newLog.data.msg}`, {server: this.server}
+      `Log line for server ${this.server.id} - ${newLog.type} - ${newLog.data.msg}`, {serverId: this.server.id}
     );
 
     sails.helpers.getQueueObject('hooks').add(enrichedLog);
