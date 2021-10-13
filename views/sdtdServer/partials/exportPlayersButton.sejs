@@ -1,4 +1,4 @@
-<button id="export-button" type="button" class="btn btn-primary">CSV export</button>
+<button id="export-button" type="button" class="btn btn-sm btn-outline-primary">CSV export</button>
 
 <script>
   $(document).ready(() => {
@@ -15,7 +15,7 @@
           a.click();
           window.URL.revokeObjectURL(url);
         })
-        .catch((e) => alert(e)); 
+        .catch((e) => alert(e));
     })
   })
 

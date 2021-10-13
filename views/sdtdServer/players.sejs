@@ -20,130 +20,14 @@
 
     <h1>Player overview</h1>
 
-    <br />
-
-    <%- await include('./partials/exportPlayersButton.sejs') %>
-    <%- await include('./partials/deletePlayersButton.sejs') %>
-    <%- await include('./partials/wipeTeleports.sejs') %>
-    <%- await include('./partials/wipeCurrencyBtn.sejs') %>
-
-    <br />
-
     <div class="row">
       <div class="col-md-12">
-        <table
-          id="players-overview"
-          class="table table-striped table-bordered dataTable no-footer"
-        >
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Entity ID</th>
-              <th>Steam ID</th>
-              <th>Role</th>
-              <th>IP</th>
-              <th>Country</th>
-              <th>Playtime</th>
-              <th>Last online</th>
-              <th>Level</th>
-              <th>Currency</th>
-              <th>Score</th>
-              <th>Deaths</th>
-              <th>Players killed</th>
-              <th>Zombies killed</th>
-            </tr>
-          </thead>
-        </table>
+        <%- await include('./playersTable.sejs', { onlyOnline: false, height: false, identifier: 'identifier' }) %>
       </div>
     </div>
   </div>
 </body>
 
 <script>
-  $(document).ready(function () {
-    let players = [];
-
-    let playerDataTable = $("#players-overview").DataTable({
-      data: window.SAILS_LOCALS.players,
-      dom: "Bfrtip",
-      ajax: {
-        url: "/api/sdtdserver/players/datatable",
-        type: "post",
-        data: {
-          serverId: window.SAILS_LOCALS.server.id,
-          _csrf: window.SAILS_LOCALS._csrf,
-        },
-      },
-      buttons: [],
-      fixedHeader: true,
-      responsive: true,
-      serverSide: true,
-      columns: [
-        {
-          data: "name",
-          render: function (data, type, row, meta) {
-            return `<a href="/player/${row.id}/profile">${data}</a>`;
-          },
-        },
-        {
-          data: "entityId",
-        },
-        {
-          data: "steamId",
-        },
-        {
-          data: "role",
-          render: {
-              _: "name",
-              sort: "level",
-            },
-        },
-        {
-          data: "ip",
-        },
-        {
-          data: "country",
-          render: function (data, type, row, meta) {
-            if (row.country) {
-              let flagImg = `<img src="../../images/flags/blank.gif" class="flag flag-${row.country.toLowerCase()}"/>`;
-              return `${flagImg} ${row.country}`;
-            } else {
-              return `Unknown`;
-            }
-          },
-        },
-        {
-          data: "playtime",
-          render: function (data, type, row, meta) {
-            return hhmmss(row.playtime);
-          },
-        },
-        {
-          data: "lastOnline",
-          render: function (data, type, row, meta) {
-            const date = new Date(row.lastOnline)
-            return date.toLocaleString()
-          },
-        },
-        {
-          data: "level",
-        },
-        {
-          data: "currency",
-        },
-        {
-          data: "score",
-        },
-        {
-          data: "deaths",
-        },
-        {
-          data: "playerKills",
-        },
-        {
-          data: "zombieKills",
-        },
-      ],
-    });
-  });
+  const identifier = 'playersOverview';
 </script>

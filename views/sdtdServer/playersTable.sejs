@@ -1,0 +1,248 @@
+<div class="card" style="margin: 0;">
+  <div class="card-header">
+    <span style="margin-right: 10px;" class="badge badge-pill badge-light">
+      <span id="countFiltered">0</span> / <span id="countTotal">0</span> Entries
+    </span>
+    <%- await include('./partials/exportPlayersButton.sejs') %>
+    <%- await include('./partials/deletePlayersButton.sejs') %>
+    <%- await include('./partials/wipeTeleports.sejs') %>
+    <%- await include('./partials/wipeCurrencyBtn.sejs') %>
+    <div style="width: 275px" class="input-group float-right">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1"><i class="fa fa-search"></i></span>
+      </div>
+      <input id="search-input" type="text" class="form-control" placeholder="Search...">
+    </div>
+    <button title="Reset Table" onclick="resetColumnState()" style="margin-right: 50px;" class="btn btn-outline-danger btn-sm float-right"><i class="fa fa-table"></i></button>
+  </div>
+  <div class="card-body" style="padding: 0">
+    <div id="players-table" style="height: 100px; width: 100%;" class="ag-theme-alpine"></div>
+  </div>
+</div>
+
+<style>
+    .ag-root-wrapper {
+        border: 0!important;
+    }
+</style>
+
+<script>
+  let onlyOnline = null;
+  let height = null;
+  let identifier = null;
+  let lastEndRow = null;
+  let searchValue = '';
+  const columnDefs = [
+    { headerName: 'Name', field: 'name', width: 300, cellRenderer: (p) => {
+      if (!!p.value) {
+        return '<span><a target="_blank" href="/player/' + p.data.id + '/profile">' + p.value + '</a></span>';
+      }
+    } },
+    { headerName: 'Entity ID', field: 'entityId' },
+    { headerName: 'Steam ID', field: 'steamId', width: 300, cellRenderer: (p) => {
+      if (!!p.value) {
+        return '<a target="_blank" href="https://steamcommunity.com/profiles/' + p.value + '">' + p.value + '</a>';
+      }
+    } },
+    { headerName: 'Role', field: 'role', width: 150, cellRenderer: (p) => {
+      if (!!p.value) {
+        return p.value.name;
+      }
+    } },
+    { headerName: 'IP', field: 'ip', width: 200, cellRenderer: (p) => {
+      if (!!p.value) {
+        return '<a target="_blank" href="https://scamalytics.com/ip/' + p.value + '">' + p.value + '</a>';
+      }
+    } },
+    { headerName: 'Country', field: 'country', width: 140, cellRenderer: (p) => {
+      if (!!p.value) {
+        let flagImg = '<img src="../../images/flags/blank.gif" class="flag flag-' + p.value.toLowerCase() + '"/>';
+        return flagImg + ' ' + p.value;
+      }
+    } },
+    { headerName: 'Playtime', field: 'playtime', cellRenderer: (p) => {
+      if (!!p.value) {
+        return (p.value / 3600).toFixed(1) + ' h';
+      }
+    } },
+    { headerName: 'Last online', field: 'lastOnline', cellRenderer: (p) => {
+      if (!!p.value) {
+        return new Date(p.value).toLocaleString();
+      }
+    } },
+    { headerName: 'Level', field: 'level', width: 130 },
+    { headerName: 'Currency', field: 'currency', width: 150 },
+    { headerName: 'Score', field: 'score', width: 130 },
+    { headerName: 'Deaths', field: 'deaths', width: 130 },
+    { headerName: 'Player Kills', field: 'playerKills', width: 170 },
+    { headerName: 'Zombie Kills', field: 'zombieKills', width: 170 },
+  ];
+
+  const gridOptions = {
+    columnDefs: columnDefs,
+    rowData: [],
+    defaultColDef: {
+      resizable: true,
+      sortable: true
+    },
+    enableSorting: true,
+    enableColResize: true,
+    enableCellTextSelection: true,
+    rowModelType: 'infinite',
+    cacheBlockSize: 25,
+    maxConcurrentDatasourceRequests: 1,
+    infiniteInitialRowCount: 50,
+    onGridReady: (params) => {
+      const sortModel = JSON.parse(localStorage.getItem(identifier + '.SortModel'));
+      const columnState = JSON.parse(localStorage.getItem(identifier + '.columnState'));
+      gridOptions.api.setSortModel(sortModel);
+      gridOptions.columnApi.applyColumnState({ state: columnState, applyOrder: true });
+      if (!columnState) {
+        params.api.sizeColumnsToFit();
+      }
+      params.api.setDatasource(createDatasource());
+    },
+    onSortChanged: (p) => {
+      localStorage.setItem(identifier + '.sortModel', JSON.stringify(p.api.getSortModel()));
+    },
+    onColumnVisible: (p) => {
+      saveColumnState();
+    },
+    onColumnMoved: (p) => {
+      if (p.finished) {
+        saveColumnState();
+      }
+    },
+    onColumnResized: (p) => {
+      if (p.finished) {
+        saveColumnState();
+      }
+    },
+  };
+  $(document).ready(() => {
+    onlyOnline = <%= onlyOnline %>;
+    height = <%= height %>;
+    identifier = <%= identifier %>;
+    autoSizeTable();
+    const gridDiv = document.querySelector('#players-table');
+    new agGrid.Grid(gridDiv, gridOptions);
+
+    $('#search-input')
+      .change(function () {
+        searchValue = $('#search-input').val();
+        gridOptions.api.refreshInfiniteCache();
+    })
+    io.socket.on('playerConnected', (connectedMessage) => {
+      // Stub
+    })
+
+    io.socket.on('playerDisconnected', (disconnectedMessage) => {
+      // Stub
+    })
+  });
+
+  async function loadData () {
+    let data = await $.ajax({
+      url: '/api/sdtdserver/players/datatable',
+      type: 'POST',
+      data: {
+        _csrf: window.SAILS_LOCALS._csrf,
+        serverId: window.SAILS_LOCALS.server.id,
+      },
+      error: function (xhr, status, error) {
+        $('#modal-set-note').modal('hide');
+        showErrorModal(`Error while processing an API request. ${xhr.responseText}`)
+        displayAjaxToSupportData(xhr, this);
+
+      }
+    });
+    if (data) {
+      gridOptions.rowData = data.data;
+      autoSizeTable();
+
+      const gridDiv = document.querySelector('#players-table');
+      new agGrid.Grid(gridDiv, gridOptions);
+    }
+  }
+
+  /**
+   * Get DataSource
+   */
+  function createDatasource () {
+    return {
+      rowCount: null,
+      // called by the grid when more rows are required
+      getRows: async (params) => {
+        if (!params.startRow) {
+          gridOptions.api.showLoadingOverlay();
+        }
+        let endRow;
+        if (lastEndRow !== null && lastEndRow >= params.endRow) {
+            endRow = lastEndRow;
+        } else {
+            endRow = params.endRow;
+        }
+        lastEndRow = params.endRow;
+        let data = await $.ajax({
+          url: '/api/sdtdserver/players/datatable',
+          type: 'POST',
+            data: {
+              _csrf: window.SAILS_LOCALS._csrf,
+              serverId: window.SAILS_LOCALS.server.id,
+              startRow: params.startRow,
+              endRow: endRow,
+              sortModel: params.sortModel,
+              searchText: searchValue,
+              fields: columnDefs.map(def => def.field),
+              onlyOnline: onlyOnline
+            },
+            error: function (xhr, status, error) {
+              params.failCallback();
+              $('#modal-set-note').modal('hide');
+              showErrorModal(`Error while processing an API request. ${xhr.responseText}`)
+              displayAjaxToSupportData(xhr, this);
+            }
+        });
+        if (data) {
+          lastRow = params.startRow + data.data.length;
+          let response = {
+            status: true,
+            rows: data.data,
+            lastRow: null
+          };
+          if (response.rows.length === 0) {
+            gridOptions.api?.showNoRowsOverlay();
+          }
+          $('#countFiltered').text(data.recordsFiltered);
+          $('#countTotal').text(data.recordsTotal);
+          gridOptions.api.hideOverlay();
+          params.successCallback(response.rows, data.recordsFiltered);
+
+        }
+      }
+    };
+  }
+
+  function autoSizeTable () {
+    let tableHeight;
+    if (height) {
+      tableHeight = height
+    } else {
+      let windowHeight = $(window).height();
+      tableHeight = windowHeight - 300;
+    }
+    $('#players-table').css({height: tableHeight + 'px'});
+  }
+
+  /**
+   * Save Aggrid ColumnState to Localstorage
+   */
+  function saveColumnState () {
+    localStorage.setItem(identifier + '.columnState', JSON.stringify(gridOptions.columnApi.getColumnState()));
+  }
+
+  function resetColumnState () {
+    gridOptions.columnApi.resetColumnState();
+    gridOptions.api.sizeColumnsToFit();
+  }
+</script>

@@ -1,6 +1,6 @@
 const Handlebars = require('handlebars');
 // The library will automatically register the helpers with Handlebars
-const helpers = require('@budibase/handlebars-helpers')([
+require('@budibase/handlebars-helpers')([
   'array',
   'collection',
   'comparison',

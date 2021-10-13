@@ -1,7 +1,7 @@
 <!-- Button trigger modal -->
 <button
   type="button"
-  class="btn btn-danger"
+  class="btn btn-sm btn-outline-danger"
   data-toggle="modal"
   data-target="#wipe-currency-modal"
 >

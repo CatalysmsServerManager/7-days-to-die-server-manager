@@ -7,7 +7,7 @@
     "@budibase/handlebars-helpers": "^0.11.5",
     "@sailshq/connect-redis": "^3.2.1",
     "@sailshq/socket.io-redis": "^5.2.0",
-    "@sentry/core": "^6.13.1",
+    "@sentry/core": "^6.13.2",
     "@sentry/node": "^6.13.1",
     "@sentry/tracing": "^6.13.1",
     "@streammedev/hhmmss": "^1.0.0",
@@ -58,11 +58,13 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production concurrently --kill-others -n 'app,worker' 'npm run start:app' 'npm run start:worker'",
     "start:app": "node app.js",
+    "start:app:inspect": "node --inspect-brk=localhost:9229 app.js",
     "start:worker": "node worker/worker.js",
     "wait-for:db": "node ./scripts/wait-for-db.mjs",
     "test": "mocha test ",
     "lint": "eslint .",
     "dev": "cross-env NODE_ENV=development nodemon --exec concurrently --kill-others -n 'app,worker' 'npm run start:app' 'npm run start:worker'",
+    "dev:inspect": "cross-env NODE_ENV=development nodemon --exec concurrently --kill-others -n 'app,worker' 'npm run start:app:inspect' 'npm run start:worker'",
     "debug": "node debug app.js",
     "cover": "nyc npm run test",
     "itemIcons:update": "sh ./scripts/itemIconsUpdate.sh",
@@ -84,6 +86,7 @@
     "node": "12"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "7.15.8",
     "@types/bull": "^3.15.3",
     "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",

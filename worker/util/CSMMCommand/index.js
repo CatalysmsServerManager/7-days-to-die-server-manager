@@ -38,6 +38,7 @@ module.exports = class CSMMCommand {
 
   async loadData() {
     this.data.server = this.server;
+    this.data.server.config = await SdtdConfig.findOne({server: this.server.id});
     this.data.server.onlinePlayers = await sails.helpers.sdtd.loadPlayerData(this.server.id, undefined, true);
     this.data.server.stats = await sails.helpers.sdtdApi.getStats(SdtdServer.getAPIConfig(this.server));
     return this.data;
