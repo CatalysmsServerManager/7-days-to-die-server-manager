@@ -27,6 +27,7 @@
 </style>
 
 <script>
+  const mobile = isMobile()
   let onlyOnline = null;
   let height = null;
   let identifier = null;
@@ -75,7 +76,7 @@
     { headerName: 'Score', field: 'score', width: 130 },
     { headerName: 'Deaths', field: 'deaths', width: 130 },
     { headerName: 'Player Kills', field: 'playerKills', width: 170 },
-    { headerName: 'Zombie Kills', field: 'zombieKills', width: 170 },
+    { headerName: 'Zombie Kills', field: 'zombieKills', width: 170 }, 
   ];
 
   const gridOptions = {
@@ -93,12 +94,14 @@
     maxConcurrentDatasourceRequests: 1,
     infiniteInitialRowCount: 50,
     onGridReady: (params) => {
-      const sortModel = JSON.parse(localStorage.getItem(identifier + '.SortModel'));
-      const columnState = JSON.parse(localStorage.getItem(identifier + '.columnState'));
+      const sortModel = JSON.parse(localStorage.getItem(identifier + '.sortModel'));
+      const columnState = JSON.parse(localStorage.getItem(identifier + '.ColumnState'));
       gridOptions.api.setSortModel(sortModel);
       gridOptions.columnApi.applyColumnState({ state: columnState, applyOrder: true });
       if (!columnState) {
-        params.api.sizeColumnsToFit();
+        if (!mobile) {
+          params.api.sizeColumnsToFit();
+        }
       }
       params.api.setDatasource(createDatasource());
     },
@@ -243,6 +246,12 @@
 
   function resetColumnState () {
     gridOptions.columnApi.resetColumnState();
-    gridOptions.api.sizeColumnsToFit();
+    if (!mobile) {
+      gridOptions.api.sizeColumnsToFit();
+    }
+  }
+
+  function isMobile() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
   }
 </script>
