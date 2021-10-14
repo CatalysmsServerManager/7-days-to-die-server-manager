@@ -29,5 +29,5 @@
 </body>
 
 <script>
-  const identifier = 'playersOverview';
+  identifier = 'playersOverview';
 </script>
