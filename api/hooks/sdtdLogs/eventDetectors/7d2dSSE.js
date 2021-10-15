@@ -1,12 +1,16 @@
 const LoggingObject = require('../LoggingObject');
 const EventSource = require('eventsource');
 const handleLogLine = require('../../../../worker/processors/logs/handleLogLine');
+const throttledFunction = require('../../../../worker/util/throttledFunction');
+
+const RATE_LIMIT_MINUTES = process.env.SSE_RATE_LIMIT_MINUTES || 5;
+const RATE_LIMIT_AMOUNT = process.env.SSE_RATE_LIMIT_AMOUNT || 5000;
 
 class SdtdSSE extends LoggingObject {
   constructor(server) {
     super(server);
     this.SSERegex = /\d+-\d+-\d+T\d+:\d+:\d+ \d+\.\d+ INF (.+)/;
-    this.listener = this.SSEListener.bind(this);
+    this.listener = throttledFunction(this.SSEListener.bind(this), RATE_LIMIT_AMOUNT, RATE_LIMIT_MINUTES);
     this.queuedChatMessages = [];
     this.lastMessage = Date.now();
 
@@ -98,8 +102,6 @@ class SdtdSSE extends LoggingObject {
       }, 250);
     }
   };
-
-
 }
 
 module.exports = SdtdSSE;
