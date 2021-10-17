@@ -4,7 +4,7 @@ const handleLogLine = require('../../../../worker/processors/logs/handleLogLine'
 const throttledFunction = require('../../../../worker/util/throttledFunction');
 
 const RATE_LIMIT_MINUTES = parseInt(process.env.SSE_RATE_LIMIT_MINUTES, 10) || 5;
-const RATE_LIMIT_AMOUNT = parseInt(process.env.SSE_RATE_LIMIT_AMOUNT, 10) || 5000;
+const RATE_LIMIT_AMOUNT = parseInt(process.env.SSE_RATE_LIMIT_AMOUNT, 10) || 1000;
 
 class SdtdSSE extends LoggingObject {
   constructor(server) {
