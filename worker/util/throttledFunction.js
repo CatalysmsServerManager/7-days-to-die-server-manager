@@ -26,6 +26,7 @@ function throttledFunction(listener, amount, minutes) {
     incrBucket();
     const sum = Object.values(buckets).reduce((sum, bucket) => sum + bucket, 0);
     if (sum > amount) {
+      sails.log.warn(`Discarding an event ${JSON.stringify(data, null, 2)}`, {labels: {namespace: 'throttledFunction'}});
       return;
     }
     listener(data);
