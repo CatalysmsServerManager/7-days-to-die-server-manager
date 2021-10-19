@@ -50,7 +50,7 @@ describe('throttledFunction', function () {
     fn(8);
     fn(9);
 
-    expect(stub).to.have.callCount(7);
+    expect(stub).to.have.callCount(8);
     expect(stub).to.have.been.calledWith(1);
     expect(stub).to.have.been.calledWith(2);
     expect(stub).to.have.been.calledWith(3);
