@@ -13,7 +13,7 @@ function throttledFunction(listener, amount, minutes) {
     const hour = date.getHours();
     if (!buckets[`${hour}${minute}`]) {
       buckets[`${hour}${minute}`] = 0;
-      const keys = Object.keys(buckets).map(k => parseInt(k, 10));
+      const keys = Object.keys(buckets);
       if (Math.max(...keys) - Math.min(...keys) >= minutes ) {
         const oldest = keys.sort((a, b) => a - b)[0];
         delete buckets[oldest];
