@@ -11,6 +11,7 @@ require('@budibase/handlebars-helpers')([
   'number',
   'regex',
   'string',
+  'object'
 ]);
 
 Handlebars.registerHelper('eq', function (a, b) {
