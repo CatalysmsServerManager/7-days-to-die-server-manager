@@ -7,21 +7,24 @@ function throttledFunction(listener, amount, minutes) {
   const buckets = {};
 
   function incrBucket() {
-
     const date = new Date();
-    const minute = String(date.getMinutes()).padStart(2, '0');
-    const hour = date.getHours();
-    if (!buckets[`${hour}${minute}`]) {
-      buckets[`${hour}${minute}`] = 0;
+    date.setUTCMilliseconds(0);
+    date.setUTCSeconds(0);
+
+    if (!buckets[date.toISOString()]) {
+      buckets[date.toISOString()] = 0;
       const keys = Object.keys(buckets);
-      if (Math.max(...keys) - Math.min(...keys) >= minutes ) {
-        const oldest = keys.sort((a, b) => a - b)[0];
-        delete buckets[oldest];
-      }
+
+      keys
+        .filter(d => {
+          return new Date(d) < date.getTime() - minutes * 60 * 1000;
+        })
+        .forEach(keyToDelete => {
+          delete buckets[keyToDelete];
+        });
     }
 
-    buckets[`${hour}${minute}`]++;
-
+    buckets[date.toISOString()]++;
   }
 
 
