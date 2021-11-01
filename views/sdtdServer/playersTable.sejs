@@ -1,8 +1,18 @@
 <div class="card" style="margin: 0;">
   <div class="card-header">
-    <span style="margin-right: 10px;" class="badge badge-pill badge-light">
-      <span id="countFiltered">0</span> / <span id="countTotal">0</span> Entries
-    </span>
+    <div class="btn-group" style="margin-right: 50px;">
+      <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Actions
+      </button>
+      <div class="dropdown-menu">
+<!--        <a class="dropdown-item" href="#">Ban</a>-->
+<!--        <a class="dropdown-item" href="#">Kick</a>-->
+<!--        <a class="dropdown-item" href="#">Teleport</a>-->
+<!--        <a class="dropdown-item" href="#">Give item</a>-->
+        <a onclick="getSelectedPlayerIds()" class="dropdown-item" style="cursor: pointer;" data-toggle="modal" data-target="#player-setbalance-modal">Give Currency</a>
+<!--        <a class="dropdown-item" href="#">Delete Profile</a>-->
+      </div>
+    </div>
     <%- await include('./partials/exportPlayersButton.sejs') %>
     <%- await include('./partials/deletePlayersButton.sejs') %>
     <%- await include('./partials/wipeTeleports.sejs') %>
@@ -13,11 +23,17 @@
       </div>
       <input id="search-input" type="text" class="form-control" placeholder="Search...">
     </div>
+    <div class="float-right">
+      <span style="margin-right: 10px;margin-top: 10px;" class="badge badge-pill badge-light">
+        <span id="countFiltered">0</span> / <span id="countTotal">0</span> Entries
+      </span>
+    </div>
     <button title="Reset Table" onclick="resetColumnState()" style="margin-right: 50px;" class="btn btn-outline-danger btn-sm float-right"><i class="fa fa-table"></i></button>
   </div>
   <div class="card-body" style="padding: 0">
     <div id="players-table" style="height: 100px; width: 100%;" class="ag-theme-alpine"></div>
   </div>
+  <%- await include("./modals/setMoneyModal.sejs") %>
 </div>
 
 <style>
@@ -33,7 +49,15 @@
   let identifier = null;
   let lastEndRow = null;
   let searchValue = '';
+  let selectedPlayerIds = [];
   const columnDefs = [
+    {
+      headerName: '', field: 'id', width: 80,
+      checkboxSelection: true,
+      cellRenderer: (p) => {
+        return '';
+      }
+    },
     { headerName: 'Name', field: 'name', width: 300, cellRenderer: (p) => {
       if (!!p.value) {
         return '<span><a target="_blank" href="/player/' + p.data.id + '/profile">' + p.value + '</a></span>';
@@ -76,7 +100,7 @@
     { headerName: 'Score', field: 'score', width: 130 },
     { headerName: 'Deaths', field: 'deaths', width: 130 },
     { headerName: 'Player Kills', field: 'playerKills', width: 170 },
-    { headerName: 'Zombie Kills', field: 'zombieKills', width: 170 }, 
+    { headerName: 'Zombie Kills', field: 'zombieKills', width: 170 },
   ];
 
   const gridOptions = {
@@ -86,6 +110,8 @@
       resizable: true,
       sortable: true
     },
+    suppressRowClickSelection: true,
+    rowSelection: 'multiple',
     enableSorting: true,
     enableColResize: true,
     enableCellTextSelection: true,
@@ -251,7 +277,16 @@
     }
   }
 
-  function isMobile() {
-    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
+  function getSelectedPlayerIds () {
+    let playerIds = [];
+    let selectedRows = gridOptions.api.getSelectedRows();
+    selectedRows.forEach((value) => {
+      playerIds.push(value.id);
+    });
+    localStorage.setItem('selectedplayerIds', JSON.stringify(playerIds));
+  }
+
+  function isMobile () {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   }
 </script>

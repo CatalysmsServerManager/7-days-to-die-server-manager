@@ -1,9 +1,4 @@
-<%- exposeLocalsToBrowser() %>
 
-    <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#player-setbalance-modal">
-        Set balance
-    </button>
 
     <!-- Modal -->
     <div class="modal fade" id="player-setbalance-modal" tabindex="-1" role="dialog" aria-labelledby="player-setbalance-modal-title"
@@ -11,7 +6,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="player-setbalance-modal-title">Set balance</h4>
+                    <h4 class="modal-title" id="player-setbalance-modal-title">Give Currency</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -20,10 +15,10 @@
                     <div class="container-fluid">
 
                         <div class="form-group">
-                            <label for="player-setbalance-modal-input">New balance</label>
+                            <label for="player-setbalance-modal-input">Give Currency</label>
                             <input type="text" class="form-control" name="player-setbalance-modal-input" id="player-setbalance-modal-input" aria-describedby="player-setbalance-modal-input-help"
-                                placeholder="<%= player.currency %>">
-                            <small id="player-setbalance-modal-input-help" class="form-text text-muted">The amount of money the player will have</small>
+                                placeholder="">
+                            <small id="player-setbalance-modal-input-help" class="form-text text-muted">The amount of money the player will get</small>
                         </div>
 
                     </div>
@@ -39,21 +34,21 @@
     <script>
 
         $(document).ready(() => {
+
             $('#player-setbalance-modal-submit').click((e) => {
                 const balance = $('#player-setbalance-modal-input').val();
-                const playerIds = [(<%= player.id %>)];
-                console.log('playerids', playerIds);
                 $.ajax({
                     url: `/api/player/balance`,
                     method: "POST",
                     data: {
                         serverId: window.SAILS_LOCALS.server.id,
-                        playerIds: playerIds,
+                        playerIds: JSON.parse(localStorage.getItem('selectedplayerIds')),
                         balance: balance,
-                        mode: 'set',
-                        _csrf: window.SAILS_LOCALS._csrf,
+                        mode: 'give',
+                        _csrf: window.SAILS_LOCALS._csrf
                     },
                     success: (data, status, xhr) => {
+                        localStorage.removeItem('selectedplayerIds');
                         window.location.reload();
                     },
                     error: function (xhr, status, error) {
@@ -61,10 +56,8 @@
                         showErrorModal(`${error} - ${xhr.responseText}`, xhr);
                     }
                 });
-            })
+            });
 
         })
-
-
 
     </script>
