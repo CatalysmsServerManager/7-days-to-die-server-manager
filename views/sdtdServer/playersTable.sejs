@@ -76,7 +76,7 @@
     { headerName: 'Score', field: 'score', width: 130 },
     { headerName: 'Deaths', field: 'deaths', width: 130 },
     { headerName: 'Player Kills', field: 'playerKills', width: 170 },
-    { headerName: 'Zombie Kills', field: 'zombieKills', width: 170 }, 
+    { headerName: 'Zombie Kills', field: 'zombieKills', width: 170 },
   ];
 
   const gridOptions = {
@@ -241,7 +241,7 @@
    * Save Aggrid ColumnState to Localstorage
    */
   function saveColumnState () {
-    localStorage.setItem(identifier + '.columnState', JSON.stringify(gridOptions.columnApi.getColumnState()));
+    localStorage.setItem(identifier + '.ColumnState', JSON.stringify(gridOptions.columnApi.getColumnState()));
   }
 
   function resetColumnState () {
@@ -252,6 +252,6 @@
   }
 
   function isMobile() {
-    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
   }
 </script>

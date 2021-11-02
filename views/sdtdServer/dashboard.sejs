@@ -70,7 +70,7 @@
   <h2>
     Online players
   </h2>
-  <%- await include('./playersTable.sejs', { onlyOnline: true, height: 300, identifier: 'identifier' }) %>
+  <%- await include('./playersTable.sejs', { onlyOnline: true, height: 700, identifier: 'identifier' }) %>
 </div>
 
 
