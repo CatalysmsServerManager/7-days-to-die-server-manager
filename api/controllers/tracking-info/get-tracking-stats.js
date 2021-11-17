@@ -49,12 +49,14 @@ module.exports = {
       where: {
         server: inputs.serverId,
       },
+      select: ['createdAt'],
       sort: 'createdAt ASC', limit: 1
     });
     stats.newest = await TrackingInfo.find({
       where: {
         server: inputs.serverId,
       },
+      select: ['createdAt'],
       sort: 'createdAt DESC', limit: 1
     });
 
