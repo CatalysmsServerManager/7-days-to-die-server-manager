@@ -151,6 +151,21 @@ describe('sdtdLogs#handleLogLine', () => {
     expect(result.data.messageText).to.eq('/test');
   });
 
+  it('correctly parses A20 chat messages', () => {
+    const logLine = {
+      msg: `Chat (from 'Steam_123456789', entity id '171', to 'Global'): 'Catalysm': $help`,
+      type: 'Log',
+      trace: '',
+    };
+
+    const result = handleLogLine(logLine);
+    expect(result.type).to.eq('chatMessage');
+    expect(result.data.steamId).to.eq('123456789');
+    expect(result.data.playerName).to.eq('Catalysm');
+    expect(result.data.entityId).to.eq('171');
+    expect(result.data.messageText).to.eq('$help');
+  });
+
   it('Correctly detects a playerDied event with PvE death', () => {
     const logLine = {
       date: '2017-11-14',

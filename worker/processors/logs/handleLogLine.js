@@ -20,6 +20,8 @@ const entityKilledRegex = /(killed .*)/g;
 const gmsgDeathRegex = /GMSG: Player '(\w+)' died/;
 const gmsgPvPDeathRegex = /GMSG: Player (.+) killed by (.+)/;
 
+const chatRegex = /Chat \(from '(?<steamId>[\w\d-]+)', entity id '(?<entityId>[-\d]+)', to '(?<channel>\w+)'\): '(?<playerName>.+)':(?<messageText>.+)/;
+
 module.exports = logLine => {
 
 
@@ -68,39 +70,31 @@ module.exports = logLine => {
     returnValue.data = memUpdate;
   }
 
-  // A17 Chat
-  if (_.startsWith(logLine.msg, 'Chat') && logLine.msg.includes('(from')) {
+  if (chatRegex.test(logLine.msg)) {
     /*
     {
        date: '2018-11-20',
        time: '14:38:03',
        uptime: '2274.494',
-       msg: 'Chat (from \'76561198028175941\', entity id \'171\', to \'Global\'): \'Catalysm\': blabla',
+       msg: 'Chat (from 'Steam_123456789', entity id '171', to 'Global'): 'Catalysm': $help',
        trace: '',
        type: 'Log'
     }
     */
 
-    let splitMessage = logLine.msg.split('\'');
 
-    if (logLine.msg.includes('Chat handled by mod')) {
-      splitMessage = splitMessage.slice(2);
-    }
+    const { groups: { steamId, entityId,channel, playerName, messageText } } = chatRegex.exec(logLine.msg);
 
-    let data = {
+    const data = {
       date: logLine.date,
       time: logLine.time,
       uptime: logLine.uptime,
       msg: logLine.msg,
-      steamId: splitMessage[1],
-      entityId: splitMessage[3],
-      channel: splitMessage[5],
-      playerName: splitMessage[7],
-      messageText: splitMessage
-        .slice(8)
-        .join(' ')
-        .replace(':', '')
-        .trim()
+      steamId: steamId.replace('Steam_', ''),
+      entityId,
+      channel,
+      playerName,
+      messageText: messageText.trim()
     };
 
     // Filter out chatmessages that have been handled by some API mod already
@@ -111,69 +105,6 @@ module.exports = logLine => {
       returnValue.type = 'chatMessage';
       returnValue.data = data;
     }
-
-  }
-
-  // pre A17 chat
-  if (_.startsWith(logLine.msg, 'Chat:')) {
-    /*
-    {
-      "date": "2017-11-14",
-      "time": "14:50:39",
-      "uptime": "123.278",
-      "msg": "Chat: 'Catalysm': hey",
-      "trace": "",
-      "type": "Log"
-    }
-    */
-
-    let firstIdx = logLine.msg.indexOf('\'');
-    let secondIdx = logLine.msg.indexOf('\'', firstIdx + 1);
-    let playerName = logLine.msg.slice(firstIdx + 1, secondIdx);
-    let messageText = logLine.msg.slice(secondIdx + 3, logLine.msg.length);
-
-    let type = 'chat';
-    if (playerName === 'Server') {
-      type = 'server';
-    }
-
-    /*
-    Workaround for when the server uses servertools roles
-    Server tools
-    */
-    if (playerName.includes('[-]') && playerName.includes('](')) {
-      let roleColourDividerIndex = playerName.indexOf('](');
-      let roleEndIndex = playerName.indexOf(')', roleColourDividerIndex);
-      let newPlayerName = playerName
-        .substring(roleEndIndex + 2)
-        .replace('[-]', '');
-      playerName = newPlayerName;
-    }
-
-    /**
-     * Workaround for coppi colours (with the colour ending indicator [-])
-     */
-
-    if (playerName.includes('[-]')) {
-      let colourEndIdx = playerName.indexOf(']');
-      let newPlayerName = playerName
-        .substring(colourEndIdx + 1)
-        .replace('[-]', '');
-      playerName = newPlayerName;
-    }
-
-    let data = {
-      playerName,
-      messageText,
-      type,
-      date: logLine.date,
-      time: logLine.time,
-      uptime: logLine.uptime,
-      msg: logLine.msg
-    };
-
-    returnValue.type = 'chatMessage';
-    returnValue.data = data;
   }
 
   if (connectedRegex.test(logLine.msg)) {
