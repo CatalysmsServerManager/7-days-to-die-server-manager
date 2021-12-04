@@ -30,7 +30,7 @@ class Shop extends SdtdCommand {
 
 
     if (cpmVersion >= 6.4) {
-      cmdToExec = `giveplus ${player.steamId} "${listing.name}" ${listing.amount} ${listing.quality ? listing.quality + ' 0' : ''}`;
+      cmdToExec = `giveplus ${player.entityId} "${listing.name}" ${listing.amount} ${listing.quality ? listing.quality + ' 0' : ''}`;
     } else {
       cmdToExec = `give ${player.entityId} "${listing.name}" ${listing.amount} ${listing.quality ? listing.quality : ''}`;
     }
