@@ -39,7 +39,7 @@ module.exports = {
 
     try {
       const response = await sails.helpers.sdtdApi.getStats(
-        SdtdServer.getAPIConfig(server),
+        SdtdServer.getAPIConfig(sdtdServer),
       );
       if (response.gametime) {
         return exits.success(true);
