@@ -4,6 +4,45 @@ const expect = chai.expect;
 const handleLogLine = require('../../../../worker/processors/logs/handleLogLine');
 
 describe('sdtdLogs#handleLogLine', () => {
+  it('Correctly detects a A20 playerDisconnected event', () => {
+    const logLine = {
+      date: '2017-11-14',
+      time: '14:50:49',
+      uptime: '133.559',
+      msg: `Player disconnected: EntityID=171, PltfmId='Steam_76561198028175941', CrossId='EOS_0002b5d970954287afdcb5dc35af0424', OwnerID='Steam_76561198028175941', PlayerName='Catalysm'`,
+      trace: '',
+      type: 'Log'
+    };
+
+    const result = handleLogLine(logLine);
+
+    expect(result.type).to.eq('playerDisconnected');
+    expect(result.data.playerName).to.eq('Catalysm');
+    expect(result.data.playerID).to.eq('76561198028175941');
+    expect(result.data.entityID).to.eq('171');
+  });
+
+  it('Correctly detects a playerDisconnected event', () => {
+    const logLine = {
+      date: '2017-11-14',
+      time: '14:50:49',
+      uptime: '133.559',
+      msg: `Player disconnected: EntityID=171, PlayerID='76561198028175941', OwnerID='76561198028175941', PlayerName='Catalysm'`,
+      trace: '',
+      type: 'Log'
+    };
+
+    const result = handleLogLine(logLine);
+
+    expect(result.type).to.eq('playerDisconnected');
+    expect(result.data.playerName).to.eq('Catalysm');
+    expect(result.data.playerID).to.eq('76561198028175941');
+    expect(result.data.entityID).to.eq('171');
+  });
+
+
+
+
   it('Correctly detects a death event', () => {
     const logLine = {
       date: '2017-11-14',

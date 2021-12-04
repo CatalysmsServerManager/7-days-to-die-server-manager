@@ -10,6 +10,7 @@ const a20DeathRegex = /PlayerSpawnedInWorld \(reason: Died, position: (?<x>[-\d]
 const preA20DeathRegex = /PlayerSpawnedInWorld \(reason: Died, position: (?<x>[-\d]+), (?<y>[-\d]+), (?<z>[-\d]+)\): EntityID=(?<entityId>\d+), PlayerID='(?<platformId>[\d\w]+)', OwnerID='(?<steamId>\d{17})', PlayerName='(?<playerName>.+)'/;
 
 const connectedRegex = /(Player connected,)/;
+const disconnectedRegex = /(Player disconnected: )/;
 
 const joinedRegex = /(PlayerSpawnedInWorld \(reason: EnterMultiplayer, position:)/g;
 const joinedValuesRegex = /([A-Za-z_]*)=(?:'([^']*)'|(\d*))/gm;
@@ -163,7 +164,7 @@ module.exports = logLine => {
     returnValue.data = joinMsg;
   }
 
-  if (_.startsWith(logLine.msg, 'Player disconnected:')) {
+  if (disconnectedRegex.test(logLine.msg)) {
     /*
     {
       "date": "2017-11-14",
@@ -174,23 +175,11 @@ module.exports = logLine => {
       "type": "Log"
     }
     */
-    let logMsg = logLine.msg;
-    logMsg = logMsg.replace('Player disconnected', '');
-    logMsg = logMsg.split(',');
-
-    let entityID = logMsg[0].replace(': EntityID=', '').trim();
-    let playerID = logMsg[1]
-      .replace('PlayerID=', '')
-      .replace(/'/g, '')
-      .trim();
-    let ownerID = logMsg[2]
-      .replace('OwnerID=', '')
-      .replace(/'/g, '')
-      .trim();
-    let playerName = logMsg[3]
-      .replace('PlayerName=', '')
-      .replace(/'/g, '')
-      .trim();
+    const steamIdMatches = /PltfmId='Steam_(\d{17})|PlayerID='(\d{17})/.exec(logLine.msg);
+    const playerID = steamIdMatches[1] || steamIdMatches[2];
+    const playerName = /PlayerName='(.+)'/.exec(logLine.msg)[1];
+    const entityID = /EntityID=(\d+)/.exec(logLine.msg)[1];
+    const ownerID = /OwnerID='(Steam_)?(\d+)/.exec(logLine.msg)[2];
 
     let disconnectedMsg = {
       entityID,
