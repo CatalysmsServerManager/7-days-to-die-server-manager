@@ -34,7 +34,7 @@ describe('/api/player/giveitem', function () {
       expect(response.body).to.deep.eq({});
       expect(sails.helpers.sdtdApi.executeConsoleCommand).to.have.been.calledWith(
         sandbox.match.any,
-        `giveplus ${sails.testPlayer.steamId} "ammo9mmBulletBall" 1 `
+        `giveplus ${sails.testPlayer.entityId} "ammo9mmBulletBall" 1 `
       );
     });
 
@@ -50,7 +50,7 @@ describe('/api/player/giveitem', function () {
       expect(response.body).to.deep.eq({});
       expect(sails.helpers.sdtdApi.executeConsoleCommand).to.have.been.calledWith(
         sandbox.match.any,
-        `giveplus ${sails.testPlayer.steamId} "item with quotes" 1 `
+        `giveplus ${sails.testPlayer.entityId} "item with quotes" 1 `
       );
     });
 

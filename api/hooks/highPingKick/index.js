@@ -123,7 +123,7 @@ class HighPingCount {
   }
 
   async kickPlayer(player, server, reason) {
-    await this.sails.helpers.sdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(server), `kick ${player.steamId} "${reason}"`, {server,player});
+    await this.sails.helpers.sdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(server), `kick ${player.entityId} "${reason}"`, {server,player});
   }
 
   getPlayerFails(playerId) {

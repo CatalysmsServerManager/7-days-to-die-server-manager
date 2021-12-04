@@ -452,7 +452,7 @@ module.exports = function sdtdCountryBan(sails) {
               adminUser: server.authName,
               adminToken: server.authToken
             },
-            `ban add ${connectedMessage.steamId} 100 years "CSMM: Players from your country (${country}) are not allowed to connect to this server."`
+            `ban add ${connectedMessage.entityId} 100 years "CSMM: Players from your country (${country}) are not allowed to connect to this server."`
           );
         } else {
           await sails.helpers.sdtdApi.executeConsoleCommand(
@@ -462,7 +462,7 @@ module.exports = function sdtdCountryBan(sails) {
               adminUser: server.authName,
               adminToken: server.authToken
             },
-            `kick ${connectedMessage.steamId} "CSMM: Players from your country (${country}) are not allowed to connect to this server."`
+            `kick ${connectedMessage.entityId} "CSMM: Players from your country (${country}) are not allowed to connect to this server."`
           );
         }
 

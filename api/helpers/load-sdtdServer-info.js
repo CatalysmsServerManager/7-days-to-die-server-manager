@@ -1,5 +1,3 @@
-var sevenDays = require('machinepack-7daystodiewebapi');
-
 module.exports = {
 
 
@@ -30,74 +28,22 @@ module.exports = {
     }
   },
 
-  /**
-   * @description Loads server information
-   * @name loadSdtdServerInfo
-   * @param {number} serverId
-   * @memberof module:Helpers
-   * @method
-   */
-
-
   fn: async function (inputs, exits) {
-
-    try {
-
-      // Load serverinfo from DB first
-      let server = await SdtdServer.findOne(inputs.serverId);
-      server.stats = await loadStats(server);
-      server.serverInfo = await loadServerInfo(server);
-      sails.log.debug(`HELPER - loadSdtdserverInfo - Loaded server info for server ${server.name}`, {server});
-      exits.success(server);
-    } catch (error) {
-      sails.log.warn(`HELPER - load-sdtdServer-info - Failed to load info ${error}`, {serverId: inputs.serverId});
-      return exits.error(error);
-    }
-
-
-    function loadStats(server) {
-      return new Promise((resolve) => {
-        sevenDays.getStats({
-          ip: server.ip,
-          port: server.webPort,
-          authName: server.authName,
-          authToken: server.authToken
-        }).exec({
-          error: () => {
-            resolve(undefined);
-          },
-          success: data => {
-            resolve(data);
-          }
-        });
-      });
-    }
-
-    function loadServerInfo(server) {
-      return new Promise((resolve) => {
-        sevenDays.getServerInfo({
-          ip: server.ip,
-          port: server.webPort,
-          authName: server.authName,
-          authToken: server.authToken
-        }).exec({
-          error: () => {
-            resolve(undefined);
-          },
-          success: data => {
-            for (const dataPoint in data) {
-              if (data.hasOwnProperty(dataPoint)) {
-                data[dataPoint] = data[dataPoint].value;
-              }
-            }
-            resolve(data);
-          }
-        });
-      });
-    }
-
-
+    const server = await SdtdServer.findOne(inputs.serverId);
+    server.stats = await sails.helpers.sdtdApi.getStats(SdtdServer.getAPIConfig(server));
+    server.serverInfo = await loadServerInfo(server);
+    sails.log.debug(`HELPER - loadSdtdserverInfo - Loaded server info for server ${server.name}`, { server });
+    exits.success(server);
   }
-
-
 };
+
+async function loadServerInfo(server) {
+  const data = await sails.helpers.sdtdApi.getServerInfo(SdtdServer.getAPIConfig(server));
+
+  for (const dataPoint in data) {
+    if (data.hasOwnProperty(dataPoint)) {
+      data[dataPoint] = data[dataPoint].value;
+    }
+  }
+  return data;
+}

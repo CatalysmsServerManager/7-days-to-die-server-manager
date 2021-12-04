@@ -4,6 +4,45 @@ const expect = chai.expect;
 const handleLogLine = require('../../../../worker/processors/logs/handleLogLine');
 
 describe('sdtdLogs#handleLogLine', () => {
+  it('Correctly detects a A20 playerDisconnected event', () => {
+    const logLine = {
+      date: '2017-11-14',
+      time: '14:50:49',
+      uptime: '133.559',
+      msg: `Player disconnected: EntityID=171, PltfmId='Steam_76561198028175941', CrossId='EOS_0002b5d970954287afdcb5dc35af0424', OwnerID='Steam_76561198028175941', PlayerName='Catalysm'`,
+      trace: '',
+      type: 'Log'
+    };
+
+    const result = handleLogLine(logLine);
+
+    expect(result.type).to.eq('playerDisconnected');
+    expect(result.data.playerName).to.eq('Catalysm');
+    expect(result.data.playerID).to.eq('76561198028175941');
+    expect(result.data.entityID).to.eq('171');
+  });
+
+  it('Correctly detects a playerDisconnected event', () => {
+    const logLine = {
+      date: '2017-11-14',
+      time: '14:50:49',
+      uptime: '133.559',
+      msg: `Player disconnected: EntityID=171, PlayerID='76561198028175941', OwnerID='76561198028175941', PlayerName='Catalysm'`,
+      trace: '',
+      type: 'Log'
+    };
+
+    const result = handleLogLine(logLine);
+
+    expect(result.type).to.eq('playerDisconnected');
+    expect(result.data.playerName).to.eq('Catalysm');
+    expect(result.data.playerID).to.eq('76561198028175941');
+    expect(result.data.entityID).to.eq('171');
+  });
+
+
+
+
   it('Correctly detects a death event', () => {
     const logLine = {
       date: '2017-11-14',
@@ -21,6 +60,24 @@ describe('sdtdLogs#handleLogLine', () => {
     expect(result.data.playerName).to.eq('Catalysm');
     expect(result.data.steamId).to.eq('76561198028175941');
     expect(result.data.entityId).to.eq('6454');
+  });
+
+  it('Correctly detects a A20 death event', () => {
+    const logLine = {
+      date: '2017-11-14',
+      time: '14:50:49',
+      uptime: '133.559',
+      msg: `PlayerSpawnedInWorld (reason: Died, position: 1074, 61, 323): EntityID=171, PltfmId='Steam_76561198028175941', CrossId='EOS_0002b5d970954287afdcb5dc35af0424', OwnerID='Steam_76561198028175941', PlayerName='Catalysm'`,
+      trace: '',
+      type: 'Log'
+    };
+
+    const result = handleLogLine(logLine);
+
+    expect(result.type).to.eq('playerDeath');
+    expect(result.data.playerName).to.eq('Catalysm');
+    expect(result.data.steamId).to.eq('76561198028175941');
+    expect(result.data.entityId).to.eq('171');
   });
 
   it('Correctly detects a playerConnected event', () => {
@@ -44,6 +101,27 @@ describe('sdtdLogs#handleLogLine', () => {
     expect(result.data.country).to.not.be.null;
   });
 
+  it('Correctly detects a A20 playerConnected event', () => {
+    const logLine = {
+      date: '2017-11-14',
+      time: '14:50:25',
+      uptime: '109.802',
+      msg:
+        `Player connected, entityid=171, name=Catalysm, pltfmid=Steam_76561198028175941, crossid=EOS_0002b5d970954287afdcb5dc35af0424, steamOwner=Steam_76561198028175941, ip=2.21.16.8`,
+      trace: '',
+      type: 'Log'
+    };
+
+    const result = handleLogLine(logLine);
+
+    expect(result.type).to.eq('playerConnected');
+    expect(result.data.playerName).to.eq('Catalysm');
+    expect(result.data.steamId).to.eq('76561198028175941');
+    expect(result.data.entityId).to.eq('171');
+    // I don't think it makes sense to check the actual country, just that something gets set
+    expect(result.data.country).to.not.be.null;
+  });
+
   it('Correctly detects a playerJoined event', () => {
     const logLine = {
       date: '2017-11-14',
@@ -61,6 +139,24 @@ describe('sdtdLogs#handleLogLine', () => {
     expect(result.data.playerName).to.eq('Catalysm');
     expect(result.data.steamId).to.eq('76561198028175941');
     expect(result.data.entityId).to.eq('531');
+  });
+
+  it('Correctly detects a A20 playerJoined event', () => {
+    const logLine = {
+      date: '2017-11-14',
+      time: '14:50:25',
+      uptime: '109.802',
+      msg: `PlayerSpawnedInWorld (reason: EnterMultiplayer, position: -1972, 81, 1041): EntityID=298, PltfmId='Steam_76561198028175941', CrossId='EOS_0002b5d970954287afdcb5dc35af0424', OwnerID='Steam_76561198028175941', PlayerName='Catalysm'`,
+      trace: '',
+      type: 'Log'
+    };
+
+    const result = handleLogLine(logLine);
+
+    expect(result.type).to.eq('playerJoined');
+    expect(result.data.playerName).to.eq('Catalysm');
+    expect(result.data.steamId).to.eq('76561198028175941');
+    expect(result.data.entityId).to.eq('298');
   });
 
   it('correctly detects a playerLevel event', () => {
@@ -149,6 +245,21 @@ describe('sdtdLogs#handleLogLine', () => {
     expect(result.data.playerName).to.eq('Catalysm');
     expect(result.data.entityId).to.eq('171');
     expect(result.data.messageText).to.eq('/test');
+  });
+
+  it('correctly parses A20 chat messages', () => {
+    const logLine = {
+      msg: `Chat (from 'Steam_123456789', entity id '171', to 'Global'): 'Catalysm': $help`,
+      type: 'Log',
+      trace: '',
+    };
+
+    const result = handleLogLine(logLine);
+    expect(result.type).to.eq('chatMessage');
+    expect(result.data.steamId).to.eq('123456789');
+    expect(result.data.playerName).to.eq('Catalysm');
+    expect(result.data.entityId).to.eq('171');
+    expect(result.data.messageText).to.eq('$help');
   });
 
   it('Correctly detects a playerDied event with PvE death', () => {

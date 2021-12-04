@@ -36,12 +36,12 @@ module.exports = {
         if (player.server.owner === inputs.userId) {
           ownerCheck = true;
         }
-
-        if (player.role.manageServer || player.role.manageEconomy || player.role.managePlayers || player.role.manageGbl || player.role.viewDashboard || player.role.useTracking || player.role.viewAnalytics || player.role.manageTickets || ownerCheck) {
-          player.server.role = player.role;
-          objectToSend.push(player.server);
+        if (player.role) {
+          if (player.role.manageServer || player.role.manageEconomy || player.role.managePlayers || player.role.manageGbl || player.role.viewDashboard || player.role.useTracking || player.role.viewAnalytics || player.role.manageTickets || ownerCheck) {
+            player.server.role = player.role;
+            objectToSend.push(player.server);
+          }
         }
-
       } catch (error) {
         sails.log.error(error, {userId: inputs.userId});
       }

@@ -84,7 +84,7 @@ class Gimme extends SdtdCommand {
           let cmdToExec;
 
           if (cpmVersion >= 6.4) {
-            cmdToExec = `giveplus ${player.steamId} ${itemToGive} 1`;
+            cmdToExec = `giveplus ${player.entityId} ${itemToGive} 1`;
           } else {
             cmdToExec = `give ${player.entityId} ${itemToGive} 1`;
           }

@@ -66,7 +66,7 @@ module.exports = {
       // TODO start - this should be a helper
       let cmdToExec;
       if (cpmVersion >= 6.4) {
-        cmdToExec = `giveplus ${player.steamId} "${inputs.itemName}" ${inputs.amount} ${inputs.quality ? inputs.quality + ' 0' : ''}`;
+        cmdToExec = `giveplus ${player.entityId} "${inputs.itemName}" ${inputs.amount} ${inputs.quality ? inputs.quality + ' 0' : ''}`;
       } else {
         cmdToExec = `give ${player.entityId} "${inputs.itemName}" ${inputs.amount} ${inputs.quality ? inputs.quality : ''}`;
       }
@@ -78,7 +78,7 @@ module.exports = {
       }
       // TODO end - this should be a helper
 
-      await sails.helpers.sdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(server), `pm ${player.steamId} "CSMM - You have received ${inputs.amount} of ${inputs.itemName}"`);
+      await sails.helpers.sdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(server), `pm ${player.entityId} "CSMM - You have received ${inputs.amount} of ${inputs.itemName}"`);
 
       sails.log.info(`API - Player:give-item - giving ${inputs.amount} of ${inputs.itemName} to ${inputs.playerId} with quality: ${inputs.quality}`, {player, server});
       return exits.success();

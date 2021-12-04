@@ -1,5 +1,3 @@
-var sevenDays = require('machinepack-7daystodiewebapi');
-
 module.exports = {
 
   friendlyName: 'Unban player',
@@ -31,37 +29,15 @@ module.exports = {
    */
 
   fn: async function (inputs, exits) {
+    sails.log.debug(`API - Player:unban - unbanning player ${inputs.playerId}`, {player, server});
+    const player = await Player.findOne(inputs.playerId).populate('server');
+    const server = await SdtdServer.findOne(player.server.id);
 
-    try {
+    const response = await sails.helpers.sdtdApi.executeConsoleCommand(
+      SdtdServer.getAPIConfig(server),
+      `ban remove ${player.entityId}`
+    );
 
-      let player = await Player.findOne(inputs.playerId).populate('server');
-      let server = await SdtdServer.findOne(player.server.id);
-      sails.log.debug(`API - Player:unban - unbanning player ${inputs.playerId}`, {player, server});
-      return sevenDays.unbanPlayer({
-        ip: server.ip,
-        port: server.webPort,
-        authName: server.authName,
-        authToken: server.authToken,
-        playerId: player.steamId,
-      }).exec({
-        error: function (error) {
-          return exits.error(error);
-        },
-        unknownPlayer: function () {
-          return exits.notFound('Cannot unban player, invalid ID given!');
-        },
-        success: function (response) {
-          return exits.success(response);
-        }
-      });
-
-    } catch (error) {
-      sails.log.error(`API - Player:unban - ${error}`, {playerId: inputs.playerId});
-      return exits.error(error);
-    }
-
-
-
-
+    return exits.success(response);
   }
 };

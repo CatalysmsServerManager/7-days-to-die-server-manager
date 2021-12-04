@@ -69,7 +69,7 @@ describe('countryBan', () => {
         adminUser: connectedMessage.server.authName,
         adminToken: connectedMessage.server.authToken
       },
-      `kick ${connectedMessage.steamId} "CSMM: Players from your country (${connectedMessage.country}) are not allowed to connect to this server."`
+      `kick ${connectedMessage.entityId} "CSMM: Players from your country (${connectedMessage.country}) are not allowed to connect to this server."`
     );
   });
 
@@ -110,7 +110,7 @@ describe('countryBan', () => {
         adminUser: connectedMessage.server.authName,
         adminToken: connectedMessage.server.authToken
       },
-      `kick ${connectedMessage.steamId} "CSMM: Players from your country (${connectedMessage.country}) are not allowed to connect to this server."`
+      `kick ${connectedMessage.entityId} "CSMM: Players from your country (${connectedMessage.country}) are not allowed to connect to this server."`
     );
   });
 
