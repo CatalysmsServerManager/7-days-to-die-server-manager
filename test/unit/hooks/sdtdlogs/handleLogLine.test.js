@@ -141,6 +141,24 @@ describe('sdtdLogs#handleLogLine', () => {
     expect(result.data.entityId).to.eq('531');
   });
 
+  it('Correctly detects a A20 playerJoined event', () => {
+    const logLine = {
+      date: '2017-11-14',
+      time: '14:50:25',
+      uptime: '109.802',
+      msg: `PlayerSpawnedInWorld (reason: EnterMultiplayer, position: -1972, 81, 1041): EntityID=298, PltfmId='Steam_76561198028175941', CrossId='EOS_0002b5d970954287afdcb5dc35af0424', OwnerID='Steam_76561198028175941', PlayerName='Catalysm'`,
+      trace: '',
+      type: 'Log'
+    };
+
+    const result = handleLogLine(logLine);
+
+    expect(result.type).to.eq('playerJoined');
+    expect(result.data.playerName).to.eq('Catalysm');
+    expect(result.data.steamId).to.eq('76561198028175941');
+    expect(result.data.entityId).to.eq('298');
+  });
+
   it('correctly detects a playerLevel event', () => {
     const logLine = {
       'date': '2020-07-11',

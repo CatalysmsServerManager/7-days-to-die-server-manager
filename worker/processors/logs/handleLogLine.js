@@ -1,6 +1,5 @@
 const _ = require('lodash');
 
-const replaceQuotes = string => string.substring(1, string.length - 1);
 const extractIntegers = string => string.match(/\d*/g).join('');
 
 const steamIdRegex = /\d{17}/g;
@@ -12,8 +11,7 @@ const preA20DeathRegex = /PlayerSpawnedInWorld \(reason: Died, position: (?<x>[-
 const connectedRegex = /(Player connected,)/;
 const disconnectedRegex = /(Player disconnected: )/;
 
-const joinedRegex = /(PlayerSpawnedInWorld \(reason: EnterMultiplayer, position:)/g;
-const joinedValuesRegex = /([A-Za-z_]*)=(?:'([^']*)'|(\d*))/gm;
+const joinedRegex = /(PlayerSpawnedInWorld \(reason: EnterMultiplayer, position:)/;
 
 const newLevelRegex = /(made level \d*)/g;
 const oldLevelRegex = /(was )\d*/g;
@@ -148,12 +146,18 @@ module.exports = logLine => {
     }
     */
 
-    const joinedArray = logLine.msg.match(joinedValuesRegex);
+    const steamIdMatches = /PltfmId='Steam_(\d{17})|PlayerID='(\d{17})/.exec(logLine.msg);
+    const steamId = steamIdMatches[1] || steamIdMatches[2];
+    const playerName = /PlayerName='(.+)'/.exec(logLine.msg)[1];
+    const entityId = /EntityID=(\d+)/.exec(logLine.msg)[1];
+    const ownerId = /OwnerID='(Steam_)?(\d+)/.exec(logLine.msg)[2];
+
 
     let joinMsg = {
-      steamId: replaceQuotes(joinedArray[2].replace('OwnerID=', '')),
-      playerName: replaceQuotes(joinedArray[3].replace('PlayerName=', '')),
-      entityId: joinedArray[0].replace('EntityID=', ''),
+      steamId,
+      playerName,
+      entityId,
+      ownerId,
       date: logLine.date,
       time: logLine.time,
       uptime: logLine.uptime,
