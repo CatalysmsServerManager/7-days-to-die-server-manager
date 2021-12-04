@@ -23,6 +23,24 @@ describe('sdtdLogs#handleLogLine', () => {
     expect(result.data.entityId).to.eq('6454');
   });
 
+  it('Correctly detects a A20 death event', () => {
+    const logLine = {
+      date: '2017-11-14',
+      time: '14:50:49',
+      uptime: '133.559',
+      msg: `PlayerSpawnedInWorld (reason: Died, position: 1074, 61, 323): EntityID=171, PltfmId='Steam_76561198028175941', CrossId='EOS_0002b5d970954287afdcb5dc35af0424', OwnerID='Steam_76561198028175941', PlayerName='Catalysm'`,
+      trace: '',
+      type: 'Log'
+    };
+
+    const result = handleLogLine(logLine);
+
+    expect(result.type).to.eq('playerDeath');
+    expect(result.data.playerName).to.eq('Catalysm');
+    expect(result.data.steamId).to.eq('76561198028175941');
+    expect(result.data.entityId).to.eq('171');
+  });
+
   it('Correctly detects a playerConnected event', () => {
     const logLine = {
       date: '2017-11-14',

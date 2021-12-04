@@ -4,8 +4,10 @@ const replaceQuotes = string => string.substring(1, string.length - 1);
 const extractIntegers = string => string.match(/\d*/g).join('');
 
 const steamIdRegex = /\d{17}/g;
-const deathRegex = /(PlayerSpawnedInWorld \(reason: Died, position:)/g;
-const deathValuesRegex = /([A-Za-z_]*)=(?:'([^']*)'|(\d*))/gm;
+
+
+const a20DeathRegex = /PlayerSpawnedInWorld \(reason: Died, position: (?<x>[-\d]+), (?<y>[-\d]+), (?<z>[-\d]+)\): EntityID=(?<entityId>\d+), (PltfmId|PlayerID)='(?<platformId>[\d\w]+)', CrossId='(?<crossId>[\d\w]+)', OwnerID='Steam_(?<steamId>\d{17})', PlayerName='(?<playerName>.+)'/;
+const preA20DeathRegex = /PlayerSpawnedInWorld \(reason: Died, position: (?<x>[-\d]+), (?<y>[-\d]+), (?<z>[-\d]+)\): EntityID=(?<entityId>\d+), PlayerID='(?<platformId>[\d\w]+)', OwnerID='(?<steamId>\d{17})', PlayerName='(?<playerName>.+)'/;
 
 const connectedRegex = /(Player connected,)/g;
 
@@ -200,7 +202,7 @@ module.exports = logLine => {
     returnValue.data = disconnectedMsg;
   }
 
-  if (deathRegex.test(logLine.msg)) {
+  if (a20DeathRegex.test(logLine.msg)) {
     /*
     {
       "date": "2017-11-14",
@@ -212,15 +214,42 @@ module.exports = logLine => {
     }
     */
 
-    let deathArray = logLine.msg.match(deathValuesRegex);
+    const { groups: { steamId, entityId, playerName } } = a20DeathRegex.exec(logLine.msg);
     const deathMessage = {
       date: logLine.date,
       time: logLine.time,
       uptime: logLine.uptime,
       msg: logLine.msg,
-      steamId: replaceQuotes(deathArray[2].replace('OwnerID=', '')),
-      playerName: replaceQuotes(deathArray[3].replace('PlayerName=', '')),
-      entityId: deathArray[0].replace('EntityID=', '')
+      steamId,
+      playerName,
+      entityId
+    };
+
+    returnValue.type = 'playerDeath';
+    returnValue.data = deathMessage;
+  }
+
+  if (preA20DeathRegex.test(logLine.msg)) {
+    /*
+    {
+      "date": "2017-11-14",
+      "time": "14:50:49",
+      "uptime": "133.559",
+      "msg": "PlayerSpawnedInWorld (reason: Died, position: 2796, 68, -1452): EntityID=6454, PlayerID='76561198028175941', OwnerID='76561198028175941', PlayerName='Catalysm'",
+      "trace": "",
+      "type": "Log"
+    }
+    */
+
+    const { groups: { steamId, entityId, playerName } } = preA20DeathRegex.exec(logLine.msg);
+    const deathMessage = {
+      date: logLine.date,
+      time: logLine.time,
+      uptime: logLine.uptime,
+      msg: logLine.msg,
+      steamId,
+      playerName,
+      entityId
     };
 
     returnValue.type = 'playerDeath';
