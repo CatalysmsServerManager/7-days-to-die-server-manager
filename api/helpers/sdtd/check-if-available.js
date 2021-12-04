@@ -1,5 +1,3 @@
-var sevenDays = require('machinepack-7daystodiewebapi');
-
 module.exports = {
 
 
@@ -47,13 +45,13 @@ module.exports = {
    */
 
   fn: async function (inputs, exits) {
-    let sdtdServer = await SdtdServer.findOne({
+    const sdtdServer = await SdtdServer.findOne({
       id: inputs.serverId
     });
 
-    let statsResponse = await checkStats(sdtdServer);
+    const statsResponse = await checkStats(sdtdServer);
 
-    let commandResponse = true;
+    const commandResponse = true;
     if (!inputs.onlyStats) {
       commandResponse = await checkCommand(sdtdServer);
     }
@@ -66,54 +64,31 @@ module.exports = {
   }
 };
 
-async function checkStats(sdtdServer) {
-  return new Promise(resolve => {
-    sevenDays.getStats({
-      ip: sdtdServer.ip,
-      port: sdtdServer.webPort,
-      authName: sdtdServer.authName,
-      authToken: sdtdServer.authToken
-    }).exec({
-      success: (response) => {
+async function checkStats(server) {
+  try {
+    const response = await sails.helpers.sdtdApi.getStats(SdtdServer.getAPIConfig(server));
 
-        if (!response) {
-          return resolve(false);
-        }
+    if (!response) {
+      return false;
+    }
 
-        if (response.gametime) {
-          return resolve(true);
-        } else {
-          return resolve(false);
-        }
-      },
-      error: () => {
-        return resolve(false);
-      },
-      connectionRefused: () => {
-        return resolve(false);
-      }
-    });
-  });
+    if (response.gametime) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    return false;
+  }
+
 }
 
-async function checkCommand(sdtdServer) {
-  return new Promise(resolve => {
-    sevenDays.executeCommand({
-      ip: sdtdServer.ip,
-      port: sdtdServer.webPort,
-      authName: sdtdServer.authName,
-      authToken: sdtdServer.authToken,
-      command: 'help'
-    }).exec({
-      success: () => {
-        resolve(true);
-      },
-      error: () => {
-        resolve(false);
-      },
-      connectionRefused: () => {
-        resolve(false);
-      }
-    });
-  });
+async function checkCommand(server) {
+  try {
+    await sails.helpers.sdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(server), 'version');
+    return true;
+  } catch (error) {
+    return false;
+  }
+
 }

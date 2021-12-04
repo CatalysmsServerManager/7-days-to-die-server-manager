@@ -1,4 +1,3 @@
-var sevenDays = require('machinepack-7daystodiewebapi');
 var he = require('he');
 
 module.exports = {
@@ -130,14 +129,14 @@ module.exports = {
 
         playerProfile[0].role = await sails.helpers.sdtd.getPlayerRole(playerProfile[0].id);
 
-        sails.log.verbose(`Loaded a player - ${playerProfile[0].id} - ${playerProfile[0].name} - server: ${server.name}`, {serverId: inputs.serverId, player: playerProfile[0]});
+        sails.log.verbose(`Loaded a player - ${playerProfile[0].id} - ${playerProfile[0].name} - server: ${server.name}`, { serverId: inputs.serverId, player: playerProfile[0] });
         playerProfile[0].name = he.decode(playerProfile[0].name);
         playersToSend.push(playerProfile[0]);
       }
       let dateEnded = new Date();
 
       if (playersToSend.length > 0) {
-        sails.log.debug(`HELPER - loadPlayerData - Loaded player data for ${server.name}! Took ${dateEnded.valueOf() - dateStarted.valueOf()} ms - SteamId: ${inputs.steamId}`, {serverId: inputs.serverId});
+        sails.log.debug(`HELPER - loadPlayerData - Loaded player data for ${server.name}! Took ${dateEnded.valueOf() - dateStarted.valueOf()} ms - SteamId: ${inputs.steamId}`, { serverId: inputs.serverId });
       }
       return exits.success(playersToSend);
 
@@ -151,23 +150,13 @@ module.exports = {
 };
 
 async function getPlayerList(server) {
-  return new Promise((resolve) => {
-    sevenDays.getPlayerList({
-      ip: server.ip,
-      port: server.webPort,
-      authName: server.authName,
-      authToken: server.authToken
-    }).exec({
-      error: function () {
-        resolve({
-          players: []
-        });
-      },
-      success: function (playerList) {
-        resolve(playerList);
-      }
-    });
-  });
+  try {
+    const response = await sails.helpers.sdtdApi.getPlayerList(SdtdServer.getAPIConfig(server)
+    );
+    return response;
+  } catch (error) {
+    return { players: [] };
+  }
 }
 
 
@@ -197,24 +186,13 @@ async function findOrCreatePlayer(player, serverId) {
   }
 }
 
-function loadPlayerInventory(steamId, server) {
-  return new Promise((resolve) => {
-    sevenDays.getPlayerInventory({
-      ip: server.ip,
-      port: server.webPort,
-      authName: server.authName,
-      authToken: server.authToken,
-      steamId: steamId
-    }).exec({
-      error: function (err) {
-        sails.log.error(`HELPER - loadPlayerData:loadPlayerInventory ${err}`, {server});
-        resolve(undefined);
-      },
-      success: function (data) {
-        resolve(data);
-      }
-    });
-  });
+async function loadPlayerInventory(steamId, server) {
+  try {
+    const response = await sails.helpers.sdtdApi.getPlayerInventory(SdtdServer.getAPIConfig(server), steamId);
+    return response;
+  } catch (error) {
+    return undefined;
+  }
 }
 
 function loadSteamAvatar(steamId) {

@@ -1,5 +1,3 @@
-var sevenDays = require('machinepack-7daystodiewebapi');
-
 module.exports = {
 
 
@@ -33,28 +31,14 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
+    const response = await sails.helpers.sdtdApi.getAllowedCommands(SdtdServer.getAPIConfig(inputs.server));
 
-    sevenDays.getAllowedCommands({
-      ip: inputs.server.ip,
-      port: inputs.server.webPort,
-      authName: inputs.server.authName,
-      authToken: inputs.server.authToken
-    }).exec({
-      error: error => {
-        return exits.error(error);
-      },
-      success: response => {
-        let allowedCommands = new Array();
-        response.commands.forEach(command => {
-          allowedCommands.push(command.command);
-        });
-
-        return exits.success(allowedCommands);
-      }
+    const allowedCommands = new Array();
+    response.commands.forEach(command => {
+      allowedCommands.push(command.command);
     });
 
-
-
+    return exits.success(allowedCommands);
 
   }
 

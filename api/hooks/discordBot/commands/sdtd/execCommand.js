@@ -1,7 +1,6 @@
 const Commando = require('discord.js-commando');
 const Discord = require('discord.js');
 const findSdtdServer = require('../../util/findSdtdServer.js');
-const Daystodiewebapi = require('machinepack-7daystodiewebapi');
 const fs = require('fs');
 
 class ExecCommand extends Commando.Command {
@@ -65,77 +64,54 @@ class ExecCommand extends Commando.Command {
       return msg.channel.send(errorEmbed);
     }
 
-    // Execute a command via web api
-    Daystodiewebapi.executeCommand({
-      ip: sdtdServer.ip,
-      port: sdtdServer.webPort,
-      command: args.command,
-      authName: sdtdServer.authName,
-      authToken: sdtdServer.authToken,
-    }).exec({
-      // An unexpected error occurred.
-      error: function (err) {
-        let errorEmbed = new client.errorEmbed(`${err.message}`);
-        return msg.channel.send(errorEmbed);
-      },
-      // Server refused the request (usually means server offline)
-      connectionRefused: function () {
-        let errorEmbed = new client.errorEmbed(`:octagonal_sign: Error connecting to the server`);
-        return msg.channel.send(errorEmbed);
-      },
-      // Not authorized to do this request
-      unauthorized: function () {
-        let errorEmbed = new client.errorEmbed(`:octagonal_sign: Not authorized to execute a command (Check your webtokens config!)`);
-        return msg.channel.send(errorEmbed);
-      },
-      // Unknown command entered
-      unknownCommand: function () {
-        let errorEmbed = new client.errorEmbed(`:octagonal_sign: Unknown command`);
-        return msg.channel.send(errorEmbed);
-      },
-      // OK.
-      success: async function (response) {
-        let successEmbed = new Discord.MessageEmbed();
-        successEmbed.addField(':inbox_tray: Input', `${args.command}`)
-          .setColor('GREEN');
+    try {
+      const response = await sails.helpers.sdtdApi.executeConsoleCommand(
+        SdtdServer.getAPIConfig(sdtdServer),
+        args.command
+      );
 
-        if (response.result.length > 1000) {
-          try {
-            fs.writeFile(`${sdtdServer.name}_${args.command}_output.txt`, response.result, err => {
-              if (err) {
-                sails.log.error(err, {server: sdtdServer});
-              }
-              successEmbed.addField(':outbox_tray: Output', `Logging to file`);
-              msg.channel.send({
-                embed: successEmbed,
-                files: [{
-                  attachment: `${sdtdServer.name}_${args.command}_output.txt`,
-                  name: `${sdtdServer.name}_${args.command}_output.txt`
-                }]
-              }).then(() => {
-                fs.unlink(`${sdtdServer.name}_${args.command}_output.txt`, err => {
-                  if (err) {
-                    sails.log.error(err, {server: sdtdServer});
-                  }
-                });
-              }).catch(e => {
-                sails.log.error(`DISCORD COMMAND - EXECCOMMAND - ${e}`, {server: sdtdServer});
+      let successEmbed = new Discord.MessageEmbed();
+      successEmbed.addField(':inbox_tray: Input', `${args.command}`)
+        .setColor('GREEN');
+
+      if (response.result.length > 1000) {
+        try {
+          fs.writeFile(`${sdtdServer.name}_${args.command}_output.txt`, response.result, err => {
+            if (err) {
+              sails.log.error(err, {server: sdtdServer});
+            }
+            successEmbed.addField(':outbox_tray: Output', `Logging to file`);
+            msg.channel.send({
+              embed: successEmbed,
+              files: [{
+                attachment: `${sdtdServer.name}_${args.command}_output.txt`,
+                name: `${sdtdServer.name}_${args.command}_output.txt`
+              }]
+            }).then(() => {
+              fs.unlink(`${sdtdServer.name}_${args.command}_output.txt`, err => {
+                if (err) {
+                  sails.log.error(err, {server: sdtdServer});
+                }
               });
+            }).catch(e => {
+              sails.log.error(`DISCORD COMMAND - EXECCOMMAND - ${e}`, {server: sdtdServer});
             });
-          } catch (error) {
-            sails.log.error(`DISCORD COMMAND - EXECCOMMAND - ${error}`, {server: sdtdServer});
-          }
-
-        } else {
-          successEmbed.addField(':outbox_tray: Output', `${response.result ? response.result : 'No output data'}`);
-          return msg.channel.send(successEmbed);
+          });
+        } catch (error) {
+          sails.log.error(`DISCORD COMMAND - EXECCOMMAND - ${error}`, {server: sdtdServer});
         }
 
+      } else {
+        successEmbed.addField(':outbox_tray: Output', `${response.result ? response.result : 'No output data'}`);
+        return msg.channel.send(successEmbed);
+      }
 
-      },
 
-    });
 
+    } catch (error) {
+      const errorEmbed = new client.errorEmbed(`:octagonal_sign: Error while executing command`);
+      return msg.channel.send(errorEmbed);
+    }
   }
 
 }

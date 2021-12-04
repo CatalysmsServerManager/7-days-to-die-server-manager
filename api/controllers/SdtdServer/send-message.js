@@ -1,5 +1,3 @@
-const sevenDays = require('machinepack-7daystodiewebapi');
-
 module.exports = {
 
   friendlyName: 'Send message',
@@ -43,33 +41,15 @@ module.exports = {
    */
 
   fn: async function (inputs, exits) {
-
-
-
     sails.log.debug(`API - SdtdServer:send message - sending a message on server ${inputs.serverId} to player: ${inputs.destinationPlayer}`, {serverId: inputs.serverId});
 
-    try {
-      let sdtdServer = await SdtdServer.findOne(inputs.serverId);
-      sevenDays.sendMessage({
-        ip: sdtdServer.ip,
-        port: sdtdServer.webPort,
-        authName: sdtdServer.authName,
-        authToken: sdtdServer.authToken,
-        message: inputs.message,
-        playerID: inputs.destinationPlayer ? inputs.destinationPlayer : undefined
-      }).exec({
-        success: (response) => {
-          return exits.success(response);
-        },
-        error: (error) => {
-          return exits.error(error);
-        }
-      });
+    const server = await SdtdServer.findOne(inputs.serverId);
 
-    } catch (error) {
-      sails.log.error(`API - SdtdServer:sendMessage - ${error}`, {serverId: inputs.serverId});
-      return exits.error(error);
-    }
+    await sails.helpers.sdtdApi.executeConsoleCommand(
+      SdtdServer.getAPIConfig(server),
+      `say "Restarting the server in ${minutesLeft} minute(s)"`
+    );
 
+    return exits.success();
   }
 };
