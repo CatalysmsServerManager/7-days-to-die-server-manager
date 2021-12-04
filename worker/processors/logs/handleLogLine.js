@@ -9,7 +9,7 @@ const steamIdRegex = /\d{17}/g;
 const a20DeathRegex = /PlayerSpawnedInWorld \(reason: Died, position: (?<x>[-\d]+), (?<y>[-\d]+), (?<z>[-\d]+)\): EntityID=(?<entityId>\d+), (PltfmId|PlayerID)='(?<platformId>[\d\w]+)', CrossId='(?<crossId>[\d\w]+)', OwnerID='Steam_(?<steamId>\d{17})', PlayerName='(?<playerName>.+)'/;
 const preA20DeathRegex = /PlayerSpawnedInWorld \(reason: Died, position: (?<x>[-\d]+), (?<y>[-\d]+), (?<z>[-\d]+)\): EntityID=(?<entityId>\d+), PlayerID='(?<platformId>[\d\w]+)', OwnerID='(?<steamId>\d{17})', PlayerName='(?<playerName>.+)'/;
 
-const connectedRegex = /(Player connected,)/g;
+const connectedRegex = /(Player connected,)/;
 
 const joinedRegex = /(PlayerSpawnedInWorld \(reason: EnterMultiplayer, position:)/g;
 const joinedValuesRegex = /([A-Za-z_]*)=(?:'([^']*)'|(\d*))/gm;
@@ -110,23 +110,28 @@ module.exports = logLine => {
   }
 
   if (connectedRegex.test(logLine.msg)) {
-    const connectedArray = logLine.msg.split(',');
-    let joinMsg = {
-      steamId: connectedArray.find(e => e.includes('steamid')).split('=')[1],
-      playerName: connectedArray.find(e => e.includes('name')).split('=')[1],
-      entityId: connectedArray.find(e => e.includes('entityid')).split('=')[1],
-      ip: connectedArray.find(e => e.includes('ip')).split('=')[1],
+    const steamIdMatches = /pltfmid=Steam_(\d{17})|steamid=(\d{17})/.exec(logLine.msg);
+    const steamId = steamIdMatches[1] || steamIdMatches[2];
+    const playerName = /name=(.+), (pltfmid=|steamid=)/.exec(logLine.msg)[1];
+    const entityId = /entityid=(\d+)/.exec(logLine.msg)[1];
+    const ip = /ip=([\d.]+)/.exec(logLine.msg)[1];
+
+    let connectedMsg = {
+      steamId,
+      playerName,
+      entityId,
+      ip,
       date: logLine.date,
       time: logLine.time,
       uptime: logLine.uptime,
       msg: logLine.msg
     };
 
-    const geoIpLookup = require('geoip-lite').lookup(joinMsg.ip);
-    joinMsg.country = geoIpLookup ? geoIpLookup.country : null;
+    const geoIpLookup = require('geoip-lite').lookup(connectedMsg.ip);
+    connectedMsg.country = geoIpLookup ? geoIpLookup.country : null;
 
     returnValue.type = 'playerConnected';
-    returnValue.data = joinMsg;
+    returnValue.data = connectedMsg;
   }
 
   // New player connects

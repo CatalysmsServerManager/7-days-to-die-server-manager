@@ -62,6 +62,27 @@ describe('sdtdLogs#handleLogLine', () => {
     expect(result.data.country).to.not.be.null;
   });
 
+  it('Correctly detects a A20 playerConnected event', () => {
+    const logLine = {
+      date: '2017-11-14',
+      time: '14:50:25',
+      uptime: '109.802',
+      msg:
+        `Player connected, entityid=171, name=Catalysm, pltfmid=Steam_76561198028175941, crossid=EOS_0002b5d970954287afdcb5dc35af0424, steamOwner=Steam_76561198028175941, ip=2.21.16.8`,
+      trace: '',
+      type: 'Log'
+    };
+
+    const result = handleLogLine(logLine);
+
+    expect(result.type).to.eq('playerConnected');
+    expect(result.data.playerName).to.eq('Catalysm');
+    expect(result.data.steamId).to.eq('76561198028175941');
+    expect(result.data.entityId).to.eq('171');
+    // I don't think it makes sense to check the actual country, just that something gets set
+    expect(result.data.country).to.not.be.null;
+  });
+
   it('Correctly detects a playerJoined event', () => {
     const logLine = {
       date: '2017-11-14',
