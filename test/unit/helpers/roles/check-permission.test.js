@@ -297,7 +297,7 @@ async function mockPlayer({
   serverId,
 }) {
   let createdUser = await User.create({
-    steamId: faker.random.uuid(),
+    steamId: faker.datatype.uuid(),
     username: faker.internet.userName()
   }).fetch();
 

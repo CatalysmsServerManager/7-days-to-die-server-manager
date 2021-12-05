@@ -6,13 +6,13 @@ describe('HELPER execute-custom-command', function () {
   beforeEach(function () {
     sandbox.stub(sails.helpers.sdtdApi, 'getStats').resolves({
       gametime: {
-        days: faker.random.number({ min: 1, max: 250 }),
-        hours: faker.random.number({ min: 0, max: 24 }),
-        minutes: faker.random.number({ min: 1, max: 60 })
+        days: faker.datatype.number({ min: 1, max: 250 }),
+        hours: faker.datatype.number({ min: 0, max: 24 }),
+        minutes: faker.datatype.number({ min: 1, max: 60 })
       },
-      players: faker.random.number({ min: 1, max: 20 }),
-      hostiles: faker.random.number({ min: 1, max: 100 }),
-      animals: faker.random.number({ min: 1, max: 100 })
+      players: faker.datatype.number({ min: 1, max: 20 }),
+      hostiles: faker.datatype.number({ min: 1, max: 100 }),
+      animals: faker.datatype.number({ min: 1, max: 100 })
     });
     sandbox.stub(sails.helpers.sdtdApi, 'executeConsoleCommand').resolves({ result: 'it worked yay' });
     sandbox.stub(sails.helpers.sdtd, 'loadPlayerData').resolves([sails.testPlayer]);
@@ -229,7 +229,7 @@ say "1 - 1 = {{subtract 1 1}}"
     });
 
     it('Can sort arrays asc', async function () {
-      const randomPlayerLevel = () => ({ ...sails.testPlayer, role: { level: faker.random.number() } });
+      const randomPlayerLevel = () => ({ ...sails.testPlayer, role: { level: faker.datatype.number() } });
       const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
       {{#each (sort players "role.level" "asc")}}
             {{this.role.level}}
@@ -247,7 +247,7 @@ say "1 - 1 = {{subtract 1 1}}"
     });
 
     it('Can sort arrays desc', async function () {
-      const randomPlayerLevel = () => ({ ...sails.testPlayer, role: { level: faker.random.number() } });
+      const randomPlayerLevel = () => ({ ...sails.testPlayer, role: { level: faker.datatype.number() } });
       const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
       {{#each (sort players "role.level" "desc")}}
             {{this.role.level}}
