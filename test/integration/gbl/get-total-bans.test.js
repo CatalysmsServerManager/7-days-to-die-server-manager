@@ -23,7 +23,7 @@ describe('GET /api/gbl/total', function () {
     {
       // random player ban on testServer
       server: sails.testServer.id,
-      steamId: faker.random.number({min: 0, max: 999999999999}),
+      steamId: faker.datatype.number({min: 0, max: 999999999999}),
       bannedUntil: faker.date.future().valueOf(),
       reason: 'Test ban'
     }]).fetch();

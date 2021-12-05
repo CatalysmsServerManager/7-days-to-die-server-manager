@@ -47,7 +47,7 @@ describe('PATCH /api/role', function () {
       let data = {
         roleId: testRoles[0].id
       };
-      data[field] = faker.random.boolean();
+      data[field] = faker.datatype.boolean();
 
       return supertest(sails.hooks.http.app)
         .patch('/api/role')
