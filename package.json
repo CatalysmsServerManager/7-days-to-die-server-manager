@@ -85,14 +85,14 @@
     "node": "12"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "7.15.8",
+    "@babel/eslint-parser": "7.16.3",
     "@types/bull": "^3.15.3",
     "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",
     "codecov": "^3.8.3",
     "coveralls": "^3.1.1",
     "docker-compose": "^0.23.13",
-    "eslint": "^7.32.0",
+    "eslint": "^8.4.0",
     "faker": "^5.5.3",
     "grunt-bower-task": "^0.5.0",
     "husky": "^4.3.0",
