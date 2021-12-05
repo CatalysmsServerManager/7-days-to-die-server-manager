@@ -23,7 +23,7 @@ describe('DELETE /api/gbl/', function () {
     {
       // random player ban on testServer
       server: sails.testServer.id,
-      steamId: faker.random.number({
+      steamId: faker.datatype.number({
         min: 0,
         max: 999999999999
       }),

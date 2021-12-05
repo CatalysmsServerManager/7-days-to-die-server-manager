@@ -88,15 +88,15 @@ describe('Player teleports', function () {
 async function mockTeleport(options) {
   _.defaults(options, {
     name: faker.address.streetName(),
-    x: faker.random.number({
+    x: faker.datatype.number({
       min: -5000,
       max: 5000
     }),
-    y: faker.random.number({
+    y: faker.datatype.number({
       min: -5000,
       max: 5000
     }),
-    z: faker.random.number({
+    z: faker.datatype.number({
       min: -5000,
       max: 5000
     }),

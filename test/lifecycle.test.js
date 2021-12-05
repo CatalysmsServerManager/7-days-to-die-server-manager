@@ -105,7 +105,7 @@ afterEach(async function () {
 
 beforeEach(async function () {
   let testUser = await User.create({
-    steamId: faker.random.number({ min: 0, max: 9999999999999 }),
+    steamId: faker.datatype.number({ min: 0, max: 9999999999999 }),
     username: faker.internet.userName(),
     discordId: '111111111111111111'
   }).meta({ skipAllLifecycleCallbacks: true }).fetch();
