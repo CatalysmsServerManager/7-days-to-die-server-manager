@@ -261,6 +261,8 @@ module.exports = logLine => {
       "time": "14:50:49",
       "uptime": "133.559",
       "msg": "[CSMM_Patrons]playerLeveled: Catalysm (76561198028175941) made level 6 (was 5)",
+      or
+              [CSMM_Patrons]playerLeveled: Catalysm (Steam_76561198028175941) made level 2 (was 1)
       "trace": "",
       "type": "Log"
     }
@@ -292,6 +294,8 @@ module.exports = logLine => {
       "time": "14:50:49",
       "uptime": "133.559",
       "msg": "[CSMM_Patrons]entityKilled: Catalysm (76561198028175941) killed zombie zombieBoe",
+      or
+            [CSMM_Patrons]entityKilled: Catalysm (Steam_76561198028175941) killed zombie zombieYo with Dev: Instant Death Pistol
       "trace": "",
       "type": "Log"
     }
