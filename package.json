@@ -85,7 +85,7 @@
     "node": "12"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "7.15.8",
+    "@babel/eslint-parser": "7.16.3",
     "@types/bull": "^3.15.3",
     "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",
