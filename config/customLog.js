@@ -16,34 +16,38 @@ const logDirectory = process.env.LOGGING_DIR ? process.env.LOGGING_DIR : './logs
 const handleInfo = format((info) => {
   if (!info.labels) { info.labels = {}; };
 
-  if (info.userId) {
-    info.labels.user = info.userId.toString();
-    delete info.userId;
-  }
+  try {
+    if (info.userId) {
+      info.labels.user = info.userId.toString();
+      delete info.userId;
+    }
 
-  if (info.user) {
-    info.labels.user = info.user.id.toString();
-    delete info.user;
-  }
+    if (info.user) {
+      info.labels.user = info.user.id.toString();
+      delete info.user;
+    }
 
-  if (info.serverId) {
-    info.labels.server = info.serverId.toString();
-    delete info.serverId;
-  }
+    if (info.serverId) {
+      info.labels.server = info.serverId.toString();
+      delete info.serverId;
+    }
 
-  if (info.server) {
-    info.labels.server = info.server.id.toString();
-    delete info.server;
-  }
+    if (info.server) {
+      info.labels.server = info.server.id.toString();
+      delete info.server;
+    }
 
-  if (info.playerId) {
-    info.labels.player = info.playerId.toString();
-    delete info.playerId;
-  }
+    if (info.playerId) {
+      info.labels.player = info.playerId.toString();
+      delete info.playerId;
+    }
 
-  if (info.player) {
-    info.labels.player = info.player.id.toString();
-    delete info.player;
+    if (info.player) {
+      info.labels.player = info.player.id.toString();
+      delete info.player;
+    }
+  } catch (error) {
+    sails.log.error(`Error while parsing log info`, {original: info, error});
   }
 
   return info;

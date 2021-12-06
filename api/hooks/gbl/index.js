@@ -37,13 +37,13 @@ async function refreshBans() {
     try {
       let loggingObj = await sails.hooks.sdtdlogs.getLoggingObject(server.id);
       loggingObj.on('playerConnected', async connectedMsg => {
-        if (!connectedMsg.steamID) {
+        if (!connectedMsg.steamId) {
           return;
         }
 
         let foundBans = await BanEntry.find({
           where: {
-            steamId: connectedMsg.steamID,
+            steamId: connectedMsg.steamId,
             server: {
               '!=': connectedMsg.server.id
             }
@@ -56,7 +56,7 @@ async function refreshBans() {
         foundBans = _.uniqBy(foundBans, ban => ban.server.owner);
 
         sails.log.debug(
-          `Found ${foundBans.length} total bans for player ${connectedMsg.steamID} on the GBL`, {server}
+          `Found ${foundBans.length} total bans for player ${connectedMsg.steamId} on the GBL`, {server}
         );
 
         let config = await SdtdConfig.findOne({
@@ -66,7 +66,7 @@ async function refreshBans() {
         let playerAutoKicked = false;
         let player = await Player.findOne({
           server: connectedMsg.server.id,
-          steamId: connectedMsg.steamID
+          steamId: connectedMsg.steamId
         });
 
         if (
@@ -80,7 +80,7 @@ async function refreshBans() {
               adminUser: server.authName,
               adminToken: server.authToken
             },
-            `kick ${connectedMsg.steamID} "CSMM: You are listed ${foundBans.length} times on the global ban list."`
+            `kick ${connectedMsg.entityId} "CSMM: You are listed ${foundBans.length} times on the global ban list."`
           );
 
           playerAutoKicked = true;
@@ -107,9 +107,7 @@ async function refreshBans() {
       await sails.helpers.sdtd.loadBans(server.id);
     } catch (error) {
       sails.log.warn(
-        `Error refreshing ban info for server ${server.name}`, {server},
-        error
-      );
+        `Error refreshing ban info for server ${server.name}`, {server, error});
     }
   }
 

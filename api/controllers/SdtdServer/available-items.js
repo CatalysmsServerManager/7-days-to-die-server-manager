@@ -1,5 +1,3 @@
-const sevenDays = require('machinepack-7daystodiewebapi');
-
 module.exports = {
 
 
@@ -16,7 +14,7 @@ module.exports = {
     },
     item: {
       type: 'string',
-      example: 'stew'
+      defaultsTo: '*'
     }
 
   },
@@ -42,42 +40,20 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     sails.log.debug(`API - SdtdServer:available-items - Loading available items!`, {serverId: inputs.serverId});
-    try {
-      let server = await SdtdServer.findOne({
-        id: inputs.serverId
-      });
 
-      if (_.isUndefined(server)) {
-        return exits.notFound();
-      }
+    const server = await SdtdServer.findOne({
+      id: inputs.serverId
+    });
 
-      sevenDays.listItems({
-        ip: server.ip,
-        port: server.webPort,
-        authName: server.authName,
-        authToken: server.authToken,
-        itemToSearch: inputs.item
-      }).exec({
-        success: (response) => {
-          if (!response) {
-            return exits.success([]);
-          }
-          return exits.success(response);
-        },
-        unknownCommand: (error) => {
-          return exits.commandError(error);
-        },
-        error: (error) => {
-          return exits.error(error);
-        }
-      });
-
-    } catch (error) {
-      sails.log.error(`API - SdtdServer:available-items - ${error}`, {serverId: inputs.serverId});
-      return exits.error(error);
+    if (_.isUndefined(server)) {
+      return exits.notFound();
     }
 
+    const response = await sails.helpers.sdtdApi.executeConsoleCommand(
+      SdtdServer.getAPIConfig(server),
+      `listitems ${inputs.item}`
+    );
+
+    return exits.success(response);
   }
-
-
 };

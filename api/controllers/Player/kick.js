@@ -1,5 +1,3 @@
-var sevenDays = require('machinepack-7daystodiewebapi');
-
 module.exports = {
 
   friendlyName: 'Kick player',
@@ -35,38 +33,13 @@ module.exports = {
    */
 
   fn: async function (inputs, exits) {
+    const player = await Player.findOne(inputs.playerId).populate('server');
+    const server = await SdtdServer.findOne(player.server.id);
+    const response = await sails.helpers.sdtdApi.executeConsoleCommand(
+      SdtdServer.getAPIConfig(server),
+      `kick ${player.entityId} "${inputs.reason}"`
+    );
 
-    try {
-
-      let player = await Player.findOne(inputs.playerId).populate('server');
-      let server = await SdtdServer.findOne(player.server.id);
-      return sevenDays.kickPlayer({
-        ip: server.ip,
-        port: server.webPort,
-        authName: server.authName,
-        authToken: server.authToken,
-        playerId: player.steamId,
-        reason: inputs.reason
-      }).exec({
-        error: function (error) {
-          return exits.error(error);
-        },
-        unknownPlayer: function () {
-          return exits.notFound('Cannot kick player, invalid ID given!');
-        },
-        success: function (response) {
-          sails.log.info(`API - Player:kick - Kicking player from server ${inputs.serverId}`, {player});
-          return exits.success(response);
-        }
-      });
-
-    } catch (error) {
-      sails.log.error(`API - Player:kick - ${error}`, {playerId: inputs.playerId});
-      return exits.error(error);
-    }
-
-
-
-
+    return exits.success(response);
   }
 };

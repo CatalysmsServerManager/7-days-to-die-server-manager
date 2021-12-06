@@ -1,16 +1,17 @@
 const _ = require('lodash');
 
-const replaceQuotes = string => string.substring(1, string.length - 1);
 const extractIntegers = string => string.match(/\d*/g).join('');
 
 const steamIdRegex = /\d{17}/g;
-const deathRegex = /(PlayerSpawnedInWorld \(reason: Died, position:)/g;
-const deathValuesRegex = /([A-Za-z_]*)=(?:'([^']*)'|(\d*))/gm;
 
-const connectedRegex = /(Player connected,)/g;
 
-const joinedRegex = /(PlayerSpawnedInWorld \(reason: EnterMultiplayer, position:)/g;
-const joinedValuesRegex = /([A-Za-z_]*)=(?:'([^']*)'|(\d*))/gm;
+const a20DeathRegex = /PlayerSpawnedInWorld \(reason: Died, position: (?<x>[-\d]+), (?<y>[-\d]+), (?<z>[-\d]+)\): EntityID=(?<entityId>\d+), (PltfmId|PlayerID)='(?<platformId>[\d\w]+)', CrossId='(?<crossId>[\d\w]+)', OwnerID='Steam_(?<steamId>\d{17})', PlayerName='(?<playerName>.+)'/;
+const preA20DeathRegex = /PlayerSpawnedInWorld \(reason: Died, position: (?<x>[-\d]+), (?<y>[-\d]+), (?<z>[-\d]+)\): EntityID=(?<entityId>\d+), PlayerID='(?<platformId>[\d\w]+)', OwnerID='(?<steamId>\d{17})', PlayerName='(?<playerName>.+)'/;
+
+const connectedRegex = /(Player connected,)/;
+const disconnectedRegex = /(Player disconnected: )/;
+
+const joinedRegex = /(PlayerSpawnedInWorld \(reason: EnterMultiplayer, position:)/;
 
 const newLevelRegex = /(made level \d*)/g;
 const oldLevelRegex = /(was )\d*/g;
@@ -19,6 +20,8 @@ const entityKilledRegex = /(killed .*)/g;
 
 const gmsgDeathRegex = /GMSG: Player '(\w+)' died/;
 const gmsgPvPDeathRegex = /GMSG: Player (.+) killed by (.+)/;
+
+const chatRegex = /Chat \(from '(?<steamId>[\w\d-]+)', entity id '(?<entityId>[-\d]+)', to '(?<channel>\w+)'\): '(?<playerName>.+)':(?<messageText>.+)/;
 
 module.exports = logLine => {
 
@@ -68,39 +71,31 @@ module.exports = logLine => {
     returnValue.data = memUpdate;
   }
 
-  // A17 Chat
-  if (_.startsWith(logLine.msg, 'Chat') && logLine.msg.includes('(from')) {
+  if (chatRegex.test(logLine.msg)) {
     /*
     {
        date: '2018-11-20',
        time: '14:38:03',
        uptime: '2274.494',
-       msg: 'Chat (from \'76561198028175941\', entity id \'171\', to \'Global\'): \'Catalysm\': blabla',
+       msg: 'Chat (from 'Steam_123456789', entity id '171', to 'Global'): 'Catalysm': $help',
        trace: '',
        type: 'Log'
     }
     */
 
-    let splitMessage = logLine.msg.split('\'');
 
-    if (logLine.msg.includes('Chat handled by mod')) {
-      splitMessage = splitMessage.slice(2);
-    }
+    const { groups: { steamId, entityId,channel, playerName, messageText } } = chatRegex.exec(logLine.msg);
 
-    let data = {
+    const data = {
       date: logLine.date,
       time: logLine.time,
       uptime: logLine.uptime,
       msg: logLine.msg,
-      steamId: splitMessage[1],
-      entityId: splitMessage[3],
-      channel: splitMessage[5],
-      playerName: splitMessage[7],
-      messageText: splitMessage
-        .slice(8)
-        .join(' ')
-        .replace(':', '')
-        .trim()
+      steamId: steamId.replace('Steam_', ''),
+      entityId,
+      channel,
+      playerName,
+      messageText: messageText.trim()
     };
 
     // Filter out chatmessages that have been handled by some API mod already
@@ -111,89 +106,31 @@ module.exports = logLine => {
       returnValue.type = 'chatMessage';
       returnValue.data = data;
     }
-
-  }
-
-  // pre A17 chat
-  if (_.startsWith(logLine.msg, 'Chat:')) {
-    /*
-    {
-      "date": "2017-11-14",
-      "time": "14:50:39",
-      "uptime": "123.278",
-      "msg": "Chat: 'Catalysm': hey",
-      "trace": "",
-      "type": "Log"
-    }
-    */
-
-    let firstIdx = logLine.msg.indexOf('\'');
-    let secondIdx = logLine.msg.indexOf('\'', firstIdx + 1);
-    let playerName = logLine.msg.slice(firstIdx + 1, secondIdx);
-    let messageText = logLine.msg.slice(secondIdx + 3, logLine.msg.length);
-
-    let type = 'chat';
-    if (playerName === 'Server') {
-      type = 'server';
-    }
-
-    /*
-    Workaround for when the server uses servertools roles
-    Server tools
-    */
-    if (playerName.includes('[-]') && playerName.includes('](')) {
-      let roleColourDividerIndex = playerName.indexOf('](');
-      let roleEndIndex = playerName.indexOf(')', roleColourDividerIndex);
-      let newPlayerName = playerName
-        .substring(roleEndIndex + 2)
-        .replace('[-]', '');
-      playerName = newPlayerName;
-    }
-
-    /**
-     * Workaround for coppi colours (with the colour ending indicator [-])
-     */
-
-    if (playerName.includes('[-]')) {
-      let colourEndIdx = playerName.indexOf(']');
-      let newPlayerName = playerName
-        .substring(colourEndIdx + 1)
-        .replace('[-]', '');
-      playerName = newPlayerName;
-    }
-
-    let data = {
-      playerName,
-      messageText,
-      type,
-      date: logLine.date,
-      time: logLine.time,
-      uptime: logLine.uptime,
-      msg: logLine.msg
-    };
-
-    returnValue.type = 'chatMessage';
-    returnValue.data = data;
   }
 
   if (connectedRegex.test(logLine.msg)) {
-    const connectedArray = logLine.msg.split(',');
-    let joinMsg = {
-      steamId: connectedArray.find(e => e.includes('steamid')).split('=')[1],
-      playerName: connectedArray.find(e => e.includes('name')).split('=')[1],
-      entityId: connectedArray.find(e => e.includes('entityid')).split('=')[1],
-      ip: connectedArray.find(e => e.includes('ip')).split('=')[1],
+    const steamIdMatches = /pltfmid=Steam_(\d{17})|steamid=(\d{17})/.exec(logLine.msg);
+    const steamId = steamIdMatches[1] || steamIdMatches[2];
+    const playerName = /name=(.+), (pltfmid=|steamid=)/.exec(logLine.msg)[1];
+    const entityId = /entityid=(\d+)/.exec(logLine.msg)[1];
+    const ip = /ip=([\d.]+)/.exec(logLine.msg)[1];
+
+    let connectedMsg = {
+      steamId,
+      playerName,
+      entityId,
+      ip,
       date: logLine.date,
       time: logLine.time,
       uptime: logLine.uptime,
       msg: logLine.msg
     };
 
-    const geoIpLookup = require('geoip-lite').lookup(joinMsg.ip);
-    joinMsg.country = geoIpLookup ? geoIpLookup.country : null;
+    const geoIpLookup = require('geoip-lite').lookup(connectedMsg.ip);
+    connectedMsg.country = geoIpLookup ? geoIpLookup.country : null;
 
     returnValue.type = 'playerConnected';
-    returnValue.data = joinMsg;
+    returnValue.data = connectedMsg;
   }
 
   // New player connects
@@ -209,12 +146,18 @@ module.exports = logLine => {
     }
     */
 
-    const joinedArray = logLine.msg.match(joinedValuesRegex);
+    const steamIdMatches = /PltfmId='Steam_(\d{17})|PlayerID='(\d{17})/.exec(logLine.msg);
+    const steamId = steamIdMatches[1] || steamIdMatches[2];
+    const playerName = /PlayerName='(.+)'/.exec(logLine.msg)[1];
+    const entityId = /EntityID=(\d+)/.exec(logLine.msg)[1];
+    const ownerId = /OwnerID='(Steam_)?(\d+)/.exec(logLine.msg)[2];
+
 
     let joinMsg = {
-      steamId: replaceQuotes(joinedArray[2].replace('OwnerID=', '')),
-      playerName: replaceQuotes(joinedArray[3].replace('PlayerName=', '')),
-      entityId: joinedArray[0].replace('EntityID=', ''),
+      steamId,
+      playerName,
+      entityId,
+      ownerId,
       date: logLine.date,
       time: logLine.time,
       uptime: logLine.uptime,
@@ -225,7 +168,7 @@ module.exports = logLine => {
     returnValue.data = joinMsg;
   }
 
-  if (_.startsWith(logLine.msg, 'Player disconnected:')) {
+  if (disconnectedRegex.test(logLine.msg)) {
     /*
     {
       "date": "2017-11-14",
@@ -236,23 +179,11 @@ module.exports = logLine => {
       "type": "Log"
     }
     */
-    let logMsg = logLine.msg;
-    logMsg = logMsg.replace('Player disconnected', '');
-    logMsg = logMsg.split(',');
-
-    let entityID = logMsg[0].replace(': EntityID=', '').trim();
-    let playerID = logMsg[1]
-      .replace('PlayerID=', '')
-      .replace(/'/g, '')
-      .trim();
-    let ownerID = logMsg[2]
-      .replace('OwnerID=', '')
-      .replace(/'/g, '')
-      .trim();
-    let playerName = logMsg[3]
-      .replace('PlayerName=', '')
-      .replace(/'/g, '')
-      .trim();
+    const steamIdMatches = /PltfmId='Steam_(\d{17})|PlayerID='(\d{17})/.exec(logLine.msg);
+    const playerID = steamIdMatches[1] || steamIdMatches[2];
+    const playerName = /PlayerName='(.+)'/.exec(logLine.msg)[1];
+    const entityID = /EntityID=(\d+)/.exec(logLine.msg)[1];
+    const ownerID = /OwnerID='(Steam_)?(\d+)/.exec(logLine.msg)[2];
 
     let disconnectedMsg = {
       entityID,
@@ -269,7 +200,7 @@ module.exports = logLine => {
     returnValue.data = disconnectedMsg;
   }
 
-  if (deathRegex.test(logLine.msg)) {
+  if (a20DeathRegex.test(logLine.msg)) {
     /*
     {
       "date": "2017-11-14",
@@ -281,15 +212,42 @@ module.exports = logLine => {
     }
     */
 
-    let deathArray = logLine.msg.match(deathValuesRegex);
+    const { groups: { steamId, entityId, playerName } } = a20DeathRegex.exec(logLine.msg);
     const deathMessage = {
       date: logLine.date,
       time: logLine.time,
       uptime: logLine.uptime,
       msg: logLine.msg,
-      steamId: replaceQuotes(deathArray[2].replace('OwnerID=', '')),
-      playerName: replaceQuotes(deathArray[3].replace('PlayerName=', '')),
-      entityId: deathArray[0].replace('EntityID=', '')
+      steamId,
+      playerName,
+      entityId
+    };
+
+    returnValue.type = 'playerDeath';
+    returnValue.data = deathMessage;
+  }
+
+  if (preA20DeathRegex.test(logLine.msg)) {
+    /*
+    {
+      "date": "2017-11-14",
+      "time": "14:50:49",
+      "uptime": "133.559",
+      "msg": "PlayerSpawnedInWorld (reason: Died, position: 2796, 68, -1452): EntityID=6454, PlayerID='76561198028175941', OwnerID='76561198028175941', PlayerName='Catalysm'",
+      "trace": "",
+      "type": "Log"
+    }
+    */
+
+    const { groups: { steamId, entityId, playerName } } = preA20DeathRegex.exec(logLine.msg);
+    const deathMessage = {
+      date: logLine.date,
+      time: logLine.time,
+      uptime: logLine.uptime,
+      msg: logLine.msg,
+      steamId,
+      playerName,
+      entityId
     };
 
     returnValue.type = 'playerDeath';
@@ -303,6 +261,8 @@ module.exports = logLine => {
       "time": "14:50:49",
       "uptime": "133.559",
       "msg": "[CSMM_Patrons]playerLeveled: Catalysm (76561198028175941) made level 6 (was 5)",
+      or
+              [CSMM_Patrons]playerLeveled: Catalysm (Steam_76561198028175941) made level 2 (was 1)
       "trace": "",
       "type": "Log"
     }
@@ -334,6 +294,8 @@ module.exports = logLine => {
       "time": "14:50:49",
       "uptime": "133.559",
       "msg": "[CSMM_Patrons]entityKilled: Catalysm (76561198028175941) killed zombie zombieBoe",
+      or
+            [CSMM_Patrons]entityKilled: Catalysm (Steam_76561198028175941) killed zombie zombieYo with Dev: Instant Death Pistol
       "trace": "",
       "type": "Log"
     }
