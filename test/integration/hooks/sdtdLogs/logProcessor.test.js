@@ -38,7 +38,8 @@ describe('logProcessor', function () {
         server: {
           id: sails.testServer.id
         }
-      }
+      },
+      update: () => {}
     });
 
     expect(ret).to.deep.include({
