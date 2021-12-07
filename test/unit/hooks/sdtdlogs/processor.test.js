@@ -38,7 +38,7 @@ describe('Worker processor logs', () => {
 
   it('empty response should increase empty response', async () => {
 
-    const job = { data: { serverId: sails.testServer.id } };
+    const job = { data: { serverId: sails.testServer.id }, update: () => {}};
 
     await processor(job);
     let lastLogLine = await LastLogLine.get(sails.testServer.id);
@@ -60,7 +60,7 @@ describe('Worker processor logs', () => {
   });
 
   it('fifteenth empty response should reset log last log line and empty response', async () => {
-    const job = { data: { serverId: sails.testServer.id } };
+    const job = { data: { serverId: sails.testServer.id }, update: () => {} };
 
     sails.helpers.sdtdApi.getLog.returns({ entries: [] });
     sails.helpers.sdtdApi.getWebUIUpdates.returns({ newlogs: 0 });
@@ -86,7 +86,7 @@ describe('Worker processor logs', () => {
   });
 
   it('Last success should get updated whenever a job is completed', async () => {
-    const job = { data: { serverId: sails.testServer.id } };
+    const job = { data: { serverId: sails.testServer.id }, update: () => {} };
 
     expect(await sails.helpers.redis.get(`sdtdserver:${sails.testServer.id}:sdtdLogs:lastSuccess`)).to.equal(null);
     await processor(job);
