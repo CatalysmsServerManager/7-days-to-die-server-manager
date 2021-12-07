@@ -24,7 +24,7 @@ module.exports = async (event) => {
   }
 
   event.data.player = updatedPlayers[0];
-  sails.log.debug(`Updated player ${event.data.player.id} last death location to ${event.data.player.positionX},${event.data.player.positionY},${event.data.player.positionZ}`, {player: event.data.player.id, server:event.data.server});
+  sails.log.debug(`Updated player ${event.data.player.id} last death location to ${event.data.player.positionX},${event.data.player.positionY},${event.data.player.positionZ}`, {playerId: event.data.player.id, server:event.data.server});
 
 
   return event;
