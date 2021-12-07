@@ -19,6 +19,8 @@ module.exports = async function (job) {
   // Adjust latest log line based on new logs we got
   lastLogLine = lastLogLine + newLogs.entries.length;
 
+  await job.update({...job.data, logs: newLogs.entries});
+
   // Parse these logs into usable data
   let index = -1;
   for (const line of newLogs.entries) {
