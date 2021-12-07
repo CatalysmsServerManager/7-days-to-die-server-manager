@@ -1,6 +1,6 @@
 FROM node:14-alpine AS builder
 
-RUN apk --no-cache add curl=7.79.1-r0 git=2.32.0-r0 jq=1.6-r1
+RUN apk --no-cache add curl=7.79.1-r0 git=2.32.0-r0 jq=1.6-r1 python3=3.9.5-r2
 
 # Create app directory
 WORKDIR /usr/src/app
