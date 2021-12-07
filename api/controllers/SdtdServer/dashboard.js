@@ -35,39 +35,30 @@ module.exports = {
    */
 
   fn: async function (inputs, exits) {
-
     let sdtdServer = await SdtdServer.findOne(inputs.serverId);
 
-
+    let sdtdServerInfo = null;
     try {
-
-      try {
-        sdtdServerInfo = await sails.helpers.loadSdtdserverInfo(inputs.serverId);
-      } catch (error) {
-        sails.log.warn(error, {serverId: inputs.serverId});
-        return exits.badRequest(error);
-      }
-
-      const config = await SdtdConfig.findOne({ server: inputs.serverId });
-
-      if (!_.isUndefined(sdtdServerInfo)) {
-        sdtdServer = sdtdServerInfo;
-      }
-
-      let userRole = await sails.helpers.roles.getUserRole(this.req.session.user.id, sdtdServer.id);
-
-      sails.log.info(`VIEW - SdtdServer:dashboard - Showing dashboard for ${sdtdServer.name} to user ${this.req.session.userId}`, {serverId: inputs.serverId});
-      return exits.success({
-        server: sdtdServer,
-        config: config,
-        userRole: userRole,
-        owner: sdtdServer.owner === parseInt(this.req.session.user.id) ? true : false
-      });
+      sdtdServerInfo = await sails.helpers.loadSdtdserverInfo(inputs.serverId);
     } catch (error) {
-      sails.log.error(`VIEW - SdtdServer:dashboard - ${error}`, {serverId: inputs.serverId});
-      throw 'badRequest';
+      sails.log.warn(error, {serverId: inputs.serverId});
     }
 
+    const config = await SdtdConfig.findOne({ server: inputs.serverId });
+
+    if (sdtdServerInfo) {
+      sdtdServer = sdtdServerInfo;
+    }
+
+    let userRole = await sails.helpers.roles.getUserRole(this.req.session.user.id, sdtdServer.id);
+
+    sails.log.info(`VIEW - SdtdServer:dashboard - Showing dashboard for ${sdtdServer.name} to user ${this.req.session.userId}`, {serverId: inputs.serverId});
+    return exits.success({
+      server: sdtdServer,
+      config: config,
+      userRole: userRole,
+      owner: sdtdServer.owner === parseInt(this.req.session.user.id) ? true : false
+    });
 
   }
 };
