@@ -151,8 +151,7 @@ module.exports = {
 
 async function getPlayerList(server) {
   try {
-    const response = await sails.helpers.sdtdApi.getPlayerList(SdtdServer.getAPIConfig(server)
-    );
+    const response = await sails.helpers.sdtdApi.getPlayerList(SdtdServer.getAPIConfig(server), 999999);
     return response;
   } catch (error) {
     return { players: [] };
