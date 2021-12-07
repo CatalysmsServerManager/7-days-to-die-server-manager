@@ -40,8 +40,38 @@ describe('sdtdLogs#handleLogLine', () => {
     expect(result.data.entityID).to.eq('171');
   });
 
+  it('Can handle a playerDisconnected log with improper data', () => {
+    const logLine = {
+      date: '2017-11-14',
+      time: '14:50:49',
+      uptime: '133.559',
+      msg: `Player disconnected: EntityID=-1, PlayerID='76561198028175941', OwnerID='76561198028175941', PlayerName='Baguette'`,
+      trace: '',
+      type: 'Log'
+    };
+
+    const result = handleLogLine(logLine);
+
+    expect(result.type).to.eq('playerDisconnected');
+    expect(result.data.playerName).to.eq('Baguette');
+    expect(result.data.playerID).to.eq('76561198028175941');
+    expect(result.data.entityID).to.eq(null);
+  });
 
 
+  it('Can handle a playerDisconnected log with no data', () => {
+    const logLine = {
+      date: '2017-11-14',
+      time: '14:50:49',
+      uptime: '133.559',
+      msg: `Player disconnected: EntityID=-1, PlayerID='', OwnerID='', PlayerName=''`,
+      trace: '',
+      type: 'Log'
+    };
+
+    const result = handleLogLine(logLine);
+    expect(result.type).to.eq('logLine');
+  });
 
   it('Correctly detects a death event', () => {
     const logLine = {
