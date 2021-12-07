@@ -1310,6 +1310,14 @@ module.exports = {
           type: 'LONGTEXT',
           allowNull: true
         },
+        chatBridgeDCPrefix: {
+          type: 'LONGTEXT',
+          allowNull: true
+        },
+        chatBridgeDCSuffix: {
+          type: 'LONGTEXT',
+          allowNull: true
+        },
         discordNotificationConfig: {
           type: 'LONGTEXT',
           allowNull: true
