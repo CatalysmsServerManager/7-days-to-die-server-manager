@@ -45,10 +45,18 @@ module.exports = {
 
     const server = await SdtdServer.findOne(inputs.serverId);
 
-    await sails.helpers.sdtdApi.executeConsoleCommand(
-      SdtdServer.getAPIConfig(server),
-      `say "Restarting the server in ${minutesLeft} minute(s)"`
-    );
+    if (inputs.destinationPlayer) {
+      await sails.helpers.sdtdApi.executeConsoleCommand(
+        SdtdServer.getAPIConfig(server),
+        `pm ${inputs.destinationPlayer} "${inputs.message}"`
+      );
+    } else {
+      await sails.helpers.sdtdApi.executeConsoleCommand(
+        SdtdServer.getAPIConfig(server),
+        `say "${inputs.message}"`
+      );
+    }
+
 
     return exits.success();
   }
