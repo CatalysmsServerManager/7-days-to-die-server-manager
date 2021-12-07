@@ -65,7 +65,7 @@ class tele extends SdtdCommand {
 
     await sails.helpers.sdtdApi.executeConsoleCommand(
       SdtdServer.getAPIConfig(server),
-      `tele ${player.steamId} ${teleportFound.x} ${teleportFound.y} ${teleportFound.z}`
+      `tele ${player.entityId} ${teleportFound.x} ${teleportFound.y} ${teleportFound.z}`
     );
 
     await chatMessage.reply(`teleSuccess`, {
