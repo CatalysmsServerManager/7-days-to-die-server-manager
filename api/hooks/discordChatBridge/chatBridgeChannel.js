@@ -262,10 +262,15 @@ class ChatBridgeChannel {
     ) {
 
       try {
-        await sails.helpers.sdtdApi.executeConsoleCommand(
-          SdtdServer.getAPIConfig(this.sdtdServer),
-          `say "[${message.author.username}]: ${message.cleanContent}"`
-        );
+        const cpmVersion = await sails.helpers.sdtd.checkCpmVersion(this.sdtdServer.id);
+        if (cpmVersion) {
+          let chatBridgeDCPrefix = ((this.config.chatBridgeDCPrefix) ? this.config.chatBridgeDCPrefix : '');
+          let chatBridgeDCSuffix = ((this.config.chatBridgeDCSuffix) ? this.config.chatBridgeDCSuffix : '');
+          await sails.helpers.sdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(this.sdtdServer), `say2 "${chatBridgeDCPrefix}${message.author.username}[-]" "${chatBridgeDCSuffix}${message.cleanContent}"`);
+        } else
+        {
+          await sails.helpers.sdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(this.sdtdServer), `say "[${message.author.username}]: ${message.cleanContent}"`);
+        }
       } catch (error) {
         sails.log.error(
           `HOOK discordBot:chatBridgeChannel - sending discord message to game ${error}`, {server: this.sdtdServer}

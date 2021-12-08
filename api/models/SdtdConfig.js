@@ -305,6 +305,30 @@ module.exports = {
       defaultsTo: new Array('/', '!')
     },
 
+    /**
+     * @memberof SdtdServer
+     * @var {string} chatBridgeDCPrefix
+     * @description Prefix for DC messages
+     */
+
+     chatBridgeDCPrefix: {
+      type: 'string',
+      defaultsTo: '[5663F7](DC) [-]',
+      allowNull: true
+    },
+
+    /**
+     * @memberof SdtdServer
+     * @var {string} chatBridgeDCSuffix
+     * @description Suffix for DC messages
+     */
+
+    chatBridgeDCSuffix: {
+      type: 'string',
+      defaultsTo: '[FFFFFF]',
+      allowNull: true
+    },
+    
     discordNotificationConfig: {
       type: 'json',
       defaultsTo: {
