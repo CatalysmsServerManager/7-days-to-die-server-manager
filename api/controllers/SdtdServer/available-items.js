@@ -57,7 +57,7 @@ module.exports = {
     items = response.result.split('\n').map(function(item) {
       return item.trim();
     });
-    
+
     return exits.success(items);
   }
 };
