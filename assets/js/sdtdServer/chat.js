@@ -7,7 +7,6 @@ class sdtdChat {
 
 
   start() {
-
     io.socket.on('chatMessage', (chatMessage) => {
       if (chatMessage.server.id === this.serverId) {
         this.addNewChatMessage(chatMessage);
@@ -55,12 +54,12 @@ class sdtdChat {
     chatMessage.playerName = _.escape(chatMessage.playerName);
 
     if (chatMessage.playerName === 'Server') {
-      $('.chat-window').append(`<li class=\"chat-message\">[${chatMessage.time}] ${chatMessage.messageText} </li>`);
-      addMessageToStorage(`[${chatMessage.time}] ${chatMessage.messageText}`, this.serverId);
+      $('.chat-window').append(`<li class=\"chat-message\">[${new Date().toLocaleTimeString()}] ${chatMessage.messageText} </li>`);
+      addMessageToStorage(`[${new Date().toLocaleTimeString()}] ${chatMessage.messageText}`, this.serverId);
 
     } else {
-      $('.chat-window').append(`<li class=\"chat-message\">[${chatMessage.time}] ${chatMessage.playerName}: ${chatMessage.messageText} </li>`);
-      addMessageToStorage(`[${chatMessage.time}] ${chatMessage.playerName}: ${chatMessage.messageText}`, this.serverId);
+      $('.chat-window').append(`<li class=\"chat-message\">[${new Date().toLocaleTimeString()}] ${chatMessage.playerName}: ${chatMessage.messageText} </li>`);
+      addMessageToStorage(`[${new Date().toLocaleTimeString()}] ${chatMessage.playerName}: ${chatMessage.messageText}`, this.serverId);
     }
     $('.chat-window').scrollTop($('.chat-window')[0].scrollHeight);
 
