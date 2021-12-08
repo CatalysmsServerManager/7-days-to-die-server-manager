@@ -54,6 +54,14 @@ module.exports = {
       `listitems ${inputs.item}`
     );
 
-    return exits.success(response);
+    items = response.result
+      .split('\n')
+      .map(function(item) {
+        return item.trim();
+      }).filter(Boolean)
+      // Remove the last element, which is the total
+      .slice(0, -1);
+
+    return exits.success(items);
   }
 };
