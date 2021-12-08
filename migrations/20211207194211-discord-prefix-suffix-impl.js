@@ -6,7 +6,7 @@ module.exports = {
       'sdtdconfig',
       'chatBridgeDCPrefix',
       {
-        type: Sequelize.DataTypes.LONGTEXT,
+        type: Sequelize.DataTypes.TEXT('long'),
         allowNull: true,
         defaultValue: null,
       }
@@ -15,7 +15,7 @@ module.exports = {
       'sdtdconfig',
       'chatBridgeDCSuffix',
       {
-        type: Sequelize.DataTypes.LONGTEXT,
+        type: Sequelize.DataTypes.TEXT('long'),
         allowNull: true,
         defaultValue: null,
       }
