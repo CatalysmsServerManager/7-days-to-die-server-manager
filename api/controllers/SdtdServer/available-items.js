@@ -54,6 +54,10 @@ module.exports = {
       `listitems ${inputs.item}`
     );
 
-    return exits.success(response);
+    items = response.result.split('\n').map(function(item) {
+      return item.trim();
+    });
+    
+    return exits.success(items);
   }
 };
