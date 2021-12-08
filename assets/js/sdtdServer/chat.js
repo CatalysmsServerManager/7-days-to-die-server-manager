@@ -7,10 +7,7 @@ class sdtdChat {
 
 
   start() {
-    console.log('starttt');
-
     io.socket.on('chatMessage', (chatMessage) => {
-      console.log(chatMessage);
       if (chatMessage.server.id === this.serverId) {
         this.addNewChatMessage(chatMessage);
       }
