@@ -29,7 +29,7 @@ module.exports = {
    */
 
   fn: async function (inputs, exits) {
-    sails.log.debug(`API - Player:unban - unbanning player ${inputs.playerId}`, {player, server});
+    sails.log.debug(`API - Player:unban - unbanning player ${inputs.playerId}`, {playerId: inputs.playerId, server});
     const player = await Player.findOne(inputs.playerId).populate('server');
     const server = await SdtdServer.findOne(player.server.id);
 
