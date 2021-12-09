@@ -22,6 +22,14 @@ module.exports = {
       maxLength: 25
     },
 
+    chatBridgeDCPrefix: {
+      type: 'string'
+    },
+
+    chatBridgeDCSuffix: {
+      type: 'string'
+    },
+
     playerCleanupLastOnline: {
       type: 'number',
       min: 7,
@@ -50,6 +58,14 @@ module.exports = {
       updates.replyPrefix = inputs.replyPrefix;
     }
 
+    if ('chatBridgeDCPrefix' in inputs) {
+      updates.chatBridgeDCPrefix = inputs.chatBridgeDCPrefix;
+    }
+
+    if ('chatBridgeDCSuffix' in inputs) {
+      updates.chatBridgeDCSuffix = inputs.chatBridgeDCSuffix;
+    }
+    
     if ('replyServerName' in inputs) {
       updates.replyServerName = inputs.replyServerName;
     }
