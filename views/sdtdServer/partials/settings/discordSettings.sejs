@@ -366,7 +366,7 @@
         type: 'POST',
         data: {
           serverId: <%= server.id %>,
-          chatBridgeDCPrefix: newChatbridgeSuffix,
+          chatBridgeDCSuffix: newChatbridgeSuffix,
           _csrf: window.SAILS_LOCALS._csrf
         },
         success: (data, status, xhr) => {
