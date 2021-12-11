@@ -28,7 +28,7 @@ class PlayerDisconnected extends DiscordNotification {
         } on the global ban list`,
         `[GBL profile page](${process.env.CSMM_HOSTNAME}/gbl/profile?steamId=${event.player.steamId})`
       )
-      .addField('Role', event.player.role ? event.player.role : 'None')
+      .addField('Role', event.player.role ? event.player.role.name : 'None')
       .setFooter(`${event.server.name}`)
       .setURL(`${process.env.CSMM_HOSTNAME}/player/${event.player.id}/profile`);
 
