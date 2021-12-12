@@ -1,6 +1,6 @@
 FROM node:14-alpine AS builder
 
-RUN apk --no-cache add curl=7.79.1-r0 git=2.24.4-r0 jq=1.6-r0 python3=3.8.10-r0 make=4.2.1-r2
+RUN apk --no-cache add curl git jq python3 make g++
 
 # Create app directory
 WORKDIR /usr/src/app
