@@ -22,7 +22,7 @@ const handleInfo = format((info) => {
       delete info.userId;
     }
 
-    if (info.user) {
+    if (info.user && info.user.id) {
       info.labels.user = info.user.id.toString();
       delete info.user;
     }
@@ -32,7 +32,7 @@ const handleInfo = format((info) => {
       delete info.serverId;
     }
 
-    if (info.server) {
+    if (info.server && info.server.id) {
       info.labels.server = info.server.id.toString();
       delete info.server;
     }
@@ -42,7 +42,7 @@ const handleInfo = format((info) => {
       delete info.playerId;
     }
 
-    if (info.player) {
+    if (info.player && info.player.id) {
       info.labels.player = info.player.id.toString();
       delete info.player;
     }

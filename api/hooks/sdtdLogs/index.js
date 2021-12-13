@@ -131,11 +131,8 @@ module.exports = function sdtdLogs(sails) {
           return SdtdSSE;
         }
       } catch (error) {
-        sails.log.warn('Could not get allocs version, falling back to polling', {server});
-        // If we cannot get the allocs version, it likely means the server is offline right now
-        // We fall back to polling
-        // TODO: In like a month or something, when more people have updated to latests allocs fixes we can default to SSE
-        return SdtdPolling;
+        sails.log.warn('Could not get allocs version, defaulting to SSE', {server});
+        return SdtdSSE;
       }
 
 

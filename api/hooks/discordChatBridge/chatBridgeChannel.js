@@ -125,7 +125,7 @@ class ChatBridgeChannel {
   }
 
   async sendChatMessageToDiscord(chatMessage) {
-    let blockedPrefixes = this.config.chatChannelBlockedPrefixes;
+    let blockedPrefixes = this.config.chatChannelBlockedPrefixes.filter(Boolean);
 
     let messageStartsWithABlockedPrefix = message => {
       let found;

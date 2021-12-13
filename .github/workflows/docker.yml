@@ -1,6 +1,6 @@
 name: Docker
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   docker:
@@ -81,22 +81,6 @@ jobs:
             org.opencontainers.image.revision=${{ github.sha }}
             org.opencontainers.image.licenses=${{ fromJson(steps.repo.outputs.result).license.spdx_id }}
 
-      - name: Run Snyk to check Docker image for vulnerabilities
-        # Snyk can be used to break the build when it detects vulnerabilities.
-        # In this case we want to upload the issues to GitHub Code Scanning
-        continue-on-error: true
-        uses: snyk/actions/docker@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          # Pass the locally built image to Snyk
-          image: catalysm/csmm:${{ steps.prep.outputs.version }}
-          args: --file=Dockerfile
-      - name: Upload result to GitHub Code Scanning
-        uses: github/codeql-action/upload-sarif@v1
-        if: ${{ !startsWith(github.actor, 'dependabot') }}
-        with:
-          sarif_file: snyk.sarif
       # This will trigger a new build for the Pterodactyl CSMM image
       - name: Repository Dispatch
         uses: peter-evans/repository-dispatch@v1
