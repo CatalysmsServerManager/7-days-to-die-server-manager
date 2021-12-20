@@ -110,7 +110,7 @@ describe('Discord - serverInfo', function () {
     expect(Channel.prototype.send).to.have.been.calledOnce;
     const sendCall = sendStub.getCall(0).firstArg;
     const settings = sendCall.fields.find(_ => _.name === 'Settings');
-    const settingsContentArr = settings.value.split('\n').filter(_ => _.length);
+    const settingsContentArr = settings.value.split('\n').map(_ => _.trim()).filter(_ => _.length);
     expect(settingsContentArr.length).to.be.equal(settingsContentArr.filter(onlyUnique).length);
   });
 });
