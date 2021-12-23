@@ -29,7 +29,6 @@ class SdtdSSE extends LoggingObject {
   }
 
   async start() {
-    console.log(encodeURI(this.url));
     this.eventSource = new EventSource(encodeURI(this.url));
     this.eventSource.reconnectInterval = 5000;
     this.eventSource.addEventListener('logLine', this.listener);
