@@ -14,7 +14,7 @@ describe('post /api/player/unban', function () {
       })
       .expect(200)
       .then(async () => {
-        expect(spy).to.have.been.calledWith(sinon.match.any, `ban remove ${sails.testPlayer.entityId}`);
+        expect(spy).to.have.been.calledWith(sinon.match.any, `ban remove Steam_${sails.testPlayer.steamId}`);
       });
   });
 
