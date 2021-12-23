@@ -35,7 +35,7 @@ module.exports = {
     sails.log.debug(`API - Player:unban - unbanning player ${inputs.playerId}`, {playerId: inputs.playerId, serverid: server.id});
     const response = await sails.helpers.sdtdApi.executeConsoleCommand(
       SdtdServer.getAPIConfig(server),
-      `ban remove ${player.entityId}`
+      `ban remove Steam_${player.steamId}`
     );
 
     return exits.success(response);
