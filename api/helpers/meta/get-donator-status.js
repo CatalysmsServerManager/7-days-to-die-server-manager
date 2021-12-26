@@ -35,8 +35,10 @@ module.exports = {
     }
 
     let discordClient = sails.helpers.discord.getClient();
-    let developerGuild = discordClient.guilds.cache.get(
-      sails.config.custom.donorConfig.devDiscordServer
+    let developerGuild = await discordClient.guilds.fetch(
+      sails.config.custom.donorConfig.devDiscordServer,
+      true,
+      false
     );
     let discordUser = undefined;
 
@@ -58,7 +60,7 @@ module.exports = {
           return exits.success('free');
         }
 
-        foundUser = await developerGuild.members.fetch(server.owner.discordId);
+        foundUser = await developerGuild.members.fetch({user: server.owner.discordId, force: true});
         discordUser = foundUser;
       } catch (error) {
         sails.log.error(error, {userId: inputs.userId, serverId: inputs.serverId});
@@ -73,7 +75,7 @@ module.exports = {
           return exits.success('free');
         }
 
-        foundUser = await developerGuild.members.fetch(user.discordId);
+        foundUser = await developerGuild.members.fetch({user: user.discordId, force: true});
         if (!_.isUndefined(foundUser)) {
           discordUser = foundUser;
         }

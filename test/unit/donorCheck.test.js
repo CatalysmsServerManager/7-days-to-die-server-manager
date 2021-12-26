@@ -18,6 +18,7 @@ describe('donor check', () => {
   });
 
   it('Marks servers that are not donor for deletion', async () => {
+    sandbox.stub(sails.helpers.meta, 'checkDonatorStatus').resolves('free');
     let current = await SdtdConfig.findOne({ server: sails.testServer.id });
     expect(current.failedDonorChecks).to.be.equal(0);
     await donorCheck();
@@ -25,6 +26,7 @@ describe('donor check', () => {
     expect(current.failedDonorChecks).to.be.equal(1);
   });
   it('Deletes a server after 7 failed checks', async () => {
+    sandbox.stub(sails.helpers.meta, 'checkDonatorStatus').resolves('free');
     for (let i = 1; i < 8; i++) {
       let current = await SdtdConfig.findOne({ server: sails.testServer.id });
       expect(current.failedDonorChecks).to.be.equal(i - 1);
@@ -36,6 +38,7 @@ describe('donor check', () => {
 
   });
   it('Sends a notification to the owner whenever a check fails', async () => {
+    sandbox.stub(sails.helpers.meta, 'checkDonatorStatus').resolves('free');
     await donorCheck();
     expect(this.dmSpy).to.have.been.calledOnceWith(sails.testUser.discordId);
   });
