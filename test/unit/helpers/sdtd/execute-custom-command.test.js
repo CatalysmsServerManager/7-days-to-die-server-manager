@@ -348,13 +348,28 @@ say "1 - 1 = {{subtract 1 1}}"
     });
 
     it('Persists across multiple calls', async () => {
-      const templateOne = '{{setVar "test" player.steamId}}; say "Set the var!"';
-      const templateTwo = 'say "The var is: {{getVar "test"}}"';
+      const template1 = '{{setVar "test" player.steamId}}; say "Set the var!"';
+      const template2 = 'say "The var is: {{getVar "test"}}"';
 
-      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, templateOne, { player: sails.testPlayer});
-      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, templateTwo, { player: sails.testPlayer});
+      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template1, { player: sails.testPlayer});
+      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template2, { player: sails.testPlayer});
 
       expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(1).lastArg).to.equal(`say "The var is: ${sails.testPlayer.steamId}"`);
+    });
+
+    it('Can delete variables', async () => {
+      const template1 = '{{setVar "test" player.steamId}}; say "Set the var!"';
+      const template2 = 'say "The var is: {{getVar "test"}}"';
+      const template3 = '{{delVar "test"}}; say "Delete the var!"';
+      const template4 = 'say "The var is: {{getVar "test"}}"';
+
+      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template1, { player: sails.testPlayer});
+      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template2, { player: sails.testPlayer});
+      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template3, { player: sails.testPlayer});
+      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template4, { player: sails.testPlayer});
+
+      expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(1).lastArg).to.equal(`say "The var is: ${sails.testPlayer.steamId}"`);
+      expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(3).lastArg).to.equal(`say "The var is: "`);
     });
   });
 

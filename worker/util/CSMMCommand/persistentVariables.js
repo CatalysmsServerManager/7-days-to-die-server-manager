@@ -54,7 +54,7 @@ class PersistentVariablesManager {
     }
 
     return this.queue.push(async () => {
-      await PersistentVariablesManager.destroyOne(this.getDefaultQueryFilter(server, name));
+      await PersistentVariable.destroyOne(this.getDefaultQueryFilter(server, name));
       sails.log.debug(`PersistentVariable.del(${name})`, this.getLogMeta(server));
     });
   }
