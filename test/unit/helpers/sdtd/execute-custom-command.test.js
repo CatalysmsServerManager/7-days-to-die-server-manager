@@ -337,6 +337,27 @@ say "1 - 1 = {{subtract 1 1}}"
 
   });
 
+  describe('Persistent variables', () => {
+
+    it('Can set and get a variable', async () => {
+      const template = '{{setVar "test" player.steamId}}{{getVar "test"}}';
+
+      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template, { player: sails.testPlayer});
+
+      expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.equal(sails.testPlayer.steamId);
+    });
+
+    it('Persists across multiple calls', async () => {
+      const templateOne = '{{setVar "test" player.steamId}}; say "Set the var!"';
+      const templateTwo = 'say "The var is: {{getVar "test"}}"';
+
+      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, templateOne, { player: sails.testPlayer});
+      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, templateTwo, { player: sails.testPlayer});
+
+      expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(1).lastArg).to.equal(`say "The var is: ${sails.testPlayer.steamId}"`);
+    });
+  });
+
 });
 
 

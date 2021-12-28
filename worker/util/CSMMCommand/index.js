@@ -73,17 +73,19 @@ module.exports = class CSMMCommand {
   async render() {
     const errors = [];
     try {
-      this.template = this._renderHandlebars();
+      this.template = await this._renderHandlebars();
     } catch (error) {
       errors.push(error.message);
     }
 
 
     try {
-      this.template = await sails.helpers.sdtd.parseCommandsString(
-        this.template,
-        this.data
-      );
+      if (this.template) {
+        this.template = await sails.helpers.sdtd.parseCommandsString(
+          this.template,
+          this.data
+        );
+      }
     } catch (error) {
       errors.push(error.message);
     }
