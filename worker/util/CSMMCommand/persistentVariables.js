@@ -22,13 +22,13 @@ class PersistentVariablesManager {
     return this.queue.push(async () => {
       const variable = await PersistentVariable.findOne(this.getDefaultQueryFilter(server, name));
 
-      sails.log.debug(`PersistentVariable.get(${name})`, this.getLogMeta(server));
+      sails.log.debug(`PersistentVariable.get("${name}")`, this.getLogMeta(server));
 
       if (!variable) {
         return null;
       }
 
-      return variable.value;
+      return JSON.parse(variable.value);
     });
   }
 
@@ -37,10 +37,12 @@ class PersistentVariablesManager {
       throw new Error('`server` must be provided');
     }
 
+    value = JSON.stringify(value);
+
     return this.queue.push(async () => {
       await PersistentVariable.findOrCreate(this.getDefaultQueryFilter(server, name), { ...this.getDefaultQueryFilter(server, name), value });
       await PersistentVariable.updateOne(this.getDefaultQueryFilter(server, name), { value });
-      sails.log.debug(`PersistentVariable.set(${name})`, this.getLogMeta(server));
+      sails.log.debug(`PersistentVariable.set("${name}")`, this.getLogMeta(server));
       return value;
     });
 
@@ -55,7 +57,7 @@ class PersistentVariablesManager {
 
     return this.queue.push(async () => {
       await PersistentVariable.destroyOne(this.getDefaultQueryFilter(server, name));
-      sails.log.debug(`PersistentVariable.del(${name})`, this.getLogMeta(server));
+      sails.log.debug(`PersistentVariable.del("${name}")`, this.getLogMeta(server));
     });
   }
 

@@ -371,6 +371,21 @@ say "1 - 1 = {{subtract 1 1}}"
       expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(1).lastArg).to.equal(`say "The var is: ${sails.testPlayer.steamId}"`);
       expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(3).lastArg).to.equal(`say "The var is: "`);
     });
+
+
+    it('Can do a counter', async () => {
+      const incr = `{{setVar "counter" (add (getVar "counter") 1)}}`;
+      const print = `Counter is at: {{getVar "counter"}}`;
+
+      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, incr, { player: sails.testPlayer});
+      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, incr, { player: sails.testPlayer});
+      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, incr, { player: sails.testPlayer});
+      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, incr, { player: sails.testPlayer});
+      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, incr, { player: sails.testPlayer});
+      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, print, { player: sails.testPlayer});
+
+      expect(sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg).to.equal('Counter is at: 5');
+    });
   });
 
 });
