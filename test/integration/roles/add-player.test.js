@@ -21,6 +21,7 @@ describe('post /api/role/player', () => {
       server: sails.testServer.id,
       name: 'Mod',
       level: '50',
+      managePlayers: true
     }).fetch();
     testRoles.MOD_ROLE = MOD_ROLE;
 

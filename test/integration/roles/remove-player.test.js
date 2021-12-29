@@ -21,6 +21,7 @@ describe('delete /api/role/player', () => {
       server: sails.testServer.id,
       name: 'Mod',
       level: '50',
+      managePlayers: true
     }).fetch();
     testRoles.MOD_ROLE = MOD_ROLE;
 
@@ -50,11 +51,12 @@ describe('delete /api/role/player', () => {
       .delete('/api/role/player')
       .send({
         playerId: sails.testPlayer2.id,
+        serverId: sails.testServer.id
       })
       .expect(200)
       .then(async function () {
         const player2 = await Player.findOne({
-          id: sails.testPlayer2.id
+          id: sails.testPlayer2.id,
         });
         expect(player2.role).to.eq(null);
       });
@@ -64,6 +66,7 @@ describe('delete /api/role/player', () => {
       .delete('/api/role/player')
       .send({
         playerId: sails.testPlayer.id,
+        serverId: sails.testServer.id
       })
       .expect(403)
       .expect((res) => {
@@ -82,6 +85,7 @@ describe('delete /api/role/player', () => {
       .delete('/api/role/player')
       .send({
         playerId: newPlayer.id,
+        serverId: sails.testServer.id
       })
       .expect(403)
       .expect((res) => {

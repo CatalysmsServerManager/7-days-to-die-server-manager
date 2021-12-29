@@ -167,6 +167,7 @@ beforeEach(async function () {
   mockApp.all('*', function (req, res, next) {
     req.session = {};
     req.session.user = sails.testUser;
+    req.session.userId = sails.testUser.id;
     next();
   });
   mockApp.use(sails.hooks.http.app);
@@ -176,6 +177,7 @@ beforeEach(async function () {
   mockAppLowPriv.all('*', function (req, res, next) {
     req.session = {};
     req.session.user = sails.testUser2;
+    req.session.userId = sails.testUser2.id;
     next();
   });
   mockAppLowPriv.use(sails.hooks.http.app);
