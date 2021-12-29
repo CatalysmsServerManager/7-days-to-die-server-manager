@@ -28,6 +28,13 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
+    const player = await Player.findOne(inputs.playerId).populate('server');
+    const targetPlayerRole = await sails.helpers.sdtd.getPlayerRole(player.id);
+    const userRole = await sails.helpers.roles.getUserRole(this.req.session.user.id, player.server.id);
+
+    if (userRole.level >= targetPlayerRole.level) {
+      return this.res.status(403).json({error: `You cannot change the role of someone with a higher or equal role.`});
+    }
 
     let updatedPlayer = await Player.update({id: inputs.playerId}, {role: null}).fetch();
 
