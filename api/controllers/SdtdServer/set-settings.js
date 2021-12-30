@@ -65,7 +65,7 @@ module.exports = {
     if ('chatBridgeDCSuffix' in inputs) {
       updates.chatBridgeDCSuffix = inputs.chatBridgeDCSuffix;
     }
-    
+
     if ('replyServerName' in inputs) {
       updates.replyServerName = inputs.replyServerName;
     }

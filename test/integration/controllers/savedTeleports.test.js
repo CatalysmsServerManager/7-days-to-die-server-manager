@@ -3,7 +3,7 @@ const { expect } = require('chai');
 
 describe('API Saved teleports', function () {
   it('works with correct data', async function () {
-    const response = await supertest(sails.hooks.http.app).post(`/api/sdtdserver/teleport`)
+    const response = await supertest(sails.hooks.http.mockApp).post(`/api/sdtdserver/teleport`)
       .send({
         serverId: sails.testServer.id,
         name: 'test',
@@ -24,23 +24,14 @@ describe('API Saved teleports', function () {
   });
 
   it('Respects required data', async function () {
-    const response = await supertest(sails.hooks.http.app).post(`/api/sdtdserver/teleport`)
+    const response = await supertest(sails.hooks.http.mockApp).post(`/api/sdtdserver/teleport`)
       .send({});
 
-    expect(response.body).to.deep.equal({ code: 'E_MISSING_OR_INVALID_PARAMS',
-      problems:
-     [
-       '"serverId" is required, but it was not defined.',
-       '"x" is required, but it was not defined.',
-       '"y" is required, but it was not defined.',
-       '"z" is required, but it was not defined.',
-       '"name" is required, but it was not defined.' ],
-      message: 'The server could not fulfill this request (`POST /api/sdtdserver/teleport`) due to 5 missing or invalid parameters.  **The following additional tip will not be shown in production**:  Tip: Check your client-side code to make sure that the request data it sends matches the expectations of the corresponding parameters in your server-side route/action.  Also check that your client-side code sends data for every required parameter.  Finally, for programmatically-parseable details about each validation error, `.problems`. (Just remember, any time you inject dynamic data into the HTML, be sure to escape the strings at the point of injection.)' });
-    expect(response.statusCode).to.equal(400);
+    expect(response.body).to.equal('Error while running "manageServer" policy, could not determine server ID.');
   });
 
   it('Only allows alphanumeric names', async function () {
-    const response = await supertest(sails.hooks.http.app).post(`/api/sdtdserver/teleport`)
+    const response = await supertest(sails.hooks.http.mockApp).post(`/api/sdtdserver/teleport`)
       .send({
         serverId: sails.testServer.id,
         name: '#test',
@@ -56,7 +47,7 @@ describe('API Saved teleports', function () {
 
 
   it('Deletes a teleport', async function () {
-    const addResponse = await supertest(sails.hooks.http.app).post(`/api/sdtdserver/teleport`)
+    const addResponse = await supertest(sails.hooks.http.mockApp).post(`/api/sdtdserver/teleport`)
       .send({
         serverId: sails.testServer.id,
         name: 'test',
@@ -74,7 +65,7 @@ describe('API Saved teleports', function () {
     const teleport = await SavedTeleport.findOne(addResponse.body.id);
     expect(teleport).to.be.ok;
 
-    await supertest(sails.hooks.http.app).delete(`/api/sdtdserver/teleport`)
+    await supertest(sails.hooks.http.mockApp).delete(`/api/sdtdserver/teleport`)
       .send({
         serverId: sails.testServer.id,
         id: teleport.id
@@ -102,7 +93,7 @@ describe('API Saved teleports', function () {
     });
 
 
-    const response = await supertest(sails.hooks.http.app)
+    const response = await supertest(sails.hooks.http.mockApp)
       .get(`/api/sdtdserver/teleport`)
       .query({
         serverId: sails.testServer.id

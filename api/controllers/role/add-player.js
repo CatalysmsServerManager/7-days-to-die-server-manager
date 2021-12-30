@@ -42,12 +42,17 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     const player = await Player.findOne(inputs.playerId).populate('server');
+    const targetPlayerRole = await sails.helpers.sdtd.getPlayerRole(player.id);
     const userRole = await sails.helpers.roles.getUserRole(this.req.session.user.id, player.server.id);
 
     let role = await Role.findOne(inputs.roleId);
 
-    if (userRole.level >= role.level && this.req.session.user.id !== player.server.owner) {
-      return exits.forbidden(`You can only set a players role to a role lower than your own.`);
+    if (userRole.level >= role.level) {
+      return this.res.status(403).json({error: `You can only set a players role to a role lower than your own.`});
+    }
+
+    if (userRole.level >= targetPlayerRole.level) {
+      return this.res.status(403).json({error: `You cannot change the role of someone with a higher or equal role.`});
     }
 
     let updatedPlayer = await Player.update({ id: inputs.playerId }, { role: role.id }).fetch();

@@ -14,7 +14,7 @@ describe('API Execute command', function () {
 
   it('works with correct data', async function () {
     sandbox.stub(sails.helpers.sdtdApi, 'executeConsoleCommand').resolves({ result: 'it worked yay' });
-    const response = await supertest(sails.hooks.http.app).post(`/api/sdtdserver/executeCommand`)
+    const response = await supertest(sails.hooks.http.mockApp).post(`/api/sdtdserver/executeCommand`)
       .send({
         serverId: sails.testServer.id,
         command: 'version',
@@ -29,7 +29,7 @@ describe('API Execute command', function () {
   });
 
   it('Handles missing params', async function () {
-    let response = await supertest(sails.hooks.http.app).post(`/api/sdtdserver/executeCommand`)
+    let response = await supertest(sails.hooks.http.mockApp).post(`/api/sdtdserver/executeCommand`)
       .send({
         serverId: sails.testServer.id,
       });
@@ -40,25 +40,17 @@ describe('API Execute command', function () {
     });
     expect(response.statusCode).to.equal(400);
 
-    response = await supertest(sails.hooks.http.app).post(`/api/sdtdserver/executeCommand`)
+    response = await supertest(sails.hooks.http.mockApp).post(`/api/sdtdserver/executeCommand`)
       .send({
         command: 'version',
       });
-    expect(response.body).to.deep.equal({
-      code: 'E_MISSING_OR_INVALID_PARAMS',
-      problems: ['"serverId" is required, but it was not defined.'],
-      message: 'The server could not fulfill this request (`POST /api/sdtdserver/executeCommand`) due to 1 missing or invalid parameter.  **The following additional tip will not be shown in production**:  Tip: Check your client-side code to make sure that the request data it sends matches the expectations of the corresponding parameters in your server-side route/action.  Also check that your client-side code sends data for every required parameter.  Finally, for programmatically-parseable details about each validation error, `.problems`. (Just remember, any time you inject dynamic data into the HTML, be sure to escape the strings at the point of injection.)'
-    });
+    expect(response.body).to.equal('Error while running "useCommands" policy, could not determine server ID.');
     expect(response.statusCode).to.equal(400);
 
-    response = await supertest(sails.hooks.http.app).post(`/api/sdtdserver/executeCommand`)
+    response = await supertest(sails.hooks.http.mockApp).post(`/api/sdtdserver/executeCommand`)
       .send({
       });
-    expect(response.body).to.deep.equal({
-      code: 'E_MISSING_OR_INVALID_PARAMS',
-      problems: ['"serverId" is required, but it was not defined.', '"command" is required, but it was not defined.'],
-      message: 'The server could not fulfill this request (`POST /api/sdtdserver/executeCommand`) due to 2 missing or invalid parameters.  **The following additional tip will not be shown in production**:  Tip: Check your client-side code to make sure that the request data it sends matches the expectations of the corresponding parameters in your server-side route/action.  Also check that your client-side code sends data for every required parameter.  Finally, for programmatically-parseable details about each validation error, `.problems`. (Just remember, any time you inject dynamic data into the HTML, be sure to escape the strings at the point of injection.)'
-    });
+    expect(response.body).to.equal('Error while running "useCommands" policy, could not determine server ID.');
     expect(response.statusCode).to.equal(400);
 
   });
@@ -66,7 +58,7 @@ describe('API Execute command', function () {
   it('Gracefully handles unknown commands', async function () {
     sandbox.stub(sails.helpers.sdtdApi, 'executeConsoleCommand').rejects({ message: 'Not Found' });
     const date = new Date();
-    const response = await supertest(sails.hooks.http.app).post(`/api/sdtdserver/executeCommand`)
+    const response = await supertest(sails.hooks.http.mockApp).post(`/api/sdtdserver/executeCommand`)
       .send({
         serverId: sails.testServer.id,
         command: 'asfsafasfsaf',
@@ -81,7 +73,7 @@ describe('API Execute command', function () {
 
   it('Gracefully handles command errors', async function () {
     sandbox.stub(sails.helpers.sdtdApi, 'executeConsoleCommand').rejects(new Error('bad stuff'));
-    const response = await supertest(sails.hooks.http.app).post(`/api/sdtdserver/executeCommand`)
+    const response = await supertest(sails.hooks.http.mockApp).post(`/api/sdtdserver/executeCommand`)
       .send({
         serverId: sails.testServer.id,
         command: 'version',

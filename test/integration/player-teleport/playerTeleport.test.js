@@ -21,7 +21,7 @@ describe('Player teleports', function () {
 
   describe('GET /api/sdtdserver/playerteleports/', function () {
     it('should return 200 with valid data', function () {
-      return supertest(sails.hooks.http.app)
+      return supertest(sails.hooks.http.mockApp)
         .get('/api/sdtdserver/playerteleports/')
         .query({
           serverId: sails.testServer.id,
@@ -34,7 +34,7 @@ describe('Player teleports', function () {
     });
 
     it('should return 400 when playerId is not given', function () {
-      return supertest(sails.hooks.http.app)
+      return supertest(sails.hooks.http.mockApp)
         .get('/api/sdtdserver/playerteleports/')
         .expect(400);
     });
@@ -47,7 +47,7 @@ describe('Player teleports', function () {
       newTeleport = _.omit(newTeleport, 'id');
       let requestOptions = newTeleport;
       requestOptions.id = testTeleports[0].id;
-      const res = await supertest(sails.hooks.http.app).post('/api/teleport').send(requestOptions);
+      const res = await supertest(sails.hooks.http.mockApp).post('/api/teleport').send(requestOptions);
       expect(res.statusCode).to.equal(200);
       expect(res.headers['content-type']).to.include('json');
 
@@ -56,7 +56,7 @@ describe('Player teleports', function () {
     });
 
     it('should return 400 when id is not given', async function () {
-      await supertest(sails.hooks.http.app)
+      await supertest(sails.hooks.http.mockApp)
         .post('/api/teleport')
         .expect(400);
     });
@@ -65,7 +65,7 @@ describe('Player teleports', function () {
   describe('DELETE /api/teleport', function () {
     it('should return 200 with valid data', async function () {
 
-      return supertest(sails.hooks.http.app)
+      return supertest(sails.hooks.http.mockApp)
         .delete('/api/teleport')
         .query({ teleportId: testTeleports[0].id })
         .expect(async function () {
@@ -76,7 +76,7 @@ describe('Player teleports', function () {
     });
 
     it('should return 400 when id is not given', function () {
-      return supertest(sails.hooks.http.app)
+      return supertest(sails.hooks.http.mockApp)
         .delete('/api/teleport')
         .expect(400);
     });

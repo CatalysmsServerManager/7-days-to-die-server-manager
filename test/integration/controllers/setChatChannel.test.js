@@ -13,7 +13,7 @@ describe('/api/sdtdserver/setchatchannel', function () {
   it('returns OK with correct data', async function () {
     const client = sails.helpers.discord.getClient();
     sandbox.stub(sails.hooks.discordchatbridge, 'getStatus').returns(false);
-    const response = await supertest(sails.hooks.http.app)
+    const response = await supertest(sails.hooks.http.mockApp)
       .post('/api/sdtdserver/setchatchannel')
       .send({
         serverId: sails.testServer.id,
@@ -31,7 +31,7 @@ describe('/api/sdtdserver/setchatchannel', function () {
 
   it('returns OK when disabling', async function () {
     sandbox.stub(sails.hooks.discordchatbridge, 'getStatus').returns(true);
-    const response = await supertest(sails.hooks.http.app)
+    const response = await supertest(sails.hooks.http.mockApp)
       .post('/api/sdtdserver/setchatchannel')
       .send({
         serverId: sails.testServer.id,
