@@ -14,7 +14,7 @@ describe('shop', () => {
     });
 
     it('returns 200 if correct data', async () => {
-      const response = await supertest(sails.hooks.http.app)
+      const response = await supertest(sails.hooks.http.mockApp)
         .post('/api/shop/listing')
         .send({
           serverId: sails.testServer.id,
@@ -32,7 +32,7 @@ describe('shop', () => {
     });
 
     it('returns 400 if incorrect item name is given', async () => {
-      const response = await supertest(sails.hooks.http.app)
+      const response = await supertest(sails.hooks.http.mockApp)
         .post('/api/shop/listing')
         .send({
           serverId: sails.testServer.id,
@@ -46,7 +46,7 @@ describe('shop', () => {
     });
 
     it('returns 400 when setting quality and amount', async () => {
-      const response = await supertest(sails.hooks.http.app)
+      const response = await supertest(sails.hooks.http.mockApp)
         .post('/api/shop/listing')
         .send({
           serverId: sails.testServer.id,
@@ -77,7 +77,7 @@ describe('shop', () => {
     });
 
     it('returns 200 if correct data', async () => {
-      const response = await supertest(sails.hooks.http.app)
+      const response = await supertest(sails.hooks.http.mockApp)
         .post('/api/shop/listing/buy')
         .send({
           playerId: 1,
@@ -90,7 +90,7 @@ describe('shop', () => {
     });
 
     it('returns 400 when an invalid listing is given', async () => {
-      const response = await supertest(sails.hooks.http.app)
+      const response = await supertest(sails.hooks.http.mockApp)
         .post('/api/shop/listing/buy')
         .send({
           playerId: 1,
@@ -104,7 +104,7 @@ describe('shop', () => {
 
     it('returns 400 when player does not have enough currency', async () => {
       await Player.update(sails.testPlayer.id, { currency: 10 });
-      const response = await supertest(sails.hooks.http.app)
+      const response = await supertest(sails.hooks.http.mockApp)
         .post('/api/shop/listing/buy')
         .send({
           playerId: 1,
@@ -124,7 +124,7 @@ describe('shop', () => {
         economyDeductMultiplier: 0.5
       }).fetch();
       await Player.update(sails.testPlayer.id, { currency: 25, role: createdRole.id });
-      const response = await supertest(sails.hooks.http.app)
+      const response = await supertest(sails.hooks.http.mockApp)
         .post('/api/shop/listing/buy')
         .send({
           playerId: 1,

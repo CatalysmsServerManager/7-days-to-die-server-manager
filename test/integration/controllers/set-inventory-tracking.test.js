@@ -3,7 +3,7 @@ const supertest = require('supertest');
 describe('SetInventoryTracking', function () {
   it('under 26 should report an error', async function () {
     sandbox.stub(sails.helpers.sdtd, 'checkModVersion').callsFake(async () => 1);
-    const response = await supertest(sails.hooks.http.app).post('/api/sdtdserver/tracking/inventory').send({
+    const response = await supertest(sails.hooks.http.mockApp).post('/api/sdtdserver/tracking/inventory').send({
       serverId: sails.testServer.id,
       newStatus: true
     });
@@ -12,7 +12,7 @@ describe('SetInventoryTracking', function () {
   });
   it('version 26 and above should be happy', async function () {
     sandbox.stub(sails.helpers.sdtd, 'checkModVersion').callsFake(async () => 26);
-    const response = await supertest(sails.hooks.http.app).post('/api/sdtdserver/tracking/inventory').send({
+    const response = await supertest(sails.hooks.http.mockApp).post('/api/sdtdserver/tracking/inventory').send({
       serverId: sails.testServer.id,
       newStatus: true
     });

@@ -51,7 +51,7 @@ describe('delete /api/role/player', () => {
       .delete('/api/role/player')
       .send({
         playerId: sails.testPlayer2.id,
-        serverId: sails.testServer.id
+        serverId: sails.testServer.id,
       })
       .expect(200)
       .then(async function () {

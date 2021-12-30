@@ -14,13 +14,14 @@ describe('Import export', function () {
 
   beforeEach(() => {
     sandbox.stub(sails.helpers.sdtd, 'checkModVersion').resolves(38);
+    sails.config.custom.adminSteamIds = [sails.testUser.steamId];
   });
 
   for (const fileName of testImportFilesValid) {
     const filePath = path.join(__dirname, dirPath, 'valid', fileName);
     const file = fs.readFileSync(filePath).toString();
     it(`Should import a server "${fileName}"`, async function () {
-      const response = await supertest(sails.hooks.http.app)
+      const response = await supertest(sails.hooks.http.mockApp)
         .post('/api/admin/import')
         .field('userId', sails.testUser.id)
         .attach('file', filePath);
@@ -33,7 +34,7 @@ describe('Import export', function () {
   for (const fileName of testImportFilesInvalid) {
     const filePath = path.join(__dirname, dirPath, 'invalid', fileName);
     it(`Should gracefully exit "${fileName}"`, async function () {
-      const response = await supertest(sails.hooks.http.app)
+      const response = await supertest(sails.hooks.http.mockApp)
         .post('/api/admin/import')
         .field('userId', sails.testUser.id)
         .attach('file', filePath);
@@ -45,7 +46,7 @@ describe('Import export', function () {
   }
 
   it('Error with invalid params', async function () {
-    let response = await supertest(sails.hooks.http.app)
+    let response = await supertest(sails.hooks.http.mockApp)
       .post('/api/admin/import')
       .field('userId', sails.testUser.id);
 
@@ -55,7 +56,7 @@ describe('Import export', function () {
 
   it('Can export files', async function () {
 
-    const response = await supertest(sails.hooks.http.app)
+    const response = await supertest(sails.hooks.http.mockApp)
       .get(`/api/admin/export?serverId=${sails.testServer.id}`);
 
     expect(response.body.server.name).to.be.equal(sails.testServer.name);

@@ -5,7 +5,7 @@ var expect = require('chai').expect;
 
 describe('GET /api/stats', function () {
   it('should return an array', function () {
-    return supertest(sails.hooks.http.app)
+    return supertest(sails.hooks.http.mockApp)
       .get('/api/stats')
       .expect(200)
       .expect('Content-Type', /json/)

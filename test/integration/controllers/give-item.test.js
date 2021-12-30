@@ -23,7 +23,7 @@ describe('/api/player/giveitem', function () {
     });
 
     it('returns OK with correct data', async function () {
-      const response = await supertest(sails.hooks.http.app)
+      const response = await supertest(sails.hooks.http.mockApp)
         .post('/api/player/giveitem')
         .send({
           playerId: 1,
@@ -39,7 +39,7 @@ describe('/api/player/giveitem', function () {
     });
 
     it('Quoted item silently drops the quotes', async function () {
-      const response = await supertest(sails.hooks.http.app)
+      const response = await supertest(sails.hooks.http.mockApp)
         .post('/api/player/giveitem')
         .send({
           playerId: 1,
@@ -55,7 +55,7 @@ describe('/api/player/giveitem', function () {
     });
 
     it('returns 400 if incorrect item name is given', async () => {
-      const response = await supertest(sails.hooks.http.app)
+      const response = await supertest(sails.hooks.http.mockApp)
         .post('/api/player/giveitem')
         .send({
           playerId: 1,
@@ -73,7 +73,7 @@ describe('/api/player/giveitem', function () {
     });
 
     it('returns OK with correct data', async function () {
-      const response = await supertest(sails.hooks.http.app)
+      const response = await supertest(sails.hooks.http.mockApp)
         .post('/api/player/giveitem')
         .send({
           playerId: 1,
@@ -89,7 +89,7 @@ describe('/api/player/giveitem', function () {
     });
 
     it('Quoted item silently drops the quotes', async function () {
-      const response = await supertest(sails.hooks.http.app)
+      const response = await supertest(sails.hooks.http.mockApp)
         .post('/api/player/giveitem')
         .send({
           playerId: 1,
@@ -106,7 +106,7 @@ describe('/api/player/giveitem', function () {
 
 
     it('returns 400 if incorrect item name is given', async () => {
-      const response = await supertest(sails.hooks.http.app)
+      const response = await supertest(sails.hooks.http.mockApp)
         .post('/api/player/giveitem')
         .send({
           playerId: 1,
