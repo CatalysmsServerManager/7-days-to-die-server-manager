@@ -41,6 +41,8 @@ module.exports.routes = {
   '/sdtdserver/:id/playground*': {
     view: 'sdtdServer/playground',
   },
+
+
   '/auth/steam': {
     controller: 'AuthController',
     action: 'steamLogin'
@@ -116,6 +118,12 @@ module.exports.routes = {
   'get /api/playground/variable': {
     action: 'Playground/variables/get-variables',
   },
+
+  'delete /api/playground/variable/:variableId': {
+    action: 'Playground/variables/delete-variable',
+    csrf: false
+  },
+
   'get /api/stats': {
     action: 'etc/get-system-stats',
     cors: false
