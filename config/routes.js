@@ -38,6 +38,9 @@ module.exports.routes = {
     view: 'meta/stats',
   },
 
+  '/sdtdserver/:id/playground*': {
+    view: 'sdtdServer/playground',
+  },
   '/auth/steam': {
     controller: 'AuthController',
     action: 'steamLogin'

@@ -111,6 +111,11 @@ let policyObject = {
     '*': ['isLoggedIn', 'roles/manageServer'],
   },
 
+  playgroundController: {
+    '*': ['isLoggedIn', 'roles/manageServer'],
+    'get-meta': true
+  },
+
 };
 
 
