@@ -113,6 +113,9 @@ module.exports.routes = {
     action: 'Playground/get-meta',
   },
 
+  'get /api/playground/variable': {
+    action: 'Playground/variables/get-variables',
+  },
   'get /api/stats': {
     action: 'etc/get-system-stats',
     cors: false
