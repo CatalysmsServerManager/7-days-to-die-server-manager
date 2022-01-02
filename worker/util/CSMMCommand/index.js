@@ -29,11 +29,11 @@ function getParamNames(func) {
 module.exports = class CSMMCommand {
 
   constructor(server, template, data) {
-
     this.server = server;
     this.template = template;
     this.data = data || {};
     this.results = [];
+    this.errors = [];
   }
 
   async loadData() {
@@ -71,11 +71,10 @@ module.exports = class CSMMCommand {
   }
 
   async render() {
-    const errors = [];
     try {
       this.template = await this._renderHandlebars();
     } catch (error) {
-      errors.push(error.message);
+      this.errors.push(error.message);
     }
 
 
@@ -87,9 +86,10 @@ module.exports = class CSMMCommand {
         );
       }
     } catch (error) {
-      errors.push(error.message);
+      this.errors.push(error.message);
     }
-    return {template: this.template, errors};
+    await this._saveResult('templateRender');
+    return {template: this.template, errors: this.errors};
   }
 
 
@@ -99,7 +99,7 @@ module.exports = class CSMMCommand {
       const customFunction = checkForCustomFunction(command);
       if (customFunction) {
         // If we find a custom function, execute it
-        const [result, customFunctionArgs] = await executeCustomFunction(customFunction, command, this.server);
+        const [result, customFunctionArgs] = await this._executeCustomFunction(customFunction, command, this.server);
         this.results.push({
           command: customFunction.name,
           parameters: command,
@@ -108,11 +108,60 @@ module.exports = class CSMMCommand {
         });
       } else {
         // If the command is not a custom function, execute it as a game command
-        let commandResult = await executeCommand(this.server, command);
+        let commandResult = await this._executeGameCommand(this.server, command);
         this.results.push(commandResult);
       }
     }
+    await this._saveResult('execute');
     return this.results;
+  }
+
+  async _saveResult(reason) {
+    if (reason !== 'templateRender' && reason !== 'execute') {
+      throw new Error('Invalid reason for saving result');
+    }
+
+    await sails.helpers.redis.lpush(`sdtdserver:${this.server.id}:CSMMCommand:lastResults`, JSON.stringify({
+      timestamp: Date.now(),
+      results: this.results,
+      errors: this.errors,
+      template: this.template,
+      data: this.data,
+      reason
+    }));
+
+    await sails.helpers.redis.ltrim(`sdtdserver:${this.server.id}:CSMMCommand:lastResults`, 0, 19);
+  }
+
+  static async getLastResults(server) {
+    const results = await sails.helpers.redis.lrange(`sdtdserver:${server.id}:CSMMCommand:lastResults`, 0, -1);
+    return results.map(JSON.parse);
+  }
+
+  async _executeGameCommand(server, command) {
+    try {
+      let result = await sails.helpers.sdtdApi.executeConsoleCommand(
+        SdtdServer.getAPIConfig(server),
+        _.trim(command)
+      );
+      return result;
+    } catch (error) {
+      sails.log.error(error, {server});
+      return {
+        command,
+        result: 'An error occurred executing the API request to the 7D2D server'
+      };
+    }
+  }
+
+  async _executeCustomFunction(fnc, command, server) {
+    const args = getArgs(fnc, command);
+    try {
+      const res = await fnc.run(server, args);
+      return [res, args];
+    } catch (error) {
+      return [error.message, args];
+    }
   }
 
 };
@@ -124,16 +173,6 @@ function getArgs(fnc, command) {
   return res[1].slice(1, res[1].length - 1);
 }
 
-async function executeCustomFunction(fnc, command, server) {
-  const args = getArgs(fnc, command);
-  try {
-    const res = await fnc.run(server, args);
-    return [res, args];
-  } catch (error) {
-    return [error.message, args];
-  }
-}
-
 function checkForCustomFunction(command) {
   for (const fnc of supportedFunctions) {
     if (command.toLowerCase().includes(fnc.name.toLowerCase() + '(')) {
@@ -143,18 +182,3 @@ function checkForCustomFunction(command) {
   return false;
 }
 
-async function executeCommand(server, command) {
-  try {
-    let result = await sails.helpers.sdtdApi.executeConsoleCommand(
-      SdtdServer.getAPIConfig(server),
-      _.trim(command)
-    );
-    return result;
-  } catch (error) {
-    sails.log.error(error, {server});
-    return {
-      command,
-      result: 'An error occurred executing the API request to the 7D2D server'
-    };
-  }
-}

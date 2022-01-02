@@ -124,6 +124,10 @@ module.exports.routes = {
     csrf: false
   },
 
+  'get /api/playground/executions': {
+    action: 'Playground/get-executions',
+  },
+
   'get /api/stats': {
     action: 'etc/get-system-stats',
     cors: false
