@@ -14,7 +14,7 @@ COPY scripts/ ./scripts
 # where available (npm@5+)
 COPY package*.json ./
 
-ARG PLAYGROUND_VERSION=latest
+ARG PLAYGROUND_VERSION=persistent-variables
 RUN echo "Using playground version $PLAYGROUND_VERSION"
 
 RUN npm ci --only=production
