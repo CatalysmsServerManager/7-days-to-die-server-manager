@@ -7,7 +7,7 @@ describe('Cron import', function () {
 
     const data = `[{"command":"say Hello","temporalValue":"30 * * * *","enabled":true,"notificationEnabled":false}]`;
 
-    const response = await supertest(sails.hooks.http.app)
+    const response = await supertest(sails.hooks.http.mockApp)
       .post('/api/sdtdserver/cron/import')
       .send({serverId: sails.testServer.id, file: data});
 
@@ -23,7 +23,7 @@ describe('Cron import', function () {
 
     const data = `[{"command":"say Hello","temporalValue":"kjafaklfpka","enabled":true,"notificationEnabled":false}]`;
 
-    const response = await supertest(sails.hooks.http.app)
+    const response = await supertest(sails.hooks.http.mockApp)
       .post('/api/sdtdserver/cron/import')
       .send({serverId: sails.testServer.id, file: data});
 
@@ -36,7 +36,7 @@ describe('Cron import', function () {
 
     const data = `[{"command":"say Hello","temporalValue":"* * * * *","enabled":true,"notificationEnabled":false}]`;
 
-    const response = await supertest(sails.hooks.http.app)
+    const response = await supertest(sails.hooks.http.mockApp)
       .post('/api/sdtdserver/cron/import')
       .send({serverId: sails.testServer.id, file: data});
 
@@ -48,7 +48,7 @@ describe('Cron import', function () {
 
     const data = `[{"command":"say Hello","temporalValue":"30 * * * *","enabled": "not a boolean","notificationEnabled":false}]`;
 
-    const response = await supertest(sails.hooks.http.app)
+    const response = await supertest(sails.hooks.http.mockApp)
       .post('/api/sdtdserver/cron/import')
       .send({serverId: sails.testServer.id, file: data});
 
@@ -61,7 +61,7 @@ describe('Cron import', function () {
 
     const data = `[{"command":"say Hello","temporalValue":"30 * * * *","enabled": true,"notificationEnabled":"not a boolean"}]`;
 
-    const response = await supertest(sails.hooks.http.app)
+    const response = await supertest(sails.hooks.http.mockApp)
       .post('/api/sdtdserver/cron/import')
       .send({serverId: sails.testServer.id, file: data});
 

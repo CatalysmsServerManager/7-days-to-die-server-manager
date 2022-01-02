@@ -43,7 +43,7 @@ describe('GET /api/gbl/find', function () {
     testBans.length = 0;
   });
   it('should return 200 with valid info', function () {
-    return supertest(sails.hooks.http.app)
+    return supertest(sails.hooks.http.mockApp)
       .get('/api/gbl/find')
       .query({
         steamId: sails.testPlayer.steamId,
@@ -52,7 +52,7 @@ describe('GET /api/gbl/find', function () {
       .expect('Content-Type', /json/);
   });
   it('should return correct amount of bans for a player', function () {
-    return supertest(sails.hooks.http.app)
+    return supertest(sails.hooks.http.mockApp)
       .get('/api/gbl/find')
       .query({
         steamId: sails.testPlayer.steamId,
@@ -64,7 +64,7 @@ describe('GET /api/gbl/find', function () {
       });
   });
   it('should error when no steamId is given', function () {
-    return supertest(sails.hooks.http.app)
+    return supertest(sails.hooks.http.mockApp)
       .get('/api/gbl/find')
       .expect(400);
   });
