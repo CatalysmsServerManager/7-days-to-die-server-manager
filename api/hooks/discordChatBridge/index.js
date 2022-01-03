@@ -94,6 +94,14 @@ module.exports = function SdtdDiscordChatBridge(sails) {
 
     getAmount: function () {
       return chatBridgeInfoMap.size;
+    },
+
+    reloadConfig: async function (serverId) {
+      const chatBridge = getChatBridge(serverId);
+      if (chatBridge) {
+        await chatBridge.stop();
+        await chatBridge.start();
+      }
     }
 
   };
