@@ -15,7 +15,6 @@ COPY scripts/ ./scripts
 COPY package*.json ./
 
 ARG PLAYGROUND_VERSION=latest
-RUN echo "Using playground version $PLAYGROUND_VERSION"
 
 RUN npm ci --only=production
 
