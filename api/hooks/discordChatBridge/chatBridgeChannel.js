@@ -48,38 +48,34 @@ class ChatBridgeChannel {
       );
       this.sendMessageToGame = this.sendMessageToGame.bind(this);
 
-      if (!_.isUndefined(this.loggingObject) && this.config.chatChannelId) {
-        if (this.config.chatChannelRichMessages) {
-          this.loggingObject.on(
-            'playerConnected',
-            this.sendRichConnectedMessageToDiscord
-          );
-          this.loggingObject.on(
-            'playerDisconnected',
-            this.sendRichDisconnectedMessageToDiscord
-          );
-        } else {
-          this.loggingObject.on(
-            'playerConnected',
-            this.sendConnectedMessageToDiscord
-          );
-          this.loggingObject.on(
-            'playerDisconnected',
-            this.sendDisconnectedMessageToDiscord
-          );
-        }
+      if (_.isUndefined(this.loggingObject)) {
+        return;
+      }
 
-        this.loggingObject.on('chatMessage', this.sendChatMessageToDiscord);
-        this.loggingObject.on('playerDeath', this.sendDeathMessageToDiscord);
-
-        this.channel.client.on('message', this.sendMessageToGame);
+      if (this.config.chatChannelRichMessages) {
+        this.loggingObject.on(
+          'playerConnected',
+          this.sendRichConnectedMessageToDiscord
+        );
+        this.loggingObject.on(
+          'playerDisconnected',
+          this.sendRichDisconnectedMessageToDiscord
+        );
       } else {
-        this.channel.send(
-          new this.channel.client.errorEmbed(
-            ':x: Could not find a logging object for this server'
-          )
+        this.loggingObject.on(
+          'playerConnected',
+          this.sendConnectedMessageToDiscord
+        );
+        this.loggingObject.on(
+          'playerDisconnected',
+          this.sendDisconnectedMessageToDiscord
         );
       }
+
+      this.loggingObject.on('chatMessage', this.sendChatMessageToDiscord);
+      this.loggingObject.on('playerDeath', this.sendDeathMessageToDiscord);
+
+      this.channel.client.on('message', this.sendMessageToGame);
     } catch (error) {
       sails.log.error(
         `HOOK discordChatBridge:chatBridgeChannel:start`, {server: this.sdtdServer}
@@ -88,7 +84,6 @@ class ChatBridgeChannel {
   }
 
   stop() {
-    let embed = new this.channel.client.customEmbed();
     if (this.loggingObject) {
       this.loggingObject.removeListener(
         'chatMessage',
@@ -115,13 +110,7 @@ class ChatBridgeChannel {
         this.sendRichDisconnectedMessageToDiscord
       );
       this.channel.client.removeListener('message', this.sendMessageToGame);
-      embed.setDescription(':x: Disabled chat bridge');
-    } else {
-      embed.setDescription(
-        'Tried to stop chatbridge in this channel but something went wrong!'
-      );
     }
-    this.channel.send(embed);
   }
 
   async sendChatMessageToDiscord(chatMessage) {

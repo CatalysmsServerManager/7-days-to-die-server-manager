@@ -40,14 +40,26 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    let foundUser = await User.findOne(inputs.userId);
-    let foundPlayer = await Player.findOne({
+    const foundUser = await User.findOne(inputs.userId);
+    const server = await SdtdServer.findOne(inputs.serverId);
+    const foundPlayer = await Player.findOne({
       where: {
         steamId: foundUser.steamId,
         server: inputs.serverId
       }
     });
     let foundRole;
+
+    if (foundUser.id === server.owner) {
+      // Highest possible role
+      foundRole = (await Role.find({
+        where: {
+          server: server.id
+        },
+        sort: 'level ASC',
+        limit: 1
+      }))[0];
+    }
 
     if (!_.isUndefined(foundPlayer)) {
       if (foundPlayer.role) {

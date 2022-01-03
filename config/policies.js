@@ -55,6 +55,7 @@ let policyObject = {
   roleController: {
     '*': ['isLoggedIn', 'roles/manageServer'],
     'add-player': ['isLoggedIn', 'roles/managePlayers'],
+    'remove-player': ['isLoggedIn', 'roles/managePlayers'],
     'get-role': ['isLoggedIn'],
     'check-permission': ['isLoggedIn']
   },
@@ -113,12 +114,5 @@ let policyObject = {
 
 };
 
+module.exports.policies = policyObject;
 
-if (process.env.IS_TEST) {
-  console.log(`Detected a testing environment, disabling policies. If you are NOT running tests this is VERY VERY bad.`);
-  module.exports.policies = {
-    '*': true
-  };
-} else {
-  module.exports.policies = policyObject;
-}

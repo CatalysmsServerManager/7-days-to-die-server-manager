@@ -7,7 +7,7 @@ describe('post /api/player/unban', function () {
   it('should return 200 with valid data', function () {
     const spy = sandbox.stub(sails.helpers.sdtdApi, 'executeConsoleCommand');
 
-    return supertest(sails.hooks.http.app)
+    return supertest(sails.hooks.http.mockApp)
       .post('/api/player/unban')
       .query({
         playerId: sails.testPlayer.id

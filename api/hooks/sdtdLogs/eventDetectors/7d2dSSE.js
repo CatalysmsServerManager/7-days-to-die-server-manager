@@ -13,15 +13,6 @@ class SdtdSSE extends LoggingObject {
     this.listener = throttledFunction(this.SSEListener.bind(this), RATE_LIMIT_AMOUNT, RATE_LIMIT_MINUTES);
     this.queuedChatMessages = [];
     this.lastMessage = Date.now();
-
-    this.reconnectInterval = setInterval(() => {
-      if (this.eventSource.readyState === EventSource.OPEN && (this.lastMessage > (Date.now() - 300000))) {
-        return;
-      }
-      sails.log.debug(`Trying to reconnect SSE for server ${this.server.id}`, {serverId: this.server.id});
-      this.destroy();
-      this.start();
-    }, 30000);
   }
 
   get url() {
@@ -49,6 +40,7 @@ class SdtdSSE extends LoggingObject {
     }
     this.eventSource.removeEventListener(this.listener);
     this.eventSource.close();
+    this.eventSource = null;
   }
 
   async SSEListener(data) {

@@ -39,7 +39,7 @@ describe('GET /api/gbl/total', function () {
     testBans.length = 0;
   });
   it('should return a number', function () {
-    return supertest(sails.hooks.http.app)
+    return supertest(sails.hooks.http.mockApp)
       .get('/api/gbl/total')
       .expect(200)
       .then(response => {

@@ -65,7 +65,7 @@ module.exports = {
     if ('chatBridgeDCSuffix' in inputs) {
       updates.chatBridgeDCSuffix = inputs.chatBridgeDCSuffix;
     }
-    
+
     if ('replyServerName' in inputs) {
       updates.replyServerName = inputs.replyServerName;
     }
@@ -80,6 +80,10 @@ module.exports = {
       { server: server.id },
       updates
     );
+
+    if ('chatBridgeDCPrefix' in inputs || 'chatBridgeDCSuffix' in inputs) {
+      await sails.hooks.discordchatbridge.reloadConfig(inputs.serverId);
+    }
 
     return exits.success();
 
