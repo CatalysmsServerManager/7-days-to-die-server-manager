@@ -47,11 +47,18 @@ module.exports = {
 
     let role = await Role.findOne(inputs.roleId);
 
-    if (userRole.level >= role.level) {
+    // "manageServer" is a special override. We should take it into account when checking player levels
+    const canManageServer = await sails.helpers.roles.checkPermission.with({
+      permission: 'manageServer',
+      serverId: player.server.id,
+      userId: this.req.session.user.id
+    });
+
+    if (userRole.level >= role.level && !canManageServer.hasPermission) {
       return this.res.status(403).json({error: `You can only set a players role to a role lower than your own.`});
     }
 
-    if (userRole.level >= targetPlayerRole.level) {
+    if (userRole.level >= targetPlayerRole.level && !canManageServer.hasPermission) {
       return this.res.status(403).json({error: `You cannot change the role of someone with a higher or equal role.`});
     }
 
