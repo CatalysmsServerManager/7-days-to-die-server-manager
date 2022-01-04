@@ -1,7 +1,8 @@
 const promisedHandlebars = require('promised-handlebars');
 const PersistentVariablesManager = require('./CSMMCommand/persistentVariables');
+
+
 const Handlebars = promisedHandlebars(require('handlebars'), { Promise });
-// The library will automatically register the helpers with Handlebars
 require('@budibase/handlebars-helpers')([
   'array',
   'collection',
@@ -14,7 +15,10 @@ require('@budibase/handlebars-helpers')([
   'regex',
   'string',
   'object'
-]);
+], {handlebars: Handlebars});
+
+
+
 
 Handlebars.registerHelper('eq', function (a, b) {
   return (a === b);
