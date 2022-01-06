@@ -1,18 +1,30 @@
 const LoggingObject = require('../LoggingObject');
 const EventSource = require('eventsource');
 const handleLogLine = require('../../../../worker/processors/logs/handleLogLine');
-const throttledFunction = require('../../../../worker/util/throttledFunction');
+const ThrottledFunction = require('../../../../worker/util/throttledFunction');
 
-const RATE_LIMIT_MINUTES = parseInt(process.env.SSE_RATE_LIMIT_MINUTES, 10) || 5;
-const RATE_LIMIT_AMOUNT = parseInt(process.env.SSE_RATE_LIMIT_AMOUNT, 10) || 2500;
 
 class SdtdSSE extends LoggingObject {
   constructor(server) {
     super(server);
+
+    const RATE_LIMIT_MINUTES = parseInt(process.env.SSE_RATE_LIMIT_MINUTES, 10) || 5;
+    const RATE_LIMIT_AMOUNT = parseInt(process.env.SSE_RATE_LIMIT_AMOUNT, 10) || 2500;
+    const THROTTLE_DELAY = parseInt(process.env.SSE_THROTTLE_DELAY, 10) || 1000 * 60 * 5;
+
     this.SSERegex = /\d+-\d+-\d+T\d+:\d+:\d+ \d+\.\d+ INF (.+)/;
-    this.listener = throttledFunction(this.SSEListener.bind(this), RATE_LIMIT_AMOUNT, RATE_LIMIT_MINUTES);
+    this.throttledFunction = new ThrottledFunction(this.SSEListener.bind(this), RATE_LIMIT_AMOUNT, RATE_LIMIT_MINUTES);
+    this.listener = this.throttledFunction.listener;
     this.queuedChatMessages = [];
     this.lastMessage = Date.now();
+
+    this.throttledFunction.on('normal', () => {
+      this.start();
+    });
+
+    this.throttledFunction.on('throttled', () => {
+      setTimeout(this.destroy.bind(this), THROTTLE_DELAY);
+    });
   }
 
   get url() {
@@ -20,6 +32,11 @@ class SdtdSSE extends LoggingObject {
   }
 
   async start() {
+    if (this.eventSource) {
+      return;
+    }
+    sails.log.info(`Starting SSE`, {server: this.server});
+
     this.eventSource = new EventSource(encodeURI(this.url));
     this.eventSource.reconnectInterval = 5000;
     this.eventSource.addEventListener('logLine', this.listener);
@@ -30,7 +47,7 @@ class SdtdSSE extends LoggingObject {
       }
     };
     this.eventSource.onopen = () => {
-      sails.log.debug(`Opened a SSE channel for server ${this.server.id}`, {server: this.server});
+      sails.log.info(`Opened a SSE channel for server ${this.server.id}`, {server: this.server});
     };
   }
 
@@ -38,7 +55,9 @@ class SdtdSSE extends LoggingObject {
     if (!this.eventSource) {
       return;
     }
-    this.eventSource.removeEventListener(this.listener);
+    sails.log.info(`Destroying SSE`, {server: this.server});
+
+    this.eventSource.removeEventListener('logLine', this.listener);
     this.eventSource.close();
     this.eventSource = null;
   }
