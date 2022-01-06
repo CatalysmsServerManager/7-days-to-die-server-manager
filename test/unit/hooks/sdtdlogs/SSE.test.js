@@ -1,8 +1,13 @@
 const { expect } = require('chai');
 const SdtdSSE = require('../../../../api/hooks/sdtdLogs/eventDetectors/7d2dSSE');
 const { wait } = require('../../../../worker/util/wait');
+const MockDate = require('mockdate');
+const EventSource = require('eventsource');
+const sinon = require('sinon');
+
 
 describe('7d2dSSE', function () {
+  let clock;
 
   it('Correctly parses chat messages with hccp enabled', async () => {
     const sse = new SdtdSSE({ ...sails.testServer, config: sails.testServerConfig });
@@ -56,6 +61,32 @@ describe('7d2dSSE', function () {
     expect(stub).to.have.been.calledTwice;
     expect(stub.firstCall.firstArg.type).to.be.equal('logLine');
     expect(stub.secondCall.firstArg.type).to.be.equal('logLine');
+  });
+
+  it('Stops listening when server is throttled for extended period of time and reconnects after', async () => {
+    clock = sinon.useFakeTimers();
+    process.env.SSE_THROTTLE_DELAY = 1000 * 60 * 10;
+    const sse = new SdtdSSE({ ...sails.testServer, config: sails.testServerConfig });
+
+    await sse.start();
+
+    expect(sse.eventSource).to.be.instanceOf(EventSource, 'EventSource should be active at the start of the test');
+
+    sse.throttledFunction.emit('throttled');
+
+
+    await clock.tickAsync(parseInt(process.env.SSE_THROTTLE_DELAY, 10) / 2);
+    expect(sse.eventSource).to.be.instanceOf(EventSource, 'EventSource should still be active when throttle delay is not exceeded');
+
+    await clock.tickAsync(parseInt(process.env.SSE_THROTTLE_DELAY, 10));
+    expect(sse.eventSource).to.be.eql(null, 'EventSource should be destroyed after being throttled for $SSE_THROTTLE_DELAY');
+
+    await clock.tickAsync(parseInt(process.env.SSE_THROTTLE_DELAY, 10) * 10);
+    expect(sse.eventSource).to.be.eql(null, 'EventSource should be destroyed after being throttled for a long time');
+
+    sse.throttledFunction.emit('normal');
+    expect(sse.eventSource).to.be.instanceOf(EventSource, 'EventSource should be active after server is back to normal');
+    clock.restore();
   });
 
 });
