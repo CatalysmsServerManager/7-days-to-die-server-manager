@@ -1,54 +1,69 @@
-const throttledFunction = require('../../worker/util/throttledFunction');
+const ThrottledFunction = require('../../worker/util/throttledFunction');
 const MockDate = require('mockdate');
 const { expect } = require('chai');
 
 describe('throttledFunction', function () {
-  it('Throttles a function', async () => {
+  it('Throttles a function and emits events', async () => {
     const stub = sandbox.stub();
+    const throttledEventStub = sandbox.stub();
+    const normalEventStub = sandbox.stub();
 
-    const fn = throttledFunction(stub, 5, 3);
+    const throttledFunction = new ThrottledFunction(stub, 5, 3);
+
+    throttledFunction.on('throttled', throttledEventStub);
+    throttledFunction.on('normal', normalEventStub);
 
     MockDate.set(new Date('2020-12-21T03:24:00'));
-    fn(1);
-    fn(2);
-    fn(3);
-    fn(4);
+    throttledFunction.listener(1);
+    throttledFunction.listener(2);
+    throttledFunction.listener(3);
+    throttledFunction.listener(4);
     MockDate.set(new Date('2020-12-21T03:25:00'));
-    fn(5);
+    throttledFunction.listener(5);
+    expect(throttledEventStub).to.not.have.been.calledOnce;
+
     // These get blocked
-    fn(6);
-    fn(7);
+    throttledFunction.listener(6);
+    throttledFunction.listener(7);
+
+    expect(throttledEventStub).to.have.been.calledOnce;
+    expect(normalEventStub).to.not.have.been.calledOnce;
+
 
     // These arent blocked anymore
     MockDate.set(new Date('2020-12-21T03:29:00'));
-    fn(8);
-    fn(9);
+    throttledFunction.listener(8);
+    throttledFunction.listener(9);
 
     expect(stub).to.have.callCount(7);
+    expect(stub).to.have.been.calledWith(1);
+
+    expect(normalEventStub).to.have.been.calledOnce;
+
   });
 
   it('Works accross hours', async () => {
     const stub = sandbox.stub();
 
-    const fn = throttledFunction(stub, 5, 3);
+    const throttledFunction = new ThrottledFunction(stub, 5, 3);
 
     MockDate.set(new Date('2020-12-21T03:56:00'));
-    fn(1);
+    throttledFunction.listener(1);
     MockDate.set(new Date('2020-12-21T03:57:00'));
-    fn(2);
-    fn(3);
-    fn(4);
+    throttledFunction.listener(2);
+    throttledFunction.listener(3);
+    throttledFunction.listener(4);
     MockDate.set(new Date('2020-12-21T03:58:00'));
-    fn(5);
+    throttledFunction.listener(5);
     MockDate.set(new Date('2020-12-21T03:59:00'));
-    fn(6);
+    throttledFunction.listener(6);
 
-    fn(7);
+    throttledFunction.listener(7);
 
     // These arent blocked anymore
     MockDate.set(new Date('2020-12-21T04:01:00'));
-    fn(8);
-    fn(9);
+    throttledFunction.listener(8);
+    throttledFunction.listener(9);
 
     expect(stub).to.have.callCount(7);
     expect(stub).to.have.been.calledWith(1);
@@ -72,7 +87,7 @@ describe('throttledFunction', function () {
     this.timeout(60000);
     const stub = sandbox.stub();
 
-    const fn = throttledFunction(stub, 5, 3);
+    const fn = ThrottledFunction(stub, 5, 3);
     MockDate.set(new Date('2020-12-21T04:01:00'));
     for (let y = 1; y < 3; y++) {
       for (let x = 1; x < 30; x++) {

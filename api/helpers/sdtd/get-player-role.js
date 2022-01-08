@@ -35,13 +35,12 @@ module.exports = {
       id: player.user,
     });
     const server = await SdtdServer.findOne(player.server);
+    let shouldUpdateRole = false;
 
     let foundRole;
 
     if (player.role) {
       foundRole = await Role.findOne(player.role);
-    } else {
-      foundRole = undefined;
     }
 
     if (foundUser) {
@@ -54,17 +53,22 @@ module.exports = {
           sort: 'level ASC',
           limit: 1
         }))[0];
+        shouldUpdateRole = true;
       }
     }
 
     if (_.isUndefined(foundRole)) {
       foundRole = await sails.helpers.roles.getDefaultRole(player.server);
+      shouldUpdateRole = true;
     }
 
     sails.log.debug(`Found role ${foundRole.name} for player ${player.name}`, {player, serverId: player.server});
+
+    if (shouldUpdateRole) {
+      await Player.update({id: player.id}, {role: foundRole.id});
+    }
+
     return exits.success(foundRole);
 
   }
-
-
 };
