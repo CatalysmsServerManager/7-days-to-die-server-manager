@@ -19,10 +19,12 @@ class SdtdSSE extends LoggingObject {
     this.lastMessage = Date.now();
 
     this.throttledFunction.on('normal', () => {
+      sails.log.debug(`SSE normal for server ${this.server.id}`, {server: this.server});
       this.start();
     });
 
     this.throttledFunction.on('throttled', () => {
+      sails.log.debug(`SSE throttled for server ${this.server.id}`, {server: this.server});
       setTimeout(this.destroy.bind(this), THROTTLE_DELAY);
     });
 
