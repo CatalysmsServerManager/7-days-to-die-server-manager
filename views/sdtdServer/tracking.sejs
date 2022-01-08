@@ -481,12 +481,20 @@
         buttons: [
           'copy', 'excel', 'pdf', 'print'
         ],
-        columns: [{
-            data: "createdAt",
-            render: function (data, type, row, meta) {
-              let date = new Date(data);
-              return `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`;
-            }
+        columns: [
+          {
+             data: ( row, type, val, meta ) => {
+              const {createdAt} = row;
+              const date = new Date(createdAt);
+              switch (type) {
+                case 'display':
+                  return `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`
+                case 'sort':
+                  return createdAt
+                default:
+                return `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`
+              }
+            } 
           },
           {
             data: 'playerName'
@@ -509,12 +517,20 @@
         buttons: [
           'copy', 'excel', 'pdf', 'print'
         ],
-        columns: [{
-            data: "createdAt",
-            render: function (data, type, row, meta) {
-              let date = new Date(data);
-              return `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`;
-            }
+        columns: [
+          {
+            data: ( row, type, val, meta ) => {
+              const {createdAt} = row;
+              const date = new Date(createdAt);
+              switch (type) {
+                case 'display':
+                  return `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`
+                case 'sort':
+                  return createdAt
+                default:
+                return `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`
+              }
+            } 
           },
           {
             data: 'playerName'
@@ -552,13 +568,21 @@
           amountElement.addClass('bg-success')
         }
       },
-      columns: [{
-          data: "createdAt",
-          render: (data, type, row, meta) => {
-            let date = new Date(data);
-            return `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`;
-          }
-        },
+      columns: [
+        {
+          data: ( row, type, val, meta ) => {
+            const {createdAt} = row;
+            const date = new Date(createdAt);
+            switch (type) {
+              case 'display':
+                return `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`
+              case 'sort':
+                return createdAt
+              default:
+              return `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`
+            }
+          } 
+        },        ,
         {
           data: 'player',
           render: (data, type, row, meta) => {
