@@ -19,12 +19,31 @@ class SdtdSSE extends LoggingObject {
     this.lastMessage = Date.now();
 
     this.throttledFunction.on('normal', () => {
+      sails.log.debug(`SSE normal for server ${this.server.id}`, {server: this.server});
       this.start();
     });
 
     this.throttledFunction.on('throttled', () => {
+      sails.log.debug(`SSE throttled for server ${this.server.id}`, {server: this.server});
       setTimeout(this.destroy.bind(this), THROTTLE_DELAY);
     });
+
+    this.reconnectInterval = setInterval(() => this.reconnectListener(), 30000);
+  }
+
+  reconnectListener() {
+    if (!this.eventSource) {
+      // Event source isn't active, we should not be reconnecting it
+      return;
+    }
+
+    if (this.eventSource.readyState === EventSource.OPEN && (this.lastMessage > (Date.now() - 300000))) {
+      return;
+    }
+
+    sails.log.debug(`Trying to reconnect SSE for server ${this.server.id}`, {serverId: this.server.id});
+    this.destroy();
+    this.start();
   }
 
   get url() {
