@@ -17,15 +17,17 @@ class SdtdSSE extends LoggingObject {
     this.listener = this.throttledFunction.listener;
     this.queuedChatMessages = [];
     this.lastMessage = Date.now();
+    this.throttleDestructionTimeout = null;
 
     this.throttledFunction.on('normal', () => {
       sails.log.debug(`SSE normal for server ${this.server.id}`, {server: this.server});
+      clearTimeout(this.throttleDestructionTimeout);
       this.start();
     });
 
     this.throttledFunction.on('throttled', () => {
       sails.log.debug(`SSE throttled for server ${this.server.id}`, {server: this.server});
-      setTimeout(this.destroy.bind(this), THROTTLE_DELAY);
+      this.throttleDestructionTimeout = setTimeout(this.destroy.bind(this), THROTTLE_DELAY);
     });
 
     this.reconnectInterval = setInterval(() => this.reconnectListener(), 30000);
