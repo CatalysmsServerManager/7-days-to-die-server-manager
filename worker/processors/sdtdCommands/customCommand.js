@@ -19,7 +19,7 @@ class CustomCommand extends SdtdCommand {
     const argsKV = {};
 
     if (playerRole.level > this.options.level) {
-      return chatMessage.reply(`You do not have the correct role to execute this command. Ask your server admin for elevated permissions.`);
+      return chatMessage.reply('customCommandMissingPermission');
     }
 
     for (const argument of options.arguments) {
@@ -27,7 +27,10 @@ class CustomCommand extends SdtdCommand {
       let validArg = validateArg(argument, valueToFill);
 
       if (!validArg) {
-        return chatMessage.reply(`You provided an invalid value! '${valueToFill}' is not valid for ${argument.key}`);
+        return chatMessage.reply(customCommandMissingArguments, {
+          valueToFill,
+          argument
+        });
       }
 
 
@@ -56,7 +59,7 @@ class CustomCommand extends SdtdCommand {
       });
 
       if (foundUses.length > 0) {
-        return chatMessage.reply(`You need to wait longer before executing this command.`);
+        return chatMessage.reply('customCommandDelayActive');
       }
     }
 
@@ -75,7 +78,10 @@ class CustomCommand extends SdtdCommand {
       }
 
       if (notEnoughMoney) {
-        return chatMessage.reply(`You do not have enough money to do that! ${this.options.name} costs ${this.options.costToExecute} ${server.config.currencyName}`);
+        return chatMessage.reply(`customCommandNotEnoughMoney`, {
+          options: this.options,
+          server
+        });
       }
     }
 
@@ -89,7 +95,9 @@ class CustomCommand extends SdtdCommand {
 
     // If delayed, let the player know the command is about to be executed
     if (this.options.delay) {
-      await chatMessage.reply(`The command will be executed in ${this.options.delay} seconds`);
+      await chatMessage.reply(`customCommandNotifyDelay`, {
+        options: this.options,
+      });
       await wait(this.options.delay);
     }
 
@@ -120,7 +128,7 @@ class CustomCommand extends SdtdCommand {
       } catch (error) {
         sails.log.error(`Custom command error - server ${server.id} - ${chatMessage.messageText}`, {server});
         sails.log.error(error, {server});
-        chatMessage.reply(`Error, please contact your server admin!`);
+        chatMessage.reply('error', {error: 'Unexpected error'});
       }
     }
   }
