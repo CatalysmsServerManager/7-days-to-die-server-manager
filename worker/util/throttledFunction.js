@@ -15,7 +15,7 @@ class ThrottledFunction extends EventEmitter {
       this.incrBucket();
       const sum = Object.values(this.buckets).reduce((sum, amount) => sum + amount, 0);
       if (sum > this.amount) {
-        sails.log.warn(`Discarding an event event: ${JSON.stringify(data)}`, {labels: {namespace: 'throttledFunction'}, bucket: this.buckets});
+        sails.log.warn(`Discarding an event`, {labels: {namespace: 'throttledFunction'}, bucket: this.buckets, event: data});
 
         if (this.lastState === 'normal') {
           this.emit('throttled', {buckets: this.buckets});
