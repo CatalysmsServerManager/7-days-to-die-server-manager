@@ -91,4 +91,15 @@ describe('post /api/role/player', () => {
         expect(res.body.error).to.equal('You can only set a players role to a role lower than your own.');
       });
   });
+
+
+  it('Allows server owners to do what they want, without checking role levels', async () => {
+    return supertest(sails.hooks.http.mockApp)
+      .post('/api/role/player')
+      .send({
+        playerId: sails.testPlayer.id,
+        roleId: testRoles.ADMIN_ROLE.id
+      })
+      .expect(200);
+  });
 });
