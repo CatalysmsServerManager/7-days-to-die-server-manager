@@ -1,5 +1,3 @@
-const safeRegex = require('safe-regex')
-
 module.exports = {
 
   attributes: {
@@ -12,8 +10,8 @@ module.exports = {
 
     value: {
       required: true,
-      type: 'json',
-      maxLength: 10000,
+      type: 'string',
+      maxLength: 250,
     },
 
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗

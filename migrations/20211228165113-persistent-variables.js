@@ -28,7 +28,7 @@ module.exports = {
         },
 
         value: {
-          type: DataTypes.TEXT,
+          type: DataTypes.STRING(255),
         },
 
         server: {
