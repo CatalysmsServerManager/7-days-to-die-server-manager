@@ -1,5 +1,7 @@
 
-const corsOptions = {};
+const corsOptions = {
+  headers: 'sentry-trace,Content-Type'
+};
 
 if (process.env.NODE_ENV !== 'production') {
   corsOptions.allRoutes = true;

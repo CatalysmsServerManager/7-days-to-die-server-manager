@@ -38,6 +38,11 @@ module.exports.routes = {
     view: 'meta/stats',
   },
 
+  '/sdtdserver/:id/playground*': {
+    view: 'sdtdServer/playground',
+  },
+
+
   '/auth/steam': {
     controller: 'AuthController',
     action: 'steamLogin'
@@ -108,6 +113,19 @@ module.exports.routes = {
 
   'get /api/playground/meta': {
     action: 'Playground/get-meta',
+  },
+
+  'get /api/playground/variable': {
+    action: 'Playground/variables/get-variables',
+  },
+
+  'delete /api/playground/variable/:variableId': {
+    action: 'Playground/variables/delete-variable',
+    csrf: false
+  },
+
+  'get /api/playground/executions': {
+    action: 'Playground/get-executions',
   },
 
   'get /api/stats': {
