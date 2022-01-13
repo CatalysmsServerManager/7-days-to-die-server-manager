@@ -33,9 +33,9 @@ module.exports = {
       });
     }
 
-    const command = new CSMMCommand(server, inputs.template, inputs.data);
+    inputs.data.server = server;
 
-    command.data = inputs.data;
+    const command = new CSMMCommand(server, inputs.template, inputs.data);
 
     const {template, errors} =  await command.render();
     return exits.success({ output: template, errors });
