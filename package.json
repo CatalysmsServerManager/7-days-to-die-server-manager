@@ -42,7 +42,7 @@
     "request": "^2.88.2",
     "request-promise-native": "^1.0.9",
     "safe-regex": "^2.1.1",
-    "sails": "^1.4.4",
+    "sails": "^1.5.2",
     "sails-hook-grunt": "^5.0.0",
     "sails-hook-orm": "^4.0.1",
     "sails-hook-sockets": "^2.0.1",
