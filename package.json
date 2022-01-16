@@ -12,7 +12,7 @@
     "@sentry/tracing": "^6.13.1",
     "@streammedev/hhmmss": "^1.0.0",
     "7daystodie-api-wrapper": "2.2.0",
-    "async": "3.2.1",
+    "async": "3.2.3",
     "bull": "^4.2.0",
     "bull-board": "^2.1.2",
     "concurrently": "^6.2.1",
