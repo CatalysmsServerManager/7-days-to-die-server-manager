@@ -24,16 +24,17 @@ describe('POST /api/playground/execute', () => {
     const response = await supertest(sails.hooks.http.mockApp)
       .post('/api/playground/execute')
       .send({
-        template: '{{ server.id }}',
+        template: '{{ server.id }} {{ server.thisShouldStay}}',
         data: {
           server: {
-            id: 'test'
+            id: 'test',
+            thisShouldStay: 'aaa'
           }
         },
         serverId: sails.testServer.id
       });
 
-    expect(response.body.output[0]).to.be.eq(sails.testServer.id.toString());
+    expect(response.body.output[0]).to.be.eq(`${sails.testServer.id} aaa`);
 
 
   });
