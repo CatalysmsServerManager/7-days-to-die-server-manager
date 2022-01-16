@@ -4,6 +4,7 @@ const faker = require('faker');
 const MockDate = require('mockdate');
 const sinon = require('sinon');
 const chai = require('chai');
+const express = require('express');
 const sinonChai = require('sinon-chai');
 const chaiAsPromised = require('chai-as-promised');
 const { Sequelize } = require('sequelize');
@@ -105,7 +106,13 @@ afterEach(async function () {
 
 beforeEach(async function () {
   let testUser = await User.create({
-    steamId: faker.random.number({ min: 0, max: 9999999999999 }),
+    steamId: faker.datatype.number({ min: 0, max: 9999999999999 }),
+    username: faker.internet.userName(),
+    discordId: '111111111111111111'
+  }).meta({ skipAllLifecycleCallbacks: true }).fetch();
+
+  let testUser2 = await User.create({
+    steamId: faker.datatype.number({ min: 0, max: 9999999999999 }),
     username: faker.internet.userName(),
     discordId: '111111111111111111'
   }).meta({ skipAllLifecycleCallbacks: true }).fetch();
@@ -128,6 +135,15 @@ beforeEach(async function () {
     lastTeleportTime: 0
   }).meta({ skipAllLifecycleCallbacks: true }).fetch();
 
+  let testPlayer2 = await Player.create({
+    steamId: testUser2.steamId,
+    entityId: 2,
+    server: testServer.id,
+    user: testUser2.id,
+    name: faker.internet.userName(),
+    lastTeleportTime: 0
+  }).meta({ skipAllLifecycleCallbacks: true }).fetch();
+
   let testServerConfig = await SdtdConfig.create({
     server: testServer.id,
     inactive: false,
@@ -139,10 +155,33 @@ beforeEach(async function () {
   }).meta({ skipAllLifecycleCallbacks: true }).fetch();
 
   sails.testUser = testUser;
+  sails.testUser2 = testUser2;
   sails.testServer = testServer;
   sails.testPlayer = testPlayer;
+  sails.testPlayer2 = testPlayer2;
   sails.testServerConfig = testServerConfig;
   sails.testServer.players = [testPlayer];
+
+  // Setup a sails express app that is pre-authenticated with our testUser
+  const mockApp = express();
+  mockApp.all('*', function (req, res, next) {
+    req.session = {};
+    req.session.user = sails.testUser;
+    req.session.userId = sails.testUser.id;
+    next();
+  });
+  mockApp.use(sails.hooks.http.app);
+  sails.hooks.http.mockApp = mockApp;
+  // And also our second non-owner user
+  const mockAppLowPriv = express();
+  mockAppLowPriv.all('*', function (req, res, next) {
+    req.session = {};
+    req.session.user = sails.testUser2;
+    req.session.userId = sails.testUser2.id;
+    next();
+  });
+  mockAppLowPriv.use(sails.hooks.http.app);
+  sails.hooks.http.mockAppLowPriv = mockAppLowPriv;
 });
 
 function clearRedis() {

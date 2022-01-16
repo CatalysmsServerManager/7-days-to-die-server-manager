@@ -95,7 +95,28 @@
 
 
   <button id="input-settings-discord-setchatchannel-btn" type="button" class="btn btn-primary">Set chat channel</button>
+  
+  <hr>
+  <p>Discord Chatbridge Messages</p>
+  <div class="form-group">
+    <label for="dcChatbridgePrefix">Discord Message Prefix</label>
+    <input type="text" class="form-control" name="dcChatbridgePrefix" id="dcChatbridgePrefix" aria-describedby="dcChatbridgePrefix-help"
+      placeholder="" value="<%= config.chatBridgeDCPrefix %>">
+    <small id="dcChatbridgePrefix-help" class="form-text text-muted">This will be added before the discord messages coming from the server's chatbridge channel.
+      Similar to the Server Name setting.
+      Supports HEX colors. Example: <span style="color:#5663F7">[5663F7]DC</span> will color the whole message. (Requires CPM!)</small>
+  </div>
+    <button id="dcChatbridgePrefix-btn" class="btn btn-primary">Save prefix</button>
 
+  <div class="form-group">
+    <label for="dcChatbridgeSuffix">Discord Message Suffix</label>
+    <input type="text" class="form-control" name="dcChatbridgeSuffix" id="dcChatbridgeSuffix" aria-describedby="dcChatbridgeSuffix-help"
+      placeholder="" value="<%= config.chatBridgeDCSuffix %>">
+    <small id="dcChatbridgeSuffix-help" class="form-text text-muted">This will be added before the discord messages coming from the server's chatbridge channel.
+      Supports HEX colors. Example: <span style="color:#5663F7">[5663F7]Playername</span> will color the whole message. (Requires CPM!)</small>
+  </div>
+    <button id="dcChatbridgeSuffix-btn" class="btn btn-primary">Save suffix</button>
+    
   <hr>
 
 
@@ -314,6 +335,50 @@
       error: function (xhr, status, error) {
         displayAjaxToSupportData(xhr, this);
       }
+    })
+
+    $("#dcChatbridgePrefix-btn").click(e => {
+      let newChatbridgePrefix = $('#dcChatbridgePrefix').val();
+      $.ajax({
+        url: '/api/sdtdserver/settings',
+        type: 'POST',
+        data: {
+          serverId: <%= server.id %>,
+          chatBridgeDCPrefix: newChatbridgePrefix,
+          _csrf: window.SAILS_LOCALS._csrf
+        },
+        success: (data, status, xhr) => {
+          console.log(data)
+        },
+        error: function (xhr, status, error) {
+          $('#discord-settings-notifications-playerconnect-select').addClass("bg-danger").removeClass(
+            "bg-success");
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      })
+    })
+
+    $("#dcChatbridgeSuffix-btn").click(e => {
+      let newChatbridgeSuffix = $('#dcChatbridgeSuffix').val();
+      $.ajax({
+        url: '/api/sdtdserver/settings',
+        type: 'POST',
+        data: {
+          serverId: <%= server.id %>,
+          chatBridgeDCSuffix: newChatbridgeSuffix,
+          _csrf: window.SAILS_LOCALS._csrf
+        },
+        success: (data, status, xhr) => {
+          console.log(data)
+        },
+        error: function (xhr, status, error) {
+          $('#discord-settings-notifications-playerconnect-select').addClass("bg-danger").removeClass(
+            "bg-success");
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      })
     })
 
     $('#inputs-setting-discord-prefix-btn').click(e => {

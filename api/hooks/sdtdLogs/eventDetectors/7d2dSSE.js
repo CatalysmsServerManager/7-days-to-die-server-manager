@@ -1,27 +1,56 @@
 const LoggingObject = require('../LoggingObject');
 const EventSource = require('eventsource');
 const handleLogLine = require('../../../../worker/processors/logs/handleLogLine');
-const throttledFunction = require('../../../../worker/util/throttledFunction');
+const ThrottledFunction = require('../../../../worker/util/throttledFunction');
 
-const RATE_LIMIT_MINUTES = parseInt(process.env.SSE_RATE_LIMIT_MINUTES, 10) || 5;
-const RATE_LIMIT_AMOUNT = parseInt(process.env.SSE_RATE_LIMIT_AMOUNT, 10) || 2500;
 
 class SdtdSSE extends LoggingObject {
   constructor(server) {
     super(server);
+
+    const RATE_LIMIT_MINUTES = parseInt(process.env.SSE_RATE_LIMIT_MINUTES, 10) || 5;
+    const RATE_LIMIT_AMOUNT = parseInt(process.env.SSE_RATE_LIMIT_AMOUNT, 10) || 2500;
+    const THROTTLE_DELAY = parseInt(process.env.SSE_THROTTLE_DELAY, 10) || 1000 * 60 * 1;
+    const SSE_THROTTLE_RECONNECT_DELAY = parseInt(process.env.SSE_THROTTLE_RECONNECT_DELAY, 10) || 1000 * 60 * 5;
+
     this.SSERegex = /\d+-\d+-\d+T\d+:\d+:\d+ \d+\.\d+ INF (.+)/;
-    this.listener = throttledFunction(this.SSEListener.bind(this), RATE_LIMIT_AMOUNT, RATE_LIMIT_MINUTES);
+    this.throttledFunction = new ThrottledFunction(this.SSEListener.bind(this), RATE_LIMIT_AMOUNT, RATE_LIMIT_MINUTES);
+    this.listener = this.throttledFunction.listener;
     this.queuedChatMessages = [];
     this.lastMessage = Date.now();
+    this.throttleDestructionTimeout = null;
+    this.throttleReconnectTimeout = null;
 
-    this.reconnectInterval = setInterval(() => {
-      if (this.eventSource.readyState === EventSource.OPEN && (this.lastMessage > (Date.now() - 300000))) {
-        return;
-      }
-      sails.log.debug(`Trying to reconnect SSE for server ${this.server.id}`, {serverId: this.server.id});
-      this.destroy();
+
+
+    this.throttledFunction.on('normal', () => {
+      sails.log.debug(`SSE normal for server ${this.server.id}`, { server: this.server });
+      clearTimeout(this.throttleDestructionTimeout);
       this.start();
-    }, 30000);
+    });
+
+    this.throttledFunction.on('throttled', () => {
+      sails.log.debug(`SSE throttled for server ${this.server.id}`, { server: this.server });
+      this.throttleDestructionTimeout = setTimeout(this.destroy.bind(this), THROTTLE_DELAY);
+      this.throttleReconnectTimeout = setTimeout(this.start.bind(this), SSE_THROTTLE_RECONNECT_DELAY);
+    });
+
+    this.reconnectInterval = setInterval(() => this.reconnectListener(), 30000);
+  }
+
+  reconnectListener() {
+    if (!this.eventSource) {
+      // Event source isn't active, we should not be reconnecting it
+      return;
+    }
+
+    if (this.eventSource.readyState === EventSource.OPEN && (this.lastMessage > (Date.now() - 300000))) {
+      return;
+    }
+
+    sails.log.debug(`Trying to reconnect SSE for server ${this.server.id}`, { serverId: this.server.id });
+    this.destroy();
+    this.start();
   }
 
   get url() {
@@ -29,17 +58,21 @@ class SdtdSSE extends LoggingObject {
   }
 
   async start() {
-    this.eventSource = new EventSource(this.url);
+    if (this.eventSource) {
+      return;
+    }
+    clearTimeout(this.throttleReconnectTimeout);
+
+    sails.log.info(`Starting SSE`, { server: this.server });
+
+    this.eventSource = new EventSource(encodeURI(this.url));
     this.eventSource.reconnectInterval = 5000;
     this.eventSource.addEventListener('logLine', this.listener);
     this.eventSource.onerror = e => {
-      sails.log.warn(`SSE error for server ${this.server.id}`, {server: this.server});
-      if (e.message) {
-        sails.log.warn(e.message, {server: this.server});
-      }
+      sails.log.warn(`SSE error for server ${this.server.id}`, { server: this.server, error: e });
     };
     this.eventSource.onopen = () => {
-      sails.log.debug(`Opened a SSE channel for server ${this.server.id}`, {server: this.server});
+      sails.log.info(`Opened a SSE channel for server ${this.server.id}`, { server: this.server });
     };
   }
 
@@ -47,14 +80,18 @@ class SdtdSSE extends LoggingObject {
     if (!this.eventSource) {
       return;
     }
-    this.eventSource.removeEventListener(this.listener);
+    sails.log.info(`Destroying SSE`, { server: this.server });
+
+    this.eventSource.removeEventListener('logLine', this.listener);
     this.eventSource.close();
+    this.eventSource = null;
   }
 
   async SSEListener(data) {
     this.lastMessage = Date.now();
     try {
       const parsed = JSON.parse(data.data);
+      sails.log.debug(`Raw SSE event received`, { serverId: this.server.id, event: _.omit(parsed, 'server') });
       const messageMatch = this.SSERegex.exec(parsed.msg);
       if (messageMatch && messageMatch[1]) {
         parsed.msg = messageMatch[1];
@@ -68,7 +105,7 @@ class SdtdSSE extends LoggingObject {
         await this.handleMessage(log);
       }
     } catch (error) {
-      sails.log.error(error.stack, {server: this.server});
+      sails.log.error(error.stack, { server: this.server });
     }
   }
 

@@ -13,6 +13,11 @@ module.exports = {
       required: true,
     },
 
+    serverId: {
+      type: 'string',
+      required: true,
+    },
+
   },
 
 
@@ -20,9 +25,19 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    const command = new CSMMCommand(inputs.server, inputs.template, inputs.data);
+    const server = await SdtdServer.findOne({id: inputs.serverId});
 
-    command.data = inputs.data;
+    if (!server) {
+      return this.res.status(400).json({
+        message: 'Server not found',
+      });
+    }
+
+    if (inputs.data.server) {
+      inputs.data.server = Object.assign(inputs.data.server, server);
+    }
+
+    const command = new CSMMCommand(server, inputs.template, inputs.data);
 
     const {template, errors} =  await command.render();
     return exits.success({ output: template, errors });

@@ -1,6 +1,6 @@
 FROM node:14-alpine AS builder
 
-RUN apk --no-cache add curl=7.79.1-r0 git=2.24.4-r0 jq=1.6-r0
+RUN apk --no-cache add curl git jq python3
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -15,7 +15,6 @@ COPY scripts/ ./scripts
 COPY package*.json ./
 
 ARG PLAYGROUND_VERSION=latest
-RUN echo "Using playground version $PLAYGROUND_VERSION"
 
 RUN npm ci --only=production
 

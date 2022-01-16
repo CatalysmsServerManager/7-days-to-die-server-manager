@@ -23,7 +23,7 @@ describe('/api/player/giveitem', function () {
     });
 
     it('returns OK with correct data', async function () {
-      const response = await supertest(sails.hooks.http.app)
+      const response = await supertest(sails.hooks.http.mockApp)
         .post('/api/player/giveitem')
         .send({
           playerId: 1,
@@ -34,12 +34,12 @@ describe('/api/player/giveitem', function () {
       expect(response.body).to.deep.eq({});
       expect(sails.helpers.sdtdApi.executeConsoleCommand).to.have.been.calledWith(
         sandbox.match.any,
-        `giveplus ${sails.testPlayer.steamId} "ammo9mmBulletBall" 1 `
+        `giveplus ${sails.testPlayer.entityId} "ammo9mmBulletBall" 1 `
       );
     });
 
     it('Quoted item silently drops the quotes', async function () {
-      const response = await supertest(sails.hooks.http.app)
+      const response = await supertest(sails.hooks.http.mockApp)
         .post('/api/player/giveitem')
         .send({
           playerId: 1,
@@ -50,12 +50,12 @@ describe('/api/player/giveitem', function () {
       expect(response.body).to.deep.eq({});
       expect(sails.helpers.sdtdApi.executeConsoleCommand).to.have.been.calledWith(
         sandbox.match.any,
-        `giveplus ${sails.testPlayer.steamId} "item with quotes" 1 `
+        `giveplus ${sails.testPlayer.entityId} "item with quotes" 1 `
       );
     });
 
     it('returns 400 if incorrect item name is given', async () => {
-      const response = await supertest(sails.hooks.http.app)
+      const response = await supertest(sails.hooks.http.mockApp)
         .post('/api/player/giveitem')
         .send({
           playerId: 1,
@@ -73,7 +73,7 @@ describe('/api/player/giveitem', function () {
     });
 
     it('returns OK with correct data', async function () {
-      const response = await supertest(sails.hooks.http.app)
+      const response = await supertest(sails.hooks.http.mockApp)
         .post('/api/player/giveitem')
         .send({
           playerId: 1,
@@ -89,7 +89,7 @@ describe('/api/player/giveitem', function () {
     });
 
     it('Quoted item silently drops the quotes', async function () {
-      const response = await supertest(sails.hooks.http.app)
+      const response = await supertest(sails.hooks.http.mockApp)
         .post('/api/player/giveitem')
         .send({
           playerId: 1,
@@ -106,7 +106,7 @@ describe('/api/player/giveitem', function () {
 
 
     it('returns 400 if incorrect item name is given', async () => {
-      const response = await supertest(sails.hooks.http.app)
+      const response = await supertest(sails.hooks.http.mockApp)
         .post('/api/player/giveitem')
         .send({
           playerId: 1,

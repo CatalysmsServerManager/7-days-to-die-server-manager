@@ -1,6 +1,6 @@
 name: DB migrations
 
-on: [push]
+on: [push,pull_request]
 
 jobs:
   migrations:

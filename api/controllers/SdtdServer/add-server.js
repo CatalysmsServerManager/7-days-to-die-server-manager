@@ -54,7 +54,8 @@ module.exports = {
       'servers'
     );
     let donatorRole = await sails.helpers.meta.checkDonatorStatus.with({
-      userId: user.id
+      userId: user.id,
+      reload: true
     });
     let maxServers = sails.config.custom.donorConfig[donatorRole].maxServers;
 

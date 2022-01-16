@@ -1,42 +1,59 @@
+const EventEmitter = require('events');
 /**
  * Executes a function no more than amount times per minutes with sliding window
  * @param {Function} listener
  * @param {Number} amount
  */
-function throttledFunction(listener, amount, minutes) {
-  const buckets = {};
+class ThrottledFunction extends EventEmitter {
+  constructor(listener, amount, minutes) {
+    super();
+    this.amount = amount;
+    this.minutes = minutes;
+    this.buckets = {};
+    this.lastState = 'normal';
+    this.listener = (data) => {
+      this.incrBucket();
+      const sum = Object.values(this.buckets).reduce((sum, amount) => sum + amount, 0);
+      if (sum > this.amount) {
+        sails.log.warn(`Discarding an event`, {labels: {namespace: 'throttledFunction'}, bucket: this.buckets, event: data});
 
-  function incrBucket() {
+        if (this.lastState === 'normal') {
+          this.emit('throttled', {buckets: this.buckets});
+          this.lastState = 'throttled';
+        }
+
+        return;
+      }
+
+      if (this.lastState === 'throttled') {
+        this.emit('normal', {buckets: this.buckets});
+        this.lastState = 'normal';
+      }
+      listener(data);
+    };
+  }
+
+  incrBucket() {
     const date = new Date();
     date.setUTCMilliseconds(0);
     date.setUTCSeconds(0);
 
-    if (!buckets[date.toISOString()]) {
-      buckets[date.toISOString()] = 0;
-      const keys = Object.keys(buckets);
+    if (!this.buckets[date.toISOString()]) {
+      this.buckets[date.toISOString()] = 0;
+      const keys = Object.keys(this.buckets);
 
       keys
         .filter(d => {
-          return new Date(d) < date.getTime() - minutes * 60 * 1000;
+          return new Date(d) < date.getTime() - this.minutes * 60 * 1000;
         })
         .forEach(keyToDelete => {
-          delete buckets[keyToDelete];
+          delete this.buckets[keyToDelete];
         });
     }
 
-    buckets[date.toISOString()]++;
+    this.buckets[date.toISOString()]++;
   }
 
-
-  return (data) => {
-    incrBucket();
-    const sum = Object.values(buckets).reduce((sum, amount) => sum + amount, 0);
-    if (sum > amount) {
-      sails.log.warn(`Discarding an event buckets: ${JSON.stringify(buckets)}  event: ${JSON.stringify(data)}`, {labels: {namespace: 'throttledFunction'}});
-      return;
-    }
-    listener(data);
-  };
 }
 
-module.exports = throttledFunction;
+module.exports = ThrottledFunction;

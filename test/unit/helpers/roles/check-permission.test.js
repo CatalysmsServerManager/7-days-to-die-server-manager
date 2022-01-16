@@ -54,6 +54,17 @@ describe('HELPER roles/check-permission', () => {
     testRoles.push(createdRole);
 
     await Promise.all(testRoles);
+
+    await SdtdServer.create({
+      name: 'Other Server',
+      id: OtherServerRoles[0].server,
+      ip: 'localhost',
+      webPort: '8082',
+      authName: faker.random.alphaNumeric(20),
+      authToken: faker.random.alphaNumeric(20),
+      owner: sails.testUser2.id
+    });
+
     return;
 
   });
@@ -214,7 +225,7 @@ describe('HELPER roles/check-permission', () => {
 
   describe('Caching', () => {
     it('Caches when playerId is given', async () => {
-      const spy = sandbox.spy( sails.helpers.sdtd, 'getPlayerRole');
+      const spy = sandbox.spy(sails.helpers.sdtd, 'getPlayerRole');
       // First do a normal run of checks
 
       let playerRole = testRoles.filter(r => r.name === 'Player')[0];
@@ -252,7 +263,7 @@ describe('HELPER roles/check-permission', () => {
 
     });
     it('Caches when userId and serverId are given', async () => {
-      const spy = sandbox.spy( sails.helpers.roles, 'getUserRole');
+      const spy = sandbox.spy(sails.helpers.roles, 'getUserRole');
 
       // First, a normal run
       let playerRole = testRoles.filter(r => r.name === 'Admin')[0];
@@ -297,7 +308,7 @@ async function mockPlayer({
   serverId,
 }) {
   let createdUser = await User.create({
-    steamId: faker.random.uuid(),
+    steamId: faker.datatype.uuid(),
     username: faker.internet.userName()
   }).fetch();
 

@@ -1,5 +1,8 @@
-const Handlebars = require('handlebars');
-// The library will automatically register the helpers with Handlebars
+const promisedHandlebars = require('promised-handlebars');
+const PersistentVariablesManager = require('./CSMMCommand/persistentVariables');
+
+
+const Handlebars = promisedHandlebars(require('handlebars'), { Promise });
 require('@budibase/handlebars-helpers')([
   'array',
   'collection',
@@ -12,7 +15,10 @@ require('@budibase/handlebars-helpers')([
   'regex',
   'string',
   'object'
-]);
+], {handlebars: Handlebars});
+
+
+
 
 Handlebars.registerHelper('eq', function (a, b) {
   return (a === b);
@@ -113,6 +119,30 @@ Handlebars.registerHelper('randList', function (...options) {
 
   return choices[Math.floor(Math.random() * choices.length)];
 });
+
+
+Handlebars.registerHelper('setVar', async function(name, value) {
+  if (!this.server) {
+    throw new Error('Persistent variables can only be used in context of a server, this is likely an implementation error');
+  }
+
+  await PersistentVariablesManager.set(this.server, name, value);
+});
+
+Handlebars.registerHelper('getVar', async function(name) {
+  if (!this.server) {
+    throw new Error('Persistent variables can only be used in context of a server, this is likely an implementation error');
+  }
+  return await PersistentVariablesManager.get(this.server, name);
+});
+
+Handlebars.registerHelper('delVar', async function(name) {
+  if (!this.server) {
+    throw new Error('Persistent variables can only be used in context of a server, this is likely an implementation error');
+  }
+  await PersistentVariablesManager.del(this.server, name);
+});
+
 
 
 module.exports = Handlebars;

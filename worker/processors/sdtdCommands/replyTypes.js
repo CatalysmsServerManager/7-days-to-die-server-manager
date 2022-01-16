@@ -337,4 +337,34 @@ module.exports = [{
   type: 'voteLock',
   default: 'CSMM is still checking if you voted or not, please hold on',
 },
+{
+  command: 'CustomCommand',
+  pretty: 'CustomCommand - missing arguments',
+  type: 'customCommandMissingArguments',
+  default: 'You provided an invalid value! "${valueToFill}" is not valid for "${argument.key}"',
+},
+{
+  command: 'CustomCommand',
+  pretty: 'CustomCommand - missing permission',
+  type: 'customCommandMissingPermission',
+  default: 'You do not have the correct role to execute this command. Ask your server admin for elevated permissions.',
+},
+{
+  command: 'CustomCommand',
+  pretty: 'CustomCommand - delay active',
+  type: 'customCommandDelayActive',
+  default: 'You need to wait longer before executing this command.',
+},
+{
+  command: 'CustomCommand',
+  pretty: 'CustomCommand - not enough money',
+  type: 'customCommandNotEnoughMoney',
+  default: 'You do not have enough money to do that! ${options.name} costs ${options.costToExecute} ${server.config.currencyName}',
+},
+{
+  command: 'CustomCommand',
+  pretty: 'CustomCommand - notifyDelay',
+  type: 'customCommandNotifyDelay',
+  default: 'The command will be executed in ${options.delay} seconds',
+},
 ];

@@ -1,5 +1,3 @@
-var sevenDays = require('machinepack-7daystodiewebapi');
-
 module.exports = {
 
   friendlyName: 'Restart server',
@@ -35,56 +33,32 @@ module.exports = {
    */
 
   fn: async function (inputs, exits) {
+    sails.log.debug(`API - SdtdServer:restart-server - Restarting server ${inputs.serverId} in ${inputs.delay} minutes`, {serverId: inputs.serverId});
 
-    try {
-
-      sails.log.debug(`API - SdtdServer:restart-server - Restarting server ${inputs.serverId} in ${inputs.delay} minutes`, {serverId: inputs.serverId});
-
-      if (_.isUndefined(inputs.delay)) {
-        inputs.delay = 5;
-      }
-
-      let server = await SdtdServer.findOne(inputs.serverId);
-
-      setTimeout(() => {
-        sevenDays.executeCommand({
-          ip: server.ip,
-          port: server.webPort,
-          authName: server.authName,
-          authToken: server.authToken,
-          command: `shutdown`
-        }).exec({
-          error: (error) => {
-            sails.log.error(`API - SdtdServer:restart-server - ${error}`, {serverId: inputs.serverId});
-          },
-          success: () => {
-            sails.log.info(`API - SdtdServer:restart-server - Successful restart for server ${inputs.serverId} in ${inputs.delay} ${inputs.delay > 1 ? 'minutes' : 'minute'}`, {serverId: inputs.serverId});
-
-          }
-        });
-      }, inputs.delay * 60 * 1000);
-
-
-
-      for (let index = 0; index < inputs.delay + 1; index++) {
-        setTimeout(async function () {
-          if (inputs.delay - index > 0) {
-            await sendXMinutesUntilRestartToServer(inputs.delay - index, server);
-          }
-        }, index * 60 * 1000);
-      }
-
-      return exits.success();
-
-
-    } catch (error) {
-      sails.log.error(`API - SdtdServer:restart-server - ${error}`, {serverId: inputs.serverId});
-      return exits.error(error);
+    if (_.isUndefined(inputs.delay)) {
+      inputs.delay = 5;
     }
 
+    let server = await SdtdServer.findOne(inputs.serverId);
+
+    setTimeout(() => {
+      sails.helpers.sdtdApi.executeConsoleCommand(
+        SdtdServer.getAPIConfig(server),
+        `shutdown`
+      );
+    }, inputs.delay * 60 * 1000);
 
 
 
+    for (let index = 0; index < inputs.delay + 1; index++) {
+      setTimeout(async function () {
+        if (inputs.delay - index > 0) {
+          await sendXMinutesUntilRestartToServer(inputs.delay - index, server);
+        }
+      }, index * 60 * 1000);
+    }
+
+    return exits.success();
   }
 };
 
@@ -96,24 +70,12 @@ module.exports = {
  */
 
 function sendXMinutesUntilRestartToServer(minutesLeft, server) {
-  return new Promise((resolve, reject) => {
-    if (isNaN(minutesLeft)) {
-      reject(new Error(`Did not supply a number`));
-    }
+  if (isNaN(minutesLeft)) {
+    reject(new Error(`Did not supply a number`));
+  }
 
-    sevenDays.sendMessage({
-      ip: server.ip,
-      port: server.webPort,
-      authName: server.authName,
-      authToken: server.authToken,
-      message: `Restarting the server in ${minutesLeft} minute(s)`
-    }).exec({
-      error: (error) => {
-        reject(error);
-      },
-      success: () => {
-        resolve(minutesLeft - 1);
-      }
-    });
-  });
+  return sails.helpers.sdtdApi.executeConsoleCommand(
+    SdtdServer.getAPIConfig(server),
+    `say "Restarting the server in ${minutesLeft} minute(s)"`
+  );
 }

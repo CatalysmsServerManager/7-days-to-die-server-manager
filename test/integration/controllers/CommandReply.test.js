@@ -6,7 +6,7 @@ const makeSmallResponse = (response) => { return { ok: response.ok, body: respon
 describe('CommandReply', function () {
 
   it('getting without server id should error', async function () {
-    const response = await supertest(sails.hooks.http.app).get('/api/sdtdserver/commands/reply');
+    const response = await supertest(sails.hooks.http.mockApp).get('/api/sdtdserver/commands/reply');
     expect(response.body).to.deep.equal({
       code: 'E_MISSING_OR_INVALID_PARAMS',
       problems: [
@@ -18,7 +18,7 @@ describe('CommandReply', function () {
   });
 
   it('getting with server id, but no overrides, should return the default', async function () {
-    const response = await supertest(sails.hooks.http.app).get(`/api/sdtdserver/commands/reply?serverId=${sails.testServer.id}&type=notVoted`);
+    const response = await supertest(sails.hooks.http.mockApp).get(`/api/sdtdserver/commands/reply?serverId=${sails.testServer.id}&type=notVoted`);
     expect(response.body).to.deep.equal([
       {
         'reply': 'You have not voted yet! You can vote at https://7daystodie-servers.com/server/serverIdToBeFilledByAdmin/',
@@ -30,7 +30,7 @@ describe('CommandReply', function () {
 
   it('You should be able to create a command reply, and fetch it, and fetch all overrides ', async function () {
     expect(
-      await supertest(sails.hooks.http.app)
+      await supertest(sails.hooks.http.mockApp)
         .get(`/api/sdtdserver/commands/reply?serverId=${sails.testServer.id}&type=notVoted`)
         .then(makeSmallResponse)
     ).to.deep.equal({
@@ -43,7 +43,7 @@ describe('CommandReply', function () {
     });
 
     expect(
-      await supertest(sails.hooks.http.app)
+      await supertest(sails.hooks.http.mockApp)
         .post('/api/sdtdserver/commands/reply')
         .send({
           serverId: sails.testServer.id,
@@ -66,7 +66,7 @@ describe('CommandReply', function () {
     });
 
     expect(
-      await supertest(sails.hooks.http.app)
+      await supertest(sails.hooks.http.mockApp)
         .get(`/api/sdtdserver/commands/reply?serverId=${sails.testServer.id}&type=notVoted`)
         .then(makeSmallResponse)
     ).to.deep.equal({
@@ -82,7 +82,7 @@ describe('CommandReply', function () {
       }]
     });
     expect(
-      await supertest(sails.hooks.http.app)
+      await supertest(sails.hooks.http.mockApp)
         .get(`/api/sdtdserver/commands/reply?serverId=${sails.testServer.id}`)
         .then(makeSmallResponse)
     ).to.deep.equal({
@@ -101,7 +101,7 @@ describe('CommandReply', function () {
 
   it('should create a reply, then delete it', async function () {
     expect(
-      await supertest(sails.hooks.http.app)
+      await supertest(sails.hooks.http.mockApp)
         .post('/api/sdtdserver/commands/reply')
         .send({
           serverId: sails.testServer.id,
@@ -124,7 +124,7 @@ describe('CommandReply', function () {
     });
 
     expect(
-      await supertest(sails.hooks.http.app)
+      await supertest(sails.hooks.http.mockApp)
         .get(`/api/sdtdserver/commands/reply?serverId=${sails.testServer.id}`)
         .then(makeSmallResponse)
     ).to.deep.equal({
@@ -141,7 +141,7 @@ describe('CommandReply', function () {
     });
 
     expect(
-      await supertest(sails.hooks.http.app)
+      await supertest(sails.hooks.http.mockApp)
         .delete('/api/sdtdserver/commands/reply')
         .send({
           replyId: 1
@@ -154,7 +154,7 @@ describe('CommandReply', function () {
     });
 
     expect(
-      await supertest(sails.hooks.http.app)
+      await supertest(sails.hooks.http.mockApp)
         .get(`/api/sdtdserver/commands/reply?serverId=${sails.testServer.id}`)
         .then(makeSmallResponse)
     ).to.deep.equal({

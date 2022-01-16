@@ -47,12 +47,12 @@ describe('PATCH /api/role', function () {
       let data = {
         roleId: testRoles[0].id
       };
-      data[field] = faker.random.boolean();
+      data[field] = faker.datatype.boolean();
 
-      return supertest(sails.hooks.http.app)
+      return supertest(sails.hooks.http.mockApp)
         .patch('/api/role')
-        .send(data)
-        .expect(200)
+        .send({...data, serverId: sails.testServer.id})
+        //.expect(200)
         .then(async function (response) {
           const newRole = await Role.findOne({
             id: response.body.id
@@ -64,10 +64,14 @@ describe('PATCH /api/role', function () {
 
   });
 
-  it('should return 400 when no roleId is given', function (done) {
-    supertest(sails.hooks.http.app)
+  it('should return 400 when no roleId is given', function () {
+    return supertest(sails.hooks.http.mockApp)
       .patch('/api/role')
-      .expect(400, done);
+      .send({serverId: sails.testServer.id})
+      .expect(400)
+      .expect((res) => {
+        expect(res.body.problems).to.eql([ '"roleId" is required, but it was not defined.' ]);
+      });
   });
 
   it('should change default role if one already exists', async function () {
@@ -80,11 +84,12 @@ describe('PATCH /api/role', function () {
     }).fetch();
     testRoles.push(createdRole);
 
-    return supertest(sails.hooks.http.app)
+    return supertest(sails.hooks.http.mockApp)
       .patch('/api/role')
       .send({
         roleId: testRoles[0].id,
         isDefault: true,
+        serverId: sails.testServer.id
       })
       .expect(200)
       .then(async function () {

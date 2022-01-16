@@ -1,7 +1,7 @@
 <!-- EXPERIMENTS SETTINGS -->
 
 <div class="container">
-  <a class="btn btn-primary" href="/playground" role="button">Playground</a>
+  <a class="btn btn-primary" href="/sdtdserver/<%= server.id %>/playground/editor" role="button">Playground</a>
   <label for="">
     <small>The playground is an application for debugging and creating CSMM commands.</small>
   </label>

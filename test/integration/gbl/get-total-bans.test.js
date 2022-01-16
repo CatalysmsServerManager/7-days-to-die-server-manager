@@ -23,7 +23,7 @@ describe('GET /api/gbl/total', function () {
     {
       // random player ban on testServer
       server: sails.testServer.id,
-      steamId: faker.random.number({min: 0, max: 999999999999}),
+      steamId: faker.datatype.number({min: 0, max: 999999999999}),
       bannedUntil: faker.date.future().valueOf(),
       reason: 'Test ban'
     }]).fetch();
@@ -39,7 +39,7 @@ describe('GET /api/gbl/total', function () {
     testBans.length = 0;
   });
   it('should return a number', function () {
-    return supertest(sails.hooks.http.app)
+    return supertest(sails.hooks.http.mockApp)
       .get('/api/gbl/total')
       .expect(200)
       .then(response => {

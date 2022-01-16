@@ -23,7 +23,7 @@ describe('DELETE /api/gbl/', function () {
     {
       // random player ban on testServer
       server: sails.testServer.id,
-      steamId: faker.random.number({
+      steamId: faker.datatype.number({
         min: 0,
         max: 999999999999
       }),
@@ -44,10 +44,11 @@ describe('DELETE /api/gbl/', function () {
   });
 
   it('should return 200 with valid data', function () {
-    return supertest(sails.hooks.http.app)
+    return supertest(sails.hooks.http.mockApp)
       .delete('/api/gbl/')
       .query({
-        banId: testBans[0].id
+        banId: testBans[0].id,
+        serverId: sails.testServer.id
       })
       .expect(200)
       .then(async () => {
@@ -57,8 +58,14 @@ describe('DELETE /api/gbl/', function () {
   });
 
   it('should return 400 when banId is not given', function () {
-    return supertest(sails.hooks.http.app)
+    return supertest(sails.hooks.http.mockApp)
       .delete('/api/gbl/')
-      .expect(400);
+      .query({
+        serverId: sails.testServer.id
+      })
+      .expect(400)
+      .expect((res) => {
+        expect(res.body.problems).to.eql([ '"banId" is required, but it was not defined.' ]);
+      });
   });
 });

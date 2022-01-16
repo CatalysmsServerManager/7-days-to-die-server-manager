@@ -1,4 +1,3 @@
-const sevenDays = require('machinepack-7daystodiewebapi');
 const hhmmss = require('@streammedev/hhmmss');
 
 /**
@@ -49,38 +48,34 @@ class ChatBridgeChannel {
       );
       this.sendMessageToGame = this.sendMessageToGame.bind(this);
 
-      if (!_.isUndefined(this.loggingObject) && this.config.chatChannelId) {
-        if (this.config.chatChannelRichMessages) {
-          this.loggingObject.on(
-            'playerConnected',
-            this.sendRichConnectedMessageToDiscord
-          );
-          this.loggingObject.on(
-            'playerDisconnected',
-            this.sendRichDisconnectedMessageToDiscord
-          );
-        } else {
-          this.loggingObject.on(
-            'playerConnected',
-            this.sendConnectedMessageToDiscord
-          );
-          this.loggingObject.on(
-            'playerDisconnected',
-            this.sendDisconnectedMessageToDiscord
-          );
-        }
+      if (_.isUndefined(this.loggingObject)) {
+        return;
+      }
 
-        this.loggingObject.on('chatMessage', this.sendChatMessageToDiscord);
-        this.loggingObject.on('playerDeath', this.sendDeathMessageToDiscord);
-
-        this.channel.client.on('message', this.sendMessageToGame);
+      if (this.config.chatChannelRichMessages) {
+        this.loggingObject.on(
+          'playerConnected',
+          this.sendRichConnectedMessageToDiscord
+        );
+        this.loggingObject.on(
+          'playerDisconnected',
+          this.sendRichDisconnectedMessageToDiscord
+        );
       } else {
-        this.channel.send(
-          new this.channel.client.errorEmbed(
-            ':x: Could not find a logging object for this server'
-          )
+        this.loggingObject.on(
+          'playerConnected',
+          this.sendConnectedMessageToDiscord
+        );
+        this.loggingObject.on(
+          'playerDisconnected',
+          this.sendDisconnectedMessageToDiscord
         );
       }
+
+      this.loggingObject.on('chatMessage', this.sendChatMessageToDiscord);
+      this.loggingObject.on('playerDeath', this.sendDeathMessageToDiscord);
+
+      this.channel.client.on('message', this.sendMessageToGame);
     } catch (error) {
       sails.log.error(
         `HOOK discordChatBridge:chatBridgeChannel:start`, {server: this.sdtdServer}
@@ -89,7 +84,6 @@ class ChatBridgeChannel {
   }
 
   stop() {
-    let embed = new this.channel.client.customEmbed();
     if (this.loggingObject) {
       this.loggingObject.removeListener(
         'chatMessage',
@@ -116,17 +110,11 @@ class ChatBridgeChannel {
         this.sendRichDisconnectedMessageToDiscord
       );
       this.channel.client.removeListener('message', this.sendMessageToGame);
-      embed.setDescription(':x: Disabled chat bridge');
-    } else {
-      embed.setDescription(
-        'Tried to stop chatbridge in this channel but something went wrong!'
-      );
     }
-    this.channel.send(embed);
   }
 
   async sendChatMessageToDiscord(chatMessage) {
-    let blockedPrefixes = this.config.chatChannelBlockedPrefixes;
+    let blockedPrefixes = this.config.chatChannelBlockedPrefixes.filter(Boolean);
 
     let messageStartsWithABlockedPrefix = message => {
       let found;
@@ -254,32 +242,30 @@ class ChatBridgeChannel {
     this.channel.send(embed);
   }
 
-  sendMessageToGame(message) {
+  async sendMessageToGame(message) {
     if (
       !message.author.bot &&
       message.channel.id === this.channel.id &&
       message.author.id !== message.client.user.id &&
       !message.content.startsWith(message.guild.commandPrefix)
     ) {
-      sevenDays
-        .sendMessage({
-          ip: this.sdtdServer.ip,
-          port: this.sdtdServer.webPort,
-          authName: this.sdtdServer.authName,
-          authToken: this.sdtdServer.authToken,
-          message: `[${message.author.username}]: ${message.cleanContent}`
-        })
-        .exec({
-          error: error => {
-            sails.log.error(
-              `HOOK discordBot:chatBridgeChannel - sending discord message to game ${error}`, {server: this.sdtdServer}
-            );
-            message.react('⚠');
-          },
-          success: () => {
-            return true;
-          }
-        });
+
+      try {
+        const cpmVersion = await sails.helpers.sdtd.checkCpmVersion(this.sdtdServer.id);
+        if (cpmVersion) {
+          let chatBridgeDCPrefix = ((this.config.chatBridgeDCPrefix) ? this.config.chatBridgeDCPrefix : '');
+          let chatBridgeDCSuffix = ((this.config.chatBridgeDCSuffix) ? this.config.chatBridgeDCSuffix : '');
+          await sails.helpers.sdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(this.sdtdServer), `say2 "${chatBridgeDCPrefix}${message.author.username}[-]" "${chatBridgeDCSuffix}${message.cleanContent}"`);
+        } else
+        {
+          await sails.helpers.sdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(this.sdtdServer), `say "[${message.author.username}]: ${message.cleanContent}"`);
+        }
+      } catch (error) {
+        sails.log.error(
+          `HOOK discordBot:chatBridgeChannel - sending discord message to game ${error}`, {server: this.sdtdServer}
+        );
+        message.react('⚠');
+      }
     }
   }
 }

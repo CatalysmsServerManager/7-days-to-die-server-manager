@@ -45,9 +45,9 @@ async function sendMsg(server, message, player) {
   if (cpmVersion) {
     let serverName;
     if (replyServerName) {serverName = replyServerName;} else {serverName = 'CSMM';}
-    command = `pm2 "${serverName}" ${player.steamId} "${message}"`;
+    command = `pm2 "${serverName}" ${player.entityId} "${message}"`;
   } else {
-    command = `pm ${player.steamId} "${message}"`;
+    command = `pm ${player.entityId} "${message}"`;
   }
 
   return sails.helpers.sdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(server), command);

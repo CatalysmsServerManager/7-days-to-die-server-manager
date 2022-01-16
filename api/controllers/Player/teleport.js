@@ -1,5 +1,3 @@
-const sevenDays = require('machinepack-7daystodiewebapi');
-
 module.exports = {
 
   friendlyName: 'Teleport player',
@@ -48,40 +46,16 @@ module.exports = {
    */
 
   fn: async function (inputs, exits) {
+    sails.log.debug(`API - Player:teleport - teleporting player ${inputs.playerId}`, {playerId: inputs.playerId});
 
-    try {
+    const player = await Player.findOne(inputs.playerId).populate('server');
+    const server = player.server;
 
-      sails.log.debug(`API - Player:teleport - teleporting player ${inputs.playerId}`, {playerId: inputs.playerId});
+    const response = await sails.helpers.sdtdApi.executeConsoleCommand(
+      SdtdServer.getAPIConfig(server),
+      `teleportplayer ${player.entityId} ${inputs.coordX} ${inputs.coordY} ${inputs.coordZ}`
+    );
 
-      let player = await Player.findOne(inputs.playerId).populate('server');
-      let server = player.server;
-
-      sevenDays.teleportPlayer({
-        ip: server.ip,
-        port: server.webPort,
-        authName: server.authName,
-        authToken: server.authToken,
-        playerId: player.steamId,
-        coordinates: `${inputs.coordX} ${inputs.coordY} ${inputs.coordZ}`
-      }).exec({
-        success: () => {
-          sails.log.debug(`API - Player:teleport - Successfully teleported player ${inputs.playerId} to ${inputs.coordX} ${inputs.coordY} ${inputs.coordZ}`, {player, server});
-          return exits.success();
-        },
-        error: (error) => {
-          sails.log.error(`API - Player:teleport - ${error}`, {playerId: inputs.playerId});
-          return exits.error(error);
-        }
-      });
-
-
-    } catch (error) {
-      sails.log.error(`API - Player:teleport - ${error}`, {playerId: inputs.playerId});
-      return exits.error(error);
-    }
-
-
-
-
+    return exits.success(response);
   }
 };
