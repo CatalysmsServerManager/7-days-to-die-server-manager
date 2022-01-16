@@ -121,26 +121,26 @@ Handlebars.registerHelper('randList', function (...options) {
 });
 
 
-Handlebars.registerHelper('setVar', async function(name, value) {
-  if (!this.server) {
+Handlebars.registerHelper('setVar', async function setVar(name, value, options) {
+  if (!options.data.root.server) {
     throw new Error('Persistent variables can only be used in context of a server, this is likely an implementation error');
   }
 
-  await PersistentVariablesManager.set(this.server, name, value);
+  await PersistentVariablesManager.set(options.data.root.server, name, value);
 });
 
-Handlebars.registerHelper('getVar', async function(name) {
-  if (!this.server) {
+Handlebars.registerHelper('getVar', async function getVar(name, options) {
+  if (!options.data.root.server) {
     throw new Error('Persistent variables can only be used in context of a server, this is likely an implementation error');
   }
-  return await PersistentVariablesManager.get(this.server, name);
+  return PersistentVariablesManager.get(options.data.root.server, name);
 });
 
-Handlebars.registerHelper('delVar', async function(name) {
-  if (!this.server) {
+Handlebars.registerHelper('delVar', async function delVar(name, options) {
+  if (!options.data.root.server) {
     throw new Error('Persistent variables can only be used in context of a server, this is likely an implementation error');
   }
-  await PersistentVariablesManager.del(this.server, name);
+  await PersistentVariablesManager.del(options.data.root.server, name);
 });
 
 
