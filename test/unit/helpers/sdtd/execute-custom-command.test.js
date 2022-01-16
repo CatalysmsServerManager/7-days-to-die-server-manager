@@ -404,6 +404,36 @@ say "1 - 1 = {{subtract 1 1}}"
 
       expect(sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg).to.equal('Counter is at: 5');
     });
+
+
+    xit('"Shrodingers variable"', async () => {
+      const template = `
+{{setVar (add "player:counter:" player.steamId) 0}}
+var is {{getVar (add "player:counter:" player.steamId)}}
+{{setVar (add "player:counter:" player.steamId) (add 1 (getVar (add "player:counter:" player.steamId))) }}
+var is {{getVar (add "player:counter:" player.steamId)}}`;
+
+      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template, { player: sails.testPlayer });
+
+
+      expect(sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg).to.equal(`var is 0
+
+var is 1`);
+    });
+
+
+    it('Allows using persistent variables inside each block', async () => {
+      const templateSet = '{{setVar "test" player.steamId}}';
+
+      const template = `{{#each server.onlinePlayers}}
+      player {{getVar "test"}}
+      {{/each}}`;
+
+      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, templateSet, { player: sails.testPlayer });
+      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template, { player: sails.testPlayer });
+
+      expect(sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg).to.equal(`player ${sails.testPlayer.steamId}`);
+    });
   });
 
 });
