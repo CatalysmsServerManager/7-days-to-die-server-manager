@@ -33,7 +33,9 @@ module.exports = {
       });
     }
 
-    inputs.data.server = server;
+    if (inputs.data.server) {
+      inputs.data.server = Object.assign(inputs.data.server, server);
+    }
 
     const command = new CSMMCommand(server, inputs.template, inputs.data);
 
