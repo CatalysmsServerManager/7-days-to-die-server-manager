@@ -13,7 +13,7 @@
     "@streammedev/hhmmss": "^1.0.0",
     "7daystodie-api-wrapper": "2.2.0",
     "async": "3.2.1",
-    "bull": "^3.29.0",
+    "bull": "^4.2.0",
     "bull-board": "^2.1.2",
     "concurrently": "^6.2.1",
     "cron-parser": "^4.2.1",
@@ -51,7 +51,7 @@
     "sequelize": "^6.6.5",
     "sequelize-cli": "^6.2.0",
     "split-string": "^6.1.0",
-    "validator": "^13.6.0",
+    "validator": "^13.7.0",
     "winston": "^3.3.3",
     "winston-loki": "^6.0.1"
   },
