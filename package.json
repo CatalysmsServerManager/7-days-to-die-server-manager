@@ -43,7 +43,7 @@
     "request-promise-native": "^1.0.9",
     "safe-regex": "^2.1.1",
     "sails": "^1.4.4",
-    "sails-hook-grunt": "^4.0.1",
+    "sails-hook-grunt": "^5.0.0",
     "sails-hook-orm": "^3.0.2",
     "sails-hook-sockets": "^2.0.1",
     "sails-mysql": "^1.0.2",
