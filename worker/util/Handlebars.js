@@ -125,6 +125,12 @@ Handlebars.registerHelper('setVar', async function setVar(name, value, options) 
   if (!options.data.root.server) {
     throw new Error('Persistent variables can only be used in context of a server, this is likely an implementation error');
   }
+  if(!name) {
+    throw new Error('setVar: You must provide the variable name');
+  }
+  if(!value) {
+    throw new Error('setVar: You must provide the variable value');
+  }
 
   await PersistentVariablesManager.set(options.data.root.server, name, value);
 });
@@ -133,6 +139,10 @@ Handlebars.registerHelper('getVar', async function getVar(name, options) {
   if (!options.data.root.server) {
     throw new Error('Persistent variables can only be used in context of a server, this is likely an implementation error');
   }
+  if(!name) {
+    throw new Error('getVar: You must provide the variable name');
+  }
+
   return PersistentVariablesManager.get(options.data.root.server, name);
 });
 
@@ -140,6 +150,10 @@ Handlebars.registerHelper('delVar', async function delVar(name, options) {
   if (!options.data.root.server) {
     throw new Error('Persistent variables can only be used in context of a server, this is likely an implementation error');
   }
+  if(!name) {
+    throw new Error('delVar: You must provide the variable name');
+  }
+
   await PersistentVariablesManager.del(options.data.root.server, name);
 });
 
