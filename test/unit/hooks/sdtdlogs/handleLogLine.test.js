@@ -147,6 +147,7 @@ describe('sdtdLogs#handleLogLine', () => {
     expect(result.type).to.eq('playerConnected');
     expect(result.data.playerName).to.eq('Catalysm');
     expect(result.data.steamId).to.eq('76561198028175941');
+    expect(result.data.crossId).to.eq('EOS_0002b5d970954287afdcb5dc35af0424');
     expect(result.data.entityId).to.eq('171');
     // I don't think it makes sense to check the actual country, just that something gets set
     expect(result.data.country).to.not.be.null;
