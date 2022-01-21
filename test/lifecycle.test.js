@@ -62,7 +62,6 @@ before(async function () {
 
         playerTracking: false,
         discordBot: false,
-        sdtdlogs: false,
         //highpingkick: false
       },
       log: { level: process.env.CSMM_LOGLEVEL || 'info' },
@@ -183,6 +182,9 @@ beforeEach(async function () {
   });
   mockAppLowPriv.use(sails.hooks.http.app);
   sails.hooks.http.mockAppLowPriv = mockAppLowPriv;
+
+  await sails.hooks.sdtdlogs.stop(sails.testServer.id);
+
 });
 
 function clearRedis() {
