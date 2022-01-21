@@ -21,6 +21,8 @@ class SdtdSSE extends LoggingObject {
     this.throttleDestructionTimeout = null;
     this.throttleReconnectTimeout = null;
 
+    this.errorEmitLock = false;
+
 
 
     this.throttledFunction.on('normal', () => {
@@ -38,7 +40,7 @@ class SdtdSSE extends LoggingObject {
     this.reconnectInterval = setInterval(() => this.reconnectListener(), 30000);
   }
 
-  reconnectListener() {
+  async reconnectListener() {
     if (!this.eventSource) {
       // Event source isn't active, we should not be reconnecting it
       return;
@@ -48,9 +50,13 @@ class SdtdSSE extends LoggingObject {
       return;
     }
 
-    sails.log.debug(`Trying to reconnect SSE for server ${this.server.id}`, { serverId: this.server.id });
-    this.destroy();
-    this.start();
+    sails.log.debug(`Sending keep-alive message for server ${this.server.id}`, { serverId: this.server.id });
+
+    try {
+      await sails.helpers.sdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(this.server), 'version');
+    } catch (error) {
+      sails.log.debug(`Failed to send keep-alive message for server ${this.server.id}`, { serverId: this.server.id, error });
+    }
   }
 
   get url() {
@@ -70,8 +76,14 @@ class SdtdSSE extends LoggingObject {
     this.eventSource.addEventListener('logLine', this.listener);
     this.eventSource.onerror = e => {
       sails.log.warn(`SSE error for server ${this.server.id}`, { server: this.server, error: e });
+      if (!this.errorEmitLock) {
+        this.emit('connectionLost', {reason: 'A connection error occurred'});
+        this.errorEmitLock = true;
+      }
     };
     this.eventSource.onopen = () => {
+      this.emit('connected');
+      this.errorEmitLock = false;
       sails.log.info(`Opened a SSE channel for server ${this.server.id}`, { server: this.server });
     };
   }
@@ -85,6 +97,8 @@ class SdtdSSE extends LoggingObject {
     this.eventSource.removeEventListener('logLine', this.listener);
     this.eventSource.close();
     this.eventSource = null;
+    this.emit('connectionLost', {reason: 'destroyed'});
+
   }
 
   async SSEListener(data) {

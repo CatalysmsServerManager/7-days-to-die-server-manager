@@ -6,7 +6,7 @@ module.exports = async function hooks(job) {
 };
 
 
-async function handle({ data: eventData, type: eventType, server }) {
+async function handle({ data: eventData = {}, type: eventType, server }) {
   // Set this prop so this data can be passed around easier
   eventData.server = server;
 

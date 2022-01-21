@@ -69,6 +69,8 @@
               <option value="playerKilled">Player kills player</option>
               <option value="playerSuicide">Player suicide</option>
               <option value="logLine">Log line</option>
+              <option value="connected">Connected to gameserver</option>
+              <option value="connectionLost">Disconnected from gameserver</option>
             </select>
             <small id="hooks-new-event-help" class="form-text text-muted"
               >Which event will trigger this hook.</small

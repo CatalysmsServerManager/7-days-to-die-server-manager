@@ -57,7 +57,7 @@ module.exports.custom = {
 
   // Custom hooks
 
-  supportedHooks: ['playerConnected', 'playerDisconnected', 'chatMessage', 'playerDeath', 'playerJoined', 'playerLevel', 'zombieKilled', 'animalKilled', 'playerKilled', 'logLine', 'playerSuicide'],
+  supportedHooks: ['playerConnected', 'playerDisconnected', 'chatMessage', 'playerDeath', 'playerJoined', 'playerLevel', 'zombieKilled', 'animalKilled', 'playerKilled', 'logLine', 'playerSuicide', 'connected', 'connectionLost'],
 
   // DONORS
   donorConfig: {

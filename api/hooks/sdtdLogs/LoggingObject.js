@@ -10,6 +10,8 @@ class LoggingObject extends EventEmitter {
     }
 
     this.server = server;
+    this.on('connected', (e) => sails.helpers.getQueueObject('hooks').add({ type: 'connected', data: e, server: this.server }));
+    this.on('connectionLost', (e) => sails.helpers.getQueueObject('hooks').add({ type: 'connectionLost', data: e, server: this.server }));
   }
 
   async start() { throw new Error('Not implemented'); }

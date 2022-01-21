@@ -222,7 +222,7 @@ module.exports = function sdtdLogs(sails) {
 
       eventEmitter.on('connectionLost', async function (eventMsg) {
         if (eventMsg) {
-          eventMsg.server = _.omit(server, 'authName', 'authToken');;
+          eventMsg.server = _.omit(server, 'authName', 'authToken');
         }
 
         sails.sockets.broadcast(server.id, 'connectionLost', eventMsg);
@@ -231,12 +231,12 @@ module.exports = function sdtdLogs(sails) {
           notificationType: 'connectionLost',
           msg: eventMsg
         });
-        sails.log.debug(`Lost connection to server ${server.name}`, {server});
+        sails.log.info(`Lost connection to server ${server.name}`, {server, eventMsg});
       });
 
       eventEmitter.on('connected', async function (eventMsg) {
         if (eventMsg) {
-          eventMsg.server = _.omit(server, 'authName', 'authToken');;
+          eventMsg.server = _.omit(server, 'authName', 'authToken');
         }
 
         sails.sockets.broadcast(server.id, 'connected', eventMsg);
@@ -245,7 +245,7 @@ module.exports = function sdtdLogs(sails) {
           notificationType: 'connected'
         });
 
-        sails.log.debug(`Connected to server ${server.name}`, {server});
+        sails.log.info(`Connected to server ${server.name}`, {server, eventMsg});
       });
 
       eventEmitter.on('playerDeath', function (deathMessage) {
