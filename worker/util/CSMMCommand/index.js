@@ -2,13 +2,19 @@ const AddCurrency = require('../../../worker/util/customFunctions/addCurrency');
 const SendDiscord = require('../../../worker/util/customFunctions/sendDiscord');
 const SetRole = require('../../../worker/util/customFunctions/setRole');
 const Wait = require('../../../worker/util/customFunctions/wait');
+const DelVar = require('../customFunctions/persistentVariables/delVar');
+const GetVar = require('../customFunctions/persistentVariables/getVar');
+const SetVar = require('../customFunctions/persistentVariables/setVar');
 const Handlebars = require('../Handlebars');
 
 const supportedFunctions = [
   new Wait(),
   new AddCurrency(),
   new SetRole(),
-  new SendDiscord()
+  new SendDiscord(),
+  new GetVar(),
+  new SetVar(),
+  new DelVar()
 ];
 
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
@@ -95,22 +101,12 @@ module.exports = class CSMMCommand {
 
   async execute() {
     for (const command of this.template) {
-      // Check if the command matches any custom functions
-      const customFunction = checkForCustomFunction(command);
-      if (customFunction) {
-        // If we find a custom function, execute it
-        const [result, customFunctionArgs] = await this._executeCustomFunction(customFunction, command, this.server);
-        this.results.push({
-          command: customFunction.name,
-          parameters: command,
-          result,
-          customFunctionArgs
-        });
-      } else {
-        // If the command is not a custom function, execute it as a game command
-        let commandResult = await this._executeGameCommand(this.server, command);
-        this.results.push(commandResult);
-      }
+      const [parsedCommand, results] = await this.resolveCustomFunctions(command);
+      this.results = this.results.concat(results);
+      // If the command is not a custom function, execute it as a game command
+      let commandResult = await this._executeGameCommand(this.server, parsedCommand);
+      this.results.push(commandResult);
+
     }
     await this._saveResult('execute');
     return this.results;
@@ -158,12 +154,32 @@ module.exports = class CSMMCommand {
     const args = getArgs(fnc, command);
     try {
       const res = await fnc.run(server, args);
-      return [res, args];
+      return res;
     } catch (error) {
       return [error.message, args];
     }
   }
 
+  // Custom functions can be nested inside a string
+  async resolveCustomFunctions(command) {
+    const results = [];
+    const fnNames = supportedFunctions.map(fnc => fnc.name).join('|');
+    const fnRegex = new RegExp(`(${fnNames})\\([^)(]+\\)`, 'i');
+
+    let match = fnRegex.exec(command);
+
+    while (match !== null) {
+      const fn = checkForCustomFunction(match[0]);
+      if (fn) {
+        const res = await this._executeCustomFunction(fn, match[0], this.server);
+        command = command.replace(match[0], res);
+        results.push({result: res, parameters: match[0]});
+      }
+      match = fnRegex.exec(command);
+    }
+
+    return [command, results];
+  }
 };
 
 
@@ -181,4 +197,6 @@ function checkForCustomFunction(command) {
   }
   return false;
 }
+
+
 
