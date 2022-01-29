@@ -157,6 +157,15 @@ Handlebars.registerHelper('delVar', async function delVar(name, options) {
   await PersistentVariablesManager.del(options.data.root.server, name);
 });
 
+Handlebars.registerHelper('execCmd', async function execCmd(command, options) {
+  if (!options.data.root.server) {
+    throw new Error('execCmd can only be used in context of a server, this is likely an implementation error');
+  }
 
+  const server = options.data.root.server;
+  const {result} = await sails.helpers.sdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(server), command);
+
+  return result;
+});
 
 module.exports = Handlebars;
