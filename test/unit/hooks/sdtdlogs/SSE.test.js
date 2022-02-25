@@ -89,6 +89,21 @@ describe('7d2dSSE', function () {
     clock.restore();
   });
 
+  it('Attempts to reconnect SSE when no messages have been received for a long time', async () => {
+    clock = sinon.useFakeTimers();
+    const sse = new SdtdSSE({ ...sails.testServer, config: sails.testServerConfig });
+
+    const reconnectSpy = sandbox.spy(sse, 'reconnectListener');
+
+    await clock.tickAsync(30000 - 1);
+    expect(reconnectSpy).to.not.have.been.calledOnce;
+    await clock.tickAsync(1);
+
+    expect(reconnectSpy).to.have.been.calledOnce;
+
+    clock.restore();
+  });
+
   it('Should cancel destruction by throttling if server goes back to normal quickly enough', async () => {
     clock = sinon.useFakeTimers();
     process.env.SSE_THROTTLE_DELAY = 1000 * 60 * 10;
