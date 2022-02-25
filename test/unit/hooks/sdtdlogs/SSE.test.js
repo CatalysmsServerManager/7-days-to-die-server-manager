@@ -95,7 +95,7 @@ describe('7d2dSSE', function () {
 
     const reconnectSpy = sandbox.spy(sse, 'reconnectListener');
 
-    await clock.tickAsync(30000 - 1);
+    await clock.tickAsync(300000 - 1);
     expect(reconnectSpy).to.not.have.been.calledOnce;
     await clock.tickAsync(1);
 
