@@ -12,6 +12,7 @@ class SdtdSSE extends LoggingObject {
     const RATE_LIMIT_AMOUNT = parseInt(process.env.SSE_RATE_LIMIT_AMOUNT, 10) || 2500;
     const THROTTLE_DELAY = parseInt(process.env.SSE_THROTTLE_DELAY, 10) || 1000 * 60 * 1;
     const SSE_THROTTLE_RECONNECT_DELAY = parseInt(process.env.SSE_THROTTLE_RECONNECT_DELAY, 10) || 1000 * 60 * 5;
+    const SSE_RECONNECT_INTERVAL = parseInt(process.env.SSE_RECONNECT_INTERVAL, 10) || 1000 * 60 * 5;
 
     this.SSERegex = /\d+-\d+-\d+T\d+:\d+:\d+ \d+\.\d+ INF (.+)/;
     this.throttledFunction = new ThrottledFunction(this.SSEListener.bind(this), RATE_LIMIT_AMOUNT, RATE_LIMIT_MINUTES);
@@ -35,7 +36,7 @@ class SdtdSSE extends LoggingObject {
       this.throttleReconnectTimeout = setTimeout(this.start.bind(this), SSE_THROTTLE_RECONNECT_DELAY);
     });
 
-    this.reconnectInterval = setInterval(() => this.reconnectListener(), 30000);
+    this.reconnectInterval = setInterval(() => this.reconnectListener(), SSE_RECONNECT_INTERVAL);
   }
 
   reconnectListener() {
