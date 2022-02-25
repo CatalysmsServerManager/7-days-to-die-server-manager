@@ -95,7 +95,7 @@ module.exports = {
 
     if (existsCheck) {
       sails.log.info(
-        `${user.username} tried to add a new server - ${sdtdServer.name} - but it is duplicate`, { user }
+        `${user.username} tried to add a new server - ${sdtdServer.name} - but it is duplicate`, {user}
       );
       errorResponse.duplicateCheck = true;
       return exits.badRequest(errorResponse);
@@ -104,7 +104,7 @@ module.exports = {
     if (user.servers) {
       if (user.servers.length >= maxServers) {
         sails.log.info(
-          `${user.username} tried to add a new server - ${sdtdServer.name} - Max server limit (${maxServers}) reached!`, { user }
+          `${user.username} tried to add a new server - ${sdtdServer.name} - Max server limit (${maxServers}) reached!`, {user}
         );
         errorResponse.maxLimitCheck = true;
         return exits.badRequest(errorResponse);
@@ -115,7 +115,7 @@ module.exports = {
 
     if (!serverCheck.statsResponse || !serverCheck.memResponse) {
       sails.log.info(
-        `${user.username} tried to add a new server - ${sdtdServer.name} - but cannot connect - ${sdtdServer.ip}:${sdtdServer.webPort}`, { user }
+        `${user.username} tried to add a new server - ${sdtdServer.name} - but cannot connect - ${sdtdServer.ip}:${sdtdServer.webPort}`, {user}
       );
       errorResponse.statsResponse = serverCheck.statsResponse;
       errorResponse.commandResponse = serverCheck.memResponse;
@@ -131,7 +131,7 @@ module.exports = {
 
     if (addedServer) {
       sails.log.warn(
-        `${user.username} added a new server - ${addedServer.name}`, { user, server: addedServer }
+        `${user.username} added a new server - ${addedServer.name}`, {user, server: addedServer}
       );
       await sails.helpers.sdtd.loadAllPlayerData(addedServer.id);
       errorResponse.server = addedServer;
@@ -192,6 +192,7 @@ module.exports = {
       }
 
       await sails.hooks.sdtdlogs.start(addedServer.id);
+      await sails.hooks.sdtdlogs.createLogObject(addedServer.id);
 
       return exits.success(errorResponse);
     } else {

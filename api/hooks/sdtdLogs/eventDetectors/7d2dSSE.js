@@ -34,6 +34,23 @@ class SdtdSSE extends LoggingObject {
       this.throttleDestructionTimeout = setTimeout(this.destroy.bind(this), THROTTLE_DELAY);
       this.throttleReconnectTimeout = setTimeout(this.start.bind(this), SSE_THROTTLE_RECONNECT_DELAY);
     });
+
+    this.reconnectInterval = setInterval(() => this.reconnectListener(), 30000);
+  }
+
+  reconnectListener() {
+    if (!this.eventSource) {
+      // Event source isn't active, we should not be reconnecting it
+      return;
+    }
+
+    if (this.eventSource.readyState === EventSource.OPEN && (this.lastMessage > (Date.now() - 300000))) {
+      return;
+    }
+
+    sails.log.debug(`Trying to reconnect SSE for server ${this.server.id}`, { serverId: this.server.id });
+    this.destroy();
+    this.start();
   }
 
   get url() {
@@ -48,7 +65,7 @@ class SdtdSSE extends LoggingObject {
 
     sails.log.info(`Starting SSE`, { server: this.server });
 
-    this.eventSource = new EventSource(encodeURI(this.url), { headers: { Connection: 'keep-alive' } });
+    this.eventSource = new EventSource(encodeURI(this.url));
     this.eventSource.reconnectInterval = 5000;
     this.eventSource.addEventListener('logLine', this.listener);
     this.eventSource.onerror = e => {
