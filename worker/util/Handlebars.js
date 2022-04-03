@@ -183,4 +183,8 @@ Handlebars.registerHelper('times', function (n, block) {
   return accum;
 });
 
+Handlebars.registerHelper('datePassed', function (date) {
+  return ((Date.now() - Date.parse(date)) >= 0);
+});
+
 module.exports = Handlebars;
