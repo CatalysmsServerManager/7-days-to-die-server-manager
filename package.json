@@ -8,7 +8,7 @@
     "@sailshq/connect-redis": "^3.2.1",
     "@sailshq/socket.io-redis": "^5.2.0",
     "@sentry/core": "^6.16.1",
-    "@sentry/node": "^6.16.1",
+    "@sentry/node": "^6.19.6",
     "@sentry/tracing": "^6.13.1",
     "@streammedev/hhmmss": "^1.0.0",
     "7daystodie-api-wrapper": "2.2.0",
