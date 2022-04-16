@@ -48,15 +48,13 @@ class listTele extends SdtdCommand {
       return chatMessage.reply('listTeleNoTeleportsFound');
     }
 
-    chatMessage.reply('listTeleResponse', {
+    await chatMessage.reply('listTeleResponse', {
       totalTeleports: playerTeleports.length
     });
-    let stringToSend = new String();
-    playerTeleports.forEach(teleport => {
-      stringToSend += `${teleport.publicEnabled ? 'PUBLIC' : 'PRIVATE'}- ${teleport.name} at ${teleport.x},${teleport.y},${teleport.z}`;
-    });
 
-    return chatMessage.reply(stringToSend);
+    for (const teleport of playerTeleports) {
+      await chatMessage.reply(`${teleport.publicEnabled ? 'PUBLIC' : 'PRIVATE'}- ${teleport.name} at ${teleport.x},${teleport.y},${teleport.z}`);
+    }
   }
 }
 

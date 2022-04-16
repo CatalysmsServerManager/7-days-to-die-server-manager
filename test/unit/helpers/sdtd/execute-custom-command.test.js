@@ -264,6 +264,31 @@ say "1 - 1 = {{subtract 1 1}}"
       }
     });
 
+    describe('datePassed helper', () => {
+      it('Detects when a date has passed', async () => {
+        const today = new Date();
+        const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000);
+        const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+        {{#if (datePassed "${yesterday.toISOString()}")}}
+          works
+        {{/if}}
+        `);
+        expect(res).to.have.length(1);
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.be.eq(`works`);
+      });
+
+      it('Detects when a date has not passed', async () => {
+        const today = new Date();
+        const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
+        const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+        {{#if (datePassed "${tomorrow.toISOString()}")}}
+          works
+        {{/if}}
+        `);
+        expect(res).to.have.length(0);
+      });
+    });
+
 
     describe('times helper', () => {
       it('Can do a simple loop', async () => {
