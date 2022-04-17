@@ -71,6 +71,7 @@ class ExecCommand extends Commando.Command {
       );
 
       let successEmbed = new Discord.MessageEmbed();
+      successEmbed.setFooter(`Server: ${sdtdServer.name}`);
       successEmbed.addField(':inbox_tray: Input', `${args.command}`)
         .setColor('GREEN');
 
@@ -78,7 +79,7 @@ class ExecCommand extends Commando.Command {
         try {
           fs.writeFile(`${sdtdServer.name}_${args.command}_output.txt`, response.result, err => {
             if (err) {
-              sails.log.error(err, {server: sdtdServer});
+              sails.log.error(err, { server: sdtdServer });
             }
             successEmbed.addField(':outbox_tray: Output', `Logging to file`);
             msg.channel.send({
@@ -90,15 +91,15 @@ class ExecCommand extends Commando.Command {
             }).then(() => {
               fs.unlink(`${sdtdServer.name}_${args.command}_output.txt`, err => {
                 if (err) {
-                  sails.log.error(err, {server: sdtdServer});
+                  sails.log.error(err, { server: sdtdServer });
                 }
               });
             }).catch(e => {
-              sails.log.error(`DISCORD COMMAND - EXECCOMMAND - ${e}`, {server: sdtdServer});
+              sails.log.error(`DISCORD COMMAND - EXECCOMMAND - ${e}`, { server: sdtdServer });
             });
           });
         } catch (error) {
-          sails.log.error(`DISCORD COMMAND - EXECCOMMAND - ${error}`, {server: sdtdServer});
+          sails.log.error(`DISCORD COMMAND - EXECCOMMAND - ${error}`, { server: sdtdServer });
         }
 
       } else {
