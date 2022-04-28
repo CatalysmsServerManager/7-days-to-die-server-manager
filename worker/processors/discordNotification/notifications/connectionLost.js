@@ -7,7 +7,7 @@ class ConnectionLost extends DiscordNotification {
 
   async makeEmbed(event, embed) {
     embed.setTitle('Lost connection to CSMM')
-      .addField('Reason', event.msg.output)
+      .addField('Reason', event.msg.reason)
       .setColor('RED');
     return embed;
   }

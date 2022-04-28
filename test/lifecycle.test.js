@@ -182,6 +182,9 @@ beforeEach(async function () {
   });
   mockAppLowPriv.use(sails.hooks.http.app);
   sails.hooks.http.mockAppLowPriv = mockAppLowPriv;
+
+  await sails.hooks.sdtdlogs.stop(sails.testServer.id);
+
 });
 
 function clearRedis() {
