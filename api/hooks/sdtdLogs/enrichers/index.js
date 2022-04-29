@@ -15,8 +15,8 @@ module.exports = async (event) => {
 
     return enriched;
   } catch (error) {
-    sails.log.warn('Error trying to enrich a log line, this should be OK to fail...', {server: event.server, player: event.players});
-    sails.log.error(error.message,{server: event.server, player: event.players});
+    sails.log.warn('Error trying to enrich a log line, this should be OK to fail...', { server: event.server, player: event.players });
+    sails.log.error(error, { server: event.server, player: event.players });
     return event;
   }
 };

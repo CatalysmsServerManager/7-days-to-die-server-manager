@@ -412,4 +412,36 @@ describe('sdtdLogs#handleLogLine', () => {
 
     expect(result.type).to.be.eq('logLine');
   });
+
+  it('Detects steam ID from a logLine', () => {
+    const logLine = {
+      date: '2017-11-14',
+      time: '14:50:49',
+      uptime: '133.559',
+      msg: `Hey, here's a steam ID 76561198028175941!`,
+      trace: '',
+      type: 'Log'
+    };
+
+    const result = handleLogLine(logLine);
+
+    expect(result.type).to.be.eq('logLine');
+    expect(result.data.steamId).to.eq('76561198028175941');
+  });
+
+  it('Detects cross ID from a logLine', () => {
+    const logLine = {
+      date: '2017-11-14',
+      time: '14:50:49',
+      uptime: '133.559',
+      msg: `Hey, here's a cross ID EOS_0002b5d970954287afdcb5dc35af0424!`,
+      trace: '',
+      type: 'Log'
+    };
+
+    const result = handleLogLine(logLine);
+
+    expect(result.type).to.be.eq('logLine');
+    expect(result.data.crossId).to.eq('EOS_0002b5d970954287afdcb5dc35af0424');
+  });
 });

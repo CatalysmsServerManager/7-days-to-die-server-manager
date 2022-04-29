@@ -1,5 +1,3 @@
-const steam64Regex = new RegExp('[0-9]{17}');
-
 module.exports = async function enrichEventData(event) {
   let newData = event;
 
@@ -24,16 +22,6 @@ module.exports = async function enrichEventData(event) {
 
   let player;
 
-  // Try to find a steamID64 in the log message that we can link to a player.
-  let possibleIds = findSteamIdFromString(newData.msg);
-  if (possibleIds.length === 1) {
-    let players = await Player.find({
-      server: event.server.id,
-      steamId: possibleIds[0]
-    });
-    player = players[0];
-  }
-
   if (!_.isEmpty(event.steamId)) {
     player = await Player.findOne({
       steamId: event.steamId,
@@ -44,6 +32,13 @@ module.exports = async function enrichEventData(event) {
   if (!_.isEmpty(event.steamID)) {
     player = await Player.findOne({
       steamId: event.steamID,
+      server: event.server.id
+    });
+  }
+
+  if (!_.isEmpty(event.crossId)) {
+    player = await Player.findOne({
+      crossId: event.crossId,
       server: event.server.id
     });
   }
@@ -69,16 +64,3 @@ module.exports = async function enrichEventData(event) {
 
 };
 
-/**
- * @param {String} logLineMessage
- * @returns {Array} An array of strings that matches the steam64 regex
- */
-function findSteamIdFromString(logLineMessage) {
-  let possibleIds = steam64Regex.exec(logLineMessage);
-
-  if (!_.isArray(possibleIds)) {
-    possibleIds = [];
-  }
-
-  return possibleIds;
-}

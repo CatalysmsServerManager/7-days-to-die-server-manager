@@ -7,7 +7,7 @@ module.exports = async (event) => {
 
   if (!event.data.player) { throw new Error('Cannot store last death location when no player defined'); }
 
-  const onlinePlayers = await  sails.helpers.sdtdApi.getOnlinePlayers(SdtdServer.getAPIConfig(event.server));
+  const onlinePlayers = await sails.helpers.sdtdApi.getOnlinePlayers(SdtdServer.getAPIConfig(event.server));
 
   const player = onlinePlayers.find(p => p.steamid === event.data.player.steamId);
 
@@ -24,7 +24,7 @@ module.exports = async (event) => {
   }
 
   event.data.player = updatedPlayers[0];
-  sails.log.debug(`Updated player ${event.data.player.id} last death location to ${event.data.player.positionX},${event.data.player.positionY},${event.data.player.positionZ}`, {playerId: event.data.player.id, server:event.data.server});
+  sails.log.debug(`Updated player ${event.data.player.id} last death location to ${event.data.player.positionX},${event.data.player.positionY},${event.data.player.positionZ}`, { playerId: event.data.player.id, server: event.data.server });
 
 
   return event;
