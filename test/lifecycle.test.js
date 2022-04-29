@@ -126,8 +126,10 @@ beforeEach(async function () {
     owner: testUser.id
   }).meta({ skipAllLifecycleCallbacks: true }).fetch();
 
+
   let testPlayer = await Player.create({
     steamId: testUser.steamId,
+    crossId: `EOS_${faker.random.alphaNumeric(32)}`,
     entityId: 1,
     server: testServer.id,
     user: testUser.id,

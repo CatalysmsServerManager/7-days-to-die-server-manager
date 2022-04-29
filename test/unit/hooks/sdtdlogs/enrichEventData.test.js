@@ -54,6 +54,20 @@ describe('enrichEventData', () => {
     const result = await enrichEventData(event);
     expect(result.data.player.steamId).to.be.equal(sails.testPlayer.steamId);
   });
+
+  it('Enriches data when event.crossId', async () => {
+    const event = {
+      type: 'any',
+      data: {
+        crossId: sails.testPlayer.crossId,
+      },
+      server: sails.testServer
+    };
+
+    const result = await enrichEventData(event);
+    expect(result.data.player.crossId).to.be.equal(sails.testPlayer.crossId);
+  });
+
   it('Tries to enrich data via name', async () => {
 
     const event = {
