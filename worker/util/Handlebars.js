@@ -15,7 +15,7 @@ require('@budibase/handlebars-helpers')([
   'regex',
   'string',
   'object'
-], {handlebars: Handlebars});
+], { handlebars: Handlebars });
 
 
 
@@ -125,10 +125,10 @@ Handlebars.registerHelper('setVar', async function setVar(name, value, options) 
   if (!options.data.root.server) {
     throw new Error('Persistent variables can only be used in context of a server, this is likely an implementation error');
   }
-  if(!name) {
+  if (!name) {
     throw new Error('setVar: You must provide the variable name');
   }
-  if(!value) {
+  if (!value && value !== 0) {
     throw new Error('setVar: You must provide the variable value');
   }
 
@@ -139,7 +139,7 @@ Handlebars.registerHelper('getVar', async function getVar(name, options) {
   if (!options.data.root.server) {
     throw new Error('Persistent variables can only be used in context of a server, this is likely an implementation error');
   }
-  if(!name) {
+  if (!name) {
     throw new Error('getVar: You must provide the variable name');
   }
 
@@ -150,13 +150,41 @@ Handlebars.registerHelper('delVar', async function delVar(name, options) {
   if (!options.data.root.server) {
     throw new Error('Persistent variables can only be used in context of a server, this is likely an implementation error');
   }
-  if(!name) {
+  if (!name) {
     throw new Error('delVar: You must provide the variable name');
   }
 
   await PersistentVariablesManager.del(options.data.root.server, name);
 });
 
+Handlebars.registerHelper('execCmd', async function execCmd(command, options) {
+  if (!options.data.root.server) {
+    throw new Error('execCmd can only be used in context of a server, this is likely an implementation error');
+  }
 
+  const server = options.data.root.server;
+  const { result } = await sails.helpers.sdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(server), command);
+
+  return result;
+});
+
+
+Handlebars.registerHelper('times', function (n, block) {
+  if (n > 100) {
+    throw new Error('times: n must be less than 100');
+  }
+  var accum = '';
+  for (var i = 0; i < n; ++i) {
+    block.data.root.index = i;
+    block.data.root.isFirst = i === 0;
+    block.data.root.isLast = i === (n - 1);
+    accum += block.fn(this);
+  }
+  return accum;
+});
+
+Handlebars.registerHelper('datePassed', function (date) {
+  return ((Date.now() - Date.parse(date)) >= 0);
+});
 
 module.exports = Handlebars;

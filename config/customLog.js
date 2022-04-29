@@ -53,8 +53,25 @@ const handleInfo = format((info) => {
   return info;
 });
 
+const formatHttp = format((info) => {
+  if (info.labels.type === 'http') {
+    const {httpMethod, status, url} = info.labels;
+    info.message = `${httpMethod} ${status} ${url}`;
+  }
+  return info;
+});
+
+const omitLabels = format((info) => {
+  if (info.labels) {
+    delete info.labels;
+  }
+  return info;
+});
+
 const simpleFormat = winston.format.combine(
   handleInfo(),
+  formatHttp(),
+  omitLabels(),
   winston.format.colorize(),
   winston.format.simple()
 );

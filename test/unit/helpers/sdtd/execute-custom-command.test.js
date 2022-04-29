@@ -43,7 +43,7 @@ describe('HELPER execute-custom-command', function () {
     it('Can execute a custom function', async function () {
       const stub = sandbox.stub(wait, 'wait');
       const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, 'wait(5)', { player: sails.testPlayer });
-      expect(res).to.have.length(1);
+      expect(res).to.have.length(2);
       expect(res[0].parameters).to.be.equal('wait(5)');
       expect(res[0].result).to.be.equal('Waited for 5 seconds');
       expect(stub.calledOnce).to.be.true;
@@ -53,7 +53,7 @@ describe('HELPER execute-custom-command', function () {
     it('Handles complex arguments', async function () {
       const role = await Role.create({ name: 'test, aaa', level: 5, server: sails.testServer.id }).fetch();
       const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `setRole(${sails.testPlayer.steamId}, "${role.name}")`, { player: sails.testPlayer });
-      expect(res).to.have.length(1);
+      expect(res).to.have.length(2);
       expect(res[0].parameters).to.match(/setRole\(\d+, "test, aaa"\)/);
       expect(res[0].result).to.be.match(/Set player \d+ to role test, aaa/);
 
@@ -65,14 +65,14 @@ describe('HELPER execute-custom-command', function () {
     it('Can execute a custom function case insensitive', async function () {
       const stub = sandbox.stub(wait, 'wait');
       const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, 'wait(5)', { player: sails.testPlayer });
-      expect(res).to.have.length(1);
+      expect(res).to.have.length(2);
       expect(res[0].parameters).to.be.equal('wait(5)');
       expect(res[0].result).to.be.equal('Waited for 5 seconds');
       expect(stub.calledOnce).to.be.true;
       expect(stub).to.have.been.calledOnceWith(5);
 
       const resCase = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, 'WaIt(5)', { player: sails.testPlayer });
-      expect(resCase).to.have.length(1);
+      expect(resCase).to.have.length(2);
       expect(resCase[0].parameters).to.be.equal('WaIt(5)');
       expect(resCase[0].result).to.be.equal('Waited for 5 seconds');
       const calls = stub.getCalls();
@@ -85,9 +85,9 @@ describe('HELPER execute-custom-command', function () {
 
     it('Persists case after passing through function', async function () {
       const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, 'sendDiscord(12345, "heLlO wItH caSe")', { player: sails.testPlayer });
-      expect(res).to.have.length(1);
-      expect(res[0].customFunctionArgs).to.be.equal('12345, "heLlO wItH caSe"');
-      expect(res[0].result).to.be.equal('Invalid channel ID');
+      expect(res).to.have.length(2);
+      expect(res[0].parameters).to.be.equal('sendDiscord(12345, "heLlO wItH caSe")');
+      expect(res[0].result[0]).to.be.equal('Invalid channel ID');
     });
   });
 
@@ -263,6 +263,52 @@ say "1 - 1 = {{subtract 1 1}}"
         expect(resNumbers[i]).to.be.at.least(resNumbers[i + 1]);
       }
     });
+
+    describe('datePassed helper', () => {
+      it('Detects when a date has passed', async () => {
+        const today = new Date();
+        const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000);
+        const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+        {{#if (datePassed "${yesterday.toISOString()}")}}
+          works
+        {{/if}}
+        `);
+        expect(res).to.have.length(1);
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.be.eq(`works`);
+      });
+
+      it('Detects when a date has not passed', async () => {
+        const today = new Date();
+        const tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
+        const res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, `
+        {{#if (datePassed "${tomorrow.toISOString()}")}}
+          works
+        {{/if}}
+        `);
+        expect(res).to.have.length(0);
+      });
+    });
+
+
+    describe('times helper', () => {
+      it('Can do a simple loop', async () => {
+        const template = `{{#times 3}}first: {{isFirst}},index: {{index}},last: {{isLast}}{{/times}}`;
+
+
+        res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template, { player: sails.testPlayer });
+        expect(res).to.have.length(1);
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.be.eq(`first: true,index: 0,last: falsefirst: false,index: 1,last: falsefirst: false,index: 2,last: true`);
+      });
+      it('Rejects large numbers', async () => {
+        const template = `{{#times 101}}first: {{isFirst}},index: {{index}},last: {{isLast}}{{/times}}`;
+
+        res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template, { player: sails.testPlayer });
+        expect(res).to.have.length(1);
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.be.eq(`{{#times 101}}first: {{isFirst}},index: {{index}},last: {{isLast}}{{/times}}`);
+
+      });
+    });
+
   });
 
   describe('Extended handlebars helpers', () => {
@@ -357,83 +403,103 @@ say "1 - 1 = {{subtract 1 1}}"
 
   describe('Persistent variables', () => {
 
-    it('Can set and get a variable', async () => {
-      const template = '{{setVar "test" player.steamId}}{{getVar "test"}}';
+    describe('Handlebars integration', () => {
+      it('Can set and get a variable', async () => {
+        const template = '{{setVar "test" player.steamId}}{{getVar "test"}}';
 
-      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template, { player: sails.testPlayer });
+        await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template, { player: sails.testPlayer });
 
-      expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.equal(sails.testPlayer.steamId);
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.equal(sails.testPlayer.steamId);
+      });
+
+      it('Can set a value of 0', async () => {
+        const template = '{{setVar "test" 0}}{{getVar "test"}}';
+
+        await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template, { player: sails.testPlayer });
+
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.equal('0');
+      });
+
+      it('Persists across multiple calls', async () => {
+        const template1 = '{{setVar "test" player.steamId}}; say "Set the var!"';
+        const template2 = 'say "The var is: {{getVar "test"}}"';
+
+        await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template1, { player: sails.testPlayer });
+        await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template2, { player: sails.testPlayer });
+
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(1).lastArg).to.equal(`say "The var is: ${sails.testPlayer.steamId}"`);
+      });
+
+      it('Can delete variables', async () => {
+        const template1 = '{{setVar "test" player.steamId}}; say "Set the var!"';
+        const template2 = 'say "The var is: {{getVar "test"}}"';
+        const template3 = '{{delVar "test"}}; say "Delete the var!"';
+        const template4 = 'say "The var is: {{getVar "test"}}"';
+
+        await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template1, { player: sails.testPlayer });
+        await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template2, { player: sails.testPlayer });
+        await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template3, { player: sails.testPlayer });
+        await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template4, { player: sails.testPlayer });
+
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(1).lastArg).to.equal(`say "The var is: ${sails.testPlayer.steamId}"`);
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(3).lastArg).to.equal(`say "The var is: "`);
+      });
+
+
+      it('Can do a counter', async () => {
+        const incr = `{{setVar "counter" (add (getVar "counter") 1)}}`;
+        const print = `Counter is at: {{getVar "counter"}}`;
+
+        await sails.helpers.sdtd.executeCustomCmd(sails.testServer, incr, { player: sails.testPlayer });
+        await sails.helpers.sdtd.executeCustomCmd(sails.testServer, incr, { player: sails.testPlayer });
+        await sails.helpers.sdtd.executeCustomCmd(sails.testServer, incr, { player: sails.testPlayer });
+        await sails.helpers.sdtd.executeCustomCmd(sails.testServer, incr, { player: sails.testPlayer });
+        await sails.helpers.sdtd.executeCustomCmd(sails.testServer, incr, { player: sails.testPlayer });
+        await sails.helpers.sdtd.executeCustomCmd(sails.testServer, print, { player: sails.testPlayer });
+
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg).to.equal('Counter is at: 5');
+      });
+
+      it('Allows using persistent variables inside each block', async () => {
+        const templateSet = '{{setVar "test" player.steamId}}';
+
+        const template = `{{#each server.onlinePlayers}}
+            player {{getVar "test"}}
+            {{/each}}`;
+
+        await sails.helpers.sdtd.executeCustomCmd(sails.testServer, templateSet, { player: sails.testPlayer });
+        await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template, { player: sails.testPlayer });
+
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg).to.equal(`player ${sails.testPlayer.steamId}`);
+      });
     });
 
-    it('Persists across multiple calls', async () => {
-      const template1 = '{{setVar "test" player.steamId}}; say "Set the var!"';
-      const template2 = 'say "The var is: {{getVar "test"}}"';
+    describe('Custom function integration', () => {
+      it('Can set and get a var', async () => {
+        const template = [
+          'setVar("test", 1)',
+          'say "testVar = getVar("test")"',
+        ].join(';');
 
-      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template1, { player: sails.testPlayer });
-      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template2, { player: sails.testPlayer });
+        await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template, { player: sails.testPlayer });
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg).to.equal(`say "testVar = 1"`);
+      });
 
-      expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(1).lastArg).to.equal(`say "The var is: ${sails.testPlayer.steamId}"`);
-    });
+      it('Can do nested stuff', async () => {
+        const template = [
+          'setVar("test", 1)',
+          'setVar("test2", getVar("test"))',
+          'say "testVar = getVar("test2")"',
+        ].join(';');
 
-    it('Can delete variables', async () => {
-      const template1 = '{{setVar "test" player.steamId}}; say "Set the var!"';
-      const template2 = 'say "The var is: {{getVar "test"}}"';
-      const template3 = '{{delVar "test"}}; say "Delete the var!"';
-      const template4 = 'say "The var is: {{getVar "test"}}"';
+        await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template, { player: sails.testPlayer });
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg).to.equal(`say "testVar = 1"`);
+      });
 
-      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template1, { player: sails.testPlayer });
-      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template2, { player: sails.testPlayer });
-      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template3, { player: sails.testPlayer });
-      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template4, { player: sails.testPlayer });
-
-      expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(1).lastArg).to.equal(`say "The var is: ${sails.testPlayer.steamId}"`);
-      expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(3).lastArg).to.equal(`say "The var is: "`);
-    });
-
-
-    it('Can do a counter', async () => {
-      const incr = `{{setVar "counter" (add (getVar "counter") 1)}}`;
-      const print = `Counter is at: {{getVar "counter"}}`;
-
-      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, incr, { player: sails.testPlayer });
-      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, incr, { player: sails.testPlayer });
-      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, incr, { player: sails.testPlayer });
-      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, incr, { player: sails.testPlayer });
-      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, incr, { player: sails.testPlayer });
-      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, print, { player: sails.testPlayer });
-
-      expect(sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg).to.equal('Counter is at: 5');
     });
 
 
-    xit('"Shrodingers variable"', async () => {
-      const template = `
-{{setVar (add "player:counter:" player.steamId) 0}}
-var is {{getVar (add "player:counter:" player.steamId)}}
-{{setVar (add "player:counter:" player.steamId) (add 1 (getVar (add "player:counter:" player.steamId))) }}
-var is {{getVar (add "player:counter:" player.steamId)}}`;
 
-      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template, { player: sails.testPlayer });
-
-
-      expect(sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg).to.equal(`var is 0
-
-var is 1`);
-    });
-
-
-    it('Allows using persistent variables inside each block', async () => {
-      const templateSet = '{{setVar "test" player.steamId}}';
-
-      const template = `{{#each server.onlinePlayers}}
-      player {{getVar "test"}}
-      {{/each}}`;
-
-      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, templateSet, { player: sails.testPlayer });
-      await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template, { player: sails.testPlayer });
-
-      expect(sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg).to.equal(`player ${sails.testPlayer.steamId}`);
-    });
   });
 
 });
