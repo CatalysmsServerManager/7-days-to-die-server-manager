@@ -9,6 +9,7 @@ async function getPlayersDataTable(req, res) {
     whereObj.or = [
       { name: { contains: req.body.searchText } },
       { steamId: { contains: req.body.searchText } },
+      { crossId: { contains: req.body.searchText } },
       { ip: { contains: req.body.searchText } }
     ];
     if (!isNaN(req.body.searchText)) {

@@ -40,6 +40,7 @@
       }
     } },
     { headerName: 'Entity ID', field: 'entityId' },
+    { headerName: 'Cross ID', field: 'crossId' },
     { headerName: 'Steam ID', field: 'steamId', width: 300, cellRenderer: (p) => {
       if (!!p.value) {
         return '<a target="_blank" href="https://steamcommunity.com/profiles/' + p.value + '">' + p.value + '</a>';
