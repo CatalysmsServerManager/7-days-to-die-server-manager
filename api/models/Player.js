@@ -28,6 +28,7 @@ module.exports = {
 
     crossId: {
       type: 'string',
+      allowNull: true
     },
 
     /**
