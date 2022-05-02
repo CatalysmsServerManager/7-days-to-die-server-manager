@@ -4,43 +4,40 @@ const crossIdRegex = /EOS_[\d\w]{32}/;
 module.exports = async (event) => {
   let player;
 
-  if (!_.isEmpty(event.data.playerID)) {
-    event.data.steamId = event.data.playerID;
+  if (!_.isEmpty(event.playerID)) {
+    event.steamId = event.playerID;
   }
 
-
-
-
-  if (!_.isEmpty(event.data.steamId)) {
+  if (!_.isEmpty(event.steamId)) {
     player = await sails.helpers.sdtd.loadPlayerData.with({
       serverId: event.server.id,
-      steamId: event.data.steamId
+      steamId: event.steamId
     });
     player = player[0];
   }
 
-  if (!_.isEmpty(event.data.crossId)) {
+  if (!_.isEmpty(event.crossId)) {
     // TODO: Replace this with a loadPlayerData call when Allocs API is updated to send it...
     player = await Player.findOne({
       server: event.server.id,
-      crossId: event.data.crossId
+      crossId: event.crossId
     });
   }
 
-  if (!_.isEmpty(event.data.steamID)) {
+  if (!_.isEmpty(event.steamID)) {
     player = await sails.helpers.sdtd.loadPlayerData.with({
       serverId: event.server.id,
-      steamId: event.data.steamID
+      steamId: event.steamID
     });
     player = player[0];
   }
 
   // If we do not find the player via steamId, we try via name.
   if (_.isUndefined(player)) {
-    if (!_.isEmpty(event.data.playerName)) {
+    if (!_.isEmpty(event.playerName)) {
 
       player = await Player.findOne({
-        name: event.data.playerName,
+        name: event.playerName,
         server: event.server.id
       });
     }
@@ -49,9 +46,9 @@ module.exports = async (event) => {
   // If at this point we still haven't found the player,
   // We check if there is a 'msg' from the log line and try to extract an ID
   if (_.isUndefined(player)) {
-    if (event.data.msg) {
-      const detectedSteamIdMatch = event.data.msg.match(steamIdRegex);
-      const detectedCrossIdMatch = event.data.msg.match(crossIdRegex);
+    if (event.msg) {
+      const detectedSteamIdMatch = event.msg.match(steamIdRegex);
+      const detectedCrossIdMatch = event.msg.match(crossIdRegex);
 
       if (detectedSteamIdMatch) {
         const steamId = detectedSteamIdMatch[0];
@@ -70,6 +67,6 @@ module.exports = async (event) => {
     player.role = await sails.helpers.sdtd.getPlayerRole(player.id);
   }
 
-  event.data.player = player;
+  event.player = player;
   return event;
 };
