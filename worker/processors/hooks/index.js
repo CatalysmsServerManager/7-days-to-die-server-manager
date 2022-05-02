@@ -63,7 +63,7 @@ async function executeHook(eventData, hookToExec, serverId, eventType = 'logLine
   let server = await SdtdServer.findOne(serverId);
   eventData.server = server;
   eventData.type = eventType;
-  eventData = await enrichEventData({ data: eventData, ...eventData });
+  eventData = await enrichEventData(eventData);
 
   // Ugly hack to work around some data inconsistency
   // When a hook fires, Allocs hasnt always updated internal data yet
@@ -92,7 +92,7 @@ async function executeLogLineHook(eventData, hookToExec, serverId) {
 
   let server = await SdtdServer.findOne(serverId);
   eventData.server = server;
-  eventData = await enrichEventData({ data: eventData, ...eventData });
+  eventData = await enrichEventData(eventData);
   eventData.custom = getVariablesValues(hookToExec.variables, eventData.msg);
   let results = await sails.helpers.sdtd.executeCustomCmd(server, hookToExec.commandsToExecute, eventData);
   await saveResultsToRedis(hookToExec.id, results);
