@@ -1,16 +1,16 @@
 module.exports = async (event) => {
-  if (event.type !== 'playerKilled') {return event;}
+  if (event.type !== 'playerKilled') { return event; }
 
-  event.data.victim = await Player.findOne({
+  event.victim = await Player.findOne({
     server: event.server.id,
-    name: event.data.victimName
+    name: event.victimName
   });
-  event.data.killer = await Player.findOne({
+  event.killer = await Player.findOne({
     server: event.server.id,
-    name: event.data.killerName
+    name: event.killerName
   });
-  event.data.victim.role = await sails.helpers.sdtd.getPlayerRole(event.data.victim.id);
-  event.data.killer.role = await sails.helpers.sdtd.getPlayerRole(event.data.killer.id);
+  event.victim.role = await sails.helpers.sdtd.getPlayerRole(event.victim.id);
+  event.killer.role = await sails.helpers.sdtd.getPlayerRole(event.killer.id);
 
   return event;
 };
