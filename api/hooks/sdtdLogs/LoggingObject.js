@@ -23,14 +23,15 @@ class LoggingObject extends EventEmitter {
   async handleMessage(newLog) {
     let enrichedLog = newLog;
     enrichedLog.server = this.server;
+    enrichedLog.data.server = this.server;
 
     if (newLog.type !== 'logLine') {
-      enrichedLog = await enrichEventData(enrichedLog);
+      enrichedLog.data = await enrichEventData(enrichedLog.data);
       sails.helpers.getQueueObject('hooks').add({ type: 'logLine', data: enrichedLog.data, server: this.server });
     }
 
     sails.log.debug(
-      `Log line for server ${this.server.id} - ${newLog.type} - ${newLog.data.msg}`, {serverId: this.server.id}
+      `Log line for server ${this.server.id} - ${newLog.type} - ${newLog.data.msg}`, { serverId: this.server.id }
     );
 
     sails.helpers.getQueueObject('hooks').add(enrichedLog);

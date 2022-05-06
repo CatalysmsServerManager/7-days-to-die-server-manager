@@ -19,6 +19,7 @@ const event = (type, msg) => {
         }
       },
       server: sails.testServer
+
     }
   };
 };

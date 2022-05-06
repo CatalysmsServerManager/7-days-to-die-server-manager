@@ -26,6 +26,11 @@ module.exports = {
       required: true
     },
 
+    crossId: {
+      type: 'string',
+      allowNull: true
+    },
+
     /**
      * @var {number} entityId
      * @memberof Player

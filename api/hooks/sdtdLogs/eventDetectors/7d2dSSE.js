@@ -8,14 +8,17 @@ class SdtdSSE extends LoggingObject {
   constructor(server) {
     super(server);
 
-    const RATE_LIMIT_MINUTES = parseInt(process.env.SSE_RATE_LIMIT_MINUTES, 10) || 5;
-    const RATE_LIMIT_AMOUNT = parseInt(process.env.SSE_RATE_LIMIT_AMOUNT, 10) || 2500;
-    const THROTTLE_DELAY = parseInt(process.env.SSE_THROTTLE_DELAY, 10) || 1000 * 60 * 1;
-    const SSE_THROTTLE_RECONNECT_DELAY = parseInt(process.env.SSE_THROTTLE_RECONNECT_DELAY, 10) || 1000 * 60 * 5;
-    const SSE_RECONNECT_INTERVAL = parseInt(process.env.SSE_RECONNECT_INTERVAL, 10) || 1000 * 60 * 5;
+    this.RATE_LIMIT_MINUTES = parseInt(process.env.SSE_RATE_LIMIT_MINUTES, 10) || 5;
+    this.RATE_LIMIT_AMOUNT = parseInt(process.env.SSE_RATE_LIMIT_AMOUNT, 10) || 2500;
+    this.THROTTLE_DELAY = parseInt(process.env.SSE_THROTTLE_DELAY, 10) || 1000 * 60 * 1;
+    this.SSE_THROTTLE_RECONNECT_DELAY = parseInt(process.env.SSE_THROTTLE_RECONNECT_DELAY, 10) || 1000 * 60 * 5;
+    this.SSE_RECONNECT_INTERVAL = parseInt(process.env.SSE_RECONNECT_INTERVAL, 10) || 1000 * 60 * 3;
+    // If we last received a message longer ago than this, we'll force a reconnect
+    this.LAST_MESSAGE_THRESHOLD = parseInt(process.env.SSE_RECONNECT_INTERVAL, 10) || 1000 * 60 * 5;
+
 
     this.SSERegex = /\d+-\d+-\d+T\d+:\d+:\d+ \d+\.\d+ INF (.+)/;
-    this.throttledFunction = new ThrottledFunction(this.SSEListener.bind(this), RATE_LIMIT_AMOUNT, RATE_LIMIT_MINUTES);
+    this.throttledFunction = new ThrottledFunction(this.SSEListener.bind(this), this.RATE_LIMIT_AMOUNT, this.RATE_LIMIT_MINUTES);
     this.listener = this.throttledFunction.listener;
     this.queuedChatMessages = [];
     this.lastMessage = Date.now();
@@ -32,11 +35,11 @@ class SdtdSSE extends LoggingObject {
 
     this.throttledFunction.on('throttled', () => {
       sails.log.debug(`SSE throttled for server ${this.server.id}`, { server: this.server });
-      this.throttleDestructionTimeout = setTimeout(this.destroy.bind(this), THROTTLE_DELAY);
-      this.throttleReconnectTimeout = setTimeout(this.start.bind(this), SSE_THROTTLE_RECONNECT_DELAY);
+      this.throttleDestructionTimeout = setTimeout(this.destroy.bind(this), this.THROTTLE_DELAY);
+      this.throttleReconnectTimeout = setTimeout(this.start.bind(this), this.SSE_THROTTLE_RECONNECT_DELAY);
     });
 
-    this.reconnectInterval = setInterval(() => this.reconnectListener(), SSE_RECONNECT_INTERVAL);
+    this.reconnectInterval = setInterval(() => this.reconnectListener(), this.SSE_RECONNECT_INTERVAL);
   }
 
   reconnectListener() {
@@ -45,20 +48,36 @@ class SdtdSSE extends LoggingObject {
       return;
     }
 
-    if (this.eventSource.readyState === EventSource.OPEN && (this.lastMessage > (Date.now() - 300000))) {
-      return;
+    if (this.lastMessage < (Date.now() - this.LAST_MESSAGE_THRESHOLD)) {
+      this.keepAliveHandler();
     }
 
-    sails.log.debug(`Trying to reconnect SSE for server ${this.server.id}`, { serverId: this.server.id });
-    this.destroy();
-    this.start();
+  }
+
+  keepAliveHandler() {
+    if (!this.keepAliveSent) {
+      sails.log.debug(`Sending keepalive to SSE for server ${this.server.id}`, { server: this.server });
+      sails.helpers.sdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(this.server), `version`)
+        // Only catch to prevent unhandledRejections
+        // No need to await, this is fire and forget
+        .catch(e => {
+          // Do nothing
+          // If this fails, the next time this is called, it will try to reconnect
+        });
+      this.keepAliveSent = true;
+    } else {
+      this.keepAliveSent = false;
+      sails.log.debug(`Trying to reconnect SSE for server ${this.server.id}`, { serverId: this.server.id });
+      this.destroy();
+      this.start();
+    }
   }
 
   get url() {
     return `http://${this.server.ip}:${this.server.webPort}/sse/log?adminuser=${this.server.authName}&admintoken=${this.server.authToken}`;
   }
 
-  async start() {
+  start() {
     if (this.eventSource) {
       return;
     }
@@ -77,7 +96,7 @@ class SdtdSSE extends LoggingObject {
     };
   }
 
-  async destroy() {
+  destroy() {
     if (!this.eventSource) {
       return;
     }
