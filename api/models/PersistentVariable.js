@@ -14,6 +14,12 @@ module.exports = {
       maxLength: 250,
     },
 
+    preventDeletion: {
+      required: true,
+      type: 'boolean',
+      columnType: 'tinyint(1)'
+    },
+
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
