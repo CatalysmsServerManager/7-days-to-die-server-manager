@@ -84,7 +84,7 @@ module.exports = logLine => {
     */
 
 
-    const { groups: { steamId, entityId,channel, playerName, messageText } } = chatRegex.exec(logLine.msg);
+    const { groups: { steamId, entityId, channel, playerName, messageText } } = chatRegex.exec(logLine.msg);
 
     const data = {
       date: logLine.date,
@@ -110,8 +110,6 @@ module.exports = logLine => {
 
   if (connectedRegex.test(logLine.msg)) {
     // 2022-01-21T20:43:26 60120.462 INF Player connected, entityid=549, name=Catalysm, pltfmid=Steam_76561198028175941, crossid=EOS_0002b5d970954287afdcb5dc35af0424, steamOwner=Steam_76561198028175941, ip=127.0.0.1
-    const steamIdMatches = /pltfmid=Steam_(\d{17})|steamid=(\d{17})/.exec(logLine.msg);
-    const steamId = steamIdMatches[1] || steamIdMatches[2];
     const crossIdMatches = /crossid=(EOS_[\d\w]{32})/.exec(logLine.msg);
     let crossId;
     if (crossIdMatches) {
@@ -122,7 +120,6 @@ module.exports = logLine => {
     const ip = /ip=([\d.]+)/.exec(logLine.msg)[1];
 
     let connectedMsg = {
-      steamId,
       crossId,
       playerName,
       entityId,
@@ -132,6 +129,14 @@ module.exports = logLine => {
       uptime: logLine.uptime,
       msg: logLine.msg
     };
+
+    const steamIdMatches = /pltfmid=Steam_(\d{17})|steamid=(\d{17})/.exec(logLine.msg);
+    if (steamIdMatches) {
+      connectedMsg.steamId = steamIdMatches[1] || steamIdMatches[2];
+    } else {
+      const otherPlatformMatches = /pltfmid=([\d\w]+)/.exec(logLine.msg);
+      connectedMsg.steamId = otherPlatformMatches[1];
+    }
 
     const geoIpLookup = require('geoip-lite').lookup(connectedMsg.ip);
     connectedMsg.country = geoIpLookup ? geoIpLookup.country : null;
