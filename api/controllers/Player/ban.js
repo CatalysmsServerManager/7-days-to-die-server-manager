@@ -46,7 +46,7 @@ module.exports = {
 
     const response = await sails.helpers.sdtdApi.executeConsoleCommand(
       SdtdServer.getAPIConfig(server),
-      `ban add Steam_${player.steamId} ${inputs.duration} ${inputs.durationUnit.toLowerCase()} "${inputs.reason}"`
+      `ban add ${player.crossId} ${inputs.duration} ${inputs.durationUnit.toLowerCase()} "${inputs.reason}"`
     );
 
     return exits.success(response);
