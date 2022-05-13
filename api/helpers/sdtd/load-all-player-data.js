@@ -61,11 +61,12 @@ module.exports = {
 
     }
 
-    await Player.createEach(newPlayers);
+    const uniqueBySteamId = _.uniqBy(newPlayers, 'steamId');
+    await Player.createEach(uniqueBySteamId);
 
     let dateEnded = new Date();
 
-    sails.log.debug(`load-all-player-data - Created ${newPlayers.length} new records out of ${apiResult.players.length} total players for server ${server.name} - Took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`, {serverId: inputs.serverId});
+    sails.log.debug(`load-all-player-data - Created ${newPlayers.length} new records out of ${apiResult.players.length} total players for server ${server.name} - Took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`, { serverId: inputs.serverId });
 
     return exits.success(apiResult.players);
 
