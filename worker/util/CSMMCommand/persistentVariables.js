@@ -12,7 +12,37 @@ class PersistentVariablesManager {
     return { server: server.id, name };
   }
 
+  generateQueryFilter(server, query, sortBy, sortDirection, limit) {
+    var filter = {};
 
+    filter['where'] = { server: server.Id };
+
+    if (query !== '*' && query.startsWith('*') && query.endsWith('*')) {
+      query = query.substring(1, query.length - 1);
+      filter.where['name'] = { contains: query };
+    }
+    else if (query !== '*' && query.startsWith('*')) {
+      query = query.substring(1, query.length);
+      filter.where['name'] = { endsWith: query };
+    }
+    else if (query !== '*' && query.endsWith('*')) {
+      query = query.substring(0, query.length - 1);
+      filter.where['name'] = { startsWith: query };
+    }
+    else if (!query.includes('*') && query) {
+      filter.where['name'] = { contains: query };
+    }
+
+    if (sortBy && sortDirection) {
+      filter['sort'] = sortBy + ' ' + sortDirection;
+    }
+
+    if (limit !== -1) {
+      filter['limit'] = limit;
+    }
+
+    return filter;
+  }
 
   async get(server, name) {
     if (!server || !server.id) {
@@ -32,7 +62,7 @@ class PersistentVariablesManager {
     });
   }
 
-  async set(server, name, value) {
+  async set(server, name, value, preventDeletion) {
     if (!server || !server.id) {
       throw new Error('`server` must be provided');
     }
@@ -40,14 +70,31 @@ class PersistentVariablesManager {
     value = JSON.stringify(value);
 
     return this.queue.push(async () => {
-      await PersistentVariable.findOrCreate(this.getDefaultQueryFilter(server, name), { ...this.getDefaultQueryFilter(server, name), value });
-      await PersistentVariable.updateOne(this.getDefaultQueryFilter(server, name), { value });
+      await PersistentVariable.findOrCreate(this.getDefaultQueryFilter(server, name), { ...this.getDefaultQueryFilter(server, name), value, preventDeletion });
+      await PersistentVariable.updateOne(this.getDefaultQueryFilter(server, name), { value, preventDeletion });
       sails.log.debug(`PersistentVariable.set("${name}")`, this.getLogMeta(server));
       return value;
     });
+  }
 
+  async list(server, query, sortBy, sortDirection, limit) {
+    if (!server || !server.id) {
+      throw new Error('`server` must be provided');
+    }
 
+    var filter = this.generateQueryFilter(server, query, sortBy, sortDirection, limit);
 
+    return this.queue.push(async () => {
+      const variables = await PersistentVariable.find(filter);
+
+      sails.log.debug(`PersistentVariable.list("${query}", "${sortBy}", "${sortDirection}", "${limit === -1 ? 'none' : limit}")`, this.getLogMeta(server));
+
+      if (!variables) {
+        return [];
+      }
+
+      return variables;
+    });
   }
 
   async del(server, name) {

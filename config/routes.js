@@ -124,6 +124,11 @@ module.exports.routes = {
     csrf: false
   },
 
+  'put /api/playground/variable/:id':{
+    action: 'Playground/variables/edit-variable',
+    csrf: false
+  },
+
   'get /api/playground/executions': {
     action: 'Playground/get-executions',
   },
