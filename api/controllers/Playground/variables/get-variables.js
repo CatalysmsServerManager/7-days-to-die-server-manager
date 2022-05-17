@@ -1,5 +1,3 @@
-const { setMaxListeners } = require('winston-loki');
-
 module.exports = {
   inputs: {
     serverId: {
