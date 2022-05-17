@@ -412,6 +412,14 @@ say "1 - 1 = {{subtract 1 1}}"
         expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.equal(sails.testPlayer.steamId);
       });
 
+      it('Can set a value of 0', async () => {
+        const template = '{{setVar "test" 0}}{{getVar "test"}}';
+
+        await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template, { player: sails.testPlayer });
+
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.equal('0');
+      });
+
       it('Persists across multiple calls', async () => {
         const template1 = '{{setVar "test" player.steamId}}; say "Set the var!"';
         const template2 = 'say "The var is: {{getVar "test"}}"';

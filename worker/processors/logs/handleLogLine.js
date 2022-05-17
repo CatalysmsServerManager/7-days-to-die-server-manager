@@ -3,7 +3,7 @@ const _ = require('lodash');
 const extractIntegers = string => string.match(/\d*/g).join('');
 
 const steamIdRegex = /\d{17}/g;
-
+const crossIdRegex = /EOS_[\d\w]{32}/;
 
 const a20DeathRegex = /PlayerSpawnedInWorld \(reason: Died, position: (?<x>[-\d]+), (?<y>[-\d]+), (?<z>[-\d]+)\): EntityID=(?<entityId>\d+), (PltfmId|PlayerID)='(?<platformId>[\d\w]+)', CrossId='(?<crossId>[\d\w]+)', OwnerID='Steam_(?<steamId>\d{17})', PlayerName='(?<playerName>.+)'/;
 const preA20DeathRegex = /PlayerSpawnedInWorld \(reason: Died, position: (?<x>[-\d]+), (?<y>[-\d]+), (?<z>[-\d]+)\): EntityID=(?<entityId>\d+), PlayerID='(?<platformId>[\d\w]+)', OwnerID='(?<steamId>\d{17})', PlayerName='(?<playerName>.+)'/;
@@ -84,7 +84,7 @@ module.exports = logLine => {
     */
 
 
-    const { groups: { steamId, entityId,channel, playerName, messageText } } = chatRegex.exec(logLine.msg);
+    const { groups: { steamId, entityId, channel, playerName, messageText } } = chatRegex.exec(logLine.msg);
 
     const data = {
       date: logLine.date,
@@ -109,14 +109,18 @@ module.exports = logLine => {
   }
 
   if (connectedRegex.test(logLine.msg)) {
-    const steamIdMatches = /pltfmid=Steam_(\d{17})|steamid=(\d{17})/.exec(logLine.msg);
-    const steamId = steamIdMatches[1] || steamIdMatches[2];
+    // 2022-01-21T20:43:26 60120.462 INF Player connected, entityid=549, name=Catalysm, pltfmid=Steam_76561198028175941, crossid=EOS_0002b5d970954287afdcb5dc35af0424, steamOwner=Steam_76561198028175941, ip=127.0.0.1
+    const crossIdMatches = /crossid=(EOS_[\d\w]{32})/.exec(logLine.msg);
+    let crossId;
+    if (crossIdMatches) {
+      crossId = crossIdMatches[1];
+    }
     const playerName = /name=(.+), (pltfmid=|steamid=)/.exec(logLine.msg)[1];
     const entityId = /entityid=(\d+)/.exec(logLine.msg)[1];
     const ip = /ip=([\d.]+)/.exec(logLine.msg)[1];
 
     let connectedMsg = {
-      steamId,
+      crossId,
       playerName,
       entityId,
       ip,
@@ -125,6 +129,14 @@ module.exports = logLine => {
       uptime: logLine.uptime,
       msg: logLine.msg
     };
+
+    const steamIdMatches = /pltfmid=Steam_(\d{17})|steamid=(\d{17})/.exec(logLine.msg);
+    if (steamIdMatches) {
+      connectedMsg.steamId = steamIdMatches[1] || steamIdMatches[2];
+    } else {
+      const otherPlatformMatches = /pltfmid=([\d\w]+)/.exec(logLine.msg);
+      connectedMsg.steamId = otherPlatformMatches[1];
+    }
 
     const geoIpLookup = require('geoip-lite').lookup(connectedMsg.ip);
     connectedMsg.country = geoIpLookup ? geoIpLookup.country : null;
@@ -392,6 +404,14 @@ module.exports = logLine => {
     returnValue.data = deathMessage;
   }
 
+  const steamIdMatch = logLine.msg.match(steamIdRegex);
+  const crossIdMatch = logLine.msg.match(crossIdRegex);
+
+  if (steamIdMatch) {
+    returnValue.data.steamId = steamIdMatch[0];
+  } else if (crossIdMatch) {
+    returnValue.data.crossId = crossIdMatch[0];
+  }
 
   return returnValue;
 };

@@ -135,7 +135,7 @@ Handlebars.registerHelper('setVar', async function setVar(name, value, preventDe
   if (!name) {
     throw new Error('setVar: You must provide the variable name');
   }
-  if (!value) {
+  if (!value && value !== 0) {
     throw new Error('setVar: You must provide the variable value');
   }
 

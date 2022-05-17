@@ -1,7 +1,8 @@
-const enrichData = require('./enrichEventData');
+const enrichEventData = require('../../../api/hooks/sdtdLogs/enrichers');
+
 
 module.exports = async function hooks(job) {
-  sails.log.debug(`[Worker] Got a \`hooks\` job of type ${job.data.type}`, {serverId: job.data.serverId});
+  sails.log.debug(`[Worker] Got a \`hooks\` job of type ${job.data.type}`, { serverId: job.data.serverId });
   return handle(job.data);
 };
 
@@ -25,7 +26,7 @@ async function handle({ data: eventData, type: eventType, server }) {
       const stringFound = checkLogLine(`${eventData.time} ${eventData.date} ${eventData.msg}`, serverLogLineHook);
 
       if (stringFound) {
-        sails.log.debug(`Found the string! Executing hook ${serverLogLineHook.id}`, {server});
+        sails.log.debug(`Found the string! Executing hook ${serverLogLineHook.id}`, { server });
         const isNotOnCooldown = await handleCooldown(serverLogLineHook);
         if (isNotOnCooldown) {
           const variables = await getHookVariables(serverLogLineHook.id);
@@ -61,7 +62,8 @@ async function handle({ data: eventData, type: eventType, server }) {
 async function executeHook(eventData, hookToExec, serverId, eventType = 'logLine') {
   let server = await SdtdServer.findOne(serverId);
   eventData.server = server;
-  eventData = await enrichData(eventData);
+  eventData.type = eventType;
+  eventData = await enrichEventData(eventData);
 
   // Ugly hack to work around some data inconsistency
   // When a hook fires, Allocs hasnt always updated internal data yet
@@ -90,7 +92,7 @@ async function executeLogLineHook(eventData, hookToExec, serverId) {
 
   let server = await SdtdServer.findOne(serverId);
   eventData.server = server;
-  eventData = await enrichData(eventData);
+  eventData = await enrichEventData(eventData);
   eventData.custom = getVariablesValues(hookToExec.variables, eventData.msg);
   let results = await sails.helpers.sdtd.executeCustomCmd(server, hookToExec.commandsToExecute, eventData);
   await saveResultsToRedis(hookToExec.id, results);

@@ -186,14 +186,24 @@ module.exports = function sdtdLogs(sails) {
           notificationType: 'playerConnected',
           player: connectedMsg.player
         });
-        if (connectedMsg.country !== null && connectedMsg.steamId) {
+
+        if (connectedMsg.steamId) {
+          const updateObject = {};
+
+          if (connectedMsg.country) {
+            updateObject.country = connectedMsg.country;
+          }
+
+          if (connectedMsg.crossId) {
+            updateObject.crossId = connectedMsg.crossId;
+          }
+
           await Player.update({
             server: server.id,
             steamId: connectedMsg.steamId
-          }, {
-            country: connectedMsg.country
-          });
+          }, updateObject);
         }
+
         sails.sockets.broadcast(server.id, 'playerConnected', connectedMsg);
         connectedMsg.player = _.omit(connectedMsg.player, 'inventory');
         sails.log.debug(`Detected a player connected`, {server, player: connectedMsg.player});
