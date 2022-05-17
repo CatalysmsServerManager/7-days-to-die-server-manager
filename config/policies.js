@@ -113,7 +113,11 @@ let policyObject = {
   },
 
   playgroundController: {
+<<<<<<< HEAD
     '*': ['isLoggedIn', 'roles/manageServer'],
+=======
+    '*': true,
+>>>>>>> parent of adb8f7c... Delete policies.js
     'get-meta': true
   },
 
