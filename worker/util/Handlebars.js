@@ -150,7 +150,6 @@ Handlebars.registerHelper('listVar', async function listVar(query, sortBy, sortD
 
   // Search
   if (arguments.length === 2) {
-    sails.log.warn('Num Args: 2');
 
     query = arguments[0];
 
@@ -167,8 +166,6 @@ Handlebars.registerHelper('listVar', async function listVar(query, sortBy, sortD
 
   // Search with limit
   if (arguments.length === 3) {
-    sails.log.warn('Num Args: 3');
-
     query = arguments[0];
 
     if (typeof query !== 'string') {
@@ -189,8 +186,6 @@ Handlebars.registerHelper('listVar', async function listVar(query, sortBy, sortD
 
   // Search with sorting
   if (arguments.length === 4) {
-    sails.log.warn('Num Args: 4');
-
     query = arguments[0];
 
     if (typeof query !== 'string') {
@@ -211,8 +206,6 @@ Handlebars.registerHelper('listVar', async function listVar(query, sortBy, sortD
 
   // Search with sorting and limit
   if (arguments.length === 5) {
-    sails.log.warn('Num Args: 5');
-
     query = arguments[0];
 
     if (typeof query !== 'string') {
@@ -239,8 +232,6 @@ Handlebars.registerHelper('listVar', async function listVar(query, sortBy, sortD
     throw new Error('Persistent variables can only be used in context of a server, this is likely an implementation error');
   }
 
-  sails.log.warn(query);
-
   const sortByOptions = {
     created: 'createdAt',
     updated: 'updatedAt',
@@ -250,7 +241,6 @@ Handlebars.registerHelper('listVar', async function listVar(query, sortBy, sortD
 
   if (sortBy && sortByOptions[sortBy] !== undefined) {
     sortBy = sortByOptions[sortBy];
-    sails.log.warn(sortBy);
   }
 
   const sortDirectionOptions = {
@@ -260,11 +250,6 @@ Handlebars.registerHelper('listVar', async function listVar(query, sortBy, sortD
 
   if (sortDirection && sortDirectionOptions[sortDirection] !== undefined) {
     sortDirection = sortDirectionOptions[sortDirection];
-    sails.log.warn(sortDirection);
-  }
-
-  if (limit !== -1) {
-    sails.log.warn(limit);
   }
 
   return PersistentVariablesManager.list(options.data.root.server, query, sortBy, sortDirection, limit);
