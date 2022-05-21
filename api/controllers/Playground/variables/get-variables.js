@@ -49,7 +49,7 @@ module.exports = {
 
     const query = {};
 
-    query['where'] = { server: server.Id };
+    query['where'] = { server: server.id };
 
     if (inputs.filteredColumns) {
       if (inputs.filteredColumns !== null && inputs.filteredColumns.length > 0) {
@@ -79,7 +79,7 @@ module.exports = {
     const totalEntries = await PersistentVariable.count(query);
 
     if (inputs.sortedColumns) {
-      if(inputs.sortedColumns !== null && inputs.sortedColumns.length > 0){
+      if (inputs.sortedColumns !== null && inputs.sortedColumns.length > 0) {
         if (inputs.sortedColumns.length < 2) {
           if (inputs.sortedColumns[0] !== '') {
             query['sort'] = inputs.sortedColumns[0] + ' ' + inputs.columnSortTypes[0];
