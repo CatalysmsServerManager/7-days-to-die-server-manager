@@ -51,7 +51,6 @@ jobs:
 
       - run: echo ${{ !startsWith(github.actor, 'dependabot') }}
 
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
@@ -72,6 +71,8 @@ jobs:
           platforms: linux/amd64
           push: ${{ !startsWith(github.actor, 'dependabot') }}
           tags: ${{ steps.prep.outputs.tags }}
+          build-args: |
+            PLAYGROUND_VERSION: development
           labels: |
             org.opencontainers.image.title=${{ fromJson(steps.repo.outputs.result).name }}
             org.opencontainers.image.description=${{ fromJson(steps.repo.outputs.result).description }}
