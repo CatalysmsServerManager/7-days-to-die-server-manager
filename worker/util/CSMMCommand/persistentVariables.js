@@ -15,7 +15,7 @@ class PersistentVariablesManager {
   generateQueryFilter(server, query, sortBy, sortDirection, limit) {
     var filter = {};
 
-    filter['where'] = { server: server.Id };
+    filter['where'] = { server: server.id };
 
     if (query !== '*' && query.startsWith('*') && query.endsWith('*')) {
       query = query.substring(1, query.length - 1);
