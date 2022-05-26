@@ -44,8 +44,6 @@ services:
 
   cache:
     image: redis
-    volumes:
-      - ./redis-data:/data
     command: ["redis-server", "--appendonly", "yes"]
     restart: unless-stopped
 
