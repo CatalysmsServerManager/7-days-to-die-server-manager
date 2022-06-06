@@ -4,7 +4,7 @@ module.exports = async function inventoryTracking(server, playerList, playersArr
   try {
     inventories = await sails.helpers.sdtdApi.getPlayerInventories(SdtdServer.getAPIConfig(server));
   } catch (error) {
-    sails.log.warn(`${server.name} Errored during inventory tracking - ${error}.`, {server});
+    sails.log.warn(`${server.name} Errored during inventory tracking - ${error}.`, { server });
   }
 
 
@@ -16,7 +16,7 @@ module.exports = async function inventoryTracking(server, playerList, playersArr
       let trackingRecordIdx = playersArray.indexOf(trackingRecord[0]);
 
       if (trackingRecord.length === 1) {
-        let inventory = inventories.filter(inventoryEntry => inventoryEntry.steamid === playerRecord[0].steamId);
+        let inventory = inventories.filter(inventoryEntry => inventoryEntry.steamid === playerRecord[0].steamId || inventoryEntry.userid === playerRecord[0].steamId);
         if (inventory.length === 1) {
           let itemsInInventory = new Array();
           inventory = inventory[0];
@@ -45,6 +45,6 @@ module.exports = async function inventoryTracking(server, playerList, playersArr
   }
 
   let dateEnded = new Date();
-  sails.log.debug(`Performed inventory tracking for ${server.name} - ${playerList.length} players, took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`, {server});
+  sails.log.debug(`Performed inventory tracking for ${server.name} - ${playerList.length} players, took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`, { server });
   return playersArray;
 };
