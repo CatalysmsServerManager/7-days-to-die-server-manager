@@ -27,7 +27,7 @@ describe('sdtdLogs#handleLogLine', () => {
       date: '2017-11-14',
       time: '14:50:49',
       uptime: '133.559',
-      msg: `Player disconnected: EntityID=171, PlayerID='76561198028175941', OwnerID='76561198028175941', PlayerName='Catalysm'`,
+      msg: `Player disconnected: EntityID=171, PltfmId='Steam_76561198028175941', OwnerID='76561198028175941', PlayerName='Catalysm'`,
       trace: '',
       type: 'Log'
     };
@@ -45,7 +45,7 @@ describe('sdtdLogs#handleLogLine', () => {
       date: '2017-11-14',
       time: '14:50:49',
       uptime: '133.559',
-      msg: `Player disconnected: EntityID=-1, PlayerID='76561198028175941', OwnerID='76561198028175941', PlayerName='Baguette'`,
+      msg: `Player disconnected: EntityID=-1, PltfmId='Steam_76561198028175941', OwnerID='76561198028175941', PlayerName='Baguette'`,
       trace: '',
       type: 'Log'
     };
