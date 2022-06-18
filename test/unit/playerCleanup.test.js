@@ -53,6 +53,21 @@ describe('Player cleanup', () => {
 
     const teleportsAfter = await PlayerTeleport.find({ player: sails.testPlayer.id });
     expect(teleportsAfter).to.have.length(0);
+  });
 
+  it('Works when setting the value very large', async () => {
+    await SdtdConfig.update({ server: sails.testServer.id }, { playerCleanupLastOnline: 365 });
+    const now = new Date();
+    const aWeekAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
+    const newPlayer = await Player.update({ id: sails.testPlayer.id }, { lastOnline: aWeekAgo.toISOString() }).fetch();
+    await playerCleanup();
+    const afterPlayer = await Player.findOne(newPlayer[0].id);
+    expect(afterPlayer).to.be.eqls(newPlayer[0]);
+
+    const oneYearAndOneWeekAgo = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate() - 7);
+    const newPlayer2 = await Player.update({ id: sails.testPlayer.id }, { lastOnline: oneYearAndOneWeekAgo.toISOString() }).fetch();
+    await playerCleanup();
+    const afterPlayer2 = await Player.findOne(newPlayer2[0].id);
+    expect(afterPlayer2).to.be.undefined;
   });
 });
