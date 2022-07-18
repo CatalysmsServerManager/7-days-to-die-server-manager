@@ -120,7 +120,7 @@ class sdtdMap {
     for (const claimOwner of landClaims.claimowners) {
       let playerThatOwnsClaim = players.filter(player => claimOwner.steamid === player.steamId);
 
-      if (!playerThatOwnsClaim) {
+      if (!playerThatOwnsClaim.length) {
         continue;
       }
 
