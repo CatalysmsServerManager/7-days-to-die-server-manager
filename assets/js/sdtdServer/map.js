@@ -119,6 +119,11 @@ class sdtdMap {
 
     for (const claimOwner of landClaims.claimowners) {
       let playerThatOwnsClaim = players.filter(player => claimOwner.steamid === player.steamId);
+
+      if (!playerThatOwnsClaim) {
+        continue;
+      }
+
       let colors = ['red', 'green', 'blue', 'yellow', 'orange', 'brown'];
       let colorIterator = 0;
       if (!colors[colorIterator]) {
