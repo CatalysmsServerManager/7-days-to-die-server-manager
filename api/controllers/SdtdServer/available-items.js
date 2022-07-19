@@ -49,6 +49,13 @@ module.exports = {
       return exits.notFound();
     }
 
+    const cachedResult = await sails.helpers.redis.get(`server:${inputs.serverId}:availableItems`);
+
+    if (cachedResult) {
+      sails.log.debug(`API - SdtdServer:available-items - Using cached result!`, { serverId: inputs.serverId });
+      return exits.success(JSON.parse(cachedResult));
+    }
+
     const response = await sails.helpers.sdtdApi.executeConsoleCommand(
       SdtdServer.getAPIConfig(server),
       `listitems ${inputs.item}`,
@@ -62,6 +69,8 @@ module.exports = {
       }).filter(Boolean)
       // Remove the last element, which is the total
       .slice(0, -1);
+
+    await sails.helpers.redis.set(`server:${inputs.serverId}:availableItems`, JSON.stringify(items), true, 60 * 60 * 24);
 
     return exits.success(items);
   }
