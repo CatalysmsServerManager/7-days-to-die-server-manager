@@ -39,7 +39,7 @@ module.exports = {
      */
 
   fn: async function (inputs, exits) {
-    sails.log.debug(`API - SdtdServer:available-items - Loading available items!`, {serverId: inputs.serverId});
+    sails.log.debug(`API - SdtdServer:available-items - Loading available items!`, { serverId: inputs.serverId });
 
     const server = await SdtdServer.findOne({
       id: inputs.serverId
@@ -51,12 +51,13 @@ module.exports = {
 
     const response = await sails.helpers.sdtdApi.executeConsoleCommand(
       SdtdServer.getAPIConfig(server),
-      `listitems ${inputs.item}`
+      `listitems ${inputs.item}`,
+      { timeout: 10000 }
     );
 
     items = response.result
       .split('\n')
-      .map(function(item) {
+      .map(function (item) {
         return item.trim();
       }).filter(Boolean)
       // Remove the last element, which is the total
