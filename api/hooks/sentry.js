@@ -24,7 +24,8 @@ module.exports = function SentryHook(sails) {
           new Tracing.Integrations.Mysql()
         ],
         ignoreErrors: [
-          'Error connecting to the gameserver'
+          'Error connecting to the gameserver',
+          'Promise timed out after',
         ]
       }
     },
