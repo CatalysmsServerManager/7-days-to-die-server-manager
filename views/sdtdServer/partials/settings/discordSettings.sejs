@@ -229,7 +229,15 @@
               notification</button>
           </div>
 
-
+          <div class="form-group">
+            <label for="discord-settings-notifications-sseThrottled-select">Rate limit</label>
+            <small>Receive notifications when your server gets rate limited because it sends too many logs to CSMM</small>
+            <select class="form-control" name="discord-settings-notifications-sseThrottled-select" id="discord-settings-notifications-sseThrottled-select">
+              <option>Loading</option>
+            </select>
+            <button id="input-settings-discord-setnotification-sseThrottled-btn" type="button" class="btn btn-primary">Set rate limit notification</button>
+          </div>
+          
           </li>
         </div>
         <div class="modal-footer">
@@ -292,6 +300,10 @@
         select: $("#discord-settings-notifications-gbl-select"),
         option: 'gblmaxban'
       },
+      {
+        select: $("#discord-settings-notifications-sseThrottled-select"),
+        option: 'sseThrottled'
+      }
     ]
 
     if (!discordGuildId) {
@@ -813,6 +825,33 @@
         },
         error: function (xhr, status, error) {
           $("#discord-settings-notifications-gbl-select").addClass("bg-danger").removeClass(
+            "bg-success");
+          displayAjaxToSupportData(xhr, this);;
+          showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+        }
+      })
+    })
+
+    $("#input-settings-discord-setnotification-sseThrottled-btn").click(e => {
+      let newNotificationChannelId = $("#discord-settings-notifications-sseThrottled-select").val();
+      if (!newNotificationChannelId) {
+        return alert('Error! Make sure you have a guild set and are selecting a valid channel')
+      }
+      $.ajax({
+        url: '/api/sdtdserver/setnotificationchannel',
+        type: 'POST',
+        data: {
+          notificationChannelId: newNotificationChannelId,
+          serverId: <%= server.id %>,
+          notificationType: 'sseThrottled',
+          _csrf: window.SAILS_LOCALS._csrf
+        },
+        success: (data, status, xhr) => {
+          $("#discord-settings-notifications-sseThrottled-select").addClass("bg-success").removeClass(
+            "bg-danger");
+        },
+        error: function (xhr, status, error) {
+          $("#discord-settings-notifications-sseThrottled-select").addClass("bg-danger").removeClass(
             "bg-success");
           displayAjaxToSupportData(xhr, this);;
           showErrorModal(`${error} - ${xhr.responseText}`, xhr);
