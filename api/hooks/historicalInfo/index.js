@@ -14,9 +14,12 @@ module.exports = function historicalInfo(sails) {
         let memUpdateEnabledServers = await SdtdConfig.find({
           memUpdateInfoEnabled: true,
           inactive: false,
-        }).populate('server');
-        for (let config of memUpdateEnabledServers) {
-          await startMemUpdate(config.server);
+        });
+
+        const nonDisabledServers = await SdtdServer.find({ id: { in: memUpdateEnabledServers.map(config => config.server) }, disabled: false });
+
+        for (let server of nonDisabledServers) {
+          await startMemUpdate(server);
         }
       });
     },
@@ -71,7 +74,7 @@ module.exports = function historicalInfo(sails) {
       setMap(server, memUpdateObject);
       return true;
     } catch (error) {
-      sails.log.error(`HOOK - historicalInfo - Error starting memUpdate ${error}`, {serverId});
+      sails.log.error(`HOOK - historicalInfo - Error starting memUpdate ${error}`, { serverId });
       return false;
     }
   }
@@ -82,7 +85,7 @@ module.exports = function historicalInfo(sails) {
       memUpdateObject.stop();
       deleteMap(serverId, memUpdateObject);
     } catch (error) {
-      sails.log.error(`HOOK - historicalInfo - Error stopping memUpdate ${error}`, {serverId});
+      sails.log.error(`HOOK - historicalInfo - Error stopping memUpdate ${error}`, { serverId });
       return false;
     }
   }
