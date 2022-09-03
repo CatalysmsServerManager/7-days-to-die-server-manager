@@ -67,6 +67,15 @@ module.exports = {
     },
 
 
+    /**
+     * @memberof SdtdServer
+     * @var {string} disabled
+     * @description Disabled servers are hidden from the UI and will not connect to gameservers at all
+     */
+
+    disabled: {
+      type: 'boolean'
+    },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗

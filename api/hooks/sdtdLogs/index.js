@@ -30,10 +30,11 @@ module.exports = function sdtdLogs(sails) {
         sails.log.info('Initializing custom hook (`sdtdLogs`)');
         queue = await sails.helpers.getQueueObject('logs');
         try {
-          let enabledServers = await SdtdConfig.find({ inactive: false });
+          const enabledServers = await SdtdConfig.find({ inactive: false });
+          const nonDisabledServers = await SdtdServer.find({ id: { in: enabledServers.map(server => server.server) }, disabled: false });
           const promises = [];
-          for (let config of enabledServers) {
-            promises.push(this.start(config.server));
+          for (let server of nonDisabledServers) {
+            promises.push(this.start(server.id));
           }
 
           // If after 10 seconds the promises are not fulfilled yet, we continue initialization anyways
@@ -81,7 +82,7 @@ module.exports = function sdtdLogs(sails) {
     stop: async function (serverId) {
       serverId = String(serverId);
 
-      sails.log.debug(`HOOKS - sdtdLogs - stopping logging for server ${serverId}`, {serverId});
+      sails.log.debug(`HOOKS - sdtdLogs - stopping logging for server ${serverId}`, { serverId });
 
       const loggingObj = await this.getLoggingObject(serverId);
       if (loggingObj) {
@@ -131,7 +132,7 @@ module.exports = function sdtdLogs(sails) {
           return SdtdSSE;
         }
       } catch (error) {
-        sails.log.warn('Could not get allocs version, defaulting to SSE', {server});
+        sails.log.warn('Could not get allocs version, defaulting to SSE', { server });
         return SdtdSSE;
       }
 
@@ -148,7 +149,7 @@ module.exports = function sdtdLogs(sails) {
    */
 
     createLogObject: async function createLogObject(serverId) {
-      sails.log.debug(`HOOKS - sdtdLogs - Creating loggingObject for server ${serverId}`, {serverId});
+      sails.log.debug(`HOOKS - sdtdLogs - Creating loggingObject for server ${serverId}`, { serverId });
 
       // Remove any lingering repeatable jobs
       await sails.helpers.redis.bull.removeRepeatable(serverId);
@@ -175,7 +176,7 @@ module.exports = function sdtdLogs(sails) {
         chatMessage.player = _.omit(chatMessage.player, 'inventory');
 
         sails.sockets.broadcast(server.id, 'chatMessage', chatMessage);
-        sails.log.debug(`Detected a chat message`, {server});
+        sails.log.debug(`Detected a chat message`, { server });
       });
 
       eventEmitter.on('playerConnected', async function (connectedMsg) {
@@ -206,7 +207,7 @@ module.exports = function sdtdLogs(sails) {
 
         sails.sockets.broadcast(server.id, 'playerConnected', connectedMsg);
         connectedMsg.player = _.omit(connectedMsg.player, 'inventory');
-        sails.log.debug(`Detected a player connected`, {server, player: connectedMsg.player});
+        sails.log.debug(`Detected a player connected`, { server, player: connectedMsg.player });
       });
 
 
@@ -215,7 +216,7 @@ module.exports = function sdtdLogs(sails) {
         joinMsg.player = _.omit(joinMsg.player, 'inventory');
 
         sails.sockets.broadcast(server.id, 'playerJoined', joinMsg);
-        sails.log.debug(`Detected a player joined`, {server, player: joinMsg.player});
+        sails.log.debug(`Detected a player joined`, { server, player: joinMsg.player });
       });
 
       eventEmitter.on('playerDisconnected', async function (disconnectedMsg) {
@@ -227,7 +228,7 @@ module.exports = function sdtdLogs(sails) {
         });
         sails.sockets.broadcast(server.id, 'playerDisconnected', disconnectedMsg);
         disconnectedMsg.player = _.omit(disconnectedMsg.player, 'inventory');
-        sails.log.debug(`Detected a player disconnected`, {server, player: disconnectedMsg.player});
+        sails.log.debug(`Detected a player disconnected`, { server, player: disconnectedMsg.player });
       });
 
       eventEmitter.on('connectionLost', async function (eventMsg) {
@@ -241,7 +242,7 @@ module.exports = function sdtdLogs(sails) {
           notificationType: 'connectionLost',
           msg: eventMsg
         });
-        sails.log.debug(`Lost connection to server ${server.name}`, {server});
+        sails.log.debug(`Lost connection to server ${server.name}`, { server });
       });
 
       eventEmitter.on('connected', async function (eventMsg) {
@@ -255,7 +256,7 @@ module.exports = function sdtdLogs(sails) {
           notificationType: 'connected'
         });
 
-        sails.log.debug(`Connected to server ${server.name}`, {server});
+        sails.log.debug(`Connected to server ${server.name}`, { server });
       });
 
       eventEmitter.on('playerDeath', function (deathMessage) {
