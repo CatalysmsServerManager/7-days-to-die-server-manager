@@ -43,6 +43,17 @@ const systemProcessor = require('./processors/system');
 const customNotificationsProcessor = require('./processors/customNotifications');
 const sdtdCommandsProcessor = require('./processors/sdtdCommands');
 
+const QUEUE_LOGS_CONCURRECY = process.env.QUEUE_LOGS_CONCURRECY || 100;
+const QUEUE_NOTIFICATIONS_CONCURRECY = process.env.QUEUE_NOTIFICATIONS_CONCURRECY || 10;
+const QUEUE_BANNEDITEMS_CONCURRECY = process.env.QUEUE_BANNEDITEMS_CONCURRECY || 10;
+const QUEUE_PLAYERTRACKING_CONCURRECY = process.env.QUEUE_PLAYERTRACKING_CONCURRECY || 25;
+const QUEUE_KILL_CONCURRECY = process.env.QUEUE_KILL_CONCURRECY || 10;
+const QUEUE_HOOK_CONCURRECY = process.env.QUEUE_HOOK_CONCURRECY || 25;
+const QUEUE_SYSTEM_CONCURRECY = process.env.QUEUE_SYSTEM_CONCURRECY || 1;
+const QUEUE_CUSTOMNOTIFICATIONS_CONCURRECY = process.env.QUEUE_CUSTOMNOTIFICATIONS_CONCURRECY || 10;
+const QUEUE_SDTDCOMMANDS_CONCURRECY = process.env.QUEUE_SDTDCOMMANDS_CONCURRECY || 100;
+
+
 sails.load(configOverrides, async function (err) {
   if (err) {
     sails.log.error(err);
@@ -75,15 +86,15 @@ sails.load(configOverrides, async function (err) {
 
   await Promise.all([
     // We can afford a high concurrency here since jobs are only a HTTP fetch. This would be different if they are long running, blocking operations
-    queues.logs.process(100, sails.hooks.sentry.wrapWorkerJob(logProcessor)),
-    queues.discordNotifications.process(sails.hooks.sentry.wrapWorkerJob(notifProcessor)),
-    queues.bannedItems.process(sails.hooks.sentry.wrapWorkerJob(bannedItemsProcessor)),
-    queues.playerTracking.process(25, sails.hooks.sentry.wrapWorkerJob(playerTrackingProcessor)),
-    queues.kill.process(sails.hooks.sentry.wrapWorkerJob(killProcessor)),
-    queues.hooks.process(25, sails.hooks.sentry.wrapWorkerJob(hookProcessor)),
-    queues.system.process(sails.hooks.sentry.wrapWorkerJob(systemProcessor)),
-    queues.customNotifications.process(sails.hooks.sentry.wrapWorkerJob(customNotificationsProcessor)),
-    queues.sdtdCommands.process(50, sails.hooks.sentry.wrapWorkerJob(sdtdCommandsProcessor, { sampled: true }))
+    queues.logs.process(QUEUE_LOGS_CONCURRECY, sails.hooks.sentry.wrapWorkerJob(logProcessor)),
+    queues.discordNotifications.process(QUEUE_NOTIFICATIONS_CONCURRECY, sails.hooks.sentry.wrapWorkerJob(notifProcessor)),
+    queues.bannedItems.process(QUEUE_BANNEDITEMS_CONCURRECY, sails.hooks.sentry.wrapWorkerJob(bannedItemsProcessor)),
+    queues.playerTracking.process(QUEUE_PLAYERTRACKING_CONCURRECY, sails.hooks.sentry.wrapWorkerJob(playerTrackingProcessor)),
+    queues.kill.process(QUEUE_KILL_CONCURRECY, sails.hooks.sentry.wrapWorkerJob(killProcessor)),
+    queues.hooks.process(QUEUE_HOOK_CONCURRECY, sails.hooks.sentry.wrapWorkerJob(hookProcessor)),
+    queues.system.process(QUEUE_SYSTEM_CONCURRECY, sails.hooks.sentry.wrapWorkerJob(systemProcessor)),
+    queues.customNotifications.process(QUEUE_CUSTOMNOTIFICATIONS_CONCURRECY, sails.hooks.sentry.wrapWorkerJob(customNotificationsProcessor)),
+    queues.sdtdCommands.process(QUEUE_SDTDCOMMANDS_CONCURRECY, sails.hooks.sentry.wrapWorkerJob(sdtdCommandsProcessor, { sampled: true }))
   ]);
 
   return;
