@@ -45,8 +45,8 @@ describe('CronJob', function () {
     });
     expect(this.spy.callCount).to.equal(1);
     expect(this.spy.getCall(0).args.length).to.eql(3);
-    expect(this.spy.getCall(0).args[2]).to.have.all.keys('author', 'color', 'description', 'fields', 'files', 'footer', 'image', 'thumbnail', 'timestamp', 'title', 'url', 'video', 'type', 'provider');
-    expect(this.spy.getCall(0).args[2].fields).to.eql([
+    expect(this.spy.getCall(0).args[2].data).to.have.all.keys('fields', 'footer', 'title', 'url');
+    expect(this.spy.getCall(0).args[2].data.fields).to.eql([
       {
         'inline': true,
         'name': 'Command',
@@ -55,10 +55,9 @@ describe('CronJob', function () {
       {
         'inline': true,
         'name': 'Execution time',
-        'value': ' Fri May 01 2020 - 01:20:05 GMT+0000 (Coordinated Universal Time)'
+        'value': 'Fri, 01 May 2020 01:20:05 GMT'
       },
       {
-        'inline': false,
         'name': 'Response',
         'value': 'An error occurred executing the API request to the 7D2D server'
       }
@@ -78,8 +77,8 @@ describe('CronJob', function () {
     });
     expect(this.spy.callCount).to.equal(1);
     expect(this.spy.getCall(0).args.length).to.eql(3);
-    expect(this.spy.getCall(0).args[2]).to.have.all.keys('author', 'color', 'description', 'fields', 'files', 'footer', 'image', 'thumbnail', 'timestamp', 'title', 'url', 'video', 'type', 'provider');
-    expect(this.spy.getCall(0).args[2].fields).to.eql([
+    expect(this.spy.getCall(0).args[2].data).to.have.all.keys('fields', 'footer', 'title', 'url',);
+    expect(this.spy.getCall(0).args[2].data.fields).to.eql([
       {
         'inline': true,
         'name': 'Command',
@@ -88,11 +87,10 @@ describe('CronJob', function () {
       {
         'inline': true,
         'name': 'Execution time',
-        'value': ' Fri May 01 2020 - 01:20:05 GMT+0000 (Coordinated Universal Time)'
+        'value': 'Fri, 01 May 2020 01:20:05 GMT'
       },
       {
-        'inline': false,
-        'name': 'say xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        'name': 'say xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
         'value': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
       }
     ]);

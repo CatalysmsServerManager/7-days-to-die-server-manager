@@ -65,7 +65,9 @@ describe('HOOK Custom Discord notifications', () => {
 
   it('Detects messages with regex matching and capture groups', async function () {
     await customNotification(jobData('REGEXTEST Can it match a 15645646 ?'));
-    expect(this.channelSpy).to.have.been.calledOnceWith(sinon.match({ description: 'Hey! I detected this number: 15645646' }));
+    const call = this.channelSpy.getCall(0);
+    expect(this.channelSpy).to.have.been.calledOnce;
+    expect(call.args[0].embeds[0].data.description).to.equal('Hey! I detected this number: 15645646');
   });
 
   it('Can ignore server chat', async function () {

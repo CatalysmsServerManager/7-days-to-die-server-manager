@@ -10,12 +10,12 @@ describe('GblMaxBans', function () {
   it('Respond when an error occurred', async function () {
     await this.notification.sendNotification({
       serverId: sails.testServer.id,
-      player: {},
+      player: { name: 'unittest' },
       bans: []
     });
     expect(this.spy.callCount).to.equal(1);
     expect(this.spy.getCall(0).args.length).to.eql(3);
-    expect(this.spy.getCall(0).args[2]).to.have.all.keys('author', 'color', 'description', 'fields', 'files', 'footer', 'image', 'thumbnail', 'timestamp', 'title', 'url', 'video', 'type', 'provider');
+    expect(this.spy.getCall(0).args[2].data).to.have.all.keys('color', 'fields', 'footer', 'title', 'url');
 
   });
   it('throws when no player supplied', async function () {
@@ -25,27 +25,27 @@ describe('GblMaxBans', function () {
   it('Varies the message depending on if the player was banned or not', async function () {
     await this.notification.sendNotification({
       serverId: sails.testServer.id,
-      player: {},
+      player: { name: 'unittest' },
       banned: true,
       bans: []
 
     });
     expect(this.spy.callCount).to.equal(1);
     expect(this.spy.getCall(0).args.length).to.eql(3);
-    expect(this.spy.getCall(0).args[2]).to.have.all.keys('author', 'color', 'description', 'fields', 'files', 'footer', 'image', 'thumbnail', 'timestamp', 'title', 'url', 'video', 'type', 'provider');
-    expect(this.spy.getCall(0).lastArg.title).to.match(/A player with \d bans on the GBL was kicked/);
+    expect(this.spy.getCall(0).args[2].data).to.have.all.keys('color', 'fields', 'footer', 'title', 'url');
+    expect(this.spy.getCall(0).lastArg.data.title).to.match(/A player with \d bans on the GBL was kicked/);
 
     await this.notification.sendNotification({
       serverId: sails.testServer.id,
-      player: {},
+      player: { name: 'unittest' },
       banned: false,
       bans: []
 
     });
     expect(this.spy.callCount).to.equal(2);
     expect(this.spy.getCall(1).args.length).to.eql(3);
-    expect(this.spy.getCall(1).args[2]).to.have.all.keys('author', 'color', 'description', 'fields', 'files', 'footer', 'image', 'thumbnail', 'timestamp', 'title', 'url', 'video', 'type', 'provider');
-    expect(this.spy.getCall(1).lastArg.title).to.match(/A player with \d bans on the GBL has connected/);
+    expect(this.spy.getCall(1).args[2].data).to.have.all.keys('color', 'fields', 'footer', 'title', 'url');
+    expect(this.spy.getCall(1).lastArg.data.title).to.match(/A player with \d bans on the GBL has connected/);
 
   });
 });
