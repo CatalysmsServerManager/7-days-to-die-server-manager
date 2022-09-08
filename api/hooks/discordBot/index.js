@@ -1,5 +1,7 @@
-const path = require('path');
 const { handleRoleUpdate } = require('./roles/handleRoleUpdate.js');
+const { REST, Routes } = require('discord.js');
+const commands = require('./commands');
+
 
 /**
  * @module DiscordBot
@@ -37,28 +39,30 @@ module.exports = function discordBot(sails) {
         client.customEmbed = require('./util/createEmbed').CustomEmbed;
         client.errorEmbed = require('./util/createEmbed').ErrorEmbed;
 
-        // Register some stuff in the registry... yeah..
-        client.registry
-          .registerGroups([
-            ['sdtd', '7 Days to die'],
-            ['meta', 'Commands about the system']
-          ])
-          .registerDefaults()
-          .registerCommandsIn(path.join(__dirname, 'commands'));
-
         // Listeners
-
-        client.on('commandError', (command, error) => {
-          sails.log.error(`Command error! ${command.memberName} trace: ${error.stack}`);
-        });
-
-        client.on('ready', () => {
+        client.on('ready', async () => {
           sails.log.info(`Connected to Discord as ${client.user.tag} - ${client.guilds.size} guilds`);
           sails.log.info(`Discord invite link: https://discordapp.com/oauth2/authorize?client_id=${client.user.id}&scope=bot&permissions=268749889`);
-        });
 
-        client.on('commandRun', (command, promise, message) => {
-          sails.log.info(`Command ${command.name} ran by ${message.author.username} on ${message.guild ? message.guild.name : 'DM'} - ${message.content}`);
+          const rest = new REST({ version: '10' }).setToken(
+            process.env.DISCORDBOTTOKEN
+          );
+
+          try {
+            await rest
+              .put(Routes.applicationCommands(client.user.id), {
+                body: Array.from(commands.values()).map((command) =>
+                  command.slashCommand.toJSON()
+                ),
+              })
+              .then(() => sails.log.info("Successfully registered application commands."))
+              .catch(sails.log.error);
+          } catch (error) {
+            sails.log.error(error);
+          }
+
+
+
         });
 
         client.on('error', error => {
@@ -81,6 +85,20 @@ module.exports = function discordBot(sails) {
           sails.log.warn(`Discord API rateLimit reached! ${info.limit} max requests allowed to ${info.method} ${info.path}`);
         });
 
+        client.on('interactionCreate', async (interaction) => {
+          sails.log.info(`Received interaction ${interaction.id}`);
+          if (!interaction.isChatInputCommand()) { return; }
+          sails.log.info(`Interaction is: ${interaction.commandName}`);
+
+          const command = commands.get(interaction.commandName);
+          try {
+            await command.handler(interaction, client);
+            sails.log.info(`Command ${interaction.commandName} ran by ${interaction.user.username} on ${interaction.guildId}`);
+          } catch (error) {
+            sails.log.error(`Command error! ${interaction.commandName} trace: ${error.stack}`, error);
+          }
+        });
+
         client.on('guildMemberUpdate', (oldMember, newMember) => {
           try {
             handleRoleUpdate(oldMember, newMember);
@@ -95,8 +113,6 @@ module.exports = function discordBot(sails) {
 
         if (process.env.DISCORDBOTTOKEN) {
           client.login(sails.config.custom.botToken).then(() => {
-            initializeGuildPrefixes();
-
 
             // Rotate presence with stats info
             client.setInterval(async function () {
@@ -143,21 +159,3 @@ module.exports = function discordBot(sails) {
   };
 
 };
-
-
-
-async function initializeGuildPrefixes() {
-  let serversWithDiscordEnabled = await SdtdConfig.find({
-    discordGuildId: {
-      '!=': ['']
-    }
-  });
-
-  serversWithDiscordEnabled.forEach(serverConfig => {
-    let guild = client.guilds.cache.get(serverConfig.discordGuildId);
-    if (guild) {
-      guild.commandPrefix = serverConfig.discordPrefix;
-    }
-  });
-
-}

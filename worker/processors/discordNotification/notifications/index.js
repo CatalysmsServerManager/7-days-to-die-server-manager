@@ -6,7 +6,6 @@ const gblMaxBans = require('./gblMaxBans');
 const playerConnected = require('./playerConnected');
 const playerDisconnected = require('./playerDisconnected');
 const systemBoot = require('./systemBoot');
-const ticket = require('./ticket');
 const sseThrottled = require('./SSEThrottled');
 
 
@@ -19,6 +18,5 @@ module.exports = [
   new playerConnected(),
   new playerDisconnected(),
   new systemBoot(),
-  new ticket(),
   new sseThrottled(),
 ];

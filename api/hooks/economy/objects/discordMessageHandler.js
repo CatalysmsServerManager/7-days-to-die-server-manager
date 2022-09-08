@@ -13,7 +13,7 @@ class DiscordMessageHandler {
     this.emitter = emitterObj;
 
 
-    client.on('message', message => {
+    client.on('messageCreate', message => {
       if (message.guild) {
         emitterObj.emit(message.guild.id, message);
       }
