@@ -37,7 +37,7 @@ module.exports = {
         {
           'content': inputs.content,
           'tts': false,
-          'embeds': [inputs.embed.data]
+          'embeds': inputs.embed ? [inputs.embed.data] : undefined
         }
       );
       sails.log.debug(`Sent a message to channel ${inputs.channelId}`, { ...response, labels: { type: 'discord' } });
