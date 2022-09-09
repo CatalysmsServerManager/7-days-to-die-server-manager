@@ -1,6 +1,7 @@
 const { handleRoleUpdate } = require('./roles/handleRoleUpdate.js');
 const { REST, Routes } = require('discord.js');
 const commands = require('./commands');
+const adminRestart = require('./util/adminRestart.js');
 
 
 /**
@@ -96,6 +97,7 @@ module.exports = function discordBot(sails) {
             sails.log.info(`Command ${interaction.commandName} ran by ${interaction.user.username} on ${interaction.guildId}`);
           } catch (error) {
             sails.log.error(`Command error! ${interaction.commandName} trace: ${error.stack}`, error);
+            await interaction.reply(`🔴 something unexpected went wrong while executing this command :( If this problem persists, please join the support server and report this issue.`);
           }
         });
 
@@ -105,7 +107,22 @@ module.exports = function discordBot(sails) {
           } catch (error) {
             sails.log.error(`Error handling role change`, error);
           }
+        });
 
+        client.on('messageCreate', async message => {
+          if (message.inGuild()) { return; }
+          if (message.author.bot) { return; }
+
+          sails.log.info(`Received DM from ${message.author.username} - ${message.content}`);
+
+          switch (message.content) {
+            case 'restart':
+              await adminRestart(message);
+              break;
+
+            default:
+              break;
+          }
         });
 
 
