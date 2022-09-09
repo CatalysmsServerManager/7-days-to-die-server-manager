@@ -1,6 +1,7 @@
 const { handleRoleUpdate } = require('./roles/handleRoleUpdate.js');
 const { REST, Routes } = require('discord.js');
 const commands = require('./commands');
+const adminRestart = require('./util/adminRestart.js');
 
 
 /**
@@ -106,7 +107,22 @@ module.exports = function discordBot(sails) {
           } catch (error) {
             sails.log.error(`Error handling role change`, error);
           }
+        });
 
+        client.on('messageCreate', async message => {
+          if (message.inGuild()) { return; }
+          if (message.author.bot) { return; }
+
+          sails.log.info(`Received DM from ${message.author.username} - ${message.content}`);
+
+          switch (message.content) {
+            case 'restart':
+              await adminRestart(message);
+              break;
+
+            default:
+              break;
+          }
         });
 
 
