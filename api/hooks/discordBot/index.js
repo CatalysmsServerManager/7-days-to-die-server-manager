@@ -97,6 +97,7 @@ module.exports = function discordBot(sails) {
             sails.log.info(`Command ${interaction.commandName} ran by ${interaction.user.username} on ${interaction.guildId}`);
           } catch (error) {
             sails.log.error(`Command error! ${interaction.commandName} trace: ${error.stack}`, error);
+            await interaction.reply(`🔴 something unexpected went wrong while executing this command :( If this problem persists, please join the support server and report this issue.`);
           }
         });
 
