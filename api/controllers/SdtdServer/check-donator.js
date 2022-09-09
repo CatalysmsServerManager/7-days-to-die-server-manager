@@ -35,6 +35,11 @@ module.exports = {
     }
 
     let donatorStatus = await sails.helpers.meta.checkDonatorStatus(inputs.serverId, inputs.userId, inputs.reload);
+
+    if (donatorStatus && donatorStatus !== 'free') {
+      await SdtdServer.update({ id: inputs.serverId }, { disabled: false });
+    }
+
     return exits.success(donatorStatus);
 
   }

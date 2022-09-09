@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 /**
  * @class
@@ -7,19 +7,20 @@ const Discord = require('discord.js');
  * [Discord.js MessageEmbed]{@link https://discord.js.org/#/docs/main/master/class/MessageEmbed}
  */
 
-class CustomEmbed extends Discord.MessageEmbed {
+class CustomEmbed extends EmbedBuilder {
   constructor() {
     super();
     this.setTitle(sails.config.custom.botEmbedTitle);
-    this.setURL(sails.config.custom.botEmbedLink);
+    this.setURL(sails.config.custom.botEmbedUrl);
   }
+
 }
 
 class ErrorEmbed extends CustomEmbed {
   constructor(errorMsg) {
     super();
     this.setDescription(`An error occured! See below for more info \n ${errorMsg}`);
-    this.setColor('RED');
+    this.setColor('Red');
   }
 }
 

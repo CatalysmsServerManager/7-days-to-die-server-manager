@@ -22,6 +22,10 @@ module.exports = function SentryHook(sails) {
           new Sentry.Integrations.Http({ tracing: true }),
           new Tracing.Integrations.Express({ app: sails }),
           new Tracing.Integrations.Mysql()
+        ],
+        ignoreErrors: [
+          'Error connecting to the gameserver',
+          'Promise timed out after',
         ]
       }
     },

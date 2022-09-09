@@ -30,6 +30,12 @@ class SdtdSSE extends LoggingObject {
     this.throttledFunction.on('normal', () => {
       sails.log.debug(`SSE normal for server ${this.server.id}`, { server: this.server });
       clearTimeout(this.throttleDestructionTimeout);
+      sails.helpers.discord.sendNotification({
+        serverId: this.server.id,
+        notificationType: 'sseThrottled',
+        type: 'normal'
+      }).then().catch(e => { sails.log.error(`Error sending SSE throttled notification for server ${this.server.id}`, { server: this.server, error: e }); });
+
       this.start();
     });
 
@@ -37,6 +43,11 @@ class SdtdSSE extends LoggingObject {
       sails.log.debug(`SSE throttled for server ${this.server.id}`, { server: this.server });
       this.throttleDestructionTimeout = setTimeout(this.destroy.bind(this), this.THROTTLE_DELAY);
       this.throttleReconnectTimeout = setTimeout(this.start.bind(this), this.SSE_THROTTLE_RECONNECT_DELAY);
+      sails.helpers.discord.sendNotification({
+        serverId: this.server.id,
+        notificationType: 'sseThrottled',
+        type: 'throttled'
+      }).then().catch(e => { sails.log.error(`Error sending SSE throttled notification for server ${this.server.id}`, { server: this.server, error: e }); });
     });
 
     this.reconnectInterval = setInterval(() => this.reconnectListener(), this.SSE_RECONNECT_INTERVAL);

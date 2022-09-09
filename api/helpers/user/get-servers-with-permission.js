@@ -43,12 +43,12 @@ module.exports = {
           }
         }
       } catch (error) {
-        sails.log.error(error, {userId: inputs.userId});
+        sails.log.error(error, { userId: inputs.userId });
       }
     });
 
     let ownedServers = await SdtdServer.find({
-      owner: inputs.userId
+      owner: inputs.userId,
     });
 
     for (const server of ownedServers) {
@@ -66,9 +66,9 @@ module.exports = {
       }
     }
 
-    objectToSend = _.uniqBy(objectToSend, 'id');
+    objectToSend = _.uniqBy(objectToSend, 'id').filter(server => !server.disabled);
 
-    sails.log.debug(`API - User:getServersWithPermissions - Found ${objectToSend.length} servers for user ${inputs.userId}`, {userId: inputs.userId});
+    sails.log.debug(`API - User:getServersWithPermissions - Found ${objectToSend.length} servers for user ${inputs.userId}`, { userId: inputs.userId });
     return exits.success(objectToSend);
   }
 

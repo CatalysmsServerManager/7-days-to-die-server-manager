@@ -23,6 +23,7 @@ var passport = require('passport');
 var SteamStrategy = require('passport-steam');
 var DiscordStrategy = require('passport-discord').Strategy;
 const Sentry = require('@sentry/node');
+const serverDisabledMiddleware = require('../api/middleware/serverDisabledMiddleware');
 
 /**
  * Steam strategy config
@@ -121,7 +122,7 @@ morgan.token('playerId', function (req) {
   }
 });
 
-function morganJson(tokens, req,res) {
+function morganJson(tokens, req, res) {
   return JSON.stringify({
     'remote-address': tokens['remote-addr'](req, res),
     'time': tokens['date'](req, res, 'iso'),
@@ -166,6 +167,7 @@ module.exports.http = {
     sentryError: Sentry.Handlers.errorHandler(),
     sentryTracing: Sentry.Handlers.tracingHandler(),
     morgan: morganLogger,
+    serverDisabledMiddleware: serverDisabledMiddleware,
 
     /***************************************************************************
      *                                                                          *
@@ -187,6 +189,7 @@ module.exports.http = {
       'bodyParser',
       'compress',
       'poweredBy',
+      'serverDisabledMiddleware',
       'router',
       'www',
       'favicon',

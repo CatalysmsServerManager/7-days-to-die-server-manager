@@ -20,8 +20,8 @@ describe('DiscordNotification', function () {
 
     expect(spy.callCount).to.equal(1);
     expect(spy.getCall(0).args.length).to.eql(3);
-    expect(spy.getCall(0).args[2]).to.have.all.keys('author', 'color', 'description', 'fields', 'files', 'footer', 'image', 'thumbnail', 'timestamp', 'title', 'url', 'video', 'type', 'provider');
-    expect(spy.getCall(0).args[2].fields).to.eql([]);
+    expect(spy.getCall(0).args[2].data).to.have.all.keys('footer', 'title', 'url');
+    expect(spy.getCall(0).args[2].data.fields).to.be.undefined;
   });
   it('Gracefully handle an error', async function () {
     spy.onCall(0).throws(new Error('AHH'));

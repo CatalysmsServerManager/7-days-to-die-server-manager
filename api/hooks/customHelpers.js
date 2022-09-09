@@ -32,11 +32,13 @@ function errorBoundary(fn) {
         res
           .then(resolve)
           .catch(error => {
+            sails.log.error(error);
             reject(new Error('Error connecting to the gameserver'));
           });
       });
 
     } catch (error) {
+      sails.log.error(error);
       throw new Error('Error connecting to the gameserver');
     }
   };
