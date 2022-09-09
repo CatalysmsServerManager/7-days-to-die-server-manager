@@ -1,4 +1,4 @@
-const { Client, GatewayIntentBits } = require('discord.js');
+const { Client, GatewayIntentBits, Partials } = require('discord.js');
 
 let client;
 
@@ -24,6 +24,9 @@ module.exports = {
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.DirectMessages,
       ],
+      partials: [
+        Partials.Channel
+      ]
     });
 
     return exits.success(client);
