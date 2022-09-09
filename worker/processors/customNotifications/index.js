@@ -1,8 +1,7 @@
-const Discord = require('discord.js');
-
+const { EmbedBuilder } = require('discord.js');
 
 module.exports = async function customNotifications(job) {
-  sails.log.debug('[Worker] Got a `customNotification` job', {server: job.data.server});
+  sails.log.debug('[Worker] Got a `customNotification` job', { server: job.data.server });
   if (!job.data.data.msg) {
     throw new Error(`Must specify a msg`);
   }
@@ -28,9 +27,9 @@ async function handleLogLine(logLine) {
     const matchResult = matches(logLine.msg, notification.stringToSearchFor);
     if (matchResult) {
       if (notification.ignoreServerChat && isServerMessage(logLine.msg)) {
-        sails.log.debug('Ignoring message because server chat is ignored', {server});
+        sails.log.debug('Ignoring message because server chat is ignored', { server });
       } else {
-        sails.log.info(`Triggered a custom notification for server ${server.id} - ${logLine.msg}`, {server});
+        sails.log.info(`Triggered a custom notification for server ${server.id} - ${logLine.msg}`, { server });
         await sendNotification(logLine, server, notification, matchResult);
       }
     }
@@ -75,7 +74,7 @@ async function sendNotification(logLine, server, customNotif, matches) {
     return;
   }
 
-  const embed = new Discord.MessageEmbed();
+  const embed = new EmbedBuilder();
 
   embed.setTitle(`Custom notification for ${server.name}`);
 
@@ -86,9 +85,9 @@ async function sendNotification(logLine, server, customNotif, matches) {
     );
     embed.setDescription(message);
   } else {
-    embed.addField('Message', logLine.msg.substr(0, 1024));
+    embed.addFields([{ name: 'Message', value: logLine.msg.substr(0, 1024) }]);
   }
 
-  return channel.send(embed);
+  return channel.send({ embeds: [embed] });
 
 }

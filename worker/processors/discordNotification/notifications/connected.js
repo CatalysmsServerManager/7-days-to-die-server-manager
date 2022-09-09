@@ -7,7 +7,7 @@ class Connected extends DiscordNotification {
 
   async makeEmbed(event, embed) {
     embed.setTitle('Connected to CSMM')
-      .setColor('GREEN');
+      .setColor([0, 255, 0]);
     return embed;
   }
 }

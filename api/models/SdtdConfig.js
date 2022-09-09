@@ -21,7 +21,7 @@ module.exports = {
           .catch(e => cb(e));
       })
       .catch(e => {
-        sails.log.error(e, {server: newConfig.server});
+        sails.log.error(e, { server: newConfig.server });
         return cb(e);
       });
   },
@@ -247,11 +247,6 @@ module.exports = {
     // | |__| | \__ \ (_| (_) | | | (_| |
     // |_____/|_|___/\___\___/|_|  \__,_|
 
-    discordPrefix: {
-      type: 'string',
-      defaultsTo: '$'
-    },
-
     /**
      * @memberof SdtdServer
      * @var {string} discordGuildId
@@ -311,7 +306,7 @@ module.exports = {
      * @description Prefix for DC messages
      */
 
-     chatBridgeDCPrefix: {
+    chatBridgeDCPrefix: {
       type: 'string',
       defaultsTo: '[5663F7](DC) [-]',
       allowNull: true
@@ -328,7 +323,7 @@ module.exports = {
       defaultsTo: '[FFFFFF]',
       allowNull: true
     },
-    
+
     discordNotificationConfig: {
       type: 'json',
       defaultsTo: {
