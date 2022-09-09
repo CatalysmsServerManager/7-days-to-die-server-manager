@@ -7,10 +7,10 @@ class telePublic extends SdtdCommand {
       description: 'Make a teleport public',
       extendedDescription: 'Let everyone on the server teleport to a location',
       aliases: ['telepub',
-	    'teleportpublic', 'teleportpub',
-		'tppublic', 'tppub',
-		'publictele', 'publicteleport', 'publictp',
-		'pubtele', 'pubteleport', 'pubtp']
+        'teleportpublic', 'teleportpub',
+        'tppublic', 'tppub',
+        'publictele', 'publicteleport', 'publictp',
+        'pubtele', 'pubteleport', 'pubtp']
     });
   }
 

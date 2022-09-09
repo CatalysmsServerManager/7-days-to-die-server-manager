@@ -7,12 +7,12 @@ class removeTele extends SdtdCommand {
       description: 'Remove a teleport location',
       extendedDescription: 'Delete a teleport location from the system',
       aliases: ['teleremove', 'telerm', 'teledelete', 'teledel',
-	    'teleportremove', 'teleportrm', 'teleportdelete', 'teleportdel',
-		'tpremove', 'tprm', 'tpdelete', 'tpdel',
-		'removeteleport', 'removetp',
-		'rmtele', 'rmteleport', 'rmtp',
-		'deletetele', 'deleteteleport', 'deletetp',
-		'deltele', 'delteleport', 'deltp']
+        'teleportremove', 'teleportrm', 'teleportdelete', 'teleportdel',
+        'tpremove', 'tprm', 'tpdelete', 'tpdel',
+        'removeteleport', 'removetp',
+        'rmtele', 'rmteleport', 'rmtp',
+        'deletetele', 'deleteteleport', 'deletetp',
+        'deltele', 'delteleport', 'deltp']
     });
   }
 

@@ -8,10 +8,10 @@ class renameTele extends SdtdCommand {
       description: 'Rename a teleport location',
       extendedDescription: 'Arguments: oldname newname',
       aliases: ['telerename', 'telern',
-	    'teleportrename', 'teleportrn',
-		'tprename', 'tprn',
-		'renameteleport', 'renametp',
-		'rntele', 'rnteleport', 'rntp']
+        'teleportrename', 'teleportrn',
+        'tprename', 'tprn',
+        'renameteleport', 'renametp',
+        'rntele', 'rnteleport', 'rntp']
     });
   }
 

@@ -7,10 +7,10 @@ class telePrivate extends SdtdCommand {
       description: 'Make a teleport private',
       extendedDescription: 'When a teleport is private, only you can use it.',
       aliases: ['telepriv',
-	    'teleportprivate', 'teleportpriv',
-		'tpprivate', 'tppriv',
-		'privatetele', 'privateteleport', 'privatetp',
-		'privtele', 'privteleport', 'privtp']
+        'teleportprivate', 'teleportpriv',
+        'tpprivate', 'tppriv',
+        'privatetele', 'privateteleport', 'privatetp',
+        'privtele', 'privteleport', 'privtp']
     });
   }
 

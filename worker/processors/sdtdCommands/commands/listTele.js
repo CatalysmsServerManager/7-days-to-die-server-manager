@@ -7,10 +7,10 @@ class listTele extends SdtdCommand {
       description: 'List teleport locations',
       extendedDescription: 'Lists your teleport locations. By providing a \'public\' argument, you will instead see a list of public teleports "$listtele public"',
       aliases: ['telelist', 'telels',
-	    'teleportlist', 'teleportls',
-		'tplist', 'tpls',
-		'listteleport', 'listtp',
-		'lstele', 'lsteleport', 'lstp']
+        'teleportlist', 'teleportls',
+        'tplist', 'tpls',
+        'listteleport', 'listtp',
+        'lstele', 'lsteleport', 'lstp']
     });
   }
 
