@@ -1,8 +1,8 @@
 const shouldSetRole = require('../../../helpers/discord/set-role-from-discord').shouldSetRole;
 
 async function handleRoleUpdate(oldMember, newMember) {
-  let oldRoles = oldMember.roles.cache.array();
-  let newRoles = newMember.roles.cache.array();
+  let oldRoles = [...oldMember.roles.cache.values()];
+  let newRoles = [...newMember.roles.cache.values()];
 
   let deletedRole = _.difference(oldRoles, newRoles);
   let addedRole = _.difference(newRoles, oldRoles);
@@ -72,7 +72,7 @@ async function addCSMMRole(member) {
 
   for (const player of players) {
 
-    let memberRoles = member.roles.cache.array();
+    let memberRoles = [...member.roles.cache.values()];
 
     let currentPlayerRole = player.role;
 
@@ -86,7 +86,7 @@ async function addCSMMRole(member) {
     });
 
     if (_.isUndefined(highestRole[0])) {
-      sails.log.warn(`[handleRoleUpdate] No highest role found for server ${player.server}. Something is wrong`, {player});
+      sails.log.warn(`[handleRoleUpdate] No highest role found for server ${player.server}. Something is wrong`, { player });
       continue;
     }
 
@@ -96,7 +96,7 @@ async function addCSMMRole(member) {
       }, {
         role: highestRole[0].id
       });
-      sails.log.debug(`[handleRoleUpdate] Modified a players role based on discord role change - player ${player.id}. ${player.name} to role ${highestRole[0] ? highestRole[0].name : null}`, {player});
+      sails.log.debug(`[handleRoleUpdate] Modified a players role based on discord role change - player ${player.id}. ${player.name} to role ${highestRole[0] ? highestRole[0].name : null}`, { player });
     }
   }
 }

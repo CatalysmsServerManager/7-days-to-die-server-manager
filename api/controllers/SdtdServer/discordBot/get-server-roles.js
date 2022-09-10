@@ -30,7 +30,7 @@ module.exports = {
       let discordClient = await sails.helpers.discord.getClient();
       let discordGuild = await discordClient.guilds.fetch(server.config[0].discordGuildId);
       if (!_.isUndefined(discordGuild)) {
-        foundRoles = discordGuild.roles.cache.array();
+        foundRoles = [...discordGuild.roles.cache.values()];
       }
 
     }
