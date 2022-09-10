@@ -19,7 +19,7 @@ const Status = {
     const sdtdServer = await findSdtdServer(interaction, serverIdx);
 
     if (!sdtdServer) {
-      return interaction.reply(`Did not find server ${serverIdx}! Check your config please.`);
+      return interaction.editReply(`Did not find server ${serverIdx}! Check your config please.`);
     }
 
 
@@ -34,7 +34,7 @@ const Status = {
     }
 
     if (!serverInfo.stats || !serverInfo.serverInfo) {
-      return interaction.reply(`Could not load required data. Is the server offline?`);
+      return interaction.editReply(`Could not load required data. Is the server offline?`);
     }
 
     let onlinePlayersStringList = new String();
@@ -87,7 +87,7 @@ const Status = {
       embed.setColor([255, 0, 0]);
     }
 
-    return interaction.reply({ embeds: [embed] });
+    return interaction.editReply({ embeds: [embed] });
   }
 };
 

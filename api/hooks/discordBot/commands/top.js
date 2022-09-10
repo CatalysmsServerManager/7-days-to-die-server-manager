@@ -41,7 +41,7 @@ const Top = {
     const sdtdServer = await findSdtdServer(interaction, serverIdx);
 
     if (!sdtdServer) {
-      return interaction.reply(`Did not find server ${serverIdx}! Check your config please.`);
+      return interaction.editReply(`Did not find server ${serverIdx}! Check your config please.`);
     }
 
     switch (type) {
@@ -72,7 +72,7 @@ const Top = {
     }));
 
     embed.setTitle(`${sdtdServer.name} - Top ${amount} players by ${type}`);
-    return interaction.reply({ embeds: [embed] });
+    return interaction.editReply({ embeds: [embed] });
   }
 };
 

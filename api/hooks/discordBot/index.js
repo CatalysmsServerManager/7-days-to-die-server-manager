@@ -93,6 +93,7 @@ module.exports = function discordBot(sails) {
 
           const command = commands.get(interaction.commandName);
           try {
+            await interaction.deferReply();
             await command.handler(interaction, client);
             sails.log.info(`Command ${interaction.commandName} ran by ${interaction.user.username} on ${interaction.guildId}`);
           } catch (error) {
