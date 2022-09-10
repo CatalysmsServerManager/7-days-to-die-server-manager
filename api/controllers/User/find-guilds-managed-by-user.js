@@ -51,7 +51,7 @@ module.exports = {
       const filteredGuilds = (await Promise.all(discordClient.guilds.cache.map(async g => {
         try {
           const member = await g.members.fetch(discordUser.id);
-          if (member && member.permissions.has(PermissionFlagsBits.MANAGE_GUILD)) {
+          if (member && member.permissions.has(PermissionFlagsBits.ManageGuild)) {
             return g;
           }
         } catch (error) {
