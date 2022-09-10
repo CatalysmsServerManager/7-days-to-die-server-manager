@@ -24,7 +24,7 @@ const ExecCommand = {
     const sdtdServer = await findSdtdServer(interaction, serverIdx);
 
     if (!sdtdServer) {
-      return interaction.reply(`Did not find server ${serverIdx}! Check your config please.`);
+      return interaction.editReply(`Did not find server ${serverIdx}! Check your config please.`);
     }
 
     let permCheck = await sails.helpers.roles.checkPermission.with({
@@ -43,7 +43,7 @@ const ExecCommand = {
       if (usersWithDiscordId.length === 0) {
         errorEmbed.addFields([{ name: `No users with your discord ID ${interaction.user.id} found!`, value: 'Link your Discord profile to CSMM first.' }]);
       }
-      return interaction.reply(errorEmbed);
+      return interaction.editReply(errorEmbed);
     }
 
 
@@ -59,17 +59,17 @@ const ExecCommand = {
 
     if (response.result.length < 1000) {
       successEmbed.addFields([{ name: ':outbox_tray: Output', value: `${response.result ? response.result : 'No output data'}` }]);
-      return interaction.reply({ embeds: [successEmbed] });
+      return interaction.editReply({ embeds: [successEmbed] });
     }
 
     const fileName = `${sdtdServer.name}_${command}_output.txt`;
     try {
       await fs.writeFile(fileName, response.result);
       successEmbed.addFields([{ name: ':outbox_tray: Output', value: `Logging to file` }]);
-      await interaction.reply({ embeds: [successEmbed], files: [{ name: fileName, description: 'Output of the command', attachment: fileName }] });
+      await interaction.editReply({ embeds: [successEmbed], files: [{ name: fileName, description: 'Output of the command', attachment: fileName }] });
     } catch (error) {
       sails.log.error(`Error handling large command output`, { error });
-      await interaction.reply({ embeds: [successEmbed] });
+      await interaction.editReply({ embeds: [successEmbed] });
     } finally {
       await fs.unlink(fileName);
     }

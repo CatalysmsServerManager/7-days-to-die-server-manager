@@ -23,7 +23,7 @@ const Player = {
     const sdtdServer = await findSdtdServer(interaction, serverIdx);
 
     if (!sdtdServer) {
-      return interaction.reply(`Did not find server ${serverIdx}! Check your config please.`);
+      return interaction.editReply(`Did not find server ${serverIdx}! Check your config please.`);
     }
 
     let foundPlayer = await sails.models.player.find({
@@ -40,11 +40,11 @@ const Player = {
     });
 
     if (foundPlayer.length === 0) {
-      return interaction.reply(`Did not find any players with that name/ID!`);
+      return interaction.editReply(`Did not find any players with that name/ID!`);
     }
 
     if (foundPlayer.length > 1) {
-      return interaction.reply(`Found ${foundPlayer.length} players! Narrow your search please. Consider using steam ID or entity ID instead of player name`);
+      return interaction.editReply(`Found ${foundPlayer.length} players! Narrow your search please. Consider using steam ID or entity ID instead of player name`);
     }
 
     let playerInfo = await sails.helpers.sdtd.loadPlayerData.with({ serverId: sdtdServer.id, steamId: foundPlayer[0].steamId });
@@ -69,7 +69,7 @@ const Player = {
     }
 
 
-    return interaction.reply({ embeds: [embed] });
+    return interaction.editReply({ embeds: [embed] });
   }
 };
 
