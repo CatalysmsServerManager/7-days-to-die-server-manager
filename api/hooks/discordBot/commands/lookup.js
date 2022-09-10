@@ -23,7 +23,7 @@ const Lookup = {
     const sdtdServer = await findSdtdServer(interaction, serverIdx);
 
     if (!sdtdServer) {
-      return interaction.reply(`Did not find server ${serverIdx}! Check your config please.`);
+      return interaction.editReply(`Did not find server ${serverIdx}! Check your config please.`);
     }
 
     let permCheck = await sails.helpers.roles.checkPermission.with({
@@ -42,7 +42,7 @@ const Lookup = {
       if (usersWithDiscordId.length === 0) {
         errorEmbed.addFields([{ name: `No users with your discord ID ${msg.author.id} found!`, value: 'Link your Discord profile to CSMM first.' }]);
       }
-      return interaction.reply({ embeds: [errorEmbed] });
+      return interaction.editReply({ embeds: [errorEmbed] });
     }
 
     let foundPlayer = await sails.models.player.find({
@@ -62,11 +62,11 @@ const Lookup = {
     });
 
     if (foundPlayer.length === 0) {
-      return interaction.reply(`Did not find any players with that name/ID!`);
+      return interaction.editReply(`Did not find any players with that name/ID!`);
     }
 
     if (foundPlayer.length > 1) {
-      return interaction.reply(`Found ${foundPlayer.length} players! Narrow your search please. Consider using steam ID or entity ID instead of player name`);
+      return interaction.editReply(`Found ${foundPlayer.length} players! Narrow your search please. Consider using steam ID or entity ID instead of player name`);
     }
 
     let playerInfo = await sails.helpers.sdtd.loadPlayerData.with({
@@ -93,7 +93,7 @@ const Lookup = {
       embed.setThumbnail(foundPlayer.avatarUrl);
     }
 
-    return interaction.reply({ embeds: [embed] });
+    return interaction.editReply({ embeds: [embed] });
 
   }
 };

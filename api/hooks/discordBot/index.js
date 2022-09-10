@@ -93,11 +93,12 @@ module.exports = function discordBot(sails) {
 
           const command = commands.get(interaction.commandName);
           try {
+            await interaction.deferReply();
             await command.handler(interaction, client);
             sails.log.info(`Command ${interaction.commandName} ran by ${interaction.user.username} on ${interaction.guildId}`);
           } catch (error) {
             sails.log.error(`Command error! ${interaction.commandName} trace: ${error.stack}`, error);
-            await interaction.reply(`🔴 something unexpected went wrong while executing this command :( If this problem persists, please join the support server and report this issue.`);
+            await interaction.editReply(`🔴 something unexpected went wrong while executing this command :( If this problem persists, please join the support server and report this issue.`);
           }
         });
 
