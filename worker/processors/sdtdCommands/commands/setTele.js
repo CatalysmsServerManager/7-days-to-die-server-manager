@@ -7,7 +7,11 @@ class setTele extends SdtdCommand {
       name: 'settele',
       description: 'Create a teleport location',
       extendedDescription: 'Creates a teleport location at your current position. Arguments: name',
-      aliases: ['teleset', 'telecreate']
+      aliases: ['teleset', 'telecreate',
+        'teleportset', 'teleportcreate',
+        'tpset', 'tpcreate',
+        'setteleport', 'settp',
+        'createtele', 'createteleport', 'createtp']
     });
   }
 
