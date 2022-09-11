@@ -36,6 +36,11 @@ module.exports = {
     try {
 
       let discordClient = sails.helpers.discord.getClient();
+
+      if (!inputs.guildId || inputs.guildId === '0') {
+        return exits.success([]);
+      }
+
       let guild = await discordClient.guilds.fetch(inputs.guildId);
       if (_.isUndefined(guild)) {
         return exits.success([]);
