@@ -5,6 +5,7 @@ const Wait = require('../../../worker/util/customFunctions/wait');
 const DelVar = require('../customFunctions/persistentVariables/delVar');
 const GetVar = require('../customFunctions/persistentVariables/getVar');
 const SetVar = require('../customFunctions/persistentVariables/setVar');
+const RemoveTele = require('../customFunctions/removeTele');
 const Handlebars = require('../Handlebars');
 
 const supportedFunctions = [
@@ -14,7 +15,8 @@ const supportedFunctions = [
   new SendDiscord(),
   new GetVar(),
   new SetVar(),
-  new DelVar()
+  new DelVar(),
+  new RemoveTele(),
 ];
 
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
@@ -25,8 +27,8 @@ const ARGUMENT_NAMES = /([^\s,]+)/g;
 // https://stackoverflow.com/questions/1007981/how-to-get-function-parameter-names-values-dynamically
 function getParamNames(func) {
   const fnStr = func.toString().replace(STRIP_COMMENTS, '');
-  let result = fnStr.slice(fnStr.indexOf('(')+1, fnStr.indexOf(')')).match(ARGUMENT_NAMES);
-  if(result === null)  {
+  let result = fnStr.slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')')).match(ARGUMENT_NAMES);
+  if (result === null) {
     result = [];
   }
   return result;
@@ -44,7 +46,7 @@ module.exports = class CSMMCommand {
 
   async loadData() {
     this.data.server = this.server;
-    this.data.server.config = await SdtdConfig.findOne({server: this.server.id});
+    this.data.server.config = await SdtdConfig.findOne({ server: this.server.id });
     this.data.server.onlinePlayers = await sails.helpers.sdtd.loadPlayerData(this.server.id, undefined, true);
     this.data.server.stats = await sails.helpers.sdtdApi.getStats(SdtdServer.getAPIConfig(this.server));
     return this.data;
@@ -71,7 +73,7 @@ module.exports = class CSMMCommand {
 
       const element = Handlebars.helpers[helper];
       const parameters = getParamNames(element);
-      response.push({name: helper, parameters});
+      response.push({ name: helper, parameters });
     }
     return response;
   }
@@ -95,7 +97,7 @@ module.exports = class CSMMCommand {
       this.errors.push(error.message);
     }
     await this._saveResult('templateRender');
-    return {template: this.template, errors: this.errors};
+    return { template: this.template, errors: this.errors };
   }
 
 
@@ -142,7 +144,7 @@ module.exports = class CSMMCommand {
       );
       return result;
     } catch (error) {
-      sails.log.error(error, {server});
+      sails.log.error(error, { server });
       return {
         command,
         result: 'An error occurred executing the API request to the 7D2D server'
@@ -173,7 +175,7 @@ module.exports = class CSMMCommand {
       if (fn) {
         const res = await this._executeCustomFunction(fn, match[0], this.server);
         command = command.replace(match[0], res);
-        results.push({result: res, parameters: match[0]});
+        results.push({ result: res, parameters: match[0] });
       }
       match = fnRegex.exec(command);
     }
