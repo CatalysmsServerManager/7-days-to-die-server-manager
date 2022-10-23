@@ -236,153 +236,149 @@
 
 <div id="gallery-view" class="row">
 
-  <div class="col-12">
-    <div class="card-columns">
       <% listings.forEach(listing => { %>
-      <div style="text-align: center" class="card">
-        <% if(listing.iconName) { %>
-        <img class="card-img-top" src="/images/sdtdIcons/<%= listing.iconName %>.png" alt="<%= listing.name %>"
-          style="max-width: 25%; max-height: 25%;">
-        <% } else { %>
-        <img class="card-img-top" src="/images/sdtdIcons/<%= listing.name %>.png" alt="<%= listing.name %>"
-          style="max-width: 25%; max-height: 25%;">
-        <% } %>
-        <div class="card-body">
-          <h4 class="card-title">
-            <%=  listing.friendlyName ?  listing.friendlyName : listing.name%>
-          </h4>
-          <p class="card-text">
-            Bought
-            <%= listing.timesBought %> times.
-          </p>
-          <ul>
-            <li class="list-group-item">Amount:
-              <%= listing.amount %>
-            </li>
-            <% if (listing.quality) { %>
-            <li class="list-group-item">Quality:
-              <%= listing.quality %>
-            </li>
+      <div class="col-sm-3 p-0">  
+        <div style="text-align: center" class="card mb-2 mx-1 border-secondary">
+            <% if(listing.iconName) { %>
+            <img class="card-img-top mx-auto" src="/images/sdtdIcons/<%= listing.iconName %>.png" alt="<%= listing.name %>"
+            style="max-width: 25%; max-height: 25%;">
+            <% } else { %>
+            <img class="card-img-top mx-auto" src="/images/sdtdIcons/<%= listing.name %>.png" alt="<%= listing.name %>"
+            style="max-width: 25%; max-height: 25%;">
             <% } %>
-            <li class="list-group-item">Price:
-              <% if(player.role.economyDeductMultiplier !== 1) { %>
-              <s><%= listing.price %></s> <%= listing.price * player.role.economyDeductMultiplier %>
-              <% } else { %>
-              <%= listing.price %>
-              <% } %>
+            <div class="card-body">
+            <h4 class="card-title">
+                <%=  listing.friendlyName ?  listing.friendlyName : listing.name%>
+            </h4>
+            <p class="card-text">
+                Bought
+                <%= listing.timesBought %> times.
+            </p>
+            <ul>
+                <li class="list-group-item">Amount:
+                <%= listing.amount %>
+                </li>
+                <% if (listing.quality) { %>
+                <li class="list-group-item">Quality:
+                <%= listing.quality %>
+                </li>
+                <% } %>
+                <li class="list-group-item">Price:
+                <% if(player.role.economyDeductMultiplier !== 1) { %>
+                <s><%= listing.price %></s> <%= listing.price * player.role.economyDeductMultiplier %>
+                <% } else { %>
+                <%= listing.price %>
+                <% } %>
 
-            </li>
-          </ul>
-        </div>
-        <div class="card-footer">
-
-          <div class="form-group">
-            <input type="number" class="form-control" name="shop-buy-amount-<%= listing.id %>"
-              id="shop-buy-amount-<%= listing.id %>" value="1">
-          </div>
-
-          <button class="btn shop-buy btn-success" value="<%= listing.id %>">
-            Buy</button>
-
-          <% if (isAdmin) { %>
-          <button class="btn shop-delete btn-danger" value="<%= listing.id %>">
-            <i class="fas fa-trash-alt"></i> Delete</button>
-
-          <!-- Button trigger modal -->
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#shop-edit<%= listing.id %>">
-            <i class="fas fa-edit"></i> Edit
-          </button>
-
-          <!-- Modal -->
-          <div class="modal fade" id="shop-edit<%= listing.id %>" tabindex="-1" role="dialog"
-            aria-labelledby="shop-edit-<%= listing.id %>-title" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h4 class="modal-title" id="shop-edit-<%= listing.id %>-title">Edit
-                    <%= listing.friendlyName %>
-                  </h4>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-
-                  <div class="form-group">
-                    <label for="edit-<%= listing.id %>-name">Item name</label>
-                    <input type="text" class="form-control" name="edit-<%= listing.id %>-name"
-                      id="edit-<%= listing.id %>-name" aria-describedby="edit-<%=listing.id%>-name-help"
-                      value="<%= listing.name %>">
-                    <small id="edit-<%=listing.id%>-name-help" class="form-text text-muted">The name of the ingame
-                      item. Make sure this is spelled 100% correctly.</small>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="edit-<%= listing.id %>-friendlyName">Item friendly name</label>
-                    <input type="text" class="form-control" name="edit-<%= listing.id %>-friendlyName"
-                      id="edit-<%= listing.id %>-friendlyName" aria-describedby="edit-<%=listing.id%>-friendlyName-help"
-                      value="<%= listing.friendlyName %>">
-                    <small id="edit-<%=listing.id%>-friendlyName-help" class="form-text text-muted">This will be shown
-                      large to your players and should be used to differentiate the listings</small>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="edit-<%= listing.id %>-amount">Amount</label>
-                    <input type="text" class="form-control" name="edit-<%= listing.id %>-amount"
-                      id="edit-<%= listing.id %>-amount" aria-describedby="edit-<%=listing.id%>-amount-help"
-                      value="<%= listing.amount %>">
-                    <small id="edit-<%=listing.id%>-amount-help" class="form-text text-muted">The amount of this item
-                      that will be given to the player when this listing is bought.
-                    </small>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="edit-<%= listing.id %>-quality">Quality</label>
-                    <input type="text" class="form-control" name="edit-<%= listing.id %>-quality"
-                      id="edit-<%= listing.id %>-quality" aria-describedby="edit-<%=listing.id%>-quality-help"
-                      value="<%= listing.quality %>">
-                    <small id="edit-<%=listing.id%>-quality-help" class="form-text text-muted">Quality of the item. If
-                      amount is larger than one, you cannot set this.
-                    </small>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="edit-<%= listing.id %>-price">Price</label>
-                    <input type="text" class="form-control" name="edit-<%= listing.id %>-price"
-                      id="edit-<%= listing.id %>-price" aria-describedby="edit-<%=listing.id%>-price-help"
-                      value="<%= listing.price %>">
-                    <small id="edit-<%=listing.id%>-price-help" class="form-text text-muted">How much players pay to
-                      buy this listing</small>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="edit-<%= listing.id %>-customIcon">Custom icon</label>
-                    <input type="text" class="form-control" name="edit-<%= listing.id %>-customIcon"
-                      id="edit-<%= listing.id %>-customIcon" aria-describedby="edit-<%=listing.id%>-customIcon-help"
-                      value="<%= listing.customIcon %>">
-                    <small id="edit-<%=listing.id%>-customIcon-help" class="form-text text-muted">Use a different icon
-                      than the default item name.</small>
-                  </div>
-
-                </div>
-                <div class="modal-footer">
-                  <div id="edit-<%= listing.id %>-status"></div>
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="button" class="shop-edit btn btn-primary" value="<%= listing.id %>">Save</button>
-                </div>
-              </div>
+                </li>
+            </ul>
             </div>
-          </div>
+            <div class="card-footer">
 
-          <% } %>
+            <div class="form-group">
+                <input type="number" class="form-control" name="shop-buy-amount-<%= listing.id %>"
+                id="shop-buy-amount-<%= listing.id %>" value="1">
+            </div>
+
+            <button class="btn shop-buy btn-success" value="<%= listing.id %>">
+                Buy</button>
+
+            <% if (isAdmin) { %>
+            <button class="btn shop-delete btn-danger" value="<%= listing.id %>">
+                <i class="fas fa-trash-alt"></i> Delete</button>
+
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#shop-edit<%= listing.id %>">
+                <i class="fas fa-edit"></i> Edit
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="shop-edit<%= listing.id %>" tabindex="-1" role="dialog"
+                aria-labelledby="shop-edit-<%= listing.id %>-title" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h4 class="modal-title" id="shop-edit-<%= listing.id %>-title">Edit
+                        <%= listing.friendlyName %>
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="edit-<%= listing.id %>-name">Item name</label>
+                        <input type="text" class="form-control" name="edit-<%= listing.id %>-name"
+                        id="edit-<%= listing.id %>-name" aria-describedby="edit-<%=listing.id%>-name-help"
+                        value="<%= listing.name %>">
+                        <small id="edit-<%=listing.id%>-name-help" class="form-text text-muted">The name of the ingame
+                        item. Make sure this is spelled 100% correctly.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit-<%= listing.id %>-friendlyName">Item friendly name</label>
+                        <input type="text" class="form-control" name="edit-<%= listing.id %>-friendlyName"
+                        id="edit-<%= listing.id %>-friendlyName" aria-describedby="edit-<%=listing.id%>-friendlyName-help"
+                        value="<%= listing.friendlyName %>">
+                        <small id="edit-<%=listing.id%>-friendlyName-help" class="form-text text-muted">This will be shown
+                        large to your players and should be used to differentiate the listings</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit-<%= listing.id %>-amount">Amount</label>
+                        <input type="text" class="form-control" name="edit-<%= listing.id %>-amount"
+                        id="edit-<%= listing.id %>-amount" aria-describedby="edit-<%=listing.id%>-amount-help"
+                        value="<%= listing.amount %>">
+                        <small id="edit-<%=listing.id%>-amount-help" class="form-text text-muted">The amount of this item
+                        that will be given to the player when this listing is bought.
+                        </small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit-<%= listing.id %>-quality">Quality</label>
+                        <input type="text" class="form-control" name="edit-<%= listing.id %>-quality"
+                        id="edit-<%= listing.id %>-quality" aria-describedby="edit-<%=listing.id%>-quality-help"
+                        value="<%= listing.quality %>">
+                        <small id="edit-<%=listing.id%>-quality-help" class="form-text text-muted">Quality of the item. If
+                        amount is larger than one, you cannot set this.
+                        </small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit-<%= listing.id %>-price">Price</label>
+                        <input type="text" class="form-control" name="edit-<%= listing.id %>-price"
+                        id="edit-<%= listing.id %>-price" aria-describedby="edit-<%=listing.id%>-price-help"
+                        value="<%= listing.price %>">
+                        <small id="edit-<%=listing.id%>-price-help" class="form-text text-muted">How much players pay to
+                        buy this listing</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit-<%= listing.id %>-customIcon">Custom icon</label>
+                        <input type="text" class="form-control" name="edit-<%= listing.id %>-customIcon"
+                        id="edit-<%= listing.id %>-customIcon" aria-describedby="edit-<%=listing.id%>-customIcon-help"
+                        value="<%= listing.customIcon %>">
+                        <small id="edit-<%=listing.id%>-customIcon-help" class="form-text text-muted">Use a different icon
+                        than the default item name.</small>
+                    </div>
+
+                    </div>
+                    <div class="modal-footer">
+                    <div id="edit-<%= listing.id %>-status"></div>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="shop-edit btn btn-primary" value="<%= listing.id %>">Save</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <% } %>
+            </div>
         </div>
       </div>
       <% }) %>
     </div>
-
-  </div>
-
-</div>
 
 <div id="list-view" class="row">
 
