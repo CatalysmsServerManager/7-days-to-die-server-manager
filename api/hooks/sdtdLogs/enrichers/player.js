@@ -1,5 +1,6 @@
 const steamIdRegex = /\d{17}/g;
 const crossIdRegex = /EOS_[\d\w]{32}/;
+const XBLRegex = /XBL_[\d\w]+/;
 
 module.exports = async (event) => {
   let player;
@@ -49,6 +50,7 @@ module.exports = async (event) => {
     if (event.msg) {
       const detectedSteamIdMatch = event.msg.match(steamIdRegex);
       const detectedCrossIdMatch = event.msg.match(crossIdRegex);
+      const detectedXblMatch = event.msg.match(XBLRegex);
 
       if (detectedSteamIdMatch) {
         const steamId = detectedSteamIdMatch[0];
@@ -58,6 +60,10 @@ module.exports = async (event) => {
       if (detectedCrossIdMatch) {
         const crossId = detectedCrossIdMatch[0];
         player = await Player.findOne({ crossId });
+      }
+      if (detectedXblMatch) {
+        const xblId = detectedXblMatch[0];
+        player = await Player.findOne({ steamId: xblId });
       }
     }
   }

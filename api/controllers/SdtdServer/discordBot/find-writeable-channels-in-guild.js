@@ -1,3 +1,5 @@
+const { ChannelType, PermissionFlagsBits } = require('discord.js');
+
 module.exports = {
 
 
@@ -34,17 +36,22 @@ module.exports = {
     try {
 
       let discordClient = sails.helpers.discord.getClient();
-      let guild = discordClient.guilds.cache.get(inputs.guildId);
+
+      if (!inputs.guildId || inputs.guildId === '0') {
+        return exits.success([]);
+      }
+
+      let guild = await discordClient.guilds.fetch(inputs.guildId);
       if (_.isUndefined(guild)) {
         return exits.success([]);
       }
 
       let foundChannels = guild.channels.cache.filter(channel => {
-        if (channel.type !== 'text') {
+        if (channel.type !== ChannelType.GuildText) {
           return false;
         }
         let userPerms = channel.permissionsFor(discordClient.user);
-        return (userPerms.has('SEND_MESSAGES') && userPerms.has('EMBED_LINKS') && userPerms.has('VIEW_CHANNEL'));
+        return (userPerms.has(PermissionFlagsBits.SendMessages) && userPerms.has(PermissionFlagsBits.EmbedLinks) && userPerms.has(PermissionFlagsBits.ViewChannel));
       });
 
       let foundChannelsArray = Array.from(foundChannels.values());

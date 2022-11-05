@@ -70,4 +70,20 @@ describe('enrichEventData', () => {
     expect(result.player.steamId).to.be.equal(sails.testPlayer.steamId);
   });
 
+  it('Enriches data with player object when XBL id is in log line', async () => {
+    const xblId = `XBL_B80B603151EF84706B1797316A12441B7140692E`;
+    await Player.create({
+      steamId: xblId,
+      name: 'xblPlayer',
+      server: sails.testServer.id,
+    });
+
+    const event = {
+      type: 'any',
+      msg: `2022-09-28T23:32:03 19378.063 INF lootRemover: 1, player=${xblId}, item=casinoCoin, qnty=25000, quality=0, used=0`,
+    };
+
+    const result = await enrichEventData(event);
+    expect(result.player.steamId).to.be.equal(xblId);
+  });
 });

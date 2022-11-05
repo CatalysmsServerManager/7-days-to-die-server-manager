@@ -191,16 +191,17 @@ module.exports = logLine => {
       "type": "Log"
     }
     */
-    const steamIdMatches = /PltfmId='Steam_(\d{17})|PlayerID='(\d{17})/.exec(logLine.msg);
+    const steamIdMatches = /PltfmId='Steam_(\d{17})|PltfmId='(XBL_\w+)/.exec(logLine.msg);
     const playerNameMatch = /PlayerName='(.+)'/.exec(logLine.msg);
     const entityIDMatch = /EntityID=(\d+)/.exec(logLine.msg);
+    const ownerIdMatches = /OwnerID='(Steam_)?(\d+)/.exec(logLine.msg);
 
     if (!steamIdMatches) {
       return returnValue;
     }
 
     const playerID = steamIdMatches[1] || steamIdMatches[2];
-    const ownerID = /OwnerID='(Steam_)?(\d+)/.exec(logLine.msg)[2];
+    const ownerID = ownerIdMatches ? ownerIdMatches[2] : null;
 
     let disconnectedMsg = {
       entityID: entityIDMatch ? entityIDMatch[1] : null,

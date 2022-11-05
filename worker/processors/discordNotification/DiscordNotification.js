@@ -21,7 +21,7 @@ class DiscordNotification {
     let enrichedOptions = await this.enrichEvent(notificationOptions);
     let embedToSend = await this.makeEmbed(enrichedOptions, this.getBlankEmbed());
     if (!embedToSend) { return; }
-    embedToSend.setFooter(`CSMM notification for ${enrichedOptions.server.name}`);
+    embedToSend.setFooter({ text: `CSMM notification for ${enrichedOptions.server.name}` });
 
     try {
       const channelId = enrichedOptions.server.config.discordNotificationConfig[notificationOptions.notificationType];
@@ -34,10 +34,10 @@ class DiscordNotification {
           await sails.helpers.discord.sendDm(owner.discordId, `There was an error sending a CSMM notification to your channel and thus the notification has been disabled: \`${error}\``);
         }
       } catch (error) {
-        sails.log.error(`HOOK - discordNotification:DiscordNotification - Error letting owner know of discord issue - ${error}`, {server: enrichedOptions.server});
+        sails.log.error(`HOOK - discordNotification:DiscordNotification - Error letting owner know of discord issue - ${error}`, { server: enrichedOptions.server });
         throw error;
       }
-      sails.log.error(`HOOK - discordNotification:DiscordNotification - ${error}`, {server: enrichedOptions.server});
+      sails.log.error(`HOOK - discordNotification:DiscordNotification - ${error}`, { server: enrichedOptions.server });
 
       delete enrichedOptions.server.config.discordNotificationConfig[notificationOptions.notificationType];
       await SdtdConfig.update({ server: enrichedOptions.server.id }, { discordNotificationConfig: enrichedOptions.server.config.discordNotificationConfig });

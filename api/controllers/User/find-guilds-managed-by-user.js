@@ -1,3 +1,5 @@
+const { PermissionFlagsBits } = require('discord.js');
+
 module.exports = {
 
 
@@ -46,31 +48,23 @@ module.exports = {
         return exits.badRequest();
       }
 
-      const foundGuilds = [];
-
-      for (const guild of discordClient.guilds.cache.array()) {
-        let member;
+      const filteredGuilds = (await Promise.all(discordClient.guilds.cache.map(async g => {
         try {
-          member = await guild.members.fetch(discordUser.id);
-        } catch (e) {
-          // User is not in guild, skipping
-          continue;
+          const member = await g.members.fetch(discordUser.id);
+          if (member && member.permissions.has(PermissionFlagsBits.ManageGuild)) {
+            return g;
+          }
+        } catch (error) {
+          if (error.message.includes('Unknown Member')) { return null; }
+          throw error;
         }
 
-        if (!member) {
-          // Should error out on the previous call
-          // This is a safety to make sure member is defined before continuing
-          continue;
-        }
-        if (member.hasPermission('MANAGE_GUILD')) {
-          foundGuilds.push(guild);
-        }
-      }
+      }))).filter(Boolean);
 
-      sails.log.debug(`API - SdtdServer:find-guilds-managed-by-user - Found ${foundGuilds.length} guilds for user ${inputs.userId}!`, {userId: inputs.userId});
-      return exits.success(foundGuilds);
+      sails.log.debug(`API - SdtdServer:find-guilds-managed-by-user - Found ${filteredGuilds.length} guilds for user ${inputs.userId}!`, { userId: inputs.userId });
+      return exits.success(filteredGuilds);
     } catch (error) {
-      sails.log.error(`API - SdtdServer:find-guilds-managed-by-user - ${error}`, {userId: inputs.userId});
+      sails.log.error(`API - SdtdServer:find-guilds-managed-by-user - ${error}`, { userId: inputs.userId });
       return exits.error(error);
     }
 

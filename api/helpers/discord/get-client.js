@@ -1,4 +1,4 @@
-const Commando = require('discord.js-commando');
+const { Client, GatewayIntentBits, Partials } = require('discord.js');
 
 let client;
 
@@ -17,10 +17,16 @@ module.exports = {
       return exits.success(client);
     }
 
-    client = new Commando.Client({
-      owner: sails.config.custom.botOwners,
-      unknownCommandResponse: false,
-      invite: process.env.INVITELINK
+    client = new Client({
+      intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.DirectMessages,
+      ],
+      partials: [
+        Partials.Channel
+      ]
     });
 
     return exits.success(client);

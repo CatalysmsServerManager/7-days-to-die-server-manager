@@ -13,15 +13,20 @@ class CronJob extends DiscordNotification {
     let executionTime = new Date();
 
     embed.setTitle('Job ran!')
-      .addField('Command', event.job.command, true)
-      .addField('Execution time', ` ${executionTime.toDateString()} - ${executionTime.toTimeString()}`, true);
-    for (const response of event.job.responses) {
-      const fieldName = [response.command, response.parameters].filter(Boolean).join(' ').substr(0, 255); // max length is 256
-      embed.addField(
-        fieldName || 'Response',
-        response.result.length > 0 ? response.result : 'No response'
-      );
-    }
+
+      .addFields([{
+        name: 'Command', value: event.job.command, inline: true
+      }, {
+        name: 'Execution time', value: executionTime.toUTCString(), inline: true
+      }])
+
+      .addFields(...event.job.responses.map(response => {
+        const fieldName = [response.command, response.parameters].filter(Boolean).join(' ').slice(0, 200) || 'Response'; // max length is 256
+        return {
+          name: fieldName,
+          value: response.result.length > 0 ? response.result : 'No response'
+        };
+      }));
 
     return embed;
   }

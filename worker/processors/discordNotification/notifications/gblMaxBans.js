@@ -15,27 +15,30 @@ class GblMaxBan extends DiscordNotification {
         .setTitle(
           `A player with ${event.bans.length} bans on the GBL was kicked`
         )
-        .setColor('GREEN');
+        .setColor([0, 255, 0]);
     } else {
       embed
         .setTitle(
           `A player with ${event.bans.length} bans on the GBL has connected`
         )
-        .setColor('ORANGE');
+        .setColor([255, 255, 0]);
     }
 
     embed
-      .addField(
-        'Steam ID',
-        `[${event.player.steamId}](https://steamidfinder.com/lookup/${event.player.steamId}/)`,
-        true
-      )
-      .addField('Name', event.player.name)
-      .setFooter(`${event.server.name}`)
-      .addField(
-        `${event.bans.length} ban${event.bans.length === 1 ? '' : 's'} on the global ban list`,
-        `[GBL profile page](${process.env.CSMM_HOSTNAME}/gbl/profile?steamId=${event.player.steamId})`
-      )
+      .addFields([
+        {
+          name: 'Steam ID',
+          value: `[${event.player.steamId}](https://steamidfinder.com/lookup/${event.player.steamId}/)`,
+          inline: true
+        }, {
+          name: 'Name',
+          value: event.player.name,
+        }, {
+          name: `${event.bans.length} ban${event.bans.length === 1 ? '' : 's'} on the global ban list`,
+          value: `[GBL profile page](${process.env.CSMM_HOSTNAME}/gbl/profile?steamId=${event.player.steamId})`
+        }
+      ])
+      .setFooter({ text: `${event.server.name}` })
       .setURL(`${process.env.CSMM_HOSTNAME}/player/${event.player.id}/profile`);
 
     return embed;

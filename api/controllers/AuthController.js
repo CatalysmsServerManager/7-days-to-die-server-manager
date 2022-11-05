@@ -1,5 +1,12 @@
 var passport = require('passport');
 
+// This is a workaround because Sails does not want us to call next() from inside an action
+// However, passport expects to call next so we're in a bit of a pickle
+const fakeNext = (req, res) => (err) => {
+  sails.log.warn('Fake next called, this is weird behavior...', err);
+  res.redirect('/');
+};
+
 /**
  * AuthController
  *
@@ -14,11 +21,11 @@ module.exports = {
    * @description Authenticate a user via steam
    */
   steamLogin: function (req, res) {
-
+    const next = fakeNext(req, res);
     try {
       passport.authenticate('steam', {
         failureRedirect: `${process.env.CSMM_HOSTNAME}`,
-      })(req, res);
+      })(req, res, next);
     } catch (error) {
       sails.log.warn(`!!! - STEAM AUTH ERROR - !!!!`);
       sails.log.error(error);
@@ -33,7 +40,7 @@ module.exports = {
    */
 
   steamReturn: function (req, res) {
-
+    const next = fakeNext(req, res);
 
     try {
       passport.authenticate('steam', {
@@ -65,7 +72,7 @@ module.exports = {
         } catch (error) {
           sails.log.error(`AuthController - Error updating user profile ${error}`, {user});
         }
-      })(req, res);
+      })(req, res, next);
     } catch (error) {
       sails.log.warn(`!!! - STEAM AUTH ERROR - !!!!`);
       sails.log.error(error);

@@ -505,8 +505,6 @@ module.exports.routes = {
     'SdtdServerController/discordBot.set-chat-channel-blocked-prefixes',
   'post /api/sdtdserver/setnotificationchannel':
     'SdtdServerController/discordBot.set-notification-channel',
-  'post /api/sdtdserver/discord/prefix':
-    'SdtdServerController/discordBot.set-prefix',
   'get /api/sdtdserver/discord/findChannel':
     'SdtdServerController/discordBot.find-channel-by-id',
   'get /api/sdtdserver/discord/roles':

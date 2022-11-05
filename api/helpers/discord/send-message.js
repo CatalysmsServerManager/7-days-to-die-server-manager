@@ -1,3 +1,5 @@
+const { REST } = require('discord.js');
+
 module.exports = {
   friendlyName: 'Execute a discord request',
   inputs: {
@@ -16,14 +18,6 @@ module.exports = {
 
     embed: {
       type: 'json',
-      custom: (val) => {
-        // Check the shape of the object
-        return (
-          val.title &&
-          val.url &&
-          val.fields
-        );
-      }
     },
 
   },
@@ -43,12 +37,12 @@ module.exports = {
         {
           'content': inputs.content,
           'tts': false,
-          'embed': inputs.embed
+          'embeds': inputs.embed ? [inputs.embed.data] : undefined
         }
       );
-      sails.log.debug(`Sent a message to channel ${inputs.channelId}`,{...response, labels: {type: 'discord'}});
+      sails.log.debug(`Sent a message to channel ${inputs.channelId}`, { ...response, labels: { type: 'discord' } });
     } catch (e) {
-      sails.log.error(`Error sending message to ${inputs.channelId}`,{error: e, labels: {type: 'discord'}});
+      sails.log.error(`Error sending message to ${inputs.channelId}`, { error: e, labels: { type: 'discord' } });
       return exits.error(e);
     }
 
