@@ -30,7 +30,7 @@ module.exports = {
 
     const variable = await PersistentVariable.updateOne({server: inputs.serverId, id: inputs.id}).set({preventDeletion: inputs.lock});
 
-    const result = true;
+    let result = true;
 
     if (!variable) {
       result = false;
