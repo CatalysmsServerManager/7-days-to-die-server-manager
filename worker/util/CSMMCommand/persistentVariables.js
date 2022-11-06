@@ -1,3 +1,4 @@
+const { Error } = require('sequelize');
 
 class PersistentVariablesManager {
   constructor() {
@@ -103,6 +104,12 @@ class PersistentVariablesManager {
     }
 
     return this.queue.push(async () => {
+      const variable = await PersistentVariable.findOne(this.getDefaultQueryFilter(server, name));
+
+      if (variable && variable.preventDeletion) {
+        throw new Error('variable must be unlocked before it can be deleted');
+      }
+
       await PersistentVariable.destroyOne(this.getDefaultQueryFilter(server, name));
       sails.log.debug(`PersistentVariable.del("${name}")`, this.getLogMeta(server));
     });

@@ -128,6 +128,11 @@ module.exports.routes = {
     csrf: false
   },
 
+  'put /api/playground/variable/lock':{
+    action: 'Playground/variables/lock-variable',
+    csrf: false
+  },
+
   'put /api/playground/variable/:id':{
     action: 'Playground/variables/edit-variable',
     csrf: false
