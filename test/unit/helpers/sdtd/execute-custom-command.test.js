@@ -474,8 +474,8 @@ say "1 - 1 = {{subtract 1 1}}"
           setVarTemplates[i] = `{{setVar "${names[i]}" "${values[i]}"}}`;
         }
 
-        for (let i = 0; i < setVarTemplates.length; i++) {
-          await sails.helpers.sdtd.executeCustomCmd(sails.testServer, setVarTemplates[i], { player: sails.testPlayer });
+        for (let setVarTemplate of setVarTemplates) {
+          await sails.helpers.sdtd.executeCustomCmd(sails.testServer, setVarTemplate, { player: sails.testPlayer });
         }
 
         const simpleSearch = `{{#each (listVar "zk_")}}
