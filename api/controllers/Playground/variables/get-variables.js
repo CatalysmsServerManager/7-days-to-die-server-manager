@@ -67,7 +67,7 @@ module.exports = {
 
         const columns = ['name', 'value'];
 
-        for (i = 0; i < columns.length; i++) {
+        for (let i = 0; i < columns.length; i++) {
           const search = {};
           search[columns[i]] = { contains: inputs.searchQuery };
 
@@ -87,7 +87,7 @@ module.exports = {
         } else {
           query['sort'] = [];
 
-          for (i = 0; i < inputs.sortedColumns.length; i++) {
+          for (let i = 0; i < inputs.sortedColumns.length; i++) {
             query.sort[inputs.sortedColumns[i]] = inputs.columnSortTypes[i];
           }
         }

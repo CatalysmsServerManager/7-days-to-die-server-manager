@@ -28,7 +28,7 @@ module.exports = {
       });
     }
 
-    var isUnique = true;
+    let isUnique = true;
 
     const variables = await PersistentVariable.find({server: server.id, name: inputs.name});
 

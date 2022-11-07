@@ -7,7 +7,7 @@ class SetVar extends CustomFunction {
     const varName = args[0];
     const varValue = args[1];
 
-    var varPreventDeletion = args[2];
+    let varPreventDeletion = args[2];
 
     if (varPreventDeletion === undefined) {
       varPreventDeletion = false;

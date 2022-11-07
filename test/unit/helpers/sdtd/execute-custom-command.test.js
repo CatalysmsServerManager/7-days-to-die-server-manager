@@ -468,13 +468,13 @@ say "1 - 1 = {{subtract 1 1}}"
           '20'
         ];
 
-        var setVarTemplates = [];
+        let setVarTemplates = [];
 
-        for (i = 0; i < names.length; i++) {
+        for (let i = 0; i < names.length; i++) {
           setVarTemplates[i] = `{{setVar "${names[i]}" "${values[i]}"}}`;
         }
 
-        for (i = 0; i < setVarTemplates.length; i++) {
+        for (let i = 0; i < setVarTemplates.length; i++) {
           await sails.helpers.sdtd.executeCustomCmd(sails.testServer, setVarTemplates[i], { player: sails.testPlayer });
         }
 
@@ -509,8 +509,8 @@ say "1 - 1 = {{subtract 1 1}}"
             {{{this.name}}}
             {{/each}}`;
 
-        var result = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, simpleSearch, {});
-        var resultArray = sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg
+        let result = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, simpleSearch, {});
+        let resultArray = sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg
           .split('\n')
           .map((string) => string.trim());
         expect(result).to.have.length(1, 'simpleSearch: error running command');
@@ -526,7 +526,7 @@ say "1 - 1 = {{subtract 1 1}}"
         expect(resultArray).to.eql([ 'exchange:rate', 'exchange:max' ], 'startsWithSearch: eql');
 
         result = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, endsWithSearch, {});
-        var resultString = sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg;
+        let resultString = sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg;
         expect(result).to.have.length(1, 'endsWithSearch: error running command');
         expect(resultString).equal('exchange:max', 'endsWithSearch: equal');
 

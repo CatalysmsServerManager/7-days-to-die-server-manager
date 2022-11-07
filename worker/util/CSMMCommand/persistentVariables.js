@@ -14,7 +14,7 @@ class PersistentVariablesManager {
   }
 
   generateQueryFilter(server, query, sortBy, sortDirection, limit) {
-    var filter = {};
+    let filter = {};
 
     filter['where'] = { server: server.id };
 
@@ -83,7 +83,7 @@ class PersistentVariablesManager {
       throw new Error('`server` must be provided');
     }
 
-    var filter = this.generateQueryFilter(server, query, sortBy, sortDirection, limit);
+    let filter = this.generateQueryFilter(server, query, sortBy, sortDirection, limit);
 
     return this.queue.push(async () => {
       const variables = await PersistentVariable.find(filter);
