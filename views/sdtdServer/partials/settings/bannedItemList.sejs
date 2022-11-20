@@ -140,7 +140,11 @@
       buttons: [],
       columns: [
         {
-          data: "role.name"
+          data: "role",
+          render: function(data, type, row, meta) {
+            if(data && data.name) return data.name;
+            return "Deleted role";
+          }
         },
         {
           data: "command"
@@ -302,6 +306,7 @@
       const tierSelect = $("#banned-items-bannedItems-new-item-tier");
       tierSelect.empty()
       for (const row of data) {
+        if (!row.role) continue;
         tierSelect.append($("<option />").text(row.role.name).val(row.id));
       }
 
