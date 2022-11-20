@@ -300,11 +300,11 @@ say "1 - 1 = {{subtract 1 1}}"
         expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.be.eq(`first: true,index: 0,last: falsefirst: false,index: 1,last: falsefirst: false,index: 2,last: true`);
       });
       it('Rejects large numbers', async () => {
-        const template = `{{#times 101}}first: {{isFirst}},index: {{index}},last: {{isLast}}{{/times}}`;
+        const template = `{{#times 251}}first: {{isFirst}},index: {{index}},last: {{isLast}}{{/times}}`;
 
         res = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template, { player: sails.testPlayer });
         expect(res).to.have.length(1);
-        expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.be.eq(`{{#times 101}}first: {{isFirst}},index: {{index}},last: {{isLast}}{{/times}}`);
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(0).lastArg).to.be.eq(`{{#times 251}}first: {{isFirst}},index: {{index}},last: {{isLast}}{{/times}}`);
 
       });
     });
