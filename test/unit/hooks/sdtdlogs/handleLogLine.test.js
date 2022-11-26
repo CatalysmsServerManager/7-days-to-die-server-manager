@@ -227,7 +227,24 @@ describe('sdtdLogs#handleLogLine', () => {
     expect(result.data.oldLvl).to.eq('1');
 
   });
+  it('correctly detects a XBL player playerLevel event', () => {
+    const logLine = {
+      'date': '2020-07-11',
+      'time': '08:11:40',
+      'uptime': '1673.118',
+      'msg': '[CSMM_Patrons]playerLeveled: player (XBL_FA8E82BBF713BA2A53D74196F3D158368D344D7F) made level 135 (was 133)',
+      'trace': '',
+      'type': 'Log'
+    };
 
+    const result = handleLogLine(logLine);
+
+    expect(result.type).to.eq('playerLevel');
+    expect(result.data.steamId).to.eq('XBL_FA8E82BBF713BA2A53D74196F3D158368D344D7F');
+    expect(result.data.newLvl).to.eq('135');
+    expect(result.data.oldLvl).to.eq('133');
+
+  });
 
   it('correctly detects a zombieKilled event', () => {
     const logLine = {

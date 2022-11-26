@@ -4,6 +4,7 @@ const extractIntegers = string => string.match(/\d*/g).join('');
 
 const steamIdRegex = /\d{17}/g;
 const crossIdRegex = /EOS_[\d\w]{32}/;
+const xblIdRegex = /XBL_[\d\w]+/;
 
 const a20DeathRegex = /PlayerSpawnedInWorld \(reason: Died, position: (?<x>[-\d]+), (?<y>[-\d]+), (?<z>[-\d]+)\): EntityID=(?<entityId>\d+), (PltfmId|PlayerID)='(?<platformId>[\d\w]+)', CrossId='(?<crossId>[\d\w]+)', OwnerID='Steam_(?<steamId>\d{17})', PlayerName='(?<playerName>.+)'/;
 const preA20DeathRegex = /PlayerSpawnedInWorld \(reason: Died, position: (?<x>[-\d]+), (?<y>[-\d]+), (?<z>[-\d]+)\): EntityID=(?<entityId>\d+), PlayerID='(?<platformId>[\d\w]+)', OwnerID='(?<steamId>\d{17})', PlayerName='(?<playerName>.+)'/;
@@ -286,20 +287,25 @@ module.exports = logLine => {
     }
     */
 
-    const steamId = logLine.msg.match(steamIdRegex)[0];
+    const steamIdMatch = logLine.msg.match(steamIdRegex);
+    const xblIdMatch = logLine.msg.match(xblIdRegex);
     const newLvl = extractIntegers(logLine.msg.match(newLevelRegex)[0]);
     const oldLvl = extractIntegers(logLine.msg.match(oldLevelRegex)[0]);
-
 
     lvlMessage = {
       date: logLine.date,
       time: logLine.time,
       uptime: logLine.uptime,
       msg: logLine.msg,
-      steamId: steamId,
       newLvl: newLvl,
       oldLvl: oldLvl
     };
+
+    if (steamIdMatch) {
+      lvlMessage.steamId = steamIdMatch[0];
+    } else if (xblIdMatch) {
+      lvlMessage.steamId = xblIdMatch[0];
+    }
 
     returnValue.type = 'playerLevel';
     returnValue.data = lvlMessage;
