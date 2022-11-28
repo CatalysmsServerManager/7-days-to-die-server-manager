@@ -51,11 +51,6 @@ class SdtdSSE extends LoggingObject {
   }
 
   reconnectListener() {
-    if (!this.eventSource) {
-      // Event source isn't active, we should not be reconnecting it
-      return;
-    }
-
     if (this.throttled) {
       // We're throttled, we should not be reconnecting it
       return;
