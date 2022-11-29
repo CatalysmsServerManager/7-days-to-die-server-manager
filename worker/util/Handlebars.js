@@ -290,8 +290,8 @@ Handlebars.registerHelper('execCmd', async function execCmd(command, options) {
 
 
 Handlebars.registerHelper('times', function (n, block) {
-  if (n > 100) {
-    throw new Error('times: n must be less than 100');
+  if (n > 250) {
+    throw new Error('times: n must be less than 250');
   }
   var accum = '';
   for (var i = 0; i < n; ++i) {

@@ -10,11 +10,9 @@ class SdtdSSE extends LoggingObject {
 
     this.RATE_LIMIT_MINUTES = parseInt(process.env.SSE_RATE_LIMIT_MINUTES, 10) || 5;
     this.RATE_LIMIT_AMOUNT = parseInt(process.env.SSE_RATE_LIMIT_AMOUNT, 10) || 2500;
-    this.THROTTLE_DELAY = parseInt(process.env.SSE_THROTTLE_DELAY, 10) || 1000 * 60 * 1;
-    this.SSE_THROTTLE_RECONNECT_DELAY = parseInt(process.env.SSE_THROTTLE_RECONNECT_DELAY, 10) || 1000 * 60 * 5;
     this.SSE_RECONNECT_INTERVAL = parseInt(process.env.SSE_RECONNECT_INTERVAL, 10) || 1000 * 60 * 3;
     // If we last received a message longer ago than this, we'll force a reconnect
-    this.LAST_MESSAGE_THRESHOLD = parseInt(process.env.SSE_RECONNECT_INTERVAL, 10) || 1000 * 60 * 5;
+    this.LAST_MESSAGE_THRESHOLD = parseInt(process.env.LAST_MESSAGE_THRESHOLD, 10) || 1000 * 60 * 5;
 
 
     this.SSERegex = /\d+-\d+-\d+T\d+:\d+:\d+ \d+\.\d+ INF (.+)/;
@@ -22,14 +20,14 @@ class SdtdSSE extends LoggingObject {
     this.listener = this.throttledFunction.listener;
     this.queuedChatMessages = [];
     this.lastMessage = Date.now();
-    this.throttleDestructionTimeout = null;
-    this.throttleReconnectTimeout = null;
+    this.isConnecting = false;
+    this.throttled = false;
 
 
 
     this.throttledFunction.on('normal', () => {
       sails.log.debug(`SSE normal for server ${this.server.id}`, { server: this.server });
-      clearTimeout(this.throttleDestructionTimeout);
+      this.throttled = false;
       sails.helpers.discord.sendNotification({
         serverId: this.server.id,
         notificationType: 'sseThrottled',
@@ -41,8 +39,7 @@ class SdtdSSE extends LoggingObject {
 
     this.throttledFunction.on('throttled', () => {
       sails.log.debug(`SSE throttled for server ${this.server.id}`, { server: this.server });
-      this.throttleDestructionTimeout = setTimeout(this.destroy.bind(this), this.THROTTLE_DELAY);
-      this.throttleReconnectTimeout = setTimeout(this.start.bind(this), this.SSE_THROTTLE_RECONNECT_DELAY);
+      this.throttled = true;
       sails.helpers.discord.sendNotification({
         serverId: this.server.id,
         notificationType: 'sseThrottled',
@@ -54,8 +51,8 @@ class SdtdSSE extends LoggingObject {
   }
 
   reconnectListener() {
-    if (!this.eventSource) {
-      // Event source isn't active, we should not be reconnecting it
+    if (this.throttled) {
+      // We're throttled, we should not be reconnecting it
       return;
     }
 
@@ -90,9 +87,21 @@ class SdtdSSE extends LoggingObject {
 
   start() {
     if (this.eventSource) {
+      sails.log.warn(`Tried to start SSE for server ${this.server.id} but it was already active`, { server: this.server });
       return;
     }
-    clearTimeout(this.throttleReconnectTimeout);
+
+    if (this.isConnecting) {
+      sails.log.debug(`Already connecting to SSE for server ${this.server.id}`, { server: this.server });
+      return;
+    }
+
+    const isConnectingTimeout = setTimeout(() => {
+      sails.log.warn(`SSE start connection timed out for server ${this.server.id}`, { server: this.server });
+      this.isConnecting = false;
+    }, 1000 * 60 * 5);
+
+    this.isConnecting = true;
 
     sails.log.info(`Starting SSE`, { server: this.server });
 
@@ -100,10 +109,14 @@ class SdtdSSE extends LoggingObject {
     this.eventSource.reconnectInterval = 5000;
     this.eventSource.addEventListener('logLine', this.listener);
     this.eventSource.onerror = e => {
+      clearTimeout(isConnectingTimeout);
       sails.log.warn(`SSE error for server ${this.server.id}`, { server: this.server, error: e });
+      this.isConnecting = false;
     };
     this.eventSource.onopen = () => {
+      clearTimeout(isConnectingTimeout);
       sails.log.info(`Opened a SSE channel for server ${this.server.id}`, { server: this.server });
+      this.isConnecting = false;
     };
   }
 

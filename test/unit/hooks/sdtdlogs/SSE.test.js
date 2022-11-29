@@ -63,32 +63,6 @@ describe('7d2dSSE', function () {
     expect(stub.secondCall.firstArg.type).to.be.equal('logLine');
   });
 
-  it('Stops listening when server is throttled for extended period of time and reconnects after', async () => {
-    clock = sinon.useFakeTimers();
-    process.env.SSE_THROTTLE_DELAY = 1000 * 60 * 10;
-    const sse = new SdtdSSE({ ...sails.testServer, config: sails.testServerConfig });
-
-    await sse.start();
-
-    expect(sse.eventSource).to.be.instanceOf(EventSource, 'EventSource should be active at the start of the test');
-
-    sse.throttledFunction.emit('throttled');
-
-
-    await clock.tickAsync(sse.THROTTLE_DELAY / 2);
-    expect(sse.eventSource).to.be.instanceOf(EventSource, 'EventSource should still be active when throttle delay is not exceeded');
-
-    await clock.tickAsync(sse.THROTTLE_DELAY);
-    expect(sse.eventSource).to.be.eql(null, 'EventSource should be destroyed after being throttled for $SSE_THROTTLE_DELAY');
-
-    await clock.tickAsync(sse.THROTTLE_DELAY * 10);
-    expect(sse.eventSource).to.be.eql(null, 'EventSource should be destroyed after being throttled for a long time');
-
-    sse.throttledFunction.emit('normal');
-    expect(sse.eventSource).to.be.instanceOf(EventSource, 'EventSource should be active after server is back to normal');
-    clock.restore();
-  });
-
   it('Attempts to reconnect SSE when no messages have been received for a long time', async () => {
     clock = sinon.useFakeTimers();
     const sse = new SdtdSSE({ ...sails.testServer, config: sails.testServerConfig });
@@ -117,7 +91,7 @@ describe('7d2dSSE', function () {
     await clock.tickAsync(sse.SSE_RECONNECT_INTERVAL);
     expect(reconnectSpy).to.have.been.calledOnce;
     expect(keepaliveSpy).not.to.have.been.called;
-    await clock.tickAsync(sse.SSE_RECONNECT_INTERVAL);
+    await clock.tickAsync(sse.LAST_MESSAGE_THRESHOLD);
     expect(reconnectSpy).to.have.been.calledTwice;
     expect(keepaliveSpy).to.have.been.calledOnceWith(sinon.match.any, 'version');
     expect(destroySpy).not.to.have.been.called;
@@ -155,27 +129,4 @@ describe('7d2dSSE', function () {
     expect(sse.eventSource).to.be.instanceOf(EventSource, 'EventSource should be active after server is back to normal');
     clock.restore();
   });
-
-  it('Should attempt a reconnect after a while, even when the function does not emit normal state', async () => {
-    clock = sinon.useFakeTimers();
-    process.env.SSE_THROTTLE_DELAY = 10;
-    process.env.SSE_THROTTLE_RECONNECT_DELAY = 30;
-    const sse = new SdtdSSE({ ...sails.testServer, config: sails.testServerConfig });
-
-    await sse.start();
-
-    expect(sse.eventSource).to.be.instanceOf(EventSource, 'EventSource should be active at the start of the test');
-
-    sse.throttledFunction.emit('throttled');
-
-    await clock.tickAsync(sse.THROTTLE_DELAY);
-    expect(sse.eventSource).to.be.eql(null, 'EventSource should be destroyed after being throttled');
-
-    await clock.tickAsync(parseInt(process.env.SSE_THROTTLE_RECONNECT_DELAY, 10));
-    expect(sse.eventSource).to.be.instanceOf(EventSource, 'EventSource should be active');
-
-
-    clock.restore();
-  });
-
 });
