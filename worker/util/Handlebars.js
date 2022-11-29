@@ -145,7 +145,7 @@ Handlebars.registerHelper('setVar', async function setVar(name, value, preventDe
 Handlebars.registerHelper('listVar', async function listVar(query, sortBy, sortDirection, limit, options) {
 
   if (arguments.length === 1 || arguments.length > 5) {
-    throw new Error('listVar: Invlid number of arguments provided');
+    throw new Error('listVar: Invalid number of arguments provided');
   }
 
   // Search
@@ -154,7 +154,7 @@ Handlebars.registerHelper('listVar', async function listVar(query, sortBy, sortD
     query = arguments[0];
 
     if (typeof query !== 'string') {
-      throw new Error('listVar: Invlid argument for query');
+      throw new Error('listVar: Invalid argument for query');
     }
 
     options = arguments[1];
@@ -169,13 +169,13 @@ Handlebars.registerHelper('listVar', async function listVar(query, sortBy, sortD
     query = arguments[0];
 
     if (typeof query !== 'string') {
-      throw new Error('listVar: Invlid argument for query');
+      throw new Error('listVar: Invalid argument for query');
     }
 
     limit = arguments[1];
 
     if (typeof limit !== 'number') {
-      throw new Error('listVar: Invlid argument for limit');
+      throw new Error('listVar: Invalid argument for limit');
     }
 
     options = arguments[2];
@@ -189,14 +189,14 @@ Handlebars.registerHelper('listVar', async function listVar(query, sortBy, sortD
     query = arguments[0];
 
     if (typeof query !== 'string') {
-      throw new Error('listVar: Invlid argument for query');
+      throw new Error('listVar: Invalid argument for query');
     }
 
     sortBy = arguments[1];
     sortDirection = arguments[2];
 
     if (typeof sortBy !== 'string' || typeof sortDirection !== 'string' || !sortBy || !sortDirection) {
-      throw new Error('listVar: Invlid argument for sorting');
+      throw new Error('listVar: Invalid argument for sorting');
     }
 
     options = arguments[3];
@@ -209,20 +209,20 @@ Handlebars.registerHelper('listVar', async function listVar(query, sortBy, sortD
     query = arguments[0];
 
     if (typeof query !== 'string') {
-      throw new Error('listVar: Invlid argument for query');
+      throw new Error('listVar: Invalid argument for query');
     }
 
     sortBy = arguments[1];
     sortDirection = arguments[2];
 
     if (typeof sortBy !== 'string' || typeof sortDirection !== 'string' || !sortBy || !sortDirection) {
-      throw new Error('listVar: Invlid argument for sorting');
+      throw new Error('listVar: Invalid argument for sorting');
     }
 
     limit = arguments[3];
 
     if (typeof limit !== 'number') {
-      throw new Error('listVar: Invlid argument for limit');
+      throw new Error('listVar: Invalid argument for limit');
     }
 
     options = arguments[4];
