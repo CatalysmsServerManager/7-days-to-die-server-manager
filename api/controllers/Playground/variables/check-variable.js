@@ -34,8 +34,6 @@ module.exports = {
 
     variables.forEach((variable) => {
       if (variable.name === inputs.name && variable.id !== Number.parseInt(inputs.id)) {
-        sails.log.warn(`${variable.id} - ${inputs.id}`);
-        sails.log.warn(`${typeof variable.id} - ${typeof inputs.id}`);
         isUnique = false;
       }
     });
