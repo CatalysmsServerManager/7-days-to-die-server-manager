@@ -95,6 +95,12 @@ class SdtdSSE extends LoggingObject {
       sails.log.debug(`Already connecting to SSE for server ${this.server.id}`, { server: this.server });
       return;
     }
+
+    const isConnectingTimeout = setTimeout(() => {
+      sails.log.warn(`SSE start connection timed out for server ${this.server.id}`, { server: this.server });
+      this.isConnecting = false;
+    }, 1000 * 60 * 5);
+
     this.isConnecting = true;
 
     sails.log.info(`Starting SSE`, { server: this.server });
@@ -103,10 +109,12 @@ class SdtdSSE extends LoggingObject {
     this.eventSource.reconnectInterval = 5000;
     this.eventSource.addEventListener('logLine', this.listener);
     this.eventSource.onerror = e => {
+      clearTimeout(isConnectingTimeout);
       sails.log.warn(`SSE error for server ${this.server.id}`, { server: this.server, error: e });
       this.isConnecting = false;
     };
     this.eventSource.onopen = () => {
+      clearTimeout(isConnectingTimeout);
       sails.log.info(`Opened a SSE channel for server ${this.server.id}`, { server: this.server });
       this.isConnecting = false;
     };
