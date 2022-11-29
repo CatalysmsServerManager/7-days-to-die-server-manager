@@ -251,14 +251,15 @@ class ChatBridgeChannel {
       !message.content.startsWith(message.guild.commandPrefix)
     ) {
 
+      const senderName = message.member.nickname || message.author.username;
       try {
         const cpmVersion = await sails.helpers.sdtd.checkCpmVersion(this.sdtdServer.id);
         if (cpmVersion) {
           let chatBridgeDCPrefix = ((this.config.chatBridgeDCPrefix) ? this.config.chatBridgeDCPrefix : '');
           let chatBridgeDCSuffix = ((this.config.chatBridgeDCSuffix) ? this.config.chatBridgeDCSuffix : '');
-          await sails.helpers.sdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(this.sdtdServer), `say2 "${chatBridgeDCPrefix}${message.author.username}[-]" "${chatBridgeDCSuffix}${message.cleanContent}"`);
+          await sails.helpers.sdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(this.sdtdServer), `say2 "${chatBridgeDCPrefix}${senderName}[-]" "${chatBridgeDCSuffix}${message.cleanContent}"`);
         } else {
-          await sails.helpers.sdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(this.sdtdServer), `say "[${message.author.username}]: ${message.cleanContent}"`);
+          await sails.helpers.sdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(this.sdtdServer), `say "[${senderName}]: ${message.cleanContent}"`);
         }
       } catch (error) {
         sails.log.error(
