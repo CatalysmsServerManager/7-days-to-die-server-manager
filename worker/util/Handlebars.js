@@ -184,6 +184,21 @@ Handlebars.registerHelper('listVar', async function listVar(query, sortBy, sortD
     sortDirection = '';
   }
 
+  const sortByOptions = {
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    name: 'name',
+    value: 'value',
+    preventDeletion: 'preventDeletion'
+  };
+
+  const sortDirectionOptions = {
+    ASC: 'ASC',
+    DESC: 'DESC',
+    asc: 'ASC',
+    desc: 'DESC'
+  };
+
   // Search with sorting
   if (arguments.length === 4) {
     query = arguments[0];
@@ -196,6 +211,10 @@ Handlebars.registerHelper('listVar', async function listVar(query, sortBy, sortD
     sortDirection = arguments[2];
 
     if (typeof sortBy !== 'string' || typeof sortDirection !== 'string' || !sortBy || !sortDirection) {
+      throw new Error('listVar: Invalid argument for sorting');
+    }
+
+    if (sortBy && !sortByOptions[sortBy] || sortDirection && !sortDirectionOptions[sortDirection]) {
       throw new Error('listVar: Invalid argument for sorting');
     }
 
@@ -219,6 +238,10 @@ Handlebars.registerHelper('listVar', async function listVar(query, sortBy, sortD
       throw new Error('listVar: Invalid argument for sorting');
     }
 
+    if (sortBy && !sortByOptions[sortBy] || sortDirection && !sortDirectionOptions[sortDirection]) {
+      throw new Error('listVar: Invalid argument for sorting');
+    }
+
     limit = arguments[3];
 
     if (typeof limit !== 'number') {
@@ -230,26 +253,6 @@ Handlebars.registerHelper('listVar', async function listVar(query, sortBy, sortD
 
   if (!options.data.root.server) {
     throw new Error('Persistent variables can only be used in context of a server, this is likely an implementation error');
-  }
-
-  const sortByOptions = {
-    created: 'createdAt',
-    updated: 'updatedAt',
-    name: 'name',
-    value: 'value'
-  };
-
-  if (sortBy && sortByOptions[sortBy] !== undefined) {
-    sortBy = sortByOptions[sortBy];
-  }
-
-  const sortDirectionOptions = {
-    asc: 'ASC',
-    desc: 'DESC'
-  };
-
-  if (sortDirection && sortDirectionOptions[sortDirection] !== undefined) {
-    sortDirection = sortDirectionOptions[sortDirection];
   }
 
   return PersistentVariablesManager.list(options.data.root.server, query, sortBy, sortDirection, limit);

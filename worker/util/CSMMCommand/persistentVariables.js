@@ -13,36 +13,34 @@ class PersistentVariablesManager {
     return { server: server.id, name };
   }
 
-  generateQueryFilter(server, query, sortBy, sortDirection, limit) {
-    let filter = {};
-
-    filter['where'] = { server: server.id };
-
-    if (query !== '*' && query.startsWith('*') && query.endsWith('*')) {
-      query = query.substring(1, query.length - 1);
-      filter.where['name'] = { contains: query };
-    }
-    else if (query !== '*' && query.startsWith('*')) {
-      query = query.substring(1, query.length);
-      filter.where['name'] = { endsWith: query };
-    }
-    else if (query !== '*' && query.endsWith('*')) {
-      query = query.substring(0, query.length - 1);
-      filter.where['name'] = { startsWith: query };
-    }
-    else if (!query.includes('*') && query) {
-      filter.where['name'] = { contains: query };
-    }
+  generateNativeQuery(server, sortBy, sortDirection, limit) {
+    let sortingSegment = ``;
 
     if (sortBy && sortDirection) {
-      filter['sort'] = sortBy + ' ' + sortDirection;
+      if (sortBy === 'name' || sortBy === 'value') {
+        sortingSegment = `ORDER BY LENGTH(${sortBy}) ${sortDirection}, ${sortBy} ${sortDirection}`;
+      } else {
+        sortingSegment = `ORDER BY ${sortBy} ${sortDirection}`;
+      }
     }
 
-    if (limit !== -1) {
-      filter['limit'] = limit;
+    let limitSegment = ``;
+
+    if (limit !== -1){
+      limitSegment = `LIMIT ${limit}`;
     }
 
-    return filter;
+    const sqlQuery = `
+    SELECT *
+    FROM ${PersistentVariable.tableName}
+    WHERE
+      server = ${server.id}
+      AND name LIKE $1
+    ${sortingSegment}
+    ${limitSegment}
+    `;
+
+    return sqlQuery;
   }
 
   async get(server, name) {
@@ -83,10 +81,56 @@ class PersistentVariablesManager {
       throw new Error('`server` must be provided');
     }
 
-    let filter = this.generateQueryFilter(server, query, sortBy, sortDirection, limit);
+    if (typeof query !== 'string') {
+      throw new Error('Invalid argument `query`');
+    }
+
+    const sortByOptions = {
+      createdAt: 'createdAt',
+      updatedAt: 'updatedAt',
+      name: 'name',
+      value: 'value',
+      preventDeletion: 'preventDeletion'
+    };
+
+    const sortDirectionOptions = {
+      ASC: 'ASC',
+      DESC: 'DESC',
+      asc: 'ASC',
+      desc: 'DESC'
+    };
+
+    if (sortBy && !sortByOptions[sortBy]){
+      throw new Error('Invalid argument `sortBy`');
+    }
+
+    if (sortDirection && !sortDirectionOptions[sortDirection]){
+      throw new Error('Invalid argument `sortDirection`');
+    }
+
+    if (typeof limit !== 'number') {
+      throw new Error('Invalid argument `limit`');
+    }
+
+    const nativeQuery = this.generateNativeQuery(server, sortBy, sortDirection, limit);
+
+    if (query !== '*' && query.startsWith('*') && query.endsWith('*')) {
+      query = `%${query.substring(1, query.length - 1)}%`;
+    }
+    else if (query !== '*' && query.startsWith('*')) {
+      query = `%${query.substring(1, query.length)}`;
+    }
+    else if (query !== '*' && query.endsWith('*')) {
+      query = `${query.substring(0, query.length - 1)}%`;
+    }
+    else if (!query.includes('*') && query) {
+      query = `%${query}%`;
+    }
 
     return this.queue.push(async () => {
-      const variables = await PersistentVariable.find(filter);
+      const rawResult = await sails.sendNativeQuery(nativeQuery, [query]);
+
+      const variables = rawResult.rows.flat();
 
       sails.log.debug(`PersistentVariable.list("${query}", "${sortBy}", "${sortDirection}", "${limit === -1 ? 'none' : limit}")`, this.getLogMeta(server));
 
