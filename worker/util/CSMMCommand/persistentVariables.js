@@ -126,6 +126,9 @@ class PersistentVariablesManager {
     else if (!query.includes('*') && query) {
       query = `%${query}%`;
     }
+    else if (!query || query === '*') {
+      query = `%%`;
+    }
 
     return this.queue.push(async () => {
       const rawResult = await sails.sendNativeQuery(nativeQuery, [query]);
