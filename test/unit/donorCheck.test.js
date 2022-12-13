@@ -58,4 +58,12 @@ describe('donor check', () => {
     expect(current.failedDonorChecks).to.be.equal(0);
   });
 
+  it('Does not handle servers already marked as disabled', async () => {
+    sandbox.stub(sails.helpers.meta, 'checkDonatorStatus').resolves('free');
+    await SdtdServer.update({ id: sails.testServer.id }, { disabled: true });
+    await donorCheck();
+    const current = await SdtdConfig.findOne({ server: sails.testServer.id });
+    expect(current.failedDonorChecks).to.be.equal(0);
+  });
+
 });
