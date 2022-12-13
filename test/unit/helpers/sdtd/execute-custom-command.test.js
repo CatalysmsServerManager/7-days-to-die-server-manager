@@ -445,6 +445,136 @@ say "1 - 1 = {{subtract 1 1}}"
         expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(3).lastArg).to.equal(`say "The var is: "`);
       });
 
+      it('Can list variables', async() => {
+        const names = [
+          'exchange:rate',
+          'exchange:max',
+          'zk_id0',
+          'zk_id1',
+          'zk_id2',
+          'pk_id0',
+          'pk_id1',
+          'pk_id2'
+        ];
+
+        const values = [
+          '0.05',
+          '10000',
+          '0',
+          '20',
+          '5',
+          '12',
+          '3',
+          '20'
+        ];
+
+        let setVarTemplates = [];
+
+        for (let i = 0; i < names.length; i++) {
+          setVarTemplates[i] = `{{setVar "${names[i]}" "${values[i]}"}}`;
+        }
+
+        for (let setVarTemplate of setVarTemplates) {
+          await sails.helpers.sdtd.executeCustomCmd(sails.testServer, setVarTemplate, { player: sails.testPlayer });
+        }
+
+        const simpleSearch = `{{#each (listVar "zk_")}}
+            {{{this.name}}}
+            {{/each}}`;
+        const startsWithSearch = `{{#each (listVar "exc*")}}
+            {{{this.name}}}
+            {{/each}}`;
+        const endsWithSearch = `{{#each (listVar "*max")}}
+            {{{this.name}}}
+            {{/each}}`;
+        const containsSearch = `{{#each (listVar "*rat*")}}
+            {{{this.name}}}
+            {{/each}}`;
+        const searchWithLimit = `{{#each (listVar "zk_" 1)}}
+            {{{this.name}}}
+            {{/each}}`;
+        const searchWithSortDesc = `{{#each (listVar "zk_" "name" "desc")}}
+            {{{this.name}}}
+            {{/each}}`;
+        const searchWithSortAsc = `{{#each (listVar "zk_" "name" "asc")}}
+            {{{this.name}}}
+            {{/each}}`;
+        const searchWithTheLot = `{{#each (listVar "zk_" "name" "asc" 2)}}
+            {{{this.name}}}
+            {{/each}}`;
+        const searchWithNoQuery = `{{#each (listVar "")}}
+            {{{this.name}}}
+            {{/each}}`;
+        const searchWithNoResults = `{{#each (listVar "ajhsdkhasjkdhajkshdjkahsd")}}
+            {{{this.name}}}
+            {{/each}}`;
+
+        let result = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, simpleSearch, {});
+        let resultArray = sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg
+          .split('\n')
+          .map((string) => string.trim());
+        expect(result).to.have.length(1, 'simpleSearch: error running command');
+        expect(resultArray).to.have.length(3, 'simpleSearch: invalid length');
+        expect(resultArray).to.eql([ 'zk_id0', 'zk_id1', 'zk_id2' ], 'simpleSearch: eql');
+
+        result = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, startsWithSearch, {});
+        resultArray = sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg
+          .split('\n')
+          .map((string) => string.trim());
+        expect(result).to.have.length(1, 'startsWithSearch: error running command');
+        expect(resultArray).to.have.length(2, 'startsWithSearch: invalid length');
+        expect(resultArray).to.eql([ 'exchange:rate', 'exchange:max' ], 'startsWithSearch: eql');
+
+        result = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, endsWithSearch, {});
+        let resultString = sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg;
+        expect(result).to.have.length(1, 'endsWithSearch: error running command');
+        expect(resultString).equal('exchange:max', 'endsWithSearch: equal');
+
+        result = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, containsSearch, {});
+        resultString = sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg;
+        expect(result).to.have.length(1, 'containsSearch: error running command');
+        expect(resultString).equal('exchange:rate', 'containsSearch: equal');
+
+        result = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, searchWithLimit, {});
+        resultString = sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg;
+        expect(result).to.have.length(1, 'searchWithLimit: error running command');
+        expect(resultString).equal('zk_id0', 'searchWithLimit: equal');
+
+        result = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, searchWithSortDesc, {});
+        resultArray = sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg
+          .split('\n')
+          .map((string) => string.trim());
+        expect(result).to.have.length(1, 'searchWithSortDesc: error running command');
+        expect(resultArray).to.have.length(3, 'searchWithSortDesc: invalid length');
+        expect(resultArray).to.eql([ 'zk_id2', 'zk_id1', 'zk_id0' ], 'searchWithSortDesc: eql');
+
+        result = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, searchWithSortAsc, {});
+        resultArray = sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg
+          .split('\n')
+          .map((string) => string.trim());
+        expect(result).to.have.length(1, 'searchWithSortAsc: error running command');
+        expect(resultArray).to.have.length(3, 'searchWithSortAsc: invalid length');
+        expect(resultArray).to.eql([ 'zk_id0', 'zk_id1', 'zk_id2' ], 'searchWithSortAsc: eql');
+
+        result = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, searchWithTheLot, {});
+        resultArray = sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg
+          .split('\n')
+          .map((string) => string.trim());
+        expect(result).to.have.length(1, 'searchWithTheLot: error running command');
+        expect(resultArray).to.have.length(2, 'searchWithTheLot: invalid length');
+        expect(resultArray).to.eql([ 'zk_id0', 'zk_id1'], 'searchWithTheLot: eql');
+
+        result = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, searchWithNoQuery, {});
+        resultArray = sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg
+          .split('\n')
+          .map((string) => string.trim());
+        expect(result).to.have.length(1, 'searchWithNoQuery: error running command');
+        expect(resultArray).to.have.length(8, 'searchWithNoQuery: invalid length');
+        expect(resultArray).to.eql([ 'exchange:rate', 'exchange:max', 'zk_id0', 'zk_id1', 'zk_id2', 'pk_id0', 'pk_id1', 'pk_id2'], 'searchWithNoQuery: eql');
+
+        result = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, searchWithNoResults, {});
+        expect(result).to.have.length(0, 'searchWithNoResults: wait what????');
+      });
 
       it('Can do a counter', async () => {
         const incr = `{{setVar "counter" (add (getVar "counter") 1)}}`;

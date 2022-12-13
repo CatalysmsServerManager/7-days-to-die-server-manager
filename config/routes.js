@@ -119,8 +119,22 @@ module.exports.routes = {
     action: 'Playground/variables/get-variables',
   },
 
+  'get /api/playground/variable/check': {
+    action: 'Playground/variables/check-variable',
+  },
+
   'delete /api/playground/variable/:variableId': {
     action: 'Playground/variables/delete-variable',
+    csrf: false
+  },
+
+  'put /api/playground/variable/lock':{
+    action: 'Playground/variables/lock-variable',
+    csrf: false
+  },
+
+  'put /api/playground/variable/:id':{
+    action: 'Playground/variables/edit-variable',
     csrf: false
   },
 

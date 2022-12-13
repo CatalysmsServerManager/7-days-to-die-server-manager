@@ -8,7 +8,7 @@ class AddCurrency extends CustomFunction {
 
     let player = await Player.find({
       or: [
-        { id: playerId },
+        { id: isNaN(parseInt(playerId)) ? -1 : playerId },
         { steamId: playerId, server: server.id },
         { name: playerId, server: server.id }
       ]
