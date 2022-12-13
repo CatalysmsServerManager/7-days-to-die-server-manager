@@ -72,7 +72,12 @@ const ExecCommand = {
       .addFields([{ name: ':inbox_tray: Input', value: `${command}` }]);
 
     const attachments = (await Promise.all(serversToExecuteOn.map(async sdtdServer => {
-      return await handleExecution(successEmbed, sdtdServer, command);
+      try {
+        return await handleExecution(successEmbed, sdtdServer, command);
+      } catch (error) {
+        successEmbed.addFields([{ name: `:outbox_tray: Output ${sdtdServer.name}`, value: `Error while executing command` }]);
+
+      }
     }))).filter(Boolean);
 
     await interaction.editReply({ embeds: [successEmbed], files: attachments });
