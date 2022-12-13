@@ -14,6 +14,9 @@ module.exports = async function donorCheck() {
     const serversToCheck = await SdtdServer.find({
       skip: serversPerPage * i,
       limit: serversPerPage,
+      where: {
+        disabled: false
+      }
     });
 
     for (const server of serversToCheck) {
