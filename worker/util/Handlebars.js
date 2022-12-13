@@ -121,10 +121,17 @@ Handlebars.registerHelper('randList', function (...options) {
 });
 
 
-Handlebars.registerHelper('setVar', async function setVar(name, value, options) {
+Handlebars.registerHelper('setVar', async function setVar(name, value, preventDeletion, options) {
+
+  if (typeof preventDeletion !== 'boolean') {
+    options = preventDeletion;
+    preventDeletion = false;
+  }
+
   if (!options.data.root.server) {
     throw new Error('Persistent variables can only be used in context of a server, this is likely an implementation error');
   }
+
   if (!name) {
     throw new Error('setVar: You must provide the variable name');
   }
@@ -132,7 +139,123 @@ Handlebars.registerHelper('setVar', async function setVar(name, value, options) 
     throw new Error('setVar: You must provide the variable value');
   }
 
-  await PersistentVariablesManager.set(options.data.root.server, name, value);
+  await PersistentVariablesManager.set(options.data.root.server, name, value, preventDeletion);
+});
+
+Handlebars.registerHelper('listVar', async function listVar(query, sortBy, sortDirection, limit, options) {
+
+  if (arguments.length === 1 || arguments.length > 5) {
+    throw new Error('listVar: Invalid number of arguments provided');
+  }
+
+  // Search
+  if (arguments.length === 2) {
+
+    query = arguments[0];
+
+    if (typeof query !== 'string') {
+      throw new Error('listVar: Invalid argument for query');
+    }
+
+    options = arguments[1];
+
+    sortBy = '';
+    sortDirection = '';
+    limit = -1;
+  }
+
+  // Search with limit
+  if (arguments.length === 3) {
+    query = arguments[0];
+
+    if (typeof query !== 'string') {
+      throw new Error('listVar: Invalid argument for query');
+    }
+
+    limit = arguments[1];
+
+    if (typeof limit !== 'number') {
+      throw new Error('listVar: Invalid argument for limit');
+    }
+
+    options = arguments[2];
+
+    sortBy = '';
+    sortDirection = '';
+  }
+
+  const sortByOptions = {
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    name: 'name',
+    value: 'value',
+    preventDeletion: 'preventDeletion'
+  };
+
+  const sortDirectionOptions = {
+    ASC: 'ASC',
+    DESC: 'DESC',
+    asc: 'ASC',
+    desc: 'DESC'
+  };
+
+  // Search with sorting
+  if (arguments.length === 4) {
+    query = arguments[0];
+
+    if (typeof query !== 'string') {
+      throw new Error('listVar: Invalid argument for query');
+    }
+
+    sortBy = arguments[1];
+    sortDirection = arguments[2];
+
+    if (typeof sortBy !== 'string' || typeof sortDirection !== 'string' || !sortBy || !sortDirection) {
+      throw new Error('listVar: Invalid argument for sorting');
+    }
+
+    if (sortBy && !sortByOptions[sortBy] || sortDirection && !sortDirectionOptions[sortDirection]) {
+      throw new Error('listVar: Invalid argument for sorting');
+    }
+
+    options = arguments[3];
+
+    limit = -1;
+  }
+
+  // Search with sorting and limit
+  if (arguments.length === 5) {
+    query = arguments[0];
+
+    if (typeof query !== 'string') {
+      throw new Error('listVar: Invalid argument for query');
+    }
+
+    sortBy = arguments[1];
+    sortDirection = arguments[2];
+
+    if (typeof sortBy !== 'string' || typeof sortDirection !== 'string' || !sortBy || !sortDirection) {
+      throw new Error('listVar: Invalid argument for sorting');
+    }
+
+    if (sortBy && !sortByOptions[sortBy] || sortDirection && !sortDirectionOptions[sortDirection]) {
+      throw new Error('listVar: Invalid argument for sorting');
+    }
+
+    limit = arguments[3];
+
+    if (typeof limit !== 'number') {
+      throw new Error('listVar: Invalid argument for limit');
+    }
+
+    options = arguments[4];
+  }
+
+  if (!options.data.root.server) {
+    throw new Error('Persistent variables can only be used in context of a server, this is likely an implementation error');
+  }
+
+  return PersistentVariablesManager.list(options.data.root.server, query, sortBy, sortDirection, limit);
 });
 
 Handlebars.registerHelper('getVar', async function getVar(name, options) {
