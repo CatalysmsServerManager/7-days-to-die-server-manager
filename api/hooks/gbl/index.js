@@ -19,16 +19,16 @@ module.exports = function defineGblHook(sails) {
       // eslint-disable-next-line callback-return
       done();
 
-      sails.on('lifted', async () => {
+      sails.after('hook:sdtdLogs:ready', async function () {
         sails.log.info('Initializing custom hook (`gbl`)');
-        refreshBans();
+        initialize();
         return;
       });
     }
   };
 };
 
-async function refreshBans() {
+async function initialize() {
   let dateStarted = new Date();
 
   let sdtdServers = await SdtdServer.find({});
@@ -56,7 +56,7 @@ async function refreshBans() {
         foundBans = _.uniqBy(foundBans, ban => ban.server.owner);
 
         sails.log.debug(
-          `Found ${foundBans.length} total bans for player ${connectedMsg.steamId} on the GBL`, {server}
+          `Found ${foundBans.length} total bans for player ${connectedMsg.steamId} on the GBL`, { server }
         );
 
         let config = await SdtdConfig.findOne({
@@ -86,7 +86,7 @@ async function refreshBans() {
           playerAutoKicked = true;
           sails.log.info(
             `Autobanned a player for being on GBL too often`,
-            {player: connectedMsg, server }
+            { player: connectedMsg, server }
           );
         }
 
@@ -107,12 +107,12 @@ async function refreshBans() {
       await sails.helpers.sdtd.loadBans(server.id);
     } catch (error) {
       sails.log.warn(
-        `Error refreshing ban info for server ${server.name}`, {server, error});
+        `Error initializing GBL hook for server ${server.name}`, { server, error: error.message });
     }
   }
 
   let dateEnded = new Date();
   sails.log.info(
-    `Reloaded bans for ${sdtdServers.length} servers! - Took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`
+    `Initialized GBL for ${sdtdServers.length} servers! - Took ${dateEnded.valueOf() - dateStarted.valueOf()} ms`
   );
 }
