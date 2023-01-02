@@ -17,7 +17,7 @@ class SendDiscord extends CustomFunction {
 
     if (!guild) { throw new Error('You must have a Discord guild associated to this server'); }
 
-    const channel = await guild.channels.cache.get(channelId.toString());
+    const channel = await guild.channels.fetch(channelId.toString());
     if (!channel) { throw new Error(`Channel ${channelId} not found`); }
 
     await sails.helpers.discord.sendMessage(channelId, content);

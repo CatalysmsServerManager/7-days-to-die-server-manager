@@ -9,7 +9,7 @@ describe('CustomFunction sendDiscord', function () {
     instance = new fn();
     stub = sandbox.stub(sails.helpers.discord, 'sendMessage');
     guildStub = {
-      channels: { cache: { get: sandbox.stub() } }
+      channels: { fetch: sandbox.stub() }
     };
     clientStub = sandbox.stub(sails.helpers.discord, 'getClient')
       .returns({
@@ -18,7 +18,7 @@ describe('CustomFunction sendDiscord', function () {
   });
 
   it('Calls the helper', async () => {
-    guildStub.channels.cache.get.returns(true);
+    guildStub.channels.fetch.returns(true);
     await SdtdConfig.update({ server: sails.testServer.id }, { discordGuildId: '336821518250147850' });
     await instance.run(sails.testServer, '521825197666467840, Heya!');
     expect(stub).to.have.been.calledOnce;
@@ -32,7 +32,7 @@ describe('CustomFunction sendDiscord', function () {
   });
 
   it('Should only send message to channels linked to the server', async () => {
-    guildStub.channels.cache.get.returns(undefined);
+    guildStub.channels.fetch.returns(undefined);
 
     await SdtdConfig.update({ server: sails.testServer.id }, { discordGuildId: '408631230179835925' });
 
