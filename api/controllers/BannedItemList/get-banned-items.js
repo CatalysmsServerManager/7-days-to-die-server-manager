@@ -15,7 +15,7 @@ module.exports = {
   fn: async function (inputs, exits) {
     const bannedItems = await BannedItem.find({ server: inputs.serverId }).populate('tier');
 
-    const populated = bannedItems.map(async _ => {
+    const populated = bannedItems.filter(_ => _.tier).map(async _ => {
       _.tier.role = await Role.findOne(_.tier.role);
       return _;
     });
