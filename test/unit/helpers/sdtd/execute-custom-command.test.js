@@ -1,6 +1,7 @@
 const { expect } = require('chai');
 const faker = require('faker');
 const wait = require('../../../../worker/util/wait');
+const MockDate = require('mockdate');
 
 describe('HELPER execute-custom-command', function () {
   beforeEach(function () {
@@ -445,7 +446,7 @@ say "1 - 1 = {{subtract 1 1}}"
         expect(sails.helpers.sdtdApi.executeConsoleCommand.getCall(3).lastArg).to.equal(`say "The var is: "`);
       });
 
-      it('Can list variables', async() => {
+      it('Can list variables', async () => {
         const names = [
           'exchange:rate',
           'exchange:max',
@@ -515,7 +516,7 @@ say "1 - 1 = {{subtract 1 1}}"
           .map((string) => string.trim());
         expect(result).to.have.length(1, 'simpleSearch: error running command');
         expect(resultArray).to.have.length(3, 'simpleSearch: invalid length');
-        expect(resultArray).to.eql([ 'zk_id0', 'zk_id1', 'zk_id2' ], 'simpleSearch: eql');
+        expect(resultArray).to.eql(['zk_id0', 'zk_id1', 'zk_id2'], 'simpleSearch: eql');
 
         result = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, startsWithSearch, {});
         resultArray = sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg
@@ -523,7 +524,7 @@ say "1 - 1 = {{subtract 1 1}}"
           .map((string) => string.trim());
         expect(result).to.have.length(1, 'startsWithSearch: error running command');
         expect(resultArray).to.have.length(2, 'startsWithSearch: invalid length');
-        expect(resultArray).to.eql([ 'exchange:rate', 'exchange:max' ], 'startsWithSearch: eql');
+        expect(resultArray).to.eql(['exchange:rate', 'exchange:max'], 'startsWithSearch: eql');
 
         result = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, endsWithSearch, {});
         let resultString = sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg;
@@ -546,7 +547,7 @@ say "1 - 1 = {{subtract 1 1}}"
           .map((string) => string.trim());
         expect(result).to.have.length(1, 'searchWithSortDesc: error running command');
         expect(resultArray).to.have.length(3, 'searchWithSortDesc: invalid length');
-        expect(resultArray).to.eql([ 'zk_id2', 'zk_id1', 'zk_id0' ], 'searchWithSortDesc: eql');
+        expect(resultArray).to.eql(['zk_id2', 'zk_id1', 'zk_id0'], 'searchWithSortDesc: eql');
 
         result = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, searchWithSortAsc, {});
         resultArray = sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg
@@ -554,7 +555,7 @@ say "1 - 1 = {{subtract 1 1}}"
           .map((string) => string.trim());
         expect(result).to.have.length(1, 'searchWithSortAsc: error running command');
         expect(resultArray).to.have.length(3, 'searchWithSortAsc: invalid length');
-        expect(resultArray).to.eql([ 'zk_id0', 'zk_id1', 'zk_id2' ], 'searchWithSortAsc: eql');
+        expect(resultArray).to.eql(['zk_id0', 'zk_id1', 'zk_id2'], 'searchWithSortAsc: eql');
 
         result = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, searchWithTheLot, {});
         resultArray = sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg
@@ -562,7 +563,7 @@ say "1 - 1 = {{subtract 1 1}}"
           .map((string) => string.trim());
         expect(result).to.have.length(1, 'searchWithTheLot: error running command');
         expect(resultArray).to.have.length(2, 'searchWithTheLot: invalid length');
-        expect(resultArray).to.eql([ 'zk_id0', 'zk_id1'], 'searchWithTheLot: eql');
+        expect(resultArray).to.eql(['zk_id0', 'zk_id1'], 'searchWithTheLot: eql');
 
         result = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, searchWithNoQuery, {});
         resultArray = sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg
@@ -570,7 +571,7 @@ say "1 - 1 = {{subtract 1 1}}"
           .map((string) => string.trim());
         expect(result).to.have.length(1, 'searchWithNoQuery: error running command');
         expect(resultArray).to.have.length(8, 'searchWithNoQuery: invalid length');
-        expect(resultArray).to.eql([ 'exchange:rate', 'exchange:max', 'zk_id0', 'zk_id1', 'zk_id2', 'pk_id0', 'pk_id1', 'pk_id2'], 'searchWithNoQuery: eql');
+        expect(resultArray).to.eql(['exchange:rate', 'exchange:max', 'zk_id0', 'zk_id1', 'zk_id2', 'pk_id0', 'pk_id1', 'pk_id2'], 'searchWithNoQuery: eql');
 
         result = await sails.helpers.sdtd.executeCustomCmd(sails.testServer, searchWithNoResults, {});
         expect(result).to.have.length(0, 'searchWithNoResults: wait what????');
@@ -628,6 +629,57 @@ say "1 - 1 = {{subtract 1 1}}"
 
     });
 
+    describe('timeDiff helper', () => {
+      it('Can display the time left until a date', async () => {
+        MockDate.set('2020-01-01T00:00:00.000Z');
+        const template = [
+          '{{timeDiff "2020-01-02T00:00:00.000Z"}}',
+        ].join(';');
+
+        await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template, { player: sails.testPlayer });
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg).to.equal('86400');
+      });
+
+      it('Can display time passed for date in the past', async () => {
+        MockDate.set('2020-02-10T00:00:00.000Z');
+        const template = [
+          '{{timeDiff "2020-02-09T00:00:00.000Z"}}',
+        ].join(';');
+
+        await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template, { player: sails.testPlayer });
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg).to.equal('-86400');
+      });
+
+      it('can pretty-print a timediff in the future', async () => {
+        MockDate.set('2020-02-10T00:00:00.000Z');
+        const template = [
+          '{{timeDiffPretty "2020-02-11T00:00:00.000Z"}}',
+        ].join(';');
+
+        await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template, { player: sails.testPlayer });
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg).to.equal('1 day');
+      });
+
+      it('Can pretty-print a timediff thats two days away', async () => {
+        MockDate.set('2020-02-10T00:00:00.000Z');
+        const template = [
+          '{{timeDiffPretty "2020-02-12T00:00:00.000Z"}}',
+        ].join(';');
+
+        await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template, { player: sails.testPlayer });
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg).to.equal('2 days');
+      });
+
+      it('can pretty-print a timediff in the past', async () => {
+        MockDate.set('2020-02-10T00:00:00.000Z');
+        const template = [
+          '{{timeDiffPretty "2020-02-09T00:00:00.000Z"}}',
+        ].join(';');
+
+        await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template, { player: sails.testPlayer });
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg).to.equal('1 day ago');
+      });
+    });
 
 
   });
