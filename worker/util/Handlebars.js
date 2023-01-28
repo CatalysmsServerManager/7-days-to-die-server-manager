@@ -1,4 +1,5 @@
 const promisedHandlebars = require('promised-handlebars');
+const ms = require('ms');
 const PersistentVariablesManager = require('./CSMMCommand/persistentVariables');
 
 
@@ -308,6 +309,27 @@ Handlebars.registerHelper('times', function (n, block) {
 
 Handlebars.registerHelper('datePassed', function (date) {
   return ((Date.now() - Date.parse(date)) >= 0);
+});
+
+Handlebars.registerHelper('timeDiff', function (date) {
+  //Get milliseconds from Date.now()
+  let timeDiff = -1 * (Date.now() - Date.parse(date));
+  return timeDiff / 1000;
+});
+
+Handlebars.registerHelper('timeDiffPretty', function (date) {
+  //Get milliseconds from Date.now()
+  let timeDiff = Date.now() - Date.parse(date);
+
+  const isInPast = timeDiff > 0;
+
+  timeDiff = Math.abs(timeDiff);
+
+  if (isInPast) {
+    return ms(timeDiff, { long: true }) + ' ago';
+  }
+
+  return ms(timeDiff, { long: true });
 });
 
 module.exports = Handlebars;
