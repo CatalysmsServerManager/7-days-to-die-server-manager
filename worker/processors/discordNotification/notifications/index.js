@@ -7,6 +7,7 @@ const playerConnected = require('./playerConnected');
 const playerDisconnected = require('./playerDisconnected');
 const systemBoot = require('./systemBoot');
 const sseThrottled = require('./SSEThrottled');
+const ticket = require('./ticket');
 
 
 module.exports = [
@@ -19,4 +20,5 @@ module.exports = [
   new playerDisconnected(),
   new systemBoot(),
   new sseThrottled(),
+  new ticket()
 ];
