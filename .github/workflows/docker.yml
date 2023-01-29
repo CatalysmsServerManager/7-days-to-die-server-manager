@@ -69,6 +69,7 @@ jobs:
           context: .
           file: ./Dockerfile
           platforms: linux/amd64
+          provenance: false
           push: ${{ !startsWith(github.actor, 'dependabot') }}
           tags: ${{ steps.prep.outputs.tags }}
           labels: |
