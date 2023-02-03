@@ -85,6 +85,7 @@ class ChatBridgeChannel {
 
   stop() {
     if (this.loggingObject) {
+
       this.loggingObject.removeListener(
         'chatMessage',
         this.sendChatMessageToDiscord
@@ -109,8 +110,8 @@ class ChatBridgeChannel {
         'playerDisconnected',
         this.sendRichDisconnectedMessageToDiscord
       );
-      this.channel.client.removeListener('message', this.sendMessageToGame);
     }
+    this.channel.client.removeListener('messageCreate', this.sendMessageToGame);
   }
 
   async sendChatMessageToDiscord(chatMessage) {
