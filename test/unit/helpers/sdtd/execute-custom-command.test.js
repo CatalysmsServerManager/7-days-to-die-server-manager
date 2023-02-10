@@ -681,6 +681,53 @@ say "1 - 1 = {{subtract 1 1}}"
       });
     });
 
+    describe('lookupPlayer helper', () => {
+      it('Can find a player using steam ID', async () => {
+        const template = [
+          `{{get "name" (lookupPlayer "${sails.testPlayer.steamId}")}}`,
+        ].join(';');
+
+        await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template, {});
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg).to.equal(sails.testPlayer.name);
+      });
+      it('Can find a player using name', async () => {
+        const template = [
+          `{{get "name" (lookupPlayer "${sails.testPlayer.name}")}}`,
+        ].join(';');
+
+        await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template, {});
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg).to.equal(sails.testPlayer.name);
+      });
+      it('Can find a player using internal ID', async () => {
+        const template = [
+          `{{get "name" (lookupPlayer "${sails.testPlayer.id}")}}`,
+        ].join(';');
+
+        await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template, {});
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg).to.equal(sails.testPlayer.name);
+      });
+
+      it('Can find a player using crossId', async () => {
+        const template = [
+          `{{get "name" (lookupPlayer "${sails.testPlayer.crossId}")}}`,
+        ].join(';');
+
+        await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template, {});
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.lastCall.lastArg).to.equal(sails.testPlayer.name);
+      });
+
+
+      it('Cannot find players from a different server', async () => {
+        const newPlayer = await Player.create({ server: sails.testServer.id + 1, steamId: '123456789', name: 'testPlayer2', crossId: '123456789' }).fetch();
+
+        const template = [
+          `{{get "name" (lookupPlayer "${newPlayer.steamId}")}}`,
+        ].join(';');
+
+        await sails.helpers.sdtd.executeCustomCmd(sails.testServer, template, {});
+        expect(sails.helpers.sdtdApi.executeConsoleCommand.lastCall).to.be.null;
+      });
+    });
 
   });
 
