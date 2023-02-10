@@ -332,4 +332,15 @@ Handlebars.registerHelper('timeDiffPretty', function (date) {
   return ms(timeDiff, { long: true });
 });
 
+Handlebars.registerHelper('lookupPlayer', async function (searchTerm) {
+  const whereClause = { or: [{ steamId: searchTerm }, { name: searchTerm }, { crossId: searchTerm }] };
+
+  if (Number.isInteger(parseInt(searchTerm, 10))) {
+    whereClause.or.push({ id: searchTerm });
+  }
+
+  const res = await Player.find({ where: whereClause, limit: 1 });
+  return res[0];
+});
+
 module.exports = Handlebars;
