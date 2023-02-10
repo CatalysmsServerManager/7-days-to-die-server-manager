@@ -332,14 +332,23 @@ Handlebars.registerHelper('timeDiffPretty', function (date) {
   return ms(timeDiff, { long: true });
 });
 
-Handlebars.registerHelper('lookupPlayer', async function (searchTerm) {
-  const whereClause = { or: [{ steamId: searchTerm }, { name: searchTerm }, { crossId: searchTerm }] };
+Handlebars.registerHelper('lookupPlayer', async function (searchTerm, options) {
+  if (!options.data.root.server) {
+    throw new Error('This helper can only be used in context of a server, this is likely an implementation error');
+  }
+
+  const whereClause = { or: [{ steamId: searchTerm }, { name: searchTerm }, { crossId: searchTerm }], server: options.data.root.server.id };
 
   if (Number.isInteger(parseInt(searchTerm, 10))) {
     whereClause.or.push({ id: searchTerm });
   }
 
   const res = await Player.find({ where: whereClause, limit: 1 });
+
+  if (!res.length) {
+    return null;
+  }
+
   return res[0];
 });
 
