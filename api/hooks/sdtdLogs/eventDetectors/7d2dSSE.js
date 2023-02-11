@@ -109,9 +109,7 @@ class SdtdSSE extends LoggingObject {
     this.eventSource.reconnectInterval = 5000;
     this.eventSource.addEventListener('logLine', this.listener);
     this.eventSource.onerror = e => {
-      clearTimeout(isConnectingTimeout);
       sails.log.warn(`SSE error for server ${this.server.id}`, { server: this.server, error: e });
-      this.isConnecting = false;
     };
     this.eventSource.onopen = () => {
       clearTimeout(isConnectingTimeout);
@@ -129,6 +127,7 @@ class SdtdSSE extends LoggingObject {
     this.eventSource.removeEventListener('logLine', this.listener);
     this.eventSource.close();
     this.eventSource = null;
+    this.isConnecting = false;
   }
 
   async SSEListener(data) {
