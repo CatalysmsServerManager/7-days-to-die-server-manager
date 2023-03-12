@@ -1,6 +1,6 @@
 module.exports = async function adminRestart(msg) {
 
-  const admins = sails.config.custom.adminSteamIds;
+  const admins = sails.config.custom.adminSteamIds.concat(sails.config.custom.restartSteamIds);
   const adminUsers = await User.find({
     where: {
       steamId: admins,
