@@ -36,7 +36,8 @@ module.exports.custom = {
 
   discordFeedbackChannel: '336823516383150080',
 
-  adminSteamIds: (process.env.CSMM_ADMINS || '').split(',').map(str => str.trim()),
+  adminSteamIds: (process.env.CSMM_ADMINS || '').split(',').map(str => str.trim()).filter(Boolean),
+  restartSteamIds: (process.env.CSMM_RESTART_ADMINS || '').split(',').map(str => str.trim()).filter(Boolean),
 
   // How often should we gather system usage statistics in ms
   usageStatsInterval: 5000, //86400000, // 1 day
