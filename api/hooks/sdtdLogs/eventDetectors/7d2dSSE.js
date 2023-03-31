@@ -28,6 +28,7 @@ class SdtdSSE extends LoggingObject {
     this.throttledFunction.on('normal', () => {
       sails.log.debug(`SSE normal for server ${this.server.id}`, { server: this.server });
       this.throttled = false;
+      this.start();
       sails.helpers.discord.sendNotification({
         serverId: this.server.id,
         notificationType: 'sseThrottled',
@@ -40,6 +41,7 @@ class SdtdSSE extends LoggingObject {
     this.throttledFunction.on('throttled', () => {
       sails.log.debug(`SSE throttled for server ${this.server.id}`, { server: this.server });
       this.throttled = true;
+      this.destroy();
       sails.helpers.discord.sendNotification({
         serverId: this.server.id,
         notificationType: 'sseThrottled',
