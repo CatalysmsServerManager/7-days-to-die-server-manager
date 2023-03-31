@@ -1,6 +1,8 @@
 const ThrottledFunction = require('../../worker/util/throttledFunction');
 const MockDate = require('mockdate');
 const { expect } = require('chai');
+const { wait } = require('../../worker/util/wait');
+
 
 describe('throttledFunction', function () {
   it('Throttles a function and emits events', async () => {
@@ -79,6 +81,36 @@ describe('throttledFunction', function () {
     expect(stub).to.have.been.calledWith(9);
   });
 
+  it('Returns to normal after a while, even when the function does not get triggered', async () => {
+    const stub = sandbox.stub();
+
+    const throttledFunction = new ThrottledFunction(stub, 5, 0.1);
+
+    const throttledListener = sandbox.stub();
+    const normalListener = sandbox.stub();
+
+    throttledFunction.on('throttled', throttledListener);
+    throttledFunction.on('normal', normalListener);
+
+    MockDate.set(new Date('2020-12-21T03:56:00'));
+    throttledFunction.listener();
+    throttledFunction.listener();
+    throttledFunction.listener();
+    throttledFunction.listener();
+    throttledFunction.listener();
+    throttledFunction.listener();
+
+    expect(throttledListener).to.have.been.calledOnce;
+    expect(normalListener).to.not.have.been.calledOnce;
+
+    // wait a while
+    MockDate.set(new Date('2020-12-21T04:06:00'));
+    await wait(8);
+
+    expect(normalListener).to.have.been.calledOnce;
+    expect(throttledListener).to.have.been.calledOnce;
+
+  });
 
   // This test was used to create a LOT of data
   // It's skipped by default because it takes very long and the assertion isnt as useful as the previous tests
