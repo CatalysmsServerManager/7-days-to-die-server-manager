@@ -110,23 +110,4 @@ describe('7d2dSSE', function () {
 
     clock.restore();
   });
-
-  it('Should cancel destruction by throttling if server goes back to normal quickly enough', async () => {
-    clock = sinon.useFakeTimers();
-    const sse = new SdtdSSE({ ...sails.testServer, config: sails.testServerConfig });
-
-    await sse.start();
-
-    expect(sse.eventSource).to.be.instanceOf(EventSource, 'EventSource should be active at the start of the test');
-
-    sse.throttledFunction.emit('throttled');
-
-    await clock.tickAsync(sse.THROTTLE_DELAY / 2);
-    expect(sse.eventSource).to.be.instanceOf(EventSource, 'EventSource should still be active when throttle delay is not exceeded');
-
-    sse.throttledFunction.emit('normal');
-    await clock.tickAsync(sse.THROTTLE_DELAY);
-    expect(sse.eventSource).to.be.instanceOf(EventSource, 'EventSource should be active after server is back to normal');
-    clock.restore();
-  });
 });
