@@ -20,7 +20,7 @@ class ThrottledFunction extends EventEmitter {
         if (this.lastState === 'normal') {
           this.emit('throttled', { buckets: this.buckets });
           this.lastState = 'throttled';
-          this.createInactivityTimeout();
+          this.createInactivityInterval();
         }
 
         return;
@@ -29,23 +29,27 @@ class ThrottledFunction extends EventEmitter {
       if (this.lastState === 'throttled') {
         this.emit('normal', { buckets: this.buckets });
         this.lastState = 'normal';
+        clearInterval(this.inactivityInterval);
       }
       listener(data);
     };
 
     // The function can return to normal state even when it's not called
-    this.inactivityTimeout;
+    this.inactivityInterval;
   }
 
-  createInactivityTimeout() {
-    if (this.inactivityTimeout) { clearTimeout(this.inactivityTimeout); };
-    this.inactivityTimeout = setTimeout(() => {
+  createInactivityInterval() {
+    if (this.inactivityInterval) { clearInterval(this.inactivityInterval); };
+    sails.log.debug('Creating inactivity interval', { labels: { namespace: 'throttledFunction' } });
+    this.inactivityInterval = setInterval(() => {
       this.refreshBuckets();
       const sum = Object.values(this.buckets).reduce((sum, amount) => sum + amount, 0);
       if (sum === 0 && this.lastState === 'throttled') {
         sails.log.debug('Throttled function is now normal after some inactivity', { labels: { namespace: 'throttledFunction' } });
         this.emit('normal', { buckets: this.buckets });
         this.lastState = 'normal';
+      } else {
+        sails.log.debug('Throttled function is still throttled', { labels: { namespace: 'throttledFunction' } });
       }
     }, this.minutes * 60 * 1000);
   }
