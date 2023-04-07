@@ -5,8 +5,9 @@ const EventEmitter = require('events');
  * @param {Number} amount
  */
 class ThrottledFunction extends EventEmitter {
-  constructor(listener, amount, minutes) {
+  constructor(listener, amount, minutes, meta = {}) {
     super();
+    this.meta = meta;
     this.amount = amount;
     this.minutes = minutes;
     this.buckets = {};
@@ -15,7 +16,7 @@ class ThrottledFunction extends EventEmitter {
       this.incrBucket();
       const sum = Object.values(this.buckets).reduce((sum, amount) => sum + amount, 0);
       if (sum > this.amount) {
-        sails.log.warn(`Discarding an event`, { labels: { namespace: 'throttledFunction' }, bucket: this.buckets, event: data });
+        sails.log.warn(`Discarding an event`, { ...this.meta, labels: { namespace: 'throttledFunction' }, bucket: this.buckets, event: data });
 
         if (this.lastState === 'normal') {
           this.emit('throttled', { buckets: this.buckets });
@@ -38,18 +39,21 @@ class ThrottledFunction extends EventEmitter {
     this.inactivityInterval;
   }
 
+  destroy() {
+    clearInterval(this.inactivityInterval);
+    this.buckets = {};
+  }
+
   createInactivityInterval() {
     if (this.inactivityInterval) { clearInterval(this.inactivityInterval); };
-    sails.log.debug('Creating inactivity interval', { labels: { namespace: 'throttledFunction' } });
+    sails.log.debug('Creating inactivity interval', { ...this.meta, labels: { namespace: 'throttledFunction' } });
     this.inactivityInterval = setInterval(() => {
       this.refreshBuckets();
       const sum = Object.values(this.buckets).reduce((sum, amount) => sum + amount, 0);
       if (sum === 0 && this.lastState === 'throttled') {
-        sails.log.debug('Throttled function is now normal after some inactivity', { labels: { namespace: 'throttledFunction' } });
+        sails.log.debug('Throttled function is now normal after some inactivity', { ...this.meta, labels: { namespace: 'throttledFunction' } });
         this.emit('normal', { buckets: this.buckets });
         this.lastState = 'normal';
-      } else {
-        sails.log.debug('Throttled function is still throttled', { labels: { namespace: 'throttledFunction' } });
       }
     }, this.minutes * 60 * 1000);
   }
