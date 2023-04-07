@@ -16,7 +16,7 @@ class SdtdSSE extends LoggingObject {
 
 
     this.SSERegex = /\d+-\d+-\d+T\d+:\d+:\d+ \d+\.\d+ INF (.+)/;
-    this.throttledFunction = new ThrottledFunction(this.SSEListener.bind(this), this.RATE_LIMIT_AMOUNT, this.RATE_LIMIT_MINUTES);
+    this.throttledFunction = new ThrottledFunction(this.SSEListener.bind(this), this.RATE_LIMIT_AMOUNT, this.RATE_LIMIT_MINUTES, { server: this.server.id });
     this.listener = this.throttledFunction.listener;
     this.queuedChatMessages = [];
     this.lastMessage = Date.now();
@@ -121,6 +121,8 @@ class SdtdSSE extends LoggingObject {
   }
 
   destroy() {
+    this.throttledFunction.destroy();
+
     if (!this.eventSource) {
       return;
     }
@@ -130,6 +132,7 @@ class SdtdSSE extends LoggingObject {
     this.eventSource.close();
     this.eventSource = null;
     this.isConnecting = false;
+
   }
 
   async SSEListener(data) {
