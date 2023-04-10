@@ -108,6 +108,7 @@ class SdtdSSE extends LoggingObject {
     sails.log.info(`Starting SSE`, { server: this.server });
 
     this.eventSource = new EventSource(encodeURI(this.url));
+    this.eventSource.addEventListener('logLine', this.listener);
     this.eventSource.reconnectInterval = 5000;
     this.eventSource.onerror = e => {
       sails.log.warn(`SSE error for server ${this.server.id}`, { server: this.server, error: e });
@@ -116,7 +117,6 @@ class SdtdSSE extends LoggingObject {
       clearTimeout(isConnectingTimeout);
       sails.log.info(`Opened a SSE channel for server ${this.server.id}`, { server: this.server });
       this.isConnecting = false;
-      this.eventSource.addEventListener('logLine', this.listener);
     };
   }
 
