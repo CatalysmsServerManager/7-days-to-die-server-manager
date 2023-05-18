@@ -47,9 +47,8 @@ module.exports = {
 
     let newData = JSON.parse(inputs.file);
 
-    for (const newListing of newData) {
-
-      let validItemName = await sails.helpers.sdtd.validateItemName(inputs.serverId, newListing.name);
+    await Promise.all(newData.map(async (newListing) => {
+      const validItemName = await sails.helpers.sdtd.validateItemName(inputs.serverId, newListing.name);
 
       if (!validItemName) {
         problems.push(`${newListing.name} is not a valid item name`);
@@ -74,8 +73,7 @@ module.exports = {
       if (newListing.quality && newListing.amount > 1) {
         problems.push(`When setting quality, amount cannot be more than 1 for "${newListing.friendlyName}"`);
       }
-
-    }
+    }));
 
     if (problems.length === 0) {
 
