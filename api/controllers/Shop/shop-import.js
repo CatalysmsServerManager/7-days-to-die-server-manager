@@ -47,8 +47,15 @@ module.exports = {
 
     let newData = JSON.parse(inputs.file);
 
+    const server = await SdtdServer.findOne(inputs.serverId);
+
+    const serverItems = (await sails.helpers.sdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(server), `listitems "*"`))
+      .result
+      .split('\n')
+      .map(itemName => itemName.trim());
+
     await Promise.all(newData.map(async (newListing) => {
-      const validItemName = await sails.helpers.sdtd.validateItemName(inputs.serverId, newListing.name);
+      const validItemName = serverItems.find(item => item === newListing.name);
 
       if (!validItemName) {
         problems.push(`${newListing.name} is not a valid item name`);
@@ -82,7 +89,7 @@ module.exports = {
         newListing.server = inputs.serverId;
         return newListing;
       }));
-      sails.log.info(`Imported ${newData.length} entries for shop ${inputs.serverId}`, {serverId: inputs.serverId});
+      sails.log.info(`Imported ${newData.length} entries for shop ${inputs.serverId}`, { serverId: inputs.serverId });
       return exits.success();
     } else {
       return exits.invalidInput(problems);
