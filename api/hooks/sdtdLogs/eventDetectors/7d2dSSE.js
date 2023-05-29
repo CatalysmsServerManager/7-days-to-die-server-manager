@@ -144,6 +144,13 @@ class SdtdSSE extends LoggingObject {
       if (messageMatch && messageMatch[1]) {
         parsed.msg = messageMatch[1];
       }
+
+      if (log.msg.includes('NullReferenceException: Object reference not set to an instance of an object')) {
+        // 7d2d servers can get really spammy with these errors
+        // Dropping these events...
+        return;
+      }
+
       const log = handleLogLine(parsed);
       if (log) {
         if (log.type === 'chatMessage' || log.data.msg.includes('-non-player-')) {
