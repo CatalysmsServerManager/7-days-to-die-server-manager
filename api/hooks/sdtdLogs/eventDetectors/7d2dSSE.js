@@ -145,7 +145,7 @@ class SdtdSSE extends LoggingObject {
         parsed.msg = messageMatch[1];
       }
 
-      if (log.msg.includes('NullReferenceException: Object reference not set to an instance of an object')) {
+      if (parsed.msg.includes('NullReferenceException: Object reference not set to an instance of an object')) {
         // 7d2d servers can get really spammy with these errors
         // Dropping these events...
         return;
