@@ -28,9 +28,9 @@ describe('COMMAND CommandHandler', () => {
       steamId: sails.testPlayer.steamId
     };
     await commandListener({data: {data: chatMessage, server: sails.testServer}});
-    expect(this.executeCommandStub.callCount).to.be.equal(2);
+    expect(this.executeCommandStub.callCount).to.be.equal(3);
     const calls = this.executeCommandStub.getCalls();
-    expect(calls[1].lastArg).to.match(/pm \d* "test/);
+    expect(calls[2].lastArg).to.match(/pm \d* "test/);
   });
 
   it('Does not execute a command if commands are disabled on server', async () => {
@@ -40,7 +40,7 @@ describe('COMMAND CommandHandler', () => {
       steamId: sails.testPlayer.steamId
     };
     await commandListener({data: {data: chatMessage, server: sails.testServer}});
-    expect(this.executeCommandStub.callCount).to.be.equal(2);
+    expect(this.executeCommandStub.callCount).to.be.equal(3);
   });
   it('Ignores chat messages sent by server', async () => {
     const chatMessage = {
@@ -93,8 +93,8 @@ describe('COMMAND CommandHandler', () => {
       steamId: sails.testPlayer.steamId
     };
     await commandListener({data: {data: chatMessage, server: sails.testServer}});
-    expect(this.executeCommandStub.callCount).to.be.equal(2);
+    expect(this.executeCommandStub.callCount).to.be.equal(3);
     const calls = this.executeCommandStub.getCalls();
-    expect(calls[1].lastArg).to.match(/pm \d* .* PONG/);
+    expect(calls[2].lastArg).to.match(/pm \d* .* PONG/);
   });
 });

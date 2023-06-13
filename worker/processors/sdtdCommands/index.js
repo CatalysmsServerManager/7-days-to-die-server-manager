@@ -50,7 +50,7 @@ async function commandListener(job) {
     serverId: server.id,
     steamId: player[0].steamId
   });
-  player = playerInfo[0];
+  player = { ...player[0], ...playerInfo[0] };
 
   // Function to easily reply to players in a command
   chatMessage.reply = async (message, data) => await sendReplyToPlayer(server, player, message, data);
