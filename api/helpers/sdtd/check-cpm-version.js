@@ -39,7 +39,7 @@ module.exports = {
         apiResponse = (await Promise.all([
           sails.helpers.sdtd.checkModVersion('Mod CSMM Patrons', inputs.serverId),
           sails.helpers.sdtd.checkModVersion('Mod 1CSMM_Patrons', inputs.serverId),
-        ])).filter(v => v)[0];
+        ])).find(v => !!v) || 0;
       } catch (e) {
         return exits.error(e);
       }
