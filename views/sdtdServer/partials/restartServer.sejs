@@ -2,7 +2,7 @@
 
 <button id="restart-server-button" class="btn btn-default btn-lg btn-warning" type="button" data-toggle="modal" data-target="#restart-server-modal">
   <em class="glyphicon glyphicon-align-right"></em>
-  <i class="fas fa-redo"></i> Restart
+  <i class="fas fa-redo"></i> Shutdown
 </button>
 
 <!-- Modal -->
@@ -11,7 +11,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">
-            Restart server
+            Shutdown server
           </h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
