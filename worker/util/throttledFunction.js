@@ -32,7 +32,7 @@ class ThrottledFunction extends EventEmitter {
         this.lastState = 'normal';
         clearInterval(this.inactivityInterval);
       }
-      listener(data);
+      return listener(data);
     };
 
     // The function can return to normal state even when it's not called
