@@ -16,8 +16,8 @@ class SdtdSSE extends LoggingObject {
 
 
     this.SSERegex = /\d+-\d+-\d+T\d+:\d+:\d+ \d+\.\d+ INF (.+)/;
-    this.throttledFunction = new ThrottledFunction(this.SSEListener.bind(this), this.RATE_LIMIT_AMOUNT, this.RATE_LIMIT_MINUTES, { server: this.server.id });
-    this.listener = this.throttledFunction.listener;
+    this.throttledHandleLogLine = new ThrottledFunction(handleLogLine.bind(this), this.RATE_LIMIT_AMOUNT, this.RATE_LIMIT_MINUTES, { server: this.server.id });
+    this.listener = this.SSEListener.bind(this);
     this.queuedChatMessages = [];
     this.lastMessage = Date.now();
     this.isConnecting = false;
@@ -25,7 +25,7 @@ class SdtdSSE extends LoggingObject {
 
 
 
-    this.throttledFunction.on('normal', () => {
+    this.throttledHandleLogLine.on('normal', () => {
       sails.log.debug(`SSE normal for server ${this.server.id}`, { server: this.server });
       this.throttled = false;
       this.start();
@@ -38,7 +38,7 @@ class SdtdSSE extends LoggingObject {
       this.start();
     });
 
-    this.throttledFunction.on('throttled', () => {
+    this.throttledHandleLogLine.on('throttled', () => {
       sails.log.debug(`SSE throttled for server ${this.server.id}`, { server: this.server });
       this.throttled = true;
       this.destroy();
@@ -121,7 +121,7 @@ class SdtdSSE extends LoggingObject {
   }
 
   destroy() {
-    this.throttledFunction.destroy();
+    this.throttledHandleLogLine.destroy();
 
     if (!this.eventSource) {
       return;
@@ -145,13 +145,13 @@ class SdtdSSE extends LoggingObject {
         parsed.msg = messageMatch[1];
       }
 
-      if (parsed.msg.includes('NullReferenceException: Object reference not set to an instance of an object')) {
+      if (parsed.msg.includes('NullReferenceException')) {
         // 7d2d servers can get really spammy with these errors
         // Dropping these events...
         return;
       }
 
-      const log = handleLogLine(parsed);
+      const log = this.throttledHandleLogLine.listener(parsed);
       if (log) {
         if (log.type === 'chatMessage' || log.data.msg.includes('-non-player-')) {
           return this.pushChatMessage(log);
