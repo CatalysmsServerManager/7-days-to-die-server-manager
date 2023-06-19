@@ -3,6 +3,10 @@ const EventSource = require('eventsource');
 const handleLogLine = require('../../../../worker/processors/logs/handleLogLine');
 const ThrottledFunction = require('../../../../worker/util/throttledFunction');
 
+const blackListedEvents = [
+  'NullReferenceException',
+  'Infinity or NaN floating point numbers appear when calculating the transform matrix for a Collider'
+];
 
 class SdtdSSE extends LoggingObject {
   constructor(server) {
@@ -145,7 +149,8 @@ class SdtdSSE extends LoggingObject {
         parsed.msg = messageMatch[1];
       }
 
-      if (parsed.msg.includes('NullReferenceException')) {
+      // If it includes any of the blackListedEvents, drop it
+      if (_.some(this.blackListedEvents, blackListedEvent => parsed.msg.includes(blackListedEvent))) {
         // 7d2d servers can get really spammy with these errors
         // Dropping these events...
         return;
