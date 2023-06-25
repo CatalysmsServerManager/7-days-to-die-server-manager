@@ -69,7 +69,7 @@ module.exports = {
     objectToSend = _.uniqBy(objectToSend, 'id').filter(server => !server.disabled);
 
     sails.log.debug(`API - User:getServersWithPermissions - Found ${objectToSend.length} servers for user ${inputs.userId}`, { userId: inputs.userId });
-    return exits.success(objectToSend);
+    return exits.success(objectToSend.sort((a, b) => a.name.localeCompare(b.name)));
   }
 
 
