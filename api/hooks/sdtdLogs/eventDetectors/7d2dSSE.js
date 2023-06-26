@@ -20,8 +20,8 @@ class SdtdSSE extends LoggingObject {
 
 
     this.SSERegex = /\d+-\d+-\d+T\d+:\d+:\d+ \d+\.\d+ INF (.+)/;
-    this.throttledHandleLogLine = new ThrottledFunction(handleLogLine.bind(this), this.RATE_LIMIT_AMOUNT, this.RATE_LIMIT_MINUTES, { server: this.server.id });
-    this.listener = this.SSEListener.bind(this);
+    this.throttledFunction = new ThrottledFunction(this.SSEListener.bind(this), this.RATE_LIMIT_AMOUNT, this.RATE_LIMIT_MINUTES, { server: this.server.id });
+    this.listener = this.throttledFunction.listener;
     this.queuedChatMessages = [];
     this.lastMessage = Date.now();
     this.isConnecting = false;
@@ -29,7 +29,7 @@ class SdtdSSE extends LoggingObject {
 
 
 
-    this.throttledHandleLogLine.on('normal', () => {
+    this.throttledFunction.on('normal', () => {
       sails.log.debug(`SSE normal for server ${this.server.id}`, { server: this.server });
       this.throttled = false;
       this.start();
@@ -42,7 +42,7 @@ class SdtdSSE extends LoggingObject {
       this.start();
     });
 
-    this.throttledHandleLogLine.on('throttled', () => {
+    this.throttledFunction.on('throttled', () => {
       sails.log.debug(`SSE throttled for server ${this.server.id}`, { server: this.server });
       this.throttled = true;
       this.destroy();
@@ -125,7 +125,7 @@ class SdtdSSE extends LoggingObject {
   }
 
   destroy() {
-    this.throttledHandleLogLine.destroy();
+    this.throttledFunction.destroy();
 
     if (!this.eventSource) {
       return;
@@ -150,13 +150,13 @@ class SdtdSSE extends LoggingObject {
       }
 
       // If it includes any of the blackListedEvents, drop it
-      if (_.some(this.blackListedEvents, blackListedEvent => parsed.msg.includes(blackListedEvent))) {
+      if (_.some(blackListedEvents, blackListedEvent => parsed.msg.includes(blackListedEvent))) {
         // 7d2d servers can get really spammy with these errors
         // Dropping these events...
         return;
       }
 
-      const log = this.throttledHandleLogLine.listener(parsed);
+      const log = handleLogLine(parsed);
       if (log) {
         if (log.type === 'chatMessage' || log.data.msg.includes('-non-player-')) {
           return this.pushChatMessage(log);
