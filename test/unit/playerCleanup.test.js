@@ -70,4 +70,14 @@ describe('Player cleanup', () => {
     const afterPlayer2 = await Player.findOne(newPlayer2[0].id);
     expect(afterPlayer2).to.be.undefined;
   });
+
+  it('Does not delete players last connected in 1970', async () => {
+    const now = new Date();
+    const aWeekAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
+    const newPlayer = await Player.update({ id: sails.testPlayer.id }, { lastOnline: aWeekAgo.toISOString() }).fetch();
+    await Player.update({ id: sails.testPlayer.id }, { lastOnline: '1970-01-01T00:00:00.000Z' });
+    await playerCleanup();
+    const afterPlayer = await Player.findOne(newPlayer[0].id);
+    expect(afterPlayer.name).to.be.eqls(newPlayer[0].name);
+  });
 });
