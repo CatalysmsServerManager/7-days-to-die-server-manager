@@ -5,7 +5,8 @@ const ThrottledFunction = require('../../../../worker/util/throttledFunction');
 
 const blackListedEvents = [
   'NullReferenceException',
-  'Infinity or NaN floating point numbers appear when calculating the transform matrix for a Collider'
+  'Infinity or NaN floating point numbers appear when calculating the transform matrix for a Collider',
+  'IsMovementBlocked'
 ];
 
 class SdtdSSE extends LoggingObject {
