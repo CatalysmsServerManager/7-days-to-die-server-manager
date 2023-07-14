@@ -6,7 +6,8 @@ const ThrottledFunction = require('../../../../worker/util/throttledFunction');
 const blackListedEvents = [
   'NullReferenceException',
   'Infinity or NaN floating point numbers appear when calculating the transform matrix for a Collider',
-  'IsMovementBlocked'
+  'IsMovementBlocked',
+  'Particle System is trying to spawn on a mesh with zero surface area'
 ];
 
 class SdtdSSE extends LoggingObject {
