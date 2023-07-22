@@ -161,7 +161,7 @@ module.exports = logLine => {
 
     const steamIdMatches = /PltfmId='Steam_(\d{17})|PlayerID='(\d{17})/.exec(logLine.msg);
     const steamId = steamIdMatches[1] || steamIdMatches[2];
-    const playerName = /PlayerName='(.+)'/.exec(logLine.msg)[1];
+    const playerName = /PlayerName='([^']+)/.exec(logLine.msg)[1];
     const entityId = /EntityID=(\d+)/.exec(logLine.msg)[1];
     const ownerId = /OwnerID='(Steam_)?(\d+)/.exec(logLine.msg)[2];
 
