@@ -6,7 +6,7 @@ const steamIdRegex = /\d{17}/g;
 const crossIdRegex = /EOS_[\d\w]{32}/;
 const xblIdRegex = /XBL_[\d\w]+/;
 
-const a20DeathRegex = /PlayerSpawnedInWorld \(reason: Died, position: (?<x>[-\d]+), (?<y>[-\d]+), (?<z>[-\d]+)\): EntityID=(?<entityId>\d+), (PltfmId|PlayerID)='(?<platformId>[\d\w]+)', CrossId='(?<crossId>[\d\w]+)', OwnerID='Steam_(?<steamId>\d{17})', PlayerName='(?<playerName>.+)'/;
+const a20DeathRegex = /PlayerSpawnedInWorld \(reason: Died, position: (?<x>[-\d]+), (?<y>[-\d]+), (?<z>[-\d]+)\): EntityID=(?<entityId>\d+), (PltfmId|PlayerID)='(?<platformId>[\d\w]+)', CrossId='(?<crossId>[\d\w]+)', OwnerID='Steam_(?<steamId>\d{17})', PlayerName='(?<playerName>[^']+)/;
 const preA20DeathRegex = /PlayerSpawnedInWorld \(reason: Died, position: (?<x>[-\d]+), (?<y>[-\d]+), (?<z>[-\d]+)\): EntityID=(?<entityId>\d+), PlayerID='(?<platformId>[\d\w]+)', OwnerID='(?<steamId>\d{17})', PlayerName='(?<playerName>.+)'/;
 
 const connectedRegex = /(Player connected,)/;
@@ -193,7 +193,7 @@ module.exports = logLine => {
     }
     */
     const steamIdMatches = /PltfmId='Steam_(\d{17})|PltfmId='(XBL_\w+)/.exec(logLine.msg);
-    const playerNameMatch = /PlayerName='(.+)'/.exec(logLine.msg);
+    const playerNameMatch = /PlayerName='([^']+)/.exec(logLine.msg);
     const entityIDMatch = /EntityID=(\d+)/.exec(logLine.msg);
     const ownerIdMatches = /OwnerID='(Steam_)?(\d+)/.exec(logLine.msg);
 
