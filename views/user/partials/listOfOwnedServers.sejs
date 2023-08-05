@@ -111,9 +111,7 @@
 
 
       sendRequestAndUpdateFps(server);
-      io.socket.get('/sdtdserver/' + server.id + '/socket', (response) => {
-        sendRequestAndUpdatePlayers(server);
-      });
+      sendRequestAndUpdatePlayers(server);
 
       io.socket.on('memUpdate', memUpdate => {
         $(`#server-${memUpdate.server.id}-fps`).text(`${memUpdate.fps} FPS`)
