@@ -90,7 +90,7 @@ class SdtdSSE extends LoggingObject {
   }
 
   get url() {
-    return `http://${this.server.ip}:${this.server.webPort}/sse/log?adminuser=${this.server.authName}&admintoken=${this.server.authToken}`;
+    return `http${this.server.webPort === 443 ? 's' : ''}://${this.server.ip}:${this.server.webPort}/sse/log?adminuser=${this.server.authName}&admintoken=${this.server.authToken}`;
   }
 
   start() {
@@ -113,7 +113,12 @@ class SdtdSSE extends LoggingObject {
 
     sails.log.info(`Starting SSE`, { server: this.server });
 
-    this.eventSource = new EventSource(encodeURI(this.url));
+    this.eventSource = new EventSource(encodeURI(this.url), {
+      headers: {
+        ['X-SDTD-API-TOKENNAME']: this.server.authName,
+        ['X-SDTD-API-SECRET']: this.server.authToken,
+      }
+    });
     this.eventSource.addEventListener('logLine', this.listener);
     this.eventSource.reconnectInterval = 5000;
     this.eventSource.onerror = e => {
