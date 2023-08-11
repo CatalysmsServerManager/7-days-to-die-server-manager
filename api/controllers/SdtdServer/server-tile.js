@@ -48,7 +48,11 @@ module.exports = {
     const baseUrl = sails.helpers.sdtdApi.getBaseUrl(SdtdServer.getAPIConfig(server));
     const url = `${baseUrl}/map/${inputs.z}/${inputs.x}/${inputs.y}.png?adminuser=${server.authName}&admintoken=${server.authToken}`;
 
-    const reqHeaders = { ...this.req.headers };
+    const reqHeaders = {
+      ...this.req.headers,
+      ['X-SDTD-API-TOKENNAME']: server.authName,
+      ['X-SDTD-API-SECRET']: server.authToken,
+    };
     delete reqHeaders.host;
     delete reqHeaders.connection;
     delete reqHeaders['upgrade-insecure-requests'];
