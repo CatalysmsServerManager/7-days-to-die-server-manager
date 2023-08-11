@@ -55,7 +55,7 @@ module.exports = logLine => {
 
     let memUpdate = {
       date: logLine.date,
-      time: logLine.time,
+      time: logLine.time || logLine.isotime,
       uptime: logLine.uptime,
       msg: logLine.msg,
       fps: fpsIdx === -1 ? '' : splitLogLine[fpsIdx + 1],
@@ -89,7 +89,7 @@ module.exports = logLine => {
 
     const data = {
       date: logLine.date,
-      time: logLine.time,
+      time: logLine.time || logLine.isotime,
       uptime: logLine.uptime,
       msg: logLine.msg,
       steamId: steamId.replace('Steam_', ''),
@@ -126,7 +126,7 @@ module.exports = logLine => {
       entityId,
       ip,
       date: logLine.date,
-      time: logLine.time,
+      time: logLine.time || logLine.isotime,
       uptime: logLine.uptime,
       msg: logLine.msg
     };
@@ -172,7 +172,7 @@ module.exports = logLine => {
       entityId,
       ownerId,
       date: logLine.date,
-      time: logLine.time,
+      time: logLine.time || logLine.isotime,
       uptime: logLine.uptime,
       msg: logLine.msg
     };
@@ -210,7 +210,7 @@ module.exports = logLine => {
       ownerID,
       playerID,
       date: logLine.date,
-      time: logLine.time,
+      time: logLine.time || logLine.isotime,
       uptime: logLine.uptime,
       msg: logLine.msg
     };
@@ -234,7 +234,7 @@ module.exports = logLine => {
     const { groups: { steamId, entityId, playerName } } = a20DeathRegex.exec(logLine.msg);
     const deathMessage = {
       date: logLine.date,
-      time: logLine.time,
+      time: logLine.time || logLine.isotime,
       uptime: logLine.uptime,
       msg: logLine.msg,
       steamId,
@@ -261,7 +261,7 @@ module.exports = logLine => {
     const { groups: { steamId, entityId, playerName } } = preA20DeathRegex.exec(logLine.msg);
     const deathMessage = {
       date: logLine.date,
-      time: logLine.time,
+      time: logLine.time || logLine.isotime,
       uptime: logLine.uptime,
       msg: logLine.msg,
       steamId,
@@ -294,7 +294,7 @@ module.exports = logLine => {
 
     lvlMessage = {
       date: logLine.date,
-      time: logLine.time,
+      time: logLine.time || logLine.isotime,
       uptime: logLine.uptime,
       msg: logLine.msg,
       newLvl: newLvl,
@@ -329,7 +329,7 @@ module.exports = logLine => {
 
     killMessage = {
       date: logLine.date,
-      time: logLine.time,
+      time: logLine.time || logLine.isotime,
       uptime: logLine.uptime,
       msg: logLine.msg,
       steamId: logLine.msg.match(steamIdRegex)[0],
@@ -368,7 +368,7 @@ module.exports = logLine => {
     if (victimName === killerName) {
       suicideMessage = {
         date: logLine.date,
-        time: logLine.time,
+        time: logLine.time || logLine.isotime,
         uptime: logLine.uptime,
         msg: logLine.msg,
         playerName: victimName
@@ -379,7 +379,7 @@ module.exports = logLine => {
     } else {
       killMessage = {
         date: logLine.date,
-        time: logLine.time,
+        time: logLine.time || logLine.isotime,
         uptime: logLine.uptime,
         msg: logLine.msg,
         victimName: victimName,
@@ -401,7 +401,7 @@ module.exports = logLine => {
     const playerName = deathArray[1] || deathArray[2];
     const deathMessage = {
       date: logLine.date,
-      time: logLine.time,
+      time: logLine.time || logLine.isotime,
       uptime: logLine.uptime,
       msg: logLine.msg,
       playerName: playerName,
