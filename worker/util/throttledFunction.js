@@ -1,91 +1,57 @@
 const EventEmitter = require('events');
+const redis = require('redis');
+const { RateLimiterRedis } = require('rate-limiter-flexible');
+
+const redisClient = redis.createClient(process.env.REDISSTRING, { enable_offline_queue: false });
+
 /**
  * Executes a function no more than amount times per minutes with sliding window
  * @param {Function} listener
  * @param {Number} amount
  */
 class ThrottledFunction extends EventEmitter {
-  constructor(listener, amount, minutes, meta = {}) {
+  constructor(listener, amount, minutes, key = 'function') {
     super();
-    this.meta = meta;
+
+    this.key = key;
     this.amount = amount;
     this.minutes = minutes;
-    this.buckets = {};
     this.lastState = 'normal';
-    this.listener = (data) => {
-      this.incrBucket();
-      const sum = Object.values(this.buckets).reduce((sum, amount) => sum + amount, 0);
-      if (sum > this.amount) {
-        sails.log.warn(`Discarding an event`, { ...this.meta, labels: { namespace: 'throttledFunction' }, bucket: this.buckets, event: data });
 
-        if (this.lastState === 'normal') {
-          this.emit('throttled', { buckets: this.buckets });
-          this.lastState = 'throttled';
-          this.createInactivityInterval();
-        }
+    this.opts = {
+      storeClient: redisClient,
+      points: this.amount,
+      duration: this.minutes * 60, // convert minutes to seconds
 
-        return;
-      }
-
-      if (this.lastState === 'throttled') {
-        this.emit('normal', { buckets: this.buckets });
-        this.lastState = 'normal';
-        clearInterval(this.inactivityInterval);
-      }
-      return listener(data);
+      execEvenly: false,
+      blockDuration: 0,
+      keyPrefix: 'rlflx',
     };
 
-    // The function can return to normal state even when it's not called
-    this.inactivityInterval;
-  }
+    this.rateLimiter = new RateLimiterRedis(this.opts);
 
-  destroy() {
-    clearInterval(this.inactivityInterval);
-    this.buckets = {};
-  }
-
-  createInactivityInterval() {
-    if (this.inactivityInterval) { clearInterval(this.inactivityInterval); };
-    sails.log.debug('Creating inactivity interval', { ...this.meta, labels: { namespace: 'throttledFunction' } });
-    this.inactivityInterval = setInterval(() => {
-      this.refreshBuckets();
-      const sum = Object.values(this.buckets).reduce((sum, amount) => sum + amount, 0);
-      if (sum === 0 && this.lastState === 'throttled') {
-        sails.log.debug('Throttled function is now normal after some inactivity', { ...this.meta, labels: { namespace: 'throttledFunction' } });
-        this.emit('normal', { buckets: this.buckets });
-        this.lastState = 'normal';
-      }
-    }, this.minutes * 60 * 1000);
-  }
-
-  incrBucket() {
-    const date = new Date();
-    date.setUTCMilliseconds(0);
-    date.setUTCSeconds(0);
-
-    if (!this.buckets[date.toISOString()]) {
-      this.buckets[date.toISOString()] = 0;
-      this.refreshBuckets();
-    }
-
-    this.buckets[date.toISOString()]++;
-  }
-
-  refreshBuckets() {
-    const date = new Date();
-    date.setUTCMilliseconds(0);
-    date.setUTCSeconds(0);
-    const keys = Object.keys(this.buckets);
-
-    keys
-      .filter(d => {
-        return new Date(d) < date.getTime() - this.minutes * 60 * 1000;
-      })
-      .forEach(keyToDelete => {
-        delete this.buckets[keyToDelete];
-      });
+    this.listener = (data) => {
+      this.rateLimiter.consume(this.key)
+        .then(() => {
+          if (this.lastState === 'throttled') {
+            this.emit('normal');
+            this.lastState = 'normal';
+          }
+          listener(data); // call the original listener
+        })
+        .catch((rejRes) => {
+          if (rejRes instanceof Error) {
+            // Handle the Redis error accordingly
+            sails.log.error('Redis Error:', rejRes);
+          } else {
+            if (this.lastState === 'normal') {
+              this.emit('throttled');
+              this.lastState = 'throttled';
+            }
+          }
+        });
+    };
   }
 }
-
 
 module.exports = ThrottledFunction;

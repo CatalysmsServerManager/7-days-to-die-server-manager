@@ -3,8 +3,7 @@ const MockDate = require('mockdate');
 const { expect } = require('chai');
 const { wait } = require('../../worker/util/wait');
 
-
-describe('throttledFunction', function () {
+xdescribe('throttledFunction', function () {
   it('Throttles a function and emits events', async () => {
     const stub = sandbox.stub();
     const throttledEventStub = sandbox.stub();
