@@ -22,32 +22,26 @@ class SdtdSSE extends LoggingObject {
 
 
     this.SSERegex = /\d+-\d+-\d+T\d+:\d+:\d+ \d+\.\d+ INF (.+)/;
-    this.throttledFunction = new ThrottledFunction(this.SSEListener.bind(this), this.RATE_LIMIT_AMOUNT, this.RATE_LIMIT_MINUTES, { server: this.server.id });
+    this.throttledFunction = new ThrottledFunction(this.SSEListener.bind(this), this.RATE_LIMIT_AMOUNT, this.RATE_LIMIT_MINUTES, `SSEListener-${this.server.id}`);
     this.listener = this.throttledFunction.listener;
     this.queuedChatMessages = [];
     this.lastMessage = Date.now();
     this.isConnecting = false;
     this.throttled = false;
 
-
-
     this.throttledFunction.on('normal', () => {
       sails.log.debug(`SSE normal for server ${this.server.id}`, { server: this.server });
       this.throttled = false;
-      this.start();
       sails.helpers.discord.sendNotification({
         serverId: this.server.id,
         notificationType: 'sseThrottled',
         type: 'normal'
       }).then().catch(e => { sails.log.error(`Error sending SSE throttled notification for server ${this.server.id}`, { server: this.server, error: e }); });
-
-      this.start();
     });
 
     this.throttledFunction.on('throttled', () => {
       sails.log.debug(`SSE throttled for server ${this.server.id}`, { server: this.server });
       this.throttled = true;
-      this.destroy();
       sails.helpers.discord.sendNotification({
         serverId: this.server.id,
         notificationType: 'sseThrottled',
@@ -132,8 +126,6 @@ class SdtdSSE extends LoggingObject {
   }
 
   destroy() {
-    this.throttledFunction.destroy();
-
     if (!this.eventSource) {
       return;
     }
