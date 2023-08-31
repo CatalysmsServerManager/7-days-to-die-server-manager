@@ -41,7 +41,18 @@ module.exports = {
       if (!server) {
         return exits.error(new Error('Missing server'));
       }
-      const version = await sails.helpers.sdtd.checkModVersion('Mod Allocs MapRendering and Webinterface', inputs.serverId);
+
+      let version;
+
+      try {
+        version = (await Promise.all([
+          sails.helpers.sdtd.checkModVersion('Mod Allocs MapRendering and Webinterface', inputs.serverId),
+          sails.helpers.sdtd.checkModVersion('Mod Allocs_Webinterface', inputs.serverId),
+        ])).find(v => !!v) || 0;
+      } catch (e) {
+        return exits.error(e);
+      }
+
       if (version < 26) {
         return exits.notRunningPatch(`You must run Allocs webmap version greater than (or equal) 26!`);
       }
@@ -51,7 +62,7 @@ module.exports = {
     }, {
       inventoryTracking: inputs.newStatus
     });
-    sails.log.info(`Set inventory tracking for server ${inputs.serverId} to ${inputs.newStatus}`, {serverId: inputs.serverId});
+    sails.log.info(`Set inventory tracking for server ${inputs.serverId} to ${inputs.newStatus}`, { serverId: inputs.serverId });
     return exits.success();
   }
 };
