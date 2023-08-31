@@ -125,7 +125,11 @@ module.exports = function sdtdLogs(sails) {
     async getEventDetectorClass(server) {
 
       try {
-        const allocsVersion = await sails.helpers.sdtd.checkModVersion('Mod Allocs MapRendering and Webinterface', server.id);
+        const allocsVersion = (await Promise.all([
+          sails.helpers.sdtd.checkModVersion('Mod Allocs MapRendering and Webinterface', server.id),
+          sails.helpers.sdtd.checkModVersion('Mod Allocs_Webinterface', server.id),
+        ])).find(v => !!v) || 0;
+
         if (allocsVersion < 38) {
           return SdtdPolling;
         } else {
