@@ -112,7 +112,7 @@ describe('HOOK bannedItems', () => {
     expect(this.spy).to.have.been.calledOnceWith(
       sinon.match.has('id', sails.testServer.id),
       sinon.match.any,
-      { player: sinon.match.has('id', this.testPlayer.id) }
+      { player: sinon.match.has('id', this.testPlayer.id), bannedItem: sinon.match.any }
     );
   });
 

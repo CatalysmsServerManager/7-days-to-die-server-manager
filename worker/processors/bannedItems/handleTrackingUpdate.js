@@ -73,6 +73,6 @@ async function executePunishment(playerId, server, bannedItem) {
   await sails.helpers.sdtd.executeCustomCmd(
     server,
     bannedItem.tier.command,
-    { player: player }
+    { player: player, bannedItem }
   );
 };
