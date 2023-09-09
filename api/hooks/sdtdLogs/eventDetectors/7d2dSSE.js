@@ -80,7 +80,7 @@ class SdtdSSE extends LoggingObject {
       this.keepAliveSent = false;
       sails.log.debug(`Trying to reconnect SSE for server ${this.server.id}`, { serverId: this.server.id });
       this.destroy();
-      this.start();
+      this.start(false);
     }
   }
 
@@ -88,7 +88,7 @@ class SdtdSSE extends LoggingObject {
     return `http${this.server.webPort === 443 ? 's' : ''}://${this.server.ip}:${this.server.webPort}/sse/log?adminuser=${this.server.authName}&admintoken=${this.server.authToken}`;
   }
 
-  start() {
+  start(sendNotification = true) {
     if (this.eventSource) {
       sails.log.warn(`Tried to start SSE for server ${this.server.id} but it was already active`, { server: this.server });
       return;
@@ -130,7 +130,7 @@ class SdtdSSE extends LoggingObject {
       clearTimeout(isConnectingTimeout);
       sails.log.info(`Opened a SSE channel for server ${this.server.id}`, { server: this.server });
       this.isConnecting = false;
-      if (!this.isConnected) {
+      if (!this.isConnected && sendNotification) {
         this.isConnected = true;
         await sails.helpers.discord.sendNotification({
           serverId: this.server.id,
