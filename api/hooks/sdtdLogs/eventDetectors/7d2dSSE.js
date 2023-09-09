@@ -28,6 +28,7 @@ class SdtdSSE extends LoggingObject {
     this.lastMessage = Date.now();
     this.isConnecting = false;
     this.throttled = false;
+    this.isConnected = false;
 
     this.throttledFunction.on('normal', () => {
       sails.log.debug(`SSE normal for server ${this.server.id}`, { server: this.server });
@@ -115,13 +116,27 @@ class SdtdSSE extends LoggingObject {
     });
     this.eventSource.addEventListener('logLine', this.listener);
     this.eventSource.reconnectInterval = 5000;
-    this.eventSource.onerror = e => {
+    this.eventSource.onerror = async e => {
       sails.log.warn(`SSE error for server ${this.server.id}`, { server: this.server, error: e });
+      if (this.isConnected) {
+        this.isConnected = false;
+        await sails.helpers.discord.sendNotification({
+          serverId: this.server.id,
+          notificationType: 'connectionLost',
+        });
+      }
     };
-    this.eventSource.onopen = () => {
+    this.eventSource.onopen = async () => {
       clearTimeout(isConnectingTimeout);
       sails.log.info(`Opened a SSE channel for server ${this.server.id}`, { server: this.server });
       this.isConnecting = false;
+      if (!this.isConnected) {
+        this.isConnected = true;
+        await sails.helpers.discord.sendNotification({
+          serverId: this.server.id,
+          notificationType: 'connected',
+        });
+      }
     };
   }
 
@@ -135,7 +150,7 @@ class SdtdSSE extends LoggingObject {
     this.eventSource.close();
     this.eventSource = null;
     this.isConnecting = false;
-
+    this.isConnected = false;
   }
 
   async SSEListener(data) {
