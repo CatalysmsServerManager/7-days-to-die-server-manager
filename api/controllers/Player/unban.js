@@ -32,10 +32,10 @@ module.exports = {
     const player = await Player.findOne(inputs.playerId).populate('server');
     const server = await SdtdServer.findOne(player.server.id);
 
-    sails.log.debug(`API - Player:unban - unbanning player ${inputs.playerId}`, {playerId: inputs.playerId, serverid: server.id});
+    sails.log.debug(`API - Player:unban - unbanning player ${inputs.playerId}`, { playerId: inputs.playerId, serverid: server.id });
     const response = await sails.helpers.sdtdApi.executeConsoleCommand(
       SdtdServer.getAPIConfig(server),
-      `ban remove Steam_${player.steamId}`
+      `ban remove ${player.crossId}`
     );
 
     return exits.success(response);
