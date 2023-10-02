@@ -1,7 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const findSdtdServer = require('../util/findSdtdServer.js');
 const getInteractionOption = require('../util/getInteractionOption.js');
-const he = require('he');
 
 const Status = {
   name: 'status',
@@ -40,7 +39,7 @@ const Status = {
     let onlinePlayersStringList = new String();
 
     playerInfo.forEach(player => {
-      onlinePlayersStringList += `${he.decode(player.name)}, `;
+      onlinePlayersStringList += `${player.name}, `;
     });
 
     let bloodMoonDay;

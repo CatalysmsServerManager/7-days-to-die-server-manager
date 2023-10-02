@@ -1,4 +1,3 @@
-var he = require('he');
 const SdtdApi = require('7daystodie-api-wrapper');
 module.exports = {
   friendlyName: 'Load all player data',
@@ -47,7 +46,7 @@ module.exports = {
           steamId: potentialNewPlayer.steamid,
           entityId: potentialNewPlayer.entityid,
           ip: potentialNewPlayer.ip,
-          name: potentialNewPlayer.name ? he.encode(potentialNewPlayer.name) : 'Unknown',
+          name: potentialNewPlayer.name ? potentialNewPlayer.name : 'Unknown',
           positionX: potentialNewPlayer.position.x,
           positionY: potentialNewPlayer.position.y,
           positionZ: potentialNewPlayer.position.z,
