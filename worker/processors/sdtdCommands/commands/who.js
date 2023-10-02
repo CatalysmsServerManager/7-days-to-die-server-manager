@@ -1,6 +1,5 @@
 const SdtdCommand = require('../command.js');
 const validator = require('validator');
-const he = require('he');
 
 class Who extends SdtdCommand {
   constructor() {
@@ -61,7 +60,7 @@ class Who extends SdtdCommand {
     let playersnames = new String('List: ');
 
     for (const foundPlayer of playerRecords) {
-      playersnames += he.decode(foundPlayer.name) + ', ';
+      playersnames += foundPlayer.name + ', ';
     }
 
     await chatMessage.reply(`whoSuccess`, {
