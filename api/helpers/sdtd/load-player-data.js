@@ -168,7 +168,7 @@ async function findOrCreatePlayer(player, serverId) {
       entityId: player.entityid,
       crossId: player.crossplatformid,
       lastOnline: player.lastonline,
-      name: player.name ? he.encode(player.name) : 'Unknown',
+      name: player.name ? player.name : 'Unknown',
       ip: player.ip,
     });
     return foundOrCreatedPlayer;
