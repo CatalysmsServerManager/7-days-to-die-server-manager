@@ -82,8 +82,8 @@ module.exports = function discordBot(sails) {
           sails.log.warn(`Discord bot warning: ${msg}`);
         });
 
-        client.on('rateLimit', info => {
-          sails.log.warn(`Discord API rateLimit reached! ${info.limit} max requests allowed to ${info.method} ${info.path}`);
+        client.rest.on('rateLimited', info => {
+          sails.log.warn(`Discord API rateLimit reached! ${info.limit} max requests allowed to ${info.method} ${info.route}`);
         });
 
         client.on('interactionCreate', async (interaction) => {
