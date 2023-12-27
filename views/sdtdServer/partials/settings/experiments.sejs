@@ -1,77 +1,22 @@
 <!-- EXPERIMENTS SETTINGS -->
 
 <div class="container">
-  <a class="btn btn-primary" href="/sdtdserver/<%= server.id %>/playground/editor" role="button">Playground</a>
-  <label for="">
-    <small>The playground is an application for debugging and creating CSMM commands.</small>
-  </label>
-
-  <!--   <div></div>
-
-
-  <div class="form-check">
-    <label class="form-check-label">
-      <input type="checkbox" class="form-check-input" id="input-experiment-map-proxy" <%= config.mapProxy ? 'checked' : '' %>>
-      <div>Proxy all map tiles through CSMM.</div>
-      <small>This allows users to view the map in CSMM even if network problems prevent access to Alloc's webmap. Loading may be slightly slower due to proxying, but more secure thanks to HTTPS.</small>
-    </label>
-    <label class="form-check-label">
-      <input type="checkbox" class="form-check-input" id="input-experiment-server-sent-events" <%= config.serverSentEvents ? 'checked' : '' %>>
-      <div>Use server sent events</div>
-      <small>
-        This allows CSMM to receive events directly from your server, resulting in much faster response times. 
-        <b>You must be using the modified Allocs Fixes version!!</b>
-        Please toggle CSMM features after changing this setting (under basic server settings)
-      </small>
-    </label>
+  <div class="row">
+    <button id="export" type="button" class="btn btn-primary">Export server data</button>
   </div>
 
-  <hr />
-
-  <button id="input-experiment-server-update" class="btn btn-primary" type="button">
-    <em class="glyphicon glyphicon-align-right"></em>
-    <i class="fas fa-sync-alt"></i> Apply changes
-  </button>
-
-  <div id="experiment-experiment-result"></div> -->
+  <div class="row">
+    <a class="btn btn-primary" href="/sdtdserver/<%= server.id %>/playground/editor" role="button">Playground</a>
+    <label for="">
+      <small>The playground is an application for debugging and creating CSMM commands.</small>
+    </label>
+  </div>
 </div>
 
 <script>
   $(document).ready(function () {
-    $("#input-experiment-server-update").click((event) => {
-      event.preventDefault();
-
-      saveData()
-        .then(() => {
-          $("#experiment-experiment-result").text("Changes saved.");
-        })
-        .catch((e) => {
-          $("#experiment-experiment-result").text("An error occured!.");
-        });
-    });
-
-    function saveData() {
-      return new Promise((resolve, reject) => {
-        let mapProxy = $("#input-experiment-map-proxy").is(":checked");
-        $.ajax({
-          url: `/api/sdtdserver/settings`,
-          type: "POST",
-          data: {
-            _csrf: window.SAILS_LOCALS._csrf,
-            serverId: window.SAILS_LOCALS.server.id,
-            mapProxy,
-            serverSentEvents,
-          },
-          success: (data, status, xhr) => {
-            resolve();
-          },
-          error: function (xhr, status, error) {
-            displayAjaxToSupportData(xhr, this);
-            showErrorModal(`${error} - ${xhr.responseText}`, xhr);
-            reject();
-          },
-        });
-      });
-    }
+    $('#export').on('click', () => {
+        window.location = `/api/sdtdserver/export?serverId=<%= server.id %>`
+    })
   });
 </script>
