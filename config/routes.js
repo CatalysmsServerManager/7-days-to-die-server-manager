@@ -128,12 +128,12 @@ module.exports.routes = {
     csrf: false
   },
 
-  'put /api/playground/variable/lock':{
+  'put /api/playground/variable/lock': {
     action: 'Playground/variables/lock-variable',
     csrf: false
   },
 
-  'put /api/playground/variable/:id':{
+  'put /api/playground/variable/:id': {
     action: 'Playground/variables/edit-variable',
     csrf: false
   },
@@ -177,6 +177,7 @@ module.exports.routes = {
   'get /api/admin/export': 'AdminController.export',
   'post /api/admin/import': 'AdminController.import',
 
+  'get /api/sdtdserver/export': 'SdtdServerController.export',
   'post /api/sdtdserver/executeCommand': 'SdtdServerController.execute-command',
   'get /api/sdtdserver/sendMessage': 'SdtdServerController.send-message',
   'get /api/sdtdserver/loadServerInfo': 'SdtdServerController.load-server-info',
