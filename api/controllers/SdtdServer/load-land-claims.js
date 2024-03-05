@@ -36,32 +36,19 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-
-    let server = await SdtdServer.findOne(inputs.serverId);
-
-    let reqOpts = {
-      uri: `http://${server.ip}:${server.webPort}/api/getlandclaims`,
-      qs: {
-        adminuser: server.authName,
-        admintoken: server.authToken,
-      }
-    };
+    const server = await SdtdServer.findOne(inputs.serverId);
+    const apiConfig = SdtdServer.getAPIConfig(server);
 
     if (inputs.playerId) {
       let player = await Player.findOne(inputs.playerId);
-      reqOpts.qs.steamid = player.steamId;
+      const res = await sails.helpers.sdtdApi.getLandClaims(
+        apiConfig,
+        player.steamId
+      );
+      return exits.success(res);
+    } else {
+      const res = await sails.helpers.sdtdApi.getLandClaims(apiConfig);
+      return exits.success(res);
     }
-
-    request(reqOpts)
-      .then(data => {
-        console.log(data);
-        return exits.success(JSON.parse(data));
-      })
-      .catch(err => {
-        return exits.error(err);
-      });
-
-  }
-
-
+  },
 };
