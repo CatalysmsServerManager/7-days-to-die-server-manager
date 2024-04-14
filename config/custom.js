@@ -54,7 +54,7 @@ module.exports.custom = {
 
   // Economy
 
-  economyActionsBeforeDelete: 100,
+  economyActionsBeforeDelete: process.env.ECONOMY_ACTIONS_BEFORE_DELETE || 1000,
 
   // Custom hooks
 
