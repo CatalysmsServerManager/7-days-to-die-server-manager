@@ -38,14 +38,14 @@ module.exports = {
       let dateNow = Date.now();
       let borderDate = new Date(dateNow.valueOf() - milisecondsToKeepData);
 
-      let deletedRecords = await HistoricalInfo.destroy({
+      await HistoricalInfo.destroy({
         createdAt: {
           '<': borderDate.valueOf()
         },
         type: 'economy',
         server: inputs.serverId
-      }).fetch();
-      sails.log.debug(`Deleted ${deletedRecords.length} records for server ${inputs.serverId}`, {serverId: inputs.serverId});
+      });
+      sails.log.debug(`Deleted old historical info for server ${inputs.serverId}`, {serverId: inputs.serverId});
     }
     return exits.success();
 
