@@ -48,14 +48,6 @@ module.exports.custom = {
   currentAllocs: '31',
   currentCpm: '9.4',
 
-  // TRACKING
-
-  trackingCyclesBeforeDelete: 25,
-
-  // Economy
-
-  economyActionsBeforeDelete: process.env.ECONOMY_ACTIONS_BEFORE_DELETE || 1000,
-
   // Custom hooks
 
   supportedHooks: ['playerConnected', 'playerDisconnected', 'chatMessage', 'playerDeath', 'playerJoined', 'playerLevel', 'zombieKilled', 'animalKilled', 'playerKilled', 'logLine', 'playerSuicide'],

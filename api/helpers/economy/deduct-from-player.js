@@ -72,9 +72,6 @@ module.exports = {
       economyAction: 'deduct'
     });
 
-    await sails.helpers.redis.incr(`server:${playerToDeductFrom.server}:economyActionsCompleted`);
-    await sails.helpers.economy.deleteOldData(playerToDeductFrom.server);
-
     return exits.success();
   }
 };
