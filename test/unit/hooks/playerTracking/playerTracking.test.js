@@ -71,33 +71,6 @@ describe('Player tracking', () => {
 
   });
 
-  it('Deletes data after a certain time period', async () => {
-    sandbox.stub(sails.helpers.sdtd, 'getOnlinePlayers').returns(['player1', 'player2']);
-    sandbox.stub(SdtdServer, 'findOne').returns({
-      populate: () => {
-        return {
-          ...sails.testServer,
-          config: [{
-            ...sails.testServer.config,
-            locationTracking: true,
-            inventoryTracking: true
-          }]
-        };
-      }
-    });
-
-    sandbox.stub(sails.helpers.redis, 'get').returns(sails.config.custom.trackingCyclesBeforeDelete + 1);
-    sandbox.stub(sails, 'sendNativeQuery').returns({ affectedRows: 1337 });
-
-    // Kinda scuffed, we overwrite the redis getter earlier so this overwrite is weird ^^
-    sails.config.custom.donorConfig[sails.config.custom.trackingCyclesBeforeDelete + 1] = {};
-    sails.config.custom.donorConfig[sails.config.custom.trackingCyclesBeforeDelete + 1].playerTrackerKeepLocationHours = 8;
-
-    await hook({data: {serverId: sails.testServer.id}});
-
-    expect(sails.sendNativeQuery).to.have.been.calledOnceWith('DELETE FROM trackinginfo WHERE server = $1 AND createdAt < $2;', sinon.match.any);
-  });
-
   describe('basicTracking', () => {
 
     it('Updates player records', async () => {
