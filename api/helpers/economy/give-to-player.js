@@ -62,9 +62,6 @@ module.exports = {
       economyAction: 'give'
     });
 
-    await sails.helpers.redis.incr(`server:${playerToGiveTo.server}:economyActionsCompleted`);
-    await sails.helpers.economy.deleteOldData(playerToGiveTo.server);
-
     return exits.success();
   }
 };
