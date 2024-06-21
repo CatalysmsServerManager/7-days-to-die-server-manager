@@ -1,6 +1,7 @@
 const Sentry = require('@sentry/node');
 const SdtdSSE = require('./eventDetectors/7d2dSSE');
 const SdtdPolling = require('./eventDetectors/7d2dPolling');
+const SdtdSSEV1 = require('./eventDetectors/7d2dV1SSE');
 /**
  * @module 7dtdLoggingHook
  * @description Detects events on a 7dtd server.
@@ -129,6 +130,10 @@ module.exports = function sdtdLogs(sails) {
           sails.helpers.sdtd.checkModVersion('Mod Allocs MapRendering and Webinterface', server.id),
           sails.helpers.sdtd.checkModVersion('Mod Allocs_Webinterface', server.id),
         ])).find(v => !!v) || 0;
+
+        if(allocsVersion > 47) {
+          return SdtdSSEV1;
+        }
 
         if (allocsVersion < 38) {
           return SdtdPolling;
