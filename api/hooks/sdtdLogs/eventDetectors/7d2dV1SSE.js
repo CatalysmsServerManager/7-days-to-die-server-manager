@@ -9,6 +9,8 @@ const blackListedEvents = [
   "IsMovementBlocked",
   "Particle System is trying to spawn on a mesh with zero surface area",
   "VehicleManager write",
+  "Setting angular velocity of a kinematic body is not supported",
+  "Setting linear velocity of a kinematic body is not supported",
 ];
 
 class SdtdSSEV1 extends LoggingObject {
