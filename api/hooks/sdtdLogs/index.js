@@ -181,6 +181,7 @@ module.exports = function sdtdLogs(sails) {
       });
 
       eventEmitter.on('chatMessage', function (chatMessage) {
+        if(!chatMessage.playerName) {chatMessage.playerName = chatMessage.player.name;};
         chatMessage.server = _.omit(server, 'authName', 'authToken');
         chatMessage.player = _.omit(chatMessage.player, 'inventory');
 
