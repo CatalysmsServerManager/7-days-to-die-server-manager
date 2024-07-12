@@ -22,7 +22,8 @@ const entityKilledRegex = /(killed .*)/g;
 const gmsgDeathRegex = /GMSG: Player '(\w+)' died/;
 const gmsgPvPDeathRegex = /GMSG: Player (.+) killed by (.+)/;
 
-const chatRegex = /Chat \(from '(?<steamId>[\w\d-]+)', entity id '(?<entityId>[-\d]+)', to '(?<channel>\w+)'\): '(?<playerName>.+)':(?<messageText>.+)/;
+const chatRegex =
+  /Chat \(from '(?<steamId>[\w\d-]+)', entity id '(?<entityId>[-\d]+)', to '(?<channel>\w+)'\): ('(?<playerName>.+)':)?(?<messageText>.+)/;
 
 module.exports = logLine => {
 
