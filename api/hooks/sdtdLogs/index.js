@@ -141,7 +141,7 @@ module.exports = function sdtdLogs(sails) {
           return SdtdSSE;
         }
       } catch (error) {
-        sails.log.warn('Could not get allocs version, defaulting to SSEV1', { server });
+        sails.log.warn(`Could not get allocs version, defaulting to SSEV1 - ${error}`, { server });
         return SdtdSSEV1;
       }
 
