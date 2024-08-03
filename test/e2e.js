@@ -1,4 +1,4 @@
-const {upMany, logs} = require('docker-compose');
+const {upMany, logs} = require('docker-compose/dist/v2');
 const path = require('path');
 const wait = require('../worker/util/wait').wait;
 const fetch = require('node-fetch');
