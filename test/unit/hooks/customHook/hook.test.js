@@ -1,6 +1,7 @@
 const handler = require('../../../../worker/processors/hooks');
 const sinon = require('sinon');
 const { expect } = require('chai');
+const hooksCache = require('../../../../api/hooksCache');
 
 const event = (type, msg) => {
   return {
@@ -80,6 +81,8 @@ describe('Custom hooks', () => {
       await handler(event(eventType, 'some log line'));
       expect(this.mock).to.not.have.been.calledOnceWith(sinon.match.any, `say "${eventType}"`, sinon.match.any);
 
+      await hooksCache.reset(sails.testServer.id);
+
       await CustomHook.create({
         server: sails.testServer.id,
         commandsToExecute: `say "${eventType}"`,
@@ -102,6 +105,8 @@ describe('Custom hooks', () => {
       await handler(event(eventType, 'some Log LIne'));
       expect(this.mock).to.not.have.been.calledOnceWith(sinon.match.any, `say "${eventType}"`, sinon.match.any);;
 
+      await hooksCache.reset(sails.testServer.id);
+      
       await CustomHook.create({
         server: sails.testServer.id,
         commandsToExecute: `say "${eventType}"`,
@@ -124,6 +129,8 @@ describe('Custom hooks', () => {
       await handler(event(eventType, 'some log line'));
       expect(this.mock).to.not.have.been.calledOnceWith(sinon.match.any, `say "${eventType}"`, sinon.match.any);
 
+      await hooksCache.reset(sails.testServer.id);
+      
       await CustomHook.create({
         server: sails.testServer.id,
         commandsToExecute: `say "${eventType}"`,
@@ -147,6 +154,8 @@ describe('Custom hooks', () => {
       await handler(event(eventType, 'some log line'));
       expect(this.mock).to.not.have.been.calledOnceWith(sinon.match.any, `say "${eventType}"`, sinon.match.any);
 
+      await hooksCache.reset(sails.testServer.id);
+      
       await CustomHook.create({
         server: sails.testServer.id,
         commandsToExecute: `say "${eventType}"`,
