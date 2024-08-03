@@ -1,4 +1,5 @@
 const safeRegex = require('safe-regex');
+const hooksCache = require('../../../api/hooksCache');
 
 module.exports = {
 
@@ -80,6 +81,7 @@ module.exports = {
       cooldown: inputs.cooldown,
       caseSensitive: inputs.caseSensitive,
     }).fetch();
+    await hooksCache.reset(inputs.serverId);
     return exits.success(result);
 
   }

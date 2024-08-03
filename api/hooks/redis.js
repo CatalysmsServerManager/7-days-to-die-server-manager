@@ -1,5 +1,5 @@
-const Sentry = require('@sentry/node');
-const redis = require('redis');
+const Sentry = require("@sentry/node");
+const redis = require("redis");
 
 /*
  * A hook that manages the redis connection
@@ -17,13 +17,12 @@ module.exports = function BullBoard(sails) {
     initialize: function (cb) {
       this.client = redis.createClient({ url: process.env.REDISSTRING });
 
-
-      this.client.on('error', function (error) {
-        sails.log.error(error);
+      this.client.on("error", function (error) {
+        sails.log.error(`Redis error: ${error.message}`, { args: error.args });
         Sentry.captureException(error);
       });
 
       return cb();
-    }
+    },
   };
 };
