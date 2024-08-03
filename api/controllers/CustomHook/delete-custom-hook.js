@@ -1,3 +1,5 @@
+const hooksCache = require('../../../api/hooksCache');
+
 module.exports = {
 
 
@@ -25,10 +27,14 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
+    const hookToDelete = await CustomHook.findOne({
+      id: inputs.hookId
+    });
 
     await CustomHook.destroy({
       id: inputs.hookId
     });
+    await hooksCache.reset(hookToDelete.server);
     return exits.success();
 
   }
