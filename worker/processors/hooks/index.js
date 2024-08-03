@@ -1,4 +1,5 @@
 const enrichEventData = require('../../../api/hooks/sdtdLogs/enrichers');
+const hooksCache = require('../../../api/hooksCache');
 
 
 module.exports = async function hooks(job) {
@@ -13,14 +14,7 @@ async function handle({ data: eventData, type: eventType, server }) {
 
   // First we handle any 'logLine' events.
   if (eventType === 'logLine') {
-    const serverLogLineHooks = await CustomHook.find({
-      server: server.id,
-      event: 'logLine'
-    });
-
-    if (!serverLogLineHooks) {
-      serverLogLineHooks = [];
-    }
+    const serverLogLineHooks = await hooksCache.get(server.id, 'logLine');
 
     for (const serverLogLineHook of serverLogLineHooks) {
       const stringFound = checkLogLine(`${eventData.time} ${eventData.date} ${eventData.msg}`, serverLogLineHook);
@@ -39,10 +33,7 @@ async function handle({ data: eventData, type: eventType, server }) {
   }
 
   // Handle any built-in events
-  const configuredHooks = await CustomHook.find({
-    server: server.id,
-    event: eventType
-  });
+  const configuredHooks = await hooksCache.get(server.id, eventType);
 
   for (const hookToExec of configuredHooks) {
     const isNotOnCooldown = await handleCooldown(hookToExec);

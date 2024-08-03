@@ -1,4 +1,5 @@
 const safeRegex = require('safe-regex');
+const hooksCache = require('../../../api/hooksCache');
 
 module.exports = {
 
@@ -59,7 +60,9 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-
+    const hookToEdit = await CustomHook.findOne({
+      id: inputs.hookId
+    });
     if (inputs.event === 'logLine') {
       if (_.isEmpty(inputs.regex) && _.isEmpty(inputs.searchString)) {
         return exits.badInput('When using "logLine", you must define either a search string or a regex.');
@@ -80,6 +83,7 @@ module.exports = {
       cooldown: inputs.cooldown,
       caseSensitive: inputs.caseSensitive,
     }).fetch();
+    await hooksCache.reset(hookToEdit.server);
     return exits.success();
 
   }
