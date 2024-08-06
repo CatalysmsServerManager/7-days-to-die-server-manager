@@ -60,10 +60,27 @@ module.exports = {
   },
 
 
-  exits: {},
+  exits: {
+    badRequest: {
+      responseType: 'badRequest'
+    },
+  },
 
 
   fn: async function (inputs, exits) {
+    const lastTrackingQuery = await sails.helpers.redis.get(`server:${inputs.serverId}:trackingQuery`);
+
+    if (lastTrackingQuery) {
+      const lastQuery = new Date(JSON.parse(lastTrackingQuery));
+      const now = new Date();
+
+      // If last query is less than 10 seconds ago, return an error
+      if (now - lastQuery < 10000) {
+        return exits.badRequest("You can only query tracking data every 10 seconds");
+      }
+    }
+
+    await sails.helpers.redis.set(`server:${inputs.serverId}:trackingQuery`, JSON.stringify(new Date().toISOString()), true, 10);
 
     let startDate = new Date();
 
