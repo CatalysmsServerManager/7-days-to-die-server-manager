@@ -1,4 +1,4 @@
-FROM node:16-alpine AS builder
+FROM node:19-alpine AS builder
 
 RUN apk --no-cache add curl git jq python3
 
@@ -21,7 +21,7 @@ RUN npm ci --only=production
 # Bundle app source
 COPY --chown=node:node . .
 
-FROM node:16-alpine
+FROM node:19-alpine
 WORKDIR /usr/src/app
 
 COPY --chown=node:node --from=builder /usr/src/app .
