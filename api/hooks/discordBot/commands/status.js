@@ -55,7 +55,18 @@ const Status = {
       sails.log.warn(`Hook - discordBot:status - ${error}`, { server: sdtdServer });
       sails.log.error(error, { server: sdtdServer });
     }
-    const daysUntilHorde = nextHorde - serverInfo.stats.gametime.days;
+    
+    let daysUntilHorde = nextHorde - serverInfo.stats.gametime.days;
+
+    // manage next horde day
+    let hordeMessage;
+    if (daysUntilHorde < 0) {
+      hordeMessage = "The horde has already started.";
+    } else if (daysUntilHorde === 0) {
+      hordeMessage = "The horde is coming tonight.";
+    } else {
+      hordeMessage = `${daysUntilHorde} days`;
+    }
 
     let embed = new client.customEmbed();
 
@@ -66,13 +77,11 @@ const Status = {
         },
         {
           name: `Gametime`, value: `${serverInfo.stats.gametime.days} days ${serverInfo.stats.gametime.hours} hours ${serverInfo.stats.gametime.minutes} minutes
-      Next horde in ${bloodMoonDay ? daysUntilHorde : `unknown`} days`
+      Next horde in ${bloodMoonDay ? hordeMessage : `unknown`}`
         },
         { name: `${serverInfo.stats.hostiles} hostiles`, value: `${serverInfo.stats.animals} animals` },
         { name: `${serverInfo.stats.players} players online`, value: onlinePlayersStringList.length > 0 ? onlinePlayersStringList : 'None' },
       ]);
-
-
 
     if (fps > 15) {
       embed.setColor([0, 255, 0]);
