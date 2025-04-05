@@ -61,7 +61,7 @@ async function commandListener(job) {
     let commandIsEnabled = await commandToRun.isEnabled(chatMessage, player, server, args);
 
     if (!commandIsEnabled) {
-      return chatMessage.reply(`commandDisabled`);
+      return;
     }
 
     try {
