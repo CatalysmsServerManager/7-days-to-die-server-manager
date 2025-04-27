@@ -29,6 +29,8 @@ module.exports = {
       ]
     });
 
+    client.on('error', sails.log.error);
+
     return exits.success(client);
   },
 };
