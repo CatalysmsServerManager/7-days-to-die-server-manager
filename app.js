@@ -53,7 +53,11 @@ process.on('unhandledRejection', (reason) => {
   sails.log.error(`Unhandled Promise rejection ${reason}`);
   sails.log.error(reason.stack);
   Sentry.captureException(reason);
+});
 
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught exception:', error);
+  Sentry.captureException(error);
 });
 
 process.on('SIGINT', function () {
