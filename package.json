@@ -18,7 +18,7 @@
     "concurrently": "^7.0.0",
     "cron-parser": "^4.2.1",
     "cross-env": "^7.0.3",
-    "discord.js": "^14.8.0",
+    "discord.js": "^14.11.0",
     "dotenv": "^12.0.4",
     "ejs": "^3.1.6",
     "eventsource": "^1.1.0",
