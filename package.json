@@ -95,7 +95,7 @@
     "docker-compose": "^0.24.8",
     "eslint": "^8.7.0",
     "faker": "^5.5.3",
-    "grunt-bower-task": "^0.6.1",
+    "grunt-bower-task": "^0.6.2",
     "husky": "^4.3.0",
     "lint-staged": "^12.2.2",
     "mocha": "^10.0.0",
