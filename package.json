@@ -23,7 +23,7 @@
     "ejs": "^3.1.6",
     "eventsource": "^1.1.0",
     "geoip-lite": "^1.4.3",
-    "grunt": "1.4.1",
+    "grunt": "1.5.3",
     "handlebars": "^4.7.7",
     "json2csv": "^5.0.6",
     "lodash": "^4.17.21",
