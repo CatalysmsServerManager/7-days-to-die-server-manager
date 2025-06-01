@@ -92,11 +92,6 @@ class SdtdSSEV1 extends LoggingObject {
   }
 
   reconnectListener() {
-    if (this.throttled) {
-      // We're throttled, we should not be reconnecting it
-      return;
-    }
-
     if (this.lastMessage < Date.now() - this.LAST_MESSAGE_THRESHOLD) {
       this.keepAliveHandler();
     }
