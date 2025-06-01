@@ -12,6 +12,7 @@ const blackListedEvents = [
   "Setting angular velocity of a kinematic body is not supported",
   "Setting linear velocity of a kinematic body is not supported",
   "Cannot access a disposed object",
+  "path not found",
 ];
 
 class SdtdSSEV1 extends LoggingObject {
@@ -47,6 +48,7 @@ class SdtdSSEV1 extends LoggingObject {
         server: this.server,
       });
       this.throttled = false;
+      this.start(false);
       sails.helpers.discord
         .sendNotification({
           serverId: this.server.id,
@@ -67,6 +69,7 @@ class SdtdSSEV1 extends LoggingObject {
         server: this.server,
       });
       this.throttled = true;
+      this.destroy();
       sails.helpers.discord
         .sendNotification({
           serverId: this.server.id,
