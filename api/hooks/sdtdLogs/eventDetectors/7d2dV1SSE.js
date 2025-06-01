@@ -11,6 +11,7 @@ const blackListedEvents = [
   "VehicleManager write",
   "Setting angular velocity of a kinematic body is not supported",
   "Setting linear velocity of a kinematic body is not supported",
+  "Cannot access a disposed object",
 ];
 
 class SdtdSSEV1 extends LoggingObject {
