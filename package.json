@@ -33,7 +33,7 @@
     "ms": "^2.1.3",
     "mysql2": "^2.3.0",
     "p-wait-for": "^4.1.0",
-    "passport": "^0.4.1",
+    "passport": "^0.6.0",
     "passport-discord": "^0.1.4",
     "passport-steam": "^1.0.15",
     "promised-handlebars": "^2.0.1",
