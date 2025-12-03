@@ -61,11 +61,11 @@ const Status = {
     // manage next horde day
     let hordeMessage;
     if (daysUntilHorde < 0) {
-      hordeMessage = "The horde has already started.";
+      hordeMessage = "has already started.";
     } else if (daysUntilHorde === 0) {
-      hordeMessage = "The horde is coming tonight.";
+      hordeMessage = "is coming tonight.";
     } else {
-      hordeMessage = `${daysUntilHorde} days`;
+      hordeMessage = `in ${daysUntilHorde} days`;
     }
 
     let embed = new client.customEmbed();
@@ -77,7 +77,7 @@ const Status = {
         },
         {
           name: `Gametime`, value: `${serverInfo.stats.gametime.days} days ${serverInfo.stats.gametime.hours} hours ${serverInfo.stats.gametime.minutes} minutes
-      Next horde in ${bloodMoonDay ? hordeMessage : `unknown`}`
+      Next horde ${bloodMoonDay ? hordeMessage : `unknown`}`
         },
         { name: `${serverInfo.stats.hostiles} hostiles`, value: `${serverInfo.stats.animals} animals` },
         { name: `${serverInfo.stats.players} players online`, value: onlinePlayersStringList.length > 0 ? onlinePlayersStringList : 'None' },
