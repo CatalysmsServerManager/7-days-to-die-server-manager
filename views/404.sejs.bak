@@ -1,0 +1,33 @@
+﻿<div class="container ">
+
+  <div class="row justify-content-center">
+
+    <div class="main">
+      <h1>
+        Something's fishy here.
+      </h1>
+      <h2>
+        <% if (typeof error !== 'undefined') { %>
+          <%= error %>
+            <% } else { %>
+              The page you were trying to reach doesn't exist.
+              <% } %>
+      </h2>
+      <p class="help">
+        Visit our
+        <a href="https://discordapp.com/invite/EwyDdNA">support</a> to know why this might this be happening
+      </p>
+    </div>
+
+    <div>
+      <a href="/">
+      </a>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
