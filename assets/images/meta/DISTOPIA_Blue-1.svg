@@ -1,0 +1,14 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title>DISTOPIA</title>
+  <desc>Blue geometric DISTOPIA logo</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1b3a"/>
+      <stop offset="100%" stop-color="#1d5cff"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+  <circle cx="156" cy="170" r="44" fill="#ffffff" opacity="0.14"/>
+  <circle cx="352" cy="350" r="66" fill="#ffffff" opacity="0.10"/>
+  <text x="256" y="272" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="72" font-weight="700" text-anchor="middle" letter-spacing="4">DISTOPIA</text>
+</svg>

@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>CSMM</title>
+  <title>DISTOPIA</title>
 
 
   <meta charset="utf-8">
@@ -12,7 +12,7 @@
 
   <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet"
     type="text/css">
-  <link rel="icon" href="/favicon.ico?version=2" type="image/png">
+  <link rel="icon" href="/favicon.svg?version=2" type="image/png">
 
   <!--
         Stylesheets and Preprocessors
@@ -48,6 +48,7 @@
   <%- stylesheetTag('/styles/flags/flags.min.css') %>
   <%- stylesheetTag('/styles/importer.css') %>
   <%- stylesheetTag('/styles/landing-page.css') %>
+  <%- stylesheetTag('/styles/redesign.css') %>
   <%- stylesheetTag('/styles/sdtd/chat.css') %>
   <%- stylesheetTag('/styles/sdtd/console.css') %>
   <%- stylesheetTag('/styles/sdtd/gblComment.css') %>
@@ -192,7 +193,7 @@
 
 
 
-</head>
+<link rel="stylesheet" href="/styles/redesign.css">\n</head>
 
 <body class="sidenav-toggled">
 
@@ -274,3 +275,5 @@
 
 
 </html>
+
+

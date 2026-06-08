@@ -1,4 +1,4 @@
-<h2>
+﻿<h2>
   Server stats
 </h2>
 <ul class="list-group">
@@ -16,7 +16,7 @@
 </ul>
 <p>
   <% const infoLink = '/sdtdserver/' + server.id + '/info' %>
-    <a class="btn" href='<%= infoLink %>'>View more info & stats »</a>
+    <a class="btn" href='<%= infoLink %>'>View more info & stats Â»</a>
 </p>
 
 

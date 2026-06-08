@@ -1,2 +1,2 @@
-<% layout(null) %>
+﻿<% layout(null) %>
 <%- await include("../../assets/playground/index.html") %>

@@ -1,4 +1,4 @@
-<div>
+﻿<div>
   <p>
     This module allows you to specify a list of items that players are not
     allowed to have. Once a player is found with one of these items in their
@@ -401,3 +401,4 @@
     }
   });
 </script>
+

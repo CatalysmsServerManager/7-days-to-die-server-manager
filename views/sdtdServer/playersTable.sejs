@@ -1,4 +1,4 @@
-<div class="card" style="margin: 0;">
+﻿<div class="card" style="margin: 0;">
   <div class="card-header">
     <span style="margin-right: 10px;" class="badge badge-pill badge-light">
       <span id="countFiltered">0</span> / <span id="countTotal">0</span> Entries
@@ -256,3 +256,4 @@
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
   }
 </script>
+

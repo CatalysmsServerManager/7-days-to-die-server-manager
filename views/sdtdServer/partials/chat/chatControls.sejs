@@ -1,4 +1,4 @@
-<form id="chat-message-form">
+﻿<form id="chat-message-form">
   <button class="btn btn-primary" type="button" id="clearChat">
     Clear window
   </button>

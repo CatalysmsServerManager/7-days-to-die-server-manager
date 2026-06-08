@@ -1,4 +1,4 @@
-<!-- COMMANDS SETTINGS -->
+﻿<!-- COMMANDS SETTINGS -->
 
 <div class="container">
   <label class="form-check-label">
@@ -46,7 +46,7 @@
         id="input-settings-commands-playerTeleports-checkbox" value="playerTeleports"> Player teleports
     </label>
     <p class="form-text text-muted">
-      CSMM's teleport system. Includes a suite of commands to set, remove, make public/private teleports.
+      DISTOPIA's teleport system. Includes a suite of commands to set, remove, make public/private teleports.
     </p>
   </div>
 
@@ -93,7 +93,7 @@
       <label for="replyPrefix">Reply prefix</label>
       <input type="text" class="form-control" name="replyPrefix" id="replyPrefix" aria-describedby="replyPrefix-help"
         placeholder="">
-      <small id="replyPrefix-help" class="form-text text-muted">This will be added before command replies CSMM does.
+      <small id="replyPrefix-help" class="form-text text-muted">This will be added before command replies DISTOPIA does.
         This is very useful for adding some colour to the messages! For example, a hexcode like [02f9dd] will turn
         everything blue</small>
     </div>
@@ -107,7 +107,7 @@
         placeholder="">
       <small id="replyServerName-help" class="form-text text-muted">
         <b>Requires CPM to be installed since this uses the "pm2" command</b>. 
-        Whenever CSMM replies to a player from a command, this will be the sender name.
+        Whenever DISTOPIA replies to a player from a command, this will be the sender name.
       </small>
     </div>
 

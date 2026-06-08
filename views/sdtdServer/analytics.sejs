@@ -1,4 +1,4 @@
-<%- exposeLocalsToBrowser() %>
+﻿<%- exposeLocalsToBrowser() %>
 
 <div class="container-fluid">
 
@@ -232,3 +232,4 @@
   })
 
 </script>
+

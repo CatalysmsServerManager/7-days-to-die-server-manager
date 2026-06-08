@@ -1,4 +1,4 @@
-<body>
+﻿<body>
 
   <div class="container-fluid">
 
@@ -25,7 +25,7 @@
 
     <% if (player.static) { %>
     <div class="alert alert-warning" role="alert">
-      CSMM could not load data for this player from your server. The data you see is old and hasn't been updated since
+      DISTOPIA could not load data for this player from your server. The data you see is old and hasn't been updated since
       the player was last online. If you did a map/server wipe, this could be a player that has not logged in since
       that. You can still edit this players role, economy and other settings.
     </div>
@@ -73,7 +73,7 @@
                 </div>
 
                 <button type="button" id="set-role-btn" class="btn btn-primary">Set</button>
-                <small>Note that if a player does not explicitly have a role set, CSMM will use the default role (or
+                <small>Note that if a player does not explicitly have a role set, DISTOPIA will use the default role (or
                   the highest level role) for every permission check. When a player does not need any special
                   privileges, it is better to not assign a role and let the system use the default role.</small>
 
@@ -272,7 +272,7 @@
               </tr>
 
               <tr>
-                <td scope="row">CSMM currency balance</td>
+                <td scope="row">DISTOPIA currency balance</td>
                 <td>
                   <%= player.currency %>
                 </td>

@@ -1,4 +1,4 @@
-<%- exposeLocalsToBrowser() %>
+﻿<%- exposeLocalsToBrowser() %>
 
   <!-- Button trigger modal -->
   <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#ban-player-modal">
@@ -88,3 +88,4 @@
     })
 
   </script>
+

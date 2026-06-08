@@ -1,7 +1,7 @@
-<div class="container">
+﻿<div class="container">
 
   <div class="alert alert-warning" role="alert">
-    <strong>Warning: If a player is not assigned to a role, CSMM will default to the role with highest level (so lowest
+    <strong>Warning: If a player is not assigned to a role, DISTOPIA will default to the role with highest level (so lowest
       permissions).
       Make sure there is an appropriate role configured with a high level number. For example, if you have only an
       'Admin'
@@ -109,9 +109,9 @@
             <select class="form-control" name="edit-role-discord-role" id="edit-role-discord-role">
 
             </select>
-            <small id="edit-role-level-help" class="form-text text-muted">Link a Discord role to this CSMM role. CSMM
+            <small id="edit-role-level-help" class="form-text text-muted">Link a Discord role to this DISTOPIA role. DISTOPIA
               will sync users' roles. For this to work, a player will need to link
-              his discord profile to his CSMM profile!</small>
+              his discord profile to his DISTOPIA profile!</small>
           </div>
 
           <div class="form-check">
@@ -157,7 +157,7 @@
                 aria-describedby="edit-role-manageServer-help" value="true"> Manage server
             </label>
             <small id="edit-role-manageServer-help" class="form-text text-muted">Allow a user to do anything to your
-              server on CSMM. This is a very powerfull permission and you should be careful
+              server on DISTOPIA. This is a very powerfull permission and you should be careful
               who you give this to!</small>
           </div>
 
@@ -217,7 +217,7 @@
               dashboard
             </label>
             <small id="edit-role-viewDashboard-help" class="form-text text-muted">Allow a user to view your servers
-              dashboard on CSMM.</small>
+              dashboard on DISTOPIA.</small>
           </div>
 
           <div class="form-check">
@@ -511,3 +511,4 @@
   }
 
 </script>
+

@@ -1,7 +1,7 @@
-<% layout('layouts/homepageLayoutNoFooter') %>
+﻿<% layout('layouts/homepageLayoutNoFooter') %>
 <div class="container" align="center">
   <h1>Donate</h1>
-  <p>CSMM is currently developed by one person! I spend alot of time working on this project in my free time, any type
+  <p>DISTOPIA is currently developed by one person! I spend alot of time working on this project in my free time, any type
     of
     support is very welcome! Donating helps pay for hosting costs and improving the application.</p>
 
@@ -143,3 +143,4 @@
   <a target="_blank" type="button" href="https://www.patreon.com/bePatron?c=1523282" class="btn btn-primary btn-lg">Donate</a>
 
 </div>
+

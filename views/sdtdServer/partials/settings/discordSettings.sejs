@@ -1,4 +1,4 @@
-<!-- DISCORD SETTINGS -->
+﻿<!-- DISCORD SETTINGS -->
 
 
 <div class="container">
@@ -107,7 +107,7 @@
   <hr>
 
 
-  <p> CSMM can send notifications to Discord when certain events happen. </p>
+  <p> DISTOPIA can send notifications to Discord when certain events happen. </p>
 
   <!-- Button trigger modal -->
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#settings-discord-notifications-modal">
@@ -130,7 +130,7 @@
           <!-- Notification channel select -->
 
           <div class="form-group">
-            <label for="discord-settings-notifications-reboots-select">CSMM reboots</label>
+            <label for="discord-settings-notifications-reboots-select">DISTOPIA reboots</label>
             <select class="form-control" name="discord-settings-notifications-reboots-select" id="discord-settings-notifications-reboots-select">
               <option>Loading</option>
             </select>
@@ -162,7 +162,7 @@
               <option>Loading</option>
             </select>
             <button id="input-settings-discord-setnotification-connectionLost-btn" type="button" class="btn btn-primary">Set
-              CSMM disconnect notification</button>
+              DISTOPIA disconnect notification</button>
           </div>
 
           <div class="form-group">
@@ -171,7 +171,7 @@
               <option>Loading</option>
             </select>
             <button id="input-settings-discord-setnotification-connected-btn" type="button" class="btn btn-primary">Set
-              CSMM connected notification</button>
+              DISTOPIA connected notification</button>
           </div>
 
           <div class="form-group">
@@ -208,7 +208,7 @@
 
           <div class="form-group">
             <label for="discord-settings-notifications-sseThrottled-select">Rate limit</label>
-            <small>Receive notifications when your server gets rate limited because it sends too many logs to CSMM</small>
+            <small>Receive notifications when your server gets rate limited because it sends too many logs to DISTOPIA</small>
             <select class="form-control" name="discord-settings-notifications-sseThrottled-select" id="discord-settings-notifications-sseThrottled-select">
               <option>Loading</option>
             </select>
@@ -814,3 +814,4 @@
   })
 
 </script>
+

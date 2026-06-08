@@ -1,4 +1,4 @@
-<body>
+﻿<body>
   <div class="container-fluid">
     <div class="row">
       <% await include('./partials/backToDashboard.sejs') %>
@@ -11,3 +11,4 @@
     </div>
   </div>
 </body>
+

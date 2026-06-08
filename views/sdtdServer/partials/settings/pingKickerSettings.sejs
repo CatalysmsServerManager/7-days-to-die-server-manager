@@ -1,4 +1,4 @@
-<%- exposeLocalsToBrowser() %>
+﻿<%- exposeLocalsToBrowser() %>
 
   <!-- Ping kicker SETTINGS -->
   <div class="container">
@@ -131,3 +131,4 @@
     })
 
   </script>
+

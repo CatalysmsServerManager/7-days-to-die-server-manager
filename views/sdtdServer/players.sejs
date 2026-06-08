@@ -1,4 +1,4 @@
-<%- exposeLocalsToBrowser() %>
+﻿<%- exposeLocalsToBrowser() %>
 
 <body>
   <div class="container-fluid">
@@ -31,3 +31,4 @@
 <script>
   identifier = 'playersOverview';
 </script>
+

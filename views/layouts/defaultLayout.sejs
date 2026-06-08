@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>CSMM</title>
+  <title>DISTOPIA</title>
 
 
   <meta charset="utf-8">
@@ -47,6 +47,7 @@
   <%- stylesheetTag('/styles/flags/flags.min.css') %>
   <%- stylesheetTag('/styles/importer.css') %>
   <%- stylesheetTag('/styles/landing-page.css') %>
+  <%- stylesheetTag('/styles/redesign.css') %>
   <%- stylesheetTag('/styles/sdtd/chat.css') %>
   <%- stylesheetTag('/styles/sdtd/console.css') %>
   <%- stylesheetTag('/styles/sdtd/gblComment.css') %>
@@ -179,3 +180,4 @@
 
 
 </html>
+

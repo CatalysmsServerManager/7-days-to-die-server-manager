@@ -1,10 +1,10 @@
-<div>
+﻿<div>
   <div class="container">
     <p>Set jobs to run at certain intervals. You can execute any command you want. This function can be used for
       automatic
       restarts, periodic messages, daily events, ...</p>
     <% let currentDate = new Date(serverTime) %>
-    <p>Please note that jobs run against CSMM server time, not your own timezone. Current server time is:
+    <p>Please note that jobs run against DISTOPIA server time, not your own timezone. Current server time is:
       <%= currentDate.toDateString() %>
       <%= currentDate.toTimeString() %>
     </p>
@@ -475,3 +475,4 @@
   }
 
 </script>
+
