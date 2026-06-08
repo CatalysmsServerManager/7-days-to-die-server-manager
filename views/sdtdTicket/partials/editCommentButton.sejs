@@ -1,4 +1,4 @@
-<%- exposeLocalsToBrowser() %>
+﻿<%- exposeLocalsToBrowser() %>
 
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#edit-comment-modal-<%= comment.id %>">
@@ -61,3 +61,4 @@
   })
 
 </script>
+

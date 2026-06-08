@@ -1,11 +1,11 @@
-<div class="row">
+﻿<div class="row">
   <h1>Shop - <%= server.name %></h1>
 </div>
 
 <div>
   <h2>
     We are having trouble matching your game account in our system. Logging you
-    out of CSMM, please try accessing this shop again.
+    out of DISTOPIA, please try accessing this shop again.
   </h2>
 
   <p>Logging you out in <span id="countdown">5</span> seconds</p>
@@ -26,3 +26,4 @@
     }, 1000);
   });
 </script>
+

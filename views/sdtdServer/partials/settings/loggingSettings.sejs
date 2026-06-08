@@ -1,4 +1,4 @@
-<%- exposeLocalsToBrowser() %>
+﻿<%- exposeLocalsToBrowser() %>
 
   <!-- LOGGING SETTINGS -->
   <div class="row">
@@ -59,3 +59,4 @@
     })
 
   </script>
+

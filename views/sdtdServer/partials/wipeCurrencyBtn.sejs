@@ -1,4 +1,4 @@
-<!-- Button trigger modal -->
+﻿<!-- Button trigger modal -->
 <button
   type="button"
   class="btn btn-sm btn-outline-danger"
@@ -73,3 +73,4 @@
     })
   })
 </script>
+

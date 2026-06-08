@@ -1,4 +1,4 @@
-<%- exposeLocalsToBrowser() %>
+﻿<%- exposeLocalsToBrowser() %>
 
 <div>
   <nav aria-label="breadcrumb">
@@ -116,7 +116,7 @@
               <label for="tracking-limit">Limit</label>
               <input type="number" class="form-control" name="tracking-limit" id="tracking-limit" aria-describedby="tracking-limit-help"
                 value="2500">
-              <small id="tracking-limit-help" class="form-text text-muted">Limit how much datapoints CSMM will
+              <small id="tracking-limit-help" class="form-text text-muted">Limit how much datapoints DISTOPIA will
                 retrieve. Maximum is 5000</small>
             </div>
 
@@ -847,3 +847,4 @@
     }
 
   </script>
+

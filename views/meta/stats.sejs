@@ -1,4 +1,4 @@
-<% layout('layouts/homepageLayoutNoFooter') %>
+﻿<% layout('layouts/homepageLayoutNoFooter') %>
 <div class="container-fluid">
   <canvas id="myChart" width="400" height="200"></canvas>
 
@@ -79,3 +79,4 @@
   };
 
 </script>
+

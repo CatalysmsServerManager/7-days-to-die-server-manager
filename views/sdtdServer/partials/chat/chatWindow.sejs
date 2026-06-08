@@ -1,4 +1,4 @@
-<div class="chat-window">
+﻿<div class="chat-window">
 </div>
 
 <script>
@@ -31,3 +31,4 @@
   })
 
 </script>
+

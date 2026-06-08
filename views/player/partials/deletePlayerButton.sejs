@@ -1,4 +1,4 @@
-<!-- Button trigger modal -->
+﻿<!-- Button trigger modal -->
 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-player-profile-modal">
   Delete profile
 </button>
@@ -51,3 +51,4 @@
   })
 
 </script>
+

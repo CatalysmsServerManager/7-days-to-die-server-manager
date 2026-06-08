@@ -1,5 +1,5 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="/">CSMM</a>
+﻿<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="/">DISTOPIA</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -49,12 +49,10 @@
       <% } %>
       <% } %>
       <li class="nav-item">
-        <a target="_blank" class="nav-link" href="https://docs.csmm.app">
           <i class="fas fa-life-ring"></i> Documentation
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="https://www.csmm.app" target="_blank">
           <i class="fas fa-donate"></i> Donate
         </a>
       </li>
@@ -72,3 +70,5 @@
 
   </div>
 </nav>
+
+

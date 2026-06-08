@@ -1,4 +1,4 @@
-<% exposeLocalsToBrowser() %>
+﻿<% exposeLocalsToBrowser() %>
 
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#custom-command-<%= command.id %>-modal">
@@ -77,7 +77,7 @@
           <input type="number" class="form-control" name="custom-command-<%= command.id %>-modal-edit-role-level" id="custom-command-<%= command.id %>-modal-edit-role-level"
             aria-describedby="custom-command-<%= command.id %>-modal-edit-role-level-help" value="<%= command.level %>">
           <small id="custom-command-<%= command.id %>-modal-edit-role-level-help" class="form-text text-muted">The
-            minimum permission level required to execute this custom command. Note that this refers to CSMM roles, not
+            minimum permission level required to execute this custom command. Note that this refers to DISTOPIA roles, not
             7dtd admin permission!</small>
         </div>
 
@@ -526,3 +526,4 @@
   })
 
 </script>
+

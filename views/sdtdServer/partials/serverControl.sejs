@@ -1,4 +1,4 @@
-<div class="btn-group btn-group-vertical btn-group-md">
+﻿<div class="btn-group btn-group-vertical btn-group-md">
 
   <% const consoleLink = '/sdtdserver/' + server.id + '/console' %>
     <a href='<%= consoleLink %>' class="btn btn-default btn-primary">
@@ -85,3 +85,4 @@
     });
   })
 </script>
+

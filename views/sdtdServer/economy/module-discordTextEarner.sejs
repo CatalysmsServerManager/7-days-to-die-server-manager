@@ -1,4 +1,4 @@
-<!-- Button trigger modal -->
+﻿<!-- Button trigger modal -->
 <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#economy-module-discordTextEarner-modal">
         <i class="fas fa-comments"></i> Discord text earner
 </button>

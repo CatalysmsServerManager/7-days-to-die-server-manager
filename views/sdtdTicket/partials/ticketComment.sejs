@@ -1,4 +1,4 @@
-<div id="tb-ticket-comment" class="ticket-comment ticket-comment-default">
+﻿<div id="tb-ticket-comment" class="ticket-comment ticket-comment-default">
     <div class="ticket-comment-section">
         <%= comment.commentText %>
     </div>
@@ -22,3 +22,4 @@
         </div>
     </div>
 </div>
+

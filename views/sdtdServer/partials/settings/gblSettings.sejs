@@ -1,11 +1,11 @@
-<%- exposeLocalsToBrowser() %>
+﻿<%- exposeLocalsToBrowser() %>
 
 <!-- GBL SETTINGS -->
 <div class="container">
 
   <div class="row">
     <div class="col-lg-6">
-      <p>CSMM keeps track of every servers banlist. You can use this information to keep repeat offenders out of your
+      <p>DISTOPIA keeps track of every servers banlist. You can use this information to keep repeat offenders out of your
         server.
       </p>
 
@@ -102,3 +102,4 @@
   })
 
 </script>
+

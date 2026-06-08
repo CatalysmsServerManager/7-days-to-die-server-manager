@@ -1,4 +1,4 @@
-  <!-- Button trigger modal -->
+﻿  <!-- Button trigger modal -->
   <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#kick-player-modal">
     Kick
   </button>
@@ -57,3 +57,4 @@
     })
 
   </script>
+

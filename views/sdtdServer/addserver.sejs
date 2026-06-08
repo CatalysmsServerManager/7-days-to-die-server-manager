@@ -1,4 +1,4 @@
-<body>
+﻿<body>
   <%- exposeLocalsToBrowser() %>
 
   <div id="addserver-input" class="card text-center">
@@ -33,7 +33,7 @@
           </div>
           <div class="form-group">
             <label for="authName">Authorization name</label>
-            <input type="text" class="form-control" id="authName" placeholder="ex. csmm">
+            <input type="text" class="form-control" id="authName" placeholder="ex. DISTOPIA">
             <small class="form-text text-muted">Set this with telnet command</small>
           </div>
           <div class="form-group">
@@ -190,31 +190,31 @@
 
           if (response.duplicateCheck) {
             responseString +=
-              `${errorIcon}</i><p>A server with this IP and webport is already registered with CSMM. You cannot add the same server twice</p>`
+              `${errorIcon}</i><p>A server with this IP and webport is already registered with DISTOPIA. You cannot add the same server twice</p>`
             return testResponseElement.html(responseString);
           }
 
           if (response.maxLimitCheck) {
             responseString +=
-              `${errorIcon}</i><p>You have added the max number of servers to CSMM already. Consider deleting an old server or <a href="/donate">donating</a> to increase your server limit.</p>`
+              `${errorIcon}</i><p>You have added the max number of servers to DISTOPIA already. Consider deleting an old server or <a href="/donate">donating</a> to increase your server limit.</p>`
             return testResponseElement.html(responseString);
           }
 
           if (response.connectCheck) {
             if (response.statsResponse) {
               responseString +=
-                `${successIcon} <p>CSMM was able to retrieve basic stats of your server. This means you have entered the correct IP and port (unless there are multiple servers running on the ip address in question.)
+                `${successIcon} <p>DISTOPIA was able to retrieve basic stats of your server. This means you have entered the correct IP and port (unless there are multiple servers running on the ip address in question.)
                   
                   Your server is on day ${response.statsResponse.gametime.days}, hour ${response.statsResponse.gametime.hours} and minute ${response.statsResponse.gametime.minutes}. There ${response.statsResponse.players === 1 ? "is" : "are"} ${response.statsResponse.players} player${response.statsResponse.players === 1 ? "" : "s"} online.
                   
                   </p>`
             } else {
               responseString +=
-                `${errorIcon}</i> <p>CSMM could not connect to your server. CSMM tried to send a GET request to <a href="http://${serverip}:${webport}/api/getstats" target="_blank">/api/getstats</a> but failed to get a response. Usually this means you entered a bad IP and/or port. Make sure you enter the web API port of your server that was added by Allocs Fixes. This is <strong>NOT</strong> the telnet port and also <strong>NOT</strong> the port used by players to connect.
+                `${errorIcon}</i> <p>DISTOPIA could not connect to your server. DISTOPIA tried to send a GET request to <a href="http://${serverip}:${webport}/api/getstats" target="_blank">/api/getstats</a> but failed to get a response. Usually this means you entered a bad IP and/or port. Make sure you enter the web API port of your server that was added by Allocs Fixes. This is <strong>NOT</strong> the telnet port and also <strong>NOT</strong> the port used by players to connect.
               <a href="https://docs.csmm.app/en/CSMM/installation.html" target="_blank">More info</a></p>`
               if (response.detectedControlPanelPortUsed) {
                 responseString +=
-                  `The response CSMM received looks like it came from the control panel port, the web API port is defined as control panel port + 2. Did you mean to enter "<strong>${parseInt(webport) + 2}</strong>" as web API port? :)`
+                  `The response DISTOPIA received looks like it came from the control panel port, the web API port is defined as control panel port + 2. Did you mean to enter "<strong>${parseInt(webport) + 2}</strong>" as web API port? :)`
               }
 
               return testResponseElement.html(responseString);
@@ -222,7 +222,7 @@
 
             if (!response.commandResponse) {
               responseString +=
-                `${errorIcon}</i> <p>CSMM could not execute the 'mem' command on your server. This is most likely an authentication issue. Make sure you have set up an authorization token and name (you can do this via telnet commands or by editing an xml)
+                `${errorIcon}</i> <p>DISTOPIA could not execute the 'mem' command on your server. This is most likely an authentication issue. Make sure you have set up an authorization token and name (you can do this via telnet commands or by editing an xml)
                 
                   <a href="https://docs.csmm.app/en/CSMM/installation.html" target="_blank">More info</a></p>`
               return testResponseElement.html(responseString);
@@ -234,7 +234,7 @@
 
           if (response.private) {
             responseString +=
-              `${errorIcon}</i> <p> This instance is private and only CSMM system admins can add servers. <p>`
+              `${errorIcon}</i> <p> This instance is private and only DISTOPIA system admins can add servers. <p>`
             return testResponseElement.html(responseString);
           }
           if (response.donors) {
@@ -254,3 +254,4 @@
   })
 
 </script>
+

@@ -1,4 +1,4 @@
-<!-- Button trigger modal -->
+﻿<!-- Button trigger modal -->
 <button type="button" class="btn btn-secondary btn" data-toggle="modal" data-target="#sdtdserver-allowedCommands-modal">
     Available commands
 </button>

@@ -1,0 +1,19 @@
+/* Redesign starter */
+:root{
+  --bg:#0f1724;
+  --panel:#071028;
+  --muted:#9fb0c8;
+  --accent:#66d9ff;
+  --max-w:1100px;
+}
+html,body{height:100%;}
+body{
+  margin:0;
+  font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;
+  background:var(--bg);
+  color:#e6eef8;
+}
+.header{ background:linear-gradient(90deg,#071028,#071b30); padding:12px 20px; }
+.container{ max-width:var(--max-w); margin:0 auto; padding:20px; }
+.card{ background:rgba(255,255,255,0.02); border-radius:8px; padding:16px; }
+a{ color:var(--accent); }

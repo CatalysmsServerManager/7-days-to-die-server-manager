@@ -5,7 +5,7 @@
     <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="4408463b-a496-4521-a276-ed6540d2d52f" type="text/javascript" async></script>
 
 <head>
-  <title>CSMM</title>
+  <title>DISTOPIA</title>
 
 
   <meta charset="utf-8">
@@ -14,7 +14,7 @@
   <meta name="author" content="Catalysm">
 
   <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
-  <link rel="icon" href="/favicon.ico?version=2" type="image/png">
+  <link rel="icon" href="/favicon.svg?version=2" type="image/png">
 
   <!--
         Stylesheets and Preprocessors
@@ -50,6 +50,7 @@
   <%- stylesheetTag('/styles/flags/flags.min.css') %>
   <%- stylesheetTag('/styles/importer.css') %>
   <%- stylesheetTag('/styles/landing-page.css') %>
+  <%- stylesheetTag('/styles/redesign.css') %>
   <%- stylesheetTag('/styles/sdtd/chat.css') %>
   <%- stylesheetTag('/styles/sdtd/console.css') %>
   <%- stylesheetTag('/styles/sdtd/gblComment.css') %>
@@ -174,3 +175,5 @@
 
 
 </html>
+
+

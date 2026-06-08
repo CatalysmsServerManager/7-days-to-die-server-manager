@@ -1,4 +1,4 @@
-<%- exposeLocalsToBrowser() %>
+﻿<%- exposeLocalsToBrowser() %>
 
 <div id="list-of-owned-servers" aria-multiselectable="true">
 
@@ -161,3 +161,4 @@
   }
 
 </script>
+

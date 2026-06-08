@@ -1,6 +1,6 @@
-<!-- Navigation-->
+﻿<!-- Navigation-->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
-  <a class="navbar-brand" href="/">CSMM</a>
+  <a class="navbar-brand" href="/">DISTOPIA</a>
   <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
     data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
     aria-label="Toggle navigation">
@@ -90,12 +90,10 @@
       </li>
 
       <li class="nav-item">
-        <a target="_blank" class="nav-link" href="https://docs.csmm.app">
           <i class="fab fa-discord fa-lg"></i> Support </a>
       </li>
 
       <li class="nav-item">
-        <a target="_blank" class="nav-link" href="https://docs.csmm.app">
           <i class="fas fa-life-ring fa-lg"></i> Documentation
         </a>
       </li>
@@ -103,7 +101,6 @@
 
 
       <li class="nav-item">
-        <a class="nav-link" href="https://www.csmm.app" target="_blank">
           <i class="fas fa-donate fa-lg"></i> Donate
         </a>
       </li>
@@ -316,3 +313,5 @@
   })
 
 </script>
+
+

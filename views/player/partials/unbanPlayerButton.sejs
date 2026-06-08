@@ -1,4 +1,4 @@
-<%- exposeLocalsToBrowser() %>
+﻿<%- exposeLocalsToBrowser() %>
 
   <!-- Button trigger modal -->
   <button id="unban-player-submit" type="button" class="btn btn-warning">
@@ -32,3 +32,4 @@
     })
 
   </script>
+

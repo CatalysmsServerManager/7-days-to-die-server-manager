@@ -1,4 +1,4 @@
-<!-- Footer -->
+﻿<!-- Footer -->
 <footer class="footer bg-light">
     <div class="container">
         <div class="row">
@@ -10,18 +10,15 @@
                     </li>
                     <li class="list-inline-item">&sdot;</li>
                     <li class="list-inline-item">
-                        <a class="white-text" href="https://discordapp.com/invite/EwyDdNA" target="_blank">
                             <i class="fab fa-discord"></i> Support </a>
                     </li>
                     <li class="list-inline-item">&sdot;</li>
                     <li class="list-inline-item">
-                        <a class="white-text" href="https://www.paypal.me/catalysmdev" target="_blank">
                             <i class="fab fa-paypal"></i> Paypal </a>
                     </li>
                     <li class="list-inline-item">&sdot;</li>
                     <li class="list-inline-item">
 
-                        <a class="white-text" href="https://www.patreon.com/catalysm" target="_blank">
                             <i class="fab fa-patreon"></i> Patreon </a>
                     </li>
                     <li class="list-inline-item">&sdot;</li>

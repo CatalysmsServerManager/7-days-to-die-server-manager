@@ -1,4 +1,4 @@
-<%- exposeLocalsToBrowser() %>
+﻿<%- exposeLocalsToBrowser() %>
 
   <!-- Button trigger modal -->
   <button id='button-close-ticket-<%= ticket.id %>' type="button" class="btn btn-danger">
@@ -34,5 +34,6 @@
     })
 
   </script>
+
 
 
