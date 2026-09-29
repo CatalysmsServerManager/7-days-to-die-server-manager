@@ -68,6 +68,9 @@
             </form>
           </span>
 
+          <small id="modal-settings-gimme-items-unavailable" class="form-text text-muted d-none">Could not load the item
+            list from the game server. You can still type the item name manually.</small>
+
           <div id="available-items" class="invisible">ITEMS</div>
 
           <div id="available-entities" class="invisible">ENTS</div>
@@ -90,19 +93,22 @@
 
     let availableItems = [];
 
-    $.ajax({
-      url: `/api/sdtdserver/availableitems`,
-      data: {
-        serverId: window.SAILS_LOCALS.server.id,
-        item: "*",
-      },
-      success: (data, status, xhr) => {
-        availableItems = data;
-      },
-      error: function (xhr, status, error) {
-        displayAjaxToSupportData(xhr, this);;
-        showErrorModal(`${error} - ${xhr.responseText}`, xhr);
-      }
+    // The item list can be large and fail on some game servers, so only load it when the user needs autocomplete
+    $("#modal-settings-gimme-input-value").one('focus', () => {
+      $.ajax({
+        url: `/api/sdtdserver/availableitems`,
+        data: {
+          serverId: window.SAILS_LOCALS.server.id,
+          item: "*",
+        },
+        success: (data, status, xhr) => {
+          availableItems = data;
+        },
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);
+          $("#modal-settings-gimme-items-unavailable").removeClass('d-none');
+        }
+      });
     });
 
     $("#modal-settings-gimme-input-value").on('keyup', (e) => {

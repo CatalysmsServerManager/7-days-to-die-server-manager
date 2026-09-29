@@ -46,7 +46,11 @@ module.exports = {
       }
 
       let currentConfig = await SdtdConfig.findOne({ server: inputs.serverId });
-      currentConfig.discordNotificationConfig[inputs.notificationType] = inputs.notificationChannelId;
+      if (inputs.notificationChannelId === '0') {
+        delete currentConfig.discordNotificationConfig[inputs.notificationType];
+      } else {
+        currentConfig.discordNotificationConfig[inputs.notificationType] = inputs.notificationChannelId;
+      }
       await SdtdConfig.update({ server: inputs.serverId }, { discordNotificationConfig: currentConfig.discordNotificationConfig });
 
       if (notificationChannel) {
