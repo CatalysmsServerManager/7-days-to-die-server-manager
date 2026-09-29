@@ -31,6 +31,8 @@
           <div class="input-group mb-2 mr-sm-2">
             <input type="text" class="form-control" id="player-give-item-input-itemName" placeholder="Item Name">
           </div>
+          <small id="player-give-item-items-unavailable" class="form-text text-muted d-none mb-2">Could not load the
+            item list from the game server. You can still type the item name manually.</small>
 
           <label class="sr-only" for="player-give-item-input-quality">Quality</label>
           <div class="input-group mb-2 mr-sm-2">
@@ -63,19 +65,22 @@
 
     let availableItems = [];
 
-    $.ajax({
-      url: `/api/sdtdserver/availableitems`,
-      data: {
-        serverId: <%= server.id %>,
-        item: "*",
-      },
-      success: (data, status, xhr) => {
-        availableItems = data;
-      },
-      error: function (xhr, status, error) {
-        displayAjaxToSupportData(xhr, this);;
-        showErrorModal(`${error} - ${xhr.responseText}`, xhr);
-      }
+    // The item list can be large and fail on some game servers, so only load it when the user needs autocomplete
+    $("#player-give-item-input-itemName").one('focus', () => {
+      $.ajax({
+        url: `/api/sdtdserver/availableitems`,
+        data: {
+          serverId: <%= server.id %>,
+          item: "*",
+        },
+        success: (data, status, xhr) => {
+          availableItems = data;
+        },
+        error: function (xhr, status, error) {
+          displayAjaxToSupportData(xhr, this);
+          $("#player-give-item-items-unavailable").removeClass('d-none');
+        }
+      });
     });
 
     $("#player-give-item-input-itemName").on('keyup', (e) => {

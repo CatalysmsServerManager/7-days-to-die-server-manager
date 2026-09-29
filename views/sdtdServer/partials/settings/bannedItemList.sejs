@@ -89,6 +89,9 @@
         <small id="bannedItems-new-item-help" class="form-text text-muted"
           >Item name to add to the list, this has to be exact!</small
         >
+        <small id="bannedItems-items-unavailable" class="form-text text-muted d-none"
+          >Could not load the item list from the game server. You can still type the item name manually.</small
+        >
 
         <select class="form-control" name="banned-items-bannedItems-new-item-tier" id="banned-items-bannedItems-new-item-tier">
 
@@ -106,8 +109,15 @@
 <script>
   $(document).ready(() => {
     let availableitems = [];
-    getAvailableItems().then(data => {
-      availableitems = data;
+    // The item list can be large and fail on some game servers, so only load it when the user needs autocomplete
+    $("#bannedItems-new-item").one("focus", () => {
+      getAvailableItems()
+        .then(data => {
+          availableitems = data;
+        })
+        .catch(() => {
+          $("#bannedItems-items-unavailable").removeClass("d-none");
+        });
     });
 
     const bannedItemsTable = $("#bannedItems").DataTable({
@@ -394,7 +404,7 @@
           },
           error: function(xhr, status, error) {
             displayAjaxToSupportData(xhr, this);
-            showErrorModal(`${error} - ${xhr.responseText}`, xhr);
+            reject();
           }
         });
       });
