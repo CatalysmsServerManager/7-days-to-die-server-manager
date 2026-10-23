@@ -83,7 +83,7 @@
   "author": "Catalysm",
   "license": "",
   "engines": {
-    "node": "12"
+    "node": ">=24"
   },
   "devDependencies": {
     "@babel/eslint-parser": "7.16.5",
