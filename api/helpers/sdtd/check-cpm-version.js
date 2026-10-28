@@ -1,3 +1,13 @@
+// The CPM mod was renamed over time; all of these provide say2/pm2.
+const CPM_MOD_NAMES = [
+  'Mod CSMM Patrons',
+  'Mod 1CSMM_Patrons',
+  'Mod PrismaCore',
+  'Mod 1PrismaCore',
+  'Mod ServerCore',
+  'Mod 1ServerCore',
+];
+
 module.exports = {
 
 
@@ -34,19 +44,14 @@ module.exports = {
     version = await sails.helpers.redis.get(`server:${inputs.serverId}:cpm-version`);
 
     if (!version || inputs.refresh) {
-      let apiResponse;
-      try {
-        apiResponse = (await Promise.all([
-          sails.helpers.sdtd.checkModVersion('Mod CSMM Patrons', inputs.serverId),
-          sails.helpers.sdtd.checkModVersion('Mod 1CSMM_Patrons', inputs.serverId),
-          sails.helpers.sdtd.checkModVersion('Mod PrismaCore', inputs.serverId),
-          sails.helpers.sdtd.checkModVersion('Mod 1PrismaCore', inputs.serverId),
-        ])).find(v => !!v) || 0;
-      } catch (e) {
-        return exits.error(e);
-      }
-      await sails.helpers.redis.set(`server:${inputs.serverId}:cpm-version`, apiResponse, true, 600);
-      version = apiResponse;
+      const server = await SdtdServer.findOne(inputs.serverId);
+      const versionResult = await sails.helpers.sdtdApi.executeConsoleCommand(SdtdServer.getAPIConfig(server), 'version');
+      const modLine = versionResult.result
+        .split('\n')
+        .find(line => CPM_MOD_NAMES.some(modName => line.startsWith(modName)));
+      const detectedVersion = modLine ? parseFloat(_.trim(modLine.split(':').pop())) || 0 : 0;
+      await sails.helpers.redis.set(`server:${inputs.serverId}:cpm-version`, detectedVersion, true, 600);
+      version = detectedVersion;
     }
     sails.log.debug(`Detected CPM version ${version} for server ${inputs.serverId}`, { serverId: inputs.serverId });
     return exits.success(parseFloat(version));
