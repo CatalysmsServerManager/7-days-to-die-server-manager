@@ -15,7 +15,7 @@ module.exports = {
     mod: {
       type: 'string',
       required: true,
-      isIn: ['cpm', 'allocs', 'prismacore']
+      isIn: ['cpm', 'allocs', 'prismacore', 'servercore']
     }
 
   },
@@ -29,17 +29,14 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    if (inputs.mod.includes('cpm') || inputs.mod.includes('prismacore')) {
-      inputs.mod = 'Mod CSMM Patrons';
-    }
-
-    if (inputs.mod.includes('allocs')) {
-      inputs.mod = 'Mod Allocs MapRendering and Webinterface';
-    }
     let apiResponse;
 
     try {
-      apiResponse = await sails.helpers.sdtd.checkModVersion(inputs.mod, inputs.serverId);
+      if (inputs.mod === 'allocs') {
+        apiResponse = await sails.helpers.sdtd.checkModVersion('Mod Allocs MapRendering and Webinterface', inputs.serverId);
+      } else {
+        apiResponse = await sails.helpers.sdtd.checkCpmVersion(inputs.serverId);
+      }
     } catch (error) {
       return exits.success(0);
     }
