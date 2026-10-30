@@ -114,7 +114,7 @@ module.exports = function discordBot(sails) {
           if (message.inGuild()) { return; }
           if (message.author.bot) { return; }
 
-          sails.log.info(`Received DM from ${message.author.username} - ${message.content}`);
+          sails.log.info(`Received DM from ${message.author.username}`);
 
           switch (message.content) {
             case 'restart':

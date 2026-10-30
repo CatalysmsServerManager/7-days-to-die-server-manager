@@ -1,12 +1,52 @@
 <% layout('layouts/homepageLayout') %>
-<body>
+<div class="container my-5">
+  <h1>Privacy Policy</h1>
+  <p class="text-muted">Last updated: October 30, 2026</p>
 
-    <div class="container">
+  <p>CSMM (Catalysm's Server Manager) is a management tool for 7 Days to Die game servers. This page explains what data
+    CSMM collects, why, and what you can do about it.</p>
 
-            <script id="CookieDeclaration" src="https://consent.cookiebot.com/4408463b-a496-4521-a276-ed6540d2d52f/cd.js" type="text/javascript"
-        async></script>
+  <h3>Data we collect</h3>
+  <ul>
+    <li><strong>Account data:</strong> when you log in with Steam or Discord we store your Steam ID, Discord user ID,
+      username and avatar, so we can link your account to the servers and players you manage or play on.</li>
+    <li><strong>Game server data:</strong> for servers connected to CSMM we store data reported by the game server, such
+      as player names, game IDs, IP address and country, in-game position, inventory, playtime and statistics. This is
+      needed for features like player management, bans, the economy and player tracking.</li>
+    <li><strong>Discord data:</strong> when a server admin adds the CSMM bot to their Discord server, we store the IDs
+      of the guild, channels and roles the admin configures. Message content is only read in channels the admin has set
+      up (for example the chat bridge) and is relayed to the game server; it is not stored.</li>
+    <li><strong>Technical data:</strong> application logs and basic usage statistics, used to keep the service running
+      and to fix problems.</li>
+  </ul>
 
-    </div>
+  <h3>How we use data</h3>
+  <p>Data is only used to provide CSMM's features to server owners and their players. We do not sell data and do not
+    use it for advertising or to train AI models.</p>
 
+  <h3>Sharing</h3>
+  <p>Server owners and admins who use CSMM can see the data of players on their servers. Bans that server owners add
+    to the global ban list are visible to other CSMM users. We use Steam and Discord to log you in, and Cookiebot to
+    manage cookie consent. Other than that, data is not shared with third parties, except the hosting and
+    infrastructure providers that run CSMM.</p>
 
-</body>
+  <h3>Retention</h3>
+  <p>Tracking data (such as location and inventory history) is kept for a limited time and deleted automatically.
+    Other data is kept as long as the related account or server is active in CSMM.</p>
+
+  <h3>Cookies</h3>
+  <p>CSMM uses cookies to keep you logged in. Cookie consent is managed through Cookiebot.</p>
+
+  <h3>Your rights</h3>
+  <p>You can ask us to see, correct or delete your data. Server owners can delete a server from CSMM at any time,
+    which removes the data related to it.</p>
+
+  <h3>Contact</h3>
+  <p>For privacy questions or data requests, open an issue on
+    <a href="https://github.com/CatalysmsServerManager/7-days-to-die-server-manager/issues" target="_blank">GitHub</a>
+    or reach out through the support channels listed on <a href="https://docs.csmm.app" target="_blank">docs.csmm.app</a>.</p>
+
+  <h3>Cookie declaration</h3>
+  <script id="CookieDeclaration" src="https://consent.cookiebot.com/4408463b-a496-4521-a276-ed6540d2d52f/cd.js"
+    type="text/javascript" async></script>
+</div>
